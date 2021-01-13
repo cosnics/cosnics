@@ -1,0 +1,159 @@
+{{ HEADER|raw }}
+<div>
+    {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+
+    {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
+    {{ getCss('cosnics-rubric.css', appContext) }}
+    <style type="text/css">
+        /*.col-xs-12 h3#page-title {
+            transform: translateY(-15px);
+        }*/
+        .container-headerless #builder {
+            margin-left: -12px;
+            margin-right: -10px;
+        }
+
+        .container-headerless #app.builder-app {
+            height: calc(100vh - 126px);
+        }
+
+        .rubric-back-to-assignment {
+            background: #e0fffd;
+            display: inline-block;
+            margin-left: 13px;
+            padding: 2px;
+        }
+
+        .rubric-back-to-assignment .fa {
+            margin-right: 2px;
+        }
+    </style>
+    <div id="builder">
+        <rubric-builder-wrapper v-if="rubricData" :api-config="apiConfig" :version="version" :rubric-data="rubricData" :debug-server-response="false"></rubric-builder-wrapper>
+    </div>
+
+    <script>
+        Vue.use(BootstrapVue);
+        Vue.use(this['cosnics-rubric'].default);
+        Vue.use(VueI18n);
+
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
+        /*const rubricData ={
+            "useScores":true,
+            "title":"my_rubric",
+            "levels": [
+                {
+                    "id":"x71v4tjlrqve5qlsp5or",
+                    "title":"level1",
+                    "description":"bad",
+                    "score":10,
+                    "isDefault":false
+                },
+                {
+                    "id":"4suq88i9xytw8cu1wcjvm9",
+                    "title":"level2",
+                    "description":"good",
+                    "score":10,
+                    "isDefault":false
+                }
+            ],
+            "clusters": [
+                {
+                    "title":"my cluster",
+                    "categories": [
+                        {
+                            "title":"category1",
+                            "color":"#2980B9",
+                            "criteria": [
+                                {
+                                    "id":"g5w8birn51ctnkzztvfp28",
+                                    "title":"categoryCriterium",
+                                    "weight":100
+                                }
+                            ]
+                        }
+                    ],
+                    "criteria": [
+                        {
+                            "id":"lraueq7apq9f2qp5t8nna",
+                            "title":"clusterCriterium",
+                            "weight":100
+                        }
+                    ]
+                }
+            ],
+            "choices": [
+                {
+                    "criteriumId":"lraueq7apq9f2qp5t8nna",
+                    "levelId":"x71v4tjlrqve5qlsp5or",
+                    "choice": {
+                        "selected":false,
+                        "feedback":"a",
+                        "hasFixedScore":false,
+                        "fixedScore":10
+                    }
+                },
+                {
+                    "criteriumId":"lraueq7apq9f2qp5t8nna",
+                    "levelId":"4suq88i9xytw8cu1wcjvm9",
+                    "choice": {
+                        "selected":false,
+                        "feedback":"b",
+                        "hasFixedScore":false,
+                        "fixedScore":10
+                    }
+                },
+                {
+                    "criteriumId":"g5w8birn51ctnkzztvfp28",
+                    "levelId":"x71v4tjlrqve5qlsp5or",
+                    "choice": {
+                        "selected":false,
+                        "feedback":"c",
+                        "hasFixedScore":false,
+                        "fixedScore":10
+                    }
+                },
+                {
+                    "criteriumId":"g5w8birn51ctnkzztvfp28",
+                    "levelId":"4suq88i9xytw8cu1wcjvm9",
+                    "choice": {
+                        "selected":true,
+                        "feedback":"d",
+                        "hasFixedScore":false,
+                        "fixedScore":10
+                    }
+                }
+            ]
+        };*/
+        var lang;
+        try {
+            lang = '{{ LANGUAGE|raw }}';
+        } catch (err) {
+            console.warn('Language could not be set, defaulting to English instead.');
+            lang = 'en';
+        }
+        new Vue({
+            i18n: new VueI18n({ locale: lang }),
+            router: Vue.prototype.$getRouter('builder'),
+            el: '#builder',
+            data: {
+                apiConfig: {
+                    'addLevelURL': '{{ ADD_LEVEL_AJAX_URL|raw }}',
+                    'addTreeNodeURL': '{{ ADD_TREE_NODE_AJAX_URL|raw }}',
+                    'deleteLevelURL': '{{ DELETE_LEVEL_AJAX_URL|raw }}',
+                    'deleteTreeNodeURL': '{{ DELETE_TREE_NODE_AJAX_URL|raw }}',
+                    'moveLevelURL': '{{ MOVE_LEVEL_AJAX_URL|raw }}',
+                    'moveTreeNodeURL': '{{ MOVE_TREE_NODE_AJAX_URL|raw }}',
+                    'updateChoiceURL': '{{ UPDATE_CHOICE_AJAX_URL|raw }}',
+                    'updateLevelURL': '{{ UPDATE_LEVEL_AJAX_URL|raw }}',
+                    'updateTreeNodeURL': '{{ UPDATE_TREE_NODE_AJAX_URL|raw }}',
+                    'updateRubricURL': '{{ UPDATE_RUBRIC_AJAX_URL|raw }}'
+                },
+                version: data.version,
+                rubricData: data
+            }
+        });
+    </script>
+</div>
+{{ FOOTER|raw }}

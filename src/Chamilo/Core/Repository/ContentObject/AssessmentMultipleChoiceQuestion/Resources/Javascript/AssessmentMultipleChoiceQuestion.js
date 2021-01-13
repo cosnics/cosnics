@@ -232,6 +232,8 @@ $(function()
     
     $(document).ready(function()
     {
+        setDefaultScores();
+
         $(document).on('click', '.change-answer-type', convertType);
         $(document).on('click', '.add-option', addOption);
         $(document).on('click', 'input[name="recalculate_weight"]', lockWeight);

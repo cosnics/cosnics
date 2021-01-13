@@ -45,17 +45,7 @@
                 class="Chamilo\Core\Repository\Service\ContentObjectCopierWrapper"/>
 
         <service
-                id="chamilo.core.repository.content_object.learning_path.service.tree_node_copier"
-                class="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier">
-            <argument type="service"
-                      id="chamilo.core.repository.workspace.repository.content_object_repository"/>
-            <argument type="service"
-                      id="chamilo.core.repository.content_object.learning_path.service.tree_builder"/>
-            <argument type="service"
-                      id="chamilo.core.repository.content_object.learning_path.service.tree_node_data_service"/>
-            <argument type="service"
-                      id="chamilo.core.repository.service.content_object_copier_wrapper"/>
-        </service>
+                id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeCopier" autowire="true" />
 
         <service
                 id="chamilo.core.repository.content_object.learning_path.service.automatic_numbering_service"

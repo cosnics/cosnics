@@ -8,5 +8,18 @@
             id="chamilo.core.repository.service.workspace_extension_manager"
             class="Chamilo\Core\Repository\Service\WorkspaceExtensionManager">
         </service>
+
+        <service id="Chamilo\Core\Repository\Form\CourseExporterFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Includes\ContentObjectIncluder" autowire="true" />
+        <service id="Chamilo\Core\Repository\Common\ContentObjectResourceParser" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\Service\CategoryService" autowire="true" />
+        <service id="Chamilo\Core\Repository\Storage\Repository\CategoryRepository" autowire="true" />
+        <service id="Chamilo\Core\Repository\Form\Type\CopyFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
     </services>
 </container>

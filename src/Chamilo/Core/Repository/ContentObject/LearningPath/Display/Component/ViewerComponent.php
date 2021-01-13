@@ -202,7 +202,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $this->addNodeSpecificButtons($primaryActions, $secondaryActions);
             }
 
-            if ($this->canViewReporting() && $this->get_action() != self::ACTION_REPORTING)
+            if ($this->get_action() != self::ACTION_REPORTING)
             {
                 $this->addReportingButtons($tertiaryActions, $translator);
             }
@@ -554,6 +554,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $this->addPrintButton($splitDropDownButton, $translator);
+        $this->addDownloadFilesButton($splitDropDownButton, $translator);
 
         $buttonGroup->addButton($splitDropDownButton);
     }
@@ -599,6 +600,30 @@ class ViewerComponent extends BaseHtmlTreeComponent
             ),
             SubButton::DISPLAY_ICON_AND_LABEL,
             false, null, '_blank'
+        );
+
+        $button->addSubButton($extraButton);
+    }
+
+    /**
+     * Adds the activity button
+     *
+     * @param SplitDropdownButton $button
+     * @param Translation $translator
+     */
+    protected function addDownloadFilesButton(SplitDropdownButton $button, $translator)
+    {
+        $extraButton = new SubButton(
+            $translator->getTranslation('DownloadFiles', null, Manager::context()),
+            new FontAwesomeGlyph('download'),
+            $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_DOWNLOAD_FILES,
+                    self::PARAM_CHILD_ID => null
+                )
+            ),
+            SubButton::DISPLAY_ICON_AND_LABEL,
+            false, null
         );
 
         $button->addSubButton($extraButton);

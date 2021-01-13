@@ -83,7 +83,7 @@ abstract class Authentication implements AuthenticationInterface
         $user = $this->userService->getUserByUsernameOrEmail($username);
         if(!$user instanceof User)
         {
-            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], 'Chamilo\Libraries'));
+            throw new AuthenticationException($this->translator->trans('InvalidUsername', [], 'Chamilo\Core\User'));
         }
 
         if($user->getAuthenticationSource() != $this->getAuthenticationType())
@@ -94,6 +94,11 @@ abstract class Authentication implements AuthenticationInterface
         if(!$this->isAuthSourceActive())
         {
             throw new AuthenticationException($this->translator->trans('AuthSourceNotActive', [], 'Chamilo\Libraries'));
+        }
+
+        if(!$user->is_active())
+        {
+            throw new AuthenticationException($this->translator->trans('InactiveUser', [], 'Chamilo\Core\User'));
         }
 
         return $user;

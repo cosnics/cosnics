@@ -56,7 +56,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
             $parameters = array();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_UNSUBSCRIBE;
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user->getId();
-            $parameters[Manager::PARAM_COURSE_GROUP] = $browser->get_course_group()->getId();
+            $parameters[Manager::PARAM_COURSE_GROUP] = $browser->getCourseGroupFromRequest()->getId();
             $unsubscribe_url = $browser->get_url($parameters);
             $toolbar->add_item(
                 new ToolbarItem(
@@ -67,7 +67,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                     true));
         }
 
-        $course_group = $browser->get_course_group();
+        $course_group = $browser->getCourseGroupFromRequest();
 
         if (! $browser->is_allowed(WeblcmsRights::EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
              $course_group->is_member($user) && $browser->get_user()->get_id() == $user->getId())

@@ -619,7 +619,7 @@ class ContentObjectPublication extends \Chamilo\Core\Repository\Publication\Stor
         $body .= '</head><body><div class="container-fluid" style="margin-top: 15px;">';
 
         $body .= Translation::get('NewPublicationMailDescription') . ' ' . $course->get_title() . ' : <a href="' . $link .
-             '" target="_blank">' . utf8_decode($content_object->get_title()) . '</a><br />--<br />';
+             '" target="_blank">' . $content_object->get_title() . '</a><br />--<br />';
         $body .= $content_object->get_description();
         $body .= '--<br />';
         $body .= $user->get_fullname() . ' - ' . $course->get_visual_code() . ' - ' . $course->get_title() . ' - ' .

@@ -84,28 +84,4 @@ class StructureLocationService implements StructureLocationServiceInterface
         }
     }
 
-    /**
-     * Returns the structure location by a given context and action
-     * 
-     * @param string $context
-     * @param string $action
-     *
-     * @return StructureLocation
-     *
-     * @throws \Exception
-     */
-    public function getStructureLocationByContextAndAction($context, $action = null)
-    {
-        $structureLocation = $this->structureLocationRepository->findStructureLocationByContextAndAction(
-            $context, 
-            $action);
-        
-        if (! $structureLocation instanceof StructureLocation)
-        {
-            throw new \Exception(
-                'Could not find a structure location with context ' . $context . ' and action ' . $action);
-        }
-        
-        return $structureLocation;
-    }
 }

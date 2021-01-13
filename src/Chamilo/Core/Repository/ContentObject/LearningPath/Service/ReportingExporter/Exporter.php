@@ -86,7 +86,8 @@ class Exporter
                 $attemptWithUser[User::PROPERTY_EMAIL],
                 $progress . '%',
                 $progress == 100,
-                $progress > 0
+                $progress > 0,
+                $this->trackingService->getLastCompletedAttemptScoreForTreeNode($learningPath, $user, $treeNodeToExport)
             );
         }
 

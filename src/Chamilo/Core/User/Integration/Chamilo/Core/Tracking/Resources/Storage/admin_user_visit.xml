@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="admin_user_visit">
+    <properties>
+        <property
+            name="id"
+            type="integer"
+            unsigned="1"
+            notnull="1"
+            autoincrement="true" />
+        <property
+            name="admin_user_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="user_visit_id"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+        <property
+            name="visit_date"
+            type="integer"
+            unsigned="1"
+            notnull="1" />
+    </properties>
+</object>

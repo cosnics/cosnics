@@ -97,29 +97,5 @@ class CourseGroupOffice365ReferenceRepositoryTest extends ChamiloFixturesBasedTe
         $this->assertInstanceOf(CourseGroupOffice365Reference::class, $reference);
     }
 
-    public function testUpdateReference()
-    {
-        $courseGroup = new CourseGroup();
-        $courseGroup->setId(4);
-
-        $reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        $reference->setLinked(false);
-
-        $this->courseGroupOffice365ReferenceRepository->updateReference($reference);
-
-        $reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        $this->assertFalse($reference->isLinked());
-    }
-
-    public function testRemoveReference()
-    {
-        $courseGroup = new CourseGroup();
-        $courseGroup->setId(4);
-
-        $this->courseGroupOffice365ReferenceRepository->removeReferenceForCourseGroup($courseGroup);
-
-        $reference = $this->courseGroupOffice365ReferenceRepository->findByCourseGroup($courseGroup);
-        $this->assertEmpty($reference);
-    }
 }
 

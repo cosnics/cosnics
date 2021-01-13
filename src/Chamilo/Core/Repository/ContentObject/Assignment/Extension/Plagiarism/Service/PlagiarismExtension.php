@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service;
 
 use Chamilo\Application\Plagiarism\Domain\Turnitin\Exception\EulaNotAcceptedException;
+use Chamilo\Application\Plagiarism\Service\Turnitin\EulaService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Component\EntryComponent;
@@ -13,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -49,28 +51,39 @@ class PlagiarismExtension implements ExtensionInterface
     protected $bridgeManager;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
+
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
 
     /**
      * PlagiarismExtension constructor.
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker
+     * @param \Chamilo\Application\Plagiarism\Service\Turnitin\EulaService $eulaService
      * @param \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
+     * @param \Chamilo\Core\User\Service\UserService $userService
      */
     public function __construct(
         \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service\PlagiarismChecker $plagiarismChecker,
-        \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig_Environment $twig,
-        ExceptionLoggerInterface $exceptionLogger
+        EulaService $eulaService,
+        \Chamilo\Libraries\Architecture\Bridge\BridgeManager $bridgeManager, \Twig\Environment $twig,
+        ExceptionLoggerInterface $exceptionLogger,
+        UserService $userService
     )
     {
         $this->plagiarismChecker = $plagiarismChecker;
         $this->bridgeManager = $bridgeManager;
         $this->twig = $twig;
         $this->exceptionLogger = $exceptionLogger;
+        $this->eulaService = $eulaService;
+        $this->userService = $userService;
     }
 
     /**
@@ -104,7 +117,7 @@ class PlagiarismExtension implements ExtensionInterface
         EntryComponent $entryComponent, Assignment $assignment, Entry $entry, User $user
     )
     {
-        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        if(!$this->isPlagiarismEnabled())
         {
             return null;
         }
@@ -160,33 +173,32 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function entryCreated(Assignment $assignment, Entry $entry, User $user)
     {
-        if($this->plagiarismChecker->isInMaintenanceMode())
+        if(!$this->isPlagiarismEnabled())
         {
             return;
         }
 
-        if($this->getEntryPlagiarismResultServiceBridge()->checkForPlagiarismAfterSubmission())
+        if ($this->getEntryPlagiarismResultServiceBridge()->checkForPlagiarismAfterSubmission())
         {
-            if(!$this->plagiarismChecker->canCheckForPlagiarism($entry))
+            if (!$this->plagiarismChecker->canCheckForPlagiarism($entry))
             {
                 return;
             }
 
+            $assignmentUser = $this->userService->findUserByIdentifier($assignment->get_owner_id());
+
             try
             {
                 $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $assignment, $entry, $this->getEntryPlagiarismResultServiceBridge()
+                    $entry, $assignmentUser, $this->getEntryPlagiarismResultServiceBridge()
                 );
             }
             catch (EulaNotAcceptedException $eulaNotAcceptedException)
             {
-                $assignmentUser = new User();
-                $assignmentUser->setId($assignment->get_owner_id());
-
                 $this->eulaService->acceptEULA($assignmentUser);
 
                 $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $assignment, $entry, $this->getEntryPlagiarismResultServiceBridge()
+                    $entry, $assignmentUser, $this->getEntryPlagiarismResultServiceBridge()
                 );
             }
         }
@@ -198,12 +210,7 @@ class PlagiarismExtension implements ExtensionInterface
      */
     public function buildButtonToolbarForEntityBrowser(ViewerComponent $viewerComponent, ButtonToolBar $buttonToolBar)
     {
-        if($this->plagiarismChecker->isInMaintenanceMode())
-        {
-            return;
-        }
-
-        if(!$this->getAssignmentServiceBridge()->canEditAssignment())
+        if(!$this->isPlagiarismEnabled())
         {
             return;
         }
@@ -243,5 +250,15 @@ class PlagiarismExtension implements ExtensionInterface
     protected function getAssignmentServiceBridge()
     {
         return $this->bridgeManager->getBridgeByInterface(AssignmentServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isPlagiarismEnabled()
+    {
+        return !$this->plagiarismChecker->isInMaintenanceMode() &&
+            $this->getAssignmentServiceBridge()->canEditAssignment() &&
+            $this->getEntryPlagiarismResultServiceBridge()->isPlagiarismEnabled();
     }
 }

@@ -39,6 +39,13 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = '<div class="alert alert-warning">';
+
+        $html[] = $this->getTranslator()->trans(
+            'EphorusNoLongerSupported', [], 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus'
+        );
+
+        $html[] = '</div>';
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
 

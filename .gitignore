@@ -1,9 +1,14 @@
 /web/*
 /files/*
 /vendor/*
+node_modules/
 /bin/*
 /src/*
 /.idea/
+
+package-lock.json
+yarn.lock
+vue-cli-service
 
 !/src/Chamilo
 !/web/index.php

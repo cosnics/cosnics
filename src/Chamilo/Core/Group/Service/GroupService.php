@@ -71,6 +71,16 @@ class GroupService
     }
 
     /**
+     * @param array $groupIds
+     *
+     * @return Group[]
+     */
+    public function findGroupsByIds($groupIds = [])
+    {
+        return $this->groupRepository->findGroupsByIds($groupIds);
+    }
+
+    /**
      * @param string $groupCode
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      */
@@ -101,5 +111,39 @@ class GroupService
                 );
             }
         }
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     *
+     * @return Group[]
+     */
+    public function findDirectChildrenFromGroup(Group $group)
+    {
+        return $this->groupRepository->findDirectChildrenFromGroup($group);
+    }
+
+    /**
+     * @param string $name
+     * @param string $code
+     * @param int $parentGroupId
+     *
+     * @return Group
+     */
+    public function createGroup(string $name, string $code, int $parentGroupId = 0)
+    {
+        $group = new Group();
+        $group->set_name($name);
+        $group->set_code($code);
+        $group->set_parent_id($parentGroupId);
+
+        if(!$this->groupRepository->create($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not create a group with name %s and code %s', $name, $code)
+            );
+        }
+
+        return $group;
     }
 }

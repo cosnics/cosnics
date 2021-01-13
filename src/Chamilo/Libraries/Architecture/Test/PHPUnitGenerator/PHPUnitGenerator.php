@@ -18,7 +18,7 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
 
     /**
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -44,11 +44,11 @@ class PHPUnitGenerator implements PHPUnitGeneratorInterface
     /**
      * Constructor
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      * @param PathBuilder $pathBuilder
      * @param RegistrationConsulter $registrationConsulter
      */
-    public function __construct(\Twig_Environment $twig, PathBuilder $pathBuilder,
+    public function __construct(\Twig\Environment $twig, PathBuilder $pathBuilder,
         RegistrationConsulter $registrationConsulter)
     {
         $this->twig = $twig;

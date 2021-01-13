@@ -11,6 +11,7 @@ class CourseTeamRelation extends DataClass
 {
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_TEAM_ID = 'team_id';
+    const PROPERTY_ACTIVE = 'active';
 
     /**
      * @param array $extended_property_names
@@ -21,6 +22,7 @@ class CourseTeamRelation extends DataClass
     {
         $extended_property_names[] = self::PROPERTY_COURSE_ID;
         $extended_property_names[] = self::PROPERTY_TEAM_ID;
+        $extended_property_names[] = self::PROPERTY_ACTIVE;
 
         return parent::get_default_property_names($extended_property_names);
     }
@@ -55,6 +57,25 @@ class CourseTeamRelation extends DataClass
     public function setTeamId(string $teamId)
     {
         $this->set_default_property(self::PROPERTY_TEAM_ID, $teamId);
+    }
+
+    /**
+     * @param bool $active
+     *
+     * @return $this
+     */
+    public function setActive(bool $active)
+    {
+        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getActive()
+    {
+        return $this->get_default_property(self::PROPERTY_ACTIVE);
     }
 
     /**

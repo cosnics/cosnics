@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package context="Chamilo\Core\Repository">
     <settings>
+        <category name="downloads">
+            <setting name="file_download_host" field="text" default=""/>
+        </category>
         <category name="administrator">
             <setting
                 name="description_required"

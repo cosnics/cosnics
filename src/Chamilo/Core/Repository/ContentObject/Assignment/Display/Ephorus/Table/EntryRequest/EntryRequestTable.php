@@ -33,13 +33,13 @@ class EntryRequestTable extends DataClassTable implements TableFormActionsSuppor
             )
         );
 
-        $actions->add_form_action(
-            new TableFormAction(
-                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
-                Translation:: get('AddDocuments', null, self::EPHORUS_TRANSLATION_CONTEXT),
-                false
-            )
-        );
+//        $actions->add_form_action(
+//            new TableFormAction(
+//                $this->get_component()->get_url(array(Manager::PARAM_ACTION => Manager::ACTION_CREATE)),
+//                Translation:: get('AddDocuments', null, self::EPHORUS_TRANSLATION_CONTEXT),
+//                false
+//            )
+//        );
 
         return $actions;
     }

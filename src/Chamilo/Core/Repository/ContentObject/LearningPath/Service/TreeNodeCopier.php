@@ -6,8 +6,10 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
+use Chamilo\Core\Repository\Service\CategoryService;
 use Chamilo\Core\Repository\Service\ContentObjectCopierWrapper;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -39,22 +41,30 @@ class TreeNodeCopier
     protected $contentObjectCopierWrapper;
 
     /**
+     * @var CategoryService
+     */
+    protected $categoryService;
+
+    /**
      * LearningPathService constructor.
      *
      * @param ContentObjectRepository $contentObjectRepository
      * @param TreeBuilder $treeBuilder
      * @param TreeNodeDataService $treeNodeDataService
      * @param ContentObjectCopierWrapper $contentObjectCopierWrapper
+     * @param CategoryService $categoryService
      */
     public function __construct(
         ContentObjectRepository $contentObjectRepository, TreeBuilder $treeBuilder,
-        TreeNodeDataService $treeNodeDataService, ContentObjectCopierWrapper $contentObjectCopierWrapper
+        TreeNodeDataService $treeNodeDataService, ContentObjectCopierWrapper $contentObjectCopierWrapper,
+        CategoryService $categoryService
     )
     {
         $this->contentObjectRepository = $contentObjectRepository;
         $this->treeBuilder = $treeBuilder;
         $this->treeNodeDataService = $treeNodeDataService;
         $this->contentObjectCopierWrapper = $contentObjectCopierWrapper;
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -65,20 +75,35 @@ class TreeNodeCopier
      * @param User $user
      * @param array $selectedNodeIds
      * @param bool $copyInsteadOfReuse
+     * @param int|null $selectedCopyCategoryId
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      */
     public function copyNodesFromLearningPath(
         TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = array(),
-        $copyInsteadOfReuse = false
+        $copyInsteadOfReuse = false, int $selectedCopyCategoryId = null, string $newCopyCategoryName = null
     )
     {
         /** @var LearningPath $rootLearningPath */
         $rootLearningPath = $toNode->getTree()->getRoot()->getContentObject();
 
+        if (!empty($newCopyCategoryName))
+        {
+            $workspace = new PersonalWorkspace($user);
+            $newCategory = $this->categoryService->createCategoryInWorkspace(
+                $newCopyCategoryName, $workspace, $selectedCopyCategoryId
+            );
+
+            $selectedCopyCategoryId = $newCategory->getId();
+        }
+
         $fromTree = $this->treeBuilder->buildTree($fromLearningPath);
         foreach ($selectedNodeIds as $selectedNodeId)
         {
             $selectedNode = $fromTree->getTreeNodeById((int) $selectedNodeId);
-            $this->copyNodeAndChildren($rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse);
+            $this->copyNodeAndChildren(
+                $rootLearningPath, $toNode, $selectedNode, $user, $copyInsteadOfReuse, $selectedCopyCategoryId
+            );
         }
     }
 
@@ -90,14 +115,15 @@ class TreeNodeCopier
      * @param TreeNode $fromNode
      * @param User $user
      * @param bool $copyInsteadOfReuse
+     * @param int|null $selectedCopyCategoryId
      */
     protected function copyNodeAndChildren(
         LearningPath $rootLearningPath, TreeNode $toNode, TreeNode $fromNode, User $user,
-        $copyInsteadOfReuse = false
+        $copyInsteadOfReuse = false, int $selectedCopyCategoryId = null
     )
     {
         $contentObject = $this->prepareContentObjectForCopy(
-            $fromNode, $user, $toNode->getContentObject()->get_parent_id(), $copyInsteadOfReuse
+            $fromNode, $user, $selectedCopyCategoryId, $copyInsteadOfReuse
         );
 
         $treeNodeData = $this->copyTreeNodeData($rootLearningPath, $toNode, $fromNode, $user, $contentObject);
@@ -107,7 +133,9 @@ class TreeNodeCopier
 
         foreach ($fromNode->getChildNodes() as $childNode)
         {
-            $this->copyNodeAndChildren($rootLearningPath, $newNode, $childNode, $user, $copyInsteadOfReuse);
+            $this->copyNodeAndChildren(
+                $rootLearningPath, $newNode, $childNode, $user, $copyInsteadOfReuse, $selectedCopyCategoryId
+            );
         }
     }
 
@@ -123,6 +151,7 @@ class TreeNodeCopier
      * @param User $user
      * @param int $categoryId
      * @param bool $copyInsteadOfReuse
+     * @param int|null $selectedCopyCategoryId
      *
      * @return ContentObject
      */

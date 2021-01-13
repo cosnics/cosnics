@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Authentication\Anonymous;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -96,7 +98,6 @@ class AnonymousAuthentication extends Authentication implements AuthenticationIn
 
     public function logout(User $user)
     {
-
     }
 
     /**

@@ -33,20 +33,23 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      *
      * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
-    public function createFeedback(User $user, $feedback)
+    public function createFeedback(
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+    )
     {
         $feedbackObject = $this->feedbackSupportComponent->get_feedback();
 
         $feedbackObject->set_user_id($user->getId());
-        $feedbackObject->set_comment($feedback);
+        $feedbackObject->set_comment($feedbackContentObject);
         $feedbackObject->set_creation_date(time());
         $feedbackObject->set_modification_date(time());
+        $feedbackObject->setFeedbackContentObjectId($feedbackContentObject->getId());
 
-        if(!$feedbackObject->create())
+        if (!$feedbackObject->create())
         {
             throw new \RuntimeException('Could not create feedback in the database');
         }
@@ -63,7 +66,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
     public function getFeedback($count = null, $offset = null)
     {
         $feedback = $this->feedbackSupportComponent->retrieve_feedbacks($count, $offset);
-        if($feedback instanceof DataClassIterator)
+        if ($feedback instanceof DataClassIterator)
         {
             return $feedback;
         }
@@ -96,7 +99,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
      */
     public function updateFeedback(Feedback $feedback)
     {
-        if(!$feedback->update())
+        if (!$feedback->update())
         {
             throw new \RuntimeException('Could not create feedback in the database');
         }
@@ -109,7 +112,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
      */
     public function deleteFeedback(Feedback $feedback)
     {
-        if(!$feedback->delete())
+        if (!$feedback->delete())
         {
             throw new \RuntimeException('Could not create feedback in the database');
         }

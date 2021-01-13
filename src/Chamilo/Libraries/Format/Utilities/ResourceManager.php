@@ -112,7 +112,7 @@ class ResourceManager
 
     /**
      *
-     * @return \Chamilo\Libraries\Format\Utilities\ResourceManager
+     * @return ResourceManager
      */
     public static function getInstance()
     {

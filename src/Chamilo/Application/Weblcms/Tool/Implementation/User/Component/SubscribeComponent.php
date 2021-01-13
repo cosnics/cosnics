@@ -9,6 +9,7 @@ use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -215,7 +216,7 @@ class SubscribeComponent extends Manager
      */
     protected function findUsersByIds(array $userIds = array())
     {
-        $userRepository = new UserRepository();
+        $userRepository = new UserRepository(new FilterParametersTranslator());
 
         return $userRepository->findUsers(
             new InCondition(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID), $userIds));

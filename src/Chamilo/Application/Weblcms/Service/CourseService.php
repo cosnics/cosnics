@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Service;
 
+use Chamilo\Application\Weblcms\Admin\CourseAdminValidator;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
@@ -281,15 +282,37 @@ class CourseService implements CourseServiceInterface
 
     /**
      * Checks if the user is subscribed as a teacher in the course
-     * 
+     *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
+     * @param bool $includeCourseAdminValidation - advanced option, you can use this bool to disable course admin
+     * validation and make sure that the user is actually subscribed as a teacher to the course
      *
      * @return bool
      */
-    public function isUserTeacherInCourse(User $user, Course $course)
+    public function isUserTeacherInCourse(User $user, Course $course, bool $includeCourseAdminValidation = true)
     {
-        return $this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER);
+        if($user->is_platform_admin())
+        {
+            return true;
+        }
+
+        if($this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER))
+        {
+            return true;
+        }
+
+        if($includeCourseAdminValidation)
+        {
+            $courseValidator = CourseAdminValidator::getInstance();
+            // If the user is a sub administrator, grant all rights
+            if ($courseValidator->isUserAdminOfCourse($user, $course))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

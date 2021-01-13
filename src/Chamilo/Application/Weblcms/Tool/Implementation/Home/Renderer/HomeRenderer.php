@@ -1,8 +1,10 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Home\Renderer\Extension\HomeRendererExtensionManager;
 
 /**
  *
@@ -38,19 +40,28 @@ abstract class HomeRenderer
     private $introduction;
 
     /**
+     * @var HomeRendererExtensionManager
+     */
+    protected $homeRendererExtensionManager;
+
+    /**
      *
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager $homeTool
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\CourseTool[] $courseTools
      * @param boolean $introductionAllowed
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $introduction
+     * @param HomeRendererExtensionManager $homeRendererExtensionManager
+     * @param ContentObjectPublication|null $introduction
      */
-    public function __construct(Manager $homeTool, $courseTools, $introductionAllowed, 
-        ContentObjectPublication $introduction = null)
+    public function __construct(
+        Manager $homeTool, $courseTools, $introductionAllowed,
+        HomeRendererExtensionManager $homeRendererExtensionManager, ContentObjectPublication $introduction = null
+    )
     {
         $this->homeTool = $homeTool;
         $this->courseTools = $courseTools;
         $this->introductionAllowed = $introductionAllowed;
         $this->introduction = $introduction;
+        $this->homeRendererExtensionManager = $homeRendererExtensionManager;
     }
 
     /**

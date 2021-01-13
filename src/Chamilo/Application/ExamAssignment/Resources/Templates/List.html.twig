@@ -1,0 +1,128 @@
+{% extends "Chamilo\\Application\\ExamAssignment:Base.html.twig" %}
+{% set appContext = 'Chamilo\\Application\\ExamAssignment' %}
+    {% block main %}
+        <style type="text/css">
+            .btn-action.mod-access {
+                font-size: 1.5rem;
+                line-height: 1.5rem;
+                margin-top: .7rem;
+                width: 100%;
+            }
+            .exams-overview {
+                color: #333;
+                margin-top: 80px;
+                max-width: 720px;
+            }
+            .no-exams {
+                color: #707070;
+                font-size: 2.4rem;
+            }
+            .exam-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .exam-list-item {
+                align-items: center;
+                background: #f4f5f5;
+                border: 1px solid #e6e6e6;
+                border-radius: 5px;
+                color: #707070;
+                display: flex;
+                justify-content: space-between;
+                line-height: 1.6;
+                margin-bottom: 40px;
+                padding: 20px;
+            }
+            .exam-title {
+                color: #507177;
+                margin: 0 0 .7rem;
+                font-size: larger;
+                font-weight: 700;
+            }
+            .exam-metadata {
+                margin-bottom: .5rem;
+            }
+            .exam-metadata-time {
+                margin-left: -5px;
+            }
+            .time-arrow {
+                color: #009c7c;
+                margin-right: -7px;
+            }
+            .time-arrow-last {
+                color: #009c7c;
+                margin-right: -2px;
+            }
+            .exam-form {
+                flex-basis: 30%;
+            }
+            .exam-code {
+                margin-top: 8px;
+            }
+            .exam-code::placeholder {
+                color: #999;
+            }
+            .footer {
+                background: #fff;
+                border-top: 1px solid #ccc;
+                color: #666;
+                margin-top: auto;
+                padding: 10px 0;
+                width: 100%;
+            }
+            .heading-privacy-policy-title {
+                color: #3e3838;
+                font-size: 1.6rem;
+                margin: 0 0 10px;
+            }
+        </style>
+    <main>
+        <div class="container">
+            <div class="main-content exams-overview">
+                <h1 class="sr-only">{{ 'Exams'|trans({}, appContext) }}</h1>
+                {% if EXAMS is empty %}
+                <h2 class="no-exams">{{ 'NoExamsCurrentlyAvailable'|trans({}, appContext) }} </h2>
+                {% else %}
+                <ul class="exam-list">
+                    {% for EXAM in EXAMS %}
+                    <li class="exam-list-item">
+                        <div>
+                            <h2 class="exam-title">{{ EXAM.title }}</h2>
+                            <div class="exam-metadata">
+                                <div>{{ EXAM.course_title }} (<span class="course-visual-code">{{ EXAM.visual_code }}</span>)</div>
+                                <div>{{ EXAM.firstname ~ ' ' ~ EXAM.lastname }}</div>
+                            </div>
+                            <div class="exam-metadata-time">
+                                <span class="sr-only">{{ 'From'|trans({}, appContext) }} </span><time datetime="{{ EXAM.start_time|date("c") }}" class="exam-timestamp mod-list">{{ EXAM.start_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.start_time|date("Y") }} &ndash; {{ ' ' ~ EXAM.start_time|date("H:i") }}</time>
+                                <i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow fa fa-caret-right" aria-hidden="true"></i><i class="time-arrow-last fa fa-caret-right" aria-hidden="true"></i>
+                                <span class="sr-only"> {{ 'Until'|trans({}, appContext) }} </span><time datetime="{{ EXAM.end_time|date("c") }}" class="exam-timestamp mod-list">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} &ndash; {{ ' ' ~ EXAM.end_time|date("H:i") }}</time>
+                            </div>
+                        </div>
+                        <div class="exam-form">
+                            <form action="{{ ENTRY_URL|replace({'__EXAM_ID__': EXAM.publication_id}) }}" method="post">
+                                {% if EXAM.code %}
+                                <input type="text" class="exam-code form-control" name="exam_code" required="required" minlength="5" maxlength="5" autocomplete="off" placeholder="{{ 'FiveNumberCode'|trans({}, appContext) }}" />
+                                {% endif %}
+                                <button class="btn btn-action mod-access u-btn-focus">{{ 'Start'|trans({}, appContext) }}</button>
+                            </form>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {{ BELOW_LIST_RENDITION|raw }}
+            </div>
+        </div>
+    </main>
+    {% endblock %}
+    {% block footer %}
+    <!--<footer class="footer">
+        <div class="container">
+            <section>
+                <h1 class="heading-privacy-policy-title">Privacy</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel eros eu ipsum rhoncus sollicitudin. Mauris elementum nisl et felis scelerisque blandit. In hac habitasse platea dictumst. Suspendisse elementum vitae quam nec congue. Vestibulum in nisi ante. Nullam vitae mi est. Quisque facilisis viverra urna, nec mattis nulla. Quisque sollicitudin turpis et elementum vestibulum. Morbi quis sodales nisi, nec feugiat urna. Duis mattis enim vestibulum, consectetur orci vel, finibus risus. Integer eu orci risus. Etiam a tempus nulla, quis ultrices mauris.</p>
+            </section>
+        </div>
+    </footer>-->
+    {% endblock %}

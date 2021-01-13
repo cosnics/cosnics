@@ -271,7 +271,15 @@ class AttemptTrackingService
         LearningPath $learningPath, User $user, TreeNode $treeNode
     )
     {
-        return count($this->getTreeNodeAttempts($learningPath, $user, $treeNode));
+        $treeNodeAttempts = $this->getTreeNodeAttempts($learningPath, $user, $treeNode);
+        $count = 0;
+        foreach ($treeNodeAttempts as $treeNodeAttempt)
+        {
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted()) {
+                $count += 1;
+            }
+        }
+        return $count;
     }
 
     /**

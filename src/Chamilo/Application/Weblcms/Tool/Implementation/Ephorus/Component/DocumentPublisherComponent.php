@@ -5,6 +5,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Component;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -18,32 +19,35 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
 
     /**
      * Runs this component
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function run()
     {
-        $this->validateAccess();
+        throw new NotAllowedException();
 
-        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
-        {
-            $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
-            );
-            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
-
-            return $component->run();
-        }
-        else
-        {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-
-            $parameters = array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CREATE,
-                Manager::PARAM_CONTENT_OBJECT_IDS => $objects
-            );
-
-            $this->redirect('', false, $parameters);
-        }
+//        $this->validateAccess();
+//
+//        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+//        {
+//            $component = $this->getApplicationFactory()->getApplication(
+//                \Chamilo\Core\Repository\Viewer\Manager::context(),
+//                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+//            );
+//            $component->set_maximum_select(\Chamilo\Core\Repository\Viewer\Manager::SELECT_SINGLE);
+//
+//            return $component->run();
+//        }
+//        else
+//        {
+//            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+//
+//            $parameters = array(
+//                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => Manager::ACTION_CREATE,
+//                Manager::PARAM_CONTENT_OBJECT_IDS => $objects
+//            );
+//
+//            $this->redirect('', false, $parameters);
+//        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\Feedback\Form;
 
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Translation\Translation;
@@ -20,15 +21,29 @@ class FeedbackForm extends FormValidator
     private $application;
 
     /**
+     * @var ContentObjectRepository
+     */
+    protected $contentObjectRepository;
+
+    /**
      * Constructor
      *
+     * @param Application $application
+     * @param ContentObjectRepository $contentObjectRepository
      * @param string $form_url
      * @param Feedback $feedback
+     *
+     * @throws \Exception
      */
-    public function __construct(Application $application, $form_url, $feedback = null)
+    public function __construct(
+        Application $application, ContentObjectRepository $contentObjectRepository, $form_url, $feedback = null
+    )
     {
         parent::__construct('feedback', 'post', $form_url);
+
         $this->application = $application;
+        $this->contentObjectRepository = $contentObjectRepository;
+
         $this->build_form();
 
         if ($feedback && $feedback->is_identified())
@@ -120,14 +135,35 @@ class FeedbackForm extends FormValidator
     /**
      * Sets the default values
      *
-     * @param Schema $schema
+     * @param Feedback|null $feedback
+     *
+     * @throws \Exception
      */
-    protected function set_defaults($feedback)
+    protected function set_defaults(Feedback $feedback = null)
     {
         $defaults = array();
-        if ($feedback && $feedback->is_identified())
+        if ($feedback instanceof Feedback && $feedback->is_identified())
         {
-            $defaults[Feedback::PROPERTY_COMMENT] = $feedback->get_comment();
+            if ($feedback->getFeedbackContentObjectId() > 0)
+            {
+                $feedbackContentObject =
+                    $this->contentObjectRepository->findById($feedback->getFeedbackContentObjectId());
+                if (!$feedbackContentObject instanceof
+                    \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback)
+                {
+                    throw new \RuntimeException(
+                        sprintf(
+                            'The given feedback with id %s references an invalid content object', $feedback->getId()
+                        )
+                    );
+                }
+
+                $defaults[Feedback::PROPERTY_COMMENT] = $feedbackContentObject->get_description();
+            }
+            else
+            {
+                $defaults[Feedback::PROPERTY_COMMENT] = $feedback->get_comment();
+            }
         }
 
         $this->setDefaults($defaults);

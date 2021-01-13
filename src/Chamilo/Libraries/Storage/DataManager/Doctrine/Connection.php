@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine;
 
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Doctrine\DBAL\DriverManager;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 
@@ -34,33 +35,12 @@ class Connection
      */
     private function __construct($connection = null)
     {
-        if (is_null($connection))
-        {
-            $data_source_name = \Chamilo\Libraries\Storage\DataManager\DataSourceName::get_from_config('Doctrine');
-            $configuration = new \Doctrine\DBAL\Configuration();
-            $connection_parameters = array(
-                'dbname' => $data_source_name->get_database(),
-                'user' => $data_source_name->get_username(),
-                'password' => $data_source_name->get_password(),
-                'host' => $data_source_name->get_host(),
-                'driverClass' => $data_source_name->get_driver(true),
-                'charset' => 'UTF8');
-            $this->connection = DriverManager::getConnection($connection_parameters, $configuration);
+        if(is_null($connection)){
+            $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+            $connection = $container->get('doctrine.dbal.connection');
+        }
 
-            try
-            {
-                $this->connection->connect();
-            }
-            catch (\Exception $ex)
-            {
-                throw new ConnectionException(
-                    'Could not connect to the database. Please contact your system administrator.');
-            }
-        }
-        else
-        {
-            $this->connection = $connection;
-        }
+        $this->connection = $connection;
     }
 
     /**

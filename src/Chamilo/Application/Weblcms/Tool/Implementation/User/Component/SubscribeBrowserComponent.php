@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\User\Component;
 
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -31,7 +32,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
 
     public function run()
     {
-        if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -39,7 +40,8 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $this->set_parameter(
             ActionBarSearchForm::PARAM_SIMPLE_SEARCH_QUERY,
-            $this->buttonToolbarRenderer->getSearchForm()->getQuery());
+            $this->buttonToolbarRenderer->getSearchForm()->getQuery()
+        );
 
         $html = array();
 
@@ -53,6 +55,12 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
 
     public function get_user_subscribe_html()
     {
+        if (empty($this->getButtonToolbarRenderer()->getSearchForm()->getQuery()))
+        {
+            return '<div class="alert alert-info">' .
+                $this->getTranslator()->trans('SearchFirst', [], Manager::context()) . '</div>';
+        }
+
         $table = new UnsubscribedUserTable($this);
 
         $html = array();
@@ -63,7 +71,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
             // $commonActions = new ButtonGroup();
@@ -89,7 +97,8 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class_name(), User::PROPERTY_ACTIVE),
-            new StaticConditionVariable(1));
+            new StaticConditionVariable(1)
+        );
 
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
@@ -99,7 +108,10 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
                     new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME)));
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL)
+                )
+            );
         }
 
         return new AndCondition($conditions);

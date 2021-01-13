@@ -86,4 +86,9 @@ interface EntryPlagiarismResultServiceBridgeInterface
     public function findEntriesWithPlagiarismResult(
         TreeNode $treeNode, int $entityType, FilterParameters $filterParameters
     );
+
+    /**
+     * @return bool
+     */
+    public function isPlagiarismEnabled();
 }

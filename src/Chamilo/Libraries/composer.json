@@ -4,23 +4,23 @@
     "description": "Libraries",
     "require": {
         "php": ">=7.0.0",
-        "jasig/phpcas": "=1.3.3",
+        "jasig/phpcas": "=1.3.7",
         "pclzip/pclzip": "2.8.2",
-        "phpmailer/phpmailer": "=v6.0.5",
+        "phpmailer/phpmailer": "=v6.0.6",
         "kriswallsmith/assetic": "1.x",
         "natxet/CssMin": "=3.0.2",
         "mrclay/minify": "=2.2.0",
         "danielstjules/stringy": "3.1.0",
         "spipu/html2pdf": "=5.1.0",
-        "phpoffice/phpspreadsheet": "1.3.1",
+        "phpoffice/phpspreadsheet": "1.8.0",
         "kigkonsult/icalcreator": "2.24",
         "simplepie/simplepie": "1.*",
         "ezyang/htmlpurifier": "4.9.2",
-        "sentry/sentry": "*",
+        "sentry/sentry": "^1.10",
         "google/recaptcha": "~1.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "2.12.1"
+        "friendsofphp/php-cs-fixer": "~2.16"
     },
     "repositories": [
         {

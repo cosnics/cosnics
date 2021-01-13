@@ -247,7 +247,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
-        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublicationObject(
             $this->get_user(),
             new ContentObjectPublication($publication),
             $this->tool_browser->get_application()->get_course());

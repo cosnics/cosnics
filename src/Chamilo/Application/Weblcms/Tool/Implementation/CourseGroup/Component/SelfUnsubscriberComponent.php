@@ -13,7 +13,7 @@ class SelfUnsubscriberComponent extends Manager
 
     public function run()
     {
-        $course_group = $this->get_course_group();
+        $course_group = $this->getCourseGroupFromRequest();
         $user = $this->get_user();
 
         if ($course_group->is_self_unregistration_allowed() && $course_group->is_member($user) &&

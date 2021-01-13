@@ -35,29 +35,40 @@ class XmlGroupMenuFeedComponent extends \Chamilo\Core\Group\Ajax\Manager
                 null, 
                 null, 
                 new OrderBy(new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME))))->as_array();
-        
+
+        $parentGroup = DataManager::retrieve_by_id(Group::class, $parent_id);
+
         header('Content-Type: text/xml');
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n", '<tree>' . "\n";
-        echo $this->dump_tree($groups_tree);
+        echo $this->dump_tree($groups_tree, $parentGroup);
         echo '</tree>';
     }
 
-    public function dump_tree($groups)
+    public function dump_tree($groups, $parentGroup = null)
     {
         $html = array();
         
         if ($this->contains_results($groups))
         {
-            $this->dump_groups_tree($groups);
+            $this->dump_groups_tree($groups, $parentGroup);
         }
     }
 
-    public function dump_groups_tree($groups)
+    /**
+     * @param $groups
+     * @param Group $parentGroup
+     */
+    public function dump_groups_tree($groups, $parentGroup = null)
     {
+        if($parentGroup instanceof Group)
+        {
+            $parentGroupFQN = $parentGroup->get_fully_qualified_name();
+        }
+
         foreach ($groups as $group)
         {
-            $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-            
+            $description = strip_tags($parentGroupFQN . ' > ' . $group->get_name() . ' (' . $group->get_code() . ')');
+
             $has_children = $group->has_children() ? 1 : 0;
             echo '<leaf id="' . $group->get_id() . '" classes="category" has_children="' . $has_children . '" title="' .
                  htmlspecialchars($group->get_name()) . '" description="' . htmlspecialchars($description) . '"/>' . "\n";

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Feedback\Component;
 
+use a;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
+use function sprintf;
 
 /**
  * Controller to update the controlled vocabulary
@@ -40,7 +42,7 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new FeedbackForm($this, $this->get_url(), $feedback);
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), $feedback);
 
         if ($form->validate())
         {
@@ -48,7 +50,37 @@ class UpdaterComponent extends Manager
             {
                 $values = $form->exportValues();
 
-                $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
+                if ($feedback->getFeedbackContentObjectId() > 0)
+                {
+                    $feedbackContentObject =
+                        $this->getContentObjectRepository()->findById($feedback->getFeedbackContentObjectId());
+                    if (!$feedbackContentObject instanceof
+                        \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback)
+                    {
+                        throw new \RuntimeException(
+                            sprintf(
+                                'The given feedback with id %s references an invalid content object', $feedback->getId()
+                            )
+                        );
+                    }
+
+                    $feedbackContentObject->set_description($values[Feedback::PROPERTY_COMMENT]);
+                    $this->getContentObjectIncluder()->scanForResourcesAndIncludeContentObjects($feedbackContentObject);
+                    if (!$feedbackContentObject->update())
+                    {
+                        throw new \RuntimeException(
+                            sprintf(
+                                'Could not update the feedback content object for feedback with id %s',
+                                $feedback->getId()
+                            )
+                        );
+                    }
+                }
+                else
+                {
+                    $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
+                }
+
                 $this->feedbackServiceBridge->updateFeedback($feedback);
 
                 $message = Translation::get(
@@ -62,6 +94,7 @@ class UpdaterComponent extends Manager
             catch (\Exception $ex)
             {
                 $success = false;
+                $this->getExceptionLogger()->logException($ex);
                 $message = $ex->getMessage();
             }
 

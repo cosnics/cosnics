@@ -30,10 +30,8 @@ class IntegrationLauncherComponent extends Manager
             throw new NoObjectSelectedException($this->getTranslator()->trans('BaseContext', [], Manager::class));
         }
 
-        $integrationPackage = $baseContext . '\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup';
-
         return $this->getApplicationFactory()->getApplication(
-            $integrationPackage,
+            $baseContext,
             new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         )->run();
     }

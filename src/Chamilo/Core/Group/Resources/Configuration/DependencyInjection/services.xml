@@ -11,5 +11,8 @@
             <argument type="service" id="chamilo.core.group.storage.repository.group_repository" />
         </service>
 
+        <service alias="chamilo.core.group.service.group_service"
+                 id="Chamilo\Core\Group\Service\GroupService" />
+
     </services>
 </container>

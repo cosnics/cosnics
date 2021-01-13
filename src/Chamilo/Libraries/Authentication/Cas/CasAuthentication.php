@@ -2,16 +2,13 @@
 
 namespace Chamilo\Libraries\Authentication\Cas;
 
-use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
-use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Authentication\Authentication;
 use Chamilo\Libraries\Authentication\AuthenticationException;
 use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\Translation\Translation;
 use phpCAS;
-use Symfony\Component\Translation\Translator;
 
 /**
  *
@@ -176,6 +173,8 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         $user->set_lastname($userAttributes['last_name']);
         $user->set_firstname($userAttributes['first_name']);
         $user->set_official_code($userAttributes['person_number']);
+        $user->set_expiration_date(0);
+        $user->set_active(1);
 
         if (!$user->create())
         {
@@ -201,10 +200,6 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
         }
         else
         {
-            Event::trigger(
-                'Logout', \Chamilo\Core\User\Manager::context(), array('server' => $_SERVER, 'user' => $user)
-            );
-
             if (!$this->hasBeenInitialized)
             {
                 $this->initializeClient();

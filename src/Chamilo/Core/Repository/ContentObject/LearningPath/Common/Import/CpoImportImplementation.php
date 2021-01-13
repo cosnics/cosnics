@@ -93,6 +93,11 @@ class CpoImportImplementation extends ImportImplementation
 
                     $newContentObjectId = $this->get_controller()->get_content_object_id_cache_id(
                         $treeNodeData->getContentObjectId());
+
+                    if(empty($newContentObjectId))
+                    {
+                        continue;
+                    }
                 }
                 else
                 {

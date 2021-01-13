@@ -2,7 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\LearningPathAttemptEntryRelation;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Repository\AssignmentRepository;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\LearningPathTreeNodeAttempt;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Group\Storage\DataClass\Group;
@@ -127,10 +130,13 @@ class AssignmentService extends
      * @return int
      */
     public function countTargetUsersForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], FilterParameters $filterParameters
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
+        FilterParameters $filterParameters
     )
     {
-        return $this->findTargetUsersForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds, $filterParameters)
+        return $this->findTargetUsersForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $userIds, $filterParameters
+        )
             ->count();
     }
 
@@ -524,7 +530,31 @@ class AssignmentService extends
         $entry->setTreeNodeAttemptId($treeNodeAttempt->getId());
         $entry->setContentObjectPublicationId($contentObjectPublication->getId());
 
-        return $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
+        $entry = $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
+
+        return $entry;
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt $treeNodeAttempt
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     */
+    public function createLearningPathAttemptEntryRelation(TreeNodeAttempt $treeNodeAttempt, Entry $entry)
+    {
+        $learningPathAttemptEntryRelation = new LearningPathAttemptEntryRelation();
+        $learningPathAttemptEntryRelation->setTreeNodeAttemptId($treeNodeAttempt->getId());
+        $learningPathAttemptEntryRelation->setEntryId($entry->getId());
+
+        if (!$this->assignmentRepository->createLearningPathAttemptEntryRelation($learningPathAttemptEntryRelation))
+        {
+            throw new \RuntimeException(
+                sprintf(
+                    'Could not create the learning path attempt entry relation into the database for entry %s and attempt %s',
+                    $learningPathAttemptEntryRelation->getEntryId(),
+                    $learningPathAttemptEntryRelation->getTreeNodeAttemptId()
+                )
+            );
+        }
     }
 
     /**
@@ -540,6 +570,26 @@ class AssignmentService extends
         {
             $this->deleteEntry($entry);
         }
+    }
+
+    /**
+     * @param int $learningPathAttemptId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|Entry
+     */
+    public function findEntryForLearningPathAttempt(int $learningPathAttemptId)
+    {
+        return $this->assignmentRepository->findEntryForLearningPathAttempt($learningPathAttemptId);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|LearningPathTreeNodeAttempt[]
+     */
+    public function findLearningPathAttemptsByEntry(Entry $entry)
+    {
+        return $this->assignmentRepository->findLearningPathAttemptsByEntry($entry);
     }
 
     /**

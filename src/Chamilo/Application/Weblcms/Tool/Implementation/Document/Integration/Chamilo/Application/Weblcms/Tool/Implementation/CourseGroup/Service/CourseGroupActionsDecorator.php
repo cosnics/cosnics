@@ -91,4 +91,17 @@ class CourseGroupActionsDecorator implements CourseGroupActionsDecoratorInterfac
 
         $courseGroupActionsToolbar->addItem($visitDocumentButton);
     }
+
+    /**
+     * @param ButtonToolBar $courseGroupActionsToolbar
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @param bool $isCourseTeacher
+     */
+    public function addCourseGroupSubscriptionActions(
+        ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup, User $user, $isCourseTeacher = false
+    )
+    {
+
+    }
 }

@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Utilities;
 use Chamilo\Configuration\Package\Finder\BasicBundles;
 use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ArrayLoader;
@@ -51,6 +52,8 @@ class BuildUtilities
             $webResourceJavascriptPath = str_replace($basePath, $baseWebPath, $sourceResourceJavascriptPath);
             Filesystem::recurse_copy($sourceResourceJavascriptPath, $webResourceJavascriptPath, true);
 
+            self::processCustomConfig($packageNamespace, $basePath, $baseWebPath);
+
             $event->getIO()->write('Processed resources for: ' . $packageNamespace);
         }
 
@@ -67,6 +70,38 @@ class BuildUtilities
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
         Filesystem::recurse_copy($sourceResourceImagePath, $webResourceImagePath, true);
         $event->getIO()->write('Processed error pages');
+    }
+
+    /**
+     * @param string $packageNamespace
+     * @param string $basePath
+     * @param string $baseWebPath
+     */
+    protected static function processCustomConfig(string $packageNamespace, string $basePath, string $baseWebPath)
+    {
+        $customConfigPath = Path::getInstance()->getResourcesPath($packageNamespace) . 'Configuration' .
+            DIRECTORY_SEPARATOR . 'process_resources.json';
+
+        $relativePackagePath = ClassnameUtilities::getInstance()->namespaceToPath($packageNamespace);
+        $packagePath = $basePath . $relativePackagePath;
+        $packageWebPath = $baseWebPath . $relativePackagePath;
+
+        if(file_exists($customConfigPath))
+        {
+            $customConfig = json_decode(file_get_contents($customConfigPath), true);
+            foreach($customConfig as $copyConfig)
+            {
+                $inputPath = realpath($packagePath . DIRECTORY_SEPARATOR . $copyConfig['input']);
+                $outputPath = $packageWebPath . DIRECTORY_SEPARATOR . $copyConfig['output'];
+
+                if(empty($inputPath) || empty($outputPath))
+                {
+                    continue;
+                }
+
+                Filesystem::recurse_copy($inputPath, $outputPath, true);
+            }
+        }
     }
 
     /**

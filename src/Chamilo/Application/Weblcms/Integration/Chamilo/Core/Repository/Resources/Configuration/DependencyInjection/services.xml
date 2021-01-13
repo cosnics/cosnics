@@ -15,23 +15,68 @@
         </service>
 
         <service
-                id="chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.assignment_publication_service"
-                class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
-            <argument type="service"
-                      id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService"/>
-            <argument type="service"
-                      id="chamilo.core.repository.workspace.repository.content_object_repository"/>
+                id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAttachmentAssignmentPublicationService"
+                class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAttachmentAssignmentPublicationService">
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
             <argument type="string">Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\EntryAttachment</argument>
         </service>
 
         <service
-                id="chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.learning_path_assignment_publication_service"
-                class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService">
+                id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryAttachmentAssignmentPublicationService"
+                class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAttachmentAssignmentPublicationService">
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+            <argument type="string">Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment</argument>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAssignmentPublicationService"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAssignmentPublicationService">
+            <argument type="service"
+                      id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+            <argument type="string">Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry</argument>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryAssignmentPublicationService"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAssignmentPublicationService">
             <argument type="service"
                       id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService"/>
-            <argument type="service"
-                      id="chamilo.core.repository.workspace.repository.content_object_repository"/>
-            <argument type="string">Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment</argument>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+            <argument type="string">Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry</argument>
+        </service>
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryFeedbackAssignmentPublicationService"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryFeedbackAssignmentPublicationService">
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\FeedbackService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+            <argument type="string">Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry</argument>
+        </service>
+
+        <service id="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryFeedbackAssignmentPublicationService"
+                 class="Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryFeedbackAssignmentPublicationService">
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\FeedbackService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\AssignmentService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\PublicationService"/>
+            <argument type="service" id="Chamilo\Application\Weblcms\Service\CourseService"/>
+            <argument type="service" id="Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository"/>
+            <argument type="service" id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService"/>
+            <argument type="string">Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry</argument>
         </service>
     </services>
 </container>

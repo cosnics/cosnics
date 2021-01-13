@@ -14,5 +14,9 @@
         <service id="Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository" autowire="true">
             <factory service="Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepositoryFactory" method="createTurnitinRepository" />
         </service>
+
+        <service id="Chamilo\Application\Plagiarism\Console\Command\Turnitin\DeleteSubmissionCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
     </services>
 </container>

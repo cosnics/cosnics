@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Authentication\Platform;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Service\PasswordSecurity;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -15,6 +16,7 @@ use Chamilo\Libraries\Authentication\AuthenticationInterface;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\ChamiloRequest;
+use Chamilo\Libraries\Platform\Session\Session;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -114,9 +116,6 @@ class PlatformAuthentication extends Authentication
      */
     public function logout(User $user)
     {
-        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
-        $redirect->toUrl();
-        exit();
     }
 
     /**
@@ -143,12 +142,13 @@ class PlatformAuthentication extends Authentication
             return false;
         }
 
-        $oldPasswordHash = $this->hashingUtilities->hashString($oldPassword);
-
         // Verify that the entered old password matches the stored password
-        if ($oldPasswordHash != $user->get_password())
+        if(!$this->passwordSecurity->isPasswordValidForUser($user, $oldPassword))
         {
-            return false;
+            if(!$this->isPasswordValidWithOldHashingMethod($user, $oldPassword))
+            {
+                return false;
+            }
         }
 
         // Set the password

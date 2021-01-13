@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component\Integr
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Component
@@ -16,6 +17,7 @@ class SyncCourseGroupComponent extends Manager
 {
     /**
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws UserException
      */
     function run()
     {
@@ -28,11 +30,15 @@ class SyncCourseGroupComponent extends Manager
         try
         {
             $this->getCourseGroupOffice365Connector()->syncCourseGroupSubscriptions(
-                $this->getIntegrationLauncherComponent()->get_course_group()
+                $this->getIntegrationLauncherComponent()->getCourseGroupFromRequest()
             );
 
             $success = true;
             $message = 'CourseGroupSyncSuccessful';
+        }
+        catch(UserException $ex)
+        {
+            throw $ex;
         }
         catch (\Exception $ex)
         {

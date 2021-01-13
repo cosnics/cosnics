@@ -104,6 +104,8 @@ abstract class Manager extends Application
     const ACTION_VIEW_ATTACHMENT = 'AttachmentViewer';
     const ACTION_CREATE_BOOKMARK = 'CourseBookmarkCreator';
     const ACTION_MAIL_PUBLICATION = 'PublicationMailer';
+    const ACTION_SUBSCRIBE_PLATFORM_GROUP_USERS = 'SubscribePlatformGroupUsers';
+    const ACTION_QUICK_USERS_SUBSCRIBER = 'QuickUsersSubscriber';
     const DEFAULT_ACTION = self::ACTION_BROWSE;
 
     /**
@@ -444,9 +446,9 @@ abstract class Manager extends Application
         return $this->get_parent()->get_course_groups();
     }
 
-    public function get_course_group()
+    public function getCourseGroupFromRequest()
     {
-        return $this->get_parent()->get_course_group();
+        return $this->get_parent()->getCourseGroupFromRequest();
     }
 
     /**
@@ -746,7 +748,7 @@ abstract class Manager extends Application
                 $introduction_text->get_content_object()
             );
 
-            $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+            $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublicationObject(
                 $this->getUser(),
                 $introduction_text,
                 $this->get_course()
@@ -926,6 +928,11 @@ abstract class Manager extends Application
 
     public static function get_tool_type_namespace($type)
     {
+        // temp fix for HOGENT code, better solution is needed
+        if($type == 'LectureCapture')
+        {
+            return 'Hogent\Application\Weblcms\Tool\Implementation\\' . $type;
+        }
         return 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $type;
     }
 

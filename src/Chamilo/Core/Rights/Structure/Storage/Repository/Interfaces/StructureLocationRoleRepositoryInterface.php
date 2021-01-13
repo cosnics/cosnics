@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces;
 
 use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocation;
+use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
 
 /**
@@ -23,11 +24,8 @@ interface StructureLocationRoleRepositoryInterface extends DataManagerRepository
     public function findStructureLocationRoleByStructureLocationAndRole($structureLocationId, $roleId);
 
     /**
-     * Returns a list of roles by a given structure location
-     * 
-     * @param int $structureLocationId
-     *
-     * @return Role[]
+     * @return array[]
      */
-    public function findRolesForStructureLocation($structureLocationId);
+    public function retrieveStructureLocationsAndRoles();
+
 }

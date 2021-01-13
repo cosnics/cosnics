@@ -1,0 +1,176 @@
+<div>
+    {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+
+    {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
+    {{ getCss('cosnics-rubric.css', appContext) }}
+
+    <style type="text/css">
+        .col-xs-12 #rubric-entry {
+            margin: 0 -10px;
+        }
+        .cluster-sep.mod-grades:nth-last-child(2) {
+            display: none;
+        }
+        .save-rubric-area {
+            align-items: baseline;
+            margin-left: .5em;
+        }
+        @media only screen and (max-width: 639px) {
+            .save-rubric-area {
+                width: 100%;
+            }
+
+            .save-rubric-area.mod-scores {
+                order: 1;
+            }
+        }
+        @media only screen and (min-width: 640px) {
+            .save-rubric-area-content {
+                position: absolute;
+            }
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                margin-top: 3px;
+            }
+            .save-rubric-area.mod-grades .save-rubric-area-content {
+                display: flex;
+            }
+        }
+        @media only screen and (min-width: 780px) {
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                display: flex;
+            }
+        }
+        @media only screen and (min-width: 900px) {
+            .save-rubric-area.mod-scores .save-rubric-area-content {
+                margin-top: -4px;
+            }
+        }
+        .warning-msg {
+            padding: 5px;
+        }
+        .warning-msg .fa-warning {
+            color: orange;
+            margin-right: 5px;
+        }
+        .info-msg {
+            padding: 5px 5px 5px 8px;
+        }
+        .warning-msg button {
+            border: 1px solid #ddd;
+        }
+    </style>
+
+    <div id="rubric-entry">
+        <h4 style="margin: 0 10px 10px 10px">{{ 'RubricEntry'|trans({}, appContext) }}</h4>
+
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
+            <template v-slot:slot-outer>
+                <div class="save-rubric-area" :class="useScores ? 'mod-scores' : 'mod-grades'">
+                    <div class="save-rubric-area-content">
+                        <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
+                        <div v-if="showErrorMessage" class="warning-msg">
+                            <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
+                            <button @click="showErrorMessage = false">OK</button>
+                        </div>
+                        <div v-if="isSaving" class="info-msg" v-html="$t('is-saving')"></div>
+                    </div>
+                </div>
+            </template>
+        </rubric-entry-wrapper>
+        {{ form_start(FORM) }}
+        {{ form_widget(FORM.rubric_results, {'attr': {':value': 'rubricResultsJSON'} }) }}
+        {{ form_end(FORM) }}
+    </div>
+    <script>
+        Vue.use(BootstrapVue);
+        Vue.use(VueI18n);
+        Vue.use(this['cosnics-rubric'].default);
+        var messages = {
+            'en': {
+                'error': 'Attention. There are still a few errors in the rubric form.',
+                'is-saving': 'Saving rubric...',
+                'save': 'Save rubric'
+            },
+            'fr': {
+                'error': 'Attention. Il y a encore quelques erreurs dans la forme.',
+                'is-saving': 'En train de sauvegarder la rubrique...',
+                'save': 'Sauvegarder la rubrique'
+            },
+            'nl': {
+                'error': 'Opgelet, er staan nog enkele fouten in het rubric formulier.',
+                'is-saving': 'Rubric aan het oplaan...',
+                'save': 'Rubric opslaan'
+            }
+        };
+
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
+
+        var lang;
+        try {
+            lang = '{{ LANGUAGE|raw }}';
+        } catch (err) {
+            console.warn('Language could not be set, defaulting to English instead.');
+            lang = 'en';
+        }
+
+        new Vue({
+            i18n: new VueI18n({ locale: lang, messages }),
+            el: '#rubric-entry',
+            data: {
+                rubricData: data,
+                useScores: data ? data.use_scores : false,
+                hasErrors: false,
+                showErrorMessage: false,
+                rubricResults: { results: [] },
+                isSaving: false,
+            },
+            computed: {
+                rubricResultsJSON: function() {
+                    var res = JSON.stringify(this.rubricResults.results);
+                    if (this.showErrorMessage) {
+                        var i, results = this.rubricResults.results;
+                        if (results.length === 0) {
+                            return;
+                        }
+                        for (i = 0; i < results.length; i++) {
+                            if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
+                                return;
+                            }
+                        }
+                        this.hasErrors = false;
+                        this.showErrorMessage = false;
+                    }
+                    return res;
+                }
+            },
+            methods: {
+                saveRubric: function(event) {
+                    event.preventDefault();
+                    if (this.isSaving) { return; }
+                    var i, results = this.rubricResults.results;
+                    if (results.length === 0) {
+                        this.hasErrors = true;
+                        this.showErrorMessage = true;
+                        return;
+                    }
+                    for (i = 0; i < results.length; i++) {
+                        if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
+                            this.hasErrors = true;
+                            this.showErrorMessage = true;
+                            return;
+                        }
+                    }
+                    this.hasErrors = false;
+                    this.showErrorMessage = false;
+                    var form = document.querySelector('[name=entry_form]');
+                    if (form) {
+                        this.isSaving = true;
+                        form.submit();
+                    }
+                }
+            }
+        });
+    </script>
+
+</div>

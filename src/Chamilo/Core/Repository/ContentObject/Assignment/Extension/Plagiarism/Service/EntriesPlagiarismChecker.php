@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 
 /**
@@ -35,15 +36,14 @@ class EntriesPlagiarismChecker
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Core\User\Storage\DataClass\User $submitter
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Interfaces\EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
      *
      * @throws \Chamilo\Application\Plagiarism\Domain\Exception\PlagiarismException
-     * @throws \Exception
      */
     public function checkAllEntriesForPlagiarism(
-        Assignment $assignment,
+        User $submitter,
         AssignmentServiceBridgeInterface $assignmentServiceBridge,
         EntryPlagiarismResultServiceBridgeInterface $entryPlagiarismResultServiceBridge
     )
@@ -83,9 +83,13 @@ class EntriesPlagiarismChecker
 
             if ($this->plagiarismChecker->canCheckForPlagiarism($entry))
             {
-                $this->plagiarismChecker->checkEntryForPlagiarism(
-                    $assignment, $entry, $entryPlagiarismResultServiceBridge
-                );
+                try {
+                    $this->plagiarismChecker->checkEntryForPlagiarism(
+                        $entry, $submitter, $entryPlagiarismResultServiceBridge
+                    );
+                } catch (\Exception $exception) {
+                    //todo: long term fix
+                }
             }
         }
     }

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Domain\EntryDownloadResponse;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -13,6 +14,7 @@ use Chamilo\Libraries\File\Compression\ArchiveCreator\Archive;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveCreator;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFile;
 use Chamilo\Libraries\File\Compression\ArchiveCreator\ArchiveFolder;
+use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -119,7 +121,7 @@ class EntryDownloader
     {
         $safeTitle = stripslashes(//converts two backslashes to one
             stripslashes(//removes single backslash
-                str_replace('/','',$this->getAssignment()->get_title()) //remove forward slash
+                str_replace('/', '', $this->getAssignment()->get_title()) //remove forward slash
             )
         );
 
@@ -360,8 +362,10 @@ class EntryDownloader
                 return null;
             }
 
+            $fileName = $this->createFileName($entries[0], $file);
+
             return $this->createEntryDownloadResponse(
-                $file->get_full_path(), $file->get_filename(), $file->get_mime_type(), false
+                $file->get_full_path(), $fileName, $file->get_mime_type(), false
             );
         }
 
@@ -376,17 +380,6 @@ class EntryDownloader
                 continue;
             }
 
-            try
-            {
-                $entityName = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
-                    $entry->getEntityType(), $entry->getEntityId()
-                );
-            }
-            catch(\Exception $ex)
-            {
-                continue;
-            }
-
 //            $entityFolder = $this->getOrCreateFolderByEntity(
 //                $entry->getEntityType(), $entry->getEntityId(), $archive
 //            );
@@ -396,9 +389,7 @@ class EntryDownloader
 //                continue;
 //            }
 
-            $fileName = \Chamilo\Libraries\File\Filesystem::create_safe_name(
-                $entityName . '_' . $contentObject->get_filename()
-            );
+            $fileName = $this->createFileName($entry, $contentObject);
 
             $archiveFile = new ArchiveFile();
             $archiveFile->setName($fileName);
@@ -461,7 +452,7 @@ class EntryDownloader
 
                 $this->entityFoldersCache[$cacheKey] = $folder;
             }
-            catch(\Exception $ex)
+            catch (\Exception $ex)
             {
                 $this->entityFoldersCache[$cacheKey] = null;
             }
@@ -489,5 +480,33 @@ class EntryDownloader
         {
             $this->archiveCreator->removeArchiveAfterDownload($downloadResponse);
         }
+    }
+
+    /**
+     * @param Entry $entry
+     * @param File $file
+     *
+     * @return string|null
+     */
+    protected function createFileName(Entry $entry, File $file)
+    {
+        try
+        {
+            $entityName = $this->getAssignmentServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
+                $entry->getEntityType(), $entry->getEntityId()
+            );
+        }
+        catch (\Exception $ex)
+        {
+            $entityName = $entry->getEntityId();
+        }
+
+        return Filesystem::create_safe_name(
+            $entityName . '_' . str_replace(
+                '.' . $file->get_extension(), '--'
+                . date('d-m-Y--H-i', $entry->getSubmitted()) . '.' . $file->get_extension(),
+                $file->get_filename()
+            )
+        );
     }
 }

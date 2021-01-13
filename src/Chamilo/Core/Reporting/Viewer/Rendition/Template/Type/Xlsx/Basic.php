@@ -161,10 +161,10 @@ class Basic extends Xlsx
                 XlsxBlockRendition::VIEW_BASIC);
         }
         
-        $file = Path::getInstance()->getArchivePath() . Filesystem::create_unique_name(
-            Path::getInstance()->getArchivePath(), 
+        $file = Path::getInstance()->getTemporaryPath() . Filesystem::create_unique_name(
+            Path::getInstance()->getTemporaryPath(),
             $file_name);
-        
+
         $php_excel_writer = IOFactory::createWriter($this->php_excel, 'Xlsx');
         $php_excel_writer->save($file);
         

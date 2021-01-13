@@ -17,6 +17,6 @@ class NotificationRedirect extends Redirect
      */
     public function getUrl()
     {
-        return $this->getWebLink('index.php');
+        return $this->addParametersToUrl('index.php');
     }
 }

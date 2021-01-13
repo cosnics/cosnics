@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\Application;
 
 use Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException;
@@ -112,6 +113,7 @@ class ApplicationFactory
      *
      * @param string $action
      * @param boolean $generateBreadcrumbs
+     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function getComponent($action = null, $generateBreadcrumbs = true)
@@ -128,17 +130,20 @@ class ApplicationFactory
 
     /**
      *
-     * @throws \Exception
      * @return string
+     * @throws \Exception
      */
     private function getManagerClass()
     {
         $managerClass = $this->getContext() . '\Manager';
 
-        if (! class_exists($managerClass))
+        if (!class_exists($managerClass))
         {
             throw new UserException(
-                Translation::get('InvalidApplication', array('CONTEXT' => $this->getContext()), 'Chamilo\Libraries'));
+                Translation::get(
+                    'InvalidApplication', array('CONTEXT' => htmlspecialchars($this->getContext()), 'Chamilo\Libraries')
+                )
+            );
         }
 
         return $managerClass;
@@ -158,6 +163,7 @@ class ApplicationFactory
     /**
      *
      * @param string $action
+     *
      * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     private function createComponent($action = null)
@@ -173,7 +179,7 @@ class ApplicationFactory
 
         $component->set_parameter($this->getActionParameter(), $action);
 
-        if (! $this->getApplication() instanceof Application)
+        if (!$this->getApplication() instanceof Application)
         {
             $component->set_parameter(Application::PARAM_CONTEXT, $this->getContext());
         }
@@ -242,17 +248,18 @@ class ApplicationFactory
     /**
      *
      * @param string $actionParameter
+     *
      * @return string
      */
     private function getRequestedAction($actionParameter)
     {
         $getAction = $this->getRequest()->query->get($actionParameter);
 
-        if (! $getAction)
+        if (!$getAction)
         {
             $postAction = $this->getRequest()->request->get($actionParameter);
 
-            if (! $postAction)
+            if (!$postAction)
             {
                 // TODO: Catch the fact that there might not be a default action
                 $managerClass = $this->getManagerClass();
@@ -273,6 +280,7 @@ class ApplicationFactory
     /**
      *
      * @param string $action
+     *
      * @return string
      */
     public function getClassName($action = null)
@@ -288,20 +296,21 @@ class ApplicationFactory
     /**
      *
      * @param string $action
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     *
      * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
     private function buildClassName($action)
     {
         $classname = $this->getContext() . '\Component\\' . $action . 'Component';
 
-        if (! class_exists($classname))
+        if (!class_exists($classname))
         {
             // TODO: Temporary fallback for backwards compatibility
             $classname = $this->getContext() . '\Component\\' .
-                 (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
+                (string) StringUtilities::getInstance()->createString($action)->upperCamelize() . 'Component';
 
-            if (! class_exists($classname))
+            if (!class_exists($classname))
             {
                 $trail = BreadcrumbTrail::getInstance();
                 $trail->add(new Breadcrumb('#', Translation::get($classname)));

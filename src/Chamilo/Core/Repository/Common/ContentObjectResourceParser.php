@@ -97,7 +97,8 @@ class ContentObjectResourceParser
     /**
      * @param string $html
      * @param bool $parseFullHtml
-     * @return array
+     *
+     * @return ContentObject[]
      */
     public function getContentObjects(string $html, bool $parseFullHtml = false)
     {

@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Exception\CourseTeamNo
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Teams\Service\CourseTeamService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Service\TeamService;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -23,18 +24,19 @@ class GoToTeamComponent extends Manager
     /**
      * @return string|RedirectResponse
      * @throws CourseTeamNotExistsException
+     * @throws GraphException
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException
      */
     public function run()
     {
-        /**
-         * @var CourseTeamService $courseTeamService
-         */
-        $courseTeamService = $this->getService(CourseTeamService::class);
+        $courseTeamService = $this->getCourseTeamService();
+
         $team = $courseTeamService->getTeam($this->get_course());
 
-        if(is_null($team)) {
+        if (is_null($team))
+        {
             throw new CourseTeamNotExistsException($this->get_course());
         }
 
@@ -43,9 +45,12 @@ class GoToTeamComponent extends Manager
          */
         $teamService = $this->getService(TeamService::class);
 
-        if($this->get_course()->is_course_admin($this->getUser())) {
+        if ($this->get_course()->is_course_admin($this->getUser()))
+        {
             $teamService->addOwner($this->getUser(), $team);
-        } else {
+        }
+        else
+        {
             $teamService->addMember($this->getUser(), $team);
         }
 

@@ -39,6 +39,11 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
      */
 
     /**
+     * @var RepositoryCategory[]
+     */
+    protected $children;
+
+    /**
      * Creates this category
      *
      * @param $create_in_batch boolean - Creates objects in batch without fixing the right / left values (faster)
@@ -357,5 +362,25 @@ class RepositoryCategory extends \Chamilo\Configuration\Category\Storage\DataCla
 
             return $parent_ids;
         }
+    }
+
+    /**
+     * @param array $categories
+     */
+    public function setChildren(array $categories)
+    {
+        $this->children = $categories;
+    }
+
+    /**
+     * @return RepositoryCategory[]
+     *
+     * This method does not retrieve the children from the database. It is only a helper method to set / get
+     * the children directly from the domain model. At this point the category service must build the tree
+     * manually and use the setChildren method to create a recursive tree
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

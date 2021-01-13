@@ -4,8 +4,9 @@
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: Fixed Headers</title>
 
-	<script src="//code.jquery.com/jquery-1.12.1.js"></script>
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+	<script src="//code.jquery.com/jquery-3.4.1.js"></script>
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <style type="text/css">
 	/* Set alternating row colors (define BEFORE standard css). */
@@ -31,19 +32,18 @@
 		padding: 5px;
 	   white-space: pre;
 	}
+	td:nth-child(2) {
+		text-align: left;
+	}
 
 	table {
 		border-collapse: collapse;
 	}
 
-/*  	span.fancytree-node {
-	   white-space: pre;
-	} */
-
 	#tableWrapper {
-	   width: 1200px;
+	   width: 100%;
 	   height: 600px;
-	   overflow: auto;
+	   overflow: hidden;
 	   position: relative;
 	}
 
@@ -55,6 +55,72 @@
 		width: 22px;
 	}
 
+	table.fancytree-ext-table tbody tr.fancytree-ext-fixed-hover {
+	  border-color: inherit;
+	  background: #f8fcfe;
+	  color: inherit;
+	  background: -moz-linear-gradient(top, #f8fcfe 0%, #eff9fe 100%);
+	  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f8fcfe), color-stop(100%, #eff9fe));
+	  background: -webkit-linear-gradient(top, #f8fcfe 0%, #eff9fe 100%);
+	  background: -o-linear-gradient(top, #f8fcfe 0%, #eff9fe 100%);
+	  background: -ms-linear-gradient(top, #f8fcfe 0%, #eff9fe 100%);
+	  background: linear-gradient(to bottom, #f8fcfe 0%, #eff9fe 100%);
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f8fcfe', endColorstr='#eff9fe', GradientType=0);
+	  outline: 1px solid #d8f0fa;
+	}
+
+	table.fancytree-ext-table tbody tr.fancytree-active.fancytree-ext-fixed-hover,
+	table.fancytree-ext-table tbody tr.fancytree-selected.fancytree-ext-fixed-hover {
+	  border-color: inherit;
+	  background: #f2f9fd;
+	  color: inherit;
+	  background: -moz-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f9fd), color-stop(100%, #c4e8fa));
+	  background: -webkit-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -o-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -ms-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: linear-gradient(to bottom, #f2f9fd 0%, #c4e8fa 100%);
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f9fd', endColorstr='#c4e8fa', GradientType=0);
+	  outline: 1px solid #B6E6FB;
+	}
+
+	table.fancytree-ext-table {
+		width: 100%;
+	}
+
+	table.fancytree-ext-table tbody tr.fancytree-active.fancytree-ext-fixed-hover,
+	table.fancytree-ext-table tbody tr.fancytree-selected.fancytree-ext-fixed-hover {
+	  border-color: inherit;
+	  background: #f2f9fd;
+	  color: inherit;
+	  background: -moz-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f9fd), color-stop(100%, #c4e8fa));
+	  background: -webkit-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -o-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -ms-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: linear-gradient(to bottom, #f2f9fd 0%, #c4e8fa 100%);
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f9fd', endColorstr='#c4e8fa', GradientType=0);
+	  outline: 1px solid #B6E6FB;
+	}
+
+	table.fancytree-ext-table {
+		width: 100%;
+	}
+
+	table.fancytree-ext-table tbody tr.fancytree-active.fancytree-ext-fixed-hover,
+	table.fancytree-ext-table tbody tr.fancytree-selected.fancytree-ext-fixed-hover {
+	  border-color: inherit;
+	  background: #f2f9fd;
+	  color: inherit;
+	  background: -moz-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f9fd), color-stop(100%, #c4e8fa));
+	  background: -webkit-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -o-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: -ms-linear-gradient(top, #f2f9fd 0%, #c4e8fa 100%);
+	  background: linear-gradient(to bottom, #f2f9fd 0%, #c4e8fa 100%);
+	  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f9fd', endColorstr='#c4e8fa', GradientType=0);
+	  outline: 1px solid #B6E6FB;
+	}
 
 </style>
 	<link href="../src/skin-win7/ui.fancytree.css" rel="stylesheet" type="text/css">
@@ -78,8 +144,9 @@
 		$("#treetable").fancytree({
 			extensions: ["table", "fixed"],
 			checkbox: true,
+			autoScroll: true,
 			fixed: {
-				fixCols: 3,	  // Fix leftmost n columns
+				fixCols: 4,	  // Fix leftmost n columns
 //		        fixColWidths: [16, 50, 200],
 				fixRows: 2  // Fix topmost n rows (true: whole <thead>)
 			},
@@ -115,7 +182,7 @@
 				$tdList.eq(4).html("<input type='checkbox' name='like' value='" + node.key + "'>");
 
 				for (var i = 5; i < 34; i++) {
-					$tdList.eq(i).text("Body R" + idx + " C" + (i+1));
+					$tdList.eq(i).append($("<input>"));
 				}
 			},
 			collapse: function(event, data) {
@@ -129,7 +196,7 @@
 <script type="text/javascript">
 	$(function(){
 		/* Handle custom checkbox clicks */
-		$("#treetable").delegate("input[name=like]", "click", function(e){
+		$("#treetable").on("click", "input[name=like]", function(e){
 			var node = $.ui.fancytree.getNode(e),
 			   $input = $(e.target);
 			e.stopPropagation();  // prevent fancytree activate for this row
@@ -139,7 +206,7 @@
 				alert("dislike " + $input.val());
 			}
 		});
-		$("#fixedRows").keyup(function(evt) {
+		$("#fixedRows").on("keyup", function(evt) {
 			var rows = parseInt($(this).val());
 			if (!isNaN(rows) && evt.keyCode === 13) {
 				var tree = $("#treetable").fancytree("getTree");
@@ -147,7 +214,7 @@
 				tree.reload();
 			}
 		});
-		$("#fixedCols").keyup(function(evt) {
+		$("#fixedCols").on("keyup", function(evt) {
 			var cols = parseInt($(this).val());
 			if (!isNaN(cols) && evt.keyCode === 13) {
 				var tree = $("#treetable").fancytree("getTree");
@@ -159,12 +226,16 @@
 		addSampleButton({
 			label: "Expand all",
 			code: function(){
-				var t = $.ui.fancytree.getTree();
+//				var tree = $.ui.fancytree.getTree();
 				var $tree = $("#treetable");
+				var tree = $tree.fancytree("getTree");
+
 				window.console.time("expand all");
-				$tree.fancytree("getTree").visit(function(n){
+				tree.enableUpdate(false);
+				tree.visit(function(n){
 					n.setExpanded();
 				});
+				tree.enableUpdate(true);
 				window.console.timeEnd("expand all");
 			}
 		});

@@ -53,7 +53,7 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
         $canEditContentObject = $repositoryRightsService->canEditContentObject(
             $this->get_user(),
             $publication->get_content_object());
-        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublication(
+        $canEditPublicationContentObject = $weblcmsRightsService->canUserEditPublicationObject(
             $this->get_user(),
             $publication,
             $this->get_course());

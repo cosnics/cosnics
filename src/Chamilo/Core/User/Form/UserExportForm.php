@@ -45,7 +45,7 @@ class UserExportForm extends FormValidator
             'select',
             'file_type',
             Translation::get('OutputFileType'),
-            Export::get_supported_filetypes(array('ical')));
+            Export::get_supported_filetypes(array('Pdf', 'Excel')));
 
         $buttons[] = $this->createElement(
             'style_submit_button',

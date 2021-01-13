@@ -1,0 +1,49 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup' %}
+
+{{ form_start(FORM) }}
+
+<style>
+    .code-example
+    {
+        border: 1px solid #dddddd;
+        background-color: white;
+        padding: 10px 17px;
+        margin: 20px 15px 0;
+    }
+</style>
+
+<div class="row form-row">
+    <div class="col-sm-8 col-sm-push-4 col-md-10 col-md-push-2">
+        <div class="alert alert-info" style="max-width: 1200px; margin: 0 auto 20px; font-size: 14px;">
+            <div>
+                <span>{{ 'QuickUsersSubscriberInfo'|trans({'{COURSE_GROUP_NAME}': COURSE_GROUP_NAME}, appContext)|raw }}</span>
+            </div>
+            <div style="margin-top: 30px;">
+                <div style="margin-bottom: 20px;">
+                    <strong>{{ 'Example1'|trans({}, appContext) }}</strong>
+                    <div class="code-example">john.doe@example.com, jane.doe@example.com</div>
+                </div>
+                <div>
+                    <strong>{{ 'Example2'|trans({}, appContext) }}</strong>
+                    <div class="code-example">201856487<br />201951234<br />201412345</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_row(FORM.user_identifiers, {'attr': {'rows': 10}, 'label': 'UserIdentifiers'|trans({}, appContext)}) }}
+
+<div class="row form-row">
+    <div class="col-sm-8 col-sm-push-4 col-md-10 col-md-push-2" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-primary">
+            {{ 'SubscribeUsers'|trans({}, appContext) }}
+        </button>
+    </div>
+</div>
+
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}

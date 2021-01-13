@@ -36,7 +36,7 @@ class BrowserComponent extends Manager
     {
         $course_id = $this->get_course_id();
 
-        $courseGroupService = new CourseGroupService(new CourseGroupRepository());
+        $courseGroupService = $this->getCourseGroupService();
 
         // $trail = BreadcrumbTrail :: getInstance();
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
@@ -157,5 +157,13 @@ class BrowserComponent extends Manager
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+    }
+
+    /**
+     * @return CourseGroupService
+     */
+    protected function getCourseGroupService(): CourseGroupService
+    {
+        return $this->getService(CourseGroupService::class);
     }
 }

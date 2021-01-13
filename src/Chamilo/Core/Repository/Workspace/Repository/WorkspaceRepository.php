@@ -180,31 +180,28 @@ class WorkspaceRepository
 
         foreach ($entities as $entityType => $entityIdentifiers)
         {
-            foreach ($entityIdentifiers as $entityIdentifier)
-            {
-                $entityConditions = array();
+            $entityConditions = array();
 
-                $entityConditions[] = new EqualityCondition(
+            $entityConditions[] = new InCondition(
+                new PropertyConditionVariable(
+                    WorkspaceEntityRelation::class_name(),
+                    WorkspaceEntityRelation::PROPERTY_ENTITY_ID),
+                $entityIdentifiers);
+            $entityConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceEntityRelation::class_name(),
+                    WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE),
+                new StaticConditionVariable($entityType));
+            $entityConditions[] = new EqualityCondition(
+                new OperationConditionVariable(
                     new PropertyConditionVariable(
                         WorkspaceEntityRelation::class_name(),
-                        WorkspaceEntityRelation::PROPERTY_ENTITY_ID),
-                    new StaticConditionVariable($entityIdentifier));
-                $entityConditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(
-                        WorkspaceEntityRelation::class_name(),
-                        WorkspaceEntityRelation::PROPERTY_ENTITY_TYPE),
-                    new StaticConditionVariable($entityType));
-                $entityConditions[] = new EqualityCondition(
-                    new OperationConditionVariable(
-                        new PropertyConditionVariable(
-                            WorkspaceEntityRelation::class_name(),
-                            WorkspaceEntityRelation::PROPERTY_RIGHTS),
-                        OperationConditionVariable::BITWISE_AND,
-                        new StaticConditionVariable($right)),
-                    new StaticConditionVariable($right));
+                        WorkspaceEntityRelation::PROPERTY_RIGHTS),
+                    OperationConditionVariable::BITWISE_AND,
+                    new StaticConditionVariable($right)),
+                new StaticConditionVariable($right));
 
-                $conditions[] = new AndCondition($entityConditions);
-            }
+            $conditions[] = new AndCondition($entityConditions);
         }
 
         return new OrCondition($conditions);
@@ -248,6 +245,36 @@ class WorkspaceRepository
                 $offset,
                 $orderProperty,
                 $this->getWorkspaceFavouritesByUserJoins(),
+                true));
+    }
+
+    /**
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param integer[] $entities
+     * @param integer $limit
+     * @param integer $offset
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet
+     */
+    public function findWorkspaceFavouritesByUserFast(User $user, $limit = null, $offset = null, $orderProperty = array())
+    {
+        $joins = new Joins();
+        $joins->add($this->getFavouritesJoin());
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(WorkspaceUserFavourite::class_name(), WorkspaceUserFavourite::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId()));
+
+        return DataManager::retrieves(
+            Workspace::class_name(),
+            new DataClassRetrievesParameters(
+                $condition,
+                $limit,
+                $offset,
+                $orderProperty,
+                $joins,
                 true));
     }
 

@@ -4,12 +4,15 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storag
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback;
+use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
@@ -146,6 +149,74 @@ abstract class FeedbackRepository
 
         return $this->dataClassRepository->retrieves(
             $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param array $contentObjectIds
+     *
+     * @return int
+     */
+    public function countFeedbackByContentObjectIds(array $contentObjectIds = [])
+    {
+        $condition = new InCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_FEEDBACK_CONTENT_OBJECT_ID),
+            $contentObjectIds
+        );
+
+        return $this->dataClassRepository->count(
+            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Feedback[]
+     */
+    public function findFeedbackByContentObject(ContentObject $contentObject)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_FEEDBACK_CONTENT_OBJECT_ID),
+            new StaticConditionVariable($contentObject->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Feedback[]
+     */
+    public function findFeedbackByUser(User $user)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        return $this->dataClassRepository->retrieves(
+            $this->getFeedbackClassName(), new DataClassRetrievesParameters($condition)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return int
+     */
+    public function countFeedbackByUser(User $user)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable($this->getFeedbackClassName(), Feedback::PROPERTY_USER_ID),
+            new StaticConditionVariable($user->getId())
+        );
+
+        return $this->dataClassRepository->count(
+            $this->getFeedbackClassName(), new DataClassCountParameters($condition)
         );
     }
 

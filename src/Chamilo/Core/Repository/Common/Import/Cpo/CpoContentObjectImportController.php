@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common\Import\Cpo;
 
 use Chamilo\Configuration\Configuration;
@@ -83,7 +84,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function __construct($parameters)
     {
         parent::__construct($parameters);
-        
+
         $this->dom_document = new DOMDocument('1.0', 'UTF-8');
     }
 
@@ -141,28 +142,31 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_content_object_object_number_cache_id($old_object_number, $new_object_number)
     {
         $this->set_cache_id(
-            ContentObject::class_name(), 
-            ContentObject::PROPERTY_OBJECT_NUMBER, 
-            $old_object_number, 
-            $new_object_number);
+            ContentObject::class_name(),
+            ContentObject::PROPERTY_OBJECT_NUMBER,
+            $old_object_number,
+            $new_object_number
+        );
     }
 
     public function set_complex_content_object_item_id_cache_id($old_item_id, $new_item_id)
     {
         $this->set_cache_id(
-            ComplexContentObjectItem::class_name(), 
-            ComplexContentObjectItem::PROPERTY_ID, 
-            $old_item_id, 
-            $new_item_id);
+            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::PROPERTY_ID,
+            $old_item_id,
+            $new_item_id
+        );
     }
 
     public function set_external_instance_id_cache_id($old_external_instance_id, $new_external_instance_id)
     {
         $this->set_cache_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID, 
-            $old_external_instance_id, 
-            $new_external_instance_id);
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(),
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID,
+            $old_external_instance_id,
+            $new_external_instance_id
+        );
     }
 
     public function get_cache_id($classname, $property, $old_id)
@@ -187,32 +191,37 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function get_category_id_cache_id($old_id)
     {
-        $cachedCategory = $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+        $cachedCategory =
+            $this->get_cache_id(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_ID, $old_id);
+
         return empty($cachedCategory) ? 0 : $cachedCategory;
     }
 
     public function get_content_object_object_number_cache_id($old_object_number)
     {
         return $this->get_cache_id(
-            ContentObject::class_name(), 
-            ContentObject::PROPERTY_OBJECT_NUMBER, 
-            $old_object_number);
+            ContentObject::class_name(),
+            ContentObject::PROPERTY_OBJECT_NUMBER,
+            $old_object_number
+        );
     }
 
     public function get_complex_content_object_item_id_cache_id($old_item_id)
     {
         return $this->get_cache_id(
-            ComplexContentObjectItem::class_name(), 
-            ComplexContentObjectItem::PROPERTY_ID, 
-            $old_item_id);
+            ComplexContentObjectItem::class_name(),
+            ComplexContentObjectItem::PROPERTY_ID,
+            $old_item_id
+        );
     }
 
     public function get_external_instance_id_cache_id($old_external_instance_id)
     {
         return $this->get_cache_id(
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID, 
-            $old_external_instance_id);
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(),
+            \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::PROPERTY_ID,
+            $old_external_instance_id
+        );
     }
 
     public function get_object_number_created($id)
@@ -237,7 +246,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function run()
     {
-        if(empty($this->get_parameters()->get_file()))
+        if (empty($this->get_parameters()->get_file()))
         {
             throw new NoObjectSelectedException(Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
         }
@@ -254,7 +263,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 $content_object_list = $this->dom_xpath->query('/export/content_objects/content_object');
                 foreach ($content_object_list as $content_object_node)
                 {
-                    if (! $this->get_content_object_id_cache_id($content_object_node->getAttribute('id')))
+                    if (!$this->get_content_object_id_cache_id($content_object_node->getAttribute('id')))
                     {
                         $this->process_content_object($content_object_node);
                     }
@@ -265,18 +274,20 @@ class CpoContentObjectImportController extends ContentObjectImportController
             {
                 $this->add_message(Translation::get('NoCpoFile'), self::TYPE_WARNING);
             }
-            
+
             Filesystem::remove($this->temporary_directory);
         }
         else
         {
             $this->add_message(
                 Translation::get(
-                    'UnsupportedFileFormat', 
-                    array('TYPES' => implode(', ', self::get_allowed_extensions()))), 
-                self::TYPE_ERROR);
+                    'UnsupportedFileFormat',
+                    array('TYPES' => implode(', ', self::get_allowed_extensions()))
+                ),
+                self::TYPE_ERROR
+            );
         }
-        
+
         return $this->get_cache_ids(ContentObject::class_name(), ContentObject::PROPERTY_ID);
     }
 
@@ -294,12 +305,13 @@ class CpoContentObjectImportController extends ContentObjectImportController
         $category = new RepositoryCategory();
         $base_name = $this->dom_xpath->query('name', $node)->item(0)->nodeValue;
         $category->set_name(
-            DataManager::create_unique_category_name($this->get_parameters()->getWorkspace(), $parent_id, $base_name));
+            DataManager::create_unique_category_name($this->get_parameters()->getWorkspace(), $parent_id, $base_name)
+        );
         $category->set_parent($parent_id);
         $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
         $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
-        
-        if (! $category->create())
+
+        if (!$category->create())
         {
             return false;
         }
@@ -316,17 +328,27 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function process_helpers($content_object_node)
     {
-        $content_object_type = $this->determine_content_object_type(
-            $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue);
-        
+        try
+        {
+            $content_object_type = $this->determine_content_object_type(
+                $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
+            );
+        }
+        catch (\InvalidArgumentException $ex)
+        {
+            return;
+        }
+
         if (in_array($content_object_type, DataManager::get_active_helper_types()))
         {
             $content_object_reference_id = convert_uudecode(
-                $this->dom_xpath->query('extended/reference_id', $content_object_node)->item(0)->nodeValue);
-            if (! $this->get_content_object_id_cache_id($content_object_reference_id))
+                $this->dom_xpath->query('extended/reference_id', $content_object_node)->item(0)->nodeValue
+            );
+            if (!$this->get_content_object_id_cache_id($content_object_reference_id))
             {
                 $content_object_reference_list = $this->dom_xpath->query(
-                    '/export/content_objects/content_object[@id="' . $content_object_reference_id . '"]');
+                    '/export/content_objects/content_object[@id="' . $content_object_reference_id . '"]'
+                );
                 if ($content_object_reference_list->length == 1)
                 {
                     $this->process_content_object($content_object_reference_list->item(0));
@@ -337,15 +359,25 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function update_helpers($content_object_node, $content_object)
     {
-        $content_object_type = $this->determine_content_object_type(
-            $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue);
-        
+        try
+        {
+            $content_object_type = $this->determine_content_object_type(
+                $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
+            );
+        }
+        catch (\InvalidArgumentException $ex)
+        {
+            return;
+        }
+
         if (in_array($content_object_type, DataManager::get_active_helper_types()))
         {
             $content_object_reference_id = $this->dom_xpath->query('extended/reference_id', $content_object_node)->item(
-                0)->nodeValue;
+                0
+            )->nodeValue;
             $content_object->set_reference(
-                $this->get_content_object_id_cache_id(convert_uudecode($content_object_reference_id)));
+                $this->get_content_object_id_cache_id(convert_uudecode($content_object_reference_id))
+            );
         }
     }
 
@@ -355,11 +387,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
         foreach ($attachment_list as $attachment_node)
         {
             $id_ref = $attachment_node->getAttribute('idref');
-            
-            if (! $this->get_content_object_id_cache_id($id_ref))
+
+            if (!$this->get_content_object_id_cache_id($id_ref))
             {
                 $content_object_node_list = $this->dom_xpath->query(
-                    '/export/content_objects/content_object[@id="' . $id_ref . '"]');
+                    '/export/content_objects/content_object[@id="' . $id_ref . '"]'
+                );
                 if ($content_object_node_list->length == 1)
                 {
                     $this->process_content_object($content_object_node_list->item(0));
@@ -375,9 +408,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
         {
             $content_object_attachment = new ContentObjectAttachment();
             $content_object_attachment->set_content_object_id(
-                $this->get_content_object_id_cache_id($content_object_node->getAttribute('id')));
+                $this->get_content_object_id_cache_id($content_object_node->getAttribute('id'))
+            );
             $content_object_attachment->set_attachment_id(
-                $this->get_content_object_id_cache_id($attachment_node->getAttribute('idref')));
+                $this->get_content_object_id_cache_id($attachment_node->getAttribute('idref'))
+            );
             $content_object_attachment->set_type($attachment_node->getAttribute('type'));
             $content_object_attachment->create();
         }
@@ -385,15 +420,22 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     public function process_includes($content_object_node)
     {
+        $currentId = $content_object_node->getAttribute('id');
+
         $include_list = $this->dom_xpath->query('includes/include', $content_object_node);
         foreach ($include_list as $include_node)
         {
             $id_ref = $include_node->getAttribute('idref');
-            
-            if (! $this->get_content_object_id_cache_id($id_ref))
+            if ($id_ref == $currentId)
+            {
+                continue;
+            }
+
+            if (!$this->get_content_object_id_cache_id($id_ref))
             {
                 $content_object_node_list = $this->dom_xpath->query(
-                    '/export/content_objects/content_object[@id="' . $id_ref . '"]');
+                    '/export/content_objects/content_object[@id="' . $id_ref . '"]'
+                );
                 if ($content_object_node_list->length == 1)
                 {
                     $this->process_content_object($content_object_node_list->item(0));
@@ -409,9 +451,11 @@ class CpoContentObjectImportController extends ContentObjectImportController
         {
             $content_object_include = new ContentObjectInclude();
             $content_object_include->set_content_object_id(
-                $this->get_content_object_id_cache_id($content_object_node->getAttribute('id')));
+                $this->get_content_object_id_cache_id($content_object_node->getAttribute('id'))
+            );
             $content_object_include->set_include_id(
-                $this->get_content_object_id_cache_id($include_node->getAttribute('idref')));
+                $this->get_content_object_id_cache_id($include_node->getAttribute('idref'))
+            );
             $content_object_include->create();
         }
     }
@@ -422,11 +466,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
         foreach ($sub_item_list as $sub_item_node)
         {
             $id_ref = $sub_item_node->getAttribute('idref');
-            
-            if (! $this->get_content_object_id_cache_id($id_ref))
+
+            if (!$this->get_content_object_id_cache_id($id_ref))
             {
                 $content_object_node_list = $this->dom_xpath->query(
-                    '/export/content_objects/content_object[@id="' . $id_ref . '"]');
+                    '/export/content_objects/content_object[@id="' . $id_ref . '"]'
+                );
                 if ($content_object_node_list->length == 1)
                 {
                     $this->process_content_object($content_object_node_list->item(0));
@@ -441,25 +486,38 @@ class CpoContentObjectImportController extends ContentObjectImportController
         foreach ($sub_item_list as $key => $sub_item_node)
         {
             $id = $sub_item_node->getAttribute('id');
-            
-            if (! $this->get_complex_content_object_item_id_cache_id($id))
+
+            if (!$this->get_complex_content_object_item_id_cache_id($id))
             {
                 $id_ref = $sub_item_node->getAttribute('idref');
-                $complex_content_object_item = ComplexContentObjectItem::factory(
-                    $this->determine_content_object_type(
+
+                try
+                {
+                    $type = $this->determine_content_object_type(
                         $this->dom_xpath->query(
-                            '/export/content_objects/content_object[@id="' . $id_ref . '"]/general/type')->item(0)->nodeValue));
-                
+                            '/export/content_objects/content_object[@id="' . $id_ref . '"]/general/type'
+                        )->item(0)->nodeValue
+                    );
+                }
+                catch (\InvalidArgumentException $ex)
+                {
+                    continue;
+                }
+
+                $complex_content_object_item = ComplexContentObjectItem::factory($type);
+
                 $complex_content_object_item->set_ref($this->get_content_object_id_cache_id($id_ref));
                 $complex_content_object_item->set_user_id(Session::get_user_id());
                 $complex_content_object_item->set_parent(
-                    $this->get_content_object_id_cache_id($content_object_node->getAttribute('id')));
+                    $this->get_content_object_id_cache_id($content_object_node->getAttribute('id'))
+                );
                 $complex_content_object_item->set_display_order($key + 1);
                 foreach ($complex_content_object_item->get_additional_property_names() as $additional_property)
                 {
                     $complex_content_object_item->set_additional_property(
-                        $additional_property, 
-                        $sub_item_node->getAttribute($additional_property));
+                        $additional_property,
+                        $sub_item_node->getAttribute($additional_property)
+                    );
                 }
                 $complex_content_object_item->create();
                 $this->set_complex_content_object_item_id_cache_id($id, $complex_content_object_item->get_id());
@@ -470,28 +528,31 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function process_external_sync($content_object_node)
     {
         $external_sync_node_list = $this->dom_xpath->query('external_sync', $content_object_node);
-        
+
         if ($external_sync_node_list->length == 1)
         {
             $external_sync_node = $external_sync_node_list->item(0);
             $external_id = $external_sync_node->getAttribute('external_instance');
-            if (! $this->get_external_instance_id_cache_id($external_id))
+            if (!$this->get_external_instance_id_cache_id($external_id))
             {
                 $external_instance_node_list = $this->dom_xpath->query(
-                    '/export/external_instance[@id="' . $external_id . '"]');
+                    '/export/external_instance[@id="' . $external_id . '"]'
+                );
                 if ($external_instance_node_list->length == 1)
                 {
-                    
+
                     $external_instance_node = $external_instance_node_list->item(0);
                     $conditions = array();
                     $conditions[] = new EqualityCondition(
-                        new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION), 
-                        new StaticConditionVariable($external_instance_node->getAttribute('type')));
+                        new PropertyConditionVariable(Instance::class_name(), Instance::PROPERTY_IMPLEMENTATION),
+                        new StaticConditionVariable($external_instance_node->getAttribute('type'))
+                    );
                     $condition = new AndCondition($conditions);
-                    
+
                     $external_instances = \Chamilo\Core\Repository\Instance\Storage\DataManager::retrieves(
-                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(), 
-                        new DataClassRetrievesParameters($condition));
+                        \Chamilo\Core\Repository\Instance\Storage\DataClass\Instance::class_name(),
+                        new DataClassRetrievesParameters($condition)
+                    );
                     while ($external_instance = $external_instances->next_result())
                     {
                         $setting_node_list = $this->dom_xpath->query('setting', $external_instance_node);
@@ -500,14 +561,14 @@ class CpoContentObjectImportController extends ContentObjectImportController
                         {
                             $variable = $this->dom_xpath->query('variable', $setting_node)->item(0)->nodeValue;
                             $value = $this->dom_xpath->query('value', $setting_node)->item(0)->nodeValue;
-                            
+
                             if ($external_instance->get_setting($variable) != $value)
                             {
                                 $is_matching_external_instance = false;
                                 break;
                             }
                         }
-                        if (! $is_matching_external_instance)
+                        if (!$is_matching_external_instance)
                         {
                             continue;
                         }
@@ -537,12 +598,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function set_external_sync($content_object_node, $content_object)
     {
         $external_sync_node_list = $this->dom_xpath->query('external_sync', $content_object_node);
-        
+
         if ($external_sync_node_list->length == 1)
         {
             $external_sync_node = $external_sync_node_list->item(0);
             $external_id = $external_sync_node->getAttribute('external_instance');
-            
+
             if ($this->get_external_instance_id_cache_id($external_id))
             {
                 $external_sync = new \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData();
@@ -551,8 +612,9 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 $external_sync->set_external_id($this->get_external_instance_id_cache_id($external_id));
                 $external_sync->set_external_object_id($external_sync_node->getAttribute('id'));
                 $external_sync->set_external_object_timestamp($external_sync_node->getAttribute('timestamp'));
-                
+
                 $content_object->set_synchronization_data($external_sync);
+
                 return $content_object;
             }
             else
@@ -569,11 +631,12 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function create_external_sync($content_object)
     {
         $external_sync = $content_object->get_synchronization_data();
-        
+
         if ($external_sync instanceof SynchronizationData)
         {
             $external_sync->set_content_object_id($content_object->get_id());
             $external_sync->set_content_object_timestamp($content_object->get_modification_date());
+
             return $external_sync->create();
         }
         else
@@ -584,7 +647,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
 
     /**
      * Creates the tags for the given content object
-     * 
+     *
      * @param \DOMNode $content_object_node
      * @param ContentObject $content_object
      */
@@ -596,64 +659,87 @@ class CpoContentObjectImportController extends ContentObjectImportController
             $tags_content = $tags_node->nodeValue;
             $tags = explode(',', $tags_content);
             DataManager::set_tags_for_content_objects(
-                $tags, 
-                array($content_object->get_id()), 
-                $content_object->get_owner_id());
+                $tags,
+                array($content_object->get_id()),
+                $content_object->get_owner_id()
+            );
         }
     }
 
     public function process_content_object($content_object_node)
     {
-	    $configuration = Configuration::getInstance();
+        $configuration = Configuration::getInstance();
 
         $content_object_parameter = new CpoContentObjectImportParameters($content_object_node);
-        
+
         $this->process_attachments($content_object_node);
         $this->process_includes($content_object_node);
         $this->process_sub_items($content_object_node);
         $this->process_helpers($content_object_node);
         $this->process_external_sync($content_object_node);
 
+        try
+        {
+            $type = $this->determine_content_object_type(
+                $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue
+            );
+        }
+        catch (\InvalidArgumentException $ex)
+        {
+            return;
+        }
+
         $content_object = ContentObjectImportImplementation::launch(
-            $this, 
-            $this->determine_content_object_type(
-                $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue), 
-            $content_object_parameter);
-        
+            $this,
+            $type,
+            $content_object_parameter
+        );
+
+        if(!$content_object instanceof ContentObject)
+        {
+            return;
+        }
+
         $external_sync = $this->set_external_sync($content_object_node, $content_object);
-        
+
         $this->update_helpers($content_object_node, $content_object);
 
-        if (($configuration->get_setting(array('Chamilo\Core\Repository', 'description_required')) == '1') && $content_object->get_description() == '') {
-	        $content_object->set_description($content_object->get_title());
+        if (($configuration->get_setting(array('Chamilo\Core\Repository', 'description_required')) == '1') &&
+            $content_object->get_description() == '')
+        {
+            $content_object->set_description($content_object->get_title());
         }
 
         $content_object->create();
 
         $this->process_workspace_category($content_object_node, $content_object);
-        
+
         $this->set_content_object_id_cache_id($content_object_node->getAttribute('id'), $content_object->get_id());
-        
+
         $this->create_attachments($content_object_node);
         $this->create_includes($content_object_node);
         $this->create_sub_items($content_object_node);
         $this->create_external_sync($content_object);
         $this->create_content_object_tags($content_object_node, $content_object);
-        
+
         ContentObjectImportImplementation::post_process(
-            $this, 
-            $this->determine_content_object_type(
-                $this->dom_xpath->query('general/type', $content_object_node)->item(0)->nodeValue), 
-            $content_object_parameter, 
-            $content_object);
+            $this,
+            $type,
+            $content_object_parameter,
+            $content_object
+        );
     }
 
+    /**
+     * @param $contentObjectNode
+     * @param ContentObject $contentObject
+     */
     public function process_workspace_category($contentObjectNode, $contentObject)
     {
         if ($this->get_parameters()->getWorkspace() instanceof Workspace)
         {
             $parentId = $this->dom_xpath->query('general/parent_id', $contentObjectNode)->item(0)->nodeValue;
-            
+
             if ($parentId != 0)
             {
                 $parentId = $this->get_category_id_cache_id($parentId);
@@ -662,18 +748,20 @@ class CpoContentObjectImportController extends ContentObjectImportController
             {
                 $parentId = $this->get_parameters()->get_category();
             }
-            
+
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
-                $this->get_parameters()->getWorkspace()->getId(), 
-                $contentObject->getId(), 
-                $parentId);
+                $this->get_parameters()->getWorkspace()->getId(),
+                $contentObject->get_object_number(),
+                $parentId
+            );
         }
     }
 
     public function unzip()
     {
         $unzip = Filecompression::factory();
+
         return $unzip->extract_file($this->get_parameters()->get_file()->get_path());
     }
 
@@ -687,11 +775,16 @@ class CpoContentObjectImportController extends ContentObjectImportController
         return $this->temporary_directory . '/data/';
     }
 
+    public function getTemporaryDirectory()
+    {
+        return $this->temporary_directory;
+    }
+
     /**
      * Parses the content object type from a given xpath element.
      * Is backwards compatible with the cpo exports from
      * version 3.x
-     * 
+     *
      * @param string $xpath_value
      *
      * @return string
@@ -699,30 +792,33 @@ class CpoContentObjectImportController extends ContentObjectImportController
     public function determine_content_object_type($xpath_value)
     {
         $configuration = Configuration::getInstance();
-        
+
         /**
          * Backwards Compatibility
          */
         if (strpos($xpath_value, '\\') === false)
         {
             $context = 'Chamilo\Core\Repository\ContentObject\\' .
-                 (string) StringUtilities::getInstance()->createString($xpath_value)->upperCamelize();
+                (string) StringUtilities::getInstance()->createString($xpath_value)->upperCamelize();
         }
         else
         {
             $context = ClassnameUtilities::getInstance()->getNamespaceParent($xpath_value, 3);
         }
-        
+
         $registration = $configuration->get_registration($context);
-        
+
         if ($registration[Registration::PROPERTY_TYPE] != 'Chamilo\Core\Repository\ContentObject')
         {
             throw new \InvalidArgumentException(
-                sprintf('The imported value (%s) is not of type Chamilo\Core\Repository\ContentObject', $xpath_value));
+                sprintf('The imported value (%s) is not of type Chamilo\Core\Repository\ContentObject', $xpath_value)
+            );
         }
-        
+
         return $registration[Registration::PROPERTY_CONTEXT] . '\Storage\DataClass\\' .
-               ClassnameUtilities::getInstance()->getPackageNameFromNamespace($registration[Registration::PROPERTY_CONTEXT]);
+            ClassnameUtilities::getInstance()->getPackageNameFromNamespace(
+                $registration[Registration::PROPERTY_CONTEXT]
+            );
     }
 
     public static function get_allowed_extensions()

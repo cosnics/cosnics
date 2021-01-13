@@ -1,6 +1,9 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common\Import;
 
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactories;
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface;
 use Chamilo\Core\Repository\Form\ContentObjectImportForm;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -47,16 +50,25 @@ class ContentObjectImportService
     private $contentObjectIds;
 
     /**
+     * @var ImportFactoryInterface
+     */
+    protected $importFactory;
+
+    /**
      *
+     * @param ImportFactoryInterface $importFactory
      * @param string $type
      * @param \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface $workspace
      * @param \Chamilo\Libraries\Architecture\Application\Application $application
      */
-    public function __construct($type, WorkspaceInterface $workspace, Application $application)
+    public function __construct(
+        ImportFactoryInterface $importFactory, $type, WorkspaceInterface $workspace, Application $application
+    )
     {
         $this->type = $type;
         $this->workspace = $workspace;
         $this->application = $application;
+        $this->importFactory = $importFactory;
     }
 
     /**
@@ -116,20 +128,23 @@ class ContentObjectImportService
     /**
      *
      * @return \Chamilo\Core\Repository\Form\ContentObjectImportForm
+     * @throws \Exception
      */
     public function getForm()
     {
-        if (! isset($this->form))
+        if (!isset($this->form))
         {
             $importFormParameters = new ImportFormParameters(
-                $this->getType(), 
-                $this->getWorkspace(), 
-                $this->getApplication(), 
-                $this->getApplication()->get_url(array(self::PARAM_IMPORT_TYPE => $this->getType())));
-            
-            $this->form = ContentObjectImportForm::factory($importFormParameters);
+                $this->getType(),
+                $this->getWorkspace(),
+                $this->getApplication(),
+                $this->getApplication()->get_url(array(self::PARAM_IMPORT_TYPE => $this->getType()))
+            );
+
+            //$this->form = ContentObjectImportForm::factory($importFormParameters);
+            $this->form = $this->importFactory->getImportForm($importFormParameters);
         }
-        
+
         return $this->form;
     }
 
@@ -146,19 +161,28 @@ class ContentObjectImportService
     {
         if ($this->getForm()->validate())
         {
-            $formProcessorFactory = FormProcessorFactory::getInstance();
-            $formProcessor = $formProcessorFactory->getFormProcessor(
-                $this->getType(), 
-                $this->getApplication()->getUser()->getId(), 
-                $this->getWorkspace(), 
-                $this->getForm()->exportValues(), 
-                $this->getApplication()->getRequest());
-            
+//            $formProcessorFactory = FormProcessorFactory::getInstance();
+//            $formProcessor = $formProcessorFactory->getFormProcessor(
+//                $this->getType(),
+//                $this->getApplication()->getUser()->getId(),
+//                $this->getWorkspace(),
+//                $this->getForm()->exportValues(),
+//                $this->getApplication()->getRequest()
+//            );
+
+            $formProcessor = $this->importFactory->getImportFormProcessor(
+                $this->getApplication()->getUser()->getId(),
+                $this->getWorkspace(),
+                $this->getForm()->exportValues(),
+                $this->getApplication()->getRequest()
+            );
+
             $importParameters = $formProcessor->getImportParameters();
-            
-            $controller = ContentObjectImportController::factory($importParameters);
+
+//            $controller = ContentObjectImportController::factory($importParameters);
+            $controller = $this->importFactory->getImportController($importParameters);
             $this->contentObjectIds = $controller->run();
-            
+
             return true;
         }
         else

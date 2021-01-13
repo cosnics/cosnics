@@ -10,7 +10,9 @@ use Chamilo\Application\Plagiarism\Domain\Turnitin\SimilarityReportSettings;
 use Chamilo\Application\Plagiarism\Domain\SubmissionStatus;
 use Chamilo\Application\Plagiarism\Domain\Turnitin\ViewerLaunchSettings;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Utilities\StringUtilities;
 use Spipu\Html2Pdf\Tag\Sub;
+use function filesize;
 
 /**
  * @package Chamilo\Application\Plagiarism\Service\Turnitin
@@ -19,6 +21,9 @@ use Spipu\Html2Pdf\Tag\Sub;
  */
 class SubmissionService
 {
+    // 100 MB
+    const MAX_ALLOWED_FILE_SIZE = 100 * 1024 * 1024;
+
     /**
      * @var \Chamilo\Application\Plagiarism\Repository\Turnitin\TurnitinRepository
      */
@@ -95,6 +100,12 @@ class SubmissionService
             return false;
         }
 
+        $fileSize = filesize($filePath);
+        if($fileSize > self::MAX_ALLOWED_FILE_SIZE)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -119,6 +130,7 @@ class SubmissionService
         try
         {
             $submissionId = $this->createSubmission($submitter, $owner, $title, $extractTextOnly);
+            $filename = urlencode($filename); //StringUtilities::getInstance()->createString($filename)->toAscii();
             $this->uploadFileForSubmission($submissionId, $filePath, $filename);
 
             return $submissionId;
@@ -229,6 +241,17 @@ class SubmissionService
         }
 
         return $this->submissionStatusParser->parse(SubmissionStatusParser::SUBMISSION_STATUS_UPLOAD, $submissionInfo);
+    }
+
+    /**
+     * @param string $submissionId
+     * @param bool $hardDelete
+     *
+     * @throws \Exception
+     */
+    public function deleteSubmission(string $submissionId, bool $hardDelete = false)
+    {
+        $this->turnitinRepository->deleteSubmission($submissionId, $hardDelete);
     }
 
     /**

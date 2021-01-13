@@ -195,4 +195,20 @@ class CourseGroupDecoratorsManager implements CourseGroupFormDecoratorInterface,
             $actionsDecorator->addCourseGroupActions($courseGroupActionsToolbar, $courseGroup, $user, $isCourseTeacher);
         }
     }
+
+    /**
+     * @param ButtonToolBar $courseGroupActionsToolbar
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     * @param bool $isCourseTeacher
+     */
+    public function addCourseGroupSubscriptionActions(
+        ButtonToolBar $courseGroupActionsToolbar, CourseGroup $courseGroup, User $user, $isCourseTeacher = false
+    )
+    {
+        foreach($this->actionsDecorators as $actionsDecorator)
+        {
+            $actionsDecorator->addCourseGroupSubscriptionActions($courseGroupActionsToolbar, $courseGroup, $user, $isCourseTeacher);
+        }
+    }
 }

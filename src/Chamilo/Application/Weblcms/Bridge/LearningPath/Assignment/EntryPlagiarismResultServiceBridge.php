@@ -145,6 +145,10 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
     {
         $entityService = $this->entityServiceManager->getEntityServiceByType($entityType);
 
+        $entryPlagiarismResultTableParameters->setEntryClassName(\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry::class);
+        $entryPlagiarismResultTableParameters->setScoreClassName(\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score::class);
+        $entryPlagiarismResultTableParameters->setEntryPlagiarismResultClassName(\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryPlagiarismResult::class);
+
         return $entityService->getEntryPlagiarismResultTable(
             $application, $entryPlagiarismResultTableParameters
         );
@@ -166,5 +170,13 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
         return $entityService->findEntriesWithPlagiarismResult(
             $this->contentObjectPublication, $treeNode->getTreeNodeData(), $filterParameters
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPlagiarismEnabled()
+    {
+        return true;
     }
 }

@@ -150,8 +150,8 @@ abstract class GroupsFeedComponent extends \Chamilo\Libraries\Ajax\Manager
             \Chamilo\Core\User\Storage\DataClass\User::class_name(),
             new DataClassRetrievesParameters(
                 $condition,
-                $this->get_offset(),
                 100,
+                $this->get_offset(),
                 array(
                     new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME)),
                     new OrderBy(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME)))));

@@ -182,20 +182,8 @@ abstract class CalendarRendererProvider implements
 
             if ($startTime && $endTime && $calculateRecurrence)
             {
-                $recurringEvents = array();
-
-                foreach ($events as $event)
-                {
-                    $recurrenceCalculator = new RecurrenceCalculator($event, $startTime, $endTime);
-                    $parsedEvents = $recurrenceCalculator->getEvents();
-
-                    foreach ($parsedEvents as $parsedEvent)
-                    {
-                        $recurringEvents[] = $parsedEvent;
-                    }
-                }
-
-                $this->events[$cacheIdentifier] = $recurringEvents;
+                $recurrenceCalculator = new RecurrenceCalculator($events, $startTime, $endTime);
+                $this->events[$cacheIdentifier] = $recurrenceCalculator->expandEvents();
             }
             else
             {

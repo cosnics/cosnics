@@ -317,7 +317,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      */
     public function isDateAfterAssignmentEndTime($date)
     {
-        return false;
+        return $this->getAssignment()->get_end_time() < $date;
     }
 
     /**

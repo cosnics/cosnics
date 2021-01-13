@@ -40,6 +40,11 @@ class UsersProgressExportFormat implements ExportFormatInterface
     protected $started;
 
     /**
+     * @var int
+     */
+    protected $score;
+
+    /**
      * UsersProgressExportFormat constructor.
      *
      * @param string $lastName
@@ -48,8 +53,11 @@ class UsersProgressExportFormat implements ExportFormatInterface
      * @param int $progress
      * @param bool $completed
      * @param bool $started
+     * @param int $score
      */
-    public function __construct($lastName, $firstName, $email, $progress = 0, $completed = true, $started = true)
+    public function __construct(
+        $lastName, $firstName, $email, $progress = 0, $completed = true, $started = true, $score = 0
+    )
     {
         $this->lastName = $lastName;
         $this->firstName = $firstName;
@@ -57,6 +65,7 @@ class UsersProgressExportFormat implements ExportFormatInterface
         $this->progress = $progress;
         $this->completed = $completed;
         $this->started = $started;
+        $this->score = $score;
     }
 
     /**
@@ -72,7 +81,8 @@ class UsersProgressExportFormat implements ExportFormatInterface
             'email' => $this->email,
             'progress' => $this->progress,
             'completed' => (int) $this->completed,
-            'started' => (int) $this->started
+            'started' => (int) $this->started,
+            'score' => (int) $this->score
         ];
     }
 }

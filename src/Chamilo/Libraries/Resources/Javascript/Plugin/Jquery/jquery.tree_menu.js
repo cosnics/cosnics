@@ -73,7 +73,7 @@
 						var li = $('<li><div' + expand + '><a href="'
 								+ item_url + '" id="' + the_leaf.id
 								+ '" class="' + the_leaf.classes + '" title="'
-								+ the_leaf.title + '">' + the_leaf.title
+								+ the_leaf.description + '">' + the_leaf.title
 								+ '</a></div></li>');
 						$(ul).append(li);
 					});

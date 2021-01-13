@@ -2,6 +2,8 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Utilities\UUID;
 
 /**
@@ -59,6 +61,7 @@ class GroupRepository
      * @param string $groupName
      *
      * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function createGroup($groupName)
     {
@@ -91,16 +94,30 @@ class GroupRepository
      * @param string $groupName
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function updateGroup($groupIdentifier, $groupName)
     {
-        $groupData = ['description' => $groupName, 'displayName' => $groupName];
+        try
+        {
+            $groupData = ['description' => $groupName, 'displayName' => $groupName];
 
-        return $this->getGraphRepository()->executePatchWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier,
-            $groupData,
-            \Microsoft\Graph\Model\Event::class
-        );
+            return $this->getGraphRepository()->executePatchWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier,
+                $groupData,
+                \Microsoft\Graph\Model\Event::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -109,12 +126,26 @@ class GroupRepository
      * @param string $groupIdentifier
      *
      * @return \Microsoft\Graph\Model\Group | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroup($groupIdentifier)
     {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class
-        );
+        try
+        {
+            return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -124,14 +155,25 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function subscribeOwnerInGroup($groupIdentifier, $azureUserIdentifier)
     {
-        return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners/$ref',
-            ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class
-        );
+        try
+        {
+            return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier . '/owners/$ref',
+                ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
+                \Microsoft\Graph\Model\Event::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
+            return null;
+        }
     }
 
     /**
@@ -141,13 +183,27 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeOwnerFromGroup($groupIdentifier, $azureUserIdentifier)
     {
-        return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class
-        );
+        try
+        {
+            return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier . '/owners/' . $azureUserIdentifier . '/$ref',
+                \Microsoft\Graph\Model\Event::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -156,6 +212,7 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroupOwner($groupId, $azureUserIdentifier)
     {
@@ -183,13 +240,27 @@ class GroupRepository
      * @param string $groupIdentifier
      *
      * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function listGroupOwners($groupIdentifier)
     {
-        return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/owners',
-            \Microsoft\Graph\Model\User::class, true
-        );
+        try
+        {
+            return $this->getGraphRepository()->executeGetWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier . '/owners',
+                \Microsoft\Graph\Model\User::class, true
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -198,14 +269,72 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function subscribeMemberInGroup($groupIdentifier, $azureUserIdentifier)
     {
-        return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/members/$ref',
-            ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
-            \Microsoft\Graph\Model\Event::class
-        );
+        try
+        {
+            return $this->getGraphRepository()->executePostWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier . '/members/$ref',
+                ['@odata.id' => 'https://graph.microsoft.com/v1.0/users/' . $azureUserIdentifier],
+                \Microsoft\Graph\Model\Event::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
+            return null;
+        }
+    }
+
+    /**
+     * @param \GuzzleHttp\Exception\ClientException $exception
+     *
+     * @param string $azureUserIdentifier
+     * @param string $groupIdentifier
+     *
+     * @throws GroupNotExistsException
+     * @throws UnknownAzureUserIdException
+     */
+    protected function handleSubscribeUserInGroupException(
+        \GuzzleHttp\Exception\ClientException $exception, string $azureUserIdentifier, string $groupIdentifier
+    )
+    {
+        if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+        {
+            //could also be that the user is not found.
+            $userNotFoundMsgPosition = strpos(
+                $exception->getResponse()->getBody()->getContents(),
+                'Resource \'' . $azureUserIdentifier . '\' does not exist'
+            );
+            if ($userNotFoundMsgPosition !== false)
+            {
+                throw new UnknownAzureUserIdException($azureUserIdentifier);
+            }
+            else
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+        }
+
+        // Catch the exception where the user is already added to the group silently
+        if ($exception->getCode() == GraphRepository::RESPONSE_CODE_BAD_REQUEST)
+        {
+            $alreadyAddedPosition = strpos(
+                $exception->getResponse()->getBody()->getContents(),
+                'One or more added object references already exist'
+            );
+
+            if ($alreadyAddedPosition !== false)
+            {
+                return;
+            }
+        }
+
+        throw $exception;
     }
 
     /**
@@ -215,13 +344,27 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeMemberFromGroup($groupIdentifier, $azureUserIdentifier)
     {
-        return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
-            '/groups/' . $groupIdentifier . '/members/' . $azureUserIdentifier . '/$ref',
-            \Microsoft\Graph\Model\Event::class
-        );
+        try
+        {
+            return $this->getGraphRepository()->executeDeleteWithAccessTokenExpirationRetry(
+                '/groups/' . $groupIdentifier . '/members/' . $azureUserIdentifier . '/$ref',
+                \Microsoft\Graph\Model\Event::class
+            );
+        }
+        catch (\GuzzleHttp\Exception\ClientException $exception)
+        {
+            if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
+            {
+                throw new GroupNotExistsException($groupIdentifier);
+            }
+
+            throw $exception;
+        }
     }
 
     /**
@@ -230,6 +373,7 @@ class GroupRepository
      * @param string $azureUserIdentifier
      *
      * @return \Microsoft\Graph\Model\User | \Microsoft\Graph\Model\Entity
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroupMember($groupId, $azureUserIdentifier)
     {
@@ -257,6 +401,7 @@ class GroupRepository
      * @param string $groupIdentifier
      *
      * @return \Microsoft\Graph\Model\User[] | \Microsoft\Graph\Model\Entity
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function listGroupMembers($groupIdentifier)
     {
@@ -272,6 +417,7 @@ class GroupRepository
      * @param string $groupIdentifier
      *
      * @return \Microsoft\Graph\Model\PlannerPlan[] | \Microsoft\Graph\Model\Entity
+     * @throws \Exception
      */
     public function listGroupPlans($groupIdentifier)
     {
@@ -288,6 +434,7 @@ class GroupRepository
      * @param string $planName
      *
      * @return \Microsoft\Graph\Model\Entity | \Microsoft\Graph\Model\PlannerPlan
+     * @throws \Exception
      */
     public function createPlanForGroup($groupIdentifier, $planName)
     {

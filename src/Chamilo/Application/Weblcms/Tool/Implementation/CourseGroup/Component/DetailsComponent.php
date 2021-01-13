@@ -231,7 +231,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         $buttonToolbar = new ButtonToolBar();
         $managementButtonGroup = new ButtonGroup();
 
-        if ($courseGroup->is_self_registration_allowed() && !$courseGroup->is_member($this->getUser()))
+        if ($this->getCourseGroupService()->canUserSelfSubscribeToGroup($this->getUser(), $courseGroup))
         {
             $buttonToolbar->addItem(
                 new Button(

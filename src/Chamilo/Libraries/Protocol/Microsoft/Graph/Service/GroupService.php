@@ -6,7 +6,9 @@ use Chamilo\Configuration\Service\ConfigurationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\GroupRepository;
+use GuzzleHttp\Exception\ClientException;
 use Microsoft\Graph\Model\Group;
 
 /**
@@ -114,7 +116,10 @@ class GroupService
      * @param string $groupName
      *
      * @return string
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws AzureUserNotExistsException
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function createGroupByName(User $owner, $groupName)
     {
@@ -126,6 +131,9 @@ class GroupService
         }
 
         $group = $this->getGroupRepository()->createGroup($groupName);
+
+        /** IMPORTANT: SUBSCRIBE USER AS MEMBER AND AS OWNER TO MAKE CORRECT FUNCTIONALITY */
+        $this->getGroupRepository()->subscribeMemberInGroup($group->getId(), $azureUserIdentifier);
         $this->getGroupRepository()->subscribeOwnerInGroup($group->getId(), $azureUserIdentifier);
 
         return $group->getId();
@@ -136,6 +144,9 @@ class GroupService
      *
      * @param string $groupId
      * @param string $groupName
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function updateGroupName($groupId, $groupName)
     {
@@ -149,7 +160,10 @@ class GroupService
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws AzureUserNotExistsException
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws UnknownAzureUserIdException
      */
     public function addMemberToGroup(string $groupId, User $user)
     {
@@ -162,7 +176,25 @@ class GroupService
                 throw new AzureUserNotExistsException($user);
             }
 
-            $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            /** BUG IN MICROSOFT: SUBSCRIBE MEMBER REMOVES AN OWNER BUT THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
+            if ($this->isOwnerOfGroup($groupId, $user))
+            {
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+
+                try
+                {
+                    $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
+                }
+                catch (\Exception $exception)
+                {
+                    //TODO: check if subscribe member bug is fixed. It seems so because
+                    // GRAPH api is returning already subscribed errors
+                }
+            }
+            else
+            {
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            }
         }
     }
 
@@ -173,12 +205,21 @@ class GroupService
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     * @throws AzureUserNotExistsException
      */
     public function removeMemberFromGroup($groupId, User $user)
     {
         if ($this->isMemberOfGroup($groupId, $user))
         {
             $azureUserIdentifier = $this->getAzureUserIdentifier($user);
+
+            if (empty($azureUserIdentifier))
+            {
+                throw new AzureUserNotExistsException($user);
+            }
+
             $this->getGroupRepository()->removeMemberFromGroup($groupId, $azureUserIdentifier);
         }
     }
@@ -186,6 +227,9 @@ class GroupService
     /**
      * @param string $groupId
      * @param string $azureMemberId
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeMemberFromGroupByAzureId(string $groupId, string $azureMemberId)
     {
@@ -199,6 +243,7 @@ class GroupService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function isMemberOfGroup($groupId, User $user)
     {
@@ -219,6 +264,7 @@ class GroupService
      * @param string $groupId
      *
      * @return string[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroupMembers($groupId)
     {
@@ -237,6 +283,9 @@ class GroupService
      * Removes all the members from a given group
      *
      * @param string $groupId
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeAllMembersFromGroup($groupId)
     {
@@ -254,7 +303,9 @@ class GroupService
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\AzureUserNotExistsException
+     * @throws AzureUserNotExistsException
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function addOwnerToGroup($groupId, User $user)
     {
@@ -265,6 +316,15 @@ class GroupService
             if (empty($azureUserIdentifier))
             {
                 throw new AzureUserNotExistsException($user);
+            }
+
+            try
+            {
+                /** BUG IN MICROSOFT: THE OWNER SHOULD BE BOTH MEMBER AND OWNER  */
+                $this->getGroupRepository()->subscribeMemberInGroup($groupId, $azureUserIdentifier);
+            }
+            catch (\Exception $ex)
+            {
             }
 
             $this->getGroupRepository()->subscribeOwnerInGroup($groupId, $azureUserIdentifier);
@@ -278,6 +338,8 @@ class GroupService
      * @param string $groupId
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeOwnerFromGroup($groupId, User $user)
     {
@@ -291,6 +353,9 @@ class GroupService
     /**
      * @param string $groupId
      * @param string $ownerAzureId
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeOwnerByAzureId(string $groupId, string $ownerAzureId)
     {
@@ -304,6 +369,7 @@ class GroupService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return boolean
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function isOwnerOfGroup(string $groupId, User $user)
     {
@@ -325,6 +391,8 @@ class GroupService
      * @param string $groupId
      *
      * @return string[]
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroupOwners($groupId)
     {
@@ -343,6 +411,9 @@ class GroupService
      * Removes all the owners from a given group
      *
      * @param string $groupId
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeAllOwnersFromGroup($groupId)
     {
@@ -360,6 +431,7 @@ class GroupService
      * @param string $groupId
      *
      * @return string[]
+     * @throws \Exception
      */
     public function getGroupPlanIds($groupId)
     {
@@ -379,6 +451,7 @@ class GroupService
      * @param string $groupId
      *
      * @return string
+     * @throws \Exception
      */
     public function getDefaultGroupPlanId($groupId)
     {
@@ -399,6 +472,8 @@ class GroupService
      * @param string $planName
      *
      * @return string
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function createPlanForGroup($groupId, $planName = null)
     {
@@ -419,6 +494,8 @@ class GroupService
      * @param string $groupId
      *
      * @return string
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getOrCreatePlanIdForGroup($groupId)
     {
@@ -438,6 +515,8 @@ class GroupService
      * @param string $groupId
      *
      * @return string
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroupUrl($groupId)
     {
@@ -462,6 +541,9 @@ class GroupService
      * @param int $groupId
      * @param User[] $users
      * @param User[] | null $excludedUsersForRemoval
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function syncUsersToGroup($groupId, $users = array(), $excludedUsersForRemoval = [])
     {
@@ -475,7 +557,7 @@ class GroupService
 
         $currentAzureUserIdentifiers = [];
 
-        foreach($users as $user)
+        foreach ($users as $user)
         {
             $azureUserIdentifier = $this->userService->getAzureUserIdentifier($user);
             if (!empty($azureUserIdentifier))
@@ -494,6 +576,13 @@ class GroupService
             }
         }
 
+        // NEVER REMOVE OWNERS AS MEMBER WHILE SYNCHING
+        $owners = $this->getGroupRepository()->listGroupOwners($groupId);
+        foreach ($owners as $owner)
+        {
+            $excludedUsersForRemovalIdentifiers[] = $owner->getId();
+        }
+
         $office365GroupMemberIdentifiers = $this->getGroupMembers($groupId);
 
         $usersToAdd = array_diff($currentAzureUserIdentifiers, $office365GroupMemberIdentifiers);
@@ -503,7 +592,7 @@ class GroupService
         }
 
         $usersToRemove = array_diff($office365GroupMemberIdentifiers, $currentAzureUserIdentifiers);
-        if(!empty($excludedUsersForRemovalIdentifiers))
+        if (!empty($excludedUsersForRemovalIdentifiers))
         {
             $usersToRemove = array_diff($usersToRemove, $excludedUsersForRemovalIdentifiers);
         }
@@ -517,9 +606,11 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $members
+     *
      * @return string[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getGroupMemberAzureIdsNotInArray(string $groupId, array $members):array
+    public function getGroupMemberAzureIdsNotInArray(string $groupId, array $members): array
     {
         return array_diff($this->getGroupMembers($groupId), $this->userService->getAzureUserIdentifiers($members));
     }
@@ -527,9 +618,12 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $owners
+     *
      * @return string[]
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getGroupOwnerAzureIdsNotInArray(string $groupId, array $owners):array
+    public function getGroupOwnerAzureIdsNotInArray(string $groupId, array $owners): array
     {
         return array_diff($this->getGroupOwners($groupId), $this->userService->getAzureUserIdentifiers($owners));
     }
@@ -537,10 +631,14 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $members
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeGroupMembersNotInArray(string $groupId, array $members)
     {
-        foreach ($this->getGroupMemberAzureIdsNotInArray($groupId, $members) as $memberAzureId) {
+        foreach ($this->getGroupMemberAzureIdsNotInArray($groupId, $members) as $memberAzureId)
+        {
             $this->removeMemberFromGroupByAzureId($groupId, $memberAzureId);
         }
     }
@@ -548,23 +646,31 @@ class GroupService
     /**
      * @param string $groupId
      * @param User[] $owners
+     *
+     * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function removeGroupOwnersNotInArray(string $groupId, array $owners)
     {
-        foreach ($this->getGroupOwnerAzureIdsNotInArray($groupId, $owners) as $memberAzureId) {
+        foreach ($this->getGroupOwnerAzureIdsNotInArray($groupId, $owners) as $memberAzureId)
+        {
             $this->removeOwnerByAzureId($groupId, $memberAzureId);
         }
     }
 
     /**
      * @param string $groupId
+     *
      * @return Group
      * @throws GroupNotExistsException
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function getGroup(string $groupId): Group
     {
         $group = $this->groupRepository->getGroup($groupId);
-        if(!$group instanceof Group) {
+
+        if (!$group instanceof Group)
+        {
             throw new GroupNotExistsException($groupId);
         }
 

@@ -56,6 +56,15 @@
 
                     var response = upload.responseData;
 
+                    var type = response['type'];
+                    var renderInline = (editor.config['render_resource_inline'] ? 1 : 0);
+
+                    // Always show inline version for these objects, no matter how the config is set
+                    if(type === 'audio' || type === 'video' || type === 'image')
+                    {
+                        renderInline = 1;
+                    }
+
                     //resize = true??
                     if(response['type'] === 'image') {
                         // Width and height could be returned by server (#13519).
@@ -72,7 +81,7 @@
                             'data-security-code="' + response['security-code'] + '"' +
                             'data-type="'+response['type']+'"' +
                             'class="align-center"' +
-                            'data-render-inline="' + (editor.config['render_resource_inline'] ? 1 : 0) + '"' +
+                            'data-render-inline="' + renderInline + '"' +
                             '"></div><br>' );
                     }
 

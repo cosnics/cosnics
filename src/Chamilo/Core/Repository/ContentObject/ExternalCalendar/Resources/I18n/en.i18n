@@ -16,3 +16,4 @@ MaximumFileSizeUser = "You have <b>{USER}</b> left in your repository to upload 
 MaximumFileSizeUserNoUpgrade = "You have <b>{USER}</b> left in your repository to upload documents. The maximal filesize allowed by the platform is currently <b>{SERVER}</b>."
 MaximumFileSizeServer = "The maximal filesize allowed by the platform is currently <b>{FILESIZE}</b>."
 ICalParseError = "The system could not parse the given ICal. Please edit this object and enter a valid ICal URL"
+SameHostNotAllowed = "You can not use a URL from the same host as this application. Please use an external URL."

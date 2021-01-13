@@ -39,6 +39,8 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
 
     public function get_actions($groupreluser)
     {
+        $hasEditRight = $this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
         // construct the toolbar
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
         
@@ -46,19 +48,24 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer i
         $parameters = array();
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_USER_DETAILS;
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
-        $parameters[Manager::PARAM_OBJECTS] = $groupreluser->get_user_id();
+        $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $groupreluser->get_user_id();
         $details_url = $this->get_component()->get_url($parameters);
-        
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Details'), 
-                Theme::getInstance()->getCommonImagePath('Action/Details'), 
-                $details_url, 
-                ToolbarItem::DISPLAY_ICON));
+
+        if ($hasEditRight || $this->get_component()->getUser()->getId() == $groupreluser->get_user_id())
+        {
+            $toolbar->add_item(
+                new ToolbarItem(
+                    Translation::get('Details'),
+                    Theme::getInstance()->getCommonImagePath('Action/Details'),
+                    $details_url,
+                    ToolbarItem::DISPLAY_ICON
+                )
+            );
+        }
         
         // if we have editing rights, display the reporting action but never
         // allow unsubscribe
-        if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if ($hasEditRight)
         {
             $toolbar->add_item(
                 new ToolbarItem(

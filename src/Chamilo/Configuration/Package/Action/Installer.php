@@ -4,13 +4,18 @@ namespace Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\Action;
 use Chamilo\Configuration\Package\PlatformPackageBundles;
 use Chamilo\Configuration\Package\Properties\Dependencies\DependencyVerifier;
+use Chamilo\Configuration\Package\Service\DoctrinePackageStorageUnitCreator;
 use Chamilo\Configuration\Package\Storage\DataClass\Package;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\DependencyInjection\ExtensionFinder\DirectoryContainerExtensionFinder;
 use Chamilo\Libraries\File\Filesystem;
+use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use DOMDocument;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  *
@@ -28,6 +33,11 @@ abstract class Installer extends Action
     private $form_values;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $installContainer;
+
+    /**
      * Constructor
      */
     public function __construct($form_values)
@@ -35,6 +45,8 @@ abstract class Installer extends Action
         parent::__construct();
 
         $this->form_values = $form_values;
+
+        $this->initializeInstallContainer();
     }
 
     /**
@@ -119,6 +131,19 @@ abstract class Installer extends Action
      */
     public function install_storage_units()
     {
+        if(!$this->installMDB2StorageUnits())
+        {
+            return false;
+        }
+
+        return $this->installDoctrineStorageUnits();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function installMDB2StorageUnits()
+    {
         $dir = $this->get_path() . 'Resources/Storage/';
         $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES);
 
@@ -134,6 +159,58 @@ abstract class Installer extends Action
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function installDoctrineStorageUnits()
+    {
+        try
+        {
+            $doctrinePackageStorageUnitCreator = $this->getDoctrinePackageStorageUnitCreator();
+            $tableNames = $doctrinePackageStorageUnitCreator->createStorageUnitsForPackage(
+                $this->context(), $this->getExcludedEntityClasses()
+            );
+
+            foreach ($tableNames as $tableName)
+            {
+                $this->add_message(
+                    self::TYPE_NORMAL,
+                    Translation::getInstance()->getTranslation('StorageUnitCreation', null, 'Chamilo\Core\Install') .
+                    ': <em>' .
+                    $tableName. '</em>'
+                );
+            }
+        }
+        catch (\Exception $ex)
+        {
+            echo '<pre>';
+            print_r($ex->getMessage());
+            print_r($ex->getTraceAsString());
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return DoctrinePackageStorageUnitCreator|object
+     */
+    protected function getDoctrinePackageStorageUnitCreator()
+    {
+        return $this->installContainer->get(DoctrinePackageStorageUnitCreator::class);
+    }
+
+    /**
+     * Returns an array of the excluded entity classes
+     *
+     * @return string[]
+     */
+    protected function getExcludedEntityClasses()
+    {
+        return array();
     }
 
     /**
@@ -346,5 +423,26 @@ abstract class Installer extends Action
     public static function get_additional_packages()
     {
         return array();
+    }
+
+    /**
+     * Initializes a custom container
+     */
+    protected function initializeInstallContainer()
+    {
+        $cacheDir = Path::getInstance()->getCachePath('Hogent\Libraries\DependencyInjection');
+        $cacheFile = $cacheDir . 'InstallDependencyInjection.php';
+
+        if(!is_dir($cacheDir))
+        {
+            Filesystem::create_dir($cacheDir);
+        }
+
+        $containerBuilder = new DependencyInjectionContainerBuilder(
+            null, new DirectoryContainerExtensionFinder(Path::getInstance()->getBasePath()),
+            $cacheFile, 'ChamiloInstallContainer'
+        );
+
+        $this->installContainer = $containerBuilder->createContainer();
     }
 }

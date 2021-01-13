@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -10,6 +11,7 @@ use Chamilo\Libraries\Format\Menu\Library\HtmlMenu;
 use Chamilo\Libraries\Format\Menu\Library\Renderer\HtmlMenuArrayRenderer;
 use Chamilo\Libraries\Format\Menu\OptionsMenuRenderer;
 use Chamilo\Libraries\Format\Menu\TreeMenuRenderer;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -60,10 +62,13 @@ class CourseGroupMenu extends HtmlMenu
      * @param Course $course
      * @param $current_group
      * @param string $url_format
+     *
      * @throws ObjectNotExistException
      */
-    public function __construct(Course $course, $current_group,
-        $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&tool_action=Details&course=%s&course_group=%s')
+    public function __construct(
+        Course $course, $current_group,
+        $url_format = '?application=Chamilo\Application\Weblcms&go=CourseViewer&tool=CourseGroup&tool_action=Details&course=%s&course_group=%s'
+    )
     {
         $this->course = $course;
         $this->urlFmt = $url_format;
@@ -82,8 +87,10 @@ class CourseGroupMenu extends HtmlMenu
                     Translation::get(
                         'TypeNameSingle',
                         array(),
-                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'),
-                    $current_group);
+                        'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
+                    ),
+                    $current_group
+                );
             }
             $url = $this->get_url($this->current_group->get_id());
         }
@@ -113,6 +120,7 @@ class CourseGroupMenu extends HtmlMenu
         $menu_item['class'] = 'home';
         $menu_item[OptionsMenuRenderer::KEY_ID] = $course_group->get_id();
         $menu[$course_group->get_id()] = $menu_item;
+
         return $menu;
     }
 
@@ -120,6 +128,7 @@ class CourseGroupMenu extends HtmlMenu
      * Returns the menu items.
      *
      * @param $extra_items array An array of extra tree items, added to the root.
+     *
      * @return array An array with all menu items. The structure of this array is the structure needed by
      *         PEAR::HTML_Menu, on which this class is based.
      */
@@ -127,8 +136,16 @@ class CourseGroupMenu extends HtmlMenu
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parent_id));
-        $groups = DataManager::retrieves(CourseGroup::class_name(), new DataClassRetrievesParameters($condition));
+            new StaticConditionVariable($parent_id)
+        );
+
+        $groups = DataManager::retrieves(
+            CourseGroup::class_name(),
+            new DataClassRetrievesParameters(
+                $condition, null, null,
+                [new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))]
+            )
+        );
 
         // $current_group = $this->current_group;
 
@@ -155,6 +172,7 @@ class CourseGroupMenu extends HtmlMenu
      * Gets the URL of a given category
      *
      * @param $category int The id of the category
+     *
      * @return string The requested URL
      */
     public function get_url($group)
@@ -169,8 +187,11 @@ class CourseGroupMenu extends HtmlMenu
                 str_replace(
                     'tool_action=Details',
                     'tool_action=Browser',
-                    str_replace('&course_group=%s', '', $this->urlFmt)),
-                $this->course->getId()));
+                    str_replace('&course_group=%s', '', $this->urlFmt)
+                ),
+                $this->course->getId()
+            )
+        );
     }
 
     /**
@@ -187,6 +208,7 @@ class CourseGroupMenu extends HtmlMenu
             $crumb['name'] = $crumb['title'];
             unset($crumb['title']);
         }
+
         return $breadcrumbs;
     }
 
@@ -199,6 +221,7 @@ class CourseGroupMenu extends HtmlMenu
     {
         $renderer = new TreeMenuRenderer($this->get_tree_name());
         $this->render($renderer, 'sitemap');
+
         return $renderer->toHTML();
     }
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recording</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../plugin.css">
+    <link rel="stylesheet" type="text/css" href="../fonts/css/all.min.css">
+</head>
+<body>
+<div id="icon">
+    <i class="fas fa-microphone"></i>
+</div>
+<div id="controls">
+    <button id="recordButton" style="">Record</button>
+    <button id="stopButton" style="" disabled>Stop</button>
+</div>
+
+<pre id="log"></pre>
+
+<h3 id="choice">Choose your recording below:</h3>
+<ol id="recordingsList"></ol>
+
+<!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+<script src="../js/WebAudioRecorder.min.js"></script>
+<script src="../../../../../Plugin/Jquery/jquery.min.js"></script>
+<script src="../js/app.js?v=1"></script>
+
+</body>
+</html>

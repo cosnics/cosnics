@@ -52,6 +52,9 @@ class BrowserComponent extends Manager implements TableSupport
         $html = array();
 
         $html[] = $this->render_header();
+        $html[] = '<div class="alert alert-warning">';
+        $html[] = $this->getTranslator()->trans('EphorusNoLongerSupported', [], Manager::context());
+        $html[] = '</div>';
         $html[] = $this->as_html();
         $html[] = $this->render_footer();
 
@@ -128,22 +131,22 @@ class BrowserComponent extends Manager implements TableSupport
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
-            $commonActions->addButton(
-                new Button(
-                    Translation::get(
-                        'AddDocument',
-                        array(),
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
-                    ),
-                    Theme::getInstance()->getCommonImagePath('Action/Add'),
-                    $this->get_url(
-                        array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT
-                        )
-                    ),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL
-                )
-            );
+//            $commonActions->addButton(
+//                new Button(
+//                    Translation::get(
+//                        'AddDocument',
+//                        array(),
+//                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+//                    ),
+//                    Theme::getInstance()->getCommonImagePath('Action/Add'),
+//                    $this->get_url(
+//                        array(
+//                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_PUBLISH_DOCUMENT
+//                        )
+//                    ),
+//                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+//                )
+//            );
 
             $buttonToolbar->addButtonGroup($commonActions);
 

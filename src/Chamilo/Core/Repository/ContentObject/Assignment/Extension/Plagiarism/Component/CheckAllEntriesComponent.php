@@ -34,8 +34,7 @@ class CheckAllEntriesComponent extends Manager
         try
         {
             $this->getEntriesPlagiarismChecker()->checkAllEntriesForPlagiarism(
-                $this->getExtensionComponent()->getAssignment(),
-                $this->getAssignmentServiceBridge(), $this->getEntryPlagiarismResultServiceBridge()
+                $this->getUser(), $this->getAssignmentServiceBridge(), $this->getEntryPlagiarismResultServiceBridge()
             );
 
             $this->redirect(

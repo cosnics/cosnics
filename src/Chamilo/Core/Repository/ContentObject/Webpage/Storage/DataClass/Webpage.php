@@ -192,14 +192,14 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         $path = Theme::getInstance()->getFileExtension($extension, $size, false);
         if (file_exists($path))
         {
-            $size = $size . ($this->is_current() ? '' : 'Na');
+//            $size = $size . ($this->is_current() ? '' : 'Na');
             return Theme::getInstance()->getFileExtension($extension, $size);
         }
         else
         {
             return Theme::getInstance()->getImagePath(
                 ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2), 
-                'Logo/' . $size . ($this->is_current() ? '' : 'Na'));
+                'Logo/' . $size /*. ($this->is_current() ? '' : 'Na')*/);
         }
     }
 

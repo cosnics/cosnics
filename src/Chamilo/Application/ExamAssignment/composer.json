@@ -1,0 +1,41 @@
+{
+    "name": "cosnics/application-exam-assignment",
+    "version": "1.0.0",
+    "description": "Application Exam Assignment",
+    "keywords": [
+        "Application",
+        "Help"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Stefan Gabriëls",
+            "email": "stefan.gabriels@hogent.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Help",
+            "context": "Chamilo\\Application\\ExamAssignment",
+            "type": "Chamilo\\Application",
+            "install": {
+                "core": 0,
+                "default": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Configuration",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

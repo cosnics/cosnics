@@ -8,17 +8,21 @@ use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * The repository wrapper for the user data manager
@@ -28,13 +32,32 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
  */
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * @var FilterParametersTranslator
+     */
+    protected $filterParametersTranslator;
+
+    /**
+     * UserRepository constructor.
+     *
+     * @param FilterParametersTranslator $filterParametersTranslator
+     */
+    public function __construct(FilterParametersTranslator $filterParametersTranslator = null)
+    {
+        if(empty($filterParametersTranslator))
+        {
+            $filterParametersTranslator = new FilterParametersTranslator();
+        }
+
+        $this->filterParametersTranslator = $filterParametersTranslator;
+    }
 
     /**
      * Finds a user by a given id
      *
      * @param int $id
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @return \Chamilo\Core\User\Storage\DataClass\User|DataClass
      */
     public function findUserById($id)
     {
@@ -205,11 +228,22 @@ class UserRepository implements UserRepositoryInterface
         return $users;
     }
 
+    /**
+     * @param DataClass $dataClass
+     *
+     * @return bool
+     */
     public function create(DataClass $dataClass)
     {
         return $dataClass->create();
     }
 
+    /**
+     * @param DataClass $dataClass
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function update(DataClass $dataClass)
     {
         return $dataClass->update();
@@ -220,6 +254,13 @@ class UserRepository implements UserRepositoryInterface
         return $dataClass->delete();
     }
 
+    /**
+     * @param $context
+     * @param $variable
+     * @param User $user
+     *
+     * @return DataClass|UserSetting
+     */
     public function getUserSettingForSettingAndUser($context, $variable, User $user)
     {
         $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name($variable, $context);
@@ -244,6 +285,15 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
+    /**
+     * @param $context
+     * @param $variable
+     * @param User $user
+     * @param null $value
+     *
+     * @return bool
+     * @throws \Exception
+     */
     public function createUserSettingForSettingAndUser($context, $variable, User $user, $value = null)
     {
         $userSetting = $this->getUserSettingForSettingAndUser($context, $variable, $user);
@@ -276,5 +326,60 @@ class UserRepository implements UserRepositoryInterface
             'Chamilo\Core\User',
             ['target_user_id' => $targetUser->getId(), 'action_user_id' => $actionUser->getId()]
         );
+    }
+
+    /**
+     * @param FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\ResultSet\ResultSet|User[]
+     */
+    public function findUsersByParameters(FilterParameters $filterParameters)
+    {
+        $searchProperties = new DataClassProperties();
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $searchProperties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+
+        $dataClassParameters = new DataClassRetrievesParameters();
+
+        $this->filterParametersTranslator->translateFilterParameters(
+            $filterParameters, $searchProperties, $dataClassParameters
+        );
+
+        return DataManager::retrieves(User::class, $dataClassParameters)->as_array();
+    }
+
+    /**
+     * @param string $usernameOfficialCodeOrEmail
+     *
+     * @return DataClass|User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function findUserByUsernameOfficialCodeOrEmail(string $usernameOfficialCodeOrEmail)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
+            new StaticConditionVariable($usernameOfficialCodeOrEmail)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
+            new StaticConditionVariable($usernameOfficialCodeOrEmail)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
+            new StaticConditionVariable($usernameOfficialCodeOrEmail)
+        );
+
+        $condition = new OrCondition($conditions);
+
+        $dataClassParameters = new DataClassRetrieveParameters($condition);
+
+        return DataManager::retrieve(User::class, $dataClassParameters);
     }
 }

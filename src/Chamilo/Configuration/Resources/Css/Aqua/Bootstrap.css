@@ -916,3 +916,16 @@ div.panel del {
 	background-color: white !important;
 	text-decoration: line-through !important;
 }
+
+.title-underline {
+	margin-top: 0;
+	padding-bottom: 10px;
+	margin-bottom: 35px;
+	border-bottom: 1px solid #dddddd;
+}
+
+table th.sorting,
+.table.b-table>thead>tr>[aria-sort] {
+	color: #337ab7;
+	cursor: pointer;
+}

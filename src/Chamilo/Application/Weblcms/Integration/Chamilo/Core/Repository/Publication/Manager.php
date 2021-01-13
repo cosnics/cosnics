@@ -6,7 +6,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
-use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationService;
+use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAttachmentAssignmentPublicationService;
 use Chamilo\Application\Weblcms\Rights\CourseManagementRights;
 use Chamilo\Application\Weblcms\Service\ContentObjectPublicationMailer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
@@ -29,6 +29,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
@@ -447,7 +448,7 @@ class Manager implements PublicationInterface
                 new CourseRepository(),
                 new PublicationRepository(),
                 new ContentObjectRepository(),
-                new UserRepository()
+                new UserRepository(new FilterParametersTranslator())
             );
 
             $contentObjectPublicationMailer->mailPublication($publication);
@@ -551,7 +552,7 @@ class Manager implements PublicationInterface
     }
 
     /**
-     * @return AssignmentPublicationService[]
+     * @return \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\AssignmentPublicationServiceInterface[]
      */
     protected static function getAssignmentPublicationServices()
     {
@@ -560,11 +561,23 @@ class Manager implements PublicationInterface
 
         return [
             $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.assignment_publication_service'
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAttachmentAssignmentPublicationService'
             ),
             $container->get(
-                'chamilo.application.weblcms.integration.chamilo.core.repository.publication.service.content_object_publication_manager.learning_path_assignment_publication_service'
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryAttachmentAssignmentPublicationService'
             ),
+            $container->get(
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryAssignmentPublicationService'
+            ),
+            $container->get(
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryAssignmentPublicationService'
+            ),
+            $container->get(
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\EntryFeedbackAssignmentPublicationService'
+            ),
+            $container->get(
+                'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository\Publication\Service\LearningPathEntryFeedbackAssignmentPublicationService'
+            )
         ];
     }
 }

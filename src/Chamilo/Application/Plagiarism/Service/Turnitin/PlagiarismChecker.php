@@ -78,7 +78,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
         string $filename, SubmissionStatus $currentSubmissionStatus = null
     )
     {
-        if (!$this->canCheckForPlagiarism($title, $filePath))
+        if (!$this->canCheckForPlagiarism($filePath, $filename))
         {
             throw new PlagiarismException(
                 sprintf(
@@ -89,7 +89,7 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
 
         if (empty($currentSubmissionStatus) || empty($currentSubmissionStatus->getSubmissionId()))
         {
-            return $this->requestNewPlagiarismCheck($owner, $submitter, $title, $filePath, $filename);
+            return $this->requestNewPlagiarismCheck($submitter, $owner, $title, $filePath, $filename);
         }
 
         if ($currentSubmissionStatus->isUploadInProgress())
@@ -110,6 +110,11 @@ class PlagiarismChecker implements PlagiarismCheckerInterface
         if ($currentSubmissionStatus->isFailed() && $currentSubmissionStatus->canRetry())
         {
             return $this->retryPlagiarismCheck($currentSubmissionStatus, $filePath, $filename);
+        }
+
+        if($currentSubmissionStatus->isReportGenerated())
+        {
+            return $currentSubmissionStatus;
         }
 
         throw new PlagiarismException(

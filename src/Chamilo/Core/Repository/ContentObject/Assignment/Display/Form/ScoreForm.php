@@ -31,7 +31,7 @@ class ScoreForm extends FormValidator
     private $assignmentServiceBridge;
 
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -40,10 +40,10 @@ class ScoreForm extends FormValidator
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      * @param string $postUrl
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
     public function __construct(
-        Score $score = null, AssignmentServiceBridgeInterface $assignmentServiceBridge, $postUrl, \Twig_Environment $twig
+        Score $score = null, AssignmentServiceBridgeInterface $assignmentServiceBridge, $postUrl, \Twig\Environment $twig
     )
     {
         parent::__construct('details', 'post', $postUrl);

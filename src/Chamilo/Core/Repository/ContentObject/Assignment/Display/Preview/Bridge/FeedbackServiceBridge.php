@@ -98,12 +98,12 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param string $feedback
+     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+     * @return void
      */
-    public function createFeedback(User $user, $feedback, Entry $entry)
+    public function createFeedback(User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject, Entry $entry)
     {
         // TODO: Implement createFeedback() method.
     }

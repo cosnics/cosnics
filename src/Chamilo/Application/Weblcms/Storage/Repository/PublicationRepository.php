@@ -7,11 +7,13 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\PublicationRepositoryInterface;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\ResultSet\DataClassRecordResultSet;
@@ -395,7 +397,7 @@ class PublicationRepository implements PublicationRepositoryInterface
     {
         $conditions = array();
 
-        $conditions[] = $this->getPublicationConditionForCourse($course);
+        $conditions[] = $this->getPublicationCategoryConditionForCourse($course);
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
@@ -431,11 +433,19 @@ class PublicationRepository implements PublicationRepositoryInterface
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]|mixed[]
+     * @return ContentObjectPublication[]
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {
-        return DataManager::retrieves(ContentObjectPublicationCategory::class_name(), $condition)->as_array();
+        $parameters = new DataClassRetrievesParameters(
+            $condition, null, null, new OrderBy(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                )
+            )
+        );
+
+        return DataManager::retrieves(ContentObjectPublicationCategory::class_name(), $parameters)->as_array();
     }
 
     /**
@@ -460,5 +470,15 @@ class PublicationRepository implements PublicationRepositoryInterface
     public function findPublicationTargetUsers(ContentObjectPublication $contentObjectPublication)
     {
         return DataManager::get_publication_target_users($contentObjectPublication);
+    }
+
+    /**
+     * @param ContentObjectPublication $publication
+     *
+     * @return bool
+     */
+    public function createPublication(ContentObjectPublication $publication)
+    {
+        return $publication->create();
     }
 }

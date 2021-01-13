@@ -53,6 +53,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         $xmlFileLoader->load('file.xml');
         $xmlFileLoader->load('format.xml');
         $xmlFileLoader->load('hashing.xml');
+        $xmlFileLoader->load('mailer.xml');
         $xmlFileLoader->load('platform.xml');
         $xmlFileLoader->load('storage.xml');
         $xmlFileLoader->load('storage.doctrine.xml');

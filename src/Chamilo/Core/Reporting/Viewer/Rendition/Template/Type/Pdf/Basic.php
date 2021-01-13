@@ -153,8 +153,8 @@ class Basic extends Pdf
                 PdfBlockRendition::VIEW_DEFAULT);
         }
         
-        $file = Path::getInstance()->getArchivePath() .
-             Filesystem::create_unique_name(Path::getInstance()->getArchivePath(), $file_name);
+        $file = Path::getInstance()->getTemporaryPath() .
+             Filesystem::create_unique_name(Path::getInstance()->getTemporaryPath(), $file_name);
         
         $handle = fopen($file, 'a+');
         if (! fwrite($handle, $this->pdf_mc_table->Output('', 'S')))

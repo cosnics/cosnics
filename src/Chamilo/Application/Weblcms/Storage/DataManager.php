@@ -802,7 +802,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $conditions = array();
 
-        if ((! $course->is_course_admin($user)))
+        if ((! $course->is_course_admin($user, false)))
         {
             $time_conditions = array();
 
@@ -993,7 +993,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $course = $courses[$publication[ContentObjectPublication::PROPERTY_COURSE_ID]];
 
-            if ($course->is_course_admin($user))
+            if ($course->is_course_admin($user, false))
             {
                 $key = self::create_new_publications_cache_key(
                     $user->get_id(),
@@ -1211,7 +1211,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function tool_category_has_new_publications($tool, User $user, Course $course, $category)
     {
-        if ($course->is_course_admin($user))
+        if ($course->is_course_admin($user, false))
         {
             $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
                 $course->get_id(),
@@ -2421,7 +2421,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
                             if ($course_group)
                             {
-                                $user_ids = array_merge($user_ids, $course_group->get_members(true, true, false));
+                                $courseGroupMemberIds = $course_group->get_members(true, true, false);
+                                if(is_array($courseGroupMemberIds))
+                                {
+                                    $user_ids = array_merge($user_ids, $courseGroupMemberIds);
+                                }
                             }
                         }
                         break;

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Package;
 
+use Chamilo\Configuration\Package\Domain\MessageCollectorInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
@@ -42,6 +43,11 @@ abstract class Action
                 $this->message[] = $message;
                 break;
         }
+    }
+
+    public function addMessage(string $message, string $type = self::TYPE_NORMAL)
+    {
+        $this->add_message($type, $message);
     }
 
     public function set_message($message)

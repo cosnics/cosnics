@@ -3,8 +3,12 @@
 namespace Chamilo\Core\User\Service;
 
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 
 /**
  *
@@ -27,14 +31,23 @@ class UserService
     protected $passwordSecurity;
 
     /**
+     * @var \Chamilo\Libraries\Platform\Session\SessionUtilities
+     */
+    protected $sessionUtilities;
+
+    /**
      *
      * @param \Chamilo\Core\User\Storage\Repository\UserRepository $userRepository
      * @param \Chamilo\Core\User\Service\PasswordSecurity $passwordSecurity
+     * @param \Chamilo\Libraries\Platform\Session\SessionUtilities $sessionUtilities
      */
-    public function __construct(UserRepository $userRepository, PasswordSecurity $passwordSecurity)
+    public function __construct(
+        UserRepository $userRepository, PasswordSecurity $passwordSecurity, SessionUtilities $sessionUtilities
+    )
     {
         $this->userRepository = $userRepository;
         $this->passwordSecurity = $passwordSecurity;
+        $this->sessionUtilities = $sessionUtilities;
     }
 
     /**
@@ -56,7 +69,7 @@ class UserService
     public function getUserFullNameById($identifier)
     {
         $user = $this->findUserByIdentifier($identifier);
-        if(!$user instanceof User)
+        if (!$user instanceof User)
         {
             return null;
         }
@@ -138,6 +151,17 @@ class UserService
     }
 
     /**
+     * @param string $usernameOfficialCodeOrEmail
+     *
+     * @return DataClass|User
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    public function getUserByUsernameOfficialCodeOrEmail(string $usernameOfficialCodeOrEmail)
+    {
+        return $this->userRepository->findUserByUsernameOfficialCodeOrEmail($usernameOfficialCodeOrEmail);
+    }
+
+    /**
      * @param string $username
      *
      * @return bool
@@ -148,6 +172,16 @@ class UserService
     }
 
     /**
+     * @param FilterParameters $filterParameters
+     *
+     * @return User[]
+     */
+    public function getUsersByParameters(FilterParameters $filterParameters)
+    {
+        return $this->userRepository->findUsersByParameters($filterParameters);
+    }
+
+    /**
      * @param string $firstName
      * @param string $lastName
      * @param string $username
@@ -155,24 +189,33 @@ class UserService
      * @param string $emailAddress
      * @param string $password
      * @param string $authSource
+     * @param bool $active
+     *
+     * @param \DateTime|null $expirationDate
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function createUser(
-        $firstName, $lastName, $username, $officialCode, $emailAddress, $password, $authSource = 'Platform'
+        $firstName, $lastName, $username, $officialCode, $emailAddress, $password = null, $authSource = 'Platform',
+        $active = true, \DateTime $expirationDate = null
     )
     {
         $requiredParameters = [
             'firstName' => $firstName, 'lastName' => $lastName, 'username' => $username,
-            'officialCode' => $officialCode, 'emailAddress' => $emailAddress, 'password' => $password
+            'officialCode' => $officialCode, 'emailAddress' => $emailAddress
         ];
 
-        foreach($requiredParameters as $parameterName => $parameterValue)
+        foreach ($requiredParameters as $parameterName => $parameterValue)
         {
             if (empty($parameterValue))
             {
                 throw new \InvalidArgumentException('The ' . $parameterName . ' can not be empty');
             }
+        }
+
+        if (empty($password))
+        {
+            $password = uniqid();
         }
 
         if (!$this->isUsernameAvailable($username))
@@ -189,6 +232,18 @@ class UserService
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
 
+        if($active)
+        {
+            $user->set_activation_date(time());
+        }
+
+        $user->set_active($active);
+
+        if($expirationDate instanceof \DateTime)
+        {
+            $user->set_expiration_date($expirationDate->getTimestamp());
+        }
+
         $this->passwordSecurity->setPasswordForUser($user, $password);
 
         if (!$this->userRepository->create($user))
@@ -200,6 +255,123 @@ class UserService
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param string|null $firstName
+     * @param string|null $lastName
+     * @param string|null $username
+     * @param null $officialCode
+     * @param string|null $emailAddress
+     * @param string|null $password
+     * @param string|null $authSource
+     * @param bool|null $active
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function updateUserByValues(
+        User $user, string $firstName = null, string $lastName = null, string $username = null, $officialCode = null,
+        string $emailAddress = null, string $password = null, string $authSource = null,
+        bool $active = null
+    )
+    {
+        if (!empty($firstName))
+        {
+            $user->set_firstname($firstName);
+        }
+
+        if (!empty($lastName))
+        {
+            $user->set_lastname($lastName);
+        }
+
+        if (!empty($username))
+        {
+            $user->set_username($username);
+        }
+
+        if (!empty($officialCode))
+        {
+            $user->set_official_code($officialCode);
+        }
+
+        if (!empty($emailAddress))
+        {
+            $user->set_email($emailAddress);
+        }
+
+        if (!empty($authSource))
+        {
+            $user->set_auth_source($authSource);
+        }
+
+        if (!is_null($active))
+        {
+            if($active && $user->get_active() == false)
+            {
+                $user->set_activation_date(time());
+            }
+
+            $user->set_active($active);
+        }
+
+        if (!empty($password))
+        {
+            $this->passwordSecurity->setPasswordForUser($user, $password);
+        }
+
+        if (!$this->userRepository->update($user))
+        {
+            throw new \RuntimeException('Could not update the user');
+        }
+
+        return $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateUniqueUsername()
+    {
+        do
+        {
+            $username = $this->generateUsername();
+            $user = $this->getUserByUsernameOrEmail($username);
+        }
+        while ($user instanceof User);
+
+        return $username;
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateUsername()
+    {
+        $username = '';
+
+        for ($i = 0; $i < 3; $i ++)
+        {
+            $username .= chr(rand(97, 122));
+        }
+
+        $username .= rand(100, 999);
+
+        return $username;
+    }
+
+    /**
+     * Validates whether or not the currently logged in user (determined by the session) is the same as the given
+     * user. This function is used to check if any manipulations to the user object were made.
+     *
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     *
+     * @return bool
+     */
+    public function isUserCurrentLoggedInUser(User $user)
+    {
+        return $this->sessionUtilities->get('_uid') == $user->getId();
+    }
+
+    /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -208,6 +380,23 @@ class UserService
     public function countUsers($condition)
     {
         return $this->userRepository->countUsers($condition);
+    }
+
+    /**
+     * @param User $user
+     * @param string $context
+     * @param string $variable
+     */
+    public function getUserSettingForSettingAndUser(User $user, string $context, string $variable)
+    {
+        $userSetting = $this->userRepository->getUserSettingForSettingAndUser($context, $variable, $user);
+        if($userSetting instanceof UserSetting)
+        {
+            return $userSetting->get_value();
+        }
+
+        $setting = \Chamilo\Configuration\Storage\DataManager::retrieve_setting_from_variable_name($variable, $context);
+        return $setting->get_value();
     }
 
 }

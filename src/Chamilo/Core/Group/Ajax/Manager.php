@@ -13,4 +13,5 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 abstract class Manager extends AjaxManager
 {
     const ACTION_XML_GROUP_MENU_FEED = 'XmlGroupMenuFeed';
+    const ACTION_GET_GROUP_CHILDREN_JSON = 'GetGroupChildrenJSON';
 }

@@ -98,7 +98,7 @@ class Security
                 // Remove really unwanted tags, but allow object|embed (for html editor)
                 $old_data = $variable;
                 $variable = preg_replace(
-                    '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
+                    '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
                     '',
                     $variable);
             }

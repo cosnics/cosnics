@@ -1,0 +1,66 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup' %}
+
+<style>
+    table td {
+        vertical-align: middle !important;
+    }
+</style>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>{{ 'CourseGroup'|trans({}, appContext) }}</th>
+        <th>{{ 'UserIdentifier'|trans({}, appContext) }}</th>
+        <th>{{ 'FullUserName'|trans({}, appContext) }}</th>
+        <th style="width: 75px; text-align: center;">{{ 'Status'|trans({}, appContext) }}</th>
+        <th>{{ 'Remarks'|trans({}, appContext) }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for STATUS in SUBSCRIBE_STATUSES %}
+        <tr>
+            <td>
+                {% if STATUS.courseGroup %}
+                {{ STATUS.courseGroup.get_name() }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td>{{ STATUS.userIdentifier }}</td>
+            <td>
+                {% if STATUS.user %}
+                    {{ STATUS.user.get_fullname() }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+            <td style="text-align: center;">
+                {% if STATUS.status == 1 %}
+                    <span class="fa fa-check-circle" style="color: green; font-size: 18px;"></span>
+                {% else %}
+                    <span class="fa fa-times" style="color: red; font-size: 18px;"></span>
+                {% endif %}
+            </td>
+            <td>
+                {% if STATUS.status == 2 %}
+                    {{ 'UserNotFound'|trans({}, appContext) }}
+                {% elseif STATUS.status == 3 %}
+                    {{ 'UserNotSubscribedInCourse'|trans({}, appContext) }}
+                {% elseif STATUS.status == 4 %}
+                    {{ 'CourseGroupNotFound'|trans({}, appContext) }}
+                {% elseif STATUS.status == 10 %}
+                    {{ 'UnknownError'|trans({}, appContext) }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ DETAILS_URL }}" class="btn btn-primary" style="margin-top: 20px;">{{ 'ReturnToCourseGroup'|trans({}, appContext) }}</a>
+
+{{ FOOTER|raw }}

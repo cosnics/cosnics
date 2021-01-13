@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Form;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -11,6 +12,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -84,6 +86,9 @@ class AssignmentForm extends ContentObjectForm
                     $active->_elements[0]->setValue(serialize($defaults[Assignment::PROPERTY_SELECT_ATTACHMENT]));
                 }
             }
+
+            $defaults[Assignment::PROPERTY_PAGE_TEMPLATE] = $object->getPageTemplate();
+            $defaults[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE] = $object->useLastEntryAsTemplate();
         }
         else
         {
@@ -131,6 +136,19 @@ class AssignmentForm extends ContentObjectForm
             Translation::get('StartTime'),
             Translation::get('EndTime')
         );
+
+        $isRegistered = $this->getRegistrationConsulter()->isContextRegistered(
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\ExamAssignment'
+        );
+
+        if ($isRegistered)
+        {
+            $this->addElement(
+                'html', '<div class="row form-row" style="margin-top: 20px;">' .
+                '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
+                '<div class="alert alert-info">' . Translation::get('ExamAssignmentWarning') . '</div></div></div>'
+            );
+        }
 
         // Visibilty submissions
         $choices = array();
@@ -180,6 +198,24 @@ class AssignmentForm extends ContentObjectForm
             'advanced_element_finder', Assignment::PROPERTY_ALLOWED_TYPES, Translation::get('AllowedContentTypes'),
             $types
         );
+
+        $this->addElement('html', '<div class="page_template" style="display:none;">');
+
+        $this->addElement('category', Translation::get('PageTemplate'));
+
+        $this->add_html_editor(Assignment::PROPERTY_PAGE_TEMPLATE, Translation::get('PageTemplate'), false);
+        $this->addElement(
+            'checkbox', Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE, Translation::get('UseLastEntryAsTemplate')
+        );
+
+        $this->addElement(
+            'html',
+            ResourceManager::getInstance()->get_resource_html(
+                Path::getInstance()->getJavascriptPath(Assignment::package(), true) . 'PageTemplate.js'
+            )
+        );
+
+        $this->addElement('html', '</div>');
 
         $this->addElement('category');
 
@@ -268,6 +304,16 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement('category');
     }
 
+    /**
+     * @return RegistrationConsulter|object
+     */
+    protected function getRegistrationConsulter()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get(RegistrationConsulter::class);
+    }
+
     // Inherited
     public function create_content_object()
     {
@@ -303,6 +349,9 @@ class AssignmentForm extends ContentObjectForm
         {
             $object->set_visibility_feedback(null);
         }
+
+        $object->setPageTemplate($values[Assignment::PROPERTY_PAGE_TEMPLATE]);
+        $object->setUseLastEntryAsTemplate(boolval($values[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE]));
 
         $this->set_content_object($object);
 
@@ -346,6 +395,9 @@ class AssignmentForm extends ContentObjectForm
             $object->set_visibility_feedback(null);
         }
 
+        $object->setPageTemplate($values[Assignment::PROPERTY_PAGE_TEMPLATE]);
+        $object->setUseLastEntryAsTemplate(boolval($values[Assignment::PROPERTY_LAST_ENTRY_AS_TEMPLATE]));
+
         $this->set_content_object($object);
 
         return parent::update_content_object();
@@ -372,7 +424,7 @@ class AssignmentForm extends ContentObjectForm
             $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
             $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
 
-            if(in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
+            if (in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
             {
                 $allowedTypes[] = $typeClass;
             }
@@ -407,11 +459,12 @@ class AssignmentForm extends ContentObjectForm
             $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
             $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
 
-            if(in_array($typeClass, $allowedTypeClasses))
+            if (in_array($typeClass, $allowedTypeClasses))
             {
                 $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
 
-                $typeCssClass = strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
+                $typeCssClass =
+                    strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
 
                 $defaultElements->add_element(
                     new AdvancedElementFinderElement(

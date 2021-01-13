@@ -124,8 +124,8 @@ class Basic extends Csv
                 CsvBlockRendition::VIEW_BASIC);
         }
         
-        $file = Path::getInstance()->getArchivePath() . Filesystem::create_unique_name(
-            Path::getInstance()->getArchivePath(), 
+        $file = Path::getInstance()->getTemporaryPath() . Filesystem::create_unique_name(
+            Path::getInstance()->getTemporaryPath(),
             $file_name);
         
         $handle = fopen($file, 'a+');
@@ -136,7 +136,7 @@ class Basic extends Csv
         }
         
         fclose($handle);
-        
+
         return $file;
     }
 }

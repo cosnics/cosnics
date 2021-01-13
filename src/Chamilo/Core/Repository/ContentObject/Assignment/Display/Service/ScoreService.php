@@ -10,6 +10,7 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Service;
 
 
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\User\Storage\DataClass\User;
 
@@ -58,5 +59,26 @@ class ScoreService
         $this->assignmentServiceBridge->updateScore($score);
 
         return $score;
+    }
+
+    /**
+     * @param Entry $entry
+     * @param int $totalScore
+     * @param User $user
+     *
+     * @return Score
+     */
+    public function createOrUpdateScoreForEntry(Entry $entry, int $totalScore, User $user)
+    {
+        $score = $this->assignmentServiceBridge->findScoreByEntry($entry);
+        if(!$score instanceof Score)
+        {
+            $score = $this->assignmentServiceBridge->initializeScore();
+            $score->setEntryId($entry->getId());
+        }
+
+        $score->setScore($totalScore);
+
+        return $this->createOrUpdateScoreByUser($score, $user);
     }
 }

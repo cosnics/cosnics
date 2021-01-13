@@ -1,10 +1,6 @@
 {{ HEADER|raw }}
 
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueStarRating/star-rating.min.js', 'Chamilo\\Libraries') }}
+{#{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}#}
 
 <style>
     .tab-pane#notifications .list-group-item {
@@ -75,9 +71,12 @@
             {% if NOTIFICATIONS_COUNT > 0 %}<span class="new-notifications-label">{{ NOTIFICATIONS_COUNT }}</span>{% endif %}
         </a>
     </li>
-    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
+    <li role="presentation" class="{{ SELECTED_TAB != 'rubric' ? 'active': '' }}"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ ENTITY_NAME }}</a></li>
     <li role="presentation"><a href="#assignment" aria-controls="assignment" role="tab" data-toggle="tab">{{ 'Assignment'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
+    {% if SUPPORTS_RUBRICS %}
+    <li role="presentation" class="{{ SELECTED_TAB == 'rubric' ? 'active': '' }}"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+    {% endif %}
 </ul>
 
 <div class="dynamic-visual-tab-content tab-content">
@@ -89,9 +88,8 @@
                 :load-on-startup="false">
         </notifications-list>
         </div>
-        <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
     </div>
-    <div role="tabpanel" class="tab-pane active tab-pane-with-border" id="entities">
+    <div role="tabpanel" class="tab-pane {{ SELECTED_TAB != 'rubric' ? 'active': '' }} tab-pane-with-border" id="entities">
         {{ SEARCH_TOOLBAR|raw }}
         {{ ENTITY_TABLE|raw }}
     </div>
@@ -100,7 +98,6 @@
         {{ CONTENT_OBJECT_RENDITION|raw }}
     </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
-
         <div class="assignment-properties">
             <table class="table table-striped table-bordered table-hover table-responsive table-properties">
                 <tbody>
@@ -175,6 +172,39 @@
         </div>
 
     </div>
+    {% if SUPPORTS_RUBRICS %}
+    <div role="tabpanel" class="tab-pane {{ SELECTED_TAB == 'rubric' ? 'active': '' }} tab-pane-with-border" id="rubric">
+        <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
+        {% if HAS_RUBRIC %}
+            {% if CAN_BUILD_RUBRIC %}
+            <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+            <a href="{{ REMOVE_RUBRIC_URL }}" class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</a>
+            {% else %}
+                <div class="alert alert-warning">
+                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+                </div>
+            {% endif %}
+            <div class="pull-right">
+                <a href="{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL }}">
+                <div class="toggle btn btn-primary btn-sm {{ SELF_EVALUATION_ALLOWED ? '' : 'off' }}" style="width: 180px; height: 30px;">
+                    <div class="toggle-group">
+                        <label class="btn btn-primary btn-sm toggle-on">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</label>
+                        <label class="btn btn-default btn-sm active toggle-off">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</label>
+                        <span class="toggle-handle btn btn-default btn-sm"></span>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="clearfix"></div>
+            <div>{{ RUBRIC_PREVIEW|raw }}</div>
+        {% else %}
+            <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
+            <div class="text-center" style="margin-bottom: 20px;">
+                <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success btn-lg">{{ 'AddRubric'|trans({}, appContext) }}</a>
+            </div>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 <script type="text/javascript">

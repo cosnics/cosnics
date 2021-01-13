@@ -14,6 +14,10 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  */
 class FileConfigurationLoader implements CacheableDataLoaderInterface
 {
+    /**
+     * @var string[]
+     */
+    protected static $dataCache;
 
     /**
      *
@@ -127,16 +131,21 @@ class FileConfigurationLoader implements CacheableDataLoaderInterface
      */
     public function getData()
     {
-        if ($this->getFileConfigurationLocator()->isAvailable())
+        if (! isset(self::$dataCache))
         {
-            $settings = $this->getSettings();
-        }
-        else
-        {
-            $settings = $this->getDefaultSettings();
+            if ($this->getFileConfigurationLocator()->isAvailable())
+            {
+                $settings = $this->getSettings();
+            }
+            else
+            {
+                $settings = $this->getDefaultSettings();
+            }
+
+            self::$dataCache = $settings;
         }
 
-        return $settings;
+        return self::$dataCache;
     }
 
     /**

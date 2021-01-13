@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass;
 
+use Chamilo\Core\Repository\Interfaces\TemplateSupportInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
@@ -11,7 +12,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
  * 
  * @package repository.content_object.page
  */
-class Page extends ContentObject implements Versionable, Includeable
+class Page extends ContentObject implements Versionable, Includeable, TemplateSupportInterface
 {
 
     public static function get_type_name()

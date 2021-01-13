@@ -1,0 +1,202 @@
+{{ HEADER|raw }}
+
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+{% set appContext = 'Chamilo\\Core\\User' %}
+
+{#{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}#}
+
+{#{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}#}
+
+<style>
+    .invite-browser-container .invite-user {
+        max-width: 600px;
+        padding: 30px;
+        background-color: #eeeeee;
+        border: 1px solid #dddddd;
+        margin: auto;
+    }
+
+    .invite-browser-container .invite-user h1 {
+        margin: 0 0 30px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .invite-browser-container .invite-user .btn {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .invite-browser-container .invite-user .input-group-addon {
+        background-color: white;
+    }
+
+    .form-control:focus {
+        border-color: #66afe9 !important;
+    }
+
+    .invite-browser-container .invite-user .form-control,
+    .invite-browser-container .invite-user .input-group-addon {
+        border-radius: 0;
+    }
+
+    .invite-browser-container .invite-table {
+        margin-top: 50px;
+    }
+
+    #end-date-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        margin-left: 3px;
+        margin-top: 10px;
+    }
+
+    input.form-control[type="date"] {
+        line-height: normal;
+    }
+
+    .invite-browser-container .actions-column,
+    .invite-browser-container .status-column {
+        width: 50px;
+        text-align: center;
+    }
+
+    .invite-browser-container table td {
+        vertical-align: middle !important;
+    }
+</style>
+
+<div class="invite-browser-container">
+    <div class="invite-user">
+        {% if SUCCESS %}
+            <div class="alert alert-success">
+                {{ 'UserInvitedMessage'|trans({'{USER_EMAIL}': USER_EMAIL}, appContext)|raw }}
+            </div>
+        {% endif %}
+
+        {% if INVALID_EMAIL %}
+            <div class="alert alert-danger">
+                {{ 'InvalidEmailMessage'|trans({'{USER_EMAIL}': USER_EMAIL}, appContext)|raw }}
+            </div>
+        {% endif %}
+
+        <h1>{{ 'InviteNewUser'|trans({}, appContext) }}</h1>
+        {{ form_start(FORM) }}
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                    {{ form_widget(FORM.email) }}
+                </div>
+                {{ form_errors(FORM.email) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="fa fa-commenting"></span></span>
+                    {{ form_widget(FORM.personal_message) }}
+                </div>
+                {{ form_errors(FORM.personal_message) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div id="end-date-label" title="{{ 'AccountValidUntilDescription'|trans({}, appContext) }}">
+                    {{ 'AccountValidUntil'|trans({}, appContext) }}
+                </div>
+                {{ form_widget(FORM.account_valid_until) }}
+                {{ form_errors(FORM.account_valid_until) }}
+            </div>
+        </div>
+
+        <div class="buttons text-center">
+            <button type="submit" class="btn btn-success">{{ 'Invite'|trans({}, appContext) }}</button>
+        </div>
+
+        {{ form_end(FORM) }}
+
+    </div>
+
+    <div class="invite-table">
+        <div class="row">
+            <div class="col-md-6"><h3>{{ 'ExistingInvites'|trans({}, appContext) }}</h3></div>
+            <div class="col-md-6 text-right">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="{{ 'Search'|trans({}, 'Chamilo\\Libraries') }}" style="float: right; max-width: 200px;"
+                           v-model="filterText">
+                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                </div>
+            </div>
+        </div>
+        <b-table striped bordered :items="invites" :fields="fields" :filter="filterText"
+                 show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+                 empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+        >
+            <template v-slot:cell(status)="data">
+                <span v-if="data.item.status == 1">
+                    <span class="fa fa-clock-o" title="{{ 'InvitePending'|trans({}, appContext) }}"></span>
+                </span>
+                <span v-if="data.item.status == 2">
+                    <span class="fa fa-check" title="{{ 'InviteAccepted'|trans({}, appContext) }}"></span>
+                </span>
+                <span v-if="data.item.status == 3">
+                    <span class="fa fa-calendar-times-o" title="{{ 'InviteNotValid'|trans({}, appContext) }}"></span>
+                </span>
+            </template>
+            <template v-slot:cell(actions)="data">
+                <a class="btn btn-sm btn-default" :href="getExtendInviteUrl(data.item)" title="{{ 'UserInviteExtenderComponent'|trans({}, appContext) }}"><span class="fa fa-send"></span></a>
+            </template>
+        </b-table>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+
+        var fields = [
+            {
+                key: 'email',
+                'label': '{{ 'Email'|trans({}, appContext) }}',
+                'sortable': true
+            },
+            {
+                key: 'valid_until',
+                'label': '{{ 'InviteValidUntil'|trans({}, appContext) }}',
+                'sortable': true
+            },
+            {
+                key: 'status',
+                'label': '{{ 'Status'|trans({}, appContext) }}',
+                'class': 'status-column'
+            },
+            {
+                key: 'actions',
+                'label': '',
+                'class': 'actions-column'
+            }
+        ];
+
+        var invites = {{ EXISTING_INVITES_JSON|raw }}
+
+            $(window).on('load', function () {
+                new Vue({
+                    el: '.invite-browser-container',
+                    data: {
+                        filterText: null,
+                        invites: invites,
+                        fields: fields
+                    },
+                    methods: {
+                        getExtendInviteUrl: function(userInvite) {
+                            return '{{ EXTEND_USER_INVITE_URL|raw }}'.replace('__USER_INVITE_ID__', userInvite.id);
+                        }
+                    }
+                });
+            });
+    })();
+</script>
+
+{{ FOOTER|raw }}

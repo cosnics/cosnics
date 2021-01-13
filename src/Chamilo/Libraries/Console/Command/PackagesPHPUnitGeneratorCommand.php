@@ -17,16 +17,16 @@ class PackagesPHPUnitGeneratorCommand extends Command
 
     /**
      *
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
     /**
      * PackagesPHPUnitGeneratorCommand constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(\Twig\Environment $twig)
     {
         parent::__construct();
 

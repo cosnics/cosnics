@@ -177,6 +177,14 @@
                 </options>
             </setting>
         </category>
+        <category name="invites">
+            <setting name="allow_invites" field="toggle" default="1">
+                <options type="static">
+                    <option name="allow_invites" value="1" />
+                </options>
+            </setting>
+            <setting name="external_users_group_id" field="text" default="" />
+        </category>
         <category name="registration">
             <setting
                 name="allow_registration"

@@ -688,9 +688,14 @@ class User extends DataClass
     {
         // if (! $only_retrieve_ids)
         // {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
-            $this->getId(), 
-            $only_retrieve_ids);
+        if($only_retrieve_ids){
+            return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_ids_recursive(
+                $this->getId());
+        } else {
+            return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+                $this->getId(),
+                $only_retrieve_ids);
+        }
         // }
         // else
         // {

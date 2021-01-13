@@ -31,6 +31,8 @@
             </call>
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Service\PublicationService" alias="chamilo.application.weblcms.service.publication" />
+
         <service id="chamilo.application.weblcms.tool.service.category_breadcrumbs_generator"
                  class="Chamilo\Application\Weblcms\Tool\Service\CategoryBreadcrumbsGenerator">
             <argument type="service" id="chamilo.application.weblcms.service.publication" />
@@ -50,6 +52,9 @@
 
         <service id="chamilo.application.weblcms.service.course_settings_controller"
                  class="Chamilo\Application\Weblcms\CourseSettingsController" />
+
+        <service alias="chamilo.application.weblcms.service.weblcms_rights"
+                 id="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
 
         <service id="chamilo.application.weblcms.service.weblcms_rights"
                  class="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
@@ -81,7 +86,11 @@
         <service id="Chamilo\Application\Weblcms\Service\CourseService" alias="chamilo.application.weblcms.service.course"/>
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService" autowire="true"/>
+        <service id="Chamilo\Application\Weblcms\Service\CourseSubscriptionService" autowire="true"/>
+
         <service id="Chamilo\Application\Weblcms\Repository\CourseUserCategoryRepository" autowire="true"/>
+
+        <service id="Chamilo\Application\Weblcms\CourseSettingsController" autowire="true"/>
 
     </services>
 </container>

@@ -3,13 +3,9 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 	<title>Fancytree - Example: ext-clones</title>
-<!--
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
- -->
+
 	<script src="../lib/jquery.js"></script>
-	<script src="../lib/jquery-ui.custom.js"></script>
+	<script src="../src/jquery-ui-dependencies/jquery.fancytree.ui-deps.js"></script>
 
 	<link href="../src/skin-win8/ui.fancytree.css" class="skinswitcher" rel="stylesheet">
 	<script src="../src/jquery.fancytree.js"></script>
@@ -32,28 +28,13 @@ span.fancytree-node.fancytree-clone span.fancytree-title:after {
 	padding-right: 13px;
 }
 
-
 span.fancytree-node.fancytree-active-clone {
   border-color: blue;
-  -moz-animation: flash 1s ease-out;
-  -moz-animation-iteration-count: 1;
-  -webkit-animation: flash 1s ease-out;
-  -webkit-animation-iteration-count: 1;
-  -ms-animation: flash 1s ease-out;
-  -ms-animation-iteration-count: 1;
+  animation: flash 1s ease-out;
+  animation-iteration-count: 1;
 }
 
-@-ms-keyframes flash {
-	0% { background-color:none;}
-	50% { background-color:#fbf8b2;}
-	100% {background-color:none;}
-}
-@-moz-keyframes flash {
-	0% { background-color:none;}
-	50% { background-color:#fbf8b2;}
-	100% {background-color:none;}
-}
-@-ms-keyframes flash {
+@keyframes flash {
 	0% { background-color:none;}
 	50% { background-color:#fbf8b2;}
 	100% {background-color:none;}
@@ -65,10 +46,15 @@ span.fancytree-node.fancytree-active-clone {
 <script type="text/javascript">
 
 var SOURCE = [
-			  {title: "Item 1", key: "node1"},
+			  {title: "Folder 1", folder: true, expanded: true, key: "node1",
+				  children: [
+					  {title: "Sub-item 1.1", key: "node1.1", refKey: "1"},
+					  {title: "Sub-item 1.2", key: "node1.2", refKey: "2"}
+				  ]
+			  },
 			  {title: "Folder 2", folder: true, expanded: true, key: "node2",
 				  children: [
-					  {title: "Sub-item 2.1, refKey=3", key: "node2.1", refKey: "3"},
+					  {title: "Sub-item 2.1", key: "node2.1", refKey: "1"},
 					  {title: "Sub-item 2.2", key: "node2.2", refKey: "2"}
 				  ]
 			  },
@@ -76,7 +62,7 @@ var SOURCE = [
 				  children: [
 					  {title: "Sub-item 2.1", key: "node3.1", selected: false,
 						  children: [
-									  {title: "Sub-item 3.1.1", key: "node3.1.1"},
+									  {title: "Sub-item 3.1.1", key: "node3.1.1", refKey: "3"},
 									  {title: "Sub-item 3.1.2", key: "node3.1.2", refKey: "2"}
 								  ]
 						  },
@@ -86,8 +72,7 @@ var SOURCE = [
 			  {title: "Folder 4", folder: true, expanded: true, key: "node4",
 				  children: [
 					  {title: "Sub-item 2.1", key: "node4.1", refKey: "1"},
-					  {title: "Sub-item 2.2", key: "node4.2", refKey: "1", selected: false},
-					  {title: "Sub-item 2.3 (unselectable)", key: "node4.3", selected: false, unselectable: true}
+					  {title: "Sub-item 2.2", key: "node4.2", refKey: "2",}
 				  ]
 			  },
 			  {title: "Item 3", key: "node5", lazy: true}

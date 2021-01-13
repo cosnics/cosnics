@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Action\Component;
 
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
@@ -13,6 +14,7 @@ use Chamilo\Application\Weblcms\Tool\Action\Manager;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ActionSelector;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -79,6 +81,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $this->checkAuthorization();
 
+        if (method_exists($this->get_application(), 'renderBeforePublications'))
+        {
+            $content[] = $this->get_application()->renderBeforePublications();
+        }
+
         $publicationsContent = $this->renderPublications();
 
         if ($this->get_parent() instanceof Categorizable)
@@ -111,7 +118,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $html[] = $this->getButtonToolbarRenderer()->render();
 
         if ($this->get_publication_count() > 0 &&
-             $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection::TYPE_DISABLED)
+            $this->get_parent()->get_tool_registration()->get_section_type() == CourseSection::TYPE_DISABLED)
         {
             $html[] = Display::warning_message(Translation::get('ToolInvisible'));
         }
@@ -127,7 +134,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         // set if we are browsing as course admin, used for displaying the
         // additional tabs and actions
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT))
         {
             throw new NotAllowedException();
         }
@@ -135,7 +142,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function getIntroductionText()
     {
-        if (! isset($this->introductionText))
+        if (!isset($this->introductionText))
         {
             $this->introductionText = $this->get_parent()->get_introduction_text();
         }
@@ -153,7 +160,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($course_settings_controller->get_course_setting(
             $this->get_course(),
-            \Chamilo\Application\Weblcms\CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT))
+            \Chamilo\Application\Weblcms\CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
+        ))
         {
             return $this->get_parent()->display_introduction_text($this->getIntroductionText());
         }
@@ -165,6 +173,12 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html = array();
 
+        if (method_exists($this->get_application(), 'hasCustomCategoryRenderer') &&
+            $this->get_application()->hasCustomCategoryRenderer())
+        {
+            return '<div class="col-sm-12">' . $renderedPublications . '</div>';
+        }
+
         if ($this->hasCategories())
         {
 
@@ -172,7 +186,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $categoryId = intval(Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY));
 
-            if (! $categoryId || $categoryId == 0)
+            if (!$categoryId || $categoryId == 0)
             {
                 $categoryName = Translation::get('Root');
             }
@@ -224,18 +238,23 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE),
-            new StaticConditionVariable($this->get_course_id()));
+                ContentObjectPublicationCategory::PROPERTY_COURSE
+            ),
+            new StaticConditionVariable($this->get_course_id())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_TOOL),
-            new StaticConditionVariable($this->get_tool_id()));
+                ContentObjectPublicationCategory::PROPERTY_TOOL
+            ),
+            new StaticConditionVariable($this->get_tool_id())
+        );
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-            ContentObjectPublicationCategory::class_name(),
-            new DataClassCountParameters(new AndCondition($conditions))) > 0;
+                ContentObjectPublicationCategory::class_name(),
+                new DataClassCountParameters(new AndCondition($conditions))
+            ) > 0;
     }
 
     /**
@@ -244,7 +263,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function isCourseAdmin()
     {
-        if (! isset($this->isCourseAdmin))
+        if (!isset($this->isCourseAdmin))
         {
             $this->isCourseAdmin = $this->get_course()->is_course_admin($this->get_user());
         }
@@ -260,11 +279,13 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $publicationRenderer = ContentObjectPublicationListRenderer::factory(
             $this->get_parent()->get_browser_type(),
-            $this);
+            $this
+        );
 
         $actions = new TableFormActions(
             'Chamilo\Application\Weblcms\Table\Publication\Table',
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+        );
 
         if (method_exists($this->get_parent(), 'get_additional_form_actions'))
         {
@@ -282,16 +303,24 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new TableFormAction(
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE)),
-                    Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)));
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_DELETE
+                        )
+                    ),
+                    Translation::get('RemoveSelected', null, Utilities::COMMON_LIBRARIES)
+                )
+            );
 
             $actions->add_form_action(
                 new TableFormAction(
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY)),
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY
+                        )
+                    ),
                     Translation::get('ToggleVisibility'),
-                    false));
+                    false
+                )
+            );
         }
 
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) && $this->get_parent() instanceof Categorizable)
@@ -300,9 +329,13 @@ class BrowserComponent extends Manager implements DelegateComponent
                 new TableFormAction(
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY)),
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY
+                        )
+                    ),
                     Translation::get('MoveSelected', null, Utilities::COMMON_LIBRARIES),
-                    false));
+                    false
+                )
+            );
         }
 
         $publicationRenderer->set_actions($actions);
@@ -334,26 +367,31 @@ class BrowserComponent extends Manager implements DelegateComponent
                     $object_table_order,
                     $offset,
                     $max_objects,
-                    $this->get_user_id());
+                    $this->get_user_id()
+                );
             }
             elseif ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)
             {
-                $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
-                    $this->get_publication_conditions(),
-                    $object_table_order,
-                    $offset,
-                    $max_objects);
+                $publications_resultset =
+                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
+                        $this->get_publication_conditions(),
+                        $object_table_order,
+                        $offset,
+                        $max_objects
+                    );
             }
             else
             {
-                $publications_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                    $this->get_location(),
-                    $this->get_entities(),
-                    $this->get_publication_conditions(),
-                    $object_table_order,
-                    $offset,
-                    $max_objects,
-                    $this->get_user_id());
+                $publications_resultset =
+                    \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
+                        $this->get_location(),
+                        $this->get_entities(),
+                        $this->get_publication_conditions(),
+                        $object_table_order,
+                        $offset,
+                        $max_objects,
+                        $this->get_user_id()
+                    );
             }
 
             if ($publications_resultset)
@@ -381,27 +419,33 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $this->get_location(),
                 $this->get_entities(),
                 $this->get_publication_conditions(),
-                $this->get_user_id());
+                $this->get_user_id()
+            );
         }
         elseif ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)
         {
             $count = \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications(
-                $this->get_publication_conditions());
+                $this->get_publication_conditions()
+            );
         }
         else
         {
-            $count = \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
-                $this->get_location(),
-                $this->get_entities(),
-                $this->get_publication_conditions(),
-                $this->get_user_id());
+            $count =
+                \Chamilo\Application\Weblcms\Storage\DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
+                    $this->get_location(),
+                    $this->get_entities(),
+                    $this->get_publication_conditions(),
+                    $this->get_user_id()
+                );
         }
 
         return $count;
     }
 
-    public function getPublicationButton($label, $glyph, $allowedContentObjectTypes, $parameters,
-        $extraActions = array(), $classes = null)
+    public function getPublicationButton(
+        $label, $glyph, $allowedContentObjectTypes, $parameters,
+        $extraActions = array(), $classes = null
+    )
     {
         $actionSelector = new ActionSelector(
             $this,
@@ -409,14 +453,15 @@ class BrowserComponent extends Manager implements DelegateComponent
             $allowedContentObjectTypes,
             $parameters,
             $extraActions,
-            $classes);
+            $classes
+        );
 
         return $actionSelector->getActionButton($label, $glyph);
     }
 
     public function getButtonToolbarRenderer()
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
@@ -428,7 +473,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
 
                 $parameters = $this->get_parameters();
-                $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH;
+                $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                    \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH;
 
                 $publishActions->addButton(
                     $this->getPublicationButton(
@@ -437,23 +483,30 @@ class BrowserComponent extends Manager implements DelegateComponent
                         $this->get_allowed_content_object_types(),
                         $parameters,
                         array(),
-                        'btn-primary'));
+                        'btn-primary'
+                    )
+                );
 
                 $courseSettingsController = CourseSettingsController::getInstance();
 
-                if (! $this->getIntroductionText() && $this->isCourseAdmin() && $courseSettingsController->get_course_setting(
-                    $this->get_course(),
-                    CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT))
+                if (!$this->getIntroductionText() && $this->isCourseAdmin() &&
+                    $courseSettingsController->get_course_setting(
+                        $this->get_course(),
+                        CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
+                    ))
                 {
                     $parameters = $this->get_parameters();
-                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION;
+                    $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
+                        \Chamilo\Application\Weblcms\Tool\Manager::ACTION_PUBLISH_INTRODUCTION;
 
                     $publishActions->addButton(
                         $this->getPublicationButton(
                             Translation::get('PublishIntroductionText', null, Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('book'),  // new FontAwesomeGlyph('info-circle'),
                             array(Introduction::class_name()),
-                            $parameters));
+                            $parameters
+                        )
+                    );
                 }
 
                 if ($this->isCourseAdmin())
@@ -462,7 +515,10 @@ class BrowserComponent extends Manager implements DelegateComponent
                         array(
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
                             \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => Request::get(
-                                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY)));
+                                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY
+                            )
+                        )
+                    );
                 }
 
                 $manageActions->addButton(
@@ -470,10 +526,13 @@ class BrowserComponent extends Manager implements DelegateComponent
                         Translation::get('ManageRights', null, Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('lock'),
                         $link,
-                        Button::DISPLAY_ICON_AND_LABEL));
+                        Button::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
-            if ($this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT) && $this->get_parent() instanceof Categorizable)
+            if ($this->is_allowed(WeblcmsRights::MANAGE_CATEGORIES_RIGHT) &&
+                $this->get_parent() instanceof Categorizable)
             {
                 $manageActions->addButton(
                     new Button(
@@ -481,8 +540,12 @@ class BrowserComponent extends Manager implements DelegateComponent
                         new FontAwesomeGlyph('folder'),
                         $this->get_url(
                             array(
-                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MANAGE_CATEGORIES)),
-                        Button::DISPLAY_ICON_AND_LABEL));
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MANAGE_CATEGORIES
+                            )
+                        ),
+                        Button::DISPLAY_ICON_AND_LABEL
+                    )
+                );
             }
 
             if (method_exists($this->get_parent(), 'get_tool_actions'))
@@ -507,10 +570,33 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 foreach ($browser_types as $browser_type)
                 {
+                    if (ContentObjectPublicationListRenderer::isCustomType($browser_type))
+                    {
+                        $typeClass = ClassnameUtilities::getInstance()->getClassnameFromNamespace($browser_type);
+
+                        $label = Translation::get(
+                            (string) StringUtilities::getInstance()->createString($typeClass)->upperCamelize() .
+                            'View',
+                            null,
+                            $this->get_application()->context()
+                        );
+                    }
+                    else
+                    {
+                        $translationContext = Utilities::COMMON_LIBRARIES;
+                        $label = Translation::get(
+                            (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
+                            'View',
+                            null,
+                            $translationContext
+                        );
+                    }
+
                     if ($this->get_parent()->get_browser_type() != $browser_type)
                     {
                         $action = $this->get_url(
-                            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => $browser_type));
+                            array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE => $browser_type)
+                        );
                         $classes = 'not-selected';
                     }
                     else
@@ -520,16 +606,13 @@ class BrowserComponent extends Manager implements DelegateComponent
                     }
 
                     $filterActions[] = new SubButton(
-                        Translation::get(
-                            (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
-                                 'View',
-                                null,
-                                Utilities::COMMON_LIBRARIES),
+                        $label,
                         Theme::getInstance()->getCommonImagePath('View/' . $browser_type),
                         $action,
                         Button::DISPLAY_LABEL,
                         false,
-                        $classes);
+                        $classes
+                    );
                 }
 
                 $filterActions[] = new SubButtonDivider();
@@ -550,42 +633,57 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($this->isCourseAdmin())
             {
-                $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL ? 'selected' : 'not-selected');
+                $isSelected =
+                    ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL ? 'selected' :
+                        'not-selected');
 
                 $filterActions[] = new SubButton(
                     Translation::get('AllPublications'),
                     null,
                     $this->get_url(
                         array(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)),
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL
+                        )
+                    ),
                     Button::DISPLAY_LABEL,
                     false,
-                    $isSelected);
+                    $isSelected
+                );
             }
 
-            $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME ? 'selected' : 'not-selected');
+            $isSelected =
+                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME ? 'selected' :
+                    'not-selected');
 
             $filterActions[] = new SubButton(
                 Translation::get('PublishedForMe'),
                 null,
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME)),
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME
+                    )
+                ),
                 Button::DISPLAY_LABEL,
                 false,
-                $isSelected);
+                $isSelected
+            );
 
-            $isSelected = ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME ? 'selected' : 'not-selected');
+            $isSelected =
+                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME ? 'selected' :
+                    'not-selected');
 
             $filterActions[] = new SubButton(
                 Translation::get('MyPublications'),
                 null,
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME)),
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME
+                    )
+                ),
                 Button::DISPLAY_LABEL,
                 false,
-                $isSelected);
+                $isSelected
+            );
 
             $filterAction->addSubButtons($filterActions);
 
@@ -615,32 +713,39 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $course_id = Session::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_VIEW_AS_COURSE_ID);
                 $user_id = Session::get_user_id();
 
-                $publisher_id = (isset($va_id) && isset($course_id) && $course_id == $this->get_course_id()) ? $va_id : $user_id;
+                $publisher_id =
+                    (isset($va_id) && isset($course_id) && $course_id == $this->get_course_id()) ? $va_id : $user_id;
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class_name(),
-                        ContentObjectPublication::PROPERTY_PUBLISHER_ID),
-                    new StaticConditionVariable($publisher_id));
+                        ContentObjectPublication::PROPERTY_PUBLISHER_ID
+                    ),
+                    new StaticConditionVariable($publisher_id)
+                );
 
             case \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL :
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class_name(),
-                        ContentObjectPublication::PROPERTY_COURSE_ID),
-                    new StaticConditionVariable($this->get_course_id()));
+                        ContentObjectPublication::PROPERTY_COURSE_ID
+                    ),
+                    new StaticConditionVariable($this->get_course_id())
+                );
 
                 if ($this->get_tool_id())
                 {
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             ContentObjectPublication::class_name(),
-                            ContentObjectPublication::PROPERTY_TOOL),
-                        new StaticConditionVariable($this->get_tool_id()));
+                            ContentObjectPublication::PROPERTY_TOOL
+                        ),
+                        new StaticConditionVariable($this->get_tool_id())
+                    );
                 }
 
                 $category_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
-                if (! $category_id)
+                if (!$category_id)
                 {
                     $category_id = 0;
                 }
@@ -648,27 +753,33 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class_name(),
-                        ContentObjectPublication::PROPERTY_CATEGORY_ID),
-                    new StaticConditionVariable($category_id));
+                        ContentObjectPublication::PROPERTY_CATEGORY_ID
+                    ),
+                    new StaticConditionVariable($category_id)
+                );
 
                 break;
             default :
 
                 $from_date_variables = new PropertyConditionVariable(
                     ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_FROM_DATE);
+                    ContentObjectPublication::PROPERTY_FROM_DATE
+                );
 
                 $to_date_variable = new PropertyConditionVariable(
                     ContentObjectPublication::class_name(),
-                    ContentObjectPublication::PROPERTY_TO_DATE);
+                    ContentObjectPublication::PROPERTY_TO_DATE
+                );
 
                 $time_conditions = array();
 
                 $time_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class_name(),
-                        ContentObjectPublication::PROPERTY_HIDDEN),
-                    new StaticConditionVariable(0));
+                        ContentObjectPublication::PROPERTY_HIDDEN
+                    ),
+                    new StaticConditionVariable(0)
+                );
 
                 $forever_conditions = array();
 
@@ -683,12 +794,14 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $between_conditions[] = new InequalityCondition(
                     $from_date_variables,
                     InequalityCondition::LESS_THAN_OR_EQUAL,
-                    new StaticConditionVariable(time()));
+                    new StaticConditionVariable(time())
+                );
 
                 $between_conditions[] = new InequalityCondition(
                     $to_date_variable,
                     InequalityCondition::GREATER_THAN_OR_EQUAL,
-                    new StaticConditionVariable(time()));
+                    new StaticConditionVariable(time())
+                );
 
                 $between_condition = new AndCondition($between_conditions);
 
@@ -705,7 +818,8 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TYPE),
-            $this->get_allowed_types());
+            $this->get_allowed_types()
+        );
 
         if (method_exists($this->get_parent(), 'get_tool_conditions'))
         {
@@ -732,11 +846,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*');
+                '*' . $query . '*'
+            );
 
             return new OrCondition($conditions);
         }
@@ -751,20 +867,25 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_TOOL),
-            new StaticConditionVariable($this->get_tool_id()));
+                ContentObjectPublicationCategory::PROPERTY_TOOL
+            ),
+            new StaticConditionVariable($this->get_tool_id())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE),
-            new StaticConditionVariable($this->get_course_id()));
+                ContentObjectPublicationCategory::PROPERTY_COURSE
+            ),
+            new StaticConditionVariable($this->get_course_id())
+        );
 
         $condition = new AndCondition($conditions);
 
         return \Chamilo\Application\Weblcms\Storage\DataManager::count(
             ContentObjectPublicationCategory::class_name(),
-            new DataClassCountParameters($condition));
+            new DataClassCountParameters($condition)
+        );
     }
 
     private function retrieve_category($category_id)
@@ -772,26 +893,33 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_ID),
-            new StaticConditionVariable($category_id));
+                ContentObjectPublicationCategory::PROPERTY_ID
+            ),
+            new StaticConditionVariable($category_id)
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_COURSE),
-            new StaticConditionVariable($this->get_parent()->get_course_id()));
+                ContentObjectPublicationCategory::PROPERTY_COURSE
+            ),
+            new StaticConditionVariable($this->get_parent()->get_course_id())
+        );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class_name(),
-                ContentObjectPublicationCategory::PROPERTY_TOOL),
-            new StaticConditionVariable($this->get_parent()->get_tool_id()));
+                ContentObjectPublicationCategory::PROPERTY_TOOL
+            ),
+            new StaticConditionVariable($this->get_parent()->get_tool_id())
+        );
 
         $condition = new AndCondition($conditions);
 
         $objects = \Chamilo\Application\Weblcms\Storage\DataManager::retrieves(
             ContentObjectPublicationCategory::class_name(),
-            new DataClassRetrievesParameters($condition));
+            new DataClassRetrievesParameters($condition)
+        );
 
         return $objects->next_result();
     }
@@ -799,7 +927,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_publication_type()
     {
         $type = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE);
-        if (! $type)
+        if (!$type)
         {
             if ($this->isCourseAdmin())
             {
@@ -832,7 +960,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         return new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublication::class_name(),
-                ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX));
+                ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+            )
+        );
     }
 
     public function tool_category_has_new_publications($category_id)
@@ -841,6 +971,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->get_tool_id(),
             $this->get_user(),
             $this->get_course(),
-            $category_id);
+            $category_id
+        );
     }
 }

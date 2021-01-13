@@ -1,8 +1,4 @@
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueStarRating/star-rating.min.js', 'Chamilo\\Libraries') }}
+{#{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}#}
 
 {% include 'Chamilo\\Core\\Notification:NotificationsList.html.twig' %}
 
@@ -29,7 +25,7 @@
             view-notification-url="{{ VIEW_NOTIFICATION_URL }}">
         </notifications-list>
     </div>
-    <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>
+{#    <div class="notifications-beta-warning">{{ 'BETAWarning'|trans({'{ADMIN_EMAIL}': ADMIN_EMAIL}, 'Chamilo\\Application\\Weblcms\\Integration\\Chamilo\\Core\\Home')|raw }}</div>#}
 </div>
 
 <script type="text/javascript">

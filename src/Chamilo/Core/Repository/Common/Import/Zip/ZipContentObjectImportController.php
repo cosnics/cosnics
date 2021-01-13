@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\Common\Import\Zip;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportController;
+use Chamilo\Core\Repository\Common\Import\ImportParameters;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -437,7 +438,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
             $contentObjectRelationService->createContentObjectRelation(
                 $this->get_parameters()->getWorkspace()->getId(), 
-                $contentObject->getId(), 
+                $contentObject->get_object_number(),
                 $parent);
         }
     }

@@ -93,7 +93,7 @@ class DeleterComponent extends Manager
      *
      * @return int
      */
-    protected function getCourseGroupFromRequest()
+    public function getCourseGroupFromRequest()
     {
         $key = self::PARAM_COURSE_GROUP;
         $request = $this->getRequest();

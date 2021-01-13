@@ -166,7 +166,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
             CoursePlatformGroupEntity::ENTITY_TYPE . '_' . $group->get_id(),
             'type type_group',
             $group->get_name(),
-            $group->get_code(),
+            '(' . $group->get_code() . ') ' . strip_tags($group->get_fully_qualified_name(true)),
             AdvancedElementFinderElement::TYPE_SELECTABLE_AND_FILTER);
     }
 

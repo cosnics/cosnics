@@ -502,6 +502,14 @@ abstract class Table
     }
 
     /**
+     * @return string[]
+     */
+    public function getTableFilterParameters()
+    {
+        return $this->table->getTableFilterParameters();
+    }
+
+    /**
      * Registers a new parameter and value in the array of parameters
      *
      * @param string $parameter
@@ -603,6 +611,23 @@ abstract class Table
     public static function get_name()
     {
         return static::class_name(false, false);
+    }
+
+    /**
+     * Returns the list of filter parameter names used by the table. This can be used to set the
+     * required parameters in a component so that the table parameters are kept when a table action is used
+     *
+     * @return array
+     */
+    public static function getFilterParameterNames()
+    {
+        $tableName = self::get_name();
+        return [
+            $tableName . '_' . HtmlTable::PARAM_PAGE_NUMBER,
+            $tableName . '_' . HtmlTable::PARAM_NUMBER_OF_ITEMS_PER_PAGE,
+            $tableName . '_' . HtmlTable::PARAM_ORDER_COLUMN,
+            $tableName . '_' . HtmlTable::PARAM_ORDER_DIRECTION
+        ];
     }
 
     /**

@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Mail\Mailer\MailerFactory;
 use Chamilo\Libraries\Mail\Mailer\MailerInterface;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 
 /**
  *
@@ -40,7 +41,7 @@ class ImporterComponent extends Manager
         {
             $userImporter = new UserImporter(
                 new ImportParserFactory(),
-                new UserRepository(),
+                new UserRepository(new FilterParametersTranslator()),
                 $this->getConfigurationConsulter(),
                 $this->getPasswordSecurity(),
                 $this->getMailer(),

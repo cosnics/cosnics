@@ -1,7 +1,11 @@
 <?php
+
 namespace Chamilo\Core\Repository\Common\Import;
 
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactories;
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
@@ -21,6 +25,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ImportTypeSelector
 {
+    use DependencyInjectionContainerTrait;
 
     /**
      *
@@ -35,6 +40,11 @@ class ImportTypeSelector
     private $allowedContentObjectTypes;
 
     /**
+     * @var ImportFactories
+     */
+    protected $importFactories;
+
+    /**
      *
      * @param string[] $parameters
      * @param string[] $allowedContentObjectTypes
@@ -43,6 +53,8 @@ class ImportTypeSelector
     {
         $this->parameters = $parameters;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
+        $this->initializeContainer();
+        $this->importFactories = $this->getService(ImportFactories::class);
     }
 
     /**
@@ -98,7 +110,7 @@ class ImportTypeSelector
 
             $html[] = '<a class="btn btn-default" href="' . $this->getLink($type) . '">';
             $html[] = '<img src="' . Theme::getInstance()->getImagePath($imageContext, 'Import/' . $typeImageName) .
-                 '" /> ';
+                '" /> ';
             $html[] = $name;
             $html[] = '</a>';
         }
@@ -114,6 +126,7 @@ class ImportTypeSelector
         $parameters[ContentObjectImportService::PARAM_IMPORT_TYPE] = $importType;
 
         $importUrl = new Redirect($parameters);
+
         return $importUrl->getUrl();
     }
 
@@ -126,7 +139,8 @@ class ImportTypeSelector
         $dropdownButton = new DropdownButton(
             Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
             new FontAwesomeGlyph('download'),
-            Button::DISPLAY_ICON_AND_LABEL);
+            Button::DISPLAY_ICON_AND_LABEL
+        );
 
         $dropdownButton->addSubButtons($this->getTypeSelectorSubButtons());
 
@@ -144,12 +158,14 @@ class ImportTypeSelector
         foreach ($this->getImportTypes() as $type => $name)
         {
             $typeImageName = (string) StringUtilities::getInstance()->createString($type)->upperCamelize();
-            $imageContext = \Chamilo\Core\Repository\Manager::package();
+            $importFactory = $this->importFactories->getImportFactoryByAlias($type);
+            $imageContext = $importFactory->getImportContext();
 
             $subButtons[] = new SubButton(
                 $name,
                 Theme::getInstance()->getImagePath($imageContext, 'Import/16/' . $typeImageName),
-                $this->getLink($type));
+                $this->getLink($type)
+            );
         }
 
         return $subButtons;
@@ -162,23 +178,29 @@ class ImportTypeSelector
         foreach ($this->getAllowedContentObjectTypes() as $type)
         {
             $objectImportTypes = ContentObjectImportImplementation::get_types_for_object(
-                ClassnameUtilities::getInstance()->getNamespaceParent($type, 3));
+                ClassnameUtilities::getInstance()->getNamespaceParent($type, 3)
+            );
 
             foreach ($objectImportTypes as $objectImportType)
             {
-                if (! array_key_exists($objectImportType, $importTypes))
+                if (!array_key_exists($objectImportType, $importTypes))
                 {
-                    $importTypeName = (string) StringUtilities::getInstance()->createString($objectImportType)->upperCamelize();
+                    $importFactory = $this->importFactories->getImportFactoryByAlias($objectImportType);
+                    $importTypeName =
+                        (string) StringUtilities::getInstance()->createString($objectImportType)->upperCamelize();
+//
+//                    $class = __NAMESPACE__ . '\\' . $importTypeName . '\\' . $importTypeName .
+//                         'ContentObjectImportController';
+//
+//                    if (class_exists($class) && $class::is_available())
 
-                    $class = __NAMESPACE__ . '\\' . $importTypeName . '\\' . $importTypeName .
-                         'ContentObjectImportController';
-
-                    if (class_exists($class) && $class::is_available())
+                    if ($importFactory->isAvailable())
                     {
                         $importTypes[$objectImportType] = Translation::get(
                             'ImportType' . $importTypeName,
                             null,
-                            \Chamilo\Core\Repository\Manager::context());
+                            $importFactory->getImportContext()
+                        );
                     }
                 }
             }

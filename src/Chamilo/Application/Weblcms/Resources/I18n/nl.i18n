@@ -700,3 +700,4 @@ ImportCourseEntitiesRetryFailedResultsData = "Toon importeer bestand van gefaald
 NotificationFilterCourse = "Verberg alle meldingen van de cursus <b>{COURSE_TITLE}</b>"
 NotificationFilterTool = "Verberg alle meldingen van de <b>{TOOL}</b> tool in de cursus <b>{COURSE_TITLE}</b>"
 SortName = "Sorteernaam"
+Others = "Overige"
