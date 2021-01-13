@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -80,6 +81,8 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
     {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
         $class = $publication[ContentObject::PROPERTY_TYPE];
         $content_object = new $class($publication);
         $content_object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
@@ -98,7 +101,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
                     ToolbarItem::DISPLAY_ICON,
                     false,
                     'btn-link'
-                ), 3
+                ), $allowed ? 3 : 0
             );
         }
     }

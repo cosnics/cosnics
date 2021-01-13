@@ -162,22 +162,6 @@ abstract class ContentObjectRenderer implements TableSupport
 
         $useSubButtonDivider = false;
 
-        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
-        {
-            $useSubButtonDivider = true;
-
-            $dropdownButton->addSubButton(
-                new SubButton(
-                    Translation::get('Download', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Download'),
-                    $this->get_repository_browser()->get_document_downloader_url(
-                        $content_object->get_id(),
-                        $content_object->calculate_security_code()),
-                    SubButton::DISPLAY_ICON_AND_LABEL
-                )
-            );
-        }
-
         if ($canCopyContentObject)
         {
             $useSubButtonDivider = true;
@@ -357,6 +341,23 @@ abstract class ContentObjectRenderer implements TableSupport
                     false,
                     'btn-link',
                     '_blank'
+                )
+            );
+        }
+
+        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
+        {
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Download', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('download'),
+                    //Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_repository_browser()->get_document_downloader_url(
+                        $content_object->get_id(),
+                        $content_object->calculate_security_code()),
+                    SubButton::DISPLAY_ICON,
+                    false,
+                    'btn-link'
                 )
             );
         }

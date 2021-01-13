@@ -71,9 +71,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
     {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
         $buttonGroup->insertButton(
             new Button(
-                Translation::get('BrowseSubmitters'),
+                Translation::get($allowed ? 'BrowseSubmitters' : 'MySubmissions'),
                 new FontAwesomeGlyph('list-alt'),
                 //Theme::getInstance()->getCommonImagePath('Action/Browser'),
                 $this->get_url(

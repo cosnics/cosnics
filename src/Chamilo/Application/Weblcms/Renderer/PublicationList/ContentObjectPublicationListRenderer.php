@@ -908,7 +908,7 @@ abstract class ContentObjectPublicationListRenderer
         }
 
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
-        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
+//        $weblcmsRightsService = ServiceFactory::getInstance()->getRightsService();
 
         $publicationObject = new ContentObjectPublication($publication);
         $canEditContentObject = $repositoryRightsService->canEditContentObject($this->get_user(), $content_object);
@@ -1273,7 +1273,8 @@ abstract class ContentObjectPublicationListRenderer
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('DisplayComplex'),
-                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    new FontAwesomeGlyph('lightbulb-o'),
+                    //Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_complex_display_url($publication_id),
                     ToolbarItem::DISPLAY_ICON,
                     false,
