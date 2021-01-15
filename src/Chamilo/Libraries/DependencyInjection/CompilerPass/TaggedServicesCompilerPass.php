@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -33,7 +34,18 @@ abstract class TaggedServicesCompilerPass implements CompilerPassInterface
 
         foreach ($taggedServices as $taggedServiceId => $tags)
         {
-            $definition->addMethodCall($method, array(new Reference($taggedServiceId)));
+            $this->addMethodCall($definition, $method, $taggedServiceId, $tags);
         }
+    }
+
+    /**
+     * @param Definition $definition
+     * @param string $method
+     * @param string $taggedServiceId
+     * @param array $tags
+     */
+    protected function addMethodCall(Definition $definition, string $method, string $taggedServiceId, array $tags = [])
+    {
+        $definition->addMethodCall($method, array(new Reference($taggedServiceId)));
     }
 }
