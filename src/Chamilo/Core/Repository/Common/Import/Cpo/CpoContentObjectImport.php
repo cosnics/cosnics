@@ -137,7 +137,9 @@ class CpoContentObjectImport extends ContentObjectImport
         $value = mb_convert_encoding($value, 'html-entities', 'UTF-8');
 
         $dom_document = new \DOMDocument();
-        $dom_document->loadHTML($value);
+
+        // LIBXML_HTML_NODEFDTD prevents a default doctype from being added when one is not found.
+        $dom_document->loadHTML($value, LIBXML_HTML_NODEFDTD);
 
         if ($dom_document->firstChild instanceof \DOMNode)
         {

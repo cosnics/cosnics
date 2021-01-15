@@ -3,7 +3,7 @@
 ; Language = nl
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-TypeName = "Examen Opdrachten"
+TypeName = "Examenopdrachten"
 TypeNameSingle = "Opdracht"
 Actions = "Acties"
 AddAttachments = "Bijlagen toevoegen"
@@ -14,7 +14,7 @@ AllowGroupSubmissions = "Type"
 AssignmentEnded = "Deze opdracht is verlopen."
 AssignmentNotStarted = "Deze opdracht is nog niet begonnen."
 Assignments = "Opdrachten"
-BrowserComponent = "Doorblader examen opdrachten"
+BrowserComponent = "Doorblader examenopdrachten"
 CategoryMoverComponent = "Verplaats opdracht"
 ContentObjectUpdaterComponent = "Bewerk content object"
 FeedbackUpdaterComponent = "Bewerk feedback"
