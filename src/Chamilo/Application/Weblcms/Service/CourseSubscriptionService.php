@@ -189,4 +189,16 @@ class CourseSubscriptionService
         return $groups;
     }
 
+    /**
+     * @param Course $course
+     * @param int|null $status
+     *
+     * Returns an array of the users in combination with the status of each user in the course, therefore it's a record and no object
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findUsersDirectlySubscribedToCourse(Course $course, int $status = null)
+    {
+        return $this->courseSubscriptionRepository->findUsersDirectlySubscribedToCourse($course, $status);
+    }
 }
