@@ -3,16 +3,13 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Form;
 
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\Repository\PublicationRepository;
 use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -123,49 +120,137 @@ class PublicationForm extends ContentObjectPublicationForm
     {
         $this->addElement('category', $this->translator->trans('AssignmentProperties', [], Manager::context()));
 
+        // Optional feedback period
+        $this->add_feedback_period();
+
         $group = [];
 
         $group[] = $this->createElement(
             'radio', self::PROPERTY_USE_CODE, '', $this->translator->trans('NoCode', [], Manager::context()), 0,
-            array('id' => 'no_code')
+            ['id' => 'no_code']
         );
 
         $group[] = $this->createElement(
             'radio', self::PROPERTY_USE_CODE, '', $this->translator->trans('UseCode', [], Manager::context()), 1,
-            array('id' => 'use_code')
+            ['id' => 'use_code']
         );
 
         $group[] = $this->create_textfield(
             Publication::PROPERTY_CODE, $this->translator->trans('AccessCode', [], Manager::context()),
             [
                 'type' => 'numeric', 'min' => 10000, 'max' => 99999, 'maxlength' => 5, 'minlength' => 5,
-                'id' => 'access_code'
+                'id' => 'access_code', 'autocomplete' => 'off'
             ]
         );
 
-        $this->addGroup($group, null, Translation::get('AccessCode'), '', false);
+        $this->addGroup($group, null, $this->translator->trans('AccessCode', [], Manager::context()), '', false);
 
-        $javascript = [];
-        $javascript[] = '<script type="text/javascript">';
-        $javascript[] = '$(document).ready(function() {';
-        $javascript[] = '   $("#use_code").on("click", function() {';
-        $javascript[] = '       $("#access_code").show();';
-        $javascript[] = '       $("#access_code").attr("required", "required");';
-        $javascript[] = '   });';
-        $javascript[] = '   $("#no_code").on("click", function() {';
-        $javascript[] = '       $("#access_code").hide();';
-        $javascript[] = '       $("#access_code").removeAttr("required");';
-        $javascript[] = '   });';
-        $javascript[] = '   if($("#no_code").attr("checked") == "checked") {';
-        $javascript[] = '      $("#access_code").hide();';
-        $javascript[] = '   };';
-        $javascript[] = '});';
-        $javascript[] = '</script>';
-
-        $this->addElement('html', implode(PHP_EOL, $javascript));
+        $this->addElement(
+            'html',
+            "<script type=\"text/javascript\">
+                $(document).ready(function() {
+                   $('#use_code').on('click', function() {
+                       $('#access_code').show();
+                       $('#access_code').attr('required', 'required');
+                   });
+                   $('#no_code').on('click', function() {
+                       $('#access_code').hide();
+                       $('#access_code').removeAttr('required');
+                   });
+                   if ($('#no_code').is(':checked')) {
+                      $('#access_code').hide();
+                   }
+                });
+            </script>\n");
     }
 
-    /**
+    private function add_feedback_period()
+    {
+        $elementName = 'feedback_period_choice';
+
+        $choices[] = $this->createElement(
+            'radio',
+            $elementName,
+            '',
+            $this->translator->trans('NoFeedbackPeriod', [], Manager::context()),
+            0,
+            array('id' => 'choice_feedback_none'));
+        $choices[] = $this->createElement(
+            'radio',
+            $elementName,
+            '',
+            $this->translator->trans('FeedbackPeriodFromOnly', [], Manager::context()),
+            1,
+            array('id' => 'choice_feedback_from_only'));
+        $choices[] = $this->createElement(
+            'radio',
+            $elementName,
+            '',
+            $this->translator->trans('FeedbackPeriodFromUntil', [], Manager::context()),
+            2,
+            array('id' => 'choice_feedback_from_until'));
+        $this->addGroup($choices, null, $this->translator->trans('FeedbackPeriod', [], Manager::context()), '', false);
+
+        $this->addElement('html', '<div style="margin-bottom:10px;margin-left:25px;display:block;" id="feedback_from_only">');
+        $this->add_datepicker('feedback_from_date_only','');
+        $this->addElement('html', '</div>');
+
+        $this->addElement('html', '<div style="margin-bottom:10px;margin-left:25px;display:block;" id="feedback_from_until">');
+        $this->add_datepicker('feedback_from_date', '');
+        $this->add_datepicker('feedback_to_date', '');
+        $this->addElement('html', '</div>');
+
+        $this->addFormRule(array($this, 'check_document_form'));
+
+        $this->addElement(
+            'html',
+            "<script type=\"text/javascript\">
+                $(document).ready(function() {
+                    $('#choice_feedback_none').on('click', function() {
+                        $('#feedback_from_only').hide();
+                        $('#feedback_from_until').hide();
+                    });
+                    $('#choice_feedback_from_only').on('click', function() {
+                        $('#feedback_from_only').show();
+                        $('#feedback_from_until').hide();
+                    });
+                    $('#choice_feedback_from_until').on('click', function() {
+                        $('#feedback_from_only').hide();
+                        $('#feedback_from_until').show();
+                    });
+                    if ($('#choice_feedback_none').is(':checked')) {
+                         $('#feedback_from_only').hide();
+                         $('#feedback_from_until').hide();
+                    } else if ($('#choice_feedback_from_only').is(':checked')) {
+                         $('#feedback_from_until').hide();
+                    } else if ($('#choice_feedback_from_until').is(':checked')) {
+                         $('#feedback_from_only').hide();
+                    } 
+                });
+            </script>\n");
+    }
+
+    protected function check_document_form($fields)
+    {
+        $errors = array();
+        if ($fields['feedback_period_choice'] == 2)
+        {
+            $exportValues = $this->exportValues();
+            $from = DatetimeUtilities::time_from_datepicker($exportValues['feedback_from_date']);
+            $to = DatetimeUtilities::time_from_datepicker($exportValues['feedback_to_date']);
+            if ($from > $to)
+            {
+                $errors['feedback_from_date'] = $this->translator->trans('StartDateShouldBeBeforeEndDate', [], Manager::context());
+            }
+            elseif ($from == $to)
+            {
+                $errors['feedback_from_date'] = $this->translator->trans('StartDateShouldDifferFromEndDate', [], Manager::context());
+            }
+        }
+        return $errors;
+    }
+
+        /**
      * Handles the submit of the form for both create and edit
      *
      * @return boolean
@@ -212,6 +297,8 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication->setPublicationId($contentObjectPublication->getId());
         $publication->setCode($exportValues[Publication::PROPERTY_CODE]);
 
+        $this->handleFeedbackPeriod($exportValues, $publication);
+
         return $publication->create();
     }
 
@@ -239,12 +326,38 @@ class PublicationForm extends ContentObjectPublicationForm
                 $publication->setCode(null);
             }
 
+            $this->handleFeedbackPeriod($exportValues, $publication);
+
             return $publication->update();
         }
         catch (\Exception $ex)
         {
             return false;
         }
+    }
+
+    /**
+     * @param array $values
+     * @param \Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass $publication
+     */
+    private function handleFeedbackPeriod($values, $publication)
+    {
+        if ($values['feedback_period_choice'] == 0)
+        {
+            $from = $to = 0;
+        }
+        else if ($values['feedback_period_choice'] == 1)
+        {
+            $from = DatetimeUtilities::time_from_datepicker($values['feedback_from_date_only']);
+            $to = 0;
+        }
+        else if ($values['feedback_period_choice'] == 2)
+        {
+            $from = DatetimeUtilities::time_from_datepicker($values['feedback_from_date']);
+            $to = DatetimeUtilities::time_from_datepicker($values['feedback_to_date']);
+        }
+        $publication->setFromDate($from);
+        $publication->setToDate($to);
     }
 
     /**
@@ -256,9 +369,36 @@ class PublicationForm extends ContentObjectPublicationForm
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
         $code = $publication->getCode();
+        $defaults = [];
         if (!empty($code))
         {
-            $defaults = [Publication::PROPERTY_CODE => $publication->getCode(), self::PROPERTY_USE_CODE => 1];
+            $defaults[Publication::PROPERTY_CODE] = $publication->getCode();
+            $defaults[self::PROPERTY_USE_CODE] = 1;
+        }
+
+        $feedbackFromDate = $publication->getFromDate();
+        $feedbackToDate = $publication->getToDate();
+        $defaults['feedback_from_date_only'] = $feedbackFromDate;
+        $defaults['feedback_from_date'] = $feedbackFromDate;
+        $defaults['feedback_to_date'] = $feedbackToDate;
+
+        if ($feedbackFromDate > 0)
+        {
+            $defaults['feedback_from_date_only'] = $feedbackFromDate;
+            $defaults['feedback_from_date'] = $feedbackFromDate;
+
+            if ($feedbackToDate > 0)
+            {
+                $defaults['feedback_to_date'] = $feedbackToDate;
+                $defaults['feedback_period_choice'] = 2;
+            }
+            else {
+                $defaults['feedback_period_choice'] = 1;
+            }
+        }
+        else
+        {
+            $defaults['feedback_period_choice'] = 0;
         }
 
         $this->setDefaults($defaults);
