@@ -54,6 +54,11 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     protected $canEditAssignment;
 
     /**
+     * @var bool
+     */
+    protected $submissionsAllowed;
+
+    /**
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService $assignmentService
      * @param \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager $entityServiceManager
      */
@@ -110,6 +115,23 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     public function setCanEditAssignment($canEditAssignment = true)
     {
         $this->canEditAssignment = $canEditAssignment;
+    }
+
+    /**
+     *
+     * @return bool
+     */
+    public function areSubmissionsAllowed()
+    {
+        return $this->submissionsAllowed;
+    }
+
+    /**
+     * @param bool $allowed
+     */
+    public function setSubmissionsAllowed(bool $allowed)
+    {
+        $this->submissionsAllowed = $allowed;
     }
 
     /**
