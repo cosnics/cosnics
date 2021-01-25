@@ -76,7 +76,7 @@ class LaunchGenerator
         }
         else
         {
-            if ($externalTool->isValidCustomProvider())
+            if (!$externalTool->isValidCustomProvider())
             {
                 throw new \RuntimeException(
                     sprintf('The given external tool with id %s is not valid', $externalTool->getId())
