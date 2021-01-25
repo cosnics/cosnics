@@ -130,6 +130,25 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         {
             $toolbar->deleteItem(1);
             $toolbar->deleteItem(0);
+
+            $contentObjectPublication = $this->getPublicationService()->getPublication($publication[ContentObjectPublication::PROPERTY_ID]);
+
+            if ($this->canViewAssignment($contentObjectPublication))
+            {
+                $toolbar->insert_item(
+                    new ToolbarItem(
+                        Translation::get('BrowseSubmissions'),
+                        Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                            )
+                        ),
+                        ToolbarItem::DISPLAY_ICON
+                    ), 0
+                );
+            }
         }
 
         return $toolbar;
@@ -262,11 +281,17 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
+     * @param ContentObjectPublication|null $contentObjectPublication
+     *
      * @return bool
+     * @throws NoObjectSelectedException
+     * @throws NotAllowedException
+     * @throws ObjectNotExistException
      */
-    protected function canViewAssignment()
+    protected function canViewAssignment(\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication = null)
     {
-        $publication = $this->getContentObjectPublication();
+        $publication = $contentObjectPublication ?? $this->getContentObjectPublication();
+
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
             return false;
