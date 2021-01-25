@@ -67,11 +67,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-
-        if(!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
-        {
-            throw new NotAllowedException();
-        }
     }
 
     public function get_available_browser_types()
@@ -100,35 +95,42 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         $toolbar->deleteItem(4);
 
-        $toolbar->insert_item(
-            new ToolbarItem(
-                Translation::get('BrowseSubmitters'),
-                Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
-                ),
-                ToolbarItem::DISPLAY_ICON
-            ), 0
-        );
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $toolbar->insert_item(
+                new ToolbarItem(
+                    Translation::get('BrowseSubmitters'),
+                    Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON
+                ), 0
+            );
 
-
-        $toolbar->insert_item(
-            new ToolbarItem(
-                Translation::get('UserOvertime'),
-                Theme::getInstance()->getCommonImagePath('Action/Config'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
+            $toolbar->insert_item(
+                new ToolbarItem(
+                    Translation::get('UserOvertime'),
+                    Theme::getInstance()->getCommonImagePath('Action/Config'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON
                 ),
-                ToolbarItem::DISPLAY_ICON
-            ),
-            2
-        );
+                2
+            );
+        }
+        else
+        {
+            $toolbar->deleteItem(1);
+            $toolbar->deleteItem(0);
+        }
 
         return $toolbar;
     }
@@ -257,5 +259,40 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     protected function getPublicationService()
     {
         return $this->getService(PublicationService::class);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function canViewAssignment()
+    {
+        $publication = $this->getContentObjectPublication();
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
+        {
+            return false;
+        }
+
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $assignment = $this->getService(\Chamilo\Core\Repository\Workspace\Service\ContentObjectService::class)->findById($publication->get_content_object_id());
+            $time = time();
+
+            if (((int) $assignment->get_end_time()) > $time)
+            {
+                return false;
+            }
+
+            $assignmentPublication = $this->getAssignmentPublication($publication);
+
+            $fromDate = $assignmentPublication->getFromDate();
+            $toDate = $assignmentPublication->getToDate();
+
+            if ($fromDate == 0 || $time < $fromDate || ($toDate != 0 && $time > $toDate))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

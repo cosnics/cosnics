@@ -50,9 +50,13 @@ class PublicationTableColumnModel extends ObjectPublicationTableColumnModel
 
         $this->addActionsColumn();
 
-        if(!$this->get_component()->get_tool_browser()->get_parent()->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        if (!$this->get_component()->get_tool_browser()->get_parent()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $this->delete_column(7);
+            $this->delete_column(9);
+            $this->delete_column(2);
+            $this->delete_column(2);
+            $this->delete_column(2);
         }
     }
 }

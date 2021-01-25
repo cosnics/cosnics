@@ -2,7 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Component;
 
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Tool\Implementation\ExamAssignment\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
@@ -43,19 +45,19 @@ class ViewerComponent extends Manager
             )
         );
 
-        $actions[] = new Button(
-            Translation::get('SubmissionSubmit'),
-            new FontAwesomeGlyph('plus'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                )
-            ),
-            Button::DISPLAY_ICON_AND_LABEL
-        );
-
         return $actions;
+    }
+
+    /**
+     * @return string
+     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     */
+    public function run()
+    {
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT)) {
+            throw new NotAllowedException();
+        }
+        return parent::run();
     }
 }

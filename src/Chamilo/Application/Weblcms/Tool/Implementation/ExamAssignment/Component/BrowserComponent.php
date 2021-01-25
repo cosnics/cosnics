@@ -34,7 +34,13 @@ class BrowserComponent extends Manager
         $html[] = parent::render_header($pageTitle);
 
         $html[] = '<div class="alert alert-info">';
-        $html[] = $this->getTranslator()->trans('ExamAssignmentDifferences', [], Manager::context());
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $html[] = $this->getTranslator()->trans('ExamAssignmentDifferences', [], Manager::context());
+        }
+        else{
+            $html[] = $this->getTranslator()->trans('ExamAssignmentStudentInfo', [], Manager::context());
+        }
         $html[] = '</div>';
 
         return implode(PHP_EOL, $html);
@@ -69,6 +75,11 @@ class BrowserComponent extends Manager
 
     public function get_additional_form_actions()
     {
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            return array();
+        }
+
         return array(
             new TableFormAction(
                 $this->get_url(

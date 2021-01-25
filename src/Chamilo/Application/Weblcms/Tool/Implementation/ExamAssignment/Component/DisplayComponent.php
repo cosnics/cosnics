@@ -41,13 +41,26 @@ class DisplayComponent extends Manager implements DelegateComponent
     public function run()
     {
         $publication = $this->getContentObjectPublication();
-        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
-        {
-            throw new NotAllowedException();
-        }
 
         $breadcrumbTrail = BreadcrumbTrail::getInstance();
         $breadcrumbTrail->add(new Breadcrumb($this->get_url(), $publication->getContentObject()->get_title()));
+
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $this->get_root_content_object()->set_automatic_feedback_text('');
+        }
+
+        if (!$this->canViewAssignment())
+        {
+            $assigmentPublication = $this->getAssignmentPublication($publication);
+
+            return $this->getTwig()->render(Manager::context() . ':NotAvailable.html.twig',
+                [
+                    'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
+                    'FEEDBACK_FROM' => $assigmentPublication->getFromDate(),
+                    'FEEDBACK_TO' => $assigmentPublication->getToDate(),
+                ]);
+        }
 
         $this->buildBridges($publication);
 

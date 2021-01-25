@@ -7,6 +7,8 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 
 /**
  *
@@ -48,6 +50,11 @@ class UserOvertimeComponent extends Manager
      */
     public function run()
     {
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            throw new NotAllowedException();
+        }
+
         $publication = $this->getContentObjectPublication();
         $usersExtraTime = $this->getUserOvertimeService()->getUserOvertimeDataByPublication($publication);
 
