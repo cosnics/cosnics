@@ -48,6 +48,15 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         {
             case ContentObject::PROPERTY_TITLE :
                 return $this->generate_title_link($publication);
+            case Assignment::PROPERTY_START_TIME :
+                $time = $content_object->get_start_time();
+                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+                $time = DatetimeUtilities::format_locale_date($date_format, $time);
+                if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
+                {
+                    return '<span style="color: gray">' . $time . '</span>';
+                }
+                return $time;
             case Assignment::PROPERTY_END_TIME :
                 $time = $content_object->get_end_time();
                 $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
@@ -56,7 +65,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
                 {
                     return '<span style="color: gray">' . $time . '</span>';
                 }
-
                 return $time;
             case Manager::PROPERTY_NUMBER_OF_SUBMISSIONS :
                 $contentObjectPublication = new ContentObjectPublication();
