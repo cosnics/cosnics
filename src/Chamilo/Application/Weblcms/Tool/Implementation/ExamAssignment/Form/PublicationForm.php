@@ -112,9 +112,6 @@ class PublicationForm extends ContentObjectPublicationForm
 
     protected function hideVisibility()
     {
-        $this->removeElement('qf_group_1');
-        $this->removeElement('from_date');
-        $this->removeElement('to_date');
         $this->removeElement('hidden');
     }
 
@@ -265,5 +262,13 @@ class PublicationForm extends ContentObjectPublicationForm
         }
 
         $this->setDefaults($defaults);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isShowTimeWindow()
+    {
+        return false;
     }
 }
