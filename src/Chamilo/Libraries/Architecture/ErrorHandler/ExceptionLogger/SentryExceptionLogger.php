@@ -1,8 +1,12 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Libraries\Format\Structure\BaseHeader;
 use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Sentry\SentrySdk;
+use Sentry\UserDataBag;
 
 /**
  * Logs Exceptions to Sentry (sentry.io)
@@ -12,12 +16,6 @@ use Chamilo\Libraries\Platform\Session\Session;
  */
 class SentryExceptionLogger implements ExceptionLoggerInterface
 {
-
-    /**
-     * @var \Raven_Client
-     */
-    protected $sentryClient;
-
     /**
      * @var string
      */
@@ -27,11 +25,12 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * SentryExceptionLogger constructor.
      *
      * @param string $sentryConnectionString
+     *
      * @throws \Exception
      */
     public function __construct($sentryConnectionString = '')
     {
-        if (! class_exists('\Raven_Client'))
+        if (!class_exists('\Sentry\SentrySdk'))
         {
             throw new \Exception('Can not use the SentryExceptionLogger when sentry is not included');
         }
@@ -43,9 +42,22 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
         $this->sentryConnectionString = $sentryConnectionString;
 
-        $this->sentryClient = new \Raven_Client(
-            $sentryConnectionString,
-            array('install_default_breadcrumb_handlers' => false));
+        \Sentry\init(
+            [
+                'dsn' => $sentryConnectionString, 'traces_sample_rate' => 0.01,
+                'before_send' => function (\Sentry\Event $event): ?\Sentry\Event {
+                    $userId = SessionUtilities::getUserId();
+
+                    $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
+                        $_SERVER['SCRIPT_NAME'] .
+                        '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
+
+                    $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePage]);
+
+                    return $event;
+                }
+            ]
+        );
     }
 
     /**
@@ -56,14 +68,16 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      * @param string $file
      * @param integer $line
      */
-    public function logException($exception, $exceptionLevel = self::EXCEPTION_LEVEL_FATAL_ERROR, $file = null, $line = 0)
+    public function logException(
+        $exception, $exceptionLevel = self::EXCEPTION_LEVEL_FATAL_ERROR, $file = null, $line = 0
+    )
     {
         if ($exceptionLevel != self::EXCEPTION_LEVEL_FATAL_ERROR)
         {
             return;
         }
 
-        $this->sentryClient->captureException($exception);
+        \Sentry\captureException($exception);
     }
 
     /**
@@ -73,26 +87,38 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
      */
     public function addJavascriptExceptionLogger(BaseHeader $header)
     {
+        $matches = [];
+        preg_match("/https:\/\/(.*)@/", $this->sentryConnectionString, $matches);
+
+        $sentryKey = $matches[1];
+
         $html = [];
+
+        $html[] = '<script
+                src="https://js.sentry-cdn.com/' . $sentryKey . '.min.js"
+                crossorigin="anonymous"
+            ></script>';
+
+        $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
+            $_SERVER['SCRIPT_NAME'] .
+            '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . Session::getUserId();
 
         $html[] = '<script type="text/javascript">';
 
-        $html[] = 'Raven.config(\'' . $this->sentryConnectionString . '\',{';
-        $html[] = '}).install();';
+        $html[] = '
+            Sentry.onLoad(function() {
+                Sentry.setContext("user", {
+                    id: ' . Session::getUserId() . ',
+                    profile_page: "' . $profilePage . '"
+                })
+            });
+            Sentry.forceLoad();';
 
-        $html[] = 'Raven.setUserContext({';
-        $html[] = 'id: ' . Session::getUserId();
-        $html[] = '})';
 
-        $html[] = 'Raven.setExtraContext({';
-        $html[] = 'profile: \'' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
-            $_SERVER['SCRIPT_NAME'] .
-            '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . Session::getUserId() . '\'';
-        $html[] = '})';
+        $html[] = 'unknownFunction();';
 
-        $html[]= '</script>';
+        $html[] = '</script>';
 
-        $header->addJavascriptFile('https://cdn.ravenjs.com/3.26.1/raven.min.js');
         $header->addHtmlHeader(implode(PHP_EOL, $html));
     }
 }
