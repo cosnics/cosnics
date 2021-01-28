@@ -30,7 +30,7 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
      */
     function run()
     {
-        if(!$this->areInvitesAllowed())
+        if(!$this->areInvitesEnabled())
         {
             throw new NotAllowedException();
         }

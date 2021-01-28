@@ -238,8 +238,15 @@ abstract class Manager extends Application
      */
     protected function areInvitesAllowed()
     {
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1 &&
-            $this->getUser()->is_teacher();
+         return $this->areInvitesEnabled() && $this->getUser()->is_teacher();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function areInvitesEnabled()
+    {
+        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1;
     }
 
     /**
