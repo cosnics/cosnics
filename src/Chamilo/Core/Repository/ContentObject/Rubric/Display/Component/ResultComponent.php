@@ -32,9 +32,6 @@ class ResultComponent extends Manager implements DelegateComponent
         $rubric = $this->getRubric();
         $rubricData = $this->getRubricService()->getRubric($rubric->getActiveRubricDataId());
 
-//        $targetUsers = $this->getRubricBridge()->getTargetUsers();
-//        $targetUser = $targetUsers[0];
-
         $results = $this->getRubricResultJSONGenerator()->generateRubricResultsJSON(
             $rubricData, $this->getRubricBridge()->getContextIdentifier()
         );

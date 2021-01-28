@@ -18,8 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      name="repository_rubric_result",
  *      indexes={
  *          @ORM\Index(name="rrr_context", columns={"context_class", "context_id"}),
- *          @ORM\Index(name="rrr_attempt", columns={"result_id"}),
- *          @ORM\Index(name="rrr_target_user", columns={"target_user_id"})
+ *          @ORM\Index(name="rrr_attempt", columns={"result_id"})
  *      }
  * )
  */
@@ -63,13 +62,6 @@ class RubricResult
      * @ORM\Column(name="user_id", type="integer")
      */
     protected $evaluatorUserId;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="target_user_id", type="integer")
-     */
-    protected $targetUserId;
 
     /**
      * @var string
@@ -313,26 +305,6 @@ class RubricResult
     public function setEvaluatorUserId(int $evaluatorUserId): RubricResult
     {
         $this->evaluatorUserId = $evaluatorUserId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTargetUserId(): ?int
-    {
-        return $this->targetUserId;
-    }
-
-    /**
-     * @param int $targetUserId
-     *
-     * @return RubricResult
-     */
-    public function setTargetUserId(int $targetUserId): RubricResult
-    {
-        $this->targetUserId = $targetUserId;
 
         return $this;
     }

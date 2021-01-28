@@ -66,23 +66,17 @@ class RubricResultRepository extends CommonEntityRepository
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
      * @param \Chamilo\Libraries\Architecture\ContextIdentifier $contextIdentifier
-     * @param User $targetUser
      *
      * @return RubricResult[]
      */
     public function getRubricResultsForContext(
-        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser = null
+        RubricData $rubricData, ContextIdentifier $contextIdentifier
     )
     {
         $conditions = [
             'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
             'contextId' => $contextIdentifier->getContextId()
         ];
-
-        if ($targetUser instanceof User)
-        {
-            $conditions['targetUserId'] = $targetUser->getId();
-        }
 
         return $this->findBy($conditions, ['time' => 'ASC', 'resultId' => 'ASC']);
     }
