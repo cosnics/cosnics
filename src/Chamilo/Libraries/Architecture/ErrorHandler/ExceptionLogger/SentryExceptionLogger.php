@@ -50,7 +50,7 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
 
                     $profilePage = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] .
                         $_SERVER['SCRIPT_NAME'] .
-                        '?application=Chamilo\\\\Core\\\\User&go=UserDetail&user_id=' . $userId;
+                        '?application=Chamilo\\Core\\User&go=UserDetail&user_id=' . $userId;
 
                     $event->setContext('user', ['id' => $userId, 'profile_page' => $profilePage]);
 
