@@ -114,9 +114,6 @@ class SentryExceptionLogger implements ExceptionLoggerInterface
             });
             Sentry.forceLoad();';
 
-
-        $html[] = 'unknownFunction();';
-
         $html[] = '</script>';
 
         $header->addHtmlHeader(implode(PHP_EOL, $html));
