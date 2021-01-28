@@ -63,7 +63,7 @@ CKEDITOR.editorConfig = function(config)
         web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme() + '&t=' + CKEDITOR.timestamp
     ];
 
-    config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //free. Default is iframely.
+    config.embed_provider = '//noembed.com/embed?maxwidth=640&maxheight=480&url={url}&callback={callback}'; //free. Default is iframely.
 
     config.disableNativeSpellChecker = false;
     config.allowedContent = true;
