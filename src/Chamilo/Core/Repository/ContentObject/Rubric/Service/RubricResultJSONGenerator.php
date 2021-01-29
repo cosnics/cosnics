@@ -75,7 +75,6 @@ class RubricResultJSONGenerator
 
                 $jsonResults[$rubricResult->getResultId()] = new RubricResultJSONModel(
                     new RubricUserJSONModel($user->getId(), $user->get_fullname()),
-                    new RubricUserJSONModel(-1, ''), // Vue code still breaks when a target user isn't provided, even though it doesn't use it.
                     $rubricResult->getTime()
                 );
 

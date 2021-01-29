@@ -24643,12 +24643,12 @@ var RubricEntryWrapper_component = normalizeComponent(
 )
 
 /* harmony default export */ var Views_RubricEntryWrapper = (RubricEntryWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResultWrapper.vue?vue&type=template&id=7ed34c80&
-var RubricResultWrappervue_type_template_id_7ed34c80_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-result',{attrs:{"rubric":_vm.rubric,"evaluators":_vm.evaluators,"tree-node-results":_vm.treeNodeResults}}):_vm._e()}
-var RubricResultWrappervue_type_template_id_7ed34c80_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResultWrapper.vue?vue&type=template&id=20a07f56&
+var RubricResultWrappervue_type_template_id_20a07f56_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.rubric)?_c('rubric-result',{attrs:{"rubric":_vm.rubric,"evaluators":_vm.evaluators,"tree-node-results":_vm.treeNodeResults}}):_vm._e()}
+var RubricResultWrappervue_type_template_id_20a07f56_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricResultWrapper.vue?vue&type=template&id=7ed34c80&
+// CONCATENATED MODULE: ./src/Views/RubricResultWrapper.vue?vue&type=template&id=20a07f56&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.function.name.js
 var es_function_name = __webpack_require__("2fec");
@@ -25163,8 +25163,6 @@ function (_Vue) {
           userId: res.user.id,
           name: res.user.name,
           role: res.user.role,
-          targetUserId: res['target_user'].id,
-          targetName: res['target_user'].name,
           date: res.date
         };
       });
@@ -25246,8 +25244,8 @@ RubricResultWrappervue_type_script_lang_ts_RubricResultWrapper = __decorate([vue
 
 var RubricResultWrapper_component = normalizeComponent(
   Views_RubricResultWrappervue_type_script_lang_ts_,
-  RubricResultWrappervue_type_template_id_7ed34c80_render,
-  RubricResultWrappervue_type_template_id_7ed34c80_staticRenderFns,
+  RubricResultWrappervue_type_template_id_20a07f56_render,
+  RubricResultWrappervue_type_template_id_20a07f56_staticRenderFns,
   false,
   null,
   null,
@@ -29356,12 +29354,12 @@ var RubricEntryDemoWrapper_component = normalizeComponent(
 if (typeof RubricEntryDemoWrappervue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(RubricEntryDemoWrappervue_type_custom_index_0_blockType_i18n["default"])(RubricEntryDemoWrapper_component)
 
 /* harmony default export */ var Views_RubricEntryDemoWrapper = (RubricEntryDemoWrapper_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResultDemoWrapper.vue?vue&type=template&id=7e51191e&
-var RubricResultDemoWrappervue_type_template_id_7e51191e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[(_vm.rubric)?_c('rubric-result',{attrs:{"rubric":_vm.rubric,"evaluators":_vm.store.rubricResults.evaluators,"tree-node-results":_vm.treeNodeResults,"options":{ isDemo:  true }}}):_vm._e()],1)}
-var RubricResultDemoWrappervue_type_template_id_7e51191e_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"012e5ed3-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResultDemoWrapper.vue?vue&type=template&id=2e794318&
+var RubricResultDemoWrappervue_type_template_id_2e794318_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticStyle:{"margin-top":"-20px"}},[(_vm.rubric)?_c('rubric-result',{attrs:{"rubric":_vm.rubric,"evaluators":_vm.store.rubricResults.evaluators,"tree-node-results":_vm.treeNodeResults,"options":{ isDemo: true }}}):_vm._e()],1)}
+var RubricResultDemoWrappervue_type_template_id_2e794318_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/Views/RubricResultDemoWrapper.vue?vue&type=template&id=7e51191e&
+// CONCATENATED MODULE: ./src/Views/RubricResultDemoWrapper.vue?vue&type=template&id=2e794318&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/Views/RubricResultDemoWrapper.vue?vue&type=script&lang=ts&
 
@@ -29474,8 +29472,8 @@ RubricResultDemoWrappervue_type_script_lang_ts_RubricResultDemoWrapper = __decor
 
 var RubricResultDemoWrapper_component = normalizeComponent(
   Views_RubricResultDemoWrappervue_type_script_lang_ts_,
-  RubricResultDemoWrappervue_type_template_id_7e51191e_render,
-  RubricResultDemoWrappervue_type_template_id_7e51191e_staticRenderFns,
+  RubricResultDemoWrappervue_type_template_id_2e794318_render,
+  RubricResultDemoWrappervue_type_template_id_2e794318_staticRenderFns,
   false,
   null,
   null,
