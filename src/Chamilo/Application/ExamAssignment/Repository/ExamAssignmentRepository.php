@@ -60,7 +60,7 @@ class ExamAssignmentRepository
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(Assignment::class, Assignment::PROPERTY_START_TIME),
             ComparisonCondition::LESS_THAN_OR_EQUAL,
-            new StaticConditionVariable($now)
+            new StaticConditionVariable($now + (60 * 15))
         );
 
         $conditions[] = new ComparisonCondition(
