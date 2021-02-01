@@ -470,7 +470,7 @@
                         </div>
                         <!--<p>{{ 'CheckForget'|trans({}, appContext) }}</p>-->
                         <p class="exam-important"><i class="fa fa-info-circle"></i> {{ 'ButtonClickPrivacy'|trans({}, appContext) }} <strong><a id="privacy-rules-link" href="#">{{ 'PrivacyRules'|trans({}, appContext) }}</a></strong>.</p>
-                        <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>{{ 'UploadFiles'|trans({}, appContext) }}</button>
+                        <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled title="{{ 'SelectFilesFirst'|trans({}, appContext) }}">{{ 'UploadFiles'|trans({}, appContext) }}</button>
                         <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
                         <script type="text/javascript">
                             $(document).ready(function () {
@@ -519,6 +519,7 @@
 
                                         dropzone.on('processing', function () {
                                             $('#btn-upload').prop('disabled', true);
+                                            $('#btn-upload').prop('title', '');
                                             $('#btn-upload').prepend('<i class="upload-spinner fa fa-spinner fa-spin"></i>');
                                             console.log('Processing queue...');
                                             dropzone.options.autoProcessQueue = true;
@@ -544,6 +545,7 @@
                                                     $(file.previewElement).find('.progress-bar').css('width', '0%');
                                                 });
                                                 $('#btn-upload').prop('disabled', false);
+                                                $('#btn-upload').prop('title', '');
                                                 $('.upload-spinner').remove();
                                                 exam_assignment.isSubmitting = false;
                                                 console.log('Warning: Cannot redirect, still errors present.');
@@ -585,6 +587,7 @@
                                         } else {
                                             done();
                                             $('#btn-upload').prop('disabled', false);
+                                            $('#btn-upload').prop('title', '');
                                         }
                                     },
 
