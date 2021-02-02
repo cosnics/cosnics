@@ -76,6 +76,12 @@
                 font-size: 1.6rem;
                 margin: 0 0 10px;
             }
+            .alert-info.mod-no-margin {
+                margin-bottom: 0;
+            }
+            .exam-form.is-not-started {
+                flex-basis: 35%;
+            }
         </style>
     <main>
         <div class="container">
@@ -99,13 +105,17 @@
                                 <span class="sr-only"> {{ 'Until'|trans({}, appContext) }} </span><time datetime="{{ EXAM.end_time|date("c") }}" class="exam-timestamp mod-list">{{ EXAM.end_time|date("d") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("m") }}<span class="dmy-separator">/</span>{{ EXAM.end_time|date("Y") }} &ndash; {{ ' ' ~ EXAM.end_time|date("H:i") }}</time>
                             </div>
                         </div>
-                        <div class="exam-form">
+                        <div class="exam-form {% if not EXAM.has_started %}is-not-started{% endif %}">
+                            {% if EXAM.has_started %}
                             <form action="{{ ENTRY_URL|replace({'__EXAM_ID__': EXAM.publication_id}) }}" method="post">
                                 {% if EXAM.code %}
                                 <input type="text" class="exam-code form-control" name="exam_code" required="required" minlength="5" maxlength="5" autocomplete="off" placeholder="{{ 'FiveNumberCode'|trans({}, appContext) }}" />
                                 {% endif %}
                                 <button class="btn btn-action mod-access u-btn-focus">{{ 'Start'|trans({}, appContext) }}</button>
                             </form>
+                            {% else %}
+                                <div class="alert alert-info mod-no-margin">{{ 'NotStartedYet'|trans({}, appContext) }}</div>
+                            {% endif %}
                         </div>
                     </li>
                     {% endfor %}
@@ -115,14 +125,4 @@
             </div>
         </div>
     </main>
-    {% endblock %}
-    {% block footer %}
-    <!--<footer class="footer">
-        <div class="container">
-            <section>
-                <h1 class="heading-privacy-policy-title">Privacy</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel eros eu ipsum rhoncus sollicitudin. Mauris elementum nisl et felis scelerisque blandit. In hac habitasse platea dictumst. Suspendisse elementum vitae quam nec congue. Vestibulum in nisi ante. Nullam vitae mi est. Quisque facilisis viverra urna, nec mattis nulla. Quisque sollicitudin turpis et elementum vestibulum. Morbi quis sodales nisi, nec feugiat urna. Duis mattis enim vestibulum, consectetur orci vel, finibus risus. Integer eu orci risus. Etiam a tempus nulla, quis ultrices mauris.</p>
-            </section>
-        </div>
-    </footer>-->
     {% endblock %}
