@@ -5,4 +5,4 @@ CREATE TABLE `repository_rubric_result_target_user` (
   PRIMARY KEY(`id`)
 ) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_unicode_ci ENGINE = InnoDB;
 
-ALTER TABLE `repository_rubric_result` DROP `target_user_id`;
+ALTER TABLE `repository_rubric_result` CHANGE `target_user_id` `target_user_id` INT(11) NULL;
