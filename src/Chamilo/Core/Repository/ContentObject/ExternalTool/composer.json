@@ -1,0 +1,48 @@
+{
+    "name": "cosnics/core-repository-content-object-external-tool",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject ExternalTool",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "ExternalTool"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "External tool",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\ExternalTool",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "Collaboration",
+            "install": {
+                "default": 0,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                },
+                {
+                    "id": "Chamilo\\Application\\Lti",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

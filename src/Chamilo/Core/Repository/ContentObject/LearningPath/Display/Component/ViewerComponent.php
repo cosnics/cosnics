@@ -50,12 +50,6 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $trackingService = $this->getTrackingService();
 
-        $trackingService->trackAttemptForUser(
-            $this->learningPath,
-            $this->getCurrentTreeNode(),
-            $this->getUser()
-        );
-
         if (!$this->canAuditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
                 $learning_path,
                 $this->getUser(),
@@ -115,6 +109,15 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->learningPath,
             $this->getCurrentTreeNode()
         );
+
+        if($embedder->supportMultipleAttempts())
+        {
+            $trackingService->trackAttemptForUser(
+                $this->learningPath,
+                $this->getCurrentTreeNode(),
+                $this->getUser()
+            );
+        }
 
         return $embedder->run();
     }

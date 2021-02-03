@@ -10,6 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ChamiloRequest extends Request
 {
+    /**
+     * Use for testing purposes
+     *
+     * @param string $content
+     */
+    public function setContent(string $content)
+    {
+        $this->content = $content;
+    }
 
     /**
      * Returns a parameter from the POST BODY and if it does not exist fallback on the URL QUERY.

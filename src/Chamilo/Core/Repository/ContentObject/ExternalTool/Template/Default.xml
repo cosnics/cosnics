@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\ExternalTool">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">External tool</translation>
+            <translation language="nl">Externe tool</translation>
+            <translation language="fr">External tool</translation>
+            <translation language="de">External tool</translation>
+        </variable>
+    </translations>
+</template>

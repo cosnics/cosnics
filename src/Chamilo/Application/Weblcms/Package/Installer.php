@@ -142,4 +142,17 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         
         return true;
     }
+
+    /**
+     * Returns the list with extra installable packages that are connected to this package
+     *
+     * @return array
+     */
+    public static function get_additional_packages()
+    {
+        return array(
+            'Chamilo\Application\Weblcms\Bridge\Assignment',
+            'Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment'
+        );
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
@@ -16,7 +15,7 @@ use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
 
 /**
  * Service to manage publications
- *
+ * 
  * @package application\weblcms
  * @author Sven Vanpoucke - Hogeschool Gent
  */
@@ -25,28 +24,28 @@ class PublicationService implements PublicationServiceInterface
 
     /**
      * The course service
-     *
+     * 
      * @var CourseServiceInterface
      */
     private $courseService;
 
     /**
      * The weblcms rights service
-     *
+     * 
      * @var RightsServiceInterface
      */
     private $rightsService;
 
     /**
      * The publication repository
-     *
+     * 
      * @var PublicationRepositoryInterface
      */
     private $publicationRepository;
 
     /**
      * Constructor
-     *
+     * 
      * @param PublicationRepositoryInterface $publicationRepository
      */
     public function __construct(PublicationRepositoryInterface $publicationRepository)
@@ -56,7 +55,7 @@ class PublicationService implements PublicationServiceInterface
 
     /**
      * Setter injector for this dependency due to a cyclic dependency issue
-     *
+     * 
      * @param RightsServiceInterface $rightsService
      *
      * @return self
@@ -64,13 +63,13 @@ class PublicationService implements PublicationServiceInterface
     public function setRightsService(RightsServiceInterface $rightsService)
     {
         $this->rightsService = $rightsService;
-
+        
         return $this;
     }
 
     /**
      * Setter injector for this dependency due to a cyclic dependency issue
-     *
+     * 
      * @param CourseServiceInterface $courseService
      *
      * @return self
@@ -78,7 +77,7 @@ class PublicationService implements PublicationServiceInterface
     public function setCourseService(CourseServiceInterface $courseService)
     {
         $this->courseService = $courseService;
-
+        
         return $this;
     }
 
@@ -87,10 +86,10 @@ class PublicationService implements PublicationServiceInterface
      * Publication Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns a publication by a given id
-     *
+     * 
      * @param int $publicationId
      *
      * @return ContentObjectPublication
@@ -102,7 +101,7 @@ class PublicationService implements PublicationServiceInterface
 
     /**
      * Returns a publication by a given id with rights checks for the given user
-     *
+     * 
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param int $publicationId
      *
@@ -402,7 +401,7 @@ class PublicationService implements PublicationServiceInterface
      * PublicationCategory Functionality *
      * **************************************************************************************************************
      */
-
+    
     /**
      * Returns the categories for a given course and tool
      *

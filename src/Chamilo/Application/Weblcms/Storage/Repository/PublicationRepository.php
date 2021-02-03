@@ -433,7 +433,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]|mixed[]
+     * @return ContentObjectPublication[]
      */
     protected function findPublicationCategoriesByCondition(Condition $condition)
     {

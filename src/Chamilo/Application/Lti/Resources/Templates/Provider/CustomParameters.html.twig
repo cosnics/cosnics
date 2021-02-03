@@ -1,0 +1,104 @@
+{% set appContext = 'Chamilo\\Application\\Lti' %}
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/Dialog/vuejs-dialog.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{{ getCss('Plugin/VueJs/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
+{{ getCss('Plugin/VueJs/Dialog/vuejs-dialog.min.css', 'Chamilo\\Configuration') }}
+
+<style>
+    button.add-custom-parameter {
+        margin-top: 10px;
+        margin-bottom: 40px;
+    }
+</style>
+
+<div id="customParameters">
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>{{ 'CustomParameterName'|trans({}, appContext) }}</th>
+            <th>{{ 'CustomParameterValue'|trans({}, appContext) }}</th>
+            <th style="width: 50px;" class="text-center"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="customParameter in customParameters">
+            <td><input :name="'{{ CUSTOM_PARAMETERS_ELEMENT_NAME }}[' + customParameter.index + '][name]'" type="text" required v-model="customParameter.name" class="form-control" /></td>
+            <td><input :name="'{{ CUSTOM_PARAMETERS_ELEMENT_NAME }}[' + customParameter.index + '][value]'" type="text" required v-model="customParameter.value" class="form-control" /></td>
+            <td>
+                <button title="{{ 'RemoveCustomParameter'|trans({}, appContext) }}" type="button" class="btn btn-sm btn-default" @click="deleteCustomParameter(customParameter)">
+                    <span class="fa fa-remove"></span>
+                </button>
+            </td>
+        </tr>
+        <tr v-if="customParameters.length == 0" class="text-center">
+            <td colspan="3">{{ 'NoCustomParameters'|trans({}, appContext) }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-default add-custom-parameter" @click="addCustomParameter"><span class="fa fa-plus"></span> {{ 'AddCustomParameter'|trans({}, appContext) }}</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        window.Vue.use(VuejsDialog.main.default);
+
+        let dialogOptions = {
+            okText: '{{ 'Ok'|trans({}, 'Chamilo\\Libraries') }}',
+            cancelText: '{{ 'Cancel'|trans({}, 'Chamilo\\Libraries') }}'
+        };
+
+        new Vue({
+            el: '#customParameters',
+            data: {
+                customParameters: {{ DEFAULT_CUSTOM_PARAMETERS_JSON|raw }},
+                nextIndex: 0
+            },
+            mounted: function() {
+                let vueInstance = this;
+
+                this.customParameters.forEach(function(customParameter) {
+                    customParameter.index = vueInstance.nextIndex;
+                    vueInstance.nextIndex++;
+                });
+
+                this.$forceUpdate();
+            },
+            watch: {
+                customParameters: {
+                    handler: function(val, oldVal) {
+                        this.customParameters.forEach(function(customParameter) {
+                            if(customParameter.name.indexOf('=') >= 0)
+                            {
+                                let parameterParts = customParameter.name.split('=');
+                                customParameter.name = parameterParts[0];
+                                customParameter.value = parameterParts[1];
+                            }
+                        });
+                    },
+                    deep: true
+                }
+            },
+            methods: {
+                addCustomParameter: function() {
+                    this.customParameters.push({'index': this.nextIndex, 'name': '', 'value': ''});
+                    this.nextIndex++;
+                },
+                deleteCustomParameter: function(customParameter) {
+                    let vueInstance = this;
+
+                    this.$dialog.confirm("{{ 'DeleteCustomParameterConfirm'|trans({}, appContext) }}", dialogOptions)
+                        .then(function() {
+                            let index = vueInstance.customParameters.indexOf(customParameter);
+                            vueInstance.customParameters.splice(index, 1);
+                        });
+                }
+            }
+        });
+
+    });
+</script>

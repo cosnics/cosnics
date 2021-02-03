@@ -217,7 +217,6 @@ class CourseSubscriptionRepository
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param int|null $entityType
-     *
      * @param int|null $entityId
      * @param int|null $status
      *

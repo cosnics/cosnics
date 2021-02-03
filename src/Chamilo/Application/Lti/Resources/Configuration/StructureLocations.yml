@@ -1,0 +1,3 @@
+Chamilo\Application\Lti:
+  - Package: ROLE_DEFAULT_USER
+  - ManageProviders: ROLE_ADMINISTRATOR
