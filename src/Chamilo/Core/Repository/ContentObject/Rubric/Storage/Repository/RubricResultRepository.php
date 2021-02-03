@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResult;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricResultTargetUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\CommonEntityRepository;
@@ -30,6 +31,27 @@ class RubricResultRepository extends CommonEntityRepository
     }
 
     /**
+     * @param RubricResult $rubricResult
+     * @param bool $flush
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function removeRubricResult(RubricResult $rubricResult, bool $flush = true)
+    {
+        $this->removeEntity($rubricResult, $flush);
+    }
+
+    /**
+     * @param RubricResultTargetUser $rubricResultTargetUser
+     * @param bool $flush
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function saveRubricResultTargetUser(RubricResultTargetUser $rubricResultTargetUser, bool $flush = true)
+    {
+        return $this->saveEntity($rubricResultTargetUser, $flush);
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
      *
      * @return RubricResult[]
@@ -44,23 +66,17 @@ class RubricResultRepository extends CommonEntityRepository
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData $rubricData
      * @param \Chamilo\Libraries\Architecture\ContextIdentifier $contextIdentifier
-     * @param User $targetUser
      *
      * @return RubricResult[]
      */
     public function getRubricResultsForContext(
-        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser = null
+        RubricData $rubricData, ContextIdentifier $contextIdentifier
     )
     {
         $conditions = [
             'rubricData' => $rubricData, 'contextClass' => $contextIdentifier->getContextClass(),
             'contextId' => $contextIdentifier->getContextId()
         ];
-
-        if($targetUser instanceof User)
-        {
-            $conditions['targetUserId'] = $targetUser->getId();
-        }
 
         return $this->findBy($conditions, ['time' => 'ASC', 'resultId' => 'ASC']);
     }

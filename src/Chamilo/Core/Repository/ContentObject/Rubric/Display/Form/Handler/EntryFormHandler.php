@@ -82,17 +82,12 @@ class EntryFormHandler extends FormHandler
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . TreeNodeResultJSONModel::class . '>', 'json'
         );
 
-        $totalScore = 0;
+        $currentTime = new \DateTime();
 
-        foreach ($this->parameters->getTargetUsers() as $targetUser)
-        {
-            $currentTime = new \DateTime();
-
-            $totalScore = $this->rubricResultService->storeRubricResults(
-                $this->parameters->getUser(), $targetUser, $this->parameters->getRubricData(),
-                $this->parameters->getContextIdentifier(), $resultJSONModels, $currentTime
-            );
-        }
+        $totalScore = $this->rubricResultService->storeRubricResults(
+            $this->parameters->getUser(), $this->parameters->getTargetUsers(), $this->parameters->getRubricData(),
+            $this->parameters->getContextIdentifier(), $resultJSONModels, $currentTime
+        );
 
         if($this->parameters->getRubricData()->useScores())
         {

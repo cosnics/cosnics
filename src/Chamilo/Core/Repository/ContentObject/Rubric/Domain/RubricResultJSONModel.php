@@ -16,11 +16,6 @@ class RubricResultJSONModel
     protected $user;
 
     /**
-     * @var RubricUserJSONModel
-     */
-    protected $targetUser;
-
-    /**
      * @var \DateTime
      */
     protected $date;
@@ -34,16 +29,14 @@ class RubricResultJSONModel
      * RubricResultJSONModel constructor.
      *
      * @param RubricUserJSONModel $user
-     * @param RubricUserJSONModel $targetUser
      * @param \DateTime $date
      * @param TreeNodeResultJSONModel[] $results
      */
     public function __construct(
-        RubricUserJSONModel $user, RubricUserJSONModel $targetUser, \DateTime $date, array $results = []
+        RubricUserJSONModel $user, \DateTime $date, array $results = []
     )
     {
         $this->user = $user;
-        $this->targetUser = $targetUser;
         $this->date = $date;
         $this->results = $results;
     }

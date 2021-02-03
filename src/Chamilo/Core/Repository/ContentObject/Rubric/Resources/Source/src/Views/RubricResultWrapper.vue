@@ -26,7 +26,7 @@
             const convertedRubricData = convertRubricData(this.rubricData);
             const rubric = Rubric.fromJSON(convertedRubricData as RubricJsonObject);
             const evaluators = this.rubricResults.map((res : any) =>
-                ({ userId: res.user.id, name: res.user.name, role: res.user.role, targetUserId: res['target_user'].id, targetName: res['target_user'].name, date: res.date })
+                ({ userId: res.user.id, name: res.user.name, role: res.user.role, date: res.date })
             );
             const r_evaluations = this.rubricResults.map((res : any) => res.results);
 

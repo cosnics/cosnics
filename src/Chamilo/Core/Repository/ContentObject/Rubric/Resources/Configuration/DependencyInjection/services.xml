@@ -7,6 +7,7 @@
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\MigrationService" autowire="true" />
 
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType" autowire="true">
             <tag name="form.type" />
@@ -16,5 +17,8 @@
 
         <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultJSONGenerator" autowire="true" />
 
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Console\MigrateTargetUsersCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
     </services>
 </container>

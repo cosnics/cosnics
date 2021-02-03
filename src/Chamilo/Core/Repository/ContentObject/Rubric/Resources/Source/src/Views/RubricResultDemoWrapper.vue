@@ -1,6 +1,6 @@
 <template>
     <div style="margin-top: -20px">
-        <rubric-result v-if="rubric" :rubric="rubric" :evaluators="store.rubricResults.evaluators" :tree-node-results="treeNodeResults" :options="{ isDemo:  true }"></rubric-result>
+        <rubric-result v-if="rubric" :rubric="rubric" :evaluators="store.rubricResults.evaluators" :tree-node-results="treeNodeResults" :options="{ isDemo: true }"></rubric-result>
     </div>
 </template>
 

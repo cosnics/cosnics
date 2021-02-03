@@ -44,19 +44,18 @@ class RubricResultJSONGenerator
      *
      * @param RubricData $rubricData
      * @param ContextIdentifier $contextIdentifier
-     * @param User|null $targetUser
      *
      * @return array
      */
     public function generateRubricResultsJSON(
-        RubricData $rubricData, ContextIdentifier $contextIdentifier, User $targetUser = null
+        RubricData $rubricData, ContextIdentifier $contextIdentifier
     )
     {
         $handledAttempts = [];
         $jsonResults = [];
 
         $rubricResults = $this->rubricResultService->getRubricResultsForContext(
-            $rubricData, $contextIdentifier, $targetUser
+            $rubricData, $contextIdentifier
         );
 
         foreach ($rubricResults as $rubricResult)
@@ -67,17 +66,15 @@ class RubricResultJSONGenerator
                 // Prevent to handle the same attempt twice: e.g. when a user evaluates a group then two individual
                 // results are generated but they must be shown as one group result. Since a user can only evaluate
                 // once at the same moment, the results are ignored after the first user has been processed
-                if(array_key_exists($uniqueAttemptId, $handledAttempts))
+                if (array_key_exists($uniqueAttemptId, $handledAttempts))
                 {
                     continue;
                 }
 
                 $user = $this->userService->findUserByIdentifier($rubricResult->getEvaluatorUserId());
-                $targetUser = $this->userService->findUserByIdentifier($rubricResult->getTargetUserId());
 
                 $jsonResults[$rubricResult->getResultId()] = new RubricResultJSONModel(
                     new RubricUserJSONModel($user->getId(), $user->get_fullname()),
-                    new RubricUserJSONModel($targetUser->getId(), $targetUser->get_fullname()),
                     $rubricResult->getTime()
                 );
 
