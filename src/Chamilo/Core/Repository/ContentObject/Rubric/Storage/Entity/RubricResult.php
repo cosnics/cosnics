@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  *      name="repository_rubric_result",
  *      indexes={
  *          @ORM\Index(name="rrr_context", columns={"context_class", "context_id"}),
+ *          @ORM\Index(name="rrr_attempt", columns={"result_id"}),
+ *          @ORM\Index(name="rrr_target_user", columns={"target_user_id"})
  *          @ORM\Index(name="rrr_attempt", columns={"result_id"})
  *      }
  * )
@@ -62,6 +64,13 @@ class RubricResult
      * @ORM\Column(name="user_id", type="integer")
      */
     protected $evaluatorUserId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="target_user_id", type="integer", nullable=true)
+     */
+    protected $targetUserId;
 
     /**
      * @var string
@@ -310,6 +319,30 @@ class RubricResult
     }
 
     /**
+     * @return int
+     *
+     * @deprecated
+     */
+    public function getTargetUserId(): ?int
+    {
+        return $this->targetUserId;
+    }
+
+    /**
+     * @param int $targetUserId
+     *
+     * @return RubricResult
+     *
+     * @deprecated - this is now written directly to a separate table
+     */
+    public function setTargetUserId(int $targetUserId): RubricResult
+    {
+        $this->targetUserId = $targetUserId;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getComment(): ?string
@@ -349,3 +382,4 @@ class RubricResult
         return $this;
     }
 }
+
