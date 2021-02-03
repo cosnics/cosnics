@@ -17,6 +17,8 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -61,7 +63,98 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
+     * Adds extra actions to the toolbar and dropdown in different components
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     * @param array $publication
+     */
+    public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
+    {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
+        $buttonGroup->insertButton(
+            new Button(
+                Translation::get($allowed ? 'BrowseSubmitters' : 'MySubmissions'),
+                new FontAwesomeGlyph('list-alt'),
+                //Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON,
+                false,
+                'btn-link'
+            ), 0
+        );
+
+        $buttonGroup->insertButton(
+            new Button(
+                Translation::get('SubmissionSubmit'),
+                new FontAwesomeGlyph('plus'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON,
+                false,
+                'btn-link'
+            ),
+            1
+        );
+
+        $dropdownButton->insertSubButton(
+            new SubButton(
+                Translation::get('Reporting'),
+                Theme::getInstance()->getCommonImagePath('Action/Reporting'),
+                $this->get_url(
+                    array(
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Reporting',
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW,
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentEntitiesTemplate::class
+                    )
+                ),
+                ToolbarItem::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+            ),
+            3
+        );
+
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication) && $this->isEphorusEnabled())
+        {
+            $dropdownButton->insertSubButton(
+                new SubButton(
+                    Translation::get('EphorusOverview'),
+                    Theme::getInstance()->getImagePath(
+                        \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Manager::context(), 'Logo/16'
+                    ),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_EPHORUS
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL, false, null, '_blank'
+                ),
+                4
+            );
+        }
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
+        {
+            $dropdownButton->insertSubButton(new SubButtonDivider(), 3);
+        }
+    }
+
+    /**
      * Adds extra actions to the toolbar in different components
+     *
+     * TODO: remove
      *
      * @param $toolbar Toolbar
      * @param $publication Publication

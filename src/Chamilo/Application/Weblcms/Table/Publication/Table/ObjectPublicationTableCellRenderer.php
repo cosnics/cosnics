@@ -159,12 +159,12 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer impleme
     {
         $table = &$this->get_table();
         $column_model = &$table->get_column_model();
-        return $this->get_component()->get_publication_actions(
+        return $this->get_component()->get_publication_actions_dropdown(
             $publication, 
             $column_model->is_display_order_column(), 
             $column_model->get_default_order_direction() == SORT_ASC,
             $this->get_table()->getTableFilterParameters()
-        )->as_html();
+        );
     }
 
     /**

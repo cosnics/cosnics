@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\LearningPath;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
+use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Domain\TrackingParameters;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
@@ -16,10 +17,12 @@ use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -63,6 +66,71 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
+     * Adds extra actions to the toolbar and dropdown in different components
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     * @param array $publication
+     */
+    public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
+    {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
+        if ($allowed)
+        {
+            // Remove 'DisplayComplex' button (index 0) from button bar if the 'BuildPreview' button is present.
+            // Since buttons don't contain identifiers, we're comparing the translation of the labels.
+            if ($buttonGroup->getButtons()[1]->getLabel() == Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES)) {
+                $buttonGroup->removeButton(0);
+            }
+
+            if (!$this->isEmptyLearningPath($publication))
+            {
+                $dropdownButton->insertSubButton(
+                    new SubButton(
+                        Translation::get('Reporting'),
+                        Theme::getInstance()->getCommonImagePath('Action/Statistics'),
+                        $this->get_url(
+                            array(
+                                Manager::PARAM_ACTION => Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID],
+                                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_VIEW_USER_PROGRESS
+                            )
+                        ),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    ), 4
+                );
+
+                $dropdownButton->insertSubButton(
+                    new SubButton(
+                        Translation::get('ExportRawResults'),
+                        Theme::getInstance()->getCommonImagePath('Action/Export'),
+                        $this->get_url(
+                            array(
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_EXPORT_RAW_RESULTS,
+                                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                            )
+                        ),
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    ), 5
+                );
+            }
+            else
+            {
+                $dropdownButton->insertSubButton(
+                    new SubButton(
+                        Translation::get('StatisticsNA'),
+                        Theme::getInstance()->getCommonImagePath('Action/StatisticsNa'),
+                        null,
+                        ToolbarItem::DISPLAY_ICON_AND_LABEL
+                    ), 4
+                );
+            }
+        }
+    }
+
+    /**
+     * TODO: remove
      *
      * @param Toolbar $toolbar
      * @param array $publication

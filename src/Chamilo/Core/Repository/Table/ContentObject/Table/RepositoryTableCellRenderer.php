@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Table\ContentObject\Table;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
-use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableCellRenderer;
 use Chamilo\Libraries\Format\Table\Interfaces\TableCellRendererActionsColumnSupport;
 use Chamilo\Libraries\Format\Theme;
@@ -85,8 +84,6 @@ class RepositoryTableCellRenderer extends DataClassTableCellRenderer implements 
 
     public function get_actions($content_object)
     {
-        $toolbar = new Toolbar();
-        $toolbar->add_items($this->get_component()->get_content_object_actions($content_object));
-        return $toolbar->as_html();
+        return $this->get_component()->get_content_object_actions($content_object);
     }
 }

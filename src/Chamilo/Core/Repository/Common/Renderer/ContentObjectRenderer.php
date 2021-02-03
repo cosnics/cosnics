@@ -9,7 +9,14 @@ use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\ActionBarSearchForm;
-use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Format\Structure\ActionBar\Button;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
+use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
+use Chamilo\Libraries\Format\Structure\ActionBar\DropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
@@ -119,128 +126,140 @@ abstract class ContentObjectRenderer implements TableSupport
 
     public function get_content_object_actions(ContentObject $content_object)
     {
-        $actions = array();
-        
+        $buttonToolBar = new ButtonToolBar();
+        $buttonGroup = new ButtonGroup(array(), ['mod-static']);
+
+        $user = $this->get_user();
+        $workspace = $this->get_repository_browser()->getWorkspace();
         $rightsService = RightsService::getInstance();
-        
-        $canEditContentObject = $rightsService->canEditContentObject(
-            $this->get_user(), 
-            $content_object, 
-            $this->get_repository_browser()->getWorkspace());
-        
-        $canDeleteContentObject = $rightsService->canDeleteContentObject(
-            $this->get_user(), 
-            $content_object, 
-            $this->get_repository_browser()->getWorkspace());
-        
-        $canUseContentObject = $rightsService->canUseContentObject(
-            $this->get_user(), 
-            $content_object, 
-            $this->get_repository_browser()->getWorkspace());
-        
-        $canCopyContentObject = $rightsService->canCopyContentObject(
-            $this->get_user(), 
-            $content_object, 
-            $this->get_repository_browser()->getWorkspace());
-        
+
+        $canEditContentObject = $rightsService->canEditContentObject($user, $content_object, $workspace);
+        $canDeleteContentObject = $rightsService->canDeleteContentObject($user, $content_object, $workspace);
+        $canUseContentObject = $rightsService->canUseContentObject($user, $content_object, $workspace);
+        $canCopyContentObject = $rightsService->canCopyContentObject($user, $content_object, $workspace);
+
+
+        $dropdownButton = new DropdownButton(
+            Translation::get('Actions'),
+            new FontAwesomeGlyph('cog'),
+            Button::DISPLAY_ICON,
+            'btn-link');
+        $dropdownButton->setDropdownClasses('dropdown-menu-right mod-adjusted');
+
         if ($canEditContentObject)
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Edit', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Edit'), 
-                $this->get_repository_browser()->get_content_object_editing_url($content_object), 
-                ToolbarItem::DISPLAY_ICON);
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('pencil'),
+                    $this->get_repository_browser()->get_content_object_editing_url($content_object),
+                    Button::DISPLAY_ICON,
+                    false,
+                    'btn-link'
+                )
+            );
         }
-        
+
+        $useSubButtonDivider = false;
+
         if ($canCopyContentObject)
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Duplicate'), 
-                Theme::getInstance()->getCommonImagePath('Action/Copy'), 
-                $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()), 
-                ToolbarItem::DISPLAY_ICON);
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Duplicate'),
+                    Theme::getInstance()->getCommonImagePath('Action/Copy'),
+                    $this->get_repository_browser()->get_copy_content_object_url($content_object->get_id()),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+        
+        if ($canEditContentObject && DataManager::workspace_has_categories($this->get_repository_browser()->getWorkspace()))
+        {
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Move', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Move'),
+                    $this->get_repository_browser()->get_content_object_moving_url($content_object),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+        if ($useSubButtonDivider)
+        {
+            $dropdownButton->addSubButton(new SubButtonDivider());
+            $useSubButtonDivider = false;
         }
         
         if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
         {
-            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
-            {
-                $actions[] = new ToolbarItem(
-                    Translation::get('Remove', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBin'), 
-                    $url, 
-                    ToolbarItem::DISPLAY_ICON, 
-                    true);
-            }
-            else
-            {
-                $actions[] = new ToolbarItem(
-                    Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/RecycleBinNa'), 
-                    null, 
-                    ToolbarItem::DISPLAY_ICON);
-            }
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Share', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Rights'),
+                    $this->get_repository_browser()->get_url(
+                        array(
+                            Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                            Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                            \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE)),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
-        
-        if (DataManager::workspace_has_categories($this->get_repository_browser()->getWorkspace()))
+        elseif ($canDeleteContentObject)
         {
-            if ($canEditContentObject)
-            {
-                $actions[] = new ToolbarItem(
-                    Translation::get('Move', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Move'), 
-                    $this->get_repository_browser()->get_content_object_moving_url($content_object), 
-                    ToolbarItem::DISPLAY_ICON);
-            }
-        }
-        
-        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
-        {
-            $actions[] = new ToolbarItem(
-                Translation::get('Share', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Rights'), 
-                $this->get_repository_browser()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE, 
-                        Manager::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), 
-                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_SHARE)), 
-                ToolbarItem::DISPLAY_ICON);
-        }
-        else
-        {
-            if ($canDeleteContentObject)
-            {
-                $url = $this->get_repository_browser()->get_url(
-                    array(
-                        Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE, 
-                        \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE, 
-                        Manager::PARAM_CONTENT_OBJECT_ID => $content_object->getId()));
-                
-                $actions[] = new ToolbarItem(
-                    Translation::get('Unshare', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Unshare'), 
-                    $url, 
-                    ToolbarItem::DISPLAY_ICON, 
-                    true);
-            }
+            $useSubButtonDivider = true;
+
+            $url = $this->get_repository_browser()->get_url(
+                array(
+                    Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
+                    \Chamilo\Core\Repository\Workspace\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Manager::ACTION_UNSHARE,
+                    Manager::PARAM_CONTENT_OBJECT_ID => $content_object->getId()));
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Unshare', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Unshare'),
+                    $url,
+                    SubButton::DISPLAY_ICON_AND_LABEL,
+                    true
+                )
+            );
         }
         
         if ($canCopyContentObject)
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Export', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Export'), 
-                $this->get_repository_browser()->get_content_object_exporting_url($content_object), 
-                ToolbarItem::DISPLAY_ICON);
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Export', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Export'),
+                    $this->get_repository_browser()->get_content_object_exporting_url($content_object),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         if ($canUseContentObject)
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Publish'), 
-                $this->get_repository_browser()->get_publish_content_object_url($content_object), 
-                ToolbarItem::DISPLAY_ICON);
+            $useSubButtonDivider = true;
+
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    Theme::getInstance()->getCommonImagePath('Action/Publish'),
+                    $this->get_repository_browser()->get_publish_content_object_url($content_object),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                )
+            );
         }
         
         // $actions[] = new ToolbarItem(
@@ -250,80 +269,136 @@ abstract class ContentObjectRenderer implements TableSupport
         // ToolbarItem :: DISPLAY_ICON);
         
         $preview_url = $this->get_repository_browser()->get_preview_content_object_url($content_object);
-        $onclick = '" onclick="javascript:openPopup(\'' . $preview_url . '\'); return false;';
-        
+
         if ($content_object instanceof ComplexContentObjectSupport)
         {
             if (\Chamilo\Core\Repository\Builder\Manager::exists($content_object->package()))
             {
                 if ($canEditContentObject)
                 {
-                    $actions[] = new ToolbarItem(
-                        Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES), 
-                        Theme::getInstance()->getCommonImagePath('Action/Build'), 
-                        $this->get_repository_browser()->get_browse_complex_content_object_url($content_object), 
-                        ToolbarItem::DISPLAY_ICON);
+                    $useSubButtonDivider = true;
+
+                    $dropdownButton->addSubButton(
+                        new SubButton(
+                            Translation::get('BuildComplexObject', null, Utilities::COMMON_LIBRARIES),
+                            Theme::getInstance()->getCommonImagePath('Action/Build'),
+                            $this->get_repository_browser()->get_browse_complex_content_object_url($content_object),
+                            SubButton::DISPLAY_ICON_AND_LABEL
+                        )
+                    );
                 }
-                
-                $actions[] = new ToolbarItem(
-                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
-                    Theme::getInstance()->getCommonImagePath('Action/Preview'), 
-                    $preview_url, 
-                    ToolbarItem::DISPLAY_ICON, 
-                    false, 
-                    $onclick, 
-                    '_blank');
+
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('caret-square-o-right'),
+                        $preview_url,
+                        Button::DISPLAY_ICON,
+                        false,
+                        'btn-link',
+                        '_blank'
+                    )
+                );
+            }
+            elseif ($canEditContentObject)
+            {
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES),
+                        //new FontAwesomeGlyph('desktop'),
+                        Theme::getInstance()->getCommonImagePath('Action/BuildPreview'),
+                        $preview_url,
+                        Button::DISPLAY_ICON,
+                        false,
+                        'btn-link',
+                        '_blank'
+                    )
+                );
             }
             else
             {
-                if ($canEditContentObject)
-                {
-                    $actions[] = new ToolbarItem(
-                        Translation::get('BuildPreview', null, Utilities::COMMON_LIBRARIES), 
-                        Theme::getInstance()->getCommonImagePath('Action/BuildPreview'), 
-                        $preview_url, 
-                        ToolbarItem::DISPLAY_ICON, 
-                        false, 
-                        $onclick, 
-                        '_blank');
-                }
-                else
-                {
-                    $actions[] = new ToolbarItem(
-                        Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
-                        Theme::getInstance()->getCommonImagePath('Action/Preview'), 
-                        $preview_url, 
-                        ToolbarItem::DISPLAY_ICON, 
-                        false, 
-                        $onclick, 
-                        '_blank');
-                }
+                $buttonGroup->addButton(
+                    new Button(
+                        Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('caret-square-o-right'),
+                        $preview_url,
+                        Button::DISPLAY_ICON,
+                        false,
+                        'btn-link',
+                        '_blank'
+                    )
+                );
             }
         }
         else
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Preview', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Preview'), 
-                $preview_url, 
-                ToolbarItem::DISPLAY_ICON, 
-                false, 
-                $onclick, 
-                '_blank');
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Preview', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('caret-square-o-right'),
+                    $preview_url,
+                    Button::DISPLAY_ICON,
+                    false,
+                    'btn-link',
+                    '_blank'
+                )
+            );
         }
-        
+
         if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
-            $actions[] = new ToolbarItem(
-                Translation::get('Download', null, Utilities::COMMON_LIBRARIES), 
-                Theme::getInstance()->getCommonImagePath('Action/Download'), 
-                $this->get_repository_browser()->get_document_downloader_url(
-                    $content_object->get_id(), 
-                    $content_object->calculate_security_code()), 
-                ToolbarItem::DISPLAY_ICON);
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Download', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('download'),
+                    //Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_repository_browser()->get_document_downloader_url(
+                        $content_object->get_id(),
+                        $content_object->calculate_security_code()),
+                    SubButton::DISPLAY_ICON,
+                    false,
+                    'btn-link'
+                )
+            );
         }
-        
-        return $actions;
+
+        if ($this->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace)
+        {
+            if ($useSubButtonDivider)
+            {
+                $dropdownButton->addSubButton(new SubButtonDivider());
+            }
+
+            if ($url = $this->get_repository_browser()->get_content_object_recycling_url($content_object))
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('Remove', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/Delete'),
+                        $url,
+                        SubButton::DISPLAY_ICON_AND_LABEL,
+                        true
+                    )
+                );
+            }
+            else
+            {
+                $dropdownButton->addSubButton(
+                    new SubButton(
+                        Translation::get('RemoveNotAvailable', null, Utilities::COMMON_LIBRARIES),
+                        Theme::getInstance()->getCommonImagePath('Action/DeleteNa'),
+                        null,
+                        SubButton::DISPLAY_ICON_AND_LABEL
+                    )
+                );
+            }
+        }
+
+        $buttonGroup->addButton($dropdownButton);
+        $buttonToolBar->addItem($buttonGroup);
+        $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
+
+        return $buttonToolbarRenderer->render();
     }
 
     public function get_table_condition($table_class_name)
