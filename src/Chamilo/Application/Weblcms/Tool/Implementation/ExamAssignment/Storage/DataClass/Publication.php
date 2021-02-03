@@ -14,6 +14,8 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication
 {
     const PROPERTY_CODE = 'code';
+    const PROPERTY_FEEDBACK_FROM_DATE = 'feedback_from_date';
+    const PROPERTY_FEEDBACK_TO_DATE = 'feedback_to_date';
 
     /**
      * Get the default properties
@@ -26,8 +28,42 @@ class Publication extends \Chamilo\Application\Weblcms\Tool\Implementation\Assig
             array(
                 self::PROPERTY_PUBLICATION_ID,
                 self::PROPERTY_CODE,
+                self::PROPERTY_FEEDBACK_FROM_DATE,
+                self::PROPERTY_FEEDBACK_TO_DATE
             )
         );
+    }
+
+    /**
+     * @return int
+     */
+    public function getFromDate()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_FEEDBACK_FROM_DATE);
+    }
+
+    /**
+     * @param string $date
+     */
+    public function setFromDate(string $date)
+    {
+        $this->set_default_property(self::PROPERTY_FEEDBACK_FROM_DATE, $date);
+    }
+
+    /**
+     * @return int
+     */
+    public function getToDate()
+    {
+        return (int) $this->get_default_property(self::PROPERTY_FEEDBACK_TO_DATE);
+    }
+
+    /**
+     * @param string $date
+     */
+    public function setToDate(string $date)
+    {
+        $this->set_default_property(self::PROPERTY_FEEDBACK_TO_DATE, $date);
     }
 
     /**

@@ -540,7 +540,11 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $this->build_rights_form();
 
-        $this->add_forever_or_timewindow();
+        if ($this->isShowTimeWindow())
+        {
+            $this->add_forever_or_timewindow();
+        }
+
         $this->addElement(
             'checkbox',
             ContentObjectPublication::PROPERTY_HIDDEN,
@@ -1208,5 +1212,13 @@ class ContentObjectPublicationForm extends BasePublicationForm
     protected function get_form_type()
     {
         return $this->form_type;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isShowTimeWindow()
+    {
+        return true;
     }
 }

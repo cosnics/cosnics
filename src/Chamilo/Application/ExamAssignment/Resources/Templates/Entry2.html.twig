@@ -6,9 +6,13 @@
                 font-size: 1.3rem;
                 padding: 2px 6px;
             }
-            .btn-action.mod-upload, .btn-action.mod-accept {
+            .btn-action.mod-accept {
                 font-size: 1.5rem;
                 line-height: 1.5;
+            }
+            .btn-action.mod-upload {
+                font-size: 1.7rem;
+                line-height: 2;
             }
             .upload-spinner {
                 margin-left: -5px;
@@ -98,7 +102,7 @@
             }
             .exam-main {
                 color: #333;
-                margin-bottom: 50px;
+                margin-bottom: 70px;
             }
             .exam-main.mod-default {
                 margin-top: 40px;
@@ -466,7 +470,7 @@
                         </div>
                         <!--<p>{{ 'CheckForget'|trans({}, appContext) }}</p>-->
                         <p class="exam-important"><i class="fa fa-info-circle"></i> {{ 'ButtonClickPrivacy'|trans({}, appContext) }} <strong><a id="privacy-rules-link" href="#">{{ 'PrivacyRules'|trans({}, appContext) }}</a></strong>.</p>
-                        <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled>{{ 'UploadFiles'|trans({}, appContext) }}</button>
+                        <button id="btn-upload" class="btn btn-action mod-upload u-btn-focus" disabled title="{{ 'SelectFilesFirst'|trans({}, appContext) }}">{{ 'UploadFiles'|trans({}, appContext) }}</button>
                         <script type="text/javascript" src="{{ JQUERY_FILE_UPLOAD_SCRIPT_PATH }}"></script>
                         <script type="text/javascript">
                             $(document).ready(function () {
@@ -515,6 +519,7 @@
 
                                         dropzone.on('processing', function () {
                                             $('#btn-upload').prop('disabled', true);
+                                            $('#btn-upload').prop('title', '');
                                             $('#btn-upload').prepend('<i class="upload-spinner fa fa-spinner fa-spin"></i>');
                                             console.log('Processing queue...');
                                             dropzone.options.autoProcessQueue = true;
@@ -540,6 +545,7 @@
                                                     $(file.previewElement).find('.progress-bar').css('width', '0%');
                                                 });
                                                 $('#btn-upload').prop('disabled', false);
+                                                $('#btn-upload').prop('title', '');
                                                 $('.upload-spinner').remove();
                                                 exam_assignment.isSubmitting = false;
                                                 console.log('Warning: Cannot redirect, still errors present.');
@@ -581,6 +587,7 @@
                                         } else {
                                             done();
                                             $('#btn-upload').prop('disabled', false);
+                                            $('#btn-upload').prop('title', '');
                                         }
                                     },
 

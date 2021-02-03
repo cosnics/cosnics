@@ -121,6 +121,8 @@ class ExamAssignmentService
 
         $userExams = [];
 
+        $now = time();
+
         foreach ($possibleExams as $possibleExam)
         {
             if ($this->userHasRightsOnPublication($user, $possibleExam['publication_id'], $possibleExam['course_id']))
@@ -128,7 +130,7 @@ class ExamAssignmentService
                 $userOvertimeData = $this->userOvertimeService->getUserOvertimeData($possibleExam['publication_id'], $user->getId());
                 $extraSeconds = $userOvertimeData ? $userOvertimeData->getExtraSeconds() : 0;
                 $possibleExam['end_time'] = (string) ($possibleExam['end_time'] + $extraSeconds);
-
+                $possibleExam['has_started'] = $now >= (int) $possibleExam['start_time'];
                 $userExams[] = $possibleExam;
             }
         }

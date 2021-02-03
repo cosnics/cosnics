@@ -145,7 +145,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
             );
         }
 
-        if ($isEntity)
+        if ($isEntity && ($this->getAssignmentServiceBridge()->areSubmissionsAllowed()))
         {
             $toolbar->add_item(
                 new ToolbarItem(

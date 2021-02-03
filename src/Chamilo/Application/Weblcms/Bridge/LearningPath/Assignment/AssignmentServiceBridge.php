@@ -116,6 +116,15 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     }
 
     /**
+     *
+     * @return bool
+     */
+    public function areSubmissionsAllowed()
+    {
+        return true;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param integer $entityType
      *

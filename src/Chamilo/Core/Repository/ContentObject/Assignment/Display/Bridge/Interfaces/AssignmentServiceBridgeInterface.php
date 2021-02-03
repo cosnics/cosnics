@@ -158,6 +158,12 @@ interface AssignmentServiceBridgeInterface
 
     /**
      *
+     * @return boolean
+     */
+    public function areSubmissionsAllowed();
+
+    /**
+     *
      * @param integer $entityType
      * @param integer $entityId
      * @param integer $userId
