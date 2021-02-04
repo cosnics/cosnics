@@ -1133,6 +1133,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         }
         catch (\Exception $ex)
         {
+            throw $ex;
             $log .= " (unsuccessfull)\n";
         }
 
