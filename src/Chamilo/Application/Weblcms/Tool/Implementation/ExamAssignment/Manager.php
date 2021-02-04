@@ -93,40 +93,56 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
     {
-        $dropdownButton->removeSubButton(0);
+        $dropdownButton->removeSubButton(0); // remove visibility (the 'eye' icon)
 
-        $buttonGroup->insertButton(
-            new Button(
-                Translation::get('BrowseSubmitters'),
-                new FontAwesomeGlyph('list-alt'),
-                //Theme::getInstance()->getCommonImagePath('Action/Browser'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
+        $contentObjectPublication = $this->getPublicationService()->getPublication($publication[ContentObjectPublication::PROPERTY_ID]);
+
+        if ($this->canViewAssignment($contentObjectPublication))
+        {
+            $buttonGroup->insertButton(
+                new Button(
+                    Translation::get($this->is_allowed(WeblcmsRights::EDIT_RIGHT) ? 'BrowseSubmitters' : 'MySubmissions'),
+                    new FontAwesomeGlyph('list-alt'),
+                    //Theme::getInstance()->getCommonImagePath('Action/Browser'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON,
+                    false,
+                    'btn-link'
+                ), 0
+            );
+        }
+
+        if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            $dropdownButton->insertSubButton(
+                new SubButton(
+                    Translation::get('UserOvertime'),
+                    Theme::getInstance()->getCommonImagePath('Action/Config'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
+                        )
+                    ),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
                 ),
-                ToolbarItem::DISPLAY_ICON,
-                false,
-                'btn-link'
-            ), 0
-        );
+                1
+            );
+        }
+        else
+        {
+            $buttonGroup->removeButton(1);
 
-        $dropdownButton->insertSubButton(
-            new SubButton(
-                Translation::get('UserOvertime'),
-                Theme::getInstance()->getCommonImagePath('Action/Config'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_USER_OVERTIME,
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    )
-                ),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
-            ),
-            1
-        );
-
+            if (!$this->canViewAssignment($contentObjectPublication))
+            {
+                $buttonGroup->removeButton(0);
+            }
+        }
     }
 
 
