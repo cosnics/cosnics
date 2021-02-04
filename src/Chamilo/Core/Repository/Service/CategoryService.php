@@ -141,15 +141,15 @@ class CategoryService
      * Prepares the category tree for usage in a select element in a form
      *
      * @param User $user
+     * @param int $level
      *
      * @return array
      */
-    public function getCategoryTreeForForm(User $user)
+    public function getCategoryTreeForForm(User $user, int $level = 0)
     {
         $rootCategories = $this->getAllCategoriesForUserAsTree($user);
-        $categoryList = [];
 
-        $this->addCategoriesToList($rootCategories, $categoryList);
+        $this->addCategoriesToList($rootCategories, $categoryList, $level);
 
         return $categoryList;
     }
