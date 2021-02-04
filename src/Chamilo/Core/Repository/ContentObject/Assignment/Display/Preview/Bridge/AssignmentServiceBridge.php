@@ -551,4 +551,9 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
     {
        return [];
     }
+
+    public function areSubmissionsAllowed()
+    {
+        return false;
+    }
 }

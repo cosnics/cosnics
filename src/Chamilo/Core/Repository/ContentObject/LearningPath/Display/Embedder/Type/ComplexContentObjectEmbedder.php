@@ -45,4 +45,9 @@ class ComplexContentObjectEmbedder extends Embedder
         $parameters[self::PARAM_EMBEDDED_CONTENT_OBJECT_ID] = $this->treeNode->getContentObject()->getId();
         return $parameters;
     }
+
+    public function supportMultipleAttempts()
+    {
+        return true;
+    }
 }
