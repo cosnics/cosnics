@@ -555,4 +555,8 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
         return $this->learningPathAssignmentServiceBridge->isContentObjectAttachedToEntry($entry, $contentObject);
     }
 
+    public function areSubmissionsAllowed()
+    {
+        return true;
+    }
 }
