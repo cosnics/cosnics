@@ -203,12 +203,12 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $entryPlagiarismResultServiceBridge->setContentObjectPublication($this->publication);
         $this->getBridgeManager()->addBridge($entryPlagiarismResultServiceBridge);
 
-        /** @var ExternalToolServiceBridge $externalToolServiceBridge */
-        $externalToolServiceBridge = $this->getService(ExternalToolServiceBridge::class);
-        $externalToolServiceBridge->setContentObjectPublication($this->publication);
-        $externalToolServiceBridge->setCourse($this->get_course());
-        $externalToolServiceBridge->setHasEditRight($hasEditRight);
-        $this->getBridgeManager()->addBridge($externalToolServiceBridge);
+//        /** @var ExternalToolServiceBridge $externalToolServiceBridge */
+//        $externalToolServiceBridge = $this->getService(ExternalToolServiceBridge::class);
+//        $externalToolServiceBridge->setContentObjectPublication($this->publication);
+//        $externalToolServiceBridge->setCourse($this->get_course());
+//        $externalToolServiceBridge->setHasEditRight($hasEditRight);
+//        $this->getBridgeManager()->addBridge($externalToolServiceBridge);
     }
 
     public function get_root_content_object()
