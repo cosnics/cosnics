@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -61,6 +62,12 @@ abstract class Manager extends Application
         if (! $this->content_object instanceof ContentObject)
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
+        }
+
+        $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        if (!$repositoryRightsService->hasContentObjectOwnerRights($this->get_user(), $this->get_content_object()))
+        {
+            throw new NotAllowedException();
         }
 
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $this->content_object->get_id());
