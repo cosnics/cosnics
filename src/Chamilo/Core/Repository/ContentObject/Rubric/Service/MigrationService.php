@@ -78,6 +78,11 @@ class MigrationService
             {
                 $targetId = $results[0]->getTargetUserId();
 
+                if ($targetId == null)
+                {
+                    continue;
+                }
+
                 if ($keptResultId == null)
                 {
                     $keptResultId = $resultId;
