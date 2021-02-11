@@ -20,8 +20,7 @@ class UserException extends \Exception
     public function __construct($message)
     {
         $security = new Security();
-        $message = htmlentities($security->removeXSS($message));
-
+        $message = $security->removeXSS($message);
         parent::__construct($message);
     }
 }
