@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File;
 
+use Chamilo\Libraries\Platform\Security;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -196,7 +197,9 @@ class Redirect
      */
     public function getUrl()
     {
+        $security = new Security();
         $baseUrl = $this->getCurrentUrl(false) . $_SERVER['PHP_SELF'];
+        $baseUrl = $security->removeXSS($baseUrl, false);
 
         return $this->getWebLink($baseUrl);
     }

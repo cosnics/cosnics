@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
+use Chamilo\Libraries\Platform\Security;
 use Exception;
 
 /**
@@ -12,4 +13,16 @@ use Exception;
  */
 class UserException extends Exception
 {
+    /**
+     * UserException constructor.
+     *
+     * @param $message
+     */
+    public function __construct($message)
+    {
+        $security = new Security();
+        $message = $security->removeXSS($message);
+
+        parent::__construct($message);
+    }
 }

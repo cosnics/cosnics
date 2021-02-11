@@ -4,10 +4,12 @@ namespace Chamilo\Core\Repository\Preview;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -48,6 +50,7 @@ abstract class Manager extends Application
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
@@ -63,12 +66,20 @@ abstract class Manager extends Application
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
 
+        $repositoryRightsService = RightsService::getInstance();
+
+        if (!$repositoryRightsService->hasContentObjectOwnerRights($this->get_user(), $this->get_content_object()))
+        {
+            throw new NotAllowedException();
+        }
+
         $this->set_parameter(self::PARAM_CONTENT_OBJECT_ID, $this->content_object->getId());
     }
 
     /**
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \ReflectionException
      */
     protected function getButtonToolBarRenderer()
     {
