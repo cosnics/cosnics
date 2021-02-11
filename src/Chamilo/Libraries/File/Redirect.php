@@ -142,7 +142,7 @@ class Redirect
     {
         $security = new Security();
         $baseUrl = $this->getCurrentUrl(false, false) . $_SERVER['PHP_SELF'];
-        $baseUrl = $security->removeXSS($baseUrl, false);
+        $baseUrl = htmlentities($security->removeXSS($baseUrl, false));
 
         return $this->addParametersToUrl($baseUrl);
     }
