@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Platform;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +11,20 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ChamiloRequest extends Request
 {
+    /**
+     * @var Security
+     */
+    protected $security;
+
+    public function __construct(
+        array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [],
+        array $server = [], $content = null
+    )
+    {
+        parent::__construct($query, $request, $attributes, $cookies, $files, $server, $content);
+        $this->security = new Security();
+    }
+
     /**
      * Use for testing purposes
      *
@@ -51,7 +66,7 @@ class ChamiloRequest extends Request
     {
         if ($this !== $result = $this->query->get($key, $this))
         {
-            return $result;
+            return $this->security->removeXSS($result);
         }
 
         return $default;
@@ -69,7 +84,7 @@ class ChamiloRequest extends Request
     {
         if ($this !== $result = $this->request->get($key, $this))
         {
-            return $result;
+            return $this->security->removeXSS($result);
         }
 
         return $default;
@@ -87,12 +102,12 @@ class ChamiloRequest extends Request
     {
         if (null !== $result = $this->getFromPOST($key))
         {
-            return $result;
+            return $this->security->removeXSS($result);
         }
 
         if (null != $result = $this->getFromURL($key))
         {
-            return $result;
+            return $this->security->removeXSS($result);
         }
 
         return $default;
