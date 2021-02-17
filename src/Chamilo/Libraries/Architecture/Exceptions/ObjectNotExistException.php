@@ -26,6 +26,6 @@ class ObjectNotExistException extends UserException
         $id = $security->remove_XSS($id, false);
 
         parent::__construct(
-            Translation::get('ObjectNotExist', array('OBJECT' => $objectTranslation, 'OBJECT_ID' => $id)));
+            Translation::get('ObjectNotExist', array('OBJECT' => $objectTranslation, 'OBJECT_ID' => htmlentities($id))));
     }
 }

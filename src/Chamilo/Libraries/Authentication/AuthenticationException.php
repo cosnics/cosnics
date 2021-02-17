@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Authentication;
 
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -31,6 +32,9 @@ class AuthenticationException extends \Chamilo\Libraries\Architecture\Exceptions
      */
     public function __construct($message = null, $code = null, $previous = null)
     {
+        $security = new Security();
+        $message = $security->removeXSS($message);
+
         Session::register('request_uri', $_SERVER['REQUEST_URI']);
 
         $this->errorMessage = $message;
