@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -49,7 +51,19 @@ class ImpactViewRecyclerComponent extends Manager
         {
             $co_ids = array($co_ids);
         }
-        
+
+        foreach ($co_ids as $object_id) {
+            $object = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieve_by_id(ContentObject::class_name(), $object_id);
+
+            if (!RightsService::getInstance()->canDestroyContentObject(
+                $this->get_user(),
+                $object,
+                $this->getWorkspace()))
+            {
+                throw new NotAllowedException();
+            }
+        }
+
         $has_impact = $this->has_impact($co_ids);
         $this->impact_view_renderer = new ImpactViewRenderer($this, $co_ids, $has_impact);
         
