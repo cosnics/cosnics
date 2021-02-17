@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="evaluation">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" />
+        <property name="use_scores" type="boolean" notnull="1" default="1" />
+        <property name="use_feedback" type="boolean" notnull="1" default="1" />
+        <property name="rubric_id" type="integer" unsigned="1" notnull="0" />
+    </properties>
+    <index name="id" type="primary">
+        <indexproperty name="id"/>
+    </index>
+</object>

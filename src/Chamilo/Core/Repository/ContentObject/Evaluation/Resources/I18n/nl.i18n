@@ -7,3 +7,6 @@ TypeName = "Evaluatie"
 Title = "Titel"
 Properties = "Eigenschappen"
 Description = "Beschrijving"
+EvaluationUseScores = "Gebruik scores"
+EvaluationUseFeedback = "Gebruik feedback"
+
