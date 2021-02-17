@@ -60,7 +60,7 @@ class Security
             // from: https://gist.github.com/mbijon/1098477
 
             // Remove any attribute starting with "on" or xmlns
-            $variable = preg_replace('#(<[^>]+?[\x00-\x20"/\'])(?:on|xmlns)[^>]*+[>\b]?#iu', '$1>', $variable);
+            $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:on|xmlns)[^>]*+[>\b]?#iu', '$1>', $variable);
 
             // Remove javascript: and vbscript: protocols
             $variable = preg_replace(
