@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\evaluation
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Evaluation"
+TypeCategory = "Course Tools"
+InstallTypeName = "Evaluation Tool"
+BrowserComponent = "Browse evaluations"
+ViewerComponent = "View evaluation"
+PublisherComponent = "Publish evaluation"
+UpdaterComponent = "Edit evaluation"
+IntroductionPublisherComponent = "Publish introduction"
+TypeNameSingle = "Evaluation"
+SentByEmail = "Sent by email"

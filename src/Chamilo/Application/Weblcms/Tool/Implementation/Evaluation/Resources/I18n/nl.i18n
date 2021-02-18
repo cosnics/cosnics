@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\evaluation
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Evaluaties"
+TypeNameSingle = "Evaluatie"
+InstallTypeName = "Evaluaties"
+BrowserComponent = "Doorblader evaluaties"
+ViewerComponent = "Bekijk evaluatie"
+PublisherComponent = "Publiceer evaluatie"
+UpdaterComponent = "Bewerk evaluatie"
+IntroductionPublisherComponent = "Publiceer introductietekst"
+SentByEmail = "Verstuurd via email"
+ViewPeriodHeader = "Selecteer periode"
