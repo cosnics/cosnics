@@ -99,7 +99,7 @@ class Security
                 $old_data = $variable;
                 $variable = preg_replace(
                     '#</*(?:applet|b(?:ase|gsound|link)|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|s(?:cript)|xml)[^>]*+>#i',
-                    '',
+                    '<invalid>',
                     $variable);
             }
             while ($old_data !== $variable);
