@@ -12,6 +12,7 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -44,7 +45,21 @@ class MoverComponent extends Manager
             {
                 $ids = array($ids);
             }
-            
+
+            foreach ($ids as $content_object_id)
+            {
+                $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
+                if (!$content_object instanceof ContentObject)
+                {
+                    throw new \InvalidArgumentException('No valid content object selected ' . $content_object_id);
+                }
+
+                if (!$this->canEditContentObject($content_object))
+                {
+                    throw new NotAllowedException();
+                }
+            }
+
             $object = DataManager::retrieve_by_id(ContentObject::class_name(), $ids[0]);
             $parent = $object->get_parent_id();
             
@@ -72,12 +87,8 @@ class MoverComponent extends Manager
                 {
                     $object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
                     
-                    if (RightsService::getInstance()->canEditContentObject(
-                        $this->get_user(), 
-                        $object, 
-                        $this->getWorkspace()))
+                    if ($this->canEditContentObject($object))
                     {
-                        
                         $versions = DataManager::get_version_ids($object);
                         
                         foreach ($versions as $version)
@@ -244,5 +255,17 @@ class MoverComponent extends Manager
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)), 
                 Translation::get('BrowserComponent')));
         $breadcrumbtrail->add_help('repository_mover');
+    }
+
+    /**
+     * @param ContentObject $content_object
+     * @return bool
+     */
+    protected function canEditContentObject(ContentObject $content_object): bool
+    {
+        return RightsService::getInstance()->canEditContentObject(
+            $this->get_user(),
+            $content_object,
+            $this->getWorkspace());
     }
 }
