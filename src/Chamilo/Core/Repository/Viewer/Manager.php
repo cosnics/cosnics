@@ -323,7 +323,7 @@ abstract class Manager extends Application
         while ($contentObject = $objects->next_result())
         {
             $canPublishObject =
-                RightsService::getInstance()->canUseContentObjects($user, $contentObject);
+                RightsService::getInstance()->canUseContentObject($user, $contentObject);
 
             if (!$canPublishObject)
             {
