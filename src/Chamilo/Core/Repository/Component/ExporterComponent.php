@@ -62,6 +62,23 @@ class ExporterComponent extends Manager
             $content_object_ids = array($content_object_ids);
         }
 
+        foreach ($content_object_ids as $content_object_id)
+        {
+            $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $content_object_id);
+            if (!$content_object instanceof ContentObject)
+            {
+                throw new \InvalidArgumentException('No valid content object selected ' . $content_object_id);
+            }
+
+            if (!RightsService::getInstance()->canCopyContentObject(
+                $this->get_user(),
+                $content_object,
+                $this->getWorkspace()))
+            {
+                throw new NotAllowedException();
+            }
+        }
+
         if (! is_array($category_ids) && ! is_null($category_ids))
         {
             $category_ids = array($category_ids);
