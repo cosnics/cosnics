@@ -84,7 +84,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      */
     protected function getSelectedContentObjects()
     {
-        $selectedContentObjectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+        $selectedContentObjectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
         if (! empty($selectedContentObjectIds) && ! is_array($selectedContentObjectIds))
         {

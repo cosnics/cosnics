@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -387,6 +388,8 @@ class BrowserComponent extends Manager implements TableSupport
     /**
      *
      * @return WorkspaceInterface
+     * @throws NotAllowedException
+     * @throws UserException
      */
     public function getWorkspace()
     {
@@ -397,7 +400,12 @@ class BrowserComponent extends Manager implements TableSupport
                 
                 $identifier = $this->getRequest()->query->get(self::PARAM_WORKSPACE_ID);
                 $workspace = $this->workspaceService->getWorkspaceByIdentifier($identifier);
-                
+
+                if(!$this->getRightsService()->canUseContentObjects($this->getUser(), $workspace))
+                {
+                    throw new NotAllowedException();
+                }
+
                 if (! $workspace)
                 {
                     $workspaces = $this->getWorkspacesForUser();
@@ -412,7 +420,7 @@ class BrowserComponent extends Manager implements TableSupport
                                 Manager::context()));
                     }
                 }
-                
+
                 $this->workspace = $workspace;
             }
             else
@@ -422,6 +430,14 @@ class BrowserComponent extends Manager implements TableSupport
         }
         
         return $this->workspace;
+    }
+
+    /**
+     * @return RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getService(RightsService::class);
     }
 
     /**

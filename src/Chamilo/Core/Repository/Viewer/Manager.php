@@ -4,15 +4,20 @@ namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Core\Repository\Interfaces\TemplateSupportInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\InvalidUserException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -278,23 +283,51 @@ abstract class Manager extends Application
      */
     public static function any_object_selected()
     {
-        return !is_null(self::get_selected_objects());
+        return !is_null(self::getSelectedObjectIdsFromRequest());
+    }
+
+    /**
+     * @return int[]|int
+     */
+    protected static function getSelectedObjectIdsFromRequest()
+    {
+        $requestedObjectIds = Request::get(self::PARAM_ID);
+
+        if (!$requestedObjectIds)
+        {
+            $requestedObjectIds = Request::post(self::PARAM_ID);
+        }
+
+        return $requestedObjectIds;
     }
 
     /**
      *
+     * @param User $user
+     *
      * @return int|int[]
      */
-    public static function get_selected_objects()
+    public static function get_selected_objects(User $user)
     {
-        $requestedObjects = Request::get(self::PARAM_ID);
+        $selectedObjectIds = self::getSelectedObjectIdsFromRequest();
 
-        if (!$requestedObjects)
+        $objects = $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ContentObject::class_name(),
+            $selectedObjectIds
+        );
+
+        while($contentObject = $objects->next_result())
         {
-            $requestedObjects = Request::post(self::PARAM_ID);
+            $canPublishObject =
+                RightsService::getInstance()->canUseContentObjects($user, $contentObject);
+
+            if(!$canPublishObject)
+            {
+                throw new NotAllowedException();
+            }
         }
 
-        return $requestedObjects;
+        return $selectedObjectIds;
     }
 
     public function isReadyToBePublished()

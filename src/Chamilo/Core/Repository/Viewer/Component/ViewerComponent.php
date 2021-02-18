@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Core\Repository\Viewer\Component;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
@@ -7,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
@@ -19,7 +21,10 @@ use Chamilo\Libraries\Utilities\Utilities;
 
 class ViewerComponent extends Manager
 {
-
+    /**
+     * @return string
+     * @throws NotAllowedException
+     */
     public function run()
     {
         $contentObjectIdentifier = $this->getRequest()->query->get(self::PARAM_VIEW_ID);
@@ -31,10 +36,19 @@ class ViewerComponent extends Manager
                 $contentObjectIdentifier
             );
 
+            $canViewContentObject =
+                RightsService::getInstance()->canViewContentObject($this->getUser(), $content_object);
+
+            if(!$canViewContentObject)
+            {
+                throw new NotAllowedException();
+            }
+
             $canEditContentObject = RightsService::getInstance()->canEditContentObject(
                 $this->get_user(),
                 $content_object
             );
+
             $canUseContentObject =
                 RightsService::getInstance()->canUseContentObject($this->get_user(), $content_object);
 
@@ -102,7 +116,7 @@ class ViewerComponent extends Manager
      */
     public function get_content_object_display_attachment_url($attachment)
     {
-        if(!$attachment instanceof ContentObject)
+        if (!$attachment instanceof ContentObject)
         {
             return null;
         }

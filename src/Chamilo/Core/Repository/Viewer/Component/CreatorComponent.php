@@ -9,7 +9,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
 use Chamilo\Core\Repository\Viewer\Manager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -153,13 +155,24 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
     /**
      *
      * @param int $content_object_id
+     *
+     * @return string
+     * @throws NotAllowedException
      */
     protected function get_editing_form($content_object_id)
     {
         $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
             ContentObject::class_name(), 
             $content_object_id);
-        
+
+        $canEditContentObject =
+            RightsService::getInstance()->canEditContentObject($this->getUser(), $content_object);
+
+        if(!$canEditContentObject)
+        {
+            throw new NotAllowedException();
+        }
+
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
                 null, 

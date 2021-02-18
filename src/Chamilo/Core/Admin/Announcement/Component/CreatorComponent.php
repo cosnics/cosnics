@@ -26,7 +26,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
             $publisher = new Publisher($this, $objects);
 
             if ($publisher->ready_to_publish())

@@ -47,7 +47,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
             {
                 $cloi = ComplexContentObjectItem::factory($type);
 
-                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser()));
                 $cloi->set_user_id($this->get_user_id());
 
                 if ($complex_content_object_item_id)

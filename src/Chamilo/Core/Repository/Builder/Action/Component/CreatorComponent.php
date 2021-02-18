@@ -101,7 +101,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
             if (! is_array($objects))
             {

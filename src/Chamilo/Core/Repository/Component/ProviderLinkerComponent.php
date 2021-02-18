@@ -6,6 +6,7 @@ use Chamilo\Core\Metadata\Entity\DataClassEntity;
 use Chamilo\Core\Metadata\Entity\DataClassEntityFactory;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Interfaces\ApplicationSupport;
 
 /**
@@ -23,6 +24,11 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
      */
     public function run()
     {
+        if(!$this->get_user()->is_platform_admin())
+        {
+            throw new NotAllowedException();
+        }
+
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Metadata\Provider\Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));

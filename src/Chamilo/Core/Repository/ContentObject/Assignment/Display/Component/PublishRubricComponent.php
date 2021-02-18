@@ -40,7 +40,7 @@ class PublishRubricComponent extends Manager
         }
         else
         {
-            $selectedRubricId = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $selectedRubricId = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
             try
             {
