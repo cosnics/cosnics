@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\RssFeed\Common\Rendition;
 
 use Chamilo\Core\Repository\ContentObject\RssFeed\Common\RenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\RssFeed\Storage\DataClass\RssFeed;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 
@@ -40,5 +41,19 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $html[] = '</ul>';
         
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param $url
+     *
+     * @return string
+     */
+    protected function getSanitizedUrl($url)
+    {
+        if(strpos($url, 'http') !== 0) {
+            $url = 'http://' . $url;
+        }
+
+        return htmlentities($url);
     }
 }

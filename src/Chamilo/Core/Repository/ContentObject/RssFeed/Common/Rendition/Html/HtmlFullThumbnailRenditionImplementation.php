@@ -9,7 +9,8 @@ class HtmlFullThumbnailRenditionImplementation extends HtmlRenditionImplementati
     public function render()
     {
         $object = $this->get_content_object();
-        return '<span><a href="' . htmlentities($object->get_url()) . '">' . htmlentities($object->get_title()) .
-             '</a></span>';
+        $url = $this->getSanitizedUrl($object->get_url());
+
+        return '<span><a href="' . $url . '">' . $url . '</a></span>';
     }
 }

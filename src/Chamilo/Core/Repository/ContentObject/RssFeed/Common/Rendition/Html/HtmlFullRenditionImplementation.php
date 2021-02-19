@@ -11,6 +11,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     public function render()
     {
         $object = $this->get_content_object();
+        $url = $this->getSanitizedUrl($object->get_url());
         
         $html = array();
         
@@ -21,7 +22,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         
         $html[] = '<div class="panel-body">';
-        $html[] = '<a href="' . htmlentities($object->get_url()) . '">' . htmlentities($object->get_url()) . '</a>';
+        $html[] = '<a href="' . $url . '">' . $url . '</a>';
         $html[] = '</div>';
         
         $html[] = ContentObjectRenditionImplementation::launch(
