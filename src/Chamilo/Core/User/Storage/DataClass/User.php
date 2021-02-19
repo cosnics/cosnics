@@ -629,7 +629,13 @@ class User extends DataClass
      */
     public function is_teacher()
     {
-        return ($this->get_status() == self::STATUS_TEACHER ? true : false);
+        /** Admin should always be teacher, however their status is set */
+        if($this->is_platform_admin())
+        {
+            return true;
+        }
+
+        return $this->get_status() == self::STATUS_TEACHER;
     }
 
     public function is_active()

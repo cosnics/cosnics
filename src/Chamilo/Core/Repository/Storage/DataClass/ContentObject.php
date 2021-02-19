@@ -235,6 +235,7 @@ class ContentObject extends CompositeDataClass
         return $this->owner;
     }
 
+
     public function get_owner_fullname()
     {
         $owner = $this->get_owner();

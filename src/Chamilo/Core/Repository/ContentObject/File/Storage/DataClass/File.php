@@ -13,6 +13,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -612,6 +613,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             {
                 $this->add_error(Translation::get('FileFileContentNotSet'));
             }
+        }
+
+        if($this->get_extension() === 'html' && !$this->get_owner()->is_teacher())
+        {
+            $fileContents = file_get_contents($this->get_full_path());
+            $security = new Security();
+            $fileContents = $security->removeXSS($fileContents);
+            file_put_contents($this->get_full_path(), $fileContents);
         }
 
         // Filename

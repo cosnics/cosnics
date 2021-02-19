@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\Link\Common\Rendition\Html;
 
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\ContentObject\Link\Common\Rendition\HtmlRenditionImplementation;
+use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 
 class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 {
@@ -14,13 +15,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function get_description()
     {
+        /** @var Link $object */
         $object = $this->get_content_object();
         
         $html = array();
         
         $html[] = '<div class="link_url" style="margin-top: 1em;">';
         
-        if ($object->get_show_in_iframe())
+        if ($this->showInIframe($object))
         {
             $html[] = '<div style="border: 1px solid grey;">';
             $html[] = '<iframe border="0" style="border: 0;" width="100%" height="500"  src="' . $object->get_url() .
@@ -36,5 +38,26 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</div>';
         
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * @param Link $object
+     *
+     * @return false
+     */
+    protected function showInIframe(Link $object)
+    {
+        $owner = $object->get_owner();
+        if(!$owner->is_teacher() && !$owner->is_platform_admin())
+        {
+            return false;
+        }
+
+        if(!$object->get_show_in_iframe())
+        {
+            return false;
+        }
+
+        return true;
     }
 }
