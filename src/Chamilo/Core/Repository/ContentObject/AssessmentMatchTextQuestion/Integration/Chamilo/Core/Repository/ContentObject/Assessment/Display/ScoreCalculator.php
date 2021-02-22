@@ -15,7 +15,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         $question = $this->get_question();
         $use_wildcards = $question->get_use_wildcards();
         $ignore_case = $question->get_ignore_case();
-        $max_score = $question->get_best_option()->get_score();
+        $max_score = $question->get_maximum_score();
         $options = $question->get_options();
 
         usort($options, function($optionA, $optionB) {
@@ -33,6 +33,8 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         {
             if ($option->matches($user_answer, $ignore_case, $use_wildcards))
             {
+                var_dump($option->get_score());
+                var_dump($max_score);
                 return $this->make_score_relative($option->get_score(), $max_score);
             }
         }
