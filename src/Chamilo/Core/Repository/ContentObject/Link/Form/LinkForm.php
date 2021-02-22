@@ -72,7 +72,16 @@ class LinkForm extends ContentObjectForm
         $url = str_replace('http://http://', 'http://', $url);
 
         $object->set_url($url);
-        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+        }
+        else
+        {
+            $object->set_show_in_iframe(false);
+        }
+
         $this->set_content_object($object);
 
         return parent::create_content_object();
@@ -87,7 +96,15 @@ class LinkForm extends ContentObjectForm
         $url = str_replace('http://http://', 'http://', $url);
 
         $object->set_url($url);
-        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+        }
+        else
+        {
+            $object->set_show_in_iframe(false);
+        }
 
         return parent::update_content_object();
     }
