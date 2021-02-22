@@ -36,7 +36,7 @@ class CategoryService
     public function getCategoryById(int $categoryId)
     {
         $category = $this->categoryRepository->findCategoryById($categoryId);
-        if($category === false)
+        if ($category === false)
         {
             return null;
         }
@@ -116,7 +116,7 @@ class CategoryService
             }
         }
 
-        if($category instanceof RepositoryCategory)
+        if ($category instanceof RepositoryCategory)
         {
             if (!empty($prefix))
             {
@@ -163,7 +163,7 @@ class CategoryService
     {
         foreach ($categories as $category)
         {
-            $categoryList[str_repeat('---', $level) . ' ' . $category->get_name()] = $category->getId();
+            $categoryList[$category->getId()] = str_repeat('---', $level) . ' ' . $category->get_name();
 
             $level ++;
             $this->addCategoriesToList($category->getChildren(), $categoryList, $level);

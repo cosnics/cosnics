@@ -51,14 +51,17 @@ class CopyFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $categories = [$this->translator->trans('MyRepository', [], self::TRANSLATION_CONTEXT) => '0'] +
+        $categories = [0 => $this->translator->trans('MyRepository', [], self::TRANSLATION_CONTEXT)] +
             $this->categoryService->getCategoryTreeForForm($this->getUserFromOptions($options), 1);
 
         $builder->add(
             self::ELEMENT_CATEGORY, ChoiceType::class,
             [
                 'label' => $this->translator->trans('Category', [], self::TRANSLATION_CONTEXT),
-                'choices' => $categories
+                'choices' => $categories,
+                'choice_label' => function($choice) {
+                    return $choice;
+                }
             ]
         );
 
