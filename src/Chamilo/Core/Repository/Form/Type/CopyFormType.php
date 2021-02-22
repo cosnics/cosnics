@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Form\Type;
 
+use Chamilo\Core\Repository\DTO\CategoryTreeFormData;
 use Chamilo\Core\Repository\Service\CategoryService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\Form\AbstractType;
@@ -51,7 +52,7 @@ class CopyFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $categories = [0 => $this->translator->trans('MyRepository', [], self::TRANSLATION_CONTEXT)] +
+        $categories = [new CategoryTreeFormData(0, $this->translator->trans('MyRepository', [], self::TRANSLATION_CONTEXT))] +
             $this->categoryService->getCategoryTreeForForm($this->getUserFromOptions($options), 1);
 
         $builder->add(
@@ -59,8 +60,16 @@ class CopyFormType extends AbstractType
             [
                 'label' => $this->translator->trans('Category', [], self::TRANSLATION_CONTEXT),
                 'choices' => $categories,
-                'choice_label' => function($choice) {
-                    return $choice;
+                'choice_label' => function(CategoryTreeFormData $choice) {
+                    return $choice->getCategoryTitle();
+                },
+                'choice_value' => function($choice) {
+                    if($choice instanceof CategoryTreeFormData)
+                    {
+                        return $choice->getCategoryId();
+                    }
+
+                    return null;
                 }
             ]
         );

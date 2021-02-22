@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -69,7 +70,7 @@ class CopierComponent extends Manager
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->selectedCategoryId = $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY];
+            $this->selectedCategoryId = $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY]->getCategoryId();
             $newCategoryName = $form->getData()[CopyFormType::ELEMENT_NEW_CATEGORY];
 
             $this->copyContentObject($selectedObjects, $categoryId, $newCategoryName);
@@ -101,9 +102,19 @@ class CopierComponent extends Manager
      * @param ContentObject[] $selectedContentObjects
      * @param int $categoryId
      * @param string|null $newCategoryName
+     *
+     * @throws NotAllowedException
      */
     protected function copyContentObject($selectedContentObjects, int $categoryId = 0, string $newCategoryName = null)
     {
+        $category = $this->getCategoryService()->getCategoryById($categoryId);
+        if ($category->get_type() != WorkspaceService::TYPE_PERSONAL ||
+            $category->get_type_id() != $this->getUser()->getId())
+
+        {
+            throw new NotAllowedException();
+        }
+
         $target_user_id = $this->get_user_id();
         $messages = array();
 
@@ -143,6 +154,13 @@ class CopierComponent extends Manager
 //        Session::register(self::PARAM_MESSAGES, $messages);
     }
 
+    /**
+     * @return RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getService(RightsService::class);
+    }
 
     public function get_additional_parameters($additionalParameters = array())
     {
@@ -191,6 +209,7 @@ class CopierComponent extends Manager
 
     /**
      * @param ContentObject $content_object
+     *
      * @return bool
      */
     protected function canCopyContentObject(ContentObject $content_object): bool
@@ -198,6 +217,7 @@ class CopierComponent extends Manager
         return RightsService::getInstance()->canCopyContentObject(
             $this->get_user(),
             $content_object,
-            $this->getWorkspace());
+            $this->getWorkspace()
+        );
     }
 }

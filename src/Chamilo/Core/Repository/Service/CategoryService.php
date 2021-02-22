@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Service;
 
+use Chamilo\Core\Repository\DTO\CategoryTreeFormData;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\Repository\CategoryRepository;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
@@ -163,7 +164,9 @@ class CategoryService
     {
         foreach ($categories as $category)
         {
-            $categoryList[$category->getId()] = str_repeat('---', $level) . ' ' . $category->get_name();
+            $categoryList[$category->getId()] = new CategoryTreeFormData(
+                $category->getId(), str_repeat('---', $level) . ' ' . $category->get_name()
+            );
 
             $level ++;
             $this->addCategoriesToList($category->getChildren(), $categoryList, $level);
