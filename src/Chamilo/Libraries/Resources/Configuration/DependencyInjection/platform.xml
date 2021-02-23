@@ -17,6 +17,15 @@
         </service>
 
         <service
+                alias="chamilo.libraries.platform.session.session_utilities"
+                id="Chamilo\Libraries\Platform\Session\SessionUtilities" />
+
+        <service id="Chamilo\Libraries\Platform\Security\Csrf\CsrfTokenManagerFactory" autowire="true" />
+        <service id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface">
+            <factory service="Chamilo\Libraries\Platform\Security\Csrf\CsrfTokenManagerFactory" method="buildCsrfTokenManager" />
+        </service>
+
+        <service
             id="chamilo.libraries.platform.translation"
             class="Chamilo\Libraries\Translation\Translation">
             <deprecated>The "%service_id%" service is deprecated</deprecated>

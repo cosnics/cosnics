@@ -1,9 +1,12 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * This class is an extension of twig to support resource management
@@ -11,7 +14,7 @@ use Chamilo\Libraries\Format\Utilities\ResourceManager;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ResourceManagementExtension extends \Twig_Extension
+class ResourceManagementExtension extends AbstractExtension
 {
     const DEFAULT_CONTEXT = 'Chamilo\Libraries';
 
@@ -44,18 +47,20 @@ class ResourceManagementExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('getImagePath', array($this, 'getImagePath')),
-            new \Twig_SimpleFunction('getImage', array($this, 'getImage'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('getCssPath', array($this, 'getCssPath')),
-            new \Twig_SimpleFunction('getCss', array($this, 'getCss'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('getVendorCss', array($this, 'getVendorCss'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
-            new \Twig_SimpleFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction(
+            new TwigFunction('getImagePath', array($this, 'getImagePath')),
+            new TwigFunction('getImage', array($this, 'getImage'), array('is_safe' => array('html'))),
+            new TwigFunction('getCssPath', array($this, 'getCssPath')),
+            new TwigFunction('getCss', array($this, 'getCss'), array('is_safe' => array('html'))),
+            new TwigFunction('getVendorCss', array($this, 'getVendorCss'), array('is_safe' => array('html'))),
+            new TwigFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
+            new TwigFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
+            new TwigFunction(
                 'getVendorJavascript',
                 array($this, 'getVendorJavascript'),
-                array('is_safe' => array('html'))),
-            new \Twig_SimpleFunction('isUniquePath', array($this, 'isUniquePath')));
+                array('is_safe' => array('html'))
+            ),
+            new TwigFunction('isUniquePath', array($this, 'isUniquePath'))
+        );
     }
 
     /**
@@ -64,6 +69,7 @@ class ResourceManagementExtension extends \Twig_Extension
      * @param string $image
      * @param string $context
      * @param string $extension
+     *
      * @return string
      */
     public function getImagePath($image, $context, $extension = 'png')
@@ -84,6 +90,7 @@ class ResourceManagementExtension extends \Twig_Extension
      * @param string $label
      * @param string $class
      * @param string $style
+     *
      * @return string
      */
     public function getImage($image, $context, $extension = 'png', $label = null, $class = null, $style = null)
@@ -94,17 +101,17 @@ class ResourceManagementExtension extends \Twig_Extension
 
         $html[] = '<img border="0" src="' . $imagePath . '"';
 
-        if (! empty($label))
+        if (!empty($label))
         {
             $html[] = 'alt="' . $label . '" title="' . htmlentities($label) . '"';
         }
 
-        if (! empty($class))
+        if (!empty($class))
         {
             $html[] = 'class="' . $class . '"';
         }
 
-        if (! empty($style))
+        if (!empty($style))
         {
             $html[] = 'style="' . $style . '"';
         }
@@ -119,6 +126,7 @@ class ResourceManagementExtension extends \Twig_Extension
      *
      * @param string $css
      * @param string $context
+     *
      * @return string
      */
     public function getCssPath($css, $context)
@@ -133,6 +141,7 @@ class ResourceManagementExtension extends \Twig_Extension
      *
      * @param string $css
      * @param string $context
+     *
      * @return string
      */
     public function getCss($css, $context)
@@ -146,6 +155,7 @@ class ResourceManagementExtension extends \Twig_Extension
      * Returns a CSS link as HTML code for a given vendor css file
      *
      * @param string $cssPath
+     *
      * @return string
      */
     public function getVendorCss($cssPath)
@@ -159,11 +169,12 @@ class ResourceManagementExtension extends \Twig_Extension
      * Helper function to generate HTML code for css
      *
      * @param string $cssPath
+     *
      * @return string
      */
     protected function getCssHtml($cssPath)
     {
-        if (! $this->isUniquePath($cssPath))
+        if (!$this->isUniquePath($cssPath))
         {
             return '';
         }
@@ -179,6 +190,7 @@ class ResourceManagementExtension extends \Twig_Extension
      *
      * @param string $javascript
      * @param string $context
+     *
      * @return string
      */
     public function getJavascriptPath($javascript, $context)
@@ -193,6 +205,7 @@ class ResourceManagementExtension extends \Twig_Extension
      *
      * @param string $javascript
      * @param string $context
+     *
      * @return string
      */
     public function getJavascript($javascript, $context)
@@ -206,6 +219,7 @@ class ResourceManagementExtension extends \Twig_Extension
      * Returns a javascript link as HTML code for a given vendor javascript file
      *
      * @param string $javascriptPath
+     *
      * @return string
      */
     public function getVendorJavascript($javascriptPath)
@@ -219,11 +233,12 @@ class ResourceManagementExtension extends \Twig_Extension
      * Returns a javascript link as HTML code for a given javascript file in a given context
      *
      * @param string $javascriptPath
+     *
      * @return string
      */
     protected function getJavascriptHtml($javascriptPath)
     {
-        if (! $this->isUniquePath($javascriptPath))
+        if (!$this->isUniquePath($javascriptPath))
         {
             return '';
         }
@@ -255,6 +270,7 @@ class ResourceManagementExtension extends \Twig_Extension
      * Checks if a given path is unique and stores it in the usedPaths variable if it is
      *
      * @param string $path
+     *
      * @return boolean
      */
     public function isUniquePath($path)
@@ -266,9 +282,9 @@ class ResourceManagementExtension extends \Twig_Extension
 
         $this->usedPaths[] = $path;
 
-        if($this->resourceManager->resource_loaded($path))
+        if ($this->resourceManager->resource_loaded($path))
         {
-           return false;
+            return false;
         }
 
         return true;

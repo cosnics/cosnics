@@ -35,6 +35,9 @@
                 method="createEnvironment"
                 service="chamilo.libraries.format.twig.twig_factory" />
             <argument
+                    type="service"
+                    id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface" />
+            <argument
                 type="service"
                 id="symfony.component.translation.translator" />
             <argument
@@ -50,10 +53,10 @@
                 service="chamilo.libraries.format.form.form_factory_builder" />
             <argument
                 type="service"
-                id="twig.environment" />
-            <argument
-                type="service"
                 id="symfony.component.validator.validator" />
+            <argument
+                    type="service"
+                    id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface" />
         </service>
 
         <service

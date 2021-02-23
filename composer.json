@@ -36,6 +36,7 @@
 		"symfony/twig-bridge": "^3.4",
 		"symfony/validator": "^3.4",
 		"symfony/yaml": "^3.4",
+		"symfony/security-csrf": "^3.4",
 		"twig/twig": "2.14.1",
 		"kriswallsmith/assetic": "^1.4",
 		"ext-json": "*",

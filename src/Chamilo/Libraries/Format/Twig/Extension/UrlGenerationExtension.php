@@ -2,6 +2,8 @@
 namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * This class is an extension of twig to support url generation
@@ -9,7 +11,7 @@ use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UrlGenerationExtension extends \Twig_Extension
+class UrlGenerationExtension extends AbstractExtension
 {
 
     /**
@@ -53,8 +55,8 @@ class UrlGenerationExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('url', array($this->urlGenerator, 'generateURL')),
-            new \Twig_SimpleFunction('context_url', array($this->urlGenerator, 'generateContextURL')));
+            new TwigFunction('url', array($this->urlGenerator, 'generateURL')),
+            new TwigFunction('context_url', array($this->urlGenerator, 'generateContextURL')));
     }
 
     /**
