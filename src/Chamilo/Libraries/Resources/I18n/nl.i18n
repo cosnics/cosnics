@@ -680,3 +680,4 @@ ValidatorMinimumLengthMessage = "De waarde moet minstens {limit} tekens lang zij
 ValidatorMaximumLengthMessage = "De waarde mag maximaal {limit} tekens lang zijn"
 InvalidUserExceptionMessage = "Je bekijkt deze pagina door de ogen van een andere gebruiker maar dit is niet toegelaten voor deze pagina. Gelieve terug te keren naar de vorige pagina met de vorige knop van je browser."
 SelectFilter = "Verfijn je keuze"
+CsrfError = "Ongeldig CSRF token"
