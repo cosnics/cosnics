@@ -33,8 +33,6 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
         {
             if ($option->matches($user_answer, $ignore_case, $use_wildcards))
             {
-                var_dump($option->get_score());
-                var_dump($max_score);
                 return $this->make_score_relative($option->get_score(), $max_score);
             }
         }
