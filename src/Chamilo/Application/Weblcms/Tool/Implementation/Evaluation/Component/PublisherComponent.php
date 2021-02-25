@@ -1,10 +1,19 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component;
 
+use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Publication\ContentObjectPublicationHandler;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Form\PublicationForm;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
+use Chamilo\Application\Weblcms\Tool\Interfaces\ContentObject;
+use Chamilo\Application\Weblcms\Tool\Interfaces\ContentObjectPublication;
+use Chamilo\Core\Repository\Publication\Publisher\Interfaces\PublicationHandlerInterface;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormHandler;
+use Chamilo\Application\Weblcms\Tool\Interfaces\PublisherCustomPublicationFormInterface;
 
-class PublisherComponent extends Manager
+class PublisherComponent extends Manager implements PublisherCustomPublicationFormInterface,
+    PublisherCustomPublicationFormHandler
 {
 
     public function get_additional_parameters()
@@ -24,4 +33,56 @@ class PublisherComponent extends Manager
     {
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
+
+    /**
+     * Constructs the publication form
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication[] $publications
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
+     *
+     * @return ContentObjectPublicationForm
+     */
+    public function constructPublicationForm($publications, $selectedContentObjects)
+    {
+        $course = $this->get_course();
+        $is_course_admin = $course->is_course_admin($this->getUser());
+
+        return new PublicationForm(
+            $this->getUser(),
+            PublicationForm::TYPE_CREATE,
+            $publications,
+            $course,
+            $this->get_url(),
+            $is_course_admin,
+            $selectedContentObjects, $this->getTranslator(), $this->getPublicationRepository()
+        );
+    }
+
+    /**
+     * Constructs the publication form
+     *
+     * @param ContentObjectPublicationForm $publicationForm
+     *
+     * @return PublicationHandlerInterface
+     */
+    public function getPublicationHandler(ContentObjectPublicationForm $publicationForm)
+    {
+        return new ContentObjectPublicationHandler(
+            $this->get_course_id(),
+            $this->get_tool_id(),
+            $this->getUser(),
+            $this,
+            $publicationForm
+        );
+    }
+
+
+    /**
+     * @return PublicationRepository
+     */
+    public function getPublicationRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.evaluation.storage.repository.publication_repository');
+    }
+
 }

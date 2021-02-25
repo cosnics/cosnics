@@ -43,64 +43,12 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     public function render_cell($column, $publication)
     {
         $content_object = $this->get_component()->get_content_object_from_publication($publication);
-
         switch ($column->get_name())
         {
-            //case ContentObject::PROPERTY_TITLE :
-            //    return $this->generate_title_link($publication);
-            case Assignment::PROPERTY_END_TIME :
-                $time = $content_object->get_end_time();
-                $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-                $time = DatetimeUtilities::format_locale_date($date_format, $time);
-                if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
-                {
-                    return '<span style="color: gray">' . $time . '</span>';
-                }
+            case ContentObject::PROPERTY_TITLE :
+                return $this->generate_title_link($publication);
 
-                return $time;
-            case Manager::PROPERTY_NUMBER_OF_SUBMISSIONS :
-                $contentObjectPublication = new ContentObjectPublication();
-                $contentObjectPublication->setId($publication[DataClass::PROPERTY_ID]);
-
-                $contentObjectPublication->set_content_object_id(
-                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-                );
-
-                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
-
-                $entitiesCount =
-                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->countEntities(
-                        $contentObjectPublication, new FilterParameters()
-                    );
-
-                $entitiesWithEntriesCount =
-                    $this->getAssignmentService()->countDistinctEntriesByContentObjectPublicationAndEntityType(
-                        $contentObjectPublication,
-                        $entityType
-                    );
-
-                return $entitiesWithEntriesCount . ' / ' . $entitiesCount;
-            case Publication::PROPERTY_ENTITY_TYPE:
-
-                $contentObjectPublication = new ContentObjectPublication();
-                $contentObjectPublication->setId($publication[DataClass::PROPERTY_ID]);
-
-                $contentObjectPublication->set_content_object_id(
-                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
-                );
-
-                $entityType = $this->getAssignmentPublication($contentObjectPublication)->getEntityType();
-
-                $entityTypeName =
-                    $this->getEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
-
-                $iconName = ($entityType == Entry::ENTITY_TYPE_USER) ? 'user' : 'users';
-
-                $glyph = new FontAwesomeGlyph($iconName, [], $entityTypeName);
-
-                return $glyph->render();
         }
-
         return parent::render_cell($column, $publication);
     }
 
@@ -135,16 +83,6 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
         return $component->getAssignmentService();
     }
 
-    /**
-     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity\EntityServiceManager
-     */
-    protected function getEntityServiceManager()
-    {
-        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\BrowserComponent $component */
-        $component = $this->get_component()->get_tool_browser()->get_parent();
-
-        return $component->getEntityServiceManager();
-    }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication

@@ -31,4 +31,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return array(Evaluation::class_name());
     }
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\Repository\PublicationRepository
+     */
+    public function getPublicationRepository()
+    {
+        return $this->getService('chamilo.application.weblcms.tool.implementation.evaluation.storage.repository.publication_repository');
+    }
 }
