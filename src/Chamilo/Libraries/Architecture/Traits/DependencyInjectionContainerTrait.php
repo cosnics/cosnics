@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Architecture\Traits;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Libraries\Architecture\Bridge\BridgeManager;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfRequestValidator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -265,5 +266,13 @@ trait DependencyInjectionContainerTrait
     public function getBridgeManager()
     {
         return $this->getService(BridgeManager::class);
+    }
+
+    /**
+     * @return CsrfRequestValidator
+     */
+    public function getCsrfRequestValidator()
+    {
+        return $this->getService(CsrfRequestValidator::class);
     }
 }

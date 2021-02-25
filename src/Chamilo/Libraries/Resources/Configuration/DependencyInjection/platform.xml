@@ -24,6 +24,7 @@
         <service id="Symfony\Component\Security\Csrf\CsrfTokenManagerInterface">
             <factory service="Chamilo\Libraries\Platform\Security\Csrf\CsrfTokenManagerFactory" method="buildCsrfTokenManager" />
         </service>
+        <service id="Chamilo\Libraries\Platform\Security\Csrf\CsrfRequestValidator" autowire="true" />
 
         <service
             id="chamilo.libraries.platform.translation"
