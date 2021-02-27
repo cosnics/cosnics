@@ -3,9 +3,12 @@ namespace Chamilo\Libraries\Format\Utilities;
 
 use Chamilo\Configuration\Package\Finder\ResourceBundles;
 use Chamilo\Configuration\Package\PackageList;
+use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\Console\Output\OutputInterface;
+use function file_get_contents;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Processes resources from one or multiple packages
@@ -23,13 +26,20 @@ class ResourceProcessor
     protected $pathBuilder;
 
     /**
+     * @var ClassnameUtilities
+     */
+    protected $classnameUtilities;
+
+    /**
      * ResourceProcessor constructor.
      *
      * @param \Chamilo\Libraries\File\PathBuilder $pathBuilder
+     * @param ClassnameUtilities $classnameUtilities
      */
-    public function __construct(PathBuilder $pathBuilder)
+    public function __construct(PathBuilder $pathBuilder, ClassnameUtilities $classnameUtilities)
     {
         $this->pathBuilder = $pathBuilder;
+        $this->classnameUtilities = $classnameUtilities;
     }
 
     /**
@@ -38,7 +48,7 @@ class ResourceProcessor
      * @param string[] $packageNamespaces
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function processResources($packageNamespaces = array(), OutputInterface $output)
+    public function processResources(OutputInterface $output, $packageNamespaces = array())
     {
         $processAll = false;
 
@@ -63,6 +73,8 @@ class ResourceProcessor
             $this->processImages($packageNamespace, $basePath, $baseWebPath);
             $this->processCss($packageNamespace, $basePath, $baseWebPath);
             $this->processJavascript($packageNamespace, $basePath, $baseWebPath);
+            $this->processCustomConfig($packageNamespace, $basePath, $baseWebPath);
+
             $output->writeln('Processed resources for: ' . $packageNamespace);
         }
 
@@ -133,6 +145,38 @@ class ResourceProcessor
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
 
         $this->recurseCopy($sourceResourceImagePath, $webResourceImagePath, true);
+    }
+
+    /**
+     * @param string $packageNamespace
+     * @param string $basePath
+     * @param string $baseWebPath
+     */
+    protected function processCustomConfig(string $packageNamespace, string $basePath, string $baseWebPath)
+    {
+        $customConfigPath = $this->pathBuilder->getResourcesPath($packageNamespace) . 'Configuration' .
+            DIRECTORY_SEPARATOR . 'process_resources.json';
+
+        $relativePackagePath = $this->classnameUtilities->namespaceToPath($packageNamespace);
+        $packagePath = $basePath . $relativePackagePath;
+        $packageWebPath = $baseWebPath . $relativePackagePath;
+
+        if(file_exists($customConfigPath))
+        {
+            $customConfig = json_decode(file_get_contents($customConfigPath), true);
+            foreach($customConfig as $copyConfig)
+            {
+                $inputPath = realpath($packagePath . DIRECTORY_SEPARATOR . $copyConfig['input']);
+                $outputPath = $packageWebPath . DIRECTORY_SEPARATOR . $copyConfig['output'];
+
+                if(empty($inputPath) || empty($outputPath))
+                {
+                    continue;
+                }
+
+                $this->recurseCopy($inputPath, $outputPath, true);
+            }
+        }
     }
 
     /**

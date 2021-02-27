@@ -141,3 +141,6 @@ UserNotSubscribedInCourse = "Gebruiker niet ingeschreven in deze cursus"
 CourseGroupNotFound = "Cursusgroep niet gevonden"
 UnknownError = "Onbekende fout, probeer opnieuw"
 ReturnToCourseGroup = "Keer terug naar de cursusgroep"
+UserNotSubscribed = "Gebruiker kon niet ingeschreven worden"
+
+RandomChange = "Door het selecteren van de optie <strong>Willekeurige inschrijvingen</strong> zullen de gebruikers evenredig en random verdeeld worden in de aangemaakte groep(en) totdat het maximaal aantal groepsinschrijvingen per groep is bereikt"

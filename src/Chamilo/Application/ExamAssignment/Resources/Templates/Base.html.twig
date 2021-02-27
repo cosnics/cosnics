@@ -1,0 +1,124 @@
+{{ HEADER|raw }}
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .container-headerless {
+            display: contents;
+        }
+        .header {
+            background: #406e8e;
+            color: #fff;
+        }
+        .header-content {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 60px;
+            padding: 5px 0;
+        }
+        @media (min-width: 500px) {
+            .header-content {
+                flex-direction: row;
+            }
+        }
+        .header-title {
+            font-size: 2rem;
+        }
+        .header-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .user {
+            align-items: baseline;
+            display: flex;
+        }
+        .u-btn-focus:focus {
+            outline: thin dotted;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+        .btn-logout {
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            color: #fff;
+            font-size: 1.3rem;
+            margin-left: 10px;
+        }
+        .btn-logout:hover, .btn-logout:focus, .btn-logout:active {
+            background-color: #2b6090;
+            border-color: #204d74;
+            color: #fff;
+        }
+        .btn-action {
+            background-color: #009c7c;
+            border-color: #008368;
+            color: #fff;
+        }
+        .btn-action:hover, .btn-action:focus, .btn-action:active {
+            background-color: #00b690;
+            border-color: #00b690;
+            color: #fff;
+        }
+        .main-content {
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+        .course-visual-code {
+            color: #48738a;
+        }
+        .exam-timestamp {
+            color: #507177;
+            font-size: 1.35rem;
+            font-weight: 500;
+        }
+        .exam-timestamp.mod-list {
+            background-color: #fcfcfc;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 5px;
+        }
+        .exam-timestamp.mod-strong {
+            font-size: 2.1rem;
+            margin-top: -2px;
+            padding: 2px 5px 2px 0;
+        }
+        .dmy-separator {
+            font-size: 1.4rem;
+            font-weight: 400;
+            margin-left: 1px;
+        }
+        .dmy-separator-strong {
+            margin: 0 1px;
+        }
+        .u-flex-parent {
+            display: flex;
+        }
+        .u-flex-3 {
+            flex: 3;
+        }
+        .u-flex-2 {
+            flex: 2;
+        }
+    </style>
+    {% block header %}
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-title"><a href="{{ LIST_URL }}">{{ HEADER_ENTITY }}</a></div>
+                {% if USER %}<div class="user">{{ USER.get_fullname() }} <a class="btn btn-logout u-btn-focus" href="{{ LOGOUT_URL }}">{{ 'LogOut'|trans({}, appContext) }}</a></div>{% endif %}
+            </div>
+        </div>
+    </header>
+    {% endblock %}
+    {% block main %}
+    {% endblock %}
+    {% block footer %}
+    {% endblock %}
+{{ FOOTER|raw }}

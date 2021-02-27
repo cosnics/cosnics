@@ -64,7 +64,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements \Chamilo\Core\Re
         }
         else
         {
-            $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
             if (! is_array($object_ids))
             {
                 $object_ids = array($object_ids);

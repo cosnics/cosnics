@@ -10,8 +10,10 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Translation\Translation;
@@ -35,6 +37,7 @@ class CopierComponent extends Manager
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
+     * @throws NotAllowedException
      */
     public function run()
     {
@@ -54,6 +57,11 @@ class CopierComponent extends Manager
                 throw new \InvalidArgumentException('No valid content object selected ' . $selected_content_object_id);
             }
 
+            if (!$this->canCopyContentObject($content_object))
+            {
+                throw new NotAllowedException();
+            }
+
             $selectedObjects[] = $content_object;
         }
 
@@ -62,7 +70,7 @@ class CopierComponent extends Manager
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->selectedCategoryId = $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY];
+            $this->selectedCategoryId = $categoryId = $form->getData()[CopyFormType::ELEMENT_CATEGORY]->getCategoryId();
             $newCategoryName = $form->getData()[CopyFormType::ELEMENT_NEW_CATEGORY];
 
             $this->copyContentObject($selectedObjects, $categoryId, $newCategoryName);
@@ -94,9 +102,19 @@ class CopierComponent extends Manager
      * @param ContentObject[] $selectedContentObjects
      * @param int $categoryId
      * @param string|null $newCategoryName
+     *
+     * @throws NotAllowedException
      */
     protected function copyContentObject($selectedContentObjects, int $categoryId = 0, string $newCategoryName = null)
     {
+        $category = $this->getCategoryService()->getCategoryById($categoryId);
+        if ($category->get_type() != WorkspaceService::TYPE_PERSONAL ||
+            $category->get_type_id() != $this->getUser()->getId())
+
+        {
+            throw new NotAllowedException();
+        }
+
         $target_user_id = $this->get_user_id();
         $messages = array();
 
@@ -113,11 +131,7 @@ class CopierComponent extends Manager
 
         foreach ($selectedContentObjects as $content_object)
         {
-            if (RightsService::getInstance()->canCopyContentObject(
-                $this->get_user(),
-                $content_object,
-                $this->getWorkspace()
-            ))
+            if ($this->canCopyContentObject($content_object))
             {
                 $source_user_id = $content_object->get_owner_id();
 
@@ -138,6 +152,14 @@ class CopierComponent extends Manager
             }
         }
 //        Session::register(self::PARAM_MESSAGES, $messages);
+    }
+
+    /**
+     * @return RightsService
+     */
+    protected function getRightsService()
+    {
+        return $this->getService(RightsService::class);
     }
 
     public function get_additional_parameters($additionalParameters = array())
@@ -183,5 +205,19 @@ class CopierComponent extends Manager
     protected function getCategoryService()
     {
         return $this->getService(CategoryService::class);
+    }
+
+    /**
+     * @param ContentObject $content_object
+     *
+     * @return bool
+     */
+    protected function canCopyContentObject(ContentObject $content_object): bool
+    {
+        return RightsService::getInstance()->canCopyContentObject(
+            $this->get_user(),
+            $content_object,
+            $this->getWorkspace()
+        );
     }
 }

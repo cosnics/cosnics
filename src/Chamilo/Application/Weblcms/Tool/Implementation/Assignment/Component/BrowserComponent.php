@@ -77,6 +77,11 @@ class BrowserComponent extends Manager
 
     public function get_additional_form_actions()
     {
+        if (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        {
+            return array();
+        }
+
         return array(
             new TableFormAction(
                 $this->get_url(

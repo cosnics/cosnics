@@ -9,6 +9,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -21,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
 /**
  * A notificationblock for new assignment submissions (assignmenttool)
  */
-class AssignmentSubmissions extends Block
+class AssignmentSubmissions extends Block implements AsynchronousBlockInterface
 {
     public function displayContent()
     {

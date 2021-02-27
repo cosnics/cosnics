@@ -50,12 +50,6 @@ class ViewerComponent extends BaseHtmlTreeComponent
 
         $trackingService = $this->getTrackingService();
 
-        $trackingService->trackAttemptForUser(
-            $this->learningPath,
-            $this->getCurrentTreeNode(),
-            $this->getUser()
-        );
-
         if (!$this->canAuditCurrentTreeNode() && $trackingService->isCurrentTreeNodeBlocked(
                 $learning_path,
                 $this->getUser(),
@@ -115,6 +109,15 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $this->learningPath,
             $this->getCurrentTreeNode()
         );
+
+        if($embedder->supportMultipleAttempts())
+        {
+            $trackingService->trackAttemptForUser(
+                $this->learningPath,
+                $this->getCurrentTreeNode(),
+                $this->getUser()
+            );
+        }
 
         return $embedder->run();
     }
@@ -551,6 +554,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         }
 
         $this->addPrintButton($splitDropDownButton, $translator);
+        $this->addDownloadFilesButton($splitDropDownButton, $translator);
 
         $buttonGroup->addButton($splitDropDownButton);
     }
@@ -596,6 +600,30 @@ class ViewerComponent extends BaseHtmlTreeComponent
             ),
             SubButton::DISPLAY_ICON_AND_LABEL,
             false, null, '_blank'
+        );
+
+        $button->addSubButton($extraButton);
+    }
+
+    /**
+     * Adds the activity button
+     *
+     * @param SplitDropdownButton $button
+     * @param Translation $translator
+     */
+    protected function addDownloadFilesButton(SplitDropdownButton $button, $translator)
+    {
+        $extraButton = new SubButton(
+            $translator->getTranslation('DownloadFiles', null, Manager::context()),
+            new FontAwesomeGlyph('download'),
+            $this->get_url(
+                array(
+                    self::PARAM_ACTION => self::ACTION_DOWNLOAD_FILES,
+                    self::PARAM_CHILD_ID => null
+                )
+            ),
+            SubButton::DISPLAY_ICON_AND_LABEL,
+            false, null
         );
 
         $button->addSubButton($extraButton);

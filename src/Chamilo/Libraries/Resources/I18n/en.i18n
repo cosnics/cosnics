@@ -680,3 +680,4 @@ ValidatorMinimumRangeMessage = "The given value of {value} is less than the mini
 ValidatorMaximumRangeMessage = "The given value of {value} is more than the maximum allowed value of {limit}"
 InvalidUserExceptionMessage = "You are currently viewing this page as another user which is not allowed by. Please go back to the previous page with the previous button of your browser."
 SelectFilter = "Filter your choice"
+CsrfError = "Invalid CSRF token"

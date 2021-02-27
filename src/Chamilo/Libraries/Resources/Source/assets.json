@@ -1,0 +1,86 @@
+{
+  "package": "Chamilo/Libraries",
+  "javascript": [
+    {
+      "input": [
+        "{{ NodeModulesPath }}/vue/dist/vue.min.js",
+        "{{ NodeModulesPath }}/vue-star-rating/dist/star-rating.min.js",
+        "{{ NodeModulesPath }}/vue-resource/dist/vue-resource.min.js",
+        "{{ NodeModulesPath }}/vuejs-dialog/dist/vuejs-dialog.min.js",
+        "{{ NodeModulesPath }}/bootstrap-vue/dist/bootstrap-vue.min.js",
+        "{{ NodeModulesPath }}/vue-i18n/dist/vue-i18n.min.js",
+        "{{ NodeModulesPath }}/vue-select/dist/vue-select.js"
+      ],
+      "output": {
+        "path": "Resources/Javascript",
+        "filename": "cosnics.vue.min.js"
+      }
+    },
+    {
+      "input": [
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.browser.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.ui.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.tabula.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.tablednd.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.dynamic.visual_tabs.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.ui.tabs.paging.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.treeview.async.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.timeout.interval.idle.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.mousewheel.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.scrollable.pack.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.xml2json.pack.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.json.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.jsuggest.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.jeditable.mini.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.query.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.tree_menu.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Jquery/jquery.timepicker.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/JqueryContextMenu/jquery.contextMenu.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Fancytree/dist/jquery.fancytree-all.js"
+      ],
+      "output": {
+        "path": "Resources/Javascript",
+        "filename": "cosnics.jquery.min.js"
+      }
+    },
+    {
+      "input": [
+        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS/angular.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS/angular-sanitize.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap.min.js"
+      ],
+      "output": {
+        "path": "Resources/Javascript",
+        "filename": "cosnics.angular.min.js"
+      }
+    },
+    {
+      "input": [
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Dropzone/dropzone.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Highlight/highlight.pack.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/phpjs.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Bootstrap/bootstrap.min.js",
+        "{{ PackagePath }}/Resources/Javascript/Plugin/Bootstrap/bootstrap-toggle.min.js",
+        "{{ PackagePath }}/Resources/Javascript/BootstrapConflictFixes.js"
+      ],
+      "output": {
+        "path": "Resources/Javascript",
+        "filename": "cosnics.vendors.min.js"
+      }
+    },
+    {
+      "input": [
+        "{{ PackagePath }}/Resources/Javascript/Utilities.js",
+        "{{ PackagePath }}/Resources/Javascript/Notifications.js",
+        "{{ PackagePath }}/Resources/Javascript/Help.js",
+        "{{ PackagePath }}/Resources/Javascript/Visit.js",
+        "{{ PackagePath }}/Resources/Javascript/InitHighlight.js"
+      ],
+      "output": {
+        "path": "Resources/Javascript",
+        "filename": "cosnics.common.min.js"
+      }
+    }
+  ]
+}

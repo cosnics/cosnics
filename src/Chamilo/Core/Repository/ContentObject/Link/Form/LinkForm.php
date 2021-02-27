@@ -15,9 +15,15 @@ class LinkForm extends ContentObjectForm
     protected function build_creation_form()
     {
         parent::build_creation_form();
+
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Link::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
-        $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
+        }
+
         $this->addElement('category');
 
         $this->addFormRule(array($this, 'check_https_compliance'));
@@ -26,9 +32,15 @@ class LinkForm extends ContentObjectForm
     protected function build_editing_form()
     {
         parent::build_editing_form();
+
         $this->addElement('category', Translation::get('Properties'));
         $this->add_textfield(Link::PROPERTY_URL, Translation::get('URL'), true, array('size' => '100'));
-        $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $this->addElement('checkbox', Link::PROPERTY_SHOW_IN_IFRAME, Translation::get('ShowInIFrame'));
+        }
+
         $this->addElement('category');
 
         $this->addFormRule(array($this, 'check_https_compliance'));
@@ -60,7 +72,16 @@ class LinkForm extends ContentObjectForm
         $url = str_replace('http://http://', 'http://', $url);
 
         $object->set_url($url);
-        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+        }
+        else
+        {
+            $object->set_show_in_iframe(false);
+        }
+
         $this->set_content_object($object);
 
         return parent::create_content_object();
@@ -75,7 +96,15 @@ class LinkForm extends ContentObjectForm
         $url = str_replace('http://http://', 'http://', $url);
 
         $object->set_url($url);
-        $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+
+        if($this->allowShowInIframe($this->get_content_object()))
+        {
+            $object->set_show_in_iframe($this->exportValue(Link::PROPERTY_SHOW_IN_IFRAME));
+        }
+        else
+        {
+            $object->set_show_in_iframe(false);
+        }
 
         return parent::update_content_object();
     }
@@ -109,5 +138,21 @@ class LinkForm extends ContentObjectForm
         }
 
         return $errors;
+    }
+
+    /**
+     * @param Link $object
+     *
+     * @return false
+     */
+    protected function allowShowInIframe(Link $object)
+    {
+        $owner = $object->get_owner();
+        if(!$owner->is_teacher() && !$owner->is_platform_admin())
+        {
+            return false;
+        }
+
+        return true;
     }
 }

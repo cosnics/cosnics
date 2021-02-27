@@ -1,0 +1,132 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Application\\Lti' %}
+
+{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/Dialog/vuejs-dialog.min.js', 'Chamilo\\Libraries') }}
+{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{{ getCss('Plugin/VueJs/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
+{{ getCss('Plugin/VueJs/Dialog/vuejs-dialog.min.css', 'Chamilo\\Configuration') }}
+
+
+<style>
+    .btn-toolbar {
+        margin-top: 15px;
+    }
+
+    .column-actions {
+        width: 100px;
+        text-align: center;
+    }
+
+    .b-table th.sorting {
+        color: #337ab7;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+
+<div id="providerManager">
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-toolbar btn-action-toolbar">
+            <div class="action-bar btn-group">
+                <a href="{{ CREATE_PROVIDER_URL }}" class="btn btn-primary"><span class="fa fa-plus"></span> {{ 'CreateProviderComponent'|trans({}, appContext) }}</a>
+            </div>
+            <form class="form-inline">
+                <div class="action-bar input-group pull-right">
+                    <input type="text" class="form-group form-control" placeholder="{{ 'Search'|trans({}, 'Chamilo\\Libraries') }}" v-model="search" />
+                    <div class="input-group-btn" v-if="search.length > 0">
+                        <button name="deleteSearch" class="btn btn-default" type="button" @click="emptySearch">
+                            <span class="fa fa-remove" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row" >
+    <div class="col-md-12">
+        <b-table striped bordered :items="providers" :fields="fields" :filter="search" sort-by="name"
+                 show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+                 empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
+        >
+            <template slot="actions" slot-scope="data">
+                <a :href="getUpdateUrl(data.item)" class="btn btn-sm btn-default" title="{{ 'UpdateProviderComponent'|trans({}, appContext) }}"><span class="fa fa-pencil"></span></a>
+                <a href="#" @click="confirmDelete(data.item, $event)" class="btn btn-sm btn-default" title="{{ 'DeleteProviderComponent'|trans({}, appContext) }}"><span class="fa fa-remove"></span></a>
+            </template>
+        </b-table>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        window.Vue.use(VuejsDialog.main.default);
+
+        let fields = {
+            name: {
+                label: '{{ 'ProviderName'|trans({}, appContext) }}',
+                sortable: true
+            },
+            launch_url: {
+                label: '{{ 'ProviderUrl'|trans({}, appContext) }}',
+                sortable: true
+            },
+            key: {
+                label: '{{ 'ConsumerKey'|trans({}, appContext) }}',
+                sortable: true
+            },
+            actions: {
+                label : '',
+                class: 'column-actions'
+            }
+        };
+
+        let dialogOptions = {
+            okText: '{{ 'Ok'|trans({}, 'Chamilo\\Libraries') }}',
+            cancelText: '{{ 'Cancel'|trans({}, 'Chamilo\\Libraries') }}'
+        };
+
+        new Vue({
+            el: '#providerManager',
+            data: {
+                providers: {{ LTI_PROVIDERS_JSON|raw }},
+                fields: fields,
+                search: ''
+            },
+            methods: {
+                getUpdateUrl: function(Provider) {
+                    let updateTemplateUrl = "{{ UPDATE_PROVIDER_URL|raw }}";
+                    return updateTemplateUrl.replace('__ID__', Provider.id);
+                },
+                getDeleteUrl: function(Provider) {
+                    let updateTemplateUrl = "{{ DELETE_PROVIDER_URL|raw }}";
+                    return updateTemplateUrl.replace('__ID__', Provider.id);
+                },
+                emptySearch: function() {
+                    this.search = '';
+                },
+                confirmDelete: function(Provider, event) {
+                    let vueInstance = this;
+
+                    event.preventDefault();
+                    this.$dialog.confirm("{{ 'DeleteProviderConfirm'|trans({}, appContext) }}", dialogOptions)
+                        .then(function() {
+                            window.location = vueInstance.getDeleteUrl(Provider);
+                        });
+                }
+            }
+        });
+
+    });
+</script>
+
+{{ FOOTER|raw }}

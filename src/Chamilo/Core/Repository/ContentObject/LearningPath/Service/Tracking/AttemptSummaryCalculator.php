@@ -98,17 +98,27 @@ class AttemptSummaryCalculator
         $totalScore = 0;
         $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
 
-        if (count($treeNodeAttempts) == 0)
+        $count = 0;
+        foreach ($treeNodeAttempts as $treeNodeAttempt)
+        {
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted()) {
+                $count += 1;
+            }
+        }
+
+        if ($count == 0)
         {
             return 0;
         }
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            $totalScore += (int) $treeNodeAttempt->get_score();
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted()) {
+                $totalScore += (int) $treeNodeAttempt->get_score();
+            }
         }
 
-        return round($totalScore / count($treeNodeAttempts), 2);
+        return round($totalScore / $count, 2);
     }
 
     /**
@@ -130,8 +140,10 @@ class AttemptSummaryCalculator
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            $maximumScore = $maximumScore < $treeNodeAttempt->get_score() ?
-                (int) $treeNodeAttempt->get_score() : $maximumScore;
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted()) {
+                $maximumScore = $maximumScore < $treeNodeAttempt->get_score() ?
+                    (int) $treeNodeAttempt->get_score() : $maximumScore;
+            }
         }
 
         return $maximumScore;
@@ -156,8 +168,10 @@ class AttemptSummaryCalculator
 
         foreach ($treeNodeAttempts as $treeNodeAttempt)
         {
-            $minimumScore = is_null($minimumScore) || $minimumScore > $treeNodeAttempt->get_score() ?
-                (int) $treeNodeAttempt->get_score() : $minimumScore;
+            if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted()) {
+                $minimumScore = is_null($minimumScore) || $minimumScore > $treeNodeAttempt->get_score() ?
+                    (int) $treeNodeAttempt->get_score() : $minimumScore;
+            }
         }
 
         if (is_null($minimumScore))

@@ -47,7 +47,7 @@ class RssFeedForm extends ContentObjectForm
     public function create_content_object()
     {
         $content_object = new RssFeed();
-        $content_object->set_url($this->exportValue(RssFeed::PROPERTY_URL));
+        $content_object->set_url($this->getSanitizedUrl());
         $content_object->set_number_of_entries($this->exportValue(RssFeed::PROPERTY_NUMBER_OF_ENTRIES));
 
         $this->set_content_object($content_object);
@@ -58,10 +58,25 @@ class RssFeedForm extends ContentObjectForm
     public function update_content_object()
     {
         $content_object = $this->get_content_object();
-        $content_object->set_url($this->exportValue(RssFeed::PROPERTY_URL));
+        $content_object->set_url($this->getSanitizedUrl());
         $content_object->set_number_of_entries($this->exportValue(RssFeed::PROPERTY_NUMBER_OF_ENTRIES));
 
         return parent::update_content_object();
+    }
+
+    /**
+     * @throws \Exception
+     *
+     * @return string
+     */
+    protected function getSanitizedUrl()
+    {
+        $url = $this->exportValue(RssFeed::PROPERTY_URL);
+        if(strpos($url, 'http') !== 0) {
+            $url = 'http://' . $url;
+        }
+
+        return htmlentities($url);
     }
 
     protected function buildElements()

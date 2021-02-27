@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\File\Storage\DataClass;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataManager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\FileStorageSupport;
 use Chamilo\Libraries\Architecture\Interfaces\Includeable;
@@ -12,10 +13,12 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme;
+use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\String\Text;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -612,6 +615,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             }
         }
 
+        if($this->get_extension() === 'html' && !$this->get_owner()->is_teacher())
+        {
+            $fileContents = file_get_contents($this->get_full_path());
+            $security = new Security();
+            $fileContents = $security->removeXSS($fileContents);
+            file_put_contents($this->get_full_path(), $fileContents);
+        }
+
         // Filename
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
         {
@@ -874,6 +885,28 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public function setShowInline($showInline)
     {
         return $this->set_additional_property(self::PROPERTY_SHOW_INLINE, $showInline);
+    }
+
+    /**
+     * @param User $user
+     * @param UploadedFile $uploadedFile
+     *
+     * @return File
+     */
+    public static function fromUploadedFile(User $user, UploadedFile $uploadedFile)
+    {
+        $file = new self();
+        $title = substr($uploadedFile->getClientOriginalName(), 0, -(strlen($uploadedFile->getClientOriginalExtension()) + 1));
+
+        $file->set_title($title);
+        $file->set_description($uploadedFile->getClientOriginalName());
+        $file->set_owner_id($user->getId());
+        $file->set_parent_id(0);
+        $file->set_filename($uploadedFile->getClientOriginalName());
+
+        $file->set_temporary_file_path($uploadedFile->getRealPath());
+
+        return $file;
     }
 
 }

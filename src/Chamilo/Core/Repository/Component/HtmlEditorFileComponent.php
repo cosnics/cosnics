@@ -41,7 +41,7 @@ class HtmlEditorFileComponent extends Manager
             $processor = HtmlEditorProcessor::factory(
                 $plugin,
                 $this,
-                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+                \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser()));
 
             $html = array();
 

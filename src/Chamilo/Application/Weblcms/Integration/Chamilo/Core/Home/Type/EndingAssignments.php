@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\Block;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Home\NewBlock;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -25,7 +26,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * A notificationblock for new assignment submissions (assignmenttool)
  */
-class EndingAssignments extends Block
+class EndingAssignments extends Block implements AsynchronousBlockInterface
 {
 
     public function displayContent()

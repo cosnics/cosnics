@@ -1,12 +1,5 @@
 {% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\Teams' %}
 
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
-
-{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
-
 <style>
     .platform-group-table {
         margin-top: 30px;
@@ -33,17 +26,17 @@
              show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
              empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
     >
-        <template slot="name" slot-scope="data">
+        <template v-slot:cell(name)="data">
             <a :href="visitTeamUrl(data.item)">{{ '{{ data.item.name }}' }}</a>
         </template>
-        <template slot="platform_groups" slot-scope="data">
+        <template v-slot:cell(platform_groups)="data">
             <select class="form-control input-sm" name="platform_groups">
                 <option v-for="platformGroup in data.item.groups">
                     {{ '{{ platformGroup.name }}' }} ({{ '{{ platformGroup.code }}' }})
                 </option>
             </select>
         </template>
-        <template slot="actions" slot-scope="data">
+        <template v-slot:cell(actions)="data">
 
             <a :href="visitTeamUrl(data.item)" type="button" class="btn btn-default btn-sm">{{ 'VisitTeam'|trans({}, appContext) }}</a>
 
@@ -70,20 +63,23 @@
 <script type="text/javascript">
     (function () {
 
-        var fields = {
-            'name': {
+        var fields = [
+            {
+                'key': 'name',
                 'label': '{{ 'PlatformGroupTeamName'|trans({}, appContext) }}',
                 'sortable': true
             },
-            'platform_groups': {
+            {
+                'key': 'platform_groups',
                 'label': '{{ 'PlatformGroups'|trans({}, appContext) }}',
                 'sortable': false
             },
-            'actions': {
+            {
+                'key': 'actions',
                 'label': '',
                 'class': 'actions-column'
             }
-        };
+        ];
 
         var platformGroups = {{ PLATFORM_GROUP_TEAMS_JSON|raw }};
         var visitTeamUrlTemplate = '{{ VISIT_PLATFORM_GROUP_TEAM_URL|raw }}';

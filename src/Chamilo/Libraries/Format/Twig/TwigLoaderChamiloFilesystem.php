@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Libraries\Format\Twig;
 
 use Chamilo\Libraries\File\Path;
-use Twig_Error_Loader;
-use Twig_Source;
+use Twig\Error\LoaderError;
+use Twig\Loader\LoaderInterface;
+use Twig\Source;
 
 /**
  * This class loads twig templates by using a custom made format.
@@ -14,12 +16,14 @@ use Twig_Source;
  * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
+class TwigLoaderChamiloFilesystem implements LoaderInterface
 {
 
     /**
+     * @param string $name
      *
-     * @see Twig_LoaderInterface::getCacheKey()
+     * @return string
+     * @throws LoaderError
      */
     public function getCacheKey($name)
     {
@@ -27,8 +31,11 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
     }
 
     /**
+     * @param string $name
+     * @param int $time
      *
-     * @see Twig_LoaderInterface::isFresh()
+     * @return bool
+     * @throws LoaderError
      */
     public function isFresh($name, $time)
     {
@@ -40,18 +47,21 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
      * The template name is prefixed by a namespace:
      *
      * @param string $templateName
-     * @throws \Twig_Error_Loader
+     *
      * @return string
+     * @throws LoaderError
      */
     protected function findTemplate($templateName)
     {
         if (strpos($templateName, ':') === false)
         {
-            throw new \Twig_Error_Loader(
+            throw new LoaderError(
                 sprintf(
                     'The given template name "%s" does not include a valid namespace. ' .
-                         'The valid format is "namespace:template"',
-                        $templateName));
+                    'The valid format is "namespace:template"',
+                    $templateName
+                )
+            );
         }
 
         $templateNameParts = explode(':', $templateName);
@@ -60,35 +70,40 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
 
         if (empty($namespace))
         {
-            throw new \Twig_Error_Loader(
-                sprintf('The namespace in the template name "%s" can not be empty', $templateName));
+            throw new LoaderError(
+                sprintf('The namespace in the template name "%s" can not be empty', $templateName)
+            );
         }
 
         $namespacePath = Path::getInstance()->namespaceToFullPath($namespace);
 
-        if (! file_exists($namespacePath) || ! is_dir($namespacePath))
+        if (!file_exists($namespacePath) || !is_dir($namespacePath))
         {
-            throw new \Twig_Error_Loader(
+            throw new LoaderError(
                 sprintf(
                     'The given namespace "%s" does not exist or can not be found at the expected location "%s"',
                     $namespace,
-                    $namespacePath));
+                    $namespacePath
+                )
+            );
         }
 
         $templatePath = $templateNameParts[1];
 
         if (empty($templatePath))
         {
-            throw new \Twig_Error_Loader(
-                sprintf('The template path in the template name "%s" can not be empty', $templateName));
+            throw new LoaderError(
+                sprintf('The template path in the template name "%s" can not be empty', $templateName)
+            );
         }
 
         $fullPath = $namespacePath . 'Resources/Templates/' . $templatePath;
 
-        if (! file_exists($fullPath))
+        if (!file_exists($fullPath))
         {
-            throw new \Twig_Error_Loader(
-                sprintf('The given template "%s" can not be found at the expected path "%s"', $templateName, $fullPath));
+            throw new LoaderError(
+                sprintf('The given template "%s" can not be found at the expected path "%s"', $templateName, $fullPath)
+            );
         }
 
         return $fullPath;
@@ -99,14 +114,15 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
      *
      * @param string $name The template logical name
      *
-     * @return Twig_Source
+     * @return Source
      *
-     * @throws Twig_Error_Loader When $name is not found
+     * @throws LoaderError When $name is not found
      */
     public function getSourceContext($name)
     {
         $path = $this->findTemplate($name);
-        return new Twig_Source(file_get_contents($path), $name, $path);
+
+        return new Source(file_get_contents($path), $name, $path);
     }
 
     /**
@@ -121,9 +137,10 @@ class TwigLoaderChamiloFilesystem implements \Twig_LoaderInterface
         try
         {
             $this->findTemplate($name);
+
             return true;
         }
-        catch(\Exception $ex)
+        catch (\Exception $ex)
         {
             return false;
         }

@@ -6,8 +6,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\TemplateService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Core\Repository\ContentObject\Page\Storage\DataClass\Page;
-use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Viewer\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -32,6 +30,11 @@ class CreatorComponent extends Manager
      */
     public function run()
     {
+        if (!$this->getAssignmentServiceBridge()->areSubmissionsAllowed())
+        {
+            throw new NotAllowedException();
+        }
+
         if (empty($this->get_allowed_content_object_types()))
         {
             throw new UserException($this->getTranslator()->trans('NoSubmissionPossible', [], Manager::context()));
@@ -46,7 +49,7 @@ class CreatorComponent extends Manager
 
         if (\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
             if (is_array($objects))
             {
                 $objects = $objects[0];

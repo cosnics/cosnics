@@ -84,7 +84,7 @@ abstract class ImportParameters
 
     /**
      *
-     * @return the $user
+     * @return int
      */
     public function get_user()
     {

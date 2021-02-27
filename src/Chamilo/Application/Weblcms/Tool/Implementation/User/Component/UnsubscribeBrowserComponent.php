@@ -196,6 +196,12 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
     private function get_all_users_tab()
     {
+//        if(empty($this->getButtonToolbarRenderer()->getSearchForm()->getQuery()))
+//        {
+//            return '<div class="alert alert-info">' .
+//                $this->getTranslator()->trans('SearchFirst', [], Manager::context()) . '</div>';
+//        }
+
         $table = new AllSubscribedUserTable($this);
         return $table->as_html();
     }

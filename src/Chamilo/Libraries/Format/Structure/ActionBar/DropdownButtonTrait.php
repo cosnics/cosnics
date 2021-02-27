@@ -63,6 +63,24 @@ trait DropdownButtonTrait
     /**
      *
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface $subButton
+     * @parm int $index
+     */
+    public function insertSubButton(SubButtonInterface $subButton, int $index)
+    {
+        array_splice($this->subButtons, $index, 0, array($subButton));
+    }
+
+    /**
+     * @param int $index
+     */
+    public function removeSubButton(int $index)
+    {
+        array_splice($this->subButtons, $index, 1);
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Format\Structure\ActionBar\SubButtonInterface $subButton
      */
     public function prependSubButton(SubButtonInterface $subButton)
     {

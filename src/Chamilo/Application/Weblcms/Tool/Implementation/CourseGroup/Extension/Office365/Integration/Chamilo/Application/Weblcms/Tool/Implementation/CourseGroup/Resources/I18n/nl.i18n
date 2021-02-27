@@ -5,5 +5,5 @@ CourseGroupSyncFailed = "De cursusgroep en cursusbeheerder inschrijvingen konden
 VisitTeam = "Ga naar het Office365 Team"
 SynchronizeUsers = "Synchroniseer de gebruikers van deze groep"
 NoTeam = "Geen team aanmaken"
-RegularTeam = "Team aanmaken"
-ClassTeam = "Klas Team aanmaken (beta)"
+RegularTeam = "Standaard team aanmaken"
+ClassTeam = "Klas Team aanmaken (beste keuze voor onderwijs)"

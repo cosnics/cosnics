@@ -32,7 +32,7 @@ class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Reposito
         }
         else
         {
-            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objects = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
             if (! is_array($objects))
             {

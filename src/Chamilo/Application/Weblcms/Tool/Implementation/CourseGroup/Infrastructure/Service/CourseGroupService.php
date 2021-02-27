@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\R
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -107,7 +108,7 @@ class CourseGroupService
             $this->createCourseGroupUserRelation($courseGroup, $userToSubscribe);
         }
 
-        if($recalculateMembers)
+        if ($recalculateMembers)
         {
             $this->recalculateMaxMembers($courseGroup);
         }
@@ -188,5 +189,58 @@ class CourseGroupService
                 throw new \RuntimeException('Could not update course group %s', $courseGroup->getId());
             }
         }
+    }
+
+    /**
+     * @param User $user
+     * @param CourseGroup $courseGroup
+     *
+     * @return bool
+     *
+     * TODO: refactor the method more_subscriptions_allowed_for_user_in_group
+     */
+    public function canUserSelfSubscribeToGroup(User $user, CourseGroup $courseGroup)
+    {
+        if (!$courseGroup->is_self_registration_allowed())
+        {
+            return false;
+        }
+
+        if ($this->isUserSubscribedToCourseGroup($user, $courseGroup))
+        {
+            return false;
+        }
+
+        if ($this->isMaxNumberOfUsersReached($courseGroup))
+        {
+            return false;
+        }
+
+        return DataManager::more_subscriptions_allowed_for_user_in_group(
+            $courseGroup->get_parent_id(),
+            $user->getId()
+        );
+    }
+
+    public function isUserSubscribedToCourseGroup(User $user, CourseGroup $courseGroup)
+    {
+        return $this->courseGroupRepository->retrieveUserSubscriptionInCourseGroup($user, $courseGroup) instanceof
+            CourseGroupUserRelation;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return bool
+     */
+    protected function isMaxNumberOfUsersReached(CourseGroup $courseGroup)
+    {
+        // Unlimited amount of users allowed
+        if ($courseGroup->get_max_number_of_members() == 0)
+        {
+            return false;
+        }
+
+        return $this->countMembersDirectlySubscribedInGroup($courseGroup) >= $courseGroup->get_max_number_of_members();
     }
 }

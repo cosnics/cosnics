@@ -52,6 +52,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_EXPORT_REPORTING = 'ReportingExporter';
     const ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'ToggleEnforceDefaultTraversingOrder';
     const ACTION_VIEW_PRINTABLE_FORMAT = 'PrintableViewer';
+    const ACTION_DOWNLOAD_FILES = 'DownloadFiles';
 
     // Parameters
     const PARAM_STEP = 'step';

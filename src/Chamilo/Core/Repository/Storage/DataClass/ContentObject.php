@@ -235,6 +235,7 @@ class ContentObject extends CompositeDataClass
         return $this->owner;
     }
 
+
     public function get_owner_fullname()
     {
         $owner = $this->get_owner();
@@ -1984,7 +1985,7 @@ class ContentObject extends CompositeDataClass
     }
 
     public function get_attachments(
-        $type = self :: ATTACHMENT_NORMAL, $order_by = array(), $offset = null, $count = null
+        $type = self::ATTACHMENT_NORMAL, $order_by = array(), $offset = null, $count = null
     )
     {
         if (!is_array($this->attachments[$type]))

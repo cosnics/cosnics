@@ -84,6 +84,16 @@ class UserInviteRepository
     }
 
     /**
+     * @param int $userInviteId
+     *
+     * @return UserInvite|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function getUserInviteById(int $userInviteId)
+    {
+        return $this->dataClassRepository->retrieveById(UserInvite::class, $userInviteId);
+    }
+
+    /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
@@ -93,6 +103,7 @@ class UserInviteRepository
         $properties = new DataClassProperties(
             [
                 new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
+                new PropertyConditionVariable(UserInvite::class, UserInvite::PROPERTY_ID),
                 new PropertyConditionVariable(UserInvite::class, UserInvite::PROPERTY_STATUS),
                 new PropertyConditionVariable(UserInvite::class, UserInvite::PROPERTY_VALID_UNTIL),
             ]

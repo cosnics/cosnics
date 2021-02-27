@@ -5,5 +5,5 @@ CourseGroupSyncFailed= "Failed to sync the course group and teacher subscription
 VisitTeam = "Go to the Office365 Team"
 SynchronizeUsers = "Synchronize the group users"
 NoTeam = "No team"
-RegularTeam = "Create team"
-ClassTeam = "Create class team (beta)"
+RegularTeam = "Create standard team"
+ClassTeam = "Create class team (best choice for education)"

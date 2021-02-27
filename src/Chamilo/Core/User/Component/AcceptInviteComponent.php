@@ -30,7 +30,7 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
      */
     function run()
     {
-        if(!$this->areInvitesAllowed())
+        if(!$this->areInvitesEnabled())
         {
             throw new NotAllowedException();
         }
@@ -101,21 +101,8 @@ class AcceptInviteComponent extends Manager implements NoAuthenticationSupport
         return new AcceptInviteFormHandler($this->getInviteService());
     }
 
-    /**
-     * @return UserInviteService
-     */
-    protected function getInviteService()
-    {
-        return $this->getService(UserInviteService::class);
-    }
-
     public function get_additional_parameters()
     {
         return [self::PARAM_SECURITY_KEY];
-    }
-
-    protected function areInvitesAllowed()
-    {
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1;
     }
 }

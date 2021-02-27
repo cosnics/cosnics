@@ -1,8 +1,11 @@
 <?php
+
 namespace Chamilo\Core\Home\Renderer\Type\Basic;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Ajax\Component\BlockGetContentComponent;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Core\Home\Manager;
 use Chamilo\Core\Home\Rights\Form\ElementTargetEntitiesForm;
@@ -78,8 +81,10 @@ class BlockRenderer
      * @param \Chamilo\Core\Home\Storage\DataClass\Block $block
      * @param int $source
      */
-    public function __construct(Application $application, HomeService $homeService, Block $block,
-        $source = self::SOURCE_DEFAULT)
+    public function __construct(
+        Application $application, HomeService $homeService, Block $block,
+        $source = self::SOURCE_DEFAULT
+    )
     {
         $this->renderer = $application;
         $this->homeService = $homeService;
@@ -112,12 +117,12 @@ class BlockRenderer
      * Can be redefined in subclasses to change the
      * default icon.
      *
-     * @todo : not so good. would be better to make the whole "create block" a view.
      * @param string $application
      * @param string $type
      * @param string $size
      *
      * @return string
+     * @todo : not so good. would be better to make the whole "create block" a view.
      */
     public static function getImagePath($context, $type)
     {
@@ -131,11 +136,12 @@ class BlockRenderer
         {
             $imagePath = Theme::getInstance()->getImagePath($context, 'Blocks/' . $type, 'png', false);
 
-            if (! file_exists($imagePath) || ! is_file($imagePath))
+            if (!file_exists($imagePath) || !is_file($imagePath))
             {
                 return Theme::getInstance()->getImagePath(
                     ClassnameUtilities::getInstance()->getNamespaceParent($context, 4),
-                    'Logo/' . Theme::ICON_MEDIUM);
+                    'Logo/' . Theme::ICON_MEDIUM
+                );
             }
             else
             {
@@ -284,14 +290,23 @@ class BlockRenderer
 
     public function toHtml($view = '')
     {
-        if (! $this->isVisible())
+        if (!$this->isVisible())
         {
             return '';
         }
 
         $html = array();
         $html[] = $this->renderHeader();
-        $html[] = $this->displayContent();
+
+        if ($this instanceof AsynchronousBlockInterface)
+        {
+            $html[] = $this->renderContentAsynchronous();
+        }
+        else
+        {
+            $html[] = $this->displayContent();
+        }
+
         $html[] = $this->renderFooter();
 
         return implode(PHP_EOL, $html);
@@ -301,7 +316,7 @@ class BlockRenderer
     {
         $html = array();
         $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $this->getBlock()->getParentId() .
-             '" data-element-id="' . $this->getBlock()->get_id() . '">';
+            '" data-element-id="' . $this->getBlock()->get_id() . '">';
         $html[] = $this->displayTitle();
 
         if ($this->isConfigurable())
@@ -310,7 +325,7 @@ class BlockRenderer
             $html[] = '<div class="panel-body">';
 
             $formClassName = $this->getBlock()->getContext() . '\Integration\Chamilo\Core\Home\Form\\' .
-                 $this->getBlock()->getBlockType() . 'Form';
+                $this->getBlock()->getBlockType() . 'Form';
 
             if (class_exists($formClassName))
             {
@@ -330,7 +345,8 @@ class BlockRenderer
             $form = new ElementTargetEntitiesForm(
                 $this->getBlock(),
                 $this->getUrl(),
-                new ElementRightsService(new RightsRepository()));
+                new ElementRightsService(new RightsRepository())
+            );
 
             $html[] = $form->toHtml();
 
@@ -375,8 +391,9 @@ class BlockRenderer
     {
         $html = array();
 
-        $html[] = '<div class="panel-heading' . ($this->getBlock()->isVisible() ? '' : ' panel-heading-without-content') .
-             '">';
+        $html[] =
+            '<div class="panel-heading' . ($this->getBlock()->isVisible() ? '' : ' panel-heading-without-content') .
+            '">';
         $html[] = '<div class="pull-right">' . $this->displayActions() . '</div>';
         $html[] = '<h3 class="panel-title">' . $this->getTitle() . '</h3>';
         $html[] = '</div>';
@@ -390,7 +407,7 @@ class BlockRenderer
 
         $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
         $generalMode = $this->isInGeneralMode();
-        $isIdentifiedUser = $this->getUser() && ! $this->getUser()->is_anonymous_user();
+        $isIdentifiedUser = $this->getUser() && !$this->getUser()->is_anonymous_user();
 
         if ($this->getUser() instanceof User && ($userHomeAllowed || $generalMode) && $isIdentifiedUser)
         {
@@ -400,15 +417,15 @@ class BlockRenderer
                 $textVisible = Translation::get('ShowBlock');
 
                 $html[] = '<a href="#" class="portal-action portal-action-block-show' .
-                     (! $this->getBlock()->isVisible() ? '' : ' hidden') . '" title="' . $textVisible . '">' .
-                     $glyphVisible->render() . '</a>';
+                    (!$this->getBlock()->isVisible() ? '' : ' hidden') . '" title="' . $textVisible . '">' .
+                    $glyphVisible->render() . '</a>';
 
                 $glyphVisible = new FontAwesomeGlyph('chevron-up');
                 $textVisible = Translation::get('HideBlock');
 
                 $html[] = '<a href="#" class="portal-action portal-action-block-hide' .
-                     (! $this->getBlock()->isVisible() ? ' hidden' : '') . '" title="' . $textVisible . '">' .
-                     $glyphVisible->render() . '</a>';
+                    (!$this->getBlock()->isVisible() ? ' hidden' : '') . '" title="' . $textVisible . '">' .
+                    $glyphVisible->render() . '</a>';
             }
 
             if ($generalMode)
@@ -417,7 +434,7 @@ class BlockRenderer
                 $configure_text = Translation::get('SelectTargetUsersGroups');
 
                 $html[] = '<a href="#" class="portal-action portal-action-block-configure-target-entities" title="' .
-                     $configure_text . '">' . $glyph->render() . '</a>';
+                    $configure_text . '">' . $glyph->render() . '</a>';
             }
 
             if ($this->isConfigurable())
@@ -426,7 +443,7 @@ class BlockRenderer
                 $configure_text = Translation::get('Configure');
 
                 $html[] = '<a href="#" class="portal-action portal-action-block-configure" title="' . $configure_text .
-                     '">' . $glyph->render() . '</a>';
+                    '">' . $glyph->render() . '</a>';
             }
 
             if ($this->isDeletable())
@@ -435,7 +452,7 @@ class BlockRenderer
                 $delete_text = Translation::get('Delete');
 
                 $html[] = '<a href="#" class="portal-action portal-action-block-delete" title="' . $delete_text . '">' .
-                     $glyph->render() . '</a>';
+                    $glyph->render() . '</a>';
             }
         }
 
@@ -449,6 +466,38 @@ class BlockRenderer
     public function displayContent()
     {
         return '';
+    }
+
+    public function renderContentAsynchronous()
+    {
+        $ajaxUrl = $this->getUrl(
+            [
+                Application::PARAM_CONTEXT => 'Chamilo\\Core\\Home\\Ajax',
+                Application::PARAM_ACTION => 'BlockGetContent',
+                BlockGetContentComponent::PARAM_BLOCK => $this->block->getId()
+            ]
+        );
+
+        $blockContentId = 'block-content-' . $this->block->getId();
+
+        $loadingImage = Theme::getInstance()->getCommonImage('Action\LoadingMedium', 'gif');
+
+        $html = [];
+        $html[] = '<div id="' . $blockContentId . '">';
+        $html[] = '<div class="text-center" style="margin: 20px;">';
+        $html[] = $loadingImage;
+        $html[] = '</div>';
+        $html[] = '</div>';
+
+        $html[] = '<script type="text/javascript">';
+        $html[] = '  $(document).ready(function() {';
+        $html[] = '     $.get("' . $ajaxUrl . '", function( data ) {';
+        $html[] = '         $("#' . $blockContentId . '").html( data.properties.content );';
+        $html[] = '     })';
+        $html[] = '  });';
+        $html[] = '</script>';
+
+        return implode(PHP_EOL, $html);
     }
 
     /**
@@ -506,6 +555,7 @@ class BlockRenderer
      * Override for different functionality.
      *
      * @param ContentObject $object The content object to be tested.
+     *
      * @return boolean default response: false.
      */
     public function isViewAttachmentAllowed($object)
@@ -519,10 +569,10 @@ class BlockRenderer
      */
     protected function isInGeneralMode()
     {
-        if (! isset($this->generalMode))
+        if (!isset($this->generalMode))
         {
             $this->generalMode = $this->getUser() && $this->getUser()->is_platform_admin() &&
-                 $this->getHomeService()->isInGeneralMode();
+                $this->getHomeService()->isInGeneralMode();
         }
 
         return $this->generalMode;

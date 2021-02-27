@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template context="Chamilo\Core\Repository\ContentObject\Rubric">
+    <properties>
+        <name>Default</name>
+    </properties>
+    <translations>
+        <variable value="TypeName">
+            <translation language="en">Rubric</translation>
+            <translation language="nl">Rubric</translation>
+            <translation language="fr">Rubric</translation>
+            <translation language="de">Rubric</translation>
+        </variable>
+    </translations>
+</template>

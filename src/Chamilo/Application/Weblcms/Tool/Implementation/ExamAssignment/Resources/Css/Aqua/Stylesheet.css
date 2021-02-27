@@ -1,0 +1,10 @@
+.ident.ident-3dbd3ff593bed61b09f00e57ad80766f:before {
+	content: "\e70e";
+}
+
+.assignment-success-check {
+	display: block;
+	font-size: 80px;
+	margin: 0 auto 20px;
+	width: 80px;
+}

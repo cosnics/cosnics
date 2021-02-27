@@ -1,0 +1,47 @@
+{% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
+{% set appContext = 'Chamilo\\Application\\Lti' %}
+
+{{ HEADER|raw }}
+
+<style>
+    h3.underlined {
+        border-bottom: 1px solid #cccccc;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+</style>
+
+
+<div id="providerCreator">
+    {{ form_start(FORM) }}
+
+    <h3 class="underlined">Provider</h3>
+
+    {{ form_row(FORM.name) }}
+    {{ form_row(FORM.launchUrl) }}
+    {{ form_row(FORM.key) }}
+    {{ form_row(FORM.secret) }}
+
+    <h3 class="underlined">{{ 'CustomParameters'|trans({}, appContext) }}</h3>
+
+    <div class="row">
+{#            {{ form_label(FORM.customParameters) }}#}
+            {{ form_errors(FORM.customParameters) }}
+        <div class="col-md-10 col-md-push-2">
+            {% include 'Chamilo\\Application\\Lti:Provider/CustomParameters.html.twig'
+                with {'CUSTOM_PARAMETERS_ELEMENT_NAME': 'provider_form[customParameters]', 'DEFAULT_CUSTOM_PARAMETERS_JSON': DEFAULT_CUSTOM_PARAMETERS_JSON} only %}
+
+            {% do FORM.customParameters.setRendered %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-push-2">
+            <button type="submit" class="btn btn-primary"><span class="fa fa-save"></span> {{ 'Save'|trans({}, 'Chamilo\\Libraries') }}</button>
+        </div>
+    </div>
+</div>
+
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}

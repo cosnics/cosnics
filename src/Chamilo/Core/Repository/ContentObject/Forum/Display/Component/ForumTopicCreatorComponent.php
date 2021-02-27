@@ -74,7 +74,7 @@ class ForumTopicCreatorComponent extends Manager implements \Chamilo\Core\Reposi
         }
         else
         {
-            $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $object_id = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
             if (! is_array($object_id))
             {

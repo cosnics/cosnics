@@ -44,7 +44,7 @@ class CheckPlagiarismComponent extends Manager
 
         try
         {
-            $objectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
+            $objectIds = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
             if (! is_array($objectIds))
             {
                 $objectIds = array($objectIds);

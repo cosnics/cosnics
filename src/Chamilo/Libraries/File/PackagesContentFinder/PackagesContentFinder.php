@@ -54,7 +54,7 @@ abstract class PackagesContentFinder
      * Locates the content, either from the given cache or by searching through the given set of packages
      *
      * @throws \Exception
-     * @return string[]
+     * @return string[][]
      */
     protected function findContent()
     {

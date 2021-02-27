@@ -1,0 +1,44 @@
+{
+    "name": "cosnics/core-repository-content-object-rubric",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Rubric",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Rubric"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Rubric",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Rubric",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "General",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}

@@ -27,6 +27,11 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
      */
     protected static $instance;
 
+    /**
+     * @var bool[]
+     */
+    protected $courseAdminCache;
+
     /*
      * Constructor
      * @param Configuration $configuration
@@ -81,14 +86,21 @@ class CourseAdminValidator implements CourseAdminValidatorInterface
      */
     public function isUserAdminOfCourse(User $user, Course $course)
     {
-        foreach ($this->courseAdminValidatorExtensions as $courseAdminValidator)
+        $hashKey = md5('user' . $user->getId() . ':course' . $course->getId());
+        if(!array_key_exists($hashKey, $this->courseAdminCache))
         {
-            if ($courseAdminValidator->isUserAdminOfCourse($user, $course))
+            $this->courseAdminCache[$hashKey] = false;
+
+            foreach ($this->courseAdminValidatorExtensions as $courseAdminValidator)
             {
-                return true;
+                if ($courseAdminValidator->isUserAdminOfCourse($user, $course))
+                {
+                    $this->courseAdminCache[$hashKey] = true;
+                    break;
+                }
             }
         }
-        
-        return false;
+
+        return $this->courseAdminCache[$hashKey];
     }
 }

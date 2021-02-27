@@ -13,13 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *     name="notification_user_notification",
  *     indexes={
- *          @ORM\Index(name="nun_read", columns={"is_read"}),
- *          @ORM\Index(name="nun_viewed", columns={"is_viewed"}),
  *          @ORM\Index(name="nun_user_id", columns={"user_id"}),
- *          @ORM\Index(name="nun_date", columns={"date"}),
  *          @ORM\Index(name="nun_user_notification", columns={"user_id", "notification_id"}),
- *          @ORM\Index(name="nun_user_notification_read", columns={"user_id", "notification_id", "is_read"}),
- *          @ORM\Index(name="nun_user_notification_viewed", columns={"user_id", "notification_id", "is_viewed"})
+ *          @ORM\Index(name="nun_user_notification_viewed", columns={"user_id", "notification_context", "is_viewed"})
  *     }
  * )
  */

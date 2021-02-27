@@ -45,6 +45,7 @@ abstract class CommonDataClassRepository
      * @param DataClass $dataClass
      *
      * @return bool
+     * @throws \Exception
      */
     public function update(DataClass $dataClass)
     {

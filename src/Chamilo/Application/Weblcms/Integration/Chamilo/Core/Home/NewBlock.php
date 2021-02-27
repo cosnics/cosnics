@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Configuration\Configuration;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -23,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-abstract class NewBlock extends Block
+abstract class NewBlock extends Block implements AsynchronousBlockInterface
 {
     const TOOL_ANNOUNCEMENT = 'Announcement';
     const TOOL_ASSIGNMENT = 'Assignment';

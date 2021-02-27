@@ -1,0 +1,277 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\ExamAssignment' %}
+{{ HEADER|raw }}
+<style type="text/css">
+    .u-align-right {
+        text-align: right;
+    }
+    .u-flex-between {
+        display: flex;
+        justify-content: space-between;
+    }
+    .b-table td.mod-valign-middle {
+        vertical-align: middle;
+    }
+    #app {
+        display: flex;
+        flex-wrap: wrap-reverse;
+        margin-bottom: 30px;
+    }
+    #app ::placeholder {
+        color: #999;
+        font-style: oblique;
+    }
+    .app-table-container {
+        margin-right: 25px;
+        max-width: fit-content;
+    }
+    .user-search-container {
+        min-width: 30em;
+        margin-bottom: 30px;
+        max-width: 30em;
+    }
+    .tbl-extra-time {
+        color: #555;
+        width: 130px;
+    }
+    .tbl-btn-remove {
+        text-align: center;
+        width: 50px;
+    }
+    .tbl-no-sort {
+        pointer-events: none
+    }
+    .extra-time-container {
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 9px;
+    }
+    .extra-time-header {
+        color: #555;
+        font-size: inherit;
+        font-weight: 500;
+        margin: 0 0 10px 0;
+    }
+    .v-select.mod-extra-time {
+        background: white;
+    }
+    .v-select.mod-selection .vs__clear {
+        display: initial!important;
+    }
+    .select-user-email {
+        font-style: oblique;
+        margin-left: 15px;
+    }
+    .extra-time-input-container {
+        margin-bottom: 9px;
+    }
+    label[for="extra-time"] {
+        font-weight: normal;
+    }
+    .form-control.mod-extra-time {
+        display: inline-block;
+        height: initial;
+        line-height: initial;
+        margin: 0 5px;
+        text-align: center;
+        width: 5em;
+    }
+    .btn.mod-save {
+        margin-right: 5px;
+    }
+    .btn.mod-delete {
+        padding: 2px 4px;
+    }
+    .fa.mod-delete {
+        color: #666;
+    }
+    .fa.mod-margin {
+        margin-left: 3px;
+    }
+</style>
+<div id="app">
+    <div v-if="notification" class="notifications">
+        <div class="alert alert-dismissible" :class="'alert-' + notificationType" role="alert">
+            <button type="button" class="close" aria-label="{{ 'Close'|trans({}, appContext) }}" @click="notification = null">
+                <span aria-hidden="true">×</span>
+            </button>
+            ${ notification }
+        </div>
+    </div>
+    <div class="app-table-container">
+        <b-table striped hover class="table-bordered" :items="overtimeUsers" :fields="fields"
+                 show-empty empty-text="{{ 'NoStudentsExtraTime'|trans({}, appContext) }}">
+            <template v-slot:cell(fullname)="data">${ data.value }</template>
+            <template #head(extra_time)="data">
+                ${ data.label }<i class="fa fa-info-circle mod-margin" title="{{ 'MinutesAddedToBufferTime'|trans({}, appContext) }}"></i>
+            </template>
+            <template v-slot:cell(remove)="data">
+                <button class="btn btn-default mod-delete" @click="deleteExtraTime(data.item)" title="{{ 'Remove'|trans({}, appContext) }}"><i class="fa fa-times mod-delete" aria-hidden="true"></i><span class="sr-only">{{ 'Remove'|trans({}, appContext) }}</span></button>
+            </template>
+        </b-table>
+    </div>
+    <div class="user-search-container">
+        <div class="extra-time-container">
+            <h4 class="extra-time-header">{{ 'ExtraTimeHeader'|trans({}, appContext) }}</h4>
+            <div class="u-flex-between">
+                <div class="extra-time-input-container">
+                    <label for="extra-time">{{ 'ExtraTime'|trans({}, appContext) }}</label>
+                    <input id="extra-time" type="number" v-model="extraTime" min="0" @keyup.enter="applyExtraTime" oninput="validity.valid||(value='');" class="form-control mod-extra-time" /> {{ 'Minutes'|trans({}, appContext) }}
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-primary mod-save" :disabled="!selectedUsers.length" @click="applyExtraTime">{{ 'Save'|trans({}, appContext) }}</button>
+                    <button class="btn btn-sm btn-default" @click="selectedUsers = []">Reset</button>
+                </div>
+            </div>
+            <v-select label="fullname" class="mod-extra-time" :class="{ 'mod-selection': !!selectedUsers.length }" v-model="selectedUsers" :options="users" :multiple="true" :close-on-select="false" placeholder="{{ 'FindStudents'|trans({}, appContext) }}">
+                <template v-slot:option="option">
+                    <div><strong>${ option.lastname.toUpperCase() }</strong>, ${ option.firstname }</div>
+                    <div class="select-user-email">${ option.email }</div>
+                </template>
+                <div slot="no-options">{{ 'NoMatchingOptions'|trans({}, appContext) }}</div>
+            </v-select>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    Vue.component('v-select', VueSelect.VueSelect);
+
+    var listUsersUrl = '{{ LIST_USERS_AJAX_URL|raw }}';
+    var addUserOvertimeUrl = '{{ ADD_USER_OVERTIME_AJAX_URL|raw }}';
+    var updateUserOvertimeUrl = '{{ UPDATE_USER_OVERTIME_AJAX_URL|raw }}';
+    var deleteUserOvertimeUrl = '{{ DELETE_USER_OVERTIME_AJAX_URL|raw }}';
+    var setMultipleUsersOvertimeUrl = '{{  SET_MULTIPLE_USERS_OVERTIME_AJAX_URL|raw }}';
+
+    var overtimeUsers = JSON.parse('{{ USERS_OVERTIME|json_encode|raw }}');
+
+    function fullname(user) {
+        return user.lastname.toUpperCase() + ', ' + user.firstname;
+    }
+
+    new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            notification: null,
+            notificationType: 'info',
+            users: [],
+            overtimeUsers: overtimeUsers,
+            extraTime: 0,
+            selectedUsers: [],
+            fields: [
+                {
+                    key: 'fullname',
+                    label: '{{ 'UserEntity'|trans({}, appContext) }}',
+                    sortable: true,
+                    sortByFormatted: true,
+                    tdClass: 'mod-valign-middle',
+                    formatter: function (value, key, item) {
+                        return fullname(item);
+                    }
+                },
+                {
+                    key: 'email',
+                    sortable: true,
+                    tdClass: 'mod-valign-middle'
+                },
+                {
+                    key: 'extra_time',
+                    label: '{{ 'MinutesExtra'|trans({}, appContext) }}',
+                    sortable: true,
+                    thClass: 'tbl-extra-time u-align-right',
+                    tdClass: 'u-align-right mod-valign-middle'
+                },
+                {
+                    key: 'remove',
+                    label: '',
+                    thClass: 'tbl-btn-remove tbl-no-sort',
+                    tdClass: 'tbl-btn-remove'
+                }
+            ]
+        },
+        mounted: function () {
+            $.get(listUsersUrl, (function (data) {
+                if (data && data.results) {
+                    var users = data.results;
+                    for (var i = 0; i < users.length; i += 1) {
+                        users[i].fullname = fullname(users[i]);
+                    }
+                    this.users = users;
+                } else {
+                    // todo: should never happen but warn in case it does
+                }
+            }).bind(this)).fail(function (xhr) {
+                console.log(xhr.responseJSON.error_message);
+            });
+        },
+        methods: {
+            findOvertimeUser(user) {
+                if (!user) { return; }
+                for (var i = 0; i < this.overtimeUsers.length; i += 1) {
+                    if (this.overtimeUsers[i].user_id === user.id) {
+                        return this.overtimeUsers[i];
+                    }
+                }
+            },
+            applyExtraTime() {
+                if (!this.selectedUsers || this.selectedUsers.length === 0) { return; }
+                var extraTime = parseInt(this.extraTime);
+                if (isNaN(extraTime)) { return; } // todo: should never happen but warn in case it does
+                if (this.selectedUsers.length === 1) {
+                    this.applyExtraTimeSingleUser(this.selectedUsers[0], extraTime);
+                } else {
+                    this.applyExtraTimeMultipleUsers(this.selectedUsers, extraTime);
+                }
+            },
+            applyExtraTimeSingleUser(user, extraTime) {
+                var overtimeUser = this.findOvertimeUser(user);
+                if (!overtimeUser && extraTime > 0) {
+                    this.performAjaxCall(addUserOvertimeUrl, { user_id: user.id, extra_time: extraTime });
+                } else if (overtimeUser && extraTime > 0) {
+                    this.performAjaxCall(updateUserOvertimeUrl, { user_overtime_id: overtimeUser.id, extra_time: extraTime });
+                } else if (overtimeUser) {
+                    this.deleteExtraTime(overtimeUser);
+                } else {
+                    this.selectedUsers = [];
+                }
+            },
+            applyExtraTimeMultipleUsers(users, extraTime) {
+                var user, overtimeUser, actions = [];
+                for (var i = 0; i < users.length; i += 1) {
+                    user = users[i];
+                    overtimeUser = this.findOvertimeUser(user);
+                    if (!overtimeUser && extraTime > 0) {
+                        actions.push({ db_action_type: 'create', user_id: user.id, extra_time: extraTime });
+                    } else if (overtimeUser) {
+                        actions.push({ db_action_type: extraTime > 0 ? 'update' : 'delete', user_overtime_id: overtimeUser.id, extra_time: extraTime });
+                    }
+                }
+                if (actions.length > 0) {
+                    this.performAjaxCall(setMultipleUsersOvertimeUrl, { db_actions: actions });
+                } else {
+                    this.selectedUsers = [];
+                }
+            },
+            deleteExtraTime(overtimeUser) {
+                this.performAjaxCall(deleteUserOvertimeUrl, { 'user_overtime_id': overtimeUser.id });
+            },
+            performAjaxCall(url, options) {
+                this.notification = null;
+                $.post(url, options, (function (data) {
+                    if (data && data.results) {
+                        this.overtimeUsers = data.results;
+                        this.notification = '{{ 'TableUpdateSuccess'|trans({}, appContext) }}';
+                        this.notificationType = 'info';
+                        this.selectedUsers = [];
+                    } else {
+                        // todo: should never happen but warn in case it does
+                    }
+                }).bind(this)).fail((function (xhr) {
+                    this.notification = xhr.responseJSON.error_message;
+                    this.notificationType = 'danger';
+                }).bind(this));
+            }
+        }
+    });
+</script>
+{{ FOOTER|raw }}

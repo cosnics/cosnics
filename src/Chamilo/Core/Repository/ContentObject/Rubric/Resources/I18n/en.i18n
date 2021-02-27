@@ -1,0 +1,18 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\rubric
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Rubric"
+TypeCategory = "Content Objects"
+Title = "Title"
+Properties = "Properties"
+Description = "Description"
+RubricEntry = "Fill in rubric"
+RubricResult = "View rubric results"
+RubricHasResults = "The rubric can not be changed because the rubric has entries attached to it. If you want to make any modifications you need to make a copy first."
+RubricEntryComplete = "You have successfully submitted the rubric results"
+RubricUseScores = "Use scores"
+LevelGood = "Good"
+LevelBad = "Bad"
+RubricUseScoresDisabled = "This attribute can no longer be changed because the rubric has entries attached to it."

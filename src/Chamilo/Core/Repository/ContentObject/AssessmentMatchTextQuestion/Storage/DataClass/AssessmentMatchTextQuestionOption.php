@@ -65,7 +65,7 @@ class AssessmentMatchTextQuestionOption
             $value = str_replace('*', $star, $optionValue);
             $value = preg_quote($value);
             $value = str_replace($star, '.*', $value);
-            $value = "/$value/" . ($ignore_case ? 'i' : '');
+            $value = "/^$value$/" . ($ignore_case ? 'i' : '');
             return preg_match($value, $answer) > 0;
         }
         else

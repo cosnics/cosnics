@@ -127,44 +127,5 @@ class StructureLocationServiceTest extends ChamiloTestCase
         $this->structureLocationService->truncateStructureLocations();
     }
 
-    public function testGetStructureLocationByContextAndAction()
-    {
-        $context = 'Chamilo\Application\Weblcms';
-        $action = 'ManagePersonalCourses';
-
-        $structureLocation = new StructureLocation();
-
-        $this->structureLocationRepositoryMock->expects($this->once())
-            ->method('findStructureLocationByContextAndAction')
-            ->with($context, $action)
-            ->will($this->returnValue($structureLocation));
-
-        $this->assertEquals(
-            $structureLocation,
-            $this->structureLocationService->getStructureLocationByContextAndAction(
-                $context, $action
-            )
-        );
-    }
-
-    /**
-     * Tests that the getStructureLocationByContextAndAction throws an exception when it has no result for the given
-     * context and / or action
-     *
-     * @expectedException \Exception
-     */
-    public function testGetStructureLocationByContextAndActionNoResult()
-    {
-        $context = 'Chamilo\Application\Weblcms';
-        $action = 'ManagePersonalCourses';
-
-        $this->structureLocationRepositoryMock->expects($this->once())
-            ->method('findStructureLocationByContextAndAction')
-            ->will($this->returnValue(null));
-
-        $this->structureLocationService->getStructureLocationByContextAndAction(
-            $context, $action
-        );
-    }
 
 }

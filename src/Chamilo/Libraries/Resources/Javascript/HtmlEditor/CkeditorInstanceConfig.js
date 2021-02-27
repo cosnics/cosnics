@@ -1,4 +1,4 @@
-﻿/*
+/*
  Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
  For licensing, see LICENSE.html or http://ckeditor.com/license
  */
@@ -9,34 +9,34 @@ CKEDITOR.editorConfig = function(config)
     config.extraPlugins = "resource,resourceupload,chamilo,chamilofakeobjects,autosave,quickquestion,recording,resourcestylecontextmenu";
 
     config.menu_groups = 'clipboard,' + 'form,' + 'tablecell,tablecellproperties,tablerow,tablecolumn,table,'
-            + 'anchor,link,image,flash,'
-            + 'checkbox,radio,textfield,hiddenfield,imagebutton,button,select,textarea,div,' + 'chamilo';
+        + 'anchor,link,image,flash,'
+        + 'checkbox,radio,textfield,hiddenfield,imagebutton,button,select,textarea,div,' + 'chamilo';
 
     config.toolbarCanCollapse = true;
 
     config.toolbar_Full = [
-            [ 'Source', '-', 'Save', 'NewPage', 'Preview', '-', 'Templates' ],
-            [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-', 'Print', 'SpellChecker', 'Scayt' ],
-            [ 'Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat' ],
-            [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ],
-            '/',
-            [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript' ],
-            [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote' ],
-            [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
-            [ 'Link', 'Unlink', 'Anchor' ],
-            [ 'Chamilo', 'Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
-                    'PageBreak', 'Footnotes', 'CodeSnippet' ], '/', [ 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
-            [ 'Maximize', 'ShowBlocks', '-', 'About' ] ];
+        [ 'Source', '-', 'Save', 'NewPage', 'Preview', '-', 'Templates' ],
+        [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-', 'Print', 'SpellChecker', 'Scayt' ],
+        [ 'Undo', 'Redo', '-', 'Find', 'Replace', '-', 'SelectAll', 'RemoveFormat' ],
+        [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ],
+        '/',
+        [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'Subscript', 'Superscript' ],
+        [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', 'Blockquote' ],
+        [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ],
+        [ 'Link', 'Unlink', 'Anchor' ],
+        [ 'Chamilo', 'Image', 'Embed', 'Mathjax', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar',
+            'PageBreak', 'Footnotes', 'CodeSnippet' ], '/', [ 'Format', 'Font', 'FontSize' ], [ 'TextColor', 'BGColor' ],
+        [ 'Maximize', 'ShowBlocks', '-', 'About' ] ];
 
     config.toolbar_Basic = [
-            [ 'Maximize', '-', 'Format', 'Font', 'FontSize', '-', 'Bold', 'Italic', 'Underline' ],
-            '/',
-            [ 'Preview', 'Print', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-',
-                    'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
-                    'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
-            '/',
-            [ 'Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'Mathjax',
-                    'Smiley', 'Quickquestion', 'Recording', '-', 'Templates', 'SpecialChar', 'Footnotes', 'CodeSnippet', '-', 'Source' ] ];
+        [ 'Maximize', '-', 'Format', 'Font', 'FontSize', '-', 'Bold', 'Italic', 'Underline' ],
+        '/',
+        [ 'Preview', 'Print', '-', 'Undo', 'Redo', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', 'PasteCode', '-',
+            'NumberedList', 'BulletedList', 'HorizontalRule', '-', 'JustifyLeft', 'JustifyCenter',
+            'JustifyRight', 'JustifyBlock', 'Outdent', 'Indent' ],
+        '/',
+        [ 'Link', 'Unlink', 'Anchor', '-', 'TextColor', 'BGColor', '-', 'Table', 'Resource', 'Embed', 'Mathjax',
+            'Smiley', 'Quickquestion', 'Recording', '-', 'Templates', 'SpecialChar', 'Footnotes', 'CodeSnippet', '-', 'Source' ] ];
 
     /*config.filebrowserBrowseUrl = web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
@@ -48,11 +48,11 @@ CKEDITOR.editorConfig = function(config)
     config.filebrowserImageUploadUrl= web_path
         + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';*/
     config.filebrowserChamiloBrowseUrl = web_path
-            + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';
+        + 'index.php?application=Chamilo\\Core\\Repository&go=HtmlEditorFile&plugin=chamilo';
     config.filebrowserChamiloHandbookLinkBrowseUrl = web_path
-            + 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
+        + 'index.php?application=Chamilo\\Application\Handbook&go=handbook_topic_picker';
     config.latexDialogUrl = web_path
-            + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
+        + 'Chamilo/Libraries/Resources/Javascript/HtmlEditor/Ckeditor/plugins/latex/dialogs/latex.html?a=b';
 
     config.image2_captionedClass = 'image-captioned';
     config.image2_alignClasses = [ 'align-left', 'align-center', 'align-right' ];
@@ -63,7 +63,7 @@ CKEDITOR.editorConfig = function(config)
         web_path + 'index.php?application=Chamilo%5CLibraries%5CAjax&go=resource&type=css&theme=' + getTheme() + '&t=' + CKEDITOR.timestamp
     ];
 
-    config.embed_provider = '//noembed.com/embed?url={url}&callback={callback}'; //free. Default is iframely.
+    config.embed_provider = '//noembed.com/embed?maxwidth=640&maxheight=480&url={url}&callback={callback}'; //free. Default is iframely.
 
     config.disableNativeSpellChecker = false;
     config.allowedContent = true;

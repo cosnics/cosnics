@@ -4,15 +4,22 @@ namespace Chamilo\Core\Repository\Viewer;
 
 use Chamilo\Core\Repository\Interfaces\TemplateSupportInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\User\Service\UserService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\InvalidUserException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Platform\Session\Session;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -59,7 +66,6 @@ abstract class Manager extends Application
     // Configuration
     const SETTING_TABS_DISABLED = 'tabs_disabled';
     const SETTING_BREADCRUMBS_DISABLED = 'breadcrumbs_disabled';
-
 
     /**
      *
@@ -204,7 +210,7 @@ abstract class Manager extends Application
     {
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return $this->maximum_select;
         }
@@ -221,7 +227,7 @@ abstract class Manager extends Application
     {
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return $this->get_application()->get_allowed_content_object_types();
         }
@@ -255,7 +261,7 @@ abstract class Manager extends Application
     {
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return $this->excluded_objects;
         }
@@ -276,25 +282,56 @@ abstract class Manager extends Application
      *
      * @return boolean
      */
-    public function any_object_selected()
+    public static function any_object_selected()
     {
-        return !is_null(self::get_selected_objects());
+        return !is_null(self::getSelectedObjectIdsFromRequest());
+    }
+
+    /**
+     * @return int[]|int
+     */
+    protected static function getSelectedObjectIdsFromRequest()
+    {
+        $requestedObjectIds = Request::get(self::PARAM_ID);
+
+        if (!$requestedObjectIds)
+        {
+            $requestedObjectIds = Request::post(self::PARAM_ID);
+        }
+
+        return $requestedObjectIds;
     }
 
     /**
      *
+     * @param User $user
+     *
      * @return int|int[]
      */
-    public static function get_selected_objects()
+    public static function get_selected_objects(User $user)
     {
-        $requestedObjects = Request::get(self::PARAM_ID);
+        $selectedObjectIds = self::getSelectedObjectIdsFromRequest();
 
-        if (!$requestedObjects)
+        $objects = $content_object = \Chamilo\Core\Repository\Storage\DataManager::retrieves(
+            ContentObject::class_name(),
+            new InCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                is_array($selectedObjectIds) ? $selectedObjectIds : [$selectedObjectIds]
+            )
+        );
+
+        while ($contentObject = $objects->next_result())
         {
-            $requestedObjects = Request::post(self::PARAM_ID);
+            $canPublishObject =
+                RightsService::getInstance()->canUseContentObject($user, $contentObject);
+
+            if (!$canPublishObject)
+            {
+                throw new NotAllowedException();
+            }
         }
 
-        return $requestedObjects;
+        return $selectedObjectIds;
     }
 
     public function isReadyToBePublished()
@@ -317,14 +354,14 @@ abstract class Manager extends Application
      */
     public function areTabsDisabled()
     {
-        if(!$this->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
+        if (!$this->isAuthorized(\Chamilo\Core\Repository\Manager::context()))
         {
             return true;
         }
 
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return $this->getApplicationConfiguration()->get(self::SETTING_TABS_DISABLED) === true;
         }
@@ -340,7 +377,7 @@ abstract class Manager extends Application
     {
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return $this->getApplicationConfiguration()->get(self::SETTING_BREADCRUMBS_DISABLED) === true;
         }
@@ -412,7 +449,7 @@ abstract class Manager extends Application
     {
         $configuration = $this->getApplicationConfiguration();
 
-        if(!$configuration instanceof ApplicationConfiguration)
+        if (!$configuration instanceof ApplicationConfiguration)
         {
             return [];
         }

@@ -1,0 +1,39 @@
+<form id="lti-form" action="{{ LTI_URL }}" method="POST"
+      {% if SHOW_IN_IFRAME %}
+      target="LTI-tool"
+      {% else %}
+      target="about:blank"
+      {% endif %}
+>
+    {% for key, value in LTI_PARAMETERS %}
+        <input type="hidden" name="{{ key }}" id="{{ key }}" value="{{ value }}">
+    {% endfor %}
+
+    <div style="margin-bottom: 20px;">
+        <div class="load-tool">
+            <button class="btn btn-primary" type="submit" id="lti-submit">
+                {{ 'LoadLTIApplication'|trans({}, appContext) }}
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<style>
+    #LTI-tool {
+        border: none;
+    }
+</style>
+
+{% if SHOW_IN_IFRAME %}
+<iframe id="LTI-tool" name="LTI-tool" width="{{ IFRAME_WIDTH }}" height="{{ IFRAME_HEIGHT }}">
+
+</iframe>
+{% endif %}
+
+<script type="application/javascript">
+    $('document').ready(function() {
+        $('.load-tool').hide();
+        $('#lti-form').submit();
+    });
+</script>

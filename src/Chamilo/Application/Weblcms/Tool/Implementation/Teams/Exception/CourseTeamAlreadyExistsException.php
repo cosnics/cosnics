@@ -24,7 +24,7 @@ class CourseTeamAlreadyExistsException extends UserException
     {
         $message = Translation::getInstance()->getTranslator()->trans(
             "TeamAlreadyExists",
-            ["COURSE_TITLE" => $course->get_title()],
+            ["COURSE_TITLE" => htmlentities($course->get_title())],
             Manager::class);
 
         parent::__construct($message, $code, $previous);

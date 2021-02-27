@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Document;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -71,6 +72,43 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $browser_types;
     }
 
+    /**
+     * Adds extra actions to the toolbar and dropdown in different components
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     * @param array $publication
+     */
+    public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
+    {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+
+        $class = $publication[ContentObject::PROPERTY_TYPE];
+        $content_object = new $class($publication);
+        $content_object->set_id($publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]);
+
+        if ($content_object instanceof File || $content_object instanceof Webpage)
+        {
+            $buttonGroup->insertButton(
+                new Button(
+                    Translation::get('Download'),
+                    new FontAwesomeGlyph('download'),
+                    //Theme::getInstance()->getCommonImagePath('Action/Download'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DOWNLOAD,
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObject::PROPERTY_ID])),
+                    ToolbarItem::DISPLAY_ICON,
+                    false,
+                    'btn-link'
+                ), $allowed ? 3 : 0
+            );
+        }
+    }
+
+    /**
+     * TODO: remove
+     */
     public function add_content_object_publication_actions($toolbar, $publication)
     {
         $class = $publication[ContentObject::PROPERTY_TYPE];

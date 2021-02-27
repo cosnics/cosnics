@@ -135,6 +135,14 @@ class CpoImportImplementation extends ImportImplementation
             $orderedTreeNodesData[$treeNodeData->getParentTreeNodeDataId()][$treeNodeData->getDisplayOrder()] = $treeNodeData;
         }
 
+        foreach($orderedTreeNodesData as $parentId => $orderedTreeNodesByParent)
+        {
+            ksort($orderedTreeNodesByParent);
+            $orderedTreeNodesData[$parentId] = $orderedTreeNodesByParent;
+        }
+
+        ksort($orderedTreeNodesData);
+
         return $orderedTreeNodesData;
     }
 

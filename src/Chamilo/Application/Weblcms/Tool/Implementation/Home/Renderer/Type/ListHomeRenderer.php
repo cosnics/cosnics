@@ -46,6 +46,8 @@ class ListHomeRenderer extends HomeRenderer
             $html[] = '</div>';
         }
 
+        $html[] = $this->homeRendererExtensionManager->renderTopLevelInformation($this);
+
         $html[] = $this->getHomeTool()->renderHomeActions();
 
         $html[] = '<div class="clearfix"></div>';

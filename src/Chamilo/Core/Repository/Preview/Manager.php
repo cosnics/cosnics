@@ -65,7 +65,7 @@ abstract class Manager extends Application
         }
 
         $repositoryRightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
-        if (!$repositoryRightsService->hasContentObjectOwnerRights($this->get_user(), $this->get_content_object()))
+        if (!$repositoryRightsService->canViewContentObject($this->get_user(), $this->get_content_object()))
         {
             throw new NotAllowedException();
         }

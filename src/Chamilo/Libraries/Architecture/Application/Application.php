@@ -68,12 +68,15 @@ abstract class Application
     /**
      *
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
+     *
+     * @throws NotAllowedException
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         $this->applicationConfiguration = $applicationConfiguration;
 
         $this->initializeContainer();
+        $this->validateCsrf();
     }
 
     /**
@@ -107,6 +110,14 @@ abstract class Application
         }
 
         $this->getAuthorizationChecker()->checkAuthorization($this->getUser(), $context, $action);
+    }
+
+    /**
+     * @throws NotAllowedException
+     */
+    public function validateCsrf()
+    {
+        $this->getCsrfRequestValidator()->validateRequestForApplication($this);
     }
 
     /**
@@ -268,6 +279,11 @@ abstract class Application
 
         if ($this->get_application())
         {
+            if($this->getApplicationConfiguration()->isEmbeddedApplication())
+            {
+                return null;
+            }
+
             return $this->get_application()->render_header($pageTitle);
         }
 
@@ -377,6 +393,11 @@ abstract class Application
     {
         if ($this->get_application())
         {
+            if($this->getApplicationConfiguration()->isEmbeddedApplication())
+            {
+                return null;
+            }
+
             return $this->get_application()->render_footer();
         }
 

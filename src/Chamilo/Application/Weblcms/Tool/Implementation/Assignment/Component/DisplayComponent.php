@@ -77,6 +77,8 @@ class DisplayComponent extends Manager implements DelegateComponent
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
         $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
 
+        $assignmentServiceBridge->setSubmissionsAllowed(true);
+
         $assignmentServiceBridge->setCanEditAssignment(
             $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication)
         );

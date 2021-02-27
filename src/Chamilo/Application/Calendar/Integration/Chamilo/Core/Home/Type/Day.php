@@ -4,6 +4,7 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
 use Chamilo\Core\Home\Architecture\ConfigurableInterface;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniDayRenderer;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Platform\Session\Request;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
 class Day extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements ConfigurableInterface, 
-    StaticBlockTitleInterface
+    StaticBlockTitleInterface, AsynchronousBlockInterface
 {
     const CONFIGURATION_HOUR_STEP = 'hour_step';
     const CONFIGURATION_TIME_START = 'time_start';

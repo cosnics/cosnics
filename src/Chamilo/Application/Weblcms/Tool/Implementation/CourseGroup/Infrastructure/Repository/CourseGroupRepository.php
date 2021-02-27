@@ -5,11 +5,14 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastruc
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroupUserRelation;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -117,5 +120,34 @@ class CourseGroupRepository extends CommonDataClassRepository
     public function getCourseGroupById(int $courseGroupId)
     {
         return $this->dataClassRepository->retrieveById(CourseGroup::class, $courseGroupId);
+    }
+
+    /**
+     * @param User $user
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroupUserRelation|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function retrieveUserSubscriptionInCourseGroup(User $user, CourseGroup $courseGroup)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_USER),
+            new StaticConditionVariable($user->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                CourseGroupUserRelation::class, CourseGroupUserRelation::PROPERTY_COURSE_GROUP
+            ),
+            new StaticConditionVariable($courseGroup->getId())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(
+            CourseGroupUserRelation::class, new DataClassRetrieveParameters($condition)
+        );
     }
 }

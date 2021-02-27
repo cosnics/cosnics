@@ -3,11 +3,10 @@
 namespace Chamilo\Core\Repository\Component;
 
 use Chamilo\Core\Repository\Common\Import\ContentObjectImportService;
+use Chamilo\Core\Repository\Common\Import\Factory\ImportFactories;
 use Chamilo\Core\Repository\Manager;
-use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
-use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -32,7 +31,11 @@ class ImporterComponent extends Manager
         }
 
         $type = $this->getRequest()->getFromUrl(self::PARAM_IMPORT_TYPE, 'cpo');
-        $contentObjectImportService = new ContentObjectImportService($type, $this->getWorkspace(), $this);
+        $importFactory = $this->getImportFactories()->getImportFactoryByAlias($type);
+
+        $contentObjectImportService = new ContentObjectImportService(
+            $importFactory, $type, $this->getWorkspace(), $this
+        );
 
         if ($contentObjectImportService->hasFinished())
         {
@@ -48,7 +51,8 @@ class ImporterComponent extends Manager
                         'ImportType',
                         array(
                             'TYPE' => Translation::get(
-                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()
+                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize(),
+                                [], $importFactory->getImportContext()
                             )
                         )
                     )
@@ -78,5 +82,13 @@ class ImporterComponent extends Manager
     protected function getContentObjectRelationService()
     {
         return $this->getService(ContentObjectRelationService::class);
+    }
+
+    /**
+     * @return ImportFactories
+     */
+    protected function getImportFactories()
+    {
+        return $this->getService(ImportFactories::class);
     }
 }

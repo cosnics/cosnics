@@ -1,4 +1,5 @@
 <?php
+
 namespace Chamilo\Libraries\Architecture\Exceptions;
 
 use Chamilo\Libraries\Translation\Translation;
@@ -17,6 +18,8 @@ class ClassNotExistException extends UserException
      */
     public function __construct($class)
     {
-        parent::__construct(Translation::get('ClassNotExist', array('CLASS' => $class), Utilities::COMMON_LIBRARIES));
+        parent::__construct(
+            Translation::get('ClassNotExist', array('CLASS' => htmlentities($class)), Utilities::COMMON_LIBRARIES)
+        );
     }
 }

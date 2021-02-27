@@ -16,6 +16,7 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
     const PROPERTY_TYPE = 'type';
     const PROPERTY_VERSION = 'version';
     const DEFAULT_ORDER_COLUMN_INDEX = 3;
+    const DEFAULT_ORDER_COLUMN_INDEX_WORKSPACE = 4;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
 
     public function initialize_columns()
@@ -43,5 +44,13 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
         $this->add_column(
             new DataClassPropertyTableColumn(ContentObject::class_name(), ContentObject::PROPERTY_MODIFICATION_DATE));
         $this->add_column(new StaticTableColumn(self::PROPERTY_VERSION, ContentObject::get_version_header()));
+    }
+
+    public function get_default_order_column()
+    {
+        if (!$this->get_component()->get_repository_browser()->getWorkspace() instanceof PersonalWorkspace) {
+            return self::DEFAULT_ORDER_COLUMN_INDEX_WORKSPACE;
+        }
+        return self::DEFAULT_ORDER_COLUMN_INDEX;
     }
 }

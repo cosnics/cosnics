@@ -11,6 +11,7 @@ use Chamilo\Libraries\File\PackagesContentFinder\PackagesClassFinder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
+use Doctrine\ORM\EntityManager;
 use Exception;
 use Chamilo\Core\Install\Service\ConfigurationWriter;
 use Chamilo\Libraries\File\PathBuilder;
@@ -178,6 +179,9 @@ class PlatformInstaller
             return;
         }
 
+        $this->clearAndGenerateCaches();
+
+
         echo $this->installerObserver->afterInstallation();
         flush();
     }
@@ -321,5 +325,20 @@ class PlatformInstaller
             new StepResult(true, Translation::get('FoldersCreatedSuccess')));
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Clears DI cache and generates
+     */
+    protected function clearAndGenerateCaches()
+    {
+        $builder = DependencyInjectionContainerBuilder::getInstance();
+        $container = $builder->rebuildContainer()->createContainer();
+
+        /** @var EntityManager $entityManager */
+        $entityManager = $container->get(EntityManager::class);
+        $entityManager->getProxyFactory()->generateProxyClasses(
+            $entityManager->getMetadataFactory()->getAllMetadata(), $entityManager->getConfiguration()->getProxyDir()
+        );
     }
 }

@@ -50,21 +50,21 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
             case EntityTableColumnModel::PROPERTY_MEMBERS:
                 return $this->getGroupMembers($entity);
             case EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE :
-                if (is_null($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]))
+                $entryDate = $entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE];
+                if (is_null($entryDate))
                 {
                     return '-';
                 }
 
-                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_FIRST_ENTRY_DATE]);
-                break;
+                return $this->formatDate($entryDate);
             case EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE :
-                if (is_null($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]))
+                $entryDate = $entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE];
+                if (is_null($entryDate))
                 {
                     return '-';
                 }
 
-                return $this->formatDate($entity[EntityTableColumnModel::PROPERTY_LAST_ENTRY_DATE]);
-                break;
+                return $this->formatDate($entryDate);
             case EntityTableColumnModel::PROPERTY_FEEDBACK_COUNT :
                 return $this->getFeedbackServiceBridge()->countFeedbackByEntityTypeAndEntityId(
                     $this->getAssignmentServiceBridge()->getCurrentEntityType(),
@@ -145,7 +145,7 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
             );
         }
 
-        if ($isEntity)
+        if ($isEntity && ($this->getAssignmentServiceBridge()->areSubmissionsAllowed()))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -182,7 +182,8 @@ class EntityTableCellRenderer extends RecordTableCellRenderer implements TableCe
 
         if ($this->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime($date))
         {
-            return '<span style="color:red">' . $formatted_date . '</span>';
+            return $formatted_date . '<br /><div class="badge" style="background-color: red;">' .
+                Translation::getInstance()->getTranslation('LateSubmission') . '</div>';
         }
 
         return $formatted_date;

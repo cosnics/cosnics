@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Form;
 
 use Chamilo\Configuration\Configuration;
+use Chamilo\Configuration\Service\RegistrationConsulter;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File;
@@ -11,6 +12,7 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -134,6 +136,19 @@ class AssignmentForm extends ContentObjectForm
             Translation::get('StartTime'),
             Translation::get('EndTime')
         );
+
+        $isRegistered = $this->getRegistrationConsulter()->isContextRegistered(
+            'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\ExamAssignment'
+        );
+
+        if ($isRegistered)
+        {
+            $this->addElement(
+                'html', '<div class="row form-row" style="margin-top: 20px;">' .
+                '<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 col-sm-push-4 col-md-push-3 col-lg-push-2">' .
+                '<div class="alert alert-info">' . Translation::get('ExamAssignmentWarning') . '</div></div></div>'
+            );
+        }
 
         // Visibilty submissions
         $choices = array();
@@ -289,6 +304,16 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement('category');
     }
 
+    /**
+     * @return RegistrationConsulter|object
+     */
+    protected function getRegistrationConsulter()
+    {
+        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+
+        return $container->get(RegistrationConsulter::class);
+    }
+
     // Inherited
     public function create_content_object()
     {
@@ -399,7 +424,7 @@ class AssignmentForm extends ContentObjectForm
             $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
             $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
 
-            if(in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
+            if (in_array($integrationPackageData[Registration::PROPERTY_ID], $allowedTypeIdentifiers))
             {
                 $allowedTypes[] = $typeClass;
             }
@@ -434,11 +459,12 @@ class AssignmentForm extends ContentObjectForm
             $typeName = ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage);
             $typeClass = $basePackage . '\Storage\DataClass\\' . $typeName;
 
-            if(in_array($typeClass, $allowedTypeClasses))
+            if (in_array($typeClass, $allowedTypeClasses))
             {
                 $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
 
-                $typeCssClass = strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
+                $typeCssClass =
+                    strtolower(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($basePackage));
 
                 $defaultElements->add_element(
                     new AdvancedElementFinderElement(

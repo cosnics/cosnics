@@ -17,6 +17,9 @@
             <argument type="service" id="chamilo.application.weblcms.service.course_settings_controller" />
         </service>
 
+        <service id="Chamilo\Application\Weblcms\Service\PublicationService"
+                 alias="chamilo.application.weblcms.service.publication" />
+
         <service id="chamilo.application.weblcms.service.publication"
                  class="Chamilo\Application\Weblcms\Service\PublicationService">
             <argument type="service" id="chamilo.application.weblcms.storage.repository.publication_repository" />
@@ -49,6 +52,9 @@
 
         <service id="chamilo.application.weblcms.service.course_settings_controller"
                  class="Chamilo\Application\Weblcms\CourseSettingsController" />
+
+        <service alias="chamilo.application.weblcms.service.weblcms_rights"
+                 id="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />
 
         <service id="chamilo.application.weblcms.service.weblcms_rights"
                  class="Chamilo\Application\Weblcms\Rights\WeblcmsRights" />

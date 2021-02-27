@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="repository_external_tool">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" />
+        <property name="lti_provider_id" type="integer" unsigned="1" notnull="0" />
+        <property name="uuid" type="text" length="250" />
+        <property name="lti_url" type="text" length="250" />
+        <property name="consumer_key" type="text" length="250" />
+        <property name="consumer_secret" type="text" length="250" />
+        <property name="custom_parameters" type="text" />
+    </properties>
+    <index name="id" type="primary">
+        <indexproperty name="id" />
+    </index>
+    <index name="lti_provider_id">
+        <indexproperty name="lti_provider_id" />
+    </index>
+    <index name="uuid">
+        <indexproperty name="uuid" />
+    </index>
+</object>

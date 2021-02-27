@@ -32,6 +32,11 @@ class SessionUtilities
     private $securityKey;
 
     /**
+     * @var bool
+     */
+    protected $started;
+
+    /**
      *
      * @param \Chamilo\Configuration\Service\FileConfigurationLocator $fileConfigurationLocator
      * @param \Chamilo\Core\User\Service\SessionHandler|NULL $sessionHandler
@@ -101,6 +106,11 @@ class SessionUtilities
 
     public function start()
     {
+        if($this->isStarted())
+        {
+            return;
+        }
+
         /**
          * Disables PHP automatically provided cache headers
          */
@@ -140,6 +150,24 @@ class SessionUtilities
         {
             session_start();
         }
+
+        $this->started = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStarted()
+    {
+        return $this->started;
+    }
+
+    /**
+     * @return array
+     */
+    public function all()
+    {
+        return $_SESSION;
     }
 
     /**
@@ -189,6 +217,8 @@ class SessionUtilities
         session_unset();
         $_SESSION = array();
         session_destroy();
+
+        $this->started = false;
     }
 
     /**
@@ -214,7 +244,7 @@ class SessionUtilities
      */
     public function get($variable, $default = null)
     {
-        if (array_key_exists($variable, $_SESSION))
+        if ($this->has($variable))
         {
             return $_SESSION[$variable];
         }
@@ -222,6 +252,16 @@ class SessionUtilities
         {
             return $default;
         }
+    }
+
+    /**
+     * @param $variable
+     *
+     * @return bool
+     */
+    public function has($variable)
+    {
+        return array_key_exists($variable, $_SESSION);
     }
 
     /**

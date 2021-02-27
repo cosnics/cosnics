@@ -1,0 +1,49 @@
+<div>
+    {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Rubric' %}
+
+    {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
+    {{ getCss('cosnics-rubric.css', appContext) }}
+
+    <style type="text/css">
+        .col-xs-12 #rubric-result {
+            margin: 0 -10px;
+        }
+    </style>
+
+    <div id="rubric-result">
+        <h4 style="margin: 0 10px 10px 10px">{{ 'RubricResult'|trans({}, appContext) }}</h4>
+
+        <rubric-result-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
+    </div>
+
+    <script>
+        Vue.use(BootstrapVue);
+        Vue.use(VueI18n);
+        Vue.use(this['cosnics-rubric'].default);
+
+        /*var data = JSON.parse(rubricDataJSON);*/
+        var data = {{ RUBRIC_DATA_JSON|raw }};
+
+        /*var results = JSON.parse(rubricResultsJSON);*/
+        var results = {{ RUBRIC_RESULTS_JSON|raw }};
+
+        var lang;
+        try {
+            lang = '{{ LANGUAGE|raw }}';
+        } catch (err) {
+            console.warn('Language could not be set, defaulting to English instead.');
+            lang = 'en';
+        }
+
+        new Vue({
+            i18n: new VueI18n({ locale: lang }),
+            el: '#rubric-result',
+            data: {
+                rubricData: data,
+                rubricResults: results
+            }
+        });
+    </script>
+</div>
+
+

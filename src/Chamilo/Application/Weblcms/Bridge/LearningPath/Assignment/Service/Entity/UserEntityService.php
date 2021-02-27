@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\Entity
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -41,6 +42,11 @@ class UserEntityService implements EntityServiceInterface
     protected $entryPlagiarismResultService;
 
     /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    /**
      * @var array
      */
     protected $targetUsersCache = [];
@@ -51,15 +57,17 @@ class UserEntityService implements EntityServiceInterface
      * @param AssignmentService $assignmentService
      * @param \Symfony\Component\Translation\Translator $translator
      * @param \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\EntryPlagiarismResultService $entryPlagiarismResultService
+     * @param UserService $userService
      */
     public function __construct(
         AssignmentService $assignmentService, Translator $translator,
-        EntryPlagiarismResultService $entryPlagiarismResultService
+        EntryPlagiarismResultService $entryPlagiarismResultService, UserService $userService
     )
     {
         $this->assignmentService = $assignmentService;
         $this->translator = $translator;
         $this->entryPlagiarismResultService = $entryPlagiarismResultService;
+        $this->userService = $userService;
     }
 
     /**
@@ -286,7 +294,7 @@ class UserEntityService implements EntityServiceInterface
      */
     public function getUsersForEntity($entityId)
     {
-        return [$entityId];
+        return [$this->userService->findUserByIdentifier($entityId)];
     }
 
     /**

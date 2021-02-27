@@ -45,7 +45,7 @@ class IntroductionPublisherComponent extends Manager implements \Chamilo\Core\Re
         else
         {
             $pub = new ContentObjectPublication();
-            $pub->set_content_object_id(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+            $pub->set_content_object_id(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser()));
             $pub->set_course_id($this->get_course_id());
             $pub->set_tool($this->get_tool_id());
             $pub->set_category_id(0);

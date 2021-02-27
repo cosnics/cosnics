@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger;
 
 use Chamilo\Configuration\Service\ConfigurationConsulter;
+use Chamilo\Libraries\Platform\Session\SessionUtilities;
 
 /**
  * Builds the SentryExceptionLogger class

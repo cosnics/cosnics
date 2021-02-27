@@ -1,0 +1,13 @@
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\ExamAssignment' %}
+{{ HEADER|raw }}
+<div class="alert alert-danger">
+    {{ 'ExamAssignmentNotAvailable'|trans({}, appContext)|raw }}
+    {% if FEEDBACK_FROM == 0 %}
+        <p>{{ 'ExamAssignmentFeedbackNone'|trans({}, appContext) }}</p>
+    {% elseif FEEDBACK_TO == 0 %}
+        <p>{{ 'ExamAssignmentFeedbackFromOnly'|trans({'{FROM}': FEEDBACK_FROM|date("d/m/Y - H:i")}, appContext)|raw }}</p>
+    {% else %}
+        <p>{{ 'ExamAssignmentFeedbackFromUntil'|trans({'{FROM}': FEEDBACK_FROM|date("d/m/Y - H:i"), '{TO}': FEEDBACK_TO|date("d/m/Y - H:i")}, appContext)|raw }}</p>
+    {% endif %}
+</div>
+{{ FOOTER|raw }}

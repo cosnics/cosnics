@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment;
 
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
+use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
@@ -23,6 +24,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
@@ -61,6 +63,78 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $browser_types;
     }
 
+    /**
+     * Adds extra actions to the toolbar and dropdown in different components
+     *
+     * @param ButtonGroup $buttonGroup
+     * @param DropdownButton $dropdownButton
+     * @param array $publication
+     */
+    public function add_content_object_publication_actions_dropdown($buttonGroup, $dropdownButton, $publication)
+    {
+        $allowed = $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+        $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];
+
+        if ($publication[ContentObject::PROPERTY_TYPE] == Assessment::class_name())
+        {
+            $complex_display_item = $buttonGroup->getButtons()[0];
+            $complex_display_item->setImagePath(new FontAwesomeGlyph('arrow-circle-right'));
+            $complex_display_item->setLabel(Translation::get('Take'));
+        }
+
+        if ($publication[ContentObject::PROPERTY_TYPE] == Hotpotatoes::class_name())
+        {
+            $buttonGroup->insertButton(
+                new Button(
+                    Translation::get('Take'),
+                    new FontAwesomeGlyph('arrow-circle-right'),
+                    $this->get_complex_display_url($publication_id),
+                    ToolbarItem::DISPLAY_ICON,
+                    false,
+                    'btn-link'
+                ), 1
+            );
+        }
+
+        if ($allowed)
+        {
+            // Remove 'DisplayComplex' button (index 0) from button bar if the 'Preview' button is present.
+            // Since buttons don't contain identifiers, we're comparing the translation of the labels.
+            if ($buttonGroup->getButtons()[2]->getLabel() ==Translation::get('Preview', null, Utilities::COMMON_LIBRARIES))
+            {
+                $buttonGroup->removeButton(0);
+            }
+
+            $dropdownButton->insertSubButton(
+                new SubButton(
+                    Translation::get('ManageAttempts'),
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'ManageAttempts'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                            self::PARAM_ASSESSMENT => $publication_id)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                ), 4
+            );
+        } else {
+            $dropdownButton->addSubButton(
+                new SubButton(
+                    Translation::get('ViewAttempts'),
+                    Theme::getInstance()->getImagePath(__NAMESPACE__, 'ManageAttempts'),
+                    $this->get_url(
+                        array(
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                            self::PARAM_ASSESSMENT => $publication_id)),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
+        }
+
+    }
+
+    /**
+     * TODO: remove
+     */
     public function add_content_object_publication_actions($toolbar, $publication)
     {
         $publication_id = $publication[ContentObjectPublication::PROPERTY_ID];

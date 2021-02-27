@@ -1,0 +1,16 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\evaluation
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Evaluation"
+Title = "Titre"
+Properties = "Propriétés"
+Evaluation = "Evaluation"
+EvaluationToolBrowserComponent = "Parcourir"
+EvaluationToolEvaluateComponent = "Evaluer"
+EvaluationToolIntroductionPublisherComponent = "Publier une introduction"
+EvaluationToolMoverComponent = "Déplacer"
+EvaluationToolPublisherComponent = "Publier"
+EvaluationToolUpdaterComponent = "Mettre à jour"
+EvaluationToolViewerComponent = "Afficher"

@@ -29,15 +29,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
 
         if (! $object->getShowInline())
         {
-            $this->initializeContainer();
-
-            return $this->getTwig()->render(
-                'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
-                    "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
-                    "title" => $object->get_title(),
-                    "download_url" => $this->getDownloadUrl()
-                ]
-            );
+            return $this->renderThumbnail($object);
         }
 
         $class = __NAMESPACE__ . '\Html\Extension\HtmlInline' .
@@ -140,6 +132,28 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $redirect = new Redirect();
 
         return $redirect->getUrl();
+    }
+
+    /**
+     * @param File $object
+     *
+     * @return string
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    protected function renderThumbnail(File $object): string
+    {
+        $this->initializeContainer();
+
+        return $this->getTwig()->render(
+            'Chamilo\Core\Repository\ContentObject\File:full_thumbnail.html.twig', [
+                "icon_path" => $object->get_icon_path(Theme::ICON_BIG),
+                "title" => $object->get_title(),
+                "download_url" => $this->getDownloadUrl()
+            ]
+        );
     }
 
 }

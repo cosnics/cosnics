@@ -38,7 +38,7 @@ class PackagesFilesFinder extends PackagesContentFinder
      *
      * @param string $relativeFilePath - The path relative to the package root
      * @param string $filenamePattern - The filename or the pattern of filenames
-     * @return string[]
+     * @return string[][]
      */
     public function findFiles($relativeFilePath = null, $filenamePattern = '')
     {

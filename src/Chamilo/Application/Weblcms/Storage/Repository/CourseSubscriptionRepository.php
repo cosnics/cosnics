@@ -155,6 +155,50 @@ class CourseSubscriptionRepository
     }
 
     /**
+     * @param Course $course
+     * @param int $status
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findUsersDirectlySubscribedToCourse(Course $course, int $status)
+    {
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_USERNAME));
+        $properties->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_EMAIL));
+
+        $properties->add(
+            new PropertyConditionVariable(CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_STATUS)
+        );
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                CourseEntityRelation::class_name(),
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        CourseEntityRelation::class_name(), CourseEntityRelation::PROPERTY_ENTITY_ID
+                    ),
+                    new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID)
+                )
+            )
+        );
+
+        $parameters = new RecordRetrievesParameters(
+            $properties,
+            $this->getCourseEntityRelationCondition($course, CourseEntityRelation::ENTITY_TYPE_USER, null, $status),
+            null, null, [], $joins
+        );
+
+        return $this->dataClassRepository->records(User::class_name(), $parameters);
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param int $entityId
      * @param int $entityType
@@ -172,9 +216,8 @@ class CourseSubscriptionRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param int $entityType
-     *
-     * @param int $entityId
+     * @param int|null $entityType
+     * @param int|null $entityId
      * @param int|null $status
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition

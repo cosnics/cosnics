@@ -103,7 +103,7 @@ class ForumSubforumCreatorComponent extends Manager implements \Chamilo\Core\Rep
                     $cloi->set_parent($this->get_root_content_object_id());
                 }
 
-                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
+                $cloi->set_ref(\Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser()));
                 $cloi->set_user_id($this->get_user_id());
                 $cloi->set_display_order(
                     \Chamilo\Core\Repository\Storage\DataManager::select_next_display_order($cloi->get_parent()));

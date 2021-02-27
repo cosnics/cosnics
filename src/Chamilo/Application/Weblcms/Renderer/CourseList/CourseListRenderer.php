@@ -188,7 +188,7 @@ class CourseListRenderer
                     CourseSettingsConnector::VISIBILITY);
                 
                 if (($course_access == CourseSettingsConnector::COURSE_ACCESS_CLOSED || ! $course_visible) &&
-                     ! $course->is_course_admin($this->get_user()))
+                     ! $course->is_course_admin($this->get_user(), false))
                 {
                     continue;
                 }

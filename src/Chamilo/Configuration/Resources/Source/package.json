@@ -1,0 +1,16 @@
+{
+  "name": "@cosnics/chamilo-configuration",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "build-legacy"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@cosnics/chamilo-libraries": "*"
+  },
+  "bin": {
+    "build-legacy": "Javascript/JavascriptBuild.js"
+  }
+}

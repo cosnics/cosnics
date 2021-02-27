@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Service;
 
+use Chamilo\Core\Repository\DTO\CategoryTreeFormData;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Storage\Repository\CategoryRepository;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
@@ -36,7 +37,7 @@ class CategoryService
     public function getCategoryById(int $categoryId)
     {
         $category = $this->categoryRepository->findCategoryById($categoryId);
-        if($category === false)
+        if ($category === false)
         {
             return null;
         }
@@ -116,7 +117,7 @@ class CategoryService
             }
         }
 
-        if($category instanceof RepositoryCategory)
+        if ($category instanceof RepositoryCategory)
         {
             if (!empty($prefix))
             {
@@ -141,15 +142,15 @@ class CategoryService
      * Prepares the category tree for usage in a select element in a form
      *
      * @param User $user
+     * @param int $level
      *
      * @return array
      */
-    public function getCategoryTreeForForm(User $user)
+    public function getCategoryTreeForForm(User $user, int $level = 0)
     {
         $rootCategories = $this->getAllCategoriesForUserAsTree($user);
-        $categoryList = [];
 
-        $this->addCategoriesToList($rootCategories, $categoryList);
+        $this->addCategoriesToList($rootCategories, $categoryList, $level);
 
         return $categoryList;
     }
@@ -163,7 +164,9 @@ class CategoryService
     {
         foreach ($categories as $category)
         {
-            $categoryList[str_repeat('---', $level) . ' ' . $category->get_name()] = $category->getId();
+            $categoryList[$category->getId()] = new CategoryTreeFormData(
+                $category->getId(), str_repeat('---', $level) . ' ' . $category->get_name()
+            );
 
             $level ++;
             $this->addCategoriesToList($category->getChildren(), $categoryList, $level);

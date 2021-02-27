@@ -3,6 +3,7 @@ namespace Chamilo\Application\Calendar\Integration\Chamilo\Core\Home\Type;
 
 use Chamilo\Application\Calendar\Repository\CalendarRendererProviderRepository;
 use Chamilo\Application\Calendar\Service\CalendarRendererProvider;
+use Chamilo\Core\Home\Interfaces\AsynchronousBlockInterface;
 use Chamilo\Core\Home\Interfaces\StaticBlockTitleInterface;
 use Chamilo\Libraries\Calendar\Renderer\Legend;
 use Chamilo\Libraries\Calendar\Renderer\Type\View\MiniMonthRenderer;
@@ -16,7 +17,7 @@ use Chamilo\Libraries\Architecture\Application\Application;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements StaticBlockTitleInterface
+class Month extends \Chamilo\Core\Home\Renderer\Type\Basic\BlockRenderer implements StaticBlockTitleInterface, AsynchronousBlockInterface
 {
 
     private $calendarRenderer;

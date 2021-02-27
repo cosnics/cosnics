@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Chamilo\Core\Repository\Common\Import\Factory\ImportFactories" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\Common\Import\Cpo\CpoImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="cpo" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\File\FileImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="file" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Hotpotatoes\HotpotatoesImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="hotpotatoes" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Ical\IcalImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="ical" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Rar\RarImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="rar" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Vimeo\VimeoImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="vimeo" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Webpage\WebpageImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="webpage" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Youtube\YoutubeImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="youtube" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\Common\Import\Zip\ZipImportFactory" autowire="true">
+            <tag name="Chamilo\Core\Repository\Common\Import\Factory\ImportFactoryInterface" alias="zip" />
+        </service>
+    </services>
+</container>

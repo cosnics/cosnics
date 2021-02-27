@@ -160,8 +160,14 @@ class Hotpotatoes extends ContentObject implements Versionable
                 "				window.parent.location.href=\"" . $goback_url . "\"\n" . "			}\n";
         }
 
-        $js_content .= "		}\n" . " }\n" . "// Must be included \n" . "function Finish(){\n" . " mySaveScore();";
+        $js_content .= "		}\n" . " }\n" . "// Must be included \n" . "function Finish(){\n" . " mySaveScore(); console.log('saveScore');";
         $newcontent = str_replace($mit, $js_content, $content);
+
+        // Hijack this method in case if
+        $otherFunction = "function SetScormScore(){";
+        $js_content = str_replace('function Finish', 'function SetScormScore', $js_content);
+        $newcontent = str_replace($otherFunction, $js_content, $newcontent);
+
         $prehref = "<!-- BeginTopNavButtons -->";
         $posthref = "<!-- BeginTopNavButtons --><!-- edited by Chamilo -->";
         $newcontent = str_replace($prehref, $posthref, $newcontent);

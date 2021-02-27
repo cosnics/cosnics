@@ -3,12 +3,9 @@
 {% form_theme FORM 'bootstrap_3_horizontal_layout.html.twig' %}
 {% set appContext = 'Chamilo\\Core\\User' %}
 
-{{ getJavascript('Plugin/VueJS/vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/polyfill.min.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/BootstrapVue/bootstrap-vue.js', 'Chamilo\\Libraries') }}
-{{ getJavascript('Plugin/VueJS/VueResource/vue-resource.min.js', 'Chamilo\\Libraries') }}
+{#{{ getJavascript('VueCommon.js', 'Chamilo\\Libraries') }}#}
 
-{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}
+{#{{ getCss('Plugin/VueJS/BootstrapVue/bootstrap-vue.min.css', 'Chamilo\\Configuration') }}#}
 
 <style>
     .invite-browser-container .invite-user {
@@ -56,6 +53,16 @@
 
     input.form-control[type="date"] {
         line-height: normal;
+    }
+
+    .invite-browser-container .actions-column,
+    .invite-browser-container .status-column {
+        width: 50px;
+        text-align: center;
+    }
+
+    .invite-browser-container table td {
+        vertical-align: middle !important;
     }
 </style>
 
@@ -118,7 +125,8 @@
             <div class="col-md-6"><h3>{{ 'ExistingInvites'|trans({}, appContext) }}</h3></div>
             <div class="col-md-6 text-right">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" placeholder="{{ 'Search'|trans({}, 'Chamilo\\Libraries') }}" style="float: right; max-width: 200px;" v-model="filterText">
+                    <input type="text" name="search" class="form-control" placeholder="{{ 'Search'|trans({}, 'Chamilo\\Libraries') }}" style="float: right; max-width: 200px;"
+                           v-model="filterText">
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
                 </div>
             </div>
@@ -127,7 +135,7 @@
                  show-empty empty-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
                  empty-filtered-text="{{ 'NoSearchResults'|trans({}, 'Chamilo\\Libraries') }}"
         >
-            <template slot="status" slot-scope="data">
+            <template v-slot:cell(status)="data">
                 <span v-if="data.item.status == 1">
                     <span class="fa fa-clock-o" title="{{ 'InvitePending'|trans({}, appContext) }}"></span>
                 </span>
@@ -138,6 +146,9 @@
                     <span class="fa fa-calendar-times-o" title="{{ 'InviteNotValid'|trans({}, appContext) }}"></span>
                 </span>
             </template>
+            <template v-slot:cell(actions)="data">
+                <a class="btn btn-sm btn-default" :href="getExtendInviteUrl(data.item)" title="{{ 'UserInviteExtenderComponent'|trans({}, appContext) }}"><span class="fa fa-send"></span></a>
+            </template>
         </b-table>
     </div>
 </div>
@@ -145,32 +156,46 @@
 <script type="text/javascript">
     (function () {
 
-        var fields = {
-            'email': {
+        var fields = [
+            {
+                key: 'email',
                 'label': '{{ 'Email'|trans({}, appContext) }}',
                 'sortable': true
             },
-            'valid_until': {
+            {
+                key: 'valid_until',
                 'label': '{{ 'InviteValidUntil'|trans({}, appContext) }}',
                 'sortable': true
             },
-            'status': {
-                'label': '{{ 'Status'|trans({}, appContext) }}'
+            {
+                key: 'status',
+                'label': '{{ 'Status'|trans({}, appContext) }}',
+                'class': 'status-column'
+            },
+            {
+                key: 'actions',
+                'label': '',
+                'class': 'actions-column'
             }
-        };
+        ];
 
         var invites = {{ EXISTING_INVITES_JSON|raw }}
 
-        $(window).on('load', function () {
-            new Vue({
-                el: '.invite-browser-container',
-                data: {
-                    filterText: null,
-                    invites: invites,
-                    fields: fields
-                }
+            $(window).on('load', function () {
+                new Vue({
+                    el: '.invite-browser-container',
+                    data: {
+                        filterText: null,
+                        invites: invites,
+                        fields: fields
+                    },
+                    methods: {
+                        getExtendInviteUrl: function(userInvite) {
+                            return '{{ EXTEND_USER_INVITE_URL|raw }}'.replace('__USER_INVITE_ID__', userInvite.id);
+                        }
+                    }
+                });
             });
-        });
     })();
 </script>
 

@@ -21,7 +21,6 @@ class UserException extends \Exception
     {
         $security = new Security();
         $message = $security->removeXSS($message);
-
         parent::__construct($message);
     }
 }

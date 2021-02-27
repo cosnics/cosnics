@@ -30,6 +30,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
 
     /**
      * Resets the database
+     * @throws \Doctrine\ORM\Tools\ToolsException
      */
     protected function createStorageUnits()
     {

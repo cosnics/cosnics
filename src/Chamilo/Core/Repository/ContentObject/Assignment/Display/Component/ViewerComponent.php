@@ -5,11 +5,13 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableParameters;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\ActionBar\Button;
@@ -24,6 +26,7 @@ use Chamilo\Libraries\Storage\Parameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
+use Doctrine\ORM\ORMException;
 
 /**
  *
@@ -34,6 +37,7 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ViewerComponent extends Manager implements TableSupport
 {
+    const PARAM_SELECTED_TAB = 'tab';
 
     /**
      *
@@ -63,24 +67,27 @@ class ViewerComponent extends Manager implements TableSupport
      */
     protected function checkAccessRights()
     {
-        if(!$this->getRightsService()->canUserViewEntityBrowser($this->getUser(), $this->getAssignment()))
+        if (!$this->getRightsService()->canUserViewEntityBrowser($this->getUser(), $this->getAssignment()))
         {
             throw new NotAllowedException();
         }
-
     }
 
     /**
-     *
      * @return string[]
+     * @throws NotAllowedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
     protected function getTemplateProperties()
     {
         $entityName = $this->getAssignmentServiceBridge()->getPluralEntityNameByType($this->getEntityType());
         $entryCount = $this->getAssignmentServiceBridge()->countDistinctEntriesByEntityType($this->getEntityType());
         $feedbackCount = $this->getFeedbackServiceBridge()->countDistinctFeedbackByEntityType($this->getEntityType());
-        $lateEntryCount = $this->getAssignmentServiceBridge()->countDistinctLateEntriesByEntityType($this->getEntityType());
-        $entityCount = $this->getAssignmentServiceBridge()->countEntitiesByEntityType($this->getEntityType(), new FilterParameters());
+        $lateEntryCount =
+            $this->getAssignmentServiceBridge()->countDistinctLateEntriesByEntityType($this->getEntityType());
+        $entityCount = $this->getAssignmentServiceBridge()->countEntitiesByEntityType(
+            $this->getEntityType(), new FilterParameters()
+        );
 
         /** @var Assignment $assignment */
         $assignment = $this->get_root_content_object();
@@ -117,6 +124,33 @@ class ViewerComponent extends Manager implements TableSupport
         $searchToolbar = new ButtonToolBar($this->get_url());
         $searchToolbarRenderer = new ButtonToolBarRenderer($searchToolbar);
 
+        $supportsRubrics = $this->supportsRubrics();
+        $hasRubric = false;
+        $canBuildRubric = false;
+        $selfEvaluationAllowed = false;
+        $rubricPreview = null;
+
+        if ($supportsRubrics)
+        {
+            $hasRubric = $this->getAssignmentRubricService()->assignmentHasRubric($this->getAssignment());
+            $rubricPreview = $this->runRubricComponent('Preview');
+            $rubricContentObject = $this->getAssignmentRubricService()->getRubricForAssignment($this->getAssignment());
+            $selfEvaluationAllowed =
+                $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
+
+            if ($rubricContentObject instanceof Rubric)
+            {
+                try
+                {
+                    $rubricData = $this->getRubricService()->getRubric($rubricContentObject->getActiveRubricDataId());
+                    $canBuildRubric = $this->getRubricService()->canChangeRubric($rubricData);
+                }
+                catch (\Exception $ex)
+                {
+                }
+            }
+        }
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
@@ -130,12 +164,28 @@ class ViewerComponent extends Manager implements TableSupport
             'VISIBILITY_SUBMISSIONS' => $assignment->get_visibility_submissions(),
             'ENTITY_TABLE' => $this->renderEntityTable($searchToolbarRenderer->getSearchForm()),
             'CAN_EDIT_ASSIGNMENT' => $this->getAssignmentServiceBridge()->canEditAssignment(),
-            'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
+            'ADMINISTRATOR_EMAIL' => $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\Admin', 'administrator_email']
+            ),
             'NOTIFICATIONS_URL' => $notificationsUrl,
             'NOTIFICATIONS_COUNT' => $notificationsCount,
             'VIEW_NOTIFICATION_URL' => $viewNotificationUrl,
-            'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\Admin', 'administrator_email']),
-            'SEARCH_TOOLBAR' => $searchToolbarRenderer->render()
+            'ADMIN_EMAIL' => $this->getConfigurationConsulter()->getSetting(
+                ['Chamilo\Core\Admin', 'administrator_email']
+            ),
+            'SEARCH_TOOLBAR' => $searchToolbarRenderer->render(),
+            'SUPPORTS_RUBRICS' => $supportsRubrics,
+            'HAS_RUBRIC' => $hasRubric,
+            'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
+            'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
+            'REMOVE_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_REMOVE_RUBRIC]),
+            'TOGGLE_RUBRIC_SELF_EVALUATION_URL' => $this->get_url(
+                [self::PARAM_ACTION => self::ACTION_TOGGLE_RUBRIC_SELF_EVALUATION]
+            ),
+            'SELF_EVALUATION_ALLOWED' => $selfEvaluationAllowed,
+            'CAN_BUILD_RUBRIC' => $canBuildRubric,
+            'RUBRIC_PREVIEW' => $rubricPreview,
+            'SELECTED_TAB' => $this->getRequest()->getFromUrl(self::PARAM_SELECTED_TAB)
         ];
     }
 
@@ -204,14 +254,16 @@ class ViewerComponent extends Manager implements TableSupport
                 )
             );
 
-            if($this->isEphorusEnabled() && $this->getAssignmentServiceBridge()->canEditAssignment())
+            if ($this->isEphorusEnabled() && $this->getAssignmentServiceBridge()->canEditAssignment())
             {
                 $buttonToolBar->addButtonGroup(
                     new ButtonGroup(
                         array(
                             new Button(
                                 Translation::get('EphorusComponent'),
-                                Theme::getInstance()->getImagePath('Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', 'Logo/16'),
+                                Theme::getInstance()->getImagePath(
+                                    'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', 'Logo/16'
+                                ),
                                 $this->get_url([self::PARAM_ACTION => self::ACTION_EPHORUS])
                             )
                         )
@@ -225,5 +277,13 @@ class ViewerComponent extends Manager implements TableSupport
         }
 
         return $this->buttonToolbarRenderer;
+    }
+
+    /**
+     * @return RubricService
+     */
+    protected function getRubricService()
+    {
+        return $this->getService(RubricService::class);
     }
 }

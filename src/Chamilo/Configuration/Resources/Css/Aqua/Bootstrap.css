@@ -96,6 +96,12 @@ body.cke_editable {
 	background-repeat: no-repeat;
 }
 
+.dropdown-menu.mod-adjusted {
+	margin-top: 22px;
+	right: 22px;
+	top: initial;
+}
+
 .action-bar-search, .action-bar-search:hover, .action-bar-search:active,
 	.action-bar-search:focus {
 	padding: 0px;
@@ -122,6 +128,10 @@ body.cke_editable {
 .btn-action-toolbar.btn-action-toolbar-vertical .btn-group-vertical .btn
 	{
 	text-align: left;
+}
+
+.btn-group.mod-static, .btn-group.mod-static .btn-group {
+	position: static;
 }
 
 /*********
@@ -343,6 +353,22 @@ body h3#page-title {
 
 .table-navigation-search .table-order-property {
 	margin-right: 5px;
+}
+
+.table .btn-action-toolbar
+{
+	margin-bottom: 0;
+	width: max-content;
+}
+
+.table .btn-action-toolbar .btn
+{
+	padding: 0 3px;
+}
+
+.btn.dropdown-toggle .caret
+{
+	margin-left: 3px;
 }
 
 /********
@@ -924,7 +950,8 @@ div.panel del {
 	border-bottom: 1px solid #dddddd;
 }
 
-table th.sorting {
+table th.sorting,
+.table.b-table>thead>tr>[aria-sort] {
 	color: #337ab7;
 	cursor: pointer;
 }

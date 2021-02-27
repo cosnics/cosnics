@@ -19,6 +19,6 @@ class ParameterNotDefinedException extends UserException
      */
     public function __construct($parameter)
     {
-        parent::__construct(Translation::get('ParameterNotDefined', array('PARAMETER' => $parameter)));
+        parent::__construct(Translation::get('ParameterNotDefined', array('PARAMETER' => htmlentities($parameter))));
     }
 }

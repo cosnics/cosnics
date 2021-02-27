@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricTreeBuilder" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricValidator" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricAjaxService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\MigrationService" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType" autowire="true">
+            <tag name="form.type" />
+        </service>
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler\EntryFormHandler" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultJSONGenerator" autowire="true" />
+
+        <service id="Chamilo\Core\Repository\ContentObject\Rubric\Console\MigrateTargetUsersCommand" autowire="true">
+            <tag name="chamilo.libraries.console.command" />
+        </service>
+    </services>
+</container>

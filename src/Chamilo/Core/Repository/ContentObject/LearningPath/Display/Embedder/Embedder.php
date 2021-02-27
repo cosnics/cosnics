@@ -127,6 +127,11 @@ abstract class Embedder
     abstract public function render();
 
     /**
+     * @return bool
+     */
+    abstract public function supportMultipleAttempts();
+
+    /**
      *
      * @param Application $application
      * @param TrackingService $trackingService

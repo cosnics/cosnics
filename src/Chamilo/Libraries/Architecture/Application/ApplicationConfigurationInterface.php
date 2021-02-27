@@ -50,4 +50,9 @@ interface ApplicationConfigurationInterface
      * @param string $value
      */
     public function set($key, $value);
+
+    /**
+     * @return bool
+     */
+    public function isEmbeddedApplication();
 }

@@ -1,0 +1,2 @@
+Chamilo\Application\ExamAssignment:
+  - Package: ROLE_DEFAULT_USER

@@ -629,7 +629,13 @@ class User extends DataClass
      */
     public function is_teacher()
     {
-        return ($this->get_status() == self::STATUS_TEACHER ? true : false);
+        /** Admin should always be teacher, however their status is set */
+        if($this->is_platform_admin())
+        {
+            return true;
+        }
+
+        return $this->get_status() == self::STATUS_TEACHER;
     }
 
     public function is_active()
@@ -688,9 +694,14 @@ class User extends DataClass
     {
         // if (! $only_retrieve_ids)
         // {
-        return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
-            $this->getId(), 
-            $only_retrieve_ids);
+        if($only_retrieve_ids){
+            return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_ids_recursive(
+                $this->getId());
+        } else {
+            return \Chamilo\Core\Group\Storage\DataManager::retrieve_all_subscribed_groups_array(
+                $this->getId(),
+                $only_retrieve_ids);
+        }
         // }
         // else
         // {

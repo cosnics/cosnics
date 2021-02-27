@@ -71,7 +71,13 @@ class InviteComponent extends Manager
                 'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(), 'FORM' => $form->createView(),
                 'INVALID_EMAIL' => $invalidEmail, 'SUCCESS' => $success,
                 'USER_EMAIL' => $formData[InviteFormType::ELEMENT_EMAIL],
-                'EXISTING_INVITES_JSON' => $this->getSerializer()->serialize($existingInvites->getArrayCopy(), 'json')
+                'EXISTING_INVITES_JSON' => $this->getSerializer()->serialize($existingInvites->getArrayCopy(), 'json'),
+                'EXTEND_USER_INVITE_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_EXTEND_INVITE,
+                        UserInviteExtenderComponent::PARAM_USER_INVITE_ID => '__USER_INVITE_ID__'
+                    ]
+                )
             ]
         );
     }
@@ -85,22 +91,6 @@ class InviteComponent extends Manager
     }
 
     /**
-     * @return UserInviteService
-     */
-    protected function getInviteService()
-    {
-        return $this->getService(UserInviteService::class);
-    }
-
-    /**
-     * @return UserInviteService
-     */
-    protected function getUserInviteService()
-    {
-        return $this->getService(UserInviteService::class);
-    }
-
-    /**
      * Returns the admin breadcrumb generator
      *
      * @return \Chamilo\Libraries\Format\Structure\BreadcrumbGenerator
@@ -108,14 +98,5 @@ class InviteComponent extends Manager
     public function get_breadcrumb_generator()
     {
         return new NoPackageBreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
-    }
-
-    /**
-     * @return bool
-     */
-    protected function areInvitesAllowed()
-    {
-        return $this->getConfigurationConsulter()->getSetting(['Chamilo\Core\User', 'allow_invites']) == 1 &&
-            $this->getUser()->is_teacher();
     }
 }
