@@ -248,20 +248,6 @@ abstract class ContentObjectRenderer implements TableSupport
             );
         }
         
-        if ($canUseContentObject)
-        {
-            $useSubButtonDivider = true;
-
-            $dropdownButton->addSubButton(
-                new SubButton(
-                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
-                    Theme::getInstance()->getCommonImagePath('Action/Publish'),
-                    $this->get_repository_browser()->get_publish_content_object_url($content_object),
-                    SubButton::DISPLAY_ICON_AND_LABEL
-                )
-            );
-        }
-        
         // $actions[] = new ToolbarItem(
         // Translation :: get('ContentObjectAlternativeLinker'),
         // Theme :: getInstance()->getCommonImagePath('Action/ContentObjectAlternativeLinker'),
@@ -341,6 +327,22 @@ abstract class ContentObjectRenderer implements TableSupport
                     false,
                     'btn-link',
                     '_blank'
+                )
+            );
+        }
+
+        if ($canUseContentObject)
+        {
+            $useSubButtonDivider = true;
+
+            $buttonGroup->addButton(
+                new Button(
+                    Translation::get('Publish', null, Utilities::COMMON_LIBRARIES),
+                    new FontAwesomeGlyph('send'),
+                    $this->get_repository_browser()->get_publish_content_object_url($content_object),
+                    Button::DISPLAY_ICON,
+                    false,
+                    'btn-link'
                 )
             );
         }
