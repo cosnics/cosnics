@@ -6,3 +6,11 @@
 TypeName = "Externe tools"
 TypeCategory = "Cursus tools"
 InstallTypeName = "Externe Tools Tool"
+BrowserComponent = "Bekijke externe tools"
+CategoryMoverComponent = "Verplaats externe tools"
+ContentObjectUpdaterComponent = "Wijzig content object"
+FeedbackUpdaterComponent = "Wijzig feedback"
+IntroductionPublisherComponent = "Publiceer introductie"
+PublicationUpdaterComponent = "Wijzig publicatie"
+PublisherComponent = "Publiceer externe tool"
+

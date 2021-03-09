@@ -6,4 +6,10 @@
 TypeName = "ExternalTool"
 TypeCategory = "Course Tools"
 InstallTypeName = "External Tools Tool"
-
+BrowserComponent = "Browse external tools"
+CategoryMoverComponent = "Move external tools"
+ContentObjectUpdaterComponent = "Edit content object"
+FeedbackUpdaterComponent = "Edit feedback"
+IntroductionPublisherComponent = "Publish introduction"
+PublicationUpdaterComponent = "Edit publication"
+PublisherComponent = "Publish external tool"
