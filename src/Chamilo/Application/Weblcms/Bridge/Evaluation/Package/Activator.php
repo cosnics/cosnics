@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Bridge\Assignment\Package;
+namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Package;
 
 use Chamilo\Configuration\Package\NotAllowed;
 
