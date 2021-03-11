@@ -11,8 +11,6 @@ ALTER TABLE `weblcms_exam_assignment_publication` ADD COLUMN `feedback_from_date
 
 CREATE TABLE `repository_evaluation` (
   `id` int(10) NOT NULL,
-  `use_scores` tinyint(1) NOT NULL,
-  `use_feedback` tinyint(1) NOT NULL,
   `rubric_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

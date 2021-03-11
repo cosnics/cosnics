@@ -13,12 +13,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends AjaxManager
 {
-    const ACTION_SET_USE_SCORES = 'SetUseScores';
-    const ACTION_SET_USE_FEEDBACK = 'SetUseFeedback';
-
     const PARAM_ACTION = 'evaluation_display_ajax_action';
-    const PARAM_USE_SCORES = 'use_scores';
-    const PARAM_USE_FEEDBACK = 'use_feedback';
 
     /**
      * @var AjaxComponent

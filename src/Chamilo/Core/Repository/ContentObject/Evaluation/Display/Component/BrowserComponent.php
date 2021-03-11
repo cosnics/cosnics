@@ -65,20 +65,6 @@ class BrowserComponent extends Manager
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
-            'USE_SCORES' => $object->useScores(),
-            'USE_FEEDBACK' => $object->useFeedback(),
-            'SET_USE_SCORES_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::ACTION_SET_USE_SCORES
-                ]
-            ),
-            'SET_USE_FEEDBACK_URL' => $this->get_url(
-                [
-                    self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::ACTION_SET_USE_FEEDBACK
-                ]
-            ),
             'SUPPORTS_RUBRICS' => $this->supportsRubrics(),
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),

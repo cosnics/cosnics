@@ -18,6 +18,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const DEFAULT_ACTION = 'Browser';
+
     const ACTION_AJAX = 'Ajax';
     const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
     const ACTION_BUILD_RUBRIC = 'BuildRubric';

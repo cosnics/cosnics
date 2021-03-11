@@ -1,81 +1,5 @@
 {{ HEADER|raw }}
 
-<style type="text/css">
-    .onoffswitch {
-        position: relative;
-    }
-
-    .onoffswitch.mod-evaluation {
-        width: 176px;
-    }
-
-    .onoffswitch-checkbox {
-        display: none;
-    }
-
-    .onoffswitch-label {
-        border: 1px solid hsla(200, 25%, 60%, 1);
-        border-radius: 3px;
-        cursor: pointer;
-        display: block;
-        overflow: hidden;
-    }
-
-    .onoffswitch-inner {
-        display: block;
-        margin-left: -100%;
-        transition: margin .2s ease-in 0s;
-        width: 200%;
-    }
-
-    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-        margin-left: 0;
-    }
-
-    .onoffswitch-inner-before, .onoffswitch-inner-after {
-        box-sizing: border-box;
-        color: #fff;
-        display: block;
-        float: left;
-        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-weight: 500;
-        height: 20px;
-        line-height: 18px;
-        padding: 0;
-        width: 50%;
-    }
-
-    .onoffswitch-inner-before {
-        background-color: hsla(200, 25%, 60%, 1);
-        color: #fff;
-        padding-left: 5px;
-    }
-
-    .onoffswitch-inner-after {
-        background-color: #fff;
-        color: #919191;
-        padding-left: 18px;
-        /*text-align: right;*/
-    }
-
-    .onoffswitch-switch {
-        background: #ffffff;
-        border: 1px solid hsla(200, 25%, 60%, 1);
-        border-radius: 3px;
-        bottom: 0;
-        display: block;
-        margin: 0;
-        position: absolute;
-        right: calc(100% - 12px);
-        top: 0;
-        transition: all .2s ease-in 0s;
-        width: 12px;
-    }
-
-    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-        right: 0;
-    }
-</style>
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
 
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
@@ -90,28 +14,6 @@
         Properties
     </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="rubric">
-        <div id="build-settings">
-            <div class="onoffswitch mod-evaluation">
-                <input type="checkbox" v-model="useScores" id="use-scores-check" class="onoffswitch-checkbox">
-                <label for="use-scores-check" class="onoffswitch-label">
-                <span class="onoffswitch-inner">
-                    <span class="onoffswitch-inner-before">Gebruik scores</span>
-                    <span class="onoffswitch-inner-after">Gebruik geen scores</span>
-                </span>
-                    <span class="onoffswitch-switch"></span>
-                </label>
-            </div>
-            <div class="onoffswitch mod-evaluation">
-                <input type="checkbox" v-model="useFeedback" :checked="useFeedback" id="use-feedback-check" class="onoffswitch-checkbox">
-                <label for="use-feedback-check" class="onoffswitch-label">
-                <span class="onoffswitch-inner">
-                    <span class="onoffswitch-inner-before">Gebruik feedback</span>
-                    <span class="onoffswitch-inner-after">Gebruik geen feedback</span>
-                </span>
-                    <span class="onoffswitch-switch"></span>
-                </label>
-            </div>
-        </div>
         {% if SUPPORTS_RUBRICS %}
             {% if HAS_RUBRIC %}
                 {% if CAN_BUILD_RUBRIC %}
@@ -124,57 +26,6 @@
                 <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
             {% endif %}
         {% endif %}
-        <!--<div class="onoffswitch mod-evaluation">
-            <input type="checkbox" id="use-rubric-check" class="onoffswitch-checkbox">
-            <label for="use-rubric-check" class="onoffswitch-label">
-                <span class="onoffswitch-inner">
-                    <span class="onoffswitch-inner-before">Gebruik rubric</span>
-                    <span class="onoffswitch-inner-after">Gebruik geen rubric</span>
-                </span>
-                <span class="onoffswitch-switch"></span>
-            </label>
-        </div>-->
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        new Vue({
-            el: '#build-settings',
-            data: {
-                use_scores: {{ USE_SCORES ? 'true' : 'false' }},
-                use_feedback: {{ USE_FEEDBACK ? 'true' : 'false' }},
-            },
-            computed: {
-                useScores: {
-                    get: function() {
-                        return this.use_scores;
-                    },
-                    set: function(value) {
-                        this.use_scores = value;
-                        var url = '{{ SET_USE_SCORES_URL|raw }}';
-                        $.post(url, {'use_scores': value})
-                            .done(function (data) {
-                                console.log(data);
-                            });
-                    }
-                },
-                useFeedback: {
-                    get: function() {
-                        return this.use_feedback;
-                    },
-                    set: function(value) {
-                        this.use_feedback = value;
-                        var url = '{{ SET_USE_FEEDBACK_URL|raw }}';
-                        $.post(url, {'use_feedback': value})
-                            .done(function (data) {
-                                console.log(data);
-                            });
-                    }
-                }
-            },
-            methods: {
-            }
-        });
-    });
-</script>
 {{ FOOTER|raw }}
