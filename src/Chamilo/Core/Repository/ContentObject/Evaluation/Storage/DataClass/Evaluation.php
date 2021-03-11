@@ -79,17 +79,17 @@ class Evaluation extends ContentObject implements Versionable
     /**
      * @return int
      */
-    public function getRubricId(): int // -> contentobject id
+    public function getRubricId(): ?int // -> contentobject id
     {
         return $this->get_additional_property(self::PROPERTY_RUBRIC_ID);
     }
 
     /**
-     * @param int $rubricId
+     * @param ?int $rubricId
      *
      * @return $this
      */
-    public function setRubricId(int $rubricId): Evaluation
+    public function setRubricId(?int $rubricId): Evaluation
     {
         $this->set_additional_property(self::PROPERTY_RUBRIC_ID, $rubricId);
 
