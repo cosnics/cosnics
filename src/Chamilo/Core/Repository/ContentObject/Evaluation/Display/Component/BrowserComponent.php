@@ -71,7 +71,13 @@ class BrowserComponent extends Manager
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
             'REMOVE_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_REMOVE_RUBRIC]),
             'CAN_BUILD_RUBRIC' => true, // todo
-            'RUBRIC_PREVIEW' => $rubricPreview
+            'RUBRIC_PREVIEW' => $rubricPreview,
+            'LOAD_ENTITIES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::ACTION_LOAD_ENTITIES
+                ]
+            ),
         ];
     }
 }

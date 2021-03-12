@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicatio
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 
 /**
  *
@@ -39,4 +40,15 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     {
         return $this->getService('chamilo.application.weblcms.tool.implementation.evaluation.storage.repository.publication_repository');
     }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function getEvaluationPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+    }
+
 }

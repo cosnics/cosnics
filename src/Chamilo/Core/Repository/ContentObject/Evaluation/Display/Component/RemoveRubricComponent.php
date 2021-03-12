@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Cache\ParameterBag;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component
@@ -18,7 +19,7 @@ class RemoveRubricComponent extends Manager
      */
     public function run()
     {
-        if (!$this->getEvaluationServiceBridge()->canEditEvaluation())
+        if (!$this->getEvaluationServiceBridge()->canEditEvaluation() || $this->getRequest()->getMethod() != 'POST')
         {
             throw new NotAllowedException();
         }
@@ -26,7 +27,7 @@ class RemoveRubricComponent extends Manager
         try
         {
             $object = $this->get_root_content_object();
-            $object->setRubricId(0);
+            $object->setRubricId(null);
             $object->update();
             $message = 'RubricRemoved';
         }

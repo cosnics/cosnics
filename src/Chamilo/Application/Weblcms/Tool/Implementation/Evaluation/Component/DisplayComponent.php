@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -61,6 +62,11 @@ class DisplayComponent extends Manager implements DelegateComponent
         $evaluationServiceBridge->setCanEditEvaluation(
             $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $contentObjectPublication)
         );
+
+        $evaluationPublication = $this->getEvaluationPublication($contentObjectPublication);
+        $evaluationServiceBridge->setCurrentEntityType($evaluationPublication->getEntityType());
+        $evaluationServiceBridge->setContextIdentifier(new ContextIdentifier(get_class($evaluationPublication), $contentObjectPublication->getId()));
+
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
     }
 

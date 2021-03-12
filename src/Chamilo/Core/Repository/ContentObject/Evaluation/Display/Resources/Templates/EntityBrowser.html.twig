@@ -5,27 +5,58 @@
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+    <li role="presentation"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">Entity</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
     <li role="presentation" class="active"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
 </ul>
 
 <div class="dynamic-visual-tab-content tab-content">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entities">
+        Entity type: ${ entityType }<br />
+        Context: ${ context }
+    </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
         Properties
     </div>
+    {% if SUPPORTS_RUBRICS %}
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="rubric">
-        {% if SUPPORTS_RUBRICS %}
-            {% if HAS_RUBRIC %}
-                {% if CAN_BUILD_RUBRIC %}
-                <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
-                <a href="{{ REMOVE_RUBRIC_URL }}" class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</a>
-                {% else %}
-                {% endif %}
-                <div>{{ RUBRIC_PREVIEW|raw }}</div>
+        <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
+        {% if HAS_RUBRIC %}
+            {% if CAN_BUILD_RUBRIC %}
+            <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+                <form action="{{ REMOVE_RUBRIC_URL }}" method="post" style="display: contents">
+                    <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
+                </form>
             {% else %}
-                <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
+                <div class="alert alert-warning">
+                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+                </div>
             {% endif %}
+            <div class="clearfix"></div>
+            <div>{{ RUBRIC_PREVIEW|raw }}</div>
+        {% else %}
+            <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
+            <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
         {% endif %}
     </div>
+    {% endif %}
 </div>
+<script>
+    $('document').ready(function () {
+        new Vue({
+            el: '#entities',
+            delimiters: ['${', '}'],
+            data: {
+                entityType: '',
+                context: ''
+            },
+            mounted: function () {
+                $.ajax('{{ LOAD_ENTITIES_URL|raw }}').done(function(data) {
+                    this.entityType = data.properties.entity_type;
+                    this.context = data.properties.context;
+                }.bind(this));
+            }
+        });
+    });
+</script>
 {{ FOOTER|raw }}

@@ -2,6 +2,8 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces;
 
+use Chamilo\Libraries\Architecture\ContextIdentifier;
+
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Interfaces
@@ -16,4 +18,16 @@ interface EvaluationServiceBridgeInterface
      * @return boolean
      */
     public function canEditEvaluation();
+
+    /**
+     *
+     * @return integer
+     */
+    public function getCurrentEntityType();
+
+    /**
+     *
+     * @return ContextIdentifier
+     */
+    public function getContextIdentifier();
 }

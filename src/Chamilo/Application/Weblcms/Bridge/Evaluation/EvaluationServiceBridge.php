@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation
@@ -15,6 +16,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      * @var bool
      */
     protected $canEditEvaluation;
+
+    /**
+     * @var integer
+     */
+    protected $currentEntityType;
+
+    /**
+     * @var ContextIdentifier
+     */
+    protected $contextIdentifier;
 
     /**
      *
@@ -32,4 +43,39 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     {
         $this->canEditEvaluation = $canEditEvaluation;
     }
+
+    /**
+     * @param integer $currentEntityType
+     */
+    public function setCurrentEntityType(int $currentEntityType)
+    {
+        $this->currentEntityType = $currentEntityType;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getCurrentEntityType()
+    {
+        return $this->currentEntityType;
+    }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     */
+    public function setContextIdentifier(ContextIdentifier $contextIdentifier)
+    {
+        $this->contextIdentifier = $contextIdentifier;
+    }
+
+    /**
+     *
+     * @return ContextIdentifier
+     */
+    public function getContextIdentifier()
+    {
+        return $this->contextIdentifier;
+    }
+
 }
