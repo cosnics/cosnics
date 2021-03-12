@@ -146,6 +146,17 @@ class CourseSettingsService implements CourseSettingsServiceInterface
     }
 
     /**
+     * @param Course $course
+     * @param $toolRegistrationId
+     *
+     * @return bool
+     */
+    public function isToolActiveAndVisible(Course $course, $toolRegistrationId)
+    {
+        return $this->isToolActive($course, $toolRegistrationId) && $this->isToolVisible($course, $toolRegistrationId);
+    }
+
+    /**
      * Retrieves the course access type from the course settings
      * 
      * @param Course $course

@@ -164,7 +164,7 @@ class ZipAndDownloadComponent extends Manager
             {
                 while ($publication = $publications->next_result())
                 {
-                    if (! $is_course_admin && $publication[ContentObjectPublication::PROPERTY_HIDDEN])
+                    if (! $is_course_admin && !$this->isPublicationVisible($publication))
                     {
                         if (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $publication))
                         {
@@ -203,6 +203,31 @@ class ZipAndDownloadComponent extends Manager
         Filesystem::remove($target_path);
 
         return $archiveFile;
+    }
+
+    /**
+     * @param array $publication
+     *
+     * @return bool
+     */
+    protected function isPublicationVisible(array $publication)
+    {
+        if($publication[ContentObjectPublication::PROPERTY_HIDDEN])
+        {
+            return false;
+        }
+
+        $fromDate = $publication[ContentObjectPublication::PROPERTY_FROM_DATE];
+        $toDate = $publication[ContentObjectPublication::PROPERTY_TO_DATE];
+        if (!empty($fromDate) && !empty($toDate))
+        {
+            if($fromDate > time() || $toDate < time())
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

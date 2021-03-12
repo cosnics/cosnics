@@ -150,6 +150,8 @@ class CategoryService
     {
         $rootCategories = $this->getAllCategoriesForUserAsTree($user);
 
+        $categoryList = [];
+
         $this->addCategoriesToList($rootCategories, $categoryList, $level);
 
         return $categoryList;

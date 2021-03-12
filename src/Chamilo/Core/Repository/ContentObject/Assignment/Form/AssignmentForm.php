@@ -12,7 +12,6 @@ use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
@@ -304,15 +303,15 @@ class AssignmentForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    /**
-     * @return RegistrationConsulter|object
-     */
-    protected function getRegistrationConsulter()
-    {
-        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-
-        return $container->get(RegistrationConsulter::class);
-    }
+//    /**
+//     * @return RegistrationConsulter|object
+//     */
+//    protected function getRegistrationConsulter()
+//    {
+//        $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
+//
+//        return $container->get(RegistrationConsulter::class);
+//    }
 
     // Inherited
     public function create_content_object()

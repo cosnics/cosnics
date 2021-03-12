@@ -146,16 +146,4 @@ class RubricForm extends ContentObjectForm
         return $this->getContainer()->get(RubricService::class);
     }
 
-    /**
-     * @return ContainerInterface
-     */
-    protected function getContainer()
-    {
-        if (!isset($this->container))
-        {
-            $this->container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
-        }
-
-        return $this->container;
-    }
 }

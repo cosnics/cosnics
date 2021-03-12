@@ -25,7 +25,7 @@ abstract class Manager extends Application
     const PARAM_PROVIDER_ID = 'ProviderId';
     const PARAM_UUID = 'uuid';
 
-    const DEFAULT_ACTION = self::ACTION_LAUNCH;
+    const DEFAULT_ACTION = self::ACTION_MANAGE_PROVIDERS;
 
     /**
      * Manager constructor.

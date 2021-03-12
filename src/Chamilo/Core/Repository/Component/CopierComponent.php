@@ -107,12 +107,15 @@ class CopierComponent extends Manager
      */
     protected function copyContentObject($selectedContentObjects, int $categoryId = 0, string $newCategoryName = null)
     {
-        $category = $this->getCategoryService()->getCategoryById($categoryId);
-        if ($category->get_type() != WorkspaceService::TYPE_PERSONAL ||
-            $category->get_type_id() != $this->getUser()->getId())
-
+        if($categoryId > 0)
         {
-            throw new NotAllowedException();
+            $category = $this->getCategoryService()->getCategoryById($categoryId);
+            if ($category->get_type() != WorkspaceService::TYPE_PERSONAL ||
+                $category->get_type_id() != $this->getUser()->getId())
+
+            {
+                throw new NotAllowedException();
+            }
         }
 
         $target_user_id = $this->get_user_id();
