@@ -30,4 +30,11 @@ interface EvaluationServiceBridgeInterface
      * @return ContextIdentifier
      */
     public function getContextIdentifier();
+
+
+    /**
+     *
+     * @return int[]
+     */
+    public function getTargetEntityIds();
 }

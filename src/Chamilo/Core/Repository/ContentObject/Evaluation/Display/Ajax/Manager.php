@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxComponent;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 
@@ -54,5 +55,10 @@ abstract class Manager extends AjaxManager
     protected function getEvaluationServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
+    }
+
+    protected function getEntityService()
+    {
+        return $this->getService(EntityService::class);
     }
 }

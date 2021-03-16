@@ -28,6 +28,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $contextIdentifier;
 
     /**
+     * @var integer
+     */
+    protected $publicationId;
+
+    /**
      *
      * @return boolean
      */
@@ -78,4 +83,20 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         return $this->contextIdentifier;
     }
 
+    /**
+     * @param int $publicationId
+     */
+    public function setPublicationId(int $publicationId)
+    {
+        $this->publicationId = $publicationId;
+    }
+
+    /**
+     *
+     * @return int[]
+     */
+    public function getTargetEntityIds()
+    {
+        return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($this->publicationId, null);
+    }
 }

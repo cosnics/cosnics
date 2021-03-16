@@ -30,8 +30,27 @@ class LoadEntitiesComponent extends Manager
             }
 
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $result = new JsonAjaxResult(200, ['entity_type' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
-                'context' => $contextIdentifier->getContextClass() . ' - ' . $contextIdentifier->getContextId()]);
+
+            $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+            $sortColumn = $this->getRequest()->get('sort_by');
+            $sortDesc = $this->getRequest()->get('sort_desc') == 'true';
+            $perPage = $this->getRequest()->get('per_page');
+            $offset = $perPage * ($this->getRequest()->get('current_page') - 1);
+            $selectedUsers = $this->getEntityService()->getUsersFromIds($userIds, $sortColumn, $sortDesc, $offset, $perPage);
+
+            $resultData = [
+                'entity_type' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
+                'context' => $contextIdentifier->getContextClass() . ' - ' . $contextIdentifier->getContextId(),
+                'entities' => iterator_to_array($selectedUsers)
+            ];
+
+            if ($this->getRequest()->get('request_count') == 'true')
+            {
+                $users = $this->getEntityService()->getUsersFromIds($userIds);
+                $resultData['count'] = count($users);
+            }
+
+            $result = new JsonAjaxResult(200, $resultData);
             $result->display();
         }
         catch (\Exception $ex)

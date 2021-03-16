@@ -46,7 +46,6 @@ class DisplayComponent extends Manager implements DelegateComponent
         );
 
         $this->buildBridges($publication);
-
         $applicationFactory = $this->getApplicationFactory();
 
         return $applicationFactory->getApplication(
@@ -66,7 +65,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         $evaluationPublication = $this->getEvaluationPublication($contentObjectPublication);
         $evaluationServiceBridge->setCurrentEntityType($evaluationPublication->getEntityType());
         $evaluationServiceBridge->setContextIdentifier(new ContextIdentifier(get_class($evaluationPublication), $contentObjectPublication->getId()));
-
+        $evaluationServiceBridge->setPublicationId($contentObjectPublication->getId());
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
     }
 

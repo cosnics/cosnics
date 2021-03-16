@@ -2,24 +2,48 @@
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
 
+<style>
+    td.table-lastname {
+      text-transform: uppercase;
+    }
+</style>
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
-    <li role="presentation"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">Entity</a></li>
+    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">Entity</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
-    <li role="presentation" class="active"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+    <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
 </ul>
 
 <div class="dynamic-visual-tab-content tab-content">
-    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="entities">
-        Entity type: ${ entityType }<br />
-        Context: ${ context }
+    <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
+        <!--Entity type: ${ entityType }<br />
+        Context: ${ context }-->
+        <template>
+            <div>
+                <b-table striped bordered
+                    :items="entitiesProvider"
+                    :fields="fields"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    :per-page="pagination.perPage"
+                    :current-page="pagination.currentPage"
+                ></b-table>
+                <div class="pagination-container pull-right">
+                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                  aria-controls="data-table"></b-pagination>
+                    <ul class="pagination">
+                        <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
+                    </ul>
+                </div>
+            </div>
+        </template>
     </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
         Properties
     </div>
     {% if SUPPORTS_RUBRICS %}
-    <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="rubric">
+    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="rubric">
         <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
@@ -48,13 +72,38 @@
             delimiters: ['${', '}'],
             data: {
                 entityType: '',
-                context: ''
+                context: '',
+                fields: [
+                    { key: 'firstname', label: '{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true },
+                    { key: 'lastname', label: '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, variant: 'lastname' },
+                    { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true },
+                    { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false }
+                ],
+                sortBy: 'lastname',
+                sortDesc: false,
+                pagination: {
+                    currentPage: 1,
+                    perPage: 3,
+                    total: 0
+                },
+                requestCount: true
             },
-            mounted: function () {
-                $.ajax('{{ LOAD_ENTITIES_URL|raw }}').done(function(data) {
-                    this.entityType = data.properties.entity_type;
-                    this.context = data.properties.context;
-                }.bind(this));
+            methods: {
+                entitiesProvider: function(ctx, callback) {
+                    $.ajax({
+                        url: '{{ LOAD_ENTITIES_URL|raw }}',
+                        data: { sort_by: ctx.sortBy, sort_desc: ctx.sortDesc, per_page: ctx.perPage, current_page: ctx.currentPage, request_count: this.requestCount }
+                    }).done(function(data) {
+                        var d = data.properties;
+                        this.entityType = d.entity_type;
+                        this.context = d.context;
+                        if (d.count !== undefined) {
+                            this.pagination.total = d.count;
+                            this.requestCount = false;
+                        }
+                        callback(data.properties.entities);
+                    }.bind(this));
+                }
             }
         });
     });
