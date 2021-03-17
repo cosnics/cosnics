@@ -57,7 +57,7 @@ abstract class Manager extends AjaxManager
         return $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
     }
 
-    protected function getEntityService()
+    protected function getEntityService() : EntityService
     {
         return $this->getService(EntityService::class);
     }

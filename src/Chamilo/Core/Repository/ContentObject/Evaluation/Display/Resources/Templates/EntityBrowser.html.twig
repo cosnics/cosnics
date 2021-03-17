@@ -19,25 +19,38 @@
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
         <!--Entity type: ${ entityType }<br />
         Context: ${ context }-->
-        <template>
-            <div>
-                <b-table striped bordered
-                    :items="entitiesProvider"
-                    :fields="fields"
-                    :sort-by.sync="sortBy"
-                    :sort-desc.sync="sortDesc"
-                    :per-page="pagination.perPage"
-                    :current-page="pagination.currentPage"
-                ></b-table>
-                <div class="pagination-container pull-right">
-                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                                  aria-controls="data-table"></b-pagination>
-                    <ul class="pagination">
-                        <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
-                    </ul>
+        <div>
+            <div class="btn-toolbar btn-action-toolbar">
+                <div class="form-inline" style="display: flex; justify-content: flex-end">
+                    <div class="action-bar input-group">
+                        <input class="form-group form-control action-bar-search" name="query" type="text" autocomplete="off">
+                        <div class="input-group-btn">
+                            <button name="submit" class="btn btn-default" value="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                            <button name="clear" class="btn btn-default" value="clear">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </template>
+            <b-table striped bordered
+                :items="entitiesProvider"
+                :fields="fields"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                :per-page="pagination.perPage"
+                :current-page="pagination.currentPage"
+            ></b-table>
+            <div class="pagination-container" style="display: flex; justify-content: flex-end">
+                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                              aria-controls="data-table"></b-pagination>
+                <ul class="pagination">
+                    <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
         Properties
@@ -83,7 +96,7 @@
                 sortDesc: false,
                 pagination: {
                     currentPage: 1,
-                    perPage: 3,
+                    perPage: 20, //3,
                     total: 0
                 },
                 requestCount: true

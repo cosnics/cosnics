@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
@@ -36,7 +38,10 @@ class LoadEntitiesComponent extends Manager
             $sortDesc = $this->getRequest()->get('sort_desc') == 'true';
             $perPage = $this->getRequest()->get('per_page');
             $offset = $perPage * ($this->getRequest()->get('current_page') - 1);
-            $selectedUsers = $this->getEntityService()->getUsersFromIds($userIds, $sortColumn, $sortDesc, $offset, $perPage);
+
+            $sortProperties = $this->getSortProperties();
+
+            $selectedUsers = $this->getEntityService()->getUsersFromIds($userIds, $sortProperties, $sortColumn, $sortDesc, $offset, $perPage);
 
             $resultData = [
                 'entity_type' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
@@ -46,7 +51,7 @@ class LoadEntitiesComponent extends Manager
 
             if ($this->getRequest()->get('request_count') == 'true')
             {
-                $users = $this->getEntityService()->getUsersFromIds($userIds);
+                $users = $this->getEntityService()->getUsersFromIds($userIds, $sortProperties);
                 $resultData['count'] = count($users);
             }
 
@@ -60,5 +65,18 @@ class LoadEntitiesComponent extends Manager
             $result->set_result_message($ex->getMessage());
             $result->display();
         }
+    }
+
+    /**
+     * @return PropertyConditionVariable[]
+     */
+    protected function getSortProperties(): array
+    {
+        $sortProperties = [
+            'firstname' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
+            'lastname' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
+            'official_code' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
+        ];
+        return $sortProperties;
     }
 }

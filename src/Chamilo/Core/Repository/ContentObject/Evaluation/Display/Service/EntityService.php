@@ -16,8 +16,8 @@ class EntityService
         $this->entityRepository = $entityRepository;
     }
 
-    public function getUsersFromIds(array $userIds, $sortColumn = null, bool $sortDesc = false, $offset = null, $count = null)
+    public function getUsersFromIds(array $userIds, array $sortProperties, $sortColumn = null, bool $sortDesc = false, $offset = null, $count = null)
     {
-        return $this->entityRepository->getUsersFromIds($userIds, $sortColumn, $sortDesc, $offset, $count);
+        return $this->entityRepository->getUsersFromIds($userIds, $sortProperties, $sortColumn, $sortDesc, $offset, $count);
     }
 }
