@@ -1,6 +1,8 @@
 <?php
 
-namespace Chamilo\Libraries\Storage\Parameters;
+namespace Chamilo\Libraries\Storage\FilterParameters;
+
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * This class is used to communicate between the context (component, table, ajax, ...) and the repository of package.
@@ -38,11 +40,11 @@ class FilterParameters
     protected $orderBy;
 
     /**
-     * @param string $globalSearchQuery
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassSearchQuery[] $dataClassSearchQueries
-     * @param int $offset
-     * @param int $count
+     * @param string|null $globalSearchQuery
+     * @param int|null $offset
+     * @param int|null $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\FilterParameters\DataClassSearchQuery[] $dataClassSearchQueries
      */
     public function __construct(
         string $globalSearchQuery = null, int $offset = null, int $count = null, array $orderBy = array(),
@@ -65,15 +67,19 @@ class FilterParameters
     }
 
     /**
-     * @param string $globalSearchQuery
+     * @param string|null $globalSearchQuery
+     *
+     * @return FilterParameters
      */
-    public function setGlobalSearchQuery(string $globalSearchQuery = null): void
+    public function setGlobalSearchQuery(string $globalSearchQuery = null)
     {
         $this->globalSearchQuery = $globalSearchQuery;
+
+        return $this;
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassSearchQuery[]
+     * @return \Chamilo\Libraries\Storage\FilterParameters\DataClassSearchQuery[]
      */
     public function getDataClassSearchQueries(): array
     {
@@ -81,11 +87,27 @@ class FilterParameters
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassSearchQuery[] $dataClassSearchQueries
+     * @param \Chamilo\Libraries\Storage\FilterParameters\DataClassSearchQuery[] $dataClassSearchQueries
+     *
+     * @return FilterParameters
      */
-    public function setDataClassSearchQueries(array $dataClassSearchQueries): void
+    public function setDataClassSearchQueries(array $dataClassSearchQueries)
     {
         $this->dataClassSearchQueries = $dataClassSearchQueries;
+
+        return $this;
+    }
+
+    /**
+     * @param DataClassSearchQuery $dataClassSearchQuery
+     *
+     * @return $this
+     */
+    public function addDataClassSearchQuery(DataClassSearchQuery $dataClassSearchQuery)
+    {
+        $this->dataClassSearchQueries[] = $dataClassSearchQuery;
+
+        return $this;
     }
 
     /**
@@ -97,11 +119,15 @@ class FilterParameters
     }
 
     /**
-     * @param int $offset
+     * @param int|null $offset
+     *
+     * @return FilterParameters
      */
-    public function setOffset(int $offset): void
+    public function setOffset(?int $offset)
     {
         $this->offset = $offset;
+
+        return $this;
     }
 
     /**
@@ -113,11 +139,15 @@ class FilterParameters
     }
 
     /**
-     * @param int $count
+     * @param int|null $count
+     *
+     * @return FilterParameters
      */
-    public function setCount(int $count): void
+    public function setCount(?int $count)
     {
         $this->count = $count;
+
+        return $this;
     }
 
     /**
@@ -130,9 +160,25 @@ class FilterParameters
 
     /**
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     *
+     * @return FilterParameters
      */
-    public function setOrderBy(array $orderBy): void
+    public function setOrderBy(array $orderBy = [])
     {
         $this->orderBy = $orderBy;
+
+        return $this;
+    }
+
+    /**
+     * @param OrderBy $orderBy
+     *
+     * @return $this
+     */
+    public function addOrderBy(OrderBy $orderBy)
+    {
+        $this->orderBy[] = $orderBy;
+
+        return $this;
     }
 }

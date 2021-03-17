@@ -9,7 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Service

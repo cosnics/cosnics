@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -20,10 +20,10 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 class FilterParametersTranslator
 {
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param FilterParameters $filterParameters
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $searchProperties
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $dataClassParameters
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $contextCondition
+     * @param Condition|null $contextCondition
      */
     public function translateFilterParameters(
         FilterParameters $filterParameters, DataClassProperties $searchProperties,
@@ -39,9 +39,9 @@ class FilterParametersTranslator
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param FilterParameters $filterParameters
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $searchProperties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $contextCondition
+     * @param Condition|null $contextCondition
      *
      * @return Condition
      */

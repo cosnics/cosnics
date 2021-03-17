@@ -15,7 +15,7 @@ use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\ResultSet\ResultSet;
 use Chamilo\Libraries\Architecture\Application\Application;
 

@@ -10,7 +10,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -48,7 +48,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $userIds
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
@@ -113,7 +113,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $groupIds
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
@@ -175,7 +175,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      *
      * @param ContentObjectPublication $contentObjectPublication
      * @param int[] $groupIds
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */

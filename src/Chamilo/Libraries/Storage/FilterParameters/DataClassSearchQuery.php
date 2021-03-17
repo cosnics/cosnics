@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Libraries\Storage\Parameters;
+namespace Chamilo\Libraries\Storage\FilterParameters;
 
 /**
  * @package Chamilo\Libraries\Storage\Parameters

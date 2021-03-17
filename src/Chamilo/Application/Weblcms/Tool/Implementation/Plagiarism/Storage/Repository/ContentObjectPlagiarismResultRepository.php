@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -132,7 +132,7 @@ class ContentObjectPlagiarismResultRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */
@@ -146,7 +146,7 @@ class ContentObjectPlagiarismResultRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
@@ -175,7 +175,7 @@ class ContentObjectPlagiarismResultRepository
     /**
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $dataClassParameters
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      */
     protected function setPlagiarismResultParameters(
         DataClassParameters $dataClassParameters, Course $course, FilterParameters $filterParameters = null
