@@ -92,7 +92,7 @@ class FilterParametersBuilderTest extends ChamiloTestCase
 
     public function testFieldsSearchQueryWithCorruptJSON()
     {
-        $this->chamiloRequest->request->set(FilterParametersBuilder::PARAM_FIELDS_SEARCH_QUERY, '[}#aa!çpç&é"}');
+        $this->chamiloRequest->request->set(FilterParametersBuilder::PARAM_FIELDS_SEARCH_QUERY, '}#aa!çpç&é"}');
         $filterParameters = $this->filterParametersBuilder->buildFilterParametersFromRequest(
             $this->chamiloRequest, $this->fieldMapper
         );

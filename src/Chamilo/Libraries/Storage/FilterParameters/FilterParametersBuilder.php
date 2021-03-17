@@ -73,7 +73,7 @@ class FilterParametersBuilder
     {
         $fieldsSearchQuery = $chamiloRequest->getFromPostOrUrl(self::PARAM_FIELDS_SEARCH_QUERY);
         $searchQueryPerField = json_decode($fieldsSearchQuery);
-        if ($searchQueryPerField === false)
+        if (empty($searchQueryPerField))
         {
             return $this;
         }
