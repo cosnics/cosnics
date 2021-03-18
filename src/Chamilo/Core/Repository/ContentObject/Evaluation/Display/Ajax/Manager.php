@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxCompo
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax
@@ -60,5 +61,10 @@ abstract class Manager extends AjaxManager
     protected function getEntityService() : EntityService
     {
         return $this->getService(EntityService::class);
+    }
+
+    protected function getFilterParametersBuilder() : FilterParametersBuilder
+    {
+        return $this->getService(FilterParametersBuilder::class);
     }
 }

@@ -6,13 +6,13 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Stefan Gabriëls - Hogeschool Gent
  */
 class LoadEntitiesComponent extends Manager
 {
@@ -32,16 +32,11 @@ class LoadEntitiesComponent extends Manager
             }
 
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
-            $sortColumn = $this->getRequest()->get('sort_by');
-            $sortDesc = $this->getRequest()->get('sort_desc') == 'true';
-            $perPage = $this->getRequest()->get('per_page');
-            $offset = $perPage * ($this->getRequest()->get('current_page') - 1);
 
-            $sortProperties = $this->getSortProperties();
-
-            $selectedUsers = $this->getEntityService()->getUsersFromIds($userIds, $sortProperties, $sortColumn, $sortDesc, $offset, $perPage);
+            $filterParametersBuilder = $this->getFilterParametersBuilder();
+            $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $this->getFieldMapper());
+            $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $filterParameters);
 
             $resultData = [
                 'entity_type' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
@@ -49,10 +44,9 @@ class LoadEntitiesComponent extends Manager
                 'entities' => iterator_to_array($selectedUsers)
             ];
 
-            if ($this->getRequest()->get('request_count') == 'true')
+            if ($this->getRequest()->getFromPostOrUrl('request_count') == 'true')
             {
-                $users = $this->getEntityService()->getUsersFromIds($userIds, $sortProperties);
-                $resultData['count'] = count($users);
+                $resultData['count'] = $this->getEntityService()->countUsersFromIDs($userIds, $filterParameters);
             }
 
             $result = new JsonAjaxResult(200, $resultData);
@@ -68,15 +62,15 @@ class LoadEntitiesComponent extends Manager
     }
 
     /**
-     * @return PropertyConditionVariable[]
+     * @return FieldMapper
      */
-    protected function getSortProperties(): array
+    protected function getFieldMapper(): FieldMapper
     {
-        $sortProperties = [
-            'firstname' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-            'lastname' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-            'official_code' => new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
-        ];
-        return $sortProperties;
+        $class_name = User::class_name();
+        $fieldMapper = new FieldMapper();
+        $fieldMapper->addFieldMapping('firstname', $class_name, User::PROPERTY_FIRSTNAME);
+        $fieldMapper->addFieldMapping('lastname', $class_name, User::PROPERTY_LASTNAME);
+        $fieldMapper->addFieldMapping('official_code', $class_name, User::PROPERTY_OFFICIAL_CODE);
+        return $fieldMapper;
     }
 }

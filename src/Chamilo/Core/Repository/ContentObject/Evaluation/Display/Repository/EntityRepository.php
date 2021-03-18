@@ -10,9 +10,14 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository
+ *
+ * @author Stefan Gabriëls - Hogeschool Gent
+ */
 class EntityRepository
 {
     /**
@@ -28,38 +33,59 @@ class EntityRepository
         $this->filterParametersTranslator = $filterParametersTranslator;
     }
 
-    public function getUsersFromIds(array $userIds, array $sortProperties, $sortColumn = null, bool $sortDesc = false, $offset = null, $count = null)
+    /**
+     *
+     * @param int[] $userIds
+     * @param FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getUsersFromIDs(array $userIds, FilterParameters $filterParameters)
     {
-        $condition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
+        $class_name = User::class_name();
+        $condition = new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds);
 
-        $orderBy = array();
-
-        if (array_key_exists($sortColumn, $sortProperties))
-        {
-            $orderBy[] = new OrderBy($sortProperties[$sortColumn], $sortDesc ? SORT_DESC : SORT_ASC);
-        }
-
-        $retrieveProperties = $searchProperties = $this->getRetrieveProperties();
-
-        $filterParameters = new FilterParameters(null, $offset, $count, $orderBy);
-
+        $retrieveProperties = $searchProperties = $this->getDataClassProperties();
         $parameters = new RecordRetrievesParameters($retrieveProperties);
+
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
-        return $this->dataClassRepository->records(User::class_name(), $parameters);
+        return $this->dataClassRepository->records($class_name, $parameters);
+    }
+
+    /**
+     *
+     * @param int[] $userIds
+     * @param FilterParameters $filterParameters
+     *
+     * @return integer
+     */
+    public function countUsersFromIDs(array $userIds, FilterParameters $filterParameters)
+    {
+        $class_name = User::class_name();
+        $condition = new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds);
+
+        $retrieveProperties = $searchProperties = $this->getDataClassProperties();
+        $parameters = new DataClassCountParameters();
+        $parameters->setDataClassProperties($retrieveProperties);
+
+        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
+
+        return $this->dataClassRepository->count($class_name, $parameters);
     }
 
     /**
      * @return DataClassProperties
      */
-    protected function getRetrieveProperties(): DataClassProperties
+    protected function getDataClassProperties(): DataClassProperties
     {
-        $retrieveProperties = new DataClassProperties([
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE)
+        $class_name = User::class_name();
+        $properties = new DataClassProperties([
+            new PropertyConditionVariable($class_name, User::PROPERTY_FIRSTNAME),
+            new PropertyConditionVariable($class_name, User::PROPERTY_LASTNAME),
+            new PropertyConditionVariable($class_name, User::PROPERTY_OFFICIAL_CODE)
         ]);
-        return $retrieveProperties;
+        return $properties;
     }
 
 

@@ -17,4 +17,5 @@ ReturnToEvaluation = "Return to evaluation"
 RubricPublished = "Rubric is added to this evaluation"
 RubricRemoved = "Rubric is removed from this evaluation"
 RubricNotRemoved = "Rubric wasn't removed from this evaluation"
+Search = "Find"
 

@@ -23,12 +23,10 @@
             <div class="btn-toolbar btn-action-toolbar">
                 <div class="form-inline" style="display: flex; justify-content: flex-end">
                     <div class="action-bar input-group">
-                        <input class="form-group form-control action-bar-search" name="query" type="text" autocomplete="off">
+                        <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                      type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750"></b-form-input>
                         <div class="input-group-btn">
-                            <button name="submit" class="btn btn-default" value="submit">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </button>
-                            <button name="clear" class="btn btn-default" value="clear">
+                            <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </div>
@@ -40,6 +38,7 @@
                 :fields="fields"
                 :sort-by.sync="sortBy"
                 :sort-desc.sync="sortDesc"
+                :filter="globalSearchQuery"
                 :per-page="pagination.perPage"
                 :current-page="pagination.currentPage"
             ></b-table>
@@ -99,13 +98,30 @@
                     perPage: 20, //3,
                     total: 0
                 },
+                globalSearchQuery: '',
                 requestCount: true
             },
             methods: {
+                onFilterChanged: function() {
+                    this.requestCount = true;
+                },
+                onFilterCleared: function() {
+                    if (this.globalSearchQuery !== '') {
+                        this.globalSearchQuery = '';
+                        this.requestCount = true;
+                    }
+                },
                 entitiesProvider: function(ctx, callback) {
                     $.ajax({
                         url: '{{ LOAD_ENTITIES_URL|raw }}',
-                        data: { sort_by: ctx.sortBy, sort_desc: ctx.sortDesc, per_page: ctx.perPage, current_page: ctx.currentPage, request_count: this.requestCount }
+                        data: {
+                            global_search_query: ctx.filter,
+                            sort_field: ctx.sortBy,
+                            sort_direction: ctx.sortDesc ? 'desc' : 'asc',
+                            items_per_page: ctx.perPage,
+                            page_number: ctx.currentPage,
+                            request_count: this.requestCount
+                        }
                     }).done(function(data) {
                         var d = data.properties;
                         this.entityType = d.entity_type;

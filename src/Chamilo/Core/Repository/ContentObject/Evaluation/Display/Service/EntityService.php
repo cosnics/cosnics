@@ -3,7 +3,13 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository\EntityRepository;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service
+ *
+ * @author Stefan Gabriëls - Hogeschool Gent
+ */
 class EntityService
 {
     /**
@@ -16,8 +22,27 @@ class EntityService
         $this->entityRepository = $entityRepository;
     }
 
-    public function getUsersFromIds(array $userIds, array $sortProperties, $sortColumn = null, bool $sortDesc = false, $offset = null, $count = null)
+    /**
+     *
+     * @param int[] $userIds
+     * @param FilterParameters $filterParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     */
+    public function getUsersFromIDs(array $userIds, FilterParameters $filterParameters)
     {
-        return $this->entityRepository->getUsersFromIds($userIds, $sortProperties, $sortColumn, $sortDesc, $offset, $count);
+        return $this->entityRepository->getUsersFromIDs($userIds, $filterParameters);
+    }
+
+    /**
+     *
+     * @param int[] $userIds
+     * @param FilterParameters $filterParameters
+     *
+     * @return integer
+     */
+    public function countUsersFromIDs(array $userIds, FilterParameters $filterParameters)
+    {
+        return $this->entityRepository->countUsersFromIDs($userIds, $filterParameters);
     }
 }
