@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="repository_evaluation_entry_feedback">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" />
+        <property name="evaluator_id" type="integer" unsigned="1" notnull="1" />
+        <property name="feedback_content_object_id" type="integer" unsigned="1" notnull="1" />
+        <property name="created_time" type="integer" unsigned="1" notnull="1" />
+        <property name="modified_time" type="integer" unsigned="1" notnull="1" />
+        <property name="entry_id" type="integer" unsigned="1" notnull="1" />
+    </properties>
+    <index name="evaluator_id">
+        <indexproperty name="evaluator_id" />
+    </index>
+    <index name="entry_id">
+        <indexproperty name="entry_id" />
+    </index>
+</object>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<object name="evaluation">
+<object name="repository_evaluation">
     <properties>
         <property name="id" type="integer" unsigned="1" notnull="1" />
         <property name="rubric_id" type="integer" unsigned="1" notnull="0" />
