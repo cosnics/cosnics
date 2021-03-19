@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Core\User\DependencyInjection;
 
+use Chamilo\Core\User\DependencyInjection\CompilerPass\UserPropertiesExtensionCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
@@ -16,7 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface
+class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
 {
 
     /**
@@ -48,5 +50,13 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function getAlias()
     {
         return 'chamilo.core.user';
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function registerCompilerPasses(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new UserPropertiesExtensionCompilerPass());
     }
 }
