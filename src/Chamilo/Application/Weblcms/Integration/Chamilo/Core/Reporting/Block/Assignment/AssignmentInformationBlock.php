@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\Repository\AssignmentR
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 /**

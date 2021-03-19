@@ -14,7 +14,7 @@ use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Symfony\Component\Translation\Translator;
 
@@ -72,7 +72,7 @@ class UserEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
@@ -88,7 +88,7 @@ class UserEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */
@@ -126,7 +126,7 @@ class UserEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
@@ -141,7 +141,7 @@ class UserEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */

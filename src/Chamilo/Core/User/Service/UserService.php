@@ -8,7 +8,7 @@ use Chamilo\Core\User\Storage\Repository\UserRepository;
 use Chamilo\Libraries\Hashing\HashingUtilities;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  *

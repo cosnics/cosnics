@@ -25,5 +25,6 @@
         </service>
 
         <service id="Chamilo\Libraries\Storage\Query\FilterParametersTranslator" autowire="true" />
+        <service id="Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder" autowire="true" />
     </services>
 </container>

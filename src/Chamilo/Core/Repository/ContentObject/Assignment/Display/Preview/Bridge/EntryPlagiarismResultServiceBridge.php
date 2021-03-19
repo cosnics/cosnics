@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge\Storage\DataClass\EntryPlagiarismResult;
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Bridge
@@ -68,7 +68,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -79,7 +79,7 @@ class EntryPlagiarismResultServiceBridge implements EntryPlagiarismResultService
 
     /**
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */

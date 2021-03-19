@@ -10,7 +10,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -124,7 +124,7 @@ class ExternalToolResultRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      * @throws \Exception
@@ -150,7 +150,7 @@ class ExternalToolResultRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */
@@ -169,7 +169,7 @@ class ExternalToolResultRepository
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $dataClassParameters
      *
      * @return \Chamilo\Libraries\Storage\Parameters\DataClassParameters

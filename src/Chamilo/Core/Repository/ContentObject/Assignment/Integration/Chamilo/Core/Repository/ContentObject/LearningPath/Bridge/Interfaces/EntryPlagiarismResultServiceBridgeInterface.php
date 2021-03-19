@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Bridge
 use Chamilo\Core\Repository\ContentObject\Assignment\Extension\Plagiarism\Table\EntryPlagiarismResultTableParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -56,7 +56,7 @@ interface EntryPlagiarismResultServiceBridgeInterface
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */
@@ -79,7 +79,7 @@ interface EntryPlagiarismResultServiceBridgeInterface
     /**
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

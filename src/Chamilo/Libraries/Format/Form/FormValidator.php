@@ -1261,6 +1261,11 @@ EOT;
      */
     public function toHtml()
     {
+        if(!$this->elementExists(self::ELEMENT_CSRF_TOKEN))
+        {
+            $this->addCsrfToken();
+        }
+
         return $this->render();
     }
 
@@ -1269,6 +1274,13 @@ EOT;
      * @throws \Exception
      */
     function validate()
+    {
+        $this->addCsrfToken();
+
+        return parent::validate();
+    }
+
+    public function addCsrfToken()
     {
         $this->addElement('hidden', self::ELEMENT_CSRF_TOKEN, $this->csrfTokenManager->getToken($this->csrfTokenId));
         $this->addFormRule(function($data) {
@@ -1284,8 +1296,6 @@ EOT;
 
             return $errors;
         });
-
-        return parent::validate();
     }
 
     /**

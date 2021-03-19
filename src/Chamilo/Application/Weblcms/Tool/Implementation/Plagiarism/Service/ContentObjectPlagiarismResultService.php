@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Tool\Implementation\Plagiarism\Storage\DataClass\ContentObjectPlagiarismResult;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  * @package Chamilo\Application\Plagiarism\Service
@@ -68,7 +68,7 @@ class ContentObjectPlagiarismResultService
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return int
      */
@@ -79,7 +79,7 @@ class ContentObjectPlagiarismResultService
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */

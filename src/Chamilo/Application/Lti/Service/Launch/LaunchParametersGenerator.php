@@ -109,7 +109,7 @@ class LaunchParametersGenerator
             ->setToolConsumerInstanceName(
                 $this->configurationConsulter->getSetting(['Chamilo\Core\Admin', 'site_name'])
             )
-            ->setUserId(md5($user->getId() + 4));
+            ->setUserId(md5($user->getId()));
 
         return $launchParameters;
     }

@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+
 /**
  * This class represents a data provider for a table
  * Refactoring from ObjectTable to split between a table based on a record and based on an object
@@ -11,7 +13,7 @@ namespace Chamilo\Libraries\Format\Table;
 abstract class TableDataProvider extends TableComponent
 {
     /**
-     * @var \Chamilo\Libraries\Storage\Parameters\FilterParameters
+     * @var FilterParameters
      */
     protected $filterParameters;
 
@@ -35,17 +37,17 @@ abstract class TableDataProvider extends TableComponent
     abstract public function count_data($condition);
 
     /**
-     * @return \Chamilo\Libraries\Storage\Parameters\FilterParameters
+     * @return FilterParameters
      */
-    public function getFilterParameters(): \Chamilo\Libraries\Storage\Parameters\FilterParameters
+    public function getFilterParameters(): FilterParameters
     {
         return $this->filterParameters;
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters
+     * @param \Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters
      */
-    public function setFilterParameters(\Chamilo\Libraries\Storage\Parameters\FilterParameters $filterParameters): void
+    public function setFilterParameters(\Chamilo\Libraries\Storage\FilterParameters\FilterParameters $filterParameters): void
     {
         $this->filterParameters = $filterParameters;
     }
