@@ -14,7 +14,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"require": {
-		"php": ">=7.2.0",
+		"php": ">=7.4.0",
 		"chamilo/pear-libraries": "*",
 		"doctrine/cache": "1.7.1",
 		"doctrine/dbal": "2.7.1",
