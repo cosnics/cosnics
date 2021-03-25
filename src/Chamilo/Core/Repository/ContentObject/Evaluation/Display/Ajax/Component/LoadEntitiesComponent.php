@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Componen
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -26,9 +25,7 @@ class LoadEntitiesComponent extends Manager
 
             if (!$object instanceof Evaluation)
             {
-                throw new UserException(
-                    $this->getTranslator()->trans('EvaluationNotFound', [], \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context())
-                );
+                $this->throwUserException('EvaluationNotFound');
             }
 
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();

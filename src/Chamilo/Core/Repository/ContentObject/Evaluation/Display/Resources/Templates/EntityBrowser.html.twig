@@ -6,6 +6,44 @@
     td.table-lastname {
       text-transform: uppercase;
     }
+    .tbl-no-sort {
+        pointer-events: none
+    }
+    .tbl-sort-option {
+        background-position: right calc(.75rem / 2) center;
+        background-repeat: no-repeat;
+        background-size: .65em 1em;
+        cursor: pointer;
+        display: inline-block;
+        padding-right: calc(.75rem + .85em);
+        pointer-events: all;
+    }
+    .tbl-sort-option[aria-sort=none] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22zM51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .tbl-sort-option[aria-sort=ascending] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .tbl-sort-option[aria-sort=descending] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .form-control-sm {
+        height: calc(1.5em + .5rem + 2px);
+        padding: .25rem .5rem;
+        font-size: 1.3rem;
+        line-height: 1.5;
+        border-radius: .2rem;
+    }
+    .form-control-sm.mod-score {
+        /*height: calc(1.9em + .5rem + 2px);*/
+    }
+    td.table-score {
+        padding: 5px 8px!important;
+        width: 8rem;
+    }
+    .form-control[type="text"].mod-score {
+        padding: .25rem .5rem;
+    }
 </style>
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 
@@ -40,8 +78,18 @@
                 :sort-desc.sync="sortDesc"
                 :filter="globalSearchQuery"
                 :per-page="pagination.perPage"
-                :current-page="pagination.currentPage"
-            ></b-table>
+                :current-page="pagination.currentPage">
+                <template #head(fullname)="data">
+                    <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">${ '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}'.toUpperCase() }</a>
+                    <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                </template>
+                <template #cell(fullname)="data">
+                    ${data.item.lastname.toUpperCase()}, ${data.item.firstname}
+                </template>
+                <template #cell(score)="data">
+                    <b-form-input class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                </template>
+            </b-table>
             <div class="pagination-container" style="display: flex; justify-content: flex-end">
                 <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                               aria-controls="data-table"></b-pagination>
@@ -86,9 +134,10 @@
                 entityType: '',
                 context: '',
                 fields: [
-                    { key: 'firstname', label: '{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true },
-                    { key: 'lastname', label: '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, variant: 'lastname' },
+                    { key: 'id' },
+                    { key: 'fullname', sortable: false, thClass: 'tbl-no-sort'},
                     { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true },
+                    { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
                     { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false }
                 ],
                 sortBy: 'lastname',
@@ -101,7 +150,28 @@
                 globalSearchQuery: '',
                 requestCount: true
             },
+
             methods: {
+                onScoreUpdated(entity, score) {
+                    $.ajax({
+                        url: '{{ SAVE_SCORE_URL|raw }}',
+                        method: 'post',
+                        data: {
+                            entity_id: entity.id,
+                            score: score
+                        }
+                    }).done(function(data) {
+                        console.log(data);
+                    });
+                },
+                getSortStatus(s) {
+                    if (this.sortBy !== s) { return 'none'; }
+                    return this.sortDesc ? 'descending' : 'ascending';
+                },
+                sortByNameField(namefield) {
+                    this.sortDesc = this.sortBy === namefield;
+                    this.sortBy = namefield;
+                },
                 onFilterChanged: function() {
                     this.requestCount = true;
                 },

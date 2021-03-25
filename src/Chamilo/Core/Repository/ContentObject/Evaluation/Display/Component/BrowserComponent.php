@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager as AjaxManager;
 
 /**
  *
@@ -75,7 +75,13 @@ class BrowserComponent extends Manager
             'LOAD_ENTITIES_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager::ACTION_LOAD_ENTITIES
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_ENTITIES
+                ]
+            ),
+            'SAVE_SCORE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_SCORE
                 ]
             ),
         ];

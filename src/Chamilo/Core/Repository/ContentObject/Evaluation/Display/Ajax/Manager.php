@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxCompo
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager as DisplayManager;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax
@@ -17,6 +19,7 @@ use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 abstract class Manager extends AjaxManager
 {
     const ACTION_LOAD_ENTITIES = 'LoadEntities';
+    const ACTION_SAVE_SCORE = 'SaveScore';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
@@ -66,5 +69,16 @@ abstract class Manager extends AjaxManager
     protected function getFilterParametersBuilder() : FilterParametersBuilder
     {
         return $this->getService(FilterParametersBuilder::class);
+    }
+
+    /**
+     * @param string $key
+     * @throws UserException
+     */
+    protected function throwUserException($key = "")
+    {
+        throw new UserException(
+            $this->getTranslator()->trans($key, [], DisplayManager::context())
+        );
     }
 }

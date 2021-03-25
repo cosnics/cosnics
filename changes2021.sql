@@ -29,3 +29,44 @@ ALTER TABLE `weblcms_evaluation_publication`
 
 ALTER TABLE `weblcms_evaluation_publication`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  
+/*
+
+CREATE TABLE `repository_evaluation_entry` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `evaluation_id` int(10) UNSIGNED NOT NULL,
+  `context_class` VARCHAR(255) NOT NULL,
+  `context_id` int(10) UNSIGNED NOT NULL,
+  `entity_type` int(3) UNSIGNED NOT NULL,
+  `entity_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `repository_evaluation_entry_score` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `evaluator_id` int(10) UNSIGNED NOT NULL,
+  `score` VARCHAR(20) NOT NULL DEFAULT '',
+  `created_time` int(10) UNSIGNED NOT NULL,
+  `entry_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `repository_evaluation_entry_score_target_user` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `score_id` int(10) UNSIGNED NOT NULL,
+  `target_user_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `repository_evaluation_entry_feedback` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `evaluator_id` int(10) UNSIGNED NOT NULL,
+  `feedback_content_object_id` int(10) UNSIGNED NOT NULL,
+  `created_time` int(10) UNSIGNED NOT NULL,
+  `modified_time` int(10) UNSIGNED NOT NULL,
+  `entry_id` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  
+*/
+
