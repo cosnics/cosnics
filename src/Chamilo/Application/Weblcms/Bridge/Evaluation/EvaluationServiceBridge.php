@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
@@ -31,6 +33,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      * @var integer
      */
     protected $publicationId;
+
+    /**
+     * @param \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService $entityService
+     */
+    public function __construct(
+        EntityService $entityService
+    )
+    {
+        $this->entityService = $entityService;
+    }
 
     /**
      *
@@ -98,5 +110,20 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     public function getTargetEntityIds()
     {
         return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($this->publicationId, null);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId)
+    {
+        // Todo: actually search by entity type
+        return [$this->entityService->getUserForEntity($entityId)];
+        /*$entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $entityService->getUsersForEntity($entityId);*/
     }
 }

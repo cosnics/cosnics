@@ -44,6 +44,55 @@
     .form-control[type="text"].mod-score {
         padding: .25rem .5rem;
     }
+    .table.mod-col-fit > thead > tr > th.col-fit {
+        width: 1px;
+        white-space: nowrap;
+        padding-right: 30px!important;
+    }
+    /*.table[css-grid] {
+        display: grid;
+        border-collapse: collapse;
+        min-width: 100%;
+        grid-template-columns:
+            minmax(60px, .33fr)
+            minmax(240px, 1fr)
+            minmax(130px, 1fr)
+            minmax(80px, .33fr)
+            minmax(150px, 5fr)
+    }
+    .table[css-grid] thead,
+    .table[css-grid] tbody,
+    .table[css-grid] tr {
+        display: contents;
+    }
+
+    .table[css-grid] th,
+    .table[css-grid] td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .table[css-grid] th {
+        position: sticky;
+        top: 0;
+        background: white;
+        text-align: left;
+    }
+
+    .table[css-grid] th {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table[css-grid] td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        color: #808080;
+    }
+
+    .table[css-grid] tr:nth-child(even) td {
+        background: rgb(249, 249, 249);
+    }*/
 </style>
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 
@@ -78,7 +127,8 @@
                 :sort-desc.sync="sortDesc"
                 :filter="globalSearchQuery"
                 :per-page="pagination.perPage"
-                :current-page="pagination.currentPage">
+                :current-page="pagination.currentPage"
+                class="mod-col-fit">
                 <template #head(fullname)="data">
                     <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">${ '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}'.toUpperCase() }</a>
                     <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
@@ -88,6 +138,9 @@
                 </template>
                 <template #cell(score)="data">
                     <b-form-input class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                </template>
+                <template #cell(feedback_count)="data">${ data.item.feedback_count }
+                    <a class="btn btn-default btn-link " style="text-decoration: none;padding:3px"><i class="fa fa-search-plus" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
                 </template>
             </b-table>
             <div class="pagination-container" style="display: flex; justify-content: flex-end">
@@ -134,10 +187,10 @@
                 entityType: '',
                 context: '',
                 fields: [
-                    { key: 'id' },
-                    { key: 'fullname', sortable: false, thClass: 'tbl-no-sort'},
-                    { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true },
-                    { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
+                    { key: 'id', thClass: 'col-fit' },
+                    { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
+                    { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
+                    { key: 'score', sortable: false, thClass: 'tbl-no-sort col-fit', variant: 'score' },
                     { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false }
                 ],
                 sortBy: 'lastname',

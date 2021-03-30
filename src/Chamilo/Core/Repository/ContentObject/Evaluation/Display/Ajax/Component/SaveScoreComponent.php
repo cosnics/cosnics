@@ -32,6 +32,7 @@ class SaveScoreComponent extends Manager
                 $this->throwUserException('EntityIdNotProvided');
             }
 
+            $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
 
@@ -47,7 +48,7 @@ class SaveScoreComponent extends Manager
                 $this->throwUserException('EvaluationNotFound');
             }
 
-            $this->getEntityService()->createOrUpdateEvaluationEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $contextIdentifier, $entityId, $score);
+            $this->getEntityService()->createOrUpdateEvaluationEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $contextIdentifier, $entityType, $entityId, $score);
 
             $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $score]);
             $result->display();

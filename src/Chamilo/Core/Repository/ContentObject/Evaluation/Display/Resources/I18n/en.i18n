@@ -20,4 +20,5 @@ RubricNotRemoved = "Rubric wasn't removed from this evaluation"
 Search = "Find"
 EntityNotInList = "The chosen entity isn't part of the list of entities for this evaluation."
 EntityIdNotProvided = "No entity id provided"
+ScoreEntry = "Score entry"
 

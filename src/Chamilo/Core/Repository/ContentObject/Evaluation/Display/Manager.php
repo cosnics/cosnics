@@ -1,6 +1,12 @@
 <?php
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
+
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackRightsServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\RubricBridge;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
@@ -17,6 +23,8 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
  */
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
+    const PARAM_ACTION = 'evaluation_display_action';
+
     const DEFAULT_ACTION = 'Browser';
 
     const ACTION_AJAX = 'Ajax';
@@ -30,9 +38,27 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
-        $rubricBridge = new RubricBridge(null);
+        $this->buildBridgeServices();
+    }
 
+    /**
+     * Builds the bridge services for the feedback and for the extensions
+     */
+    protected function buildBridgeServices()
+    {
+        $rubricBridge = new RubricBridge($this->getEvaluationServiceBridge());
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
+
+        $feedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
+        $this->getBridgeManager()->addBridge($feedbackServiceBridge);
+        $this->getBridgeManager()->addBridge($feedbackRightsServiceBridge);
         $this->getBridgeManager()->addBridge($rubricBridge);
+    }
+
+    protected function getFeedbackServiceBridge() : FeedbackServiceBridge
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
     }
 
     /**
@@ -71,7 +97,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             return '';
         }
 
-        $rubric = $this->getContentObjectService()->findById($rubricId);
+        try
+        {
+            $rubric = $this->getContentObjectService()->findById($rubricId);
+        }
+        catch (\TypeError | \Exception $e)
+        {
+            return false;
+        }
 
         if (!$rubric instanceof Rubric)
         {
@@ -107,6 +140,30 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getEvaluationServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface
+     */
+    protected function getRubricBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(RubricBridgeInterface::class);
+    }
+
+    /**
+     * @return RubricService
+     */
+    protected function getRubricService()
+    {
+        return $this->getService(RubricService::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | \Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation
+     */
+    public function getEvaluation()
+    {
+        return $this->get_root_content_object();
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository;
+namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository;
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -12,9 +12,11 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -22,6 +24,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScoreTargetUser;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
@@ -54,6 +57,51 @@ class EntityRepository
         $this->filterParametersTranslator = $filterParametersTranslator;
     }
 
+    /*public function getUserEntity(string $contextClass, int $contextId, int $entityType, int $entityId)
+    {
+        $class_name = EvaluationEntry::class_name();
+
+        $conditions = array();
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable($contextClass)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_CONTEXT_ID),
+            new StaticConditionVariable($contextId)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($entityType)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_ID),
+            new StaticConditionVariable($entityId)
+        );
+
+        $properties = new DataClassProperties([
+            new FixedPropertyConditionVariable(EvaluationEntry::class_name(), User::PROPERTY_ID, 'entry_id'),
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
+        ]);
+
+        $userJoinConditions = array();
+        $userJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
+            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ENTITY_ID)
+        );
+
+        $joins = new Joins();
+        $joins->add(new Join(User::class_name(), new AndCondition($userJoinConditions), Join::TYPE_LEFT));
+
+        $parameters = new RecordRetrieveParameters($properties);
+        $parameters->setCondition(new AndCondition($conditions));
+        $parameters->setJoins($joins);
+
+        return $this->dataClassRepository->record($class_name, $parameters);
+    }*/
+
     /**
      *
      * @param int[] $userIds
@@ -72,10 +120,24 @@ class EntityRepository
         $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE, 'score');
         $retrieveProperties = new DataClassProperties($retrieveProperties);
 
+        $retrieveProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ID),
+                'feedback_count'
+            )
+        );
+
         $entryJoinConditions = array();
         $entryJoinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ENTITY_ID),
             new PropertyConditionVariable(User::class_name(), USER::PROPERTY_ID)
+        );
+
+        $feedbackJoinConditions = array();
+        $feedbackJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
+            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
         );
 
         $scoreJoinConditions = array();
@@ -84,12 +146,17 @@ class EntityRepository
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
         );
 
+        $group_by = new GroupBy();
+        $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
+
         $joins = new Joins();
         $joins->add(new Join(EvaluationEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
         $joins->add(new Join(EvaluationEntryScore::class_name(), new AndCondition($scoreJoinConditions), Join::TYPE_LEFT));
+        $joins->add(new Join(EvaluationEntryFeedback::class_name(), new AndCondition($feedbackJoinConditions), Join::TYPE_LEFT));
 
         $parameters = new RecordRetrievesParameters($retrieveProperties);
         $parameters->setJoins($joins);
+        $parameters->setGroupBy($group_by);
 
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
@@ -134,11 +201,12 @@ class EntityRepository
 
     /**
      * @param ContextIdentifier $contextIdentifier
+     * @param int $entityType
      * @param int $entityId
      *
      * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|DataClass|false
      */
-    public function getEvaluationEntry(ContextIdentifier $contextIdentifier, int $entityId)
+    public function getEvaluationEntry(ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
     {
         $class_name = EvaluationEntry::class_name();
         $conditions = array();
@@ -151,8 +219,13 @@ class EntityRepository
             new StaticConditionVariable($contextIdentifier->getContextId())
         );
         $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_TYPE),
+            new StaticConditionVariable($entityType)
+        );
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entityId));
+            new StaticConditionVariable($entityId)
+        );
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassRetrieveParameters($condition);

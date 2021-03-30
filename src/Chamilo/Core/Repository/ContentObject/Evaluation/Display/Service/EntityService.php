@@ -2,10 +2,11 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository\EntityRepository;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\EntityRepository;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScoreTargetUser;
+use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -17,13 +18,19 @@ use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 class EntityService
 {
     /**
-     * @var \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository\EntityRepository
+     * @var \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\EntityRepository
      */
     protected $entityRepository;
 
-    public function __construct(EntityRepository $entityRepository)
+    /**
+     * @var \Chamilo\Core\User\Service\UserService
+     */
+    protected $userService;
+
+    public function __construct(EntityRepository $entityRepository, UserService $userService)
     {
         $this->entityRepository = $entityRepository;
+        $this->userService = $userService;
     }
 
     /**
@@ -36,6 +43,11 @@ class EntityService
     public function getUsersFromIDs(array $userIds, FilterParameters $filterParameters)
     {
         return $this->entityRepository->getUsersFromIDs($userIds, $filterParameters);
+    }
+
+    public function getUserEntity(ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
+    {
+        return $this->entityRepository->getUserEntity($contextIdentifier->getContextClass(), $contextIdentifier->getContextId(), $entityType, $entityId);
     }
 
     /**
@@ -51,16 +63,39 @@ class EntityService
     }
 
     /**
+     * @param int $entityId
+     *
+     * @return \Chamilo\Core\User\Storage\DataClass\User
+     */
+    public function getUserForEntity($entityId)
+    {
+        return $this->userService->findUserByIdentifier($entityId);
+    }
+
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     * @param int $entityType
+     * @param int $entityId
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function getEvaluationEntryForEntity(ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
+    {
+        return $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId);
+    }
+
+    /**
      * @param int $evaluationId
      * @param int $evaluatorId
      * @param ContextIdentifier $contextIdentifier
+     * @param int $entityType
      * @param int $entityId
      * @param string $score
      */
-    public function createOrUpdateEvaluationEntryScoreForEntity(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityId, string $score): void
+    public function createOrUpdateEvaluationEntryScoreForEntity(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId, string $score): void
     {
-        $evaluationEntry = $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityId) ?:
-            $this->createEvaluationEntry($evaluationId, $contextIdentifier, $entityId);
+        $evaluationEntry = $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId) ?:
+            $this->createEvaluationEntry($evaluationId, $contextIdentifier, $entityType, $entityId);
 
         $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
 
@@ -76,17 +111,18 @@ class EntityService
     /**
      * @param int $evaluationId
      * @param ContextIdentifier $contextIdentifier
+     * @param int $entityType
      * @param int $entityId
      *
      * @return EvaluationEntry
      */
-    private function createEvaluationEntry(int $evaluationId, ContextIdentifier $contextIdentifier, int $entityId): EvaluationEntry
+    private function createEvaluationEntry(int $evaluationId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId): EvaluationEntry
     {
         $evaluationEntry = new EvaluationEntry();
         $evaluationEntry->setEvaluationId($evaluationId);
         $evaluationEntry->setContextClass($contextIdentifier->getContextClass());
         $evaluationEntry->setContextId($contextIdentifier->getContextId());
-        $evaluationEntry->setEntityType(1);
+        $evaluationEntry->setEntityType($entityType);
         $evaluationEntry->setEntitityId($entityId);
         $this->entityRepository->createEvaluationEntry($evaluationEntry);
 

@@ -60,11 +60,11 @@ CREATE TABLE `repository_evaluation_entry_score_target_user` (
 
 CREATE TABLE `repository_evaluation_entry_feedback` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `evaluator_id` int(10) UNSIGNED NOT NULL,
-  `feedback_content_object_id` int(10) UNSIGNED NOT NULL,
-  `created_time` int(10) UNSIGNED NOT NULL,
-  `modified_time` int(10) UNSIGNED NOT NULL,
   `entry_id` int(10) UNSIGNED NOT NULL,
+  `creation_date` int(10) UNSIGNED NOT NULL,
+  `modification_date` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `feedback_content_object_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
   

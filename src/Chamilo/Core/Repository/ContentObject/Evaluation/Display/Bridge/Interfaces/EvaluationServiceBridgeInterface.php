@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces;
 
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
@@ -37,4 +38,13 @@ interface EvaluationServiceBridgeInterface
      * @return int[]
      */
     public function getTargetEntityIds();
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId);
+
 }

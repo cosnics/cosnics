@@ -2,18 +2,25 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
  * Class RubricBridge
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge
  */
 class RubricBridge implements RubricBridgeInterface
 {
     /**
-     * @var Entry
+     * @var EvaluationServiceBridgeInterface
+     */
+    protected $evaluationServiceBridge;
+
+    /**
+     * @var EvaluationEntry
      */
     protected $entry;
 
@@ -25,11 +32,19 @@ class RubricBridge implements RubricBridgeInterface
     /**
      * RubricBridge constructor.
      *
-     * @param ScoreService $scoreService
+     * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
      */
-    public function __construct(/*ScoreService $scoreService*/)
+    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge)
     {
-        //$this->scoreService = $scoreService;
+        $this->evaluationServiceBridge = $evaluationServiceBridge;
+    }
+
+    /**
+     * @param EvaluationEntry $entry
+     */
+    public function setEvaluationEntry(EvaluationEntry $entry)
+    {
+        $this->entry = $entry;
     }
 
     /**
@@ -37,8 +52,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getContextIdentifier()
     {
-        return null;
-        //return new ContextIdentifier(get_class($this->entry), $this->entry->getId());
+        return new ContextIdentifier(get_class($this->entry), $this->entry->getId());
     }
 
     /**
@@ -57,7 +71,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getTargetUsers()
     {
-        return [];
+        return $this->evaluationServiceBridge->getUsersForEntity($this->entry->getEntityType(), $this->entry->getEntitityId());
         /*return $this->assignmentServiceBridge->getUsersForEntity(
             $this->entry->getEntityType(), $this->entry->getEntityId()
         );*/

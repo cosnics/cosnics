@@ -3,5 +3,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\FeedbackService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge" autowire="true" />
     </services>
 </container>
