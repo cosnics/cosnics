@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0",
+        "php": ">=7.4.0",
         "zend/gdata": "1.*",
         "google/apiclient": "1.1.*"
     },
