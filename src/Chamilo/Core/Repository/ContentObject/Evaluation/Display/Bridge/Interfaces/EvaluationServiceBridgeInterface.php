@@ -47,4 +47,12 @@ interface EvaluationServiceBridgeInterface
      */
     public function getUsersForEntity(int $entityType, int $entityId);
 
+    /**
+     * @param int $evaluationId
+     * @param int $userId
+     * @param int $entityId
+     * @param string $score
+     */
+    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score);
+
 }

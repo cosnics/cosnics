@@ -32,5 +32,7 @@ CourseGroupEntity = "Course group"
 PlatformGroupsEntity = "Platform groups"
 PlatformGroupEntity = "Platform group"
 EditScores = "Edit scores"
+ScoreEntryComplete = "You have successfully submitted the score."
+ScoreEntryFail = "The score hasn't been saved."
 
 

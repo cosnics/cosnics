@@ -3,8 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
-use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 
 /**
@@ -16,44 +14,21 @@ class SaveScoreComponent extends Manager
 {
     public function run(): string
     {
-        try {
-            $req = $this->getRequest();
+        try
+        {
+            $this->validateSaveScoreInput();
 
-            if (!$req->isMethod('POST'))
-            {
-                throw new NotAllowedException();
-            }
-
-            $entityId = $req->getFromPost('entity_id');
-            $score = $req->getFromPost('score') ?? '';
-
-            if (empty($entityId))
-            {
-                $this->throwUserException('EntityIdNotProvided');
-            }
-
-            $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
-            $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
-
-            if (! in_array($entityId, $userIds))
-            {
-                $this->throwUserException('EntityNotInList');
-            }
+            $entityId = $this->getRequest()->getFromPost('entity_id');
+            $score = $this->getRequest()->getFromPost('score') ?? '';
 
             $evaluation = $this->get_root_content_object();
 
-            if (! $evaluation instanceof Evaluation)
-            {
-                $this->throwUserException('EvaluationNotFound');
-            }
-
-            $this->getEntityService()->createOrUpdateEvaluationEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $contextIdentifier, $entityType, $entityId, $score);
+            $this->getEvaluationServiceBridge()->saveEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $entityId, $score);
 
             $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $score]);
             $result->display();
-
-        } catch (\Exception $ex) {
+        } catch (\Exception $ex)
+        {
             $result = new JsonAjaxResult();
             $result->set_result_code(500);
             $result->set_result_message($ex->getMessage());

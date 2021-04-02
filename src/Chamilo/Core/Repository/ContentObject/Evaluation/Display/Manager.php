@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService;
@@ -15,6 +16,8 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
 /**
  *
@@ -33,6 +36,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
     const ACTION_BUILD_RUBRIC = 'BuildRubric';
     const ACTION_REMOVE_RUBRIC = 'RemoveRubric';
+
+    const ACTION_ENTRY = 'Entry';
+    const ACTION_SAVE_SCORE = 'SaveScore';
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -187,6 +193,72 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     public function getEvaluation()
     {
         return $this->get_root_content_object();
+    }
+
+    /**
+     * @throws NotAllowedException
+     * @throws UserException
+     */
+    public function validateSaveScoreInput()
+    {
+        $this->validateIsPostRequest();
+        $this->validateIsEvaluation();
+        $this->validateEntity();
+    }
+
+    /**
+     * @throws NotAllowedException
+     */
+    protected function validateIsPostRequest()
+    {
+        if (!$this->getRequest()->isMethod('POST'))
+        {
+            throw new NotAllowedException();
+        }
+    }
+
+    /**
+     * @throws UserException
+     */
+    protected function validateIsEvaluation()
+    {
+        $evaluation = $this->get_root_content_object();
+
+        if (! $evaluation instanceof Evaluation)
+        {
+            $this->throwUserException('EvaluationNotFound');
+        }
+    }
+
+    /**
+     * @throws UserException
+     */
+    protected function validateEntity()
+    {
+        $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
+
+        if (empty($entityId))
+        {
+            $this->throwUserException('EntityIdNotProvided');
+        }
+
+        $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+
+        if (! in_array($entityId, $userIds))
+        {
+            $this->throwUserException('EntityNotInList');
+        }
+    }
+
+    /**
+     * @param string $key
+     * @throws UserException
+     */
+    protected function throwUserException($key = "")
+    {
+        throw new UserException(
+            $this->getTranslator()->trans($key, [], Manager::context())
+        );
     }
 
 }

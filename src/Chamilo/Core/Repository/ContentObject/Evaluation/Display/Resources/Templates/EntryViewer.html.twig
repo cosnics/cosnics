@@ -65,7 +65,6 @@
         max-width: 107ch;
     }
 </style>
-
 <div class="col-xs-12">
     {% if HAS_RUBRIC %}
     <div class="row">
@@ -96,9 +95,10 @@
                 <div class="title-underline-fw mod-score">
                     <h3 class="section-title">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                 </div>
-                <form name="score" method="post" class="form-inline" style="margin-left: 15px">
+                <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline" style="margin-left: 15px">
                     <div class="form-group"><label class="control-label required score-label" for="score_score">Score:</label>
-                        <input id="score_score" name="score" required="required" value="" type="text" style="width: 57px" class="form-control form-control-sm mod-score" autocomplete="off">
+                        <input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" style="width: 57px" class="form-control form-control-sm mod-score" autocomplete="off">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
                     </div>
                     <button type="submit" class="btn btn-primary" style="margin-left: 10px;">{{ 'Save'|trans({}, commonContext) }}</button>
                 </form>

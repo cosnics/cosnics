@@ -7,6 +7,11 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component
+ *
+ * @author - Stefan Gabriëls - Hogeschool Gent
+ */
 class EntryComponent extends Manager implements FeedbackSupport
 {
     const PARAM_RUBRIC_ENTRY = 'RubricEntry';
@@ -31,6 +36,13 @@ class EntryComponent extends Manager implements FeedbackSupport
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $entityId = $this->getRequest()->query->get('entity_id');
         $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
+
+        $score = '';
+        if ($evaluationScore)
+        {
+            $score = $evaluationScore->getScore();
+        }
 
         $this->set_parameter('entity_id', $entityId); // otherwise feedback update url doesn't pick this up
 
@@ -72,6 +84,8 @@ class EntryComponent extends Manager implements FeedbackSupport
             'HEADER' => $this->render_header(),
             'ENTITY_TYPE' => $entityType,
             'CAN_EDIT_EVALUATION' => true, //$this->getAssignmentServiceBridge()->canEditAssignment(),
+            'SCORE' => $score,
+            'SAVE_SCORE_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_SAVE_SCORE]),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'HAS_RUBRIC' => $hasRubric,
             'RUBRIC_VIEW' => $rubricView,

@@ -7,9 +7,9 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxCompo
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager as DisplayManager;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax
@@ -72,13 +72,11 @@ abstract class Manager extends AjaxManager
     }
 
     /**
-     * @param string $key
      * @throws UserException
+     * @throws NotAllowedException
      */
-    protected function throwUserException($key = "")
+    protected function validateSaveScoreInput()
     {
-        throw new UserException(
-            $this->getTranslator()->trans($key, [], DisplayManager::context())
-        );
+        $this->ajaxComponent->validateSaveScoreInput();
     }
 }

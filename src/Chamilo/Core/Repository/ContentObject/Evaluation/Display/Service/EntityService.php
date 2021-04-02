@@ -85,6 +85,15 @@ class EntityService
     }
 
     /**
+     * @param int $entryId
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function getEvaluationEntryScore(int $entryId)
+    {
+        return $this->entityRepository->getEvaluationEntryScore($entryId);
+    }
+
+    /**
      * @param int $evaluationId
      * @param int $evaluatorId
      * @param ContextIdentifier $contextIdentifier
