@@ -3,8 +3,10 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service
@@ -19,12 +21,19 @@ class EvaluationRubricService
     protected $contentObjectService;
 
     /**
+     * @var Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository
+     */
+    protected $rubricResultRepository;
+
+    /**
      * EvaluationRubricService constructor.
      * @param ContentObjectService $contentObjectService
+     * @param RubricResultRepository $rubricResultRepository
      */
-    public function __construct(ContentObjectService $contentObjectService)
+    public function __construct(ContentObjectService $contentObjectService, RubricResultRepository $rubricResultRepository)
     {
         $this->contentObjectService = $contentObjectService;
+        $this->rubricResultRepository = $rubricResultRepository;
     }
 
     /**
@@ -64,6 +73,15 @@ class EvaluationRubricService
         {
             return null;
         }
+    }
+
+    /**
+     * @param ContextIdentifier $entryContextIdentifier
+     * @return bool
+     */
+    public function entryHasResults(ContextIdentifier $entryContextIdentifier) : bool
+    {
+        return $this->rubricResultRepository->countRubricResultsForContextIdentifier($entryContextIdentifier) > 0;
     }
 
     public function isSelfEvaluationAllowed(Evaluation $evaluation) : bool

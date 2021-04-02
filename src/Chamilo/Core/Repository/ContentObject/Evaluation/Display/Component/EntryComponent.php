@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 
@@ -58,25 +59,20 @@ class EntryComponent extends Manager implements FeedbackSupport
         );
         $feedbackManagerHtml = $feedbackManager->run();
 
+        $rubricAction = null;
         $rubricView = null;
-        $rubricDisplay = null;
         $hasRubric = $canUseRubricEvaluation = false;
 
         if ($this->supportsRubrics())
         {
             $hasRubric = $this->getEvaluationRubricService()->evaluationHasRubric($this->getEvaluation());
-
             $canUseRubricEvaluation = $this->canUseRubricEvaluation();
+            $entryContextIdentifier = $this->getRubricBridge()->getContextIdentifier();
+            $rubricAction = $this->getRubricActionFromRequest($canUseRubricEvaluation, $entryContextIdentifier);
 
-            if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
+            if ($rubricAction)
             {
-                $rubricView = $this->runRubricComponent('Entry');
-                $rubricDisplay = 'Entry';
-            }
-            else if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
-            {
-                $rubricView = $this->runRubricComponent('Result');
-                $rubricDisplay = 'Result';
+                $rubricView = $this->runRubricComponent($rubricAction);
             }
         }
 
@@ -89,12 +85,42 @@ class EntryComponent extends Manager implements FeedbackSupport
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'HAS_RUBRIC' => $hasRubric,
             'RUBRIC_VIEW' => $rubricView,
-            'RUBRIC_DISPLAY' => $rubricDisplay,
+            'RUBRIC_ACTION' => $rubricAction,
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
             'FOOTER' => $this->render_footer()
         ];
+    }
+
+    /**
+     * @param bool $canUserRubricEvaluation
+     * @param ContextIdentifier $contextIdentifier
+     * @return string|null
+     */
+    protected function getRubricActionFromRequest(bool $canUserRubricEvaluation, ContextIdentifier $contextIdentifier) : ?string
+    {
+        if ($canUserRubricEvaluation && $this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY))
+        {
+            return 'Entry';
+        }
+
+        if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
+        {
+            return 'Result';
+        }
+
+        if ($this->getEvaluationRubricService()->entryHasResults($contextIdentifier))
+        {
+            return 'Result';
+        }
+
+        if ($canUserRubricEvaluation)
+        {
+            return 'Entry';
+        }
+
+        return null;
     }
 
     protected function getEntityName() : string

@@ -8,6 +8,12 @@
         padding-left: 15px;
     }
 
+    .rubric-action {
+        display: inline-block;
+        margin-top: 20px;
+        padding-bottom: 5px;
+    }
+
     .section-title {
         /*border-bottom: 2px solid rgba(180, 194, 197, 0.5);*/
         color: #507177;
@@ -70,17 +76,12 @@
     <div class="row">
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
-                {% if CAN_USE_RUBRIC_EVALUATION %}
-                    {% if RUBRIC_DISPLAY == 'Entry' %}
-                        <h3 class="section-title">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
-                    {% else %}
-                        <a style="margin-right: 15px;display:inline-block;/*padding-bottom:5px;*/margin-top:20px" href="{{ RUBRIC_ENTRY_URL }}#rubric">{{ 'FillInRubric'|trans({}, appContext) }}</a>
-                    {% endif %}
-                {% endif %}
-                {% if RUBRIC_DISPLAY == 'Result' %}
+                {% if RUBRIC_ACTION == 'Entry' %}
+                    <h3 class="section-title">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
+                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="rubric-action">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
+                {% elseif RUBRIC_ACTION == 'Result' %}
                     <h3 class="section-title">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
-                {% else %}
-                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" style="display:inline-block;/*padding-bottom:5px;*/margin-top:20px">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
+                    <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action">{{ 'FillInRubric'|trans({}, appContext) }}</a>
                 {% endif %}
             </div>
             <div style="padding: 0">
