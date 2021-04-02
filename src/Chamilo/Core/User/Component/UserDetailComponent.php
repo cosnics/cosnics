@@ -165,7 +165,7 @@ class UserDetailComponent extends Manager
             }
         }
 
-        $extendedProperties = $this->getUserPropertiesExtensionManager()->getExtendedUserProperties($this->getUser());
+        $extendedProperties = $this->getUserPropertiesExtensionManager()->getExtendedUserProperties($user);
         foreach($extendedProperties as $key => $value)
         {
             $table->setCellContents(($i + 1), 0, $key);
