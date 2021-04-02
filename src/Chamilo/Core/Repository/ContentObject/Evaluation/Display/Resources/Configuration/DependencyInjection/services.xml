@@ -4,7 +4,7 @@
     <services>
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\FeedbackService" autowire="true" />
-        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge" autowire="true" />
     </services>
 </container>

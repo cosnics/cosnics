@@ -3,24 +3,22 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
-use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
-use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 
-class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedback\FeedbackSupport/*, TableSupport*/
+class EntryComponent extends Manager implements FeedbackSupport
 {
     const PARAM_RUBRIC_ENTRY = 'RubricEntry';
     const PARAM_RUBRIC_RESULTS = 'RubricResult';
 
-    /*public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
-    {
-        parent::__construct($applicationConfiguration);
-    }*/
+    private $entityName;
 
     public function run()
     {
+        BreadcrumbTrail::getInstance()->get_last()->set_name(
+            $this->getTranslator()->trans('Evaluation', [], Manager::context()) . ' ' . $this->getEntityName());
+
         return $this->getTwig()->render(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':EntryViewer.html.twig',
              $this->getTemplateProperties()
@@ -29,18 +27,12 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
     protected function getTemplateProperties()
     {
-        $entityService = $this->getService(EntityService::class);
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $entityId = $this->getRequest()->query->get('entity_id');
-        $evaluationEntry = $entityService->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
 
         $this->set_parameter('entity_id', $entityId); // otherwise feedback update url doesn't pick this up
-
-        if ($entityType == 0)
-        {
-            $user = $entityService->getUserForEntity($entityId);
-        }
 
         $configuration = new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this);
         $configuration->set(\Chamilo\Core\Repository\Feedback\Manager::CONFIGURATION_SHOW_FEEDBACK_HEADER, false);
@@ -55,39 +47,69 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         $feedbackManagerHtml = $feedbackManager->run();
 
         $rubricView = null;
+        $rubricDisplay = null;
         $hasRubric = $canUseRubricEvaluation = false;
 
         if ($this->supportsRubrics())
         {
-            $hasRubric = $this->getRubricService()->evaluationHasRubric($this->getEvaluation());
+            $hasRubric = $this->getEvaluationRubricService()->evaluationHasRubric($this->getEvaluation());
 
             $canUseRubricEvaluation = $this->canUseRubricEvaluation();
 
             if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY) && $canUseRubricEvaluation)
             {
                 $rubricView = $this->runRubricComponent('Entry');
+                $rubricDisplay = 'Entry';
             }
-
-            if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
+            else if ($this->getRequest()->getFromUrl(self::PARAM_RUBRIC_RESULTS))
             {
                 $rubricView = $this->runRubricComponent('Result');
+                $rubricDisplay = 'Result';
             }
         }
 
         return [
             'HEADER' => $this->render_header(),
             'ENTITY_TYPE' => $entityType,
-            'USER' => $user,
             'CAN_EDIT_EVALUATION' => true, //$this->getAssignmentServiceBridge()->canEditAssignment(),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,
             'HAS_RUBRIC' => $hasRubric,
             'RUBRIC_VIEW' => $rubricView,
+            'RUBRIC_DISPLAY' => $rubricDisplay,
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
             'FOOTER' => $this->render_footer()
         ];
     }
+
+    protected function getEntityName() : string
+    {
+        if (isset($this->entityName))
+        {
+            return $this->entityName;
+        }
+
+        $entityId = $this->getRequest()->query->get('entity_id');
+        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+
+        if ($entityType == 0)
+        {
+            $user = $this->getEntityService()->getUserForEntity($entityId);
+            $this->entityName = $user->get_fullname();
+            return $this->entityName;
+        }
+
+        return '';
+    }
+
+    /*public function render_header($pageTitle = '')
+    {
+        $html = [];
+        $html[] = parent::render_header($pageTitle);
+        return implode(PHP_EOL, $html);
+    }*/
+
 
     /**
      *
@@ -172,6 +194,6 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             return true;
         }
 
-        return $this->getRubricService()->isSelfEvaluationAllowed($this->getEvaluation());
+        return $this->getEvaluationRubricService()->isSelfEvaluationAllowed($this->getEvaluation());
     }
 }

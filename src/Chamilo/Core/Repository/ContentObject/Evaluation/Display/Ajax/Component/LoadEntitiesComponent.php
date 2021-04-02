@@ -28,18 +28,13 @@ class LoadEntitiesComponent extends Manager
                 $this->throwUserException('EvaluationNotFound');
             }
 
-            $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
 
             $filterParametersBuilder = $this->getFilterParametersBuilder();
             $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $this->getFieldMapper());
             $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $filterParameters);
 
-            $resultData = [
-                'entity_type' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
-                'context' => $contextIdentifier->getContextClass() . ' - ' . $contextIdentifier->getContextId(),
-                'entities' => iterator_to_array($selectedUsers)
-            ];
+            $resultData = ['entities' => iterator_to_array($selectedUsers)];
 
             if ($this->getRequest()->getFromPostOrUrl('request_count') == 'true')
             {

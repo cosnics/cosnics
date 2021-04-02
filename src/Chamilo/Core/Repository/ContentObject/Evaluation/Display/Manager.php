@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
@@ -39,6 +41,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         parent::__construct($applicationConfiguration);
         $this->buildBridgeServices();
+        $entityIdentifier = $this->getRequest()->query->get('entity_id');
+        if ($entityIdentifier)
+        {
+            $this->set_parameter('entity_id', $entityIdentifier);
+        }
     }
 
     /**
@@ -148,6 +155,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getRubricBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(RubricBridgeInterface::class);
+    }
+
+    /**
+     * @return EntityService
+     */
+    protected function getEntityService()
+    {
+        return $this->getService(EntityService::class);
+    }
+
+    /**
+     * @return EvaluationRubricService
+     */
+    protected function getEvaluationRubricService()
+    {
+        return $this->getService(EvaluationRubricService::class);
     }
 
     /**

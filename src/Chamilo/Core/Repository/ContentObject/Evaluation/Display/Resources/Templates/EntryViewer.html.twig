@@ -3,61 +3,116 @@
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
 {% set commonContext = 'Chamilo\\Libraries' %}
 
-{% if ENTITY_TYPE == '0' %}
-    {{ USER.get_fullname() }}
-{% endif %}
 <style type="text/css">
-    .title-underlined {
-        border-bottom: 1px solid #dddddd;
-        padding-bottom: 7px;
-        margin-bottom: 25px;
+    #page-title {
+        padding-left: 15px;
+    }
+
+    .section-title {
+        /*border-bottom: 2px solid rgba(180, 194, 197, 0.5);*/
+        color: #507177;
+        display: inline-block;
+        font-size: 2rem;
+        font-weight: 500;
+        /*margin-bottom: -1px;*/
+        margin-right: 15px;
+    }
+
+    .title-underline-fw {
+        border-bottom: 1px solid #ededed;
+    }
+
+    .title-underline-fw.mod-rubric {
+        margin: 0 0 10px;
+    }
+
+    .title-underline-fw.mod-score {
+        margin: 15px 0 20px;
+    }
+
+    .title-underline-fw.mod-feedback {
+        margin: 20px 0 15px;
+    }
+
+    #feedback h3:not(.section-title) {
+        color: #507177;
+        display: inline-block;
+        font-size: 1.75rem;
+        margin: 5px 0 15px 15px;
+    }
+
+    .save-rubric-area {
+        margin-bottom: 20px;
+    }
+
+    .score-label {
+        color: #507177;
+        margin-bottom: 5px !important;
+        margin-right: 10px;
+    }
+
+    #rubric-entry h4, #rubric-result h4 {
+        display: none;
+    }
+
+    #feedback .panel-feedback {
+        border-color: transparent;
+        max-width: 110ch;
+    }
+
+    #feedback > form {
+        margin-left: 15px;
+        max-width: 107ch;
     }
 </style>
-    <div class="col-xs-12">
-        <div class="row">
-            <div class="col-xs-12" id="score">
-                {% if CAN_EDIT_EVALUATION %}
-                    <h3 class="title-underlined">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
-                    <style>
-                        label {
-                            margin-bottom: 5px !important;
-                        }
-                    </style>
-                    <form name="score" method="post" class="form-inline">
-                        <div class="form-group"><label class="control-label required" for="score_score">Score</label>
-                            <input id="score_score" name="score" required="required" value="" type="text" style="width: 57px">
-                        </div>
-                        <button type="submit" class="btn btn-default btn-score" style="margin-left: 20px;">{{ 'Save'|trans({}, commonContext) }}</button>
-                    </form>
+
+<div class="col-xs-12">
+    {% if HAS_RUBRIC %}
+    <div class="row">
+        <div class="col-xs-12" id="rubric">
+            <div class="title-underline-fw mod-rubric">
+                {% if CAN_USE_RUBRIC_EVALUATION %}
+                    {% if RUBRIC_DISPLAY == 'Entry' %}
+                        <h3 class="section-title">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
+                    {% else %}
+                        <a style="margin-right: 15px;display:inline-block;/*padding-bottom:5px;*/margin-top:20px" href="{{ RUBRIC_ENTRY_URL }}#rubric">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                    {% endif %}
+                {% endif %}
+                {% if RUBRIC_DISPLAY == 'Result' %}
+                    <h3 class="section-title">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
+                {% else %}
+                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" style="display:inline-block;/*padding-bottom:5px;*/margin-top:20px">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
                 {% endif %}
             </div>
-            {% if HAS_RUBRIC %}
-                <div id="rubric">
-                    <div style="margin: 20px 0;">
-                        <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
-                        {% if CAN_USE_RUBRIC_EVALUATION %}
-                            <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="btn btn-primary">{{ 'FillInRubric'|trans({}, appContext) }}</a>
-                        {% endif %}
-                        <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="btn btn-default">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
-                    </div>
-                    <div style="padding: 20px 0; border-top: 1px dotted #dddddd;">
-                        {{ RUBRIC_VIEW|raw }}
-                    </div>
-                </div>
-            {% endif %}
-
-        </div>
-
-        <div class="row">
-            <div class="col-xs-12" id="feedback">
-                <h3 class="title-underlined">Feedback</h3>
-                {{ FEEDBACK_MANAGER|raw }}
+            <div style="padding: 0">
+                {{ RUBRIC_VIEW|raw }}
             </div>
         </div>
     </div>
-
-
-
-
+    {% endif %}
+    {% if CAN_EDIT_EVALUATION %}
+        <div class="row">
+            <div class="col-xs-12" id="score">
+                <div class="title-underline-fw mod-score">
+                    <h3 class="section-title">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+                </div>
+                <form name="score" method="post" class="form-inline" style="margin-left: 15px">
+                    <div class="form-group"><label class="control-label required score-label" for="score_score">Score:</label>
+                        <input id="score_score" name="score" required="required" value="" type="text" style="width: 57px" class="form-control form-control-sm mod-score" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">{{ 'Save'|trans({}, commonContext) }}</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-xs-12" id="feedback">
+            <div class="title-underline-fw mod-feedback">
+                <h3 class="section-title">Feedback</h3>
+            </div>
+            {{ FEEDBACK_MANAGER|raw }}
+        </div>
+    </div>
+</div>
 
 {{ FOOTER|raw }}

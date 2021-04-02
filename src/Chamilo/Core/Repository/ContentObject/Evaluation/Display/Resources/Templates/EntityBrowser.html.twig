@@ -6,6 +6,9 @@
     td.table-lastname {
       text-transform: uppercase;
     }
+    td.table-fb-count {
+        text-align: center;
+    }
     .tbl-no-sort {
         pointer-events: none
     }
@@ -37,7 +40,7 @@
     .form-control-sm.mod-score {
         /*height: calc(1.9em + .5rem + 2px);*/
     }
-    td.table-score {
+    table.isScoresEditable td.table-score {
         padding: 5px 8px!important;
         width: 8rem;
     }
@@ -94,10 +97,13 @@
         background: rgb(249, 249, 249);
     }*/
 </style>
+
+{% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
+
 <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
 
 <ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">Entity</a></li>
+    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ entityTypesPlural[ENTITY_TYPE]|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
 </ul>
@@ -107,57 +113,67 @@
         <!--Entity type: ${ entityType }<br />
         Context: ${ context }-->
         <div>
-            <div class="btn-toolbar btn-action-toolbar">
-                <div class="form-inline" style="display: flex; justify-content: flex-end">
-                    <div class="action-bar input-group">
-                        <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                                      type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750"></b-form-input>
-                        <div class="input-group-btn">
-                            <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
-                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                            </button>
+            <div style="display: inline-block">
+                <div style="display: flex;align-items: center">
+                    <div class="btn-toolbar btn-action-toolbar">
+                        <div class="form-inline" style="display: flex; justify-content: flex-start;margin-left:5px;margin-top:15px">
+                            <div class="action-bar input-group">
+                                <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                              type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
+                                <div class="input-group-btn">
+                                    <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div style="margin-left:15px">
+                        <button aria-label="" aria-expanded="false" class="btn-check" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                    </div>
                 </div>
-            </div>
-            <b-table striped bordered
-                :items="entitiesProvider"
-                :fields="fields"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :filter="globalSearchQuery"
-                :per-page="pagination.perPage"
-                :current-page="pagination.currentPage"
-                class="mod-col-fit">
-                <template #head(fullname)="data">
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">${ '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}'.toUpperCase() }</a>
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
-                </template>
-                <template #cell(fullname)="data">
-                    ${data.item.lastname.toUpperCase()}, ${data.item.firstname}
-                </template>
-                <template #cell(score)="data">
-                    <b-form-input class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
-                </template>
-                <template #cell(feedback_count)="data">${ data.item.feedback_count }
-                    <a class="btn btn-default btn-link " style="text-decoration: none;padding:3px"><i class="fa fa-search-plus" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
-                </template>
-            </b-table>
-            <div class="pagination-container" style="display: flex; justify-content: flex-end">
-                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                              aria-controls="data-table"></b-pagination>
-                <ul class="pagination">
-                    <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
-                </ul>
+                <b-table striped bordered
+                    :items="entitiesProvider"
+                    :fields="fields"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    :filter="globalSearchQuery"
+                    :per-page="pagination.perPage"
+                    :current-page="pagination.currentPage"
+                    class="mod-col-fit" :class="{ 'isScoresEditable': scoresEditable }" style="width: initial">
+                    <template #head(fullname)="data">
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">${ '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}'.toUpperCase() }</a>
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                    </template>
+                    <template #cell(fullname)="data">
+                        <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                    </template>
+                    <template #cell(score)="data">
+                        <b-form-input v-if="scoresEditable" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                        <span v-else>${ data.item.score }</span>
+                    </template>
+                    <template #cell(feedback_count)="data">${ data.item.feedback_count }
+                    </template>
+                    <template #cell(actions)="data">
+                        <a class="btn btn-default btn-link" :href="getUrl(data.item.id)" style="text-decoration: none;padding:3px"><i class="fa fa-search" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
+                    </template>
+                </b-table>
+                <div class="pagination-container" style="display: flex; justify-content: flex-end;">
+                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                  aria-controls="data-table"></b-pagination>
+                    <ul class="pagination">
+                        <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
-        Properties
+        <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
+        {{ CONTENT_OBJECT_RENDITION|raw }}
     </div>
     {% if SUPPORTS_RUBRICS %}
     <div role="tabpanel" class="tab-pane tab-pane-with-border" id="rubric">
-        <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
             <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
@@ -184,14 +200,14 @@
             el: '#entities',
             delimiters: ['${', '}'],
             data: {
-                entityType: '',
+                entityType: {{ ENTITY_TYPE }},
                 context: '',
                 fields: [
-                    { key: 'id', thClass: 'col-fit' },
                     { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
                     { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
                     { key: 'score', sortable: false, thClass: 'tbl-no-sort col-fit', variant: 'score' },
-                    { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false }
+                    { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count'  }//,
+                    /*{ key: 'actions', label: '', sortable: false, thClass: 'tbl-no-sort' }*/
                 ],
                 sortBy: 'lastname',
                 sortDesc: false,
@@ -201,10 +217,15 @@
                     total: 0
                 },
                 globalSearchQuery: '',
-                requestCount: true
+                requestCount: true,
+                scoresEditable: false
             },
 
             methods: {
+                getUrl(entityId)
+                {
+                    return '{{ ENTITY_BASE_URL|raw }}&entity_type=' + this.entityType + '&entity_id=' + entityId;
+                },
                 onScoreUpdated(entity, score) {
                     $.ajax({
                         url: '{{ SAVE_SCORE_URL|raw }}',
@@ -247,7 +268,6 @@
                         }
                     }).done(function(data) {
                         var d = data.properties;
-                        this.entityType = d.entity_type;
                         this.context = d.context;
                         if (d.count !== undefined) {
                             this.pagination.total = d.count;
