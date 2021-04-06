@@ -187,17 +187,19 @@ class UserService
      * @param string $username
      * @param string $officialCode
      * @param string $emailAddress
-     * @param string $password
+     * @param null $password
      * @param string $authSource
      * @param bool $active
      *
      * @param \DateTime|null $expirationDate
+     * @param int $status
+     * @param null $diskQuota
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
      */
     public function createUser(
         $firstName, $lastName, $username, $officialCode, $emailAddress, $password = null, $authSource = 'Platform',
-        $active = true, \DateTime $expirationDate = null
+        $active = true, \DateTime $expirationDate = null, $status = User::STATUS_STUDENT, $diskQuota = null
     )
     {
         $requiredParameters = [
@@ -231,6 +233,7 @@ class UserService
         $user->set_official_code($officialCode);
         $user->set_email($emailAddress);
         $user->set_auth_source($authSource);
+        $user->set_status($status);
 
         if($active)
         {
@@ -242,6 +245,11 @@ class UserService
         if($expirationDate instanceof \DateTime)
         {
             $user->set_expiration_date($expirationDate->getTimestamp());
+        }
+
+        if($diskQuota > 0)
+        {
+            $user->set_disk_quota($diskQuota);
         }
 
         $this->passwordSecurity->setPasswordForUser($user, $password);
