@@ -12,13 +12,13 @@ class Timer
 
     /**
      *
-     * @var integer
+     * @var float
      */
     private $start_time;
 
     /**
      *
-     * @var integer
+     * @var float
      */
     private $stop_time;
 
@@ -60,6 +60,14 @@ class Timer
     public function get_time()
     {
         return (int) ($this->stop_time - $this->start_time);
+    }
+
+    /**
+     * @return float
+     */
+    public function get_time_as_float()
+    {
+        return ($this->stop_time - $this->start_time);
     }
 
     /**
