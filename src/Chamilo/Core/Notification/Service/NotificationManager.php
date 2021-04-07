@@ -67,6 +67,8 @@ class NotificationManager
         $url, array $viewingContexts, $date, $targetUserIds = [], $filters = [], $contextPaths = []
     )
     {
+        // todo: fix this once the bug is fixed
+        return;
         $notification = new Notification();
 
         foreach ($filters as $filter)
@@ -152,6 +154,7 @@ class NotificationManager
      */
     public function getNotificationById($notificationId = 0)
     {
+        return null;
         if (empty($notificationId))
         {
             throw new \RuntimeException('The given notification id can not be empty');
@@ -176,6 +179,7 @@ class NotificationManager
      */
     public function getNotificationsByContextPathForUser($contextPath, User $user, $offset = null, $count = null)
     {
+        return [];
         return $this->getNotificationsByContextPathsForUser([$contextPath], $user, $offset, $count);
     }
 
@@ -190,6 +194,8 @@ class NotificationManager
     public function getNotificationsByContextPathsForUser(array $contextPaths, User $user, $offset = null, $count = null
     )
     {
+        // TODO: enable this once bug is fixed
+        return [];
         $contexts = [];
 
         foreach ($contextPaths as $contextPath)
@@ -209,8 +215,11 @@ class NotificationManager
             return [];
         }
 
+
         $userNotifications =
             $this->notificationRepository->findUserNotificationsByContextsForUser($contexts, $user, $offset, $count);
+
+        $userNotifications = [];
 
         $notifications = [];
 
@@ -247,6 +256,7 @@ class NotificationManager
      */
     public function countUnseenNotificationsByContextPathsForUser(array $contextPaths, User $user)
     {
+        return 0;
         $contexts = [];
 
         foreach ($contextPaths as $contextPath)
@@ -275,6 +285,7 @@ class NotificationManager
      */
     public function setNotificationsViewedForUserAndContextPath($contextPath, User $user)
     {
+        return;
         $this->setNotificationsViewedForUserAndContextPaths([$contextPath], $user);
     }
 
@@ -284,6 +295,7 @@ class NotificationManager
      */
     public function setNotificationsViewedForUserAndContextPaths($contextPaths, User $user)
     {
+        return;
         $contexts = [];
 
         foreach ($contextPaths as $contextPath)
@@ -312,6 +324,7 @@ class NotificationManager
      */
     public function setNotificationsViewedForUser($notifications, User $user)
     {
+        return;
         $this->notificationRepository->setNotificationsViewedForUser($notifications, $user);
     }
 
@@ -321,6 +334,7 @@ class NotificationManager
      */
     public function setNotificationReadForUser(Notification $notification, User $user)
     {
+        return;
         $this->notificationRepository->setNotificationReadForUser($notification, $user);
     }
 
@@ -333,6 +347,7 @@ class NotificationManager
      */
     public function canUserViewNotification(Notification $notification, User $user)
     {
+        return false;
         return ($this->notificationRepository->countUserNotificationsByNotificationAndUser($notification, $user) > 0);
     }
 }
