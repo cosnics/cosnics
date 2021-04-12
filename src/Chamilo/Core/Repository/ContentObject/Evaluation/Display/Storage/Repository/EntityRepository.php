@@ -105,11 +105,12 @@ class EntityRepository
     /**
      *
      * @param int[] $userIds
+     * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function getUsersFromIDs(array $userIds, FilterParameters $filterParameters)
+    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters)
     {
         $class_name = User::class_name();
         $condition = new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds);
@@ -132,6 +133,14 @@ class EntityRepository
         $entryJoinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ENTITY_ID),
             new PropertyConditionVariable(User::class_name(), USER::PROPERTY_ID)
+        );
+        $entryJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable($contextIdentifier->getContextClass())
+        );
+        $entryJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_CONTEXT_ID),
+            new StaticConditionVariable($contextIdentifier->getContextId())
         );
 
         $feedbackJoinConditions = array();

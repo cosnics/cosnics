@@ -29,10 +29,12 @@ class LoadEntitiesComponent extends Manager
             }
 
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+            $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
             $filterParametersBuilder = $this->getFilterParametersBuilder();
             $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $this->getFieldMapper());
-            $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $filterParameters);
+
+            $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
 
             $resultData = ['entities' => iterator_to_array($selectedUsers)];
 
