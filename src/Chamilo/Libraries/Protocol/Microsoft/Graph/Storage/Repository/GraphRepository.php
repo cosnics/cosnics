@@ -345,7 +345,7 @@ class GraphRepository
      *
      * @return array
      */
-    protected function parseCollectionResponse(GraphResponse $graphResponse, $returnType)
+    protected function parseCollectionResponse(GraphResponse $graphResponse, $returnType, bool $delegated = false)
     {
         $body = $graphResponse->getBody();
 
@@ -360,7 +360,23 @@ class GraphRepository
             $count = count($body['value']);
         }
 
-        return ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
+        $data = ($count > 0) ? $graphResponse->getResponseAsObject($returnType) : [];
+        $nextLink = $body['@odata.nextLink'];
+        if(!empty($nextLink))
+        {
+            if($delegated)
+            {
+                $data =
+                    array_merge($data, $this->executeGetWithDelegatedAccess($nextLink, $returnType, true));
+            }
+            else
+            {
+                $data =
+                    array_merge($data, $this->executeGetWithAccessTokenExpirationRetry($nextLink, $returnType, true));
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -435,7 +451,7 @@ class GraphRepository
 
         if($isCollectionRequest)
         {
-            return $this->parseCollectionResponse($response, $returnClass);
+            return $this->parseCollectionResponse($response, $returnClass, false);
         }
 
         return $response;
@@ -461,7 +477,7 @@ class GraphRepository
 
         if($isCollectionRequest)
         {
-            return $this->parseCollectionResponse($response, $returnClass);
+            return $this->parseCollectionResponse($response, $returnClass, true);
         }
 
         return $response;
