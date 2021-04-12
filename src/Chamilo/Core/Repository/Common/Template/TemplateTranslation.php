@@ -56,7 +56,7 @@ class TemplateTranslation
         }
         elseif (isset($storage['en']) && isset($storage['en'][$variable]))
         {
-            return $storage;
+            return $storage['en']['variable'];
         }
         else
         {
