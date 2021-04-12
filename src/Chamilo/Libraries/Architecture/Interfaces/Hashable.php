@@ -12,27 +12,15 @@ namespace Chamilo\Libraries\Architecture\Interfaces;
 interface Hashable
 {
 
-    /**
-     *
-     * @return string
-     */
-    public function getHash();
+    public function getHash(): ?string;
 
     /**
      *
      * @return string[]
      */
-    public function getHashParts();
+    public function getHashParts(): array;
 
-    /**
-     *
-     * @return string
-     */
-    public function hash();
+    public function hash(): string;
 
-    /**
-     *
-     * @param string $hash
-     */
-    public function setHash($hash);
+    public function setHash(string $hash);
 }

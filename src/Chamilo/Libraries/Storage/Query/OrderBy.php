@@ -103,7 +103,7 @@ class OrderBy implements Hashable
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         return array($this->getConditionVariable()->getHashParts(), $this->getDirection());
     }

@@ -35,7 +35,7 @@ class FixedPropertyConditionVariable extends PropertyConditionVariable
      *
      * @see \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 

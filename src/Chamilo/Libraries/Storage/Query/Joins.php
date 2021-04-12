@@ -64,7 +64,7 @@ class Joins implements Countable, Hashable
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         $hashes = array();
 

@@ -11,26 +11,14 @@ namespace Chamilo\Libraries\Architecture\Traits;
 trait HashableTrait
 {
 
-    /**
-     *
-     * @var string
-     */
-    private $hash;
+    private ?string $hash = null;
 
-    /**
-     *
-     * @return string
-     */
-    public function getHash()
+    public function getHash(): ?string
     {
         return $this->hash;
     }
 
-    /**
-     *
-     * @param string $hash
-     */
-    public function setHash($hash)
+    public function setHash(string $hash)
     {
         $this->hash = $hash;
     }
@@ -39,13 +27,9 @@ trait HashableTrait
      *
      * @return string[]
      */
-    abstract public function getHashParts();
+    abstract public function getHashParts(): array;
 
-    /**
-     *
-     * @return string
-     */
-    public function hash()
+    public function hash(): string
     {
         if (!$this->getHash())
         {

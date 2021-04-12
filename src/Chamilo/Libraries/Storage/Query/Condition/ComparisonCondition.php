@@ -106,7 +106,7 @@ class ComparisonCondition extends Condition
      *
      * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 

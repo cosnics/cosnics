@@ -230,7 +230,7 @@ abstract class DataClassParameters implements Hashable
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         $hashParts = array();
 

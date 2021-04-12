@@ -47,7 +47,7 @@ class DataClassProperty implements Hashable
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         return array(__CLASS__, $this->get_property(), $this->get_value());
     }

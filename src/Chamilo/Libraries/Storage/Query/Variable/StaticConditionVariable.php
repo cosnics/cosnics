@@ -40,7 +40,7 @@ class StaticConditionVariable extends ConditionVariable
     /**
      * @return string[]
      */
-    public function getHashParts()
+    public function getHashParts(): array
     {
         $hashParts = ConditionVariable::getHashParts();
 
