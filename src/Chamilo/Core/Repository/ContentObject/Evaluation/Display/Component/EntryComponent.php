@@ -3,6 +3,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -22,25 +24,43 @@ class EntryComponent extends Manager implements FeedbackSupport
 
     public function run()
     {
+        $evaluationEntry = $this->ensureEvaluationEntry();
+
         BreadcrumbTrail::getInstance()->get_last()->set_name(
             $this->getTranslator()->trans('Evaluation', [], Manager::context()) . ' ' . $this->getEntityName());
 
         return $this->getTwig()->render(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':EntryViewer.html.twig',
-             $this->getTemplateProperties()
+             $this->getTemplateProperties($evaluationEntry)
         );
     }
 
-    protected function getTemplateProperties()
+    /**
+     * @return EvaluationEntry
+     */
+    private function ensureEvaluationEntry(): EvaluationEntry
     {
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $entityId = $this->getRequest()->query->get('entity_id');
-        $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
-        $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
+        $evaluation = $this->get_root_content_object();
 
+        return $this->getEntityService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
+    }
+
+    /**
+     * @param EvaluationEntry $evaluationEntry
+     * @return array
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     */
+    protected function getTemplateProperties(EvaluationEntry $evaluationEntry): array
+    {
+        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+        $entityId = $this->getRequest()->query->get('entity_id');
+        $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';
-        if ($evaluationScore)
+
+        if ($evaluationScore instanceof EvaluationEntryScore)
         {
             $score = $evaluationScore->getScore();
         }
@@ -54,7 +74,7 @@ class EntryComponent extends Manager implements FeedbackSupport
         $this->getRubricBridge()->setEvaluationEntry($evaluationEntry);
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
-            "Chamilo\Core\Repository\Feedback", $configuration,
+            'Chamilo\Core\Repository\Feedback', $configuration,
             \Chamilo\Core\Repository\Feedback\Manager::ACTION_BROWSE
         );
         $feedbackManagerHtml = $feedbackManager->run();

@@ -21,9 +21,9 @@ class LoadEntitiesComponent extends Manager
     {
         try
         {
-            $object = $this->get_root_content_object();
+            $evaluation = $this->get_root_content_object();
 
-            if (!$object instanceof Evaluation)
+            if (!$evaluation instanceof Evaluation)
             {
                 $this->throwUserException('EvaluationNotFound');
             }

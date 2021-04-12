@@ -104,18 +104,33 @@ class EntityService
      */
     public function createOrUpdateEvaluationEntryScoreForEntity(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId, string $score): void
     {
-        $evaluationEntry = $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId) ?:
-            $this->createEvaluationEntry($evaluationId, $contextIdentifier, $entityType, $entityId);
+        $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
 
         $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
 
-        if ($evaluationEntryScore instanceof EvaluationEntryScore) {
+        if ($evaluationEntryScore instanceof EvaluationEntryScore)
+        {
             $evaluationEntryScore->setScore($score);
             $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
-        } else {
+        } else
+        {
             $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, $score);
             $this->createEvaluationTargetUser($entityId, $evaluationEntryScore->getId());
         }
+    }
+
+    /**
+     * @param int $evaluationId
+     * @param ContextIdentifier $contextIdentifier
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return EvaluationEntry
+     */
+    public function createEvaluationEntryIfNotExists(int $evaluationId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId) : EvaluationEntry
+    {
+        return $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId) ?:
+            $this->createEvaluationEntry($evaluationId, $contextIdentifier, $entityType, $entityId);
     }
 
     /**
