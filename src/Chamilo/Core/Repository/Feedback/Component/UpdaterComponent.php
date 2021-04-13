@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\Feedback\Component;
 use a;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Manager;
+use Chamilo\Core\Repository\Feedback\PrivateFeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
@@ -42,7 +43,9 @@ class UpdaterComponent extends Manager
             throw new NotAllowedException();
         }
 
-        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), $feedback);
+        $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
+
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), $feedback, $supportsPrivateFeedback);
 
         if ($form->validate())
         {
@@ -79,6 +82,12 @@ class UpdaterComponent extends Manager
                 else
                 {
                     $feedback->set_comment($values[Feedback::PROPERTY_COMMENT]);
+                }
+
+                if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport)
+                {
+                    $isPrivate = (bool) $values[PrivateFeedbackSupport::PROPERTY_PRIVATE];
+                    $feedback->setIsPrivate($isPrivate);
                 }
 
                 $this->feedbackServiceBridge->updateFeedback($feedback);

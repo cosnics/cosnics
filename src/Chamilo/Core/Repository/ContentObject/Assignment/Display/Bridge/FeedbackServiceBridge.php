@@ -56,11 +56,12 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $feedbackContentObject
+     * @param bool $isPrivate
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function createFeedback(
-        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject, bool $isPrivate = false
     )
     {
         $feedbackContentObject = $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedbackContentObject, $this->entry);
@@ -117,5 +118,10 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     public function getFeedbackById($feedbackId)
     {
         return $this->assignmentFeedbackServiceBridge->getFeedbackByIdentifier($feedbackId);
+    }
+
+    public function supportsPrivateFeedback()
+    {
+        return false;
     }
 }

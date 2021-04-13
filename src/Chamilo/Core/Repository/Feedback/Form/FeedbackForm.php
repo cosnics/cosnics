@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\Feedback\Form;
 
+use Chamilo\Core\Repository\Feedback\PrivateFeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\Application;
@@ -25,6 +26,8 @@ class FeedbackForm extends FormValidator
      */
     protected $contentObjectRepository;
 
+    protected $supportsPrivateFeedback;
+
     /**
      * Constructor
      *
@@ -36,13 +39,14 @@ class FeedbackForm extends FormValidator
      * @throws \Exception
      */
     public function __construct(
-        Application $application, ContentObjectRepository $contentObjectRepository, $form_url, $feedback = null
+        Application $application, ContentObjectRepository $contentObjectRepository, $form_url, $feedback = null, $supportsPrivateFeedback = false
     )
     {
         parent::__construct('feedback', 'post', $form_url);
 
         $this->application = $application;
         $this->contentObjectRepository = $contentObjectRepository;
+        $this->supportsPrivateFeedback = $supportsPrivateFeedback;
 
         $this->build_form();
 
@@ -114,6 +118,11 @@ class FeedbackForm extends FormValidator
 //            '<div class="form-group">{element}</div>', self::PROPERTY_ATTACHMENTS_UPLOADER . '_static_data'
 //        );
 
+        if ($this->supportsPrivateFeedback)
+        {
+            $this->addElement('checkbox', PrivateFeedbackSupport::PROPERTY_PRIVATE, Translation::get('IsPrivate'));
+        }
+
         $buttons[] = $this->createElement(
             'style_submit_button',
             'submit',
@@ -128,6 +137,7 @@ class FeedbackForm extends FormValidator
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
 
+        $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
         $renderer->setElementTemplate('<div class="form-group">{element}</div>', 'buttons');
         $renderer->setRequiredNoteTemplate(null);
     }
@@ -163,6 +173,11 @@ class FeedbackForm extends FormValidator
             else
             {
                 $defaults[Feedback::PROPERTY_COMMENT] = $feedback->get_comment();
+            }
+
+            if ($this->supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport)
+            {
+                $defaults[PrivateFeedbackSupport::PROPERTY_PRIVATE] = $feedback->isPrivate();
             }
         }
 

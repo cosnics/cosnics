@@ -38,12 +38,13 @@ class FeedbackService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
      * @param integer $entry_id
+     * @param bool $isPrivate
      *
      * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
      */
     public function createFeedback(
         User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject,
-        int $entry_id
+        int $entry_id, bool $isPrivate = false
     )
     {
         $feedbackObject = new EvaluationEntryFeedback();
@@ -53,6 +54,7 @@ class FeedbackService
         $feedbackObject->set_creation_date(time());
         $feedbackObject->set_modification_date(time());
         $feedbackObject->setFeedbackContentObjectId($feedbackContentObject->getId());
+        $feedbackObject->setIsPrivate($isPrivate);
 
         if (!$this->feedbackRepository->createFeedback($feedbackObject))
         {

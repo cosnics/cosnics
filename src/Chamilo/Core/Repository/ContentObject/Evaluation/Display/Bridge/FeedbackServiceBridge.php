@@ -46,6 +46,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
         $this->assignmentFeedbackServiceBridge = $assignmentFeedbackServiceBridge;
         $this->notificationServiceBridge = $notificationServiceBridge;
     }*/
+
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\FeedbackService $feedbackService
      */
@@ -65,16 +66,18 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+     * @param bool $isPrivate
      *
      * @return \Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback
      */
     public function createFeedback(
-        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject, bool $isPrivate = false
     )
     {
-        $feedbackContentObject = $this->feedbackService->createFeedback($user, $feedbackContentObject, $this->entryId);
+        $feedbackContentObject = $this->feedbackService->createFeedback($user, $feedbackContentObject, $this->entryId, $isPrivate);
         return $feedbackContentObject;
 
+        // Todo: Notification code left here for future implementation
         /*$feedbackContentObject = $this->assignmentFeedbackServiceBridge->createFeedback($user, $feedbackContentObject, $this->entry);
         if($feedbackContentObject instanceof \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback)
         {
@@ -82,7 +85,6 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
         }
 
         return $feedbackContentObject;*/
-        return null;
     }
 
     /**
@@ -134,5 +136,10 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     public function getFeedbackById($feedbackId)
     {
         return $this->feedbackService->findFeedbackById($feedbackId);
+    }
+
+    public function supportsPrivateFeedback()
+    {
+        return true;
     }
 }

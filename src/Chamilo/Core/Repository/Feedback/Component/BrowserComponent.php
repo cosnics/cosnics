@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Manager;
+use Chamilo\Core\Repository\Feedback\PrivateFeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -44,7 +45,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url());
+        $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
+
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), null, $supportsPrivateFeedback);
 
         if ($form->validate())
         {
@@ -61,13 +64,18 @@ class BrowserComponent extends Manager implements DelegateComponent
             $feedbackContentObject->set_title('Feedback');
             $feedbackContentObject->set_state(ContentObject::STATE_INACTIVE);
             $success = $feedbackContentObject->create();
-
             $this->getContentObjectIncluder()->scanForResourcesAndIncludeContentObjects($feedbackContentObject);
 
-            if($success)
+            $isPrivate = false;
+            if ($supportsPrivateFeedback)
+            {
+                $isPrivate = (bool) $values[PrivateFeedbackSupport::PROPERTY_PRIVATE];
+            }
+
+            if ($success)
             {
                 $feedback =
-                    $this->feedbackServiceBridge->createFeedback($this->getUser(), $feedbackContentObject);
+                    $this->feedbackServiceBridge->createFeedback($this->getUser(), $feedbackContentObject, $isPrivate);
 
                 $success = $feedback instanceof Feedback;
             }
@@ -140,12 +148,19 @@ class BrowserComponent extends Manager implements DelegateComponent
                         )
                     );
 
+                    $isPrivateHTML = '';
+                    if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+                    {
+                        // Todo: Move styling out
+                        $isPrivateHTML = '<div style="font-size: 11px;margin-top: 4px;background: #d35555;display: inline-block;color: white;padding: 2px;text-transform: uppercase">' . Translation::get('Private') . '</div>';
+                    }
+
                     $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';
 
                     $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' .
                         $feedback->get_user()->get_fullname() .
                         '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) .
-                        '</div></h4>';
+                        '</div>' . $isPrivateHTML . '</h4>';
 
                     $allowedToUpdateFeedback = $this->feedbackRightsServiceBridge->canEditFeedback($feedback);
                     $allowedToDeleteFeedback = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedback);

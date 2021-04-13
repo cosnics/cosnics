@@ -5,6 +5,7 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
+UpdaterComponent = "Bewerk feedback"
 AddFeedback = "Voeg feedback toe"
 Feedback = "Feedback"
 Comment = "Commentaar"
@@ -12,3 +13,5 @@ NoFeedbackYet = "Er is nog geen feedback beschikbaar"
 StopReceivingNotifications = "Ontvang feedback niet langer via e-mail"
 ReceiveNotifications = "Ontvang nieuwe feedback via e-mail"
 FeedbackNotificationAdded = "Notificatie toegevoegd"
+IsPrivate = "Privé feedback"
+Private = "Privé"
