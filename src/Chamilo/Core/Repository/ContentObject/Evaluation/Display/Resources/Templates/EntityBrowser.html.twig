@@ -96,6 +96,37 @@
     .table[css-grid] tr:nth-child(even) td {
         background: rgb(249, 249, 249);
     }*/
+    {% if not HAS_RUBRIC %}
+    /* TODO: I copied these styles from rubrics but they should be global */
+    .btn-check {
+        background: none;
+        border: none;
+        color: #888;
+        cursor: default;
+        margin: 0;
+        padding: 0;
+    }
+    .btn-icon-check {
+        margin-right: .3em;
+        width: 1em;
+    }
+    .btn-icon-check:before {
+        content: "\f096";
+    }
+    .btn-check.checked .btn-icon-check:before {
+        content: "\f046";
+    }
+    .lbl-check {
+        border: 1px solid transparent;
+        border-radius: 3px;
+    }
+    .btn-check:focus, .btn-check:hover {
+        color: #1d4567;
+    }
+    .btn-check, .lbl-check:focus {
+        outline: none;
+    }
+    {% endif %}
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
