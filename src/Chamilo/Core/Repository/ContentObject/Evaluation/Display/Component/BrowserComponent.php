@@ -11,10 +11,8 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager as Aja
 
 /**
  *
- * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Component
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component
+ * @author Stefan Gabriëls <stefan.gabriels@hogent.be>
  */
 class BrowserComponent extends Manager
 {
@@ -84,6 +82,7 @@ class BrowserComponent extends Manager
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
+            'EXPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT]),
             'SUPPORTS_RUBRICS' => $this->supportsRubrics(),
             'HAS_RUBRIC' => $hasRubric,
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),

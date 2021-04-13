@@ -37,12 +37,16 @@ class EntityService
      *
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
-     * @param FilterParameters $filterParameters
+     * @param FilterParameters|null $filterParameters
      *
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
-    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters)
+    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null)
     {
+        if (is_null($filterParameters))
+        {
+            $filterParameters = new FilterParameters();
+        }
         return $this->entityRepository->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
     }
 

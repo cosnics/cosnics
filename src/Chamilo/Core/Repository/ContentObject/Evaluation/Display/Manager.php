@@ -36,6 +36,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
     const ACTION_BUILD_RUBRIC = 'BuildRubric';
     const ACTION_REMOVE_RUBRIC = 'RemoveRubric';
+    const ACTION_EXPORT = 'Export';
 
     const ACTION_ENTRY = 'Entry';
     const ACTION_SAVE_SCORE = 'SaveScore';
@@ -254,7 +255,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @param string $key
      * @throws UserException
      */
-    protected function throwUserException($key = "")
+    public function throwUserException($key = "")
     {
         throw new UserException(
             $this->getTranslator()->trans($key, [], Manager::context())

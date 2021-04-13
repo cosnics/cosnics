@@ -144,8 +144,8 @@
         <!--Entity type: ${ entityType }<br />
         Context: ${ context }-->
         <div>
-            <div style="display: inline-block">
-                <div style="display: flex;align-items: center">
+            <div style="display: inline-block;max-width:100%">
+                <div style="display: flex; align-items: center;">
                     <div class="btn-toolbar btn-action-toolbar">
                         <div class="form-inline" style="display: flex; justify-content: flex-start;margin-left:5px;margin-top:15px">
                             <div class="action-bar input-group">
@@ -159,8 +159,12 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-left:15px">
+                    <div style="margin-left:15px;margin-right: auto">
                         <button aria-label="" aria-expanded="false" class="btn-check" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                    </div>
+                    <div style="min-width: fit-content">
+                        <a class="btn btn-default btn-sm" disabled>{{ 'Import'|trans({}, appContext) }}</a>
+                        <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
                 </div>
                 <b-table striped bordered

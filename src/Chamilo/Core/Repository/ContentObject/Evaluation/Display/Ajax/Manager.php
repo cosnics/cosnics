@@ -79,4 +79,12 @@ abstract class Manager extends AjaxManager
     {
         $this->ajaxComponent->validateSaveScoreInput();
     }
+
+    /**
+     * @throws UserException
+     */
+    protected function throwUserException(string $key)
+    {
+        $this->ajaxComponent->throwUserException($key);
+    }
 }
