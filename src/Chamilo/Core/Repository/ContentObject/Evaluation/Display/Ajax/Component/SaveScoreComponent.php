@@ -23,9 +23,9 @@ class SaveScoreComponent extends Manager
 
             $evaluation = $this->get_root_content_object();
 
-            $this->getEvaluationServiceBridge()->saveEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $entityId, $score);
+            $evaluationEntryScore = $this->getEvaluationServiceBridge()->saveEntryScoreForEntity($evaluation->getId(), $this->getUser()->getId(), $entityId, $score);
 
-            $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $score]);
+            $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $evaluationEntryScore->getScore(), 'presence_status' => $evaluationEntryScore->isAbsent() ? 'absent' : 'present']);
             $result->display();
         } catch (\Exception $ex)
         {

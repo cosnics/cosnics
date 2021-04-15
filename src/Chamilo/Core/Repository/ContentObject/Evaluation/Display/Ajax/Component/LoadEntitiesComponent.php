@@ -45,7 +45,7 @@ class LoadEntitiesComponent extends Manager
                 {
                     $user['presence_status'] = ($user['is_absent']) ? 'absent' : 'present';
                 }
-                
+
                 $users[] = $user;
             }
 

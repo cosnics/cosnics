@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 
@@ -51,8 +52,27 @@ interface EvaluationServiceBridgeInterface
      * @param int $evaluationId
      * @param int $userId
      * @param int $entityId
-     * @param string $score
+     *
+     * @return EvaluationEntryScore
      */
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score);
+    public function saveEntityAsPresent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore;
 
+    /**
+     * @param int $evaluationId
+     * @param int $userId
+     * @param int $entityId
+     *
+     * @return EvaluationEntryScore
+     */
+    public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore;
+
+    /**
+     * @param int $evaluationId
+     * @param int $userId
+     * @param int $entityId
+     * @param string $score
+     *
+     * @return EvaluationEntryScore
+     */
+    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore;
 }

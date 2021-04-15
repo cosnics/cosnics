@@ -291,7 +291,7 @@
                             score: score
                         }
                     }).done(function(data) {
-                        console.log(data);
+                        entity.presence_status = data.properties.presence_status;
                     });
                 },
                 getSortStatus(s) {
