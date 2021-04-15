@@ -131,4 +131,14 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     {
         $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId, $score);
     }
+
+    public function saveEntityAsPresent(int $evaluationId, int $userId, int $entityId)
+    {
+        $this->entityService->saveEntityAsPresent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+    }
+
+    public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId)
+    {
+        $this->entityService->saveEntityAsAbsent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+    }
 }

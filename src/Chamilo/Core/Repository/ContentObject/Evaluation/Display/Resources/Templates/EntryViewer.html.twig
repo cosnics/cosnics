@@ -70,6 +70,18 @@
         margin-left: 15px;
         max-width: 107ch;
     }
+
+    .alert-important {
+        margin-bottom: 12px;
+        margin-left: -5px;
+        max-width: fit-content;
+        padding: 7px 10px;
+    }
+    .alert-important .fa {
+        color: #31708f;
+        font-size: 1.8rem;
+        margin-right: 5px;
+    }
 </style>
 <div class="col-xs-12">
     {% if HAS_RUBRIC %}
@@ -97,11 +109,14 @@
                     <h3 class="section-title">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                 </div>
                 <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline" style="margin-left: 15px">
-                    <div class="form-group"><label class="control-label required score-label" for="score_score">Score:</label>
-                        <input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" style="width: 57px" class="form-control form-control-sm mod-score" autocomplete="off">
+                        {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important" style="display:inline-block"><i class="fa fa-exclamation-circle"></i> {{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm" style="">{{ 'MarkPresent'|trans({}, appContext) }}</button>{% endif %}
+                    <div style="display:flex;align-items:baseline;">
+                        {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" style="width: 57px;height: unset;font-size: 1.3rem;padding: 5px 10px;line-height: 1.5;" class="form-control form-control-sm mod-score" autocomplete="off">
+                        <button type="submit" name="action" value="save" class="btn btn-primary" style="margin-left: 5px;margin-right: 5px;font-size: 1.3rem;line-height: 1.5;padding: 5px 10px;">{{ 'Save'|trans({}, commonContext) }}</button>
+                        {% endif %}
+                        {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" class="btn btn-default btn-sm" style="">{{ 'MarkAbsent'|trans({}, appContext) }}</button>{% endif %}
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-left: 10px;">{{ 'Save'|trans({}, commonContext) }}</button>
                 </form>
             </div>
         </div>

@@ -59,10 +59,12 @@ class EntryComponent extends Manager implements FeedbackSupport
         $entityId = $this->getRequest()->query->get('entity_id');
         $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';
+        $presenceStatus = 'neutral';
 
         if ($evaluationScore instanceof EvaluationEntryScore)
         {
             $score = $evaluationScore->getScore();
+            $presenceStatus = $evaluationScore->isAbsent() ? 'absent' : 'present';
         }
 
         $this->set_parameter('entity_id', $entityId); // otherwise feedback update url doesn't pick this up
@@ -100,6 +102,7 @@ class EntryComponent extends Manager implements FeedbackSupport
             'HEADER' => $this->render_header(),
             'ENTITY_TYPE' => $entityType,
             'CAN_EDIT_EVALUATION' => true, //$this->getAssignmentServiceBridge()->canEditAssignment(),
+            'PRESENCE_STATUS' => $presenceStatus,
             'SCORE' => $score,
             'SAVE_SCORE_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_SAVE_SCORE]),
             'FEEDBACK_MANAGER' => $feedbackManagerHtml,

@@ -46,6 +46,7 @@ CREATE TABLE `repository_evaluation_entry_score` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `evaluator_id` int(10) UNSIGNED NOT NULL,
   `score` VARCHAR(20) NOT NULL DEFAULT '',
+  `is_absent` tinyint(1) NOT NULL DEFAULT 0,
   `created_time` int(10) UNSIGNED NOT NULL,
   `entry_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY(`id`)

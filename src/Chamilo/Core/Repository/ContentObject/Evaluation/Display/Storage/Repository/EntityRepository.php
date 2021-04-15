@@ -119,12 +119,24 @@ class EntityRepository
 
         $retrieveProperties = $this->getDataClassProperties()->get();
         $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE, 'score');
+        $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT, 'is_absent');
         $retrieveProperties = new DataClassProperties($retrieveProperties);
 
         $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::COUNT,
-                new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ID),
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT,
+                    new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_ENTRY_ID)
+                ),
+                'score_registered'
+            )
+        );
+
+        $retrieveProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
                 'feedback_count'
             )
         );

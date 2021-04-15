@@ -36,7 +36,20 @@ class LoadEntitiesComponent extends Manager
 
             $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
 
-            $resultData = ['entities' => iterator_to_array($selectedUsers)];
+            $users = array();
+            foreach ($selectedUsers as $user)
+            {
+                $user['presence_status'] = 'neutral';
+
+                if ($user['score_registered'])
+                {
+                    $user['presence_status'] = ($user['is_absent']) ? 'absent' : 'present';
+                }
+                
+                $users[] = $user;
+            }
+
+            $resultData = ['entities' => $users];
 
             if ($this->getRequest()->getFromPostOrUrl('request_count') == 'true')
             {

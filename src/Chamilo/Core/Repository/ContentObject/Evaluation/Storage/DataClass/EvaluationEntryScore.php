@@ -12,6 +12,7 @@ class EvaluationEntryScore extends DataClass
 {
     const PROPERTY_EVALUATOR_ID = 'evaluator_id';
     const PROPERTY_SCORE = 'score';
+    const PROPERTY_IS_ABSENT = 'is_absent';
     const PROPERTY_CREATED_TIME = 'created_time';
     const PROPERTY_ENTRY_ID = 'entry_id';
 
@@ -26,6 +27,7 @@ class EvaluationEntryScore extends DataClass
             array(
                 self::PROPERTY_EVALUATOR_ID,
                 self::PROPERTY_SCORE,
+                self::PROPERTY_IS_ABSENT,
                 self::PROPERTY_CREATED_TIME,
                 self::PROPERTY_ENTRY_ID
             )
@@ -62,6 +64,22 @@ class EvaluationEntryScore extends DataClass
     public function setScore($score)
     {
         $this->set_default_property(self::PROPERTY_SCORE, $score);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAbsent()
+    {
+        return $this->get_default_property(self::PROPERTY_IS_ABSENT);
+    }
+
+    /**
+     * @param bool $isAbsent
+     */
+    public function setIsAbsent($isAbsent)
+    {
+        $this->set_default_property(self::PROPERTY_IS_ABSENT, $isAbsent);
     }
 
     /**

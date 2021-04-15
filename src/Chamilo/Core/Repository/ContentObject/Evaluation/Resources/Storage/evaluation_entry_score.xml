@@ -4,6 +4,7 @@
         <property name="id" type="integer" unsigned="1" notnull="1" />
         <property name="evaluator_id" type="integer" unsigned="1" notnull="1" />
         <property name="score" type="text" length="20" notnull="1" />
+        <property name="is_absent" type="boolean" notnull="1" default="0" />
         <property name="created_time" type="integer" unsigned="1" notnull="1" />
         <property name="entry_id" type="integer" unsigned="1" notnull="1" />
     </properties>

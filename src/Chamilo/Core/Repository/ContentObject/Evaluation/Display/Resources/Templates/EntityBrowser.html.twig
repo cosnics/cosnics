@@ -12,6 +12,24 @@
     .tbl-no-sort {
         pointer-events: none
     }
+    .presence {
+        border-radius: 3px;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .presence::before {
+        content: '\n';
+        display: block;
+        color: transparent;
+    }
+    .presence-neutral {
+    }
+    .presence-present {
+        background-color: limegreen;
+    }
+    .presence-absent {
+        background-color: red;
+    }
     .tbl-sort-option {
         background-position: right calc(.75rem / 2) center;
         background-repeat: no-repeat;
@@ -183,6 +201,8 @@
                     <template #cell(fullname)="data">
                         <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
                     </template>
+                    <template #cell(presence)="data"><template v-if="data.item.presence_status !== 'neutral'"><div style="text-align: center" class="presence" :class="['presence-' + data.item.presence_status]" :title="data.item.presence_status"><span class="sr-only">${ data.item.presence_status }</span></div></template>
+                    </template>
                     <template #cell(score)="data">
                         <b-form-input v-if="scoresEditable" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
                         <span v-else>${ data.item.score }</span>
@@ -240,6 +260,7 @@
                 fields: [
                     { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
                     { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
+                    { key: 'presence', sortable: false, thClass: 'tbl-no-sort' },
                     { key: 'score', sortable: false, thClass: 'tbl-no-sort col-fit', variant: 'score' },
                     { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count'  }//,
                     /*{ key: 'actions', label: '', sortable: false, thClass: 'tbl-no-sort' }*/

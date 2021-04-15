@@ -47,6 +47,7 @@ class EntityService
         {
             $filterParameters = new FilterParameters();
         }
+
         return $this->entityRepository->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
     }
 
@@ -123,6 +124,38 @@ class EntityService
         }
     }
 
+    public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId): void
+    {
+        $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
+        $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
+
+        if ($evaluationEntryScore instanceof EvaluationEntryScore)
+        {
+            $evaluationEntryScore->setIsAbsent(false);
+            $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
+        } else
+        {
+            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, '');
+            $this->createEvaluationTargetUser($entityId, $evaluationEntryScore->getId());
+        }
+    }
+
+    public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId): void
+    {
+        $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
+        $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
+
+        if ($evaluationEntryScore instanceof EvaluationEntryScore)
+        {
+            $evaluationEntryScore->setIsAbsent(true);
+            $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
+        } else
+        {
+            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, '', true);
+            $this->createEvaluationTargetUser($entityId, $evaluationEntryScore->getId());
+        }
+    }
+
     /**
      * @param int $evaluationId
      * @param ContextIdentifier $contextIdentifier
@@ -162,15 +195,17 @@ class EntityService
      * @param int $entryId
      * @param int $evaluatorId
      * @param string $score
+     * @param bool $isAbsent
      *
      * @return EvaluationEntryScore
      */
-    private function createEvaluationEntryScore(int $entryId, int $evaluatorId, string $score): EvaluationEntryScore
+    private function createEvaluationEntryScore(int $entryId, int $evaluatorId, string $score, bool $isAbsent = false): EvaluationEntryScore
     {
         $evaluationEntryScore = new EvaluationEntryScore();
         $evaluationEntryScore->setEvaluatorId($evaluatorId);
         $evaluationEntryScore->setEntryId($entryId);
         $evaluationEntryScore->setScore($score);
+        $evaluationEntryScore->setIsAbsent($isAbsent);
         $evaluationEntryScore->setCreatedTime(time());
         $this->entityRepository->createEvaluationEntryScore($evaluationEntryScore);
 
