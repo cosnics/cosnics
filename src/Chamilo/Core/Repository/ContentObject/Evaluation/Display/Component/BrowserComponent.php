@@ -107,6 +107,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_SCORE
                 ]
             ),
+            'LOAD_FEEDBACK_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_FEEDBACK
+                ]
+            ),
             'ENTITY_BASE_URL' => $this->get_url(
                 [
                     'evaluation_display_action' => 'Entry'

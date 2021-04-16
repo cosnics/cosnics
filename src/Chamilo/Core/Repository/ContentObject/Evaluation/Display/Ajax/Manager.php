@@ -5,6 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxComponent;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -20,6 +22,7 @@ abstract class Manager extends AjaxManager
 {
     const ACTION_LOAD_ENTITIES = 'LoadEntities';
     const ACTION_SAVE_SCORE = 'SaveScore';
+    const ACTION_LOAD_FEEDBACK = 'LoadFeedback';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
@@ -59,6 +62,19 @@ abstract class Manager extends AjaxManager
     protected function getEvaluationServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
+    }
+
+    protected function getFeedbackServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return ContentObjectRepository
+     */
+    protected function getContentObjectRepository()
+    {
+        return $this->getService(ContentObjectRepository::class);
     }
 
     protected function getEntityService() : EntityService

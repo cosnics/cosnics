@@ -145,6 +145,13 @@
         outline: none;
     }
     {% endif %}
+    .panel .list-group-item:nth-child(odd) {
+        background-color: #e0e0e0;
+    }
+    .panel .list-group-item {
+        padding-top: 20px;
+    }
+
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
@@ -161,7 +168,7 @@
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
         <!--Entity type: ${ entityType }<br />
         Context: ${ context }-->
-        <div>
+        <div style="display: flex; gap: 45px;">
             <div style="display: inline-block;max-width:100%">
                 <div style="display: flex; align-items: center;">
                     <div class="btn-toolbar btn-action-toolbar">
@@ -185,6 +192,7 @@
                         <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
                 </div>
+
                 <b-table striped bordered
                     :items="entitiesProvider"
                     :fields="fields"
@@ -207,7 +215,7 @@
                         <b-form-input v-if="scoresEditable" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
                         <span v-else>${ data.item.score }</span>
                     </template>
-                    <template #cell(feedback_count)="data">${ data.item.feedback_count }
+                    <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
                     </template>
                     <template #cell(actions)="data">
                         <a class="btn btn-default btn-link" :href="getUrl(data.item.id)" style="text-decoration: none;padding:3px"><i class="fa fa-search" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
@@ -219,6 +227,18 @@
                     <ul class="pagination">
                         <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
                     </ul>
+                </div>
+            </div>
+            <div v-if="feedback.length" class="panel panel-default panel-feedback" style="margin-top: 64px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
+                <h3>Feedback</h3>
+                <div class="list-group">
+                    <div v-for="item in feedback" :key="item.id" class="list-group-item">
+                        <div style="display:flex;">
+                            <img class="panel-feedback-profile" :src="item.photo" />
+                            <h4 class="list-group-item-heading" style="flex-grow: 2;">${item.user}<div class="feedback-date">${item.date}</div></h4>
+                        </div>
+                        <div class="list-group-item-text feedback-content" v-html="item.content"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -274,13 +294,25 @@
                 },
                 globalSearchQuery: '',
                 requestCount: true,
-                scoresEditable: false
+                scoresEditable: false,
+                feedback: []
             },
 
             methods: {
                 getUrl(entityId)
                 {
                     return '{{ ENTITY_BASE_URL|raw }}&entity_type=' + this.entityType + '&entity_id=' + entityId;
+                },
+                loadFeedback(entity) {
+                    $.ajax({
+                        url: '{{ LOAD_FEEDBACK_URL|raw }}',
+                        method: 'get',
+                        data: {
+                            entity_id: entity.id
+                        }
+                    }).done(function (data) {
+                        this.feedback = data.properties;
+                    }.bind(this));
                 },
                 onScoreUpdated(entity, score) {
                     $.ajax({
