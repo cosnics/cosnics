@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component
@@ -85,6 +86,34 @@ class EntryComponent extends Manager implements FeedbackSupport
         $rubricView = null;
         $hasRubric = $canUseRubricEvaluation = false;
 
+        $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+        $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
+
+        $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, new FilterParameters());
+        $users = array();
+        $selectedUser = null;
+
+        $prev = null;
+        $previousUser = null;
+        $nextUser = null;
+        $count = 0;
+        $userIndex = 0;
+        foreach ($selectedUsers as $user)
+        {
+            $users[] = ['fullname' => strtoupper($user['lastname']) . ' ' . $user['firstname'], 'url' => $this->get_url(['entity_id' => $user['id']]), 'selected' => $entityId == $user['id']];
+            if ($entityId == $user['id'])
+            {
+                $selectedUser = end($users);
+                $previousUser = $prev;
+                $userIndex = $count + 1;
+            } else if (isset($prev) && $prev['selected'])
+            {
+                $nextUser = end($users);
+            }
+            $prev = end($users);
+            $count++;
+        }
+
         if ($this->supportsRubrics())
         {
             $hasRubric = $this->getEvaluationRubricService()->evaluationHasRubric($this->getEvaluation());
@@ -100,6 +129,12 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         return [
             'HEADER' => $this->render_header(),
+            'USERS' => $users,
+            'SELECTED_USER' => $selectedUser,
+            'PREVIOUS_USER' => $previousUser,
+            'NEXT_USER' => $nextUser,
+            'USER_COUNT' => $count,
+            'USER_INDEX' => $userIndex,
             'ENTITY_TYPE' => $entityType,
             'CAN_EDIT_EVALUATION' => true, //$this->getAssignmentServiceBridge()->canEditAssignment(),
             'PRESENCE_STATUS' => $presenceStatus,
