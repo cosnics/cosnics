@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\File;
 
+use Exception;
+
 /**
  * A class which can be used to log messages and errors to seperate files
  *
@@ -155,11 +157,35 @@ class FileErrorLogger
     }
 
     /**
+     * @param string $action
+     * @param string $message
+     * @param boolean $includeTimestamp
+     */
+    public function markAction(string $action, string $message, bool $includeTimestamp = true)
+    {
+        $this->logAction($action, $includeTimestamp);
+        $this->logActionError($action, $message, $includeTimestamp);
+    }
+
+    /**
      * @param string $message
      * @param boolean $includeTimestamp
      */
     public function mark(string $message, bool $includeTimestamp = true)
     {
+        $this->log($message, $includeTimestamp);
+        $this->logError($message, $includeTimestamp);
+    }
+
+    /**
+     * @param string $message
+     * @param \Exception, $exception
+     * @param boolean $includeTimestamp
+     */
+    public function markException(string $message, Exception $exception, bool $includeTimestamp = true)
+    {
+        $message .= ' | ' . $exception->getMessage();
+
         $this->log($message, $includeTimestamp);
         $this->logError($message, $includeTimestamp);
     }
