@@ -128,10 +128,15 @@
                         {% endfor %}
                     </ul>
             </div>
-            {% if PREVIOUS_USER %}<a style="border-radius:4px;border:none" class="btn btn-default" title="Vorige student" href="{{ PREVIOUS_USER.url|raw }}">
+            <style>
+                .btn-prevnext:not(:hover) {
+                    border-color: transparent;
+                }
+            </style>
+            {% if PREVIOUS_USER %}<a style="padding:7px 12px;border-radius:4px;" class="btn-prevnext btn btn-default" title="Vorige student" href="{{ PREVIOUS_USER.url|raw }}">
                 <span class="inline-glyph fa fa-backward" style="transform: scale(1.2)translateX(-1px)"></span>
             </a>{% endif %}
-            {% if NEXT_USER %}<a style="/*border-top-left-radius: 4px;padding-top:8px;border-bottom-left-radius: 4px*/border:none" class="btn btn-default " title="Volgende student" href="{{ NEXT_USER.url|raw }}">
+            {% if NEXT_USER %}<a style="padding:7px 12px;border-top-left-radius: 4px;border-bottom-left-radius: 4px;" class="btn-prevnext btn btn-default " title="Volgende student" href="{{ NEXT_USER.url|raw }}">
                 <span class="inline-glyph fa fa-forward" style="transform: scale(1.2)translateX(1px)"></span>
             </a>{% endif %}
         </div>
