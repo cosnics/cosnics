@@ -239,6 +239,12 @@
                         </div>
                         <div class="list-group-item-text feedback-content" v-html="item.content"></div>
                     </div>
+                    <div style="padding: 0 10px 0 70px;margin-top:20px">
+                        <h4>Nieuwe feedback</h4>
+                        <textarea style="width: 100%;padding:5px;" name="comment" v-model="newFeedback"></textarea>
+                        <div><label for="#is_private">Private</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
+                        <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -295,7 +301,10 @@
                 globalSearchQuery: '',
                 requestCount: true,
                 scoresEditable: false,
-                feedback: []
+                feedback: [],
+                feedbackEntity: null,
+                newFeedback: '',
+                isFeedbackPrivate: false
             },
 
             methods: {
@@ -312,6 +321,22 @@
                         }
                     }).done(function (data) {
                         this.feedback = data.properties;
+                        this.feedbackEntity = entity;
+                    }.bind(this));
+                },
+                createFeedback() {
+                    $.ajax({
+                        url: '{{ SAVE_NEW_FEEDBACK_URL|raw }}',
+                        method: 'post',
+                        data: {
+                            entity_id: this.feedbackEntity.id,
+                            comment: this.newFeedback,
+                            is_private: this.isFeedbackPrivate
+                        }
+                    }).done(function (data) {
+                        this.newFeedback = '';
+                        this.isFeedbackPrivate = false;
+                        console.log(data);
                     }.bind(this));
                 },
                 onScoreUpdated(entity, score) {

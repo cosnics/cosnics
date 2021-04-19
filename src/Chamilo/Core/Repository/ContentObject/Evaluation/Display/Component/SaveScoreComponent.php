@@ -18,7 +18,7 @@ class SaveScoreComponent extends Manager implements CsrfComponentInterface
     {
         try
         {
-            $this->validateSaveScoreInput();
+            $this->validateEvaluationEntityInput();
 
             $entityId = $this->getRequest()->query->get('entity_id');
             $action = $this->getRequest()->getFromPost('action');

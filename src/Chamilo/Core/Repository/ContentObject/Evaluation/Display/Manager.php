@@ -200,7 +200,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @throws NotAllowedException
      * @throws UserException
      */
-    public function validateSaveScoreInput()
+    public function validateEvaluationEntityInput()
     {
         $this->validateIsPostRequest();
         $this->validateIsEvaluation();

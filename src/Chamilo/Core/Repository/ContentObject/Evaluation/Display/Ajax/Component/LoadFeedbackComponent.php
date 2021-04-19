@@ -30,11 +30,7 @@ class LoadFeedbackComponent extends Manager
                 $this->throwUserException('EvaluationNotFound');
             }
 
-            $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
-            $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
-            $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
-            $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
+            $this->initializeEntry();
             $feedbackItems = $this->getFeedbackServiceBridge()->getFeedback();
 
             $feedback = array();

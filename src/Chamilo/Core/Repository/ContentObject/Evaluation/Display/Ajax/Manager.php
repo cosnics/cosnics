@@ -23,6 +23,7 @@ abstract class Manager extends AjaxManager
     const ACTION_LOAD_ENTITIES = 'LoadEntities';
     const ACTION_SAVE_SCORE = 'SaveScore';
     const ACTION_LOAD_FEEDBACK = 'LoadFeedback';
+    const ACTION_CREATE_FEEDBACK = 'SaveNewFeedback';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
@@ -55,6 +56,16 @@ abstract class Manager extends AjaxManager
     {
         return $this->get_application()->get_root_content_object();
     }
+
+    protected function initializeEntry(): void
+    {
+        $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
+        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+        $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
+        $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
+    }
+
 
     /**
      * @return \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface
@@ -91,9 +102,9 @@ abstract class Manager extends AjaxManager
      * @throws UserException
      * @throws NotAllowedException
      */
-    protected function validateSaveScoreInput()
+    protected function validateEvaluationEntityInput()
     {
-        $this->ajaxComponent->validateSaveScoreInput();
+        $this->ajaxComponent->validateEvaluationEntityInput();
     }
 
     /**
