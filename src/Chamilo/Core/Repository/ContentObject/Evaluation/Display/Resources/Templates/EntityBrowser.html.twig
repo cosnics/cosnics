@@ -203,7 +203,7 @@
                     :current-page="pagination.currentPage"
                     class="mod-col-fit" :class="{ 'isScoresEditable': scoresEditable }" style="width: initial">
                     <template #head(fullname)="data">
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">${ '{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User') }}'.toUpperCase() }</a>
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
                         <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
                     </template>
                     <template #cell(fullname)="data">
@@ -326,13 +326,17 @@
                         entity.presence_status = data.properties.presence_status;
                     });
                 },
-                getSortStatus(s) {
-                    if (this.sortBy !== s) { return 'none'; }
+                getSortStatus(name) {
+                    if (this.sortBy !== name) { return 'none'; }
                     return this.sortDesc ? 'descending' : 'ascending';
                 },
                 sortByNameField(namefield) {
-                    this.sortDesc = this.sortBy === namefield;
+                    if (this.sortBy === namefield) {
+                        this.sortDesc = !this.sortDesc;
+                        return;
+                    }
                     this.sortBy = namefield;
+                    this.sortDesc = false;
                 },
                 onFilterChanged: function() {
                     this.requestCount = true;
