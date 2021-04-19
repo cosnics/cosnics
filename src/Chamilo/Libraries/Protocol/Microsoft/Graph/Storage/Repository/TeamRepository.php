@@ -154,10 +154,10 @@ class TeamRepository
                 Team::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
-
-            $bodyContents = json_decode($exception->getResponse()->getBody()->getContents(), true);
+            $messageParts = explode("API response: ", $exception->getMessage());
+            $bodyContents = json_decode($messageParts[1], true);
 
             if (
                 $exception->getCode() == 404 && is_array($bodyContents) && array_key_exists('error', $bodyContents) &&
