@@ -176,11 +176,11 @@
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
 </ul>
-
+{% set Present = 'Present'|trans({}, appContext) %}
+{% set Absent = 'Absent'|trans({}, appContext) %}
+{% set MarkAs = 'MarkAs'|trans({}, appContext) %}
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
-        <!--Entity type: ${ entityType }<br />
-        Context: ${ context }-->
         <div style="display: flex; gap: 45px;">
             <div style="display: inline-block;max-width:100%">
                 <div style="display: flex; align-items: center;">
@@ -225,11 +225,11 @@
                     <template #cell(score)="data">
                         <div style="display: flex; align-items: center">
                             <span v-if="isLabelShown(data.item)" :class="['presence', 'presence-' + data.item.presence_status]">
-                                ${data.item.presence_status === 'present' ? data.item.score : 'absent'}
+                                ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
                             </span>
                             <b-form-input v-if="isInputShown(data.item)" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
-                            <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'Markeer als ' + (data.item.presence_status === 'absent' ? 'aanwezig' : 'afwezig')">
-                                <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">Markeer als ${data.item.presence_status === 'absent' ? 'aanwezig' : 'afwezig'}</span>
+                            <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
+                                <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                             </button>
                         </div>
                     </template>
