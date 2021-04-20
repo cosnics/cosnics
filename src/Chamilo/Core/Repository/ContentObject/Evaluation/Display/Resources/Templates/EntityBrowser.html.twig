@@ -182,69 +182,71 @@
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
         <div style="display: flex; gap: 45px;">
-            <div style="display: inline-block;max-width:100%">
-                <div style="display: flex; align-items: center;">
-                    <div class="btn-toolbar btn-action-toolbar">
-                        <div class="form-inline" style="display: flex; justify-content: flex-start;margin-left:5px;margin-top:15px">
-                            <div class="action-bar input-group">
-                                <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                                              type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
-                                <div class="input-group-btn">
-                                    <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </button>
+            <div style="display: inline-block;max-width:100%;">
+                <div style="position:-webkit-sticky;position:sticky;top:0">
+                    <div style="display: flex; align-items: center;">
+                        <div class="btn-toolbar btn-action-toolbar">
+                            <div class="form-inline" style="display: flex; justify-content: flex-start;margin-left:5px;margin-top:15px">
+                                <div class="action-bar input-group">
+                                    <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                                  type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
+                                    <div class="input-group-btn">
+                                        <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div style="margin-left:15px;margin-right: auto">
+                            <button aria-label="" aria-expanded="false" class="btn-check" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                        </div>
+                        <div style="min-width: fit-content">
+                            <a class="btn btn-default btn-sm" disabled>{{ 'Import'|trans({}, appContext) }}</a>
+                            <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
+                        </div>
                     </div>
-                    <div style="margin-left:15px;margin-right: auto">
-                        <button aria-label="" aria-expanded="false" class="btn-check" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
-                    </div>
-                    <div style="min-width: fit-content">
-                        <a class="btn btn-default btn-sm" disabled>{{ 'Import'|trans({}, appContext) }}</a>
-                        <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
-                    </div>
-                </div>
 
-                <b-table striped bordered
-                    :items="entitiesProvider"
-                    :fields="fields"
-                    :sort-by.sync="sortBy"
-                    :sort-desc.sync="sortDesc"
-                    :filter="globalSearchQuery"
-                    :per-page="pagination.perPage"
-                    :current-page="pagination.currentPage"
-                    class="mod-col-fit" :class="{ 'isScoresEditable': scoresEditable }" style="width: initial">
-                    <template #head(fullname)="data">
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
-                    </template>
-                    <template #cell(fullname)="data">
-                        <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
-                    </template>
-                    <template #cell(score)="data">
-                        <div style="display: flex; align-items: center">
+                    <b-table ref="table" striped bordered
+                             :items="entitiesProvider"
+                             :fields="fields"
+                             :sort-by.sync="sortBy"
+                             :sort-desc.sync="sortDesc"
+                             :filter="globalSearchQuery"
+                             :per-page="pagination.perPage"
+                             :current-page="pagination.currentPage"
+                             class="mod-col-fit" :class="{ 'isScoresEditable': scoresEditable }" style="width: initial">
+                        <template #head(fullname)="data">
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                        </template>
+                        <template #cell(fullname)="data">
+                            <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                        </template>
+                        <template #cell(score)="data">
+                            <div style="display: flex; align-items: center">
                             <span v-if="isLabelShown(data.item)" :class="['presence', 'presence-' + data.item.presence_status]">
                                 ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
                             </span>
-                            <b-form-input v-if="isInputShown(data.item)" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
-                            <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
-                                <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
-                            </button>
-                        </div>
-                    </template>
-                    <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
-                    </template>
-                    <template #cell(actions)="data">
-                        <a class="btn btn-default btn-link" :href="getUrl(data.item.id)" style="text-decoration: none;padding:3px"><i class="fa fa-search" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
-                    </template>
-                </b-table>
-                <div class="pagination-container" style="display: flex; justify-content: flex-end;">
-                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                                  aria-controls="data-table"></b-pagination>
-                    <ul class="pagination">
-                        <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
-                    </ul>
+                                <b-form-input v-if="isInputShown(data.item)" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                                <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
+                                    <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                                </button>
+                            </div>
+                        </template>
+                        <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
+                        </template>
+                        <template #cell(actions)="data">
+                            <a class="btn btn-default btn-link" :href="getUrl(data.item.id)" style="text-decoration: none;padding:3px"><i class="fa fa-search" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
+                        </template>
+                    </b-table>
+                    <div class="pagination-container" style="display: flex; justify-content: flex-end;">
+                        <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                      aria-controls="data-table"></b-pagination>
+                        <ul class="pagination">
+                            <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div v-if="feedback.length" class="panel panel-default panel-feedback" style="margin-top: 64px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
@@ -358,7 +360,12 @@
                     }).done(function (data) {
                         this.newFeedback = '';
                         this.isFeedbackPrivate = false;
-                        console.log(data);
+                        if (data.properties.status === 'ok') {
+                            if (this.feedbackEntity && this.feedbackEntity.id === data.properties.entity_id) {
+                                this.feedback.push(data.properties.feedback);
+                            }
+                            this.$refs.table.refresh();
+                        }
                     }.bind(this));
                 },
                 onScoreUpdated(entity, score) {

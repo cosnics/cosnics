@@ -12,6 +12,9 @@ use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\DatetimeUtilities;
+use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax
@@ -115,4 +118,18 @@ abstract class Manager extends AjaxManager
     {
         $this->ajaxComponent->throwUserException($key);
     }
+
+    /**
+     *
+     * @param int $date
+     *
+     * @return string
+     */
+    protected function format_date($date)
+    {
+        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
+
+        return DatetimeUtilities::format_locale_date($date_format, $date);
+    }
+
 }

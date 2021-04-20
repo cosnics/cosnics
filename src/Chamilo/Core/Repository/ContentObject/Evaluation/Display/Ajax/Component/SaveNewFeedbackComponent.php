@@ -5,8 +5,10 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Componen
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
@@ -22,6 +24,7 @@ class SaveNewFeedbackComponent extends Manager
             $this->validateEvaluationEntityInput(); // todo: check if necessary
             $newFeedback = $this->getRequest()->getFromPost('comment') ?? '';
             $isPrivate = (bool) $this->getRequest()->getFromPost('is_private');
+            $entityId = $this->getRequest()->getFromPost('entity_id');
 
             $this->initializeEntry();
 
@@ -30,8 +33,8 @@ class SaveNewFeedbackComponent extends Manager
 
             if ($success)
             {
-                $feedback = $this->getFeedbackServiceBridge()->createFeedback($this->getUser(), $feedbackContentObject, $isPrivate);
-                $success = $feedback instanceof Feedback;
+                $feedbackItem = $this->getFeedbackServiceBridge()->createFeedback($this->getUser(), $feedbackContentObject, $isPrivate);
+                $success = $feedbackItem instanceof Feedback;
             } else
             {
                 // todo
@@ -39,11 +42,25 @@ class SaveNewFeedbackComponent extends Manager
 
             if ($success)
             {
-                $result = new JsonAjaxResult(200, ['status' => 'ok']);
+                $profilePhotoUrl = new Redirect(
+                    array(
+                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                        \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $feedbackItem->get_user()->get_id()
+                    )
+                );
+                $feedback = [
+                    'user' => $feedbackItem->get_user()->get_fullname(),
+                    'photo' => $profilePhotoUrl->getUrl(),
+                    'date' => $this->format_date($feedbackItem->get_creation_date()),
+                    'content' => $feedbackContentObject->get_description()
+                ];
+                $result = new JsonAjaxResult(200, ['status' => 'ok', 'entity_id' => $entityId, 'feedback' => $feedback]);
                 $result->display();
             } else
             {
-                // todo
+                $result = new JsonAjaxResult(200, ['status' => 'fail']);
+                $result->display();
             }
         } catch (\Exception $ex)
         {

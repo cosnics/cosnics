@@ -7,9 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluatio
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\File\Redirect;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
@@ -63,18 +60,4 @@ class LoadFeedbackComponent extends Manager
             $result->display();
         }
     }
-
-    /**
-     *
-     * @param int $date
-     *
-     * @return string
-     */
-    public function format_date($date)
-    {
-        $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
-
-        return DatetimeUtilities::format_locale_date($date_format, $date);
-    }
-
 }
