@@ -22,6 +22,7 @@ abstract class Manager extends AjaxManager
 {
     const ACTION_LOAD_ENTITIES = 'LoadEntities';
     const ACTION_SAVE_SCORE = 'SaveScore';
+    const ACTION_SAVE_PRESENCE_STATUS = 'SavePresenceStatus';
     const ACTION_LOAD_FEEDBACK = 'LoadFeedback';
     const ACTION_CREATE_FEEDBACK = 'SaveNewFeedback';
 

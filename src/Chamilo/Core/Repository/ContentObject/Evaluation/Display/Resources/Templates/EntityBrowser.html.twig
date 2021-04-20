@@ -12,24 +12,32 @@
     .tbl-no-sort {
         pointer-events: none
     }
+
     .presence {
-        border-radius: 3px;
-        margin: 0 auto;
-        width: 80%;
+        border-radius: 4px;
+        flex: 1;
+        text-align: center;
     }
-    .presence::before {
-        content: '\n';
-        display: block;
-        color: transparent;
-    }
-    .presence-neutral {
-    }
-    .presence-present {
-        background-color: limegreen;
-    }
+
     .presence-absent {
-        background-color: red;
+        background-color: #eb6a38;
+        padding: 0 5px;
+        color: white;
     }
+
+    .presence-present {
+        background-color: #ddf8e1;
+        color: #027461;
+    }
+
+    .fa.btn-icon-absent::before {
+        content: '\f0a2';
+    }
+
+    .fa.btn-icon-present::before, .fa.btn-icon-neutral::before {
+        content: '\f1f7';
+    }
+
     .tbl-sort-option {
         background-position: right calc(.75rem / 2) center;
         background-repeat: no-repeat;
@@ -58,12 +66,17 @@
     .form-control-sm.mod-score {
         /*height: calc(1.9em + .5rem + 2px);*/
     }
+    /*td.table-score {
+        display: flex;
+        align-items: center;
+    }*/
     table.isScoresEditable td.table-score {
         padding: 5px 8px!important;
         width: 8rem;
     }
     .form-control[type="text"].mod-score {
         padding: .25rem .5rem;
+        min-width: 46px;
     }
     .table.mod-col-fit > thead > tr > th.col-fit {
         width: 1px;
@@ -209,11 +222,16 @@
                     <template #cell(fullname)="data">
                         <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
                     </template>
-                    <template #cell(presence)="data"><template v-if="data.item.presence_status !== 'neutral'"><div style="text-align: center" class="presence" :class="['presence-' + data.item.presence_status]" :title="data.item.presence_status"><span class="sr-only">${ data.item.presence_status }</span></div></template>
-                    </template>
                     <template #cell(score)="data">
-                        <b-form-input v-if="scoresEditable" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
-                        <span v-else>${ data.item.score }</span>
+                        <div style="display: flex; align-items: center">
+                            <span v-if="isLabelShown(data.item)" :class="['presence', 'presence-' + data.item.presence_status]">
+                                ${data.item.presence_status === 'present' ? data.item.score : 'absent'}
+                            </span>
+                            <b-form-input v-if="isInputShown(data.item)" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                            <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'Markeer als ' + (data.item.presence_status === 'absent' ? 'aanwezig' : 'afwezig')">
+                                <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">Markeer als ${data.item.presence_status === 'absent' ? 'aanwezig' : 'afwezig'}</span>
+                            </button>
+                        </div>
                     </template>
                     <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
                     </template>
@@ -286,10 +304,8 @@
                 fields: [
                     { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
                     { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
-                    { key: 'presence', sortable: false, thClass: 'tbl-no-sort' },
                     { key: 'score', sortable: false, thClass: 'tbl-no-sort col-fit', variant: 'score' },
                     { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count'  }//,
-                    /*{ key: 'actions', label: '', sortable: false, thClass: 'tbl-no-sort' }*/
                 ],
                 sortBy: 'lastname',
                 sortDesc: false,
@@ -308,6 +324,12 @@
             },
 
             methods: {
+                isLabelShown(entity) {
+                    return entity.presence_status === 'absent' || (entity.presence_status === 'present' && !this.scoresEditable);
+                },
+                isInputShown(entity) {
+                    return entity.presence_status !== 'absent' && this.scoresEditable;
+                },
                 getUrl(entityId)
                 {
                     return '{{ ENTITY_BASE_URL|raw }}&entity_type=' + this.entityType + '&entity_id=' + entityId;
@@ -346,6 +368,18 @@
                         data: {
                             entity_id: entity.id,
                             score: score
+                        }
+                    }).done(function(data) {
+                        entity.presence_status = data.properties.presence_status;
+                    });
+                },
+                onPresenceStatusUpdated(entity) {
+                    $.ajax({
+                        url: '{{ SAVE_PRESENCE_STATUS_URL|raw }}',
+                        method: 'post',
+                        data: {
+                            entity_id: entity.id,
+                            presence_status: entity.presence_status === 'absent'
                         }
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;

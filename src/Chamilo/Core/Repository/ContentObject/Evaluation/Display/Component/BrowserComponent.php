@@ -107,6 +107,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_SCORE
                 ]
             ),
+            'SAVE_PRESENCE_STATUS_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_PRESENCE_STATUS
+                ]
+            ),
             'LOAD_FEEDBACK_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
