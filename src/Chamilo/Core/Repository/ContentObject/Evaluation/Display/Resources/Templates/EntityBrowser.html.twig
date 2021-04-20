@@ -3,6 +3,9 @@
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
 
 <style>
+    tr.table-selected {
+        background-color: #e0e0e0!important;
+    }
     td.table-lastname {
       text-transform: uppercase;
     }
@@ -346,6 +349,8 @@
                     }).done(function (data) {
                         this.feedback = data.properties;
                         this.feedbackEntity = entity;
+                        var items = this.$refs.table.computedItems;
+                        this.selectEntity(items, this.feedbackEntity.id);
                     }.bind(this));
                 },
                 createFeedback() {
@@ -413,6 +418,15 @@
                         this.requestCount = true;
                     }
                 },
+                selectEntity(items, id) {
+                    for (var i = 0; i < items.length; i += 1) {
+                        if (items[i].id === id) {
+                            items[i]._rowVariant = 'selected';
+                        } else {
+                            items[i]._rowVariant = undefined;
+                        }
+                    }
+                },
                 entitiesProvider: function(ctx, callback) {
                     $.ajax({
                         url: '{{ LOAD_ENTITIES_URL|raw }}',
@@ -431,7 +445,11 @@
                             this.pagination.total = d.count;
                             this.requestCount = false;
                         }
-                        callback(data.properties.entities);
+                        var items = data.properties.entities;
+                        if (this.feedbackEntity) {
+                            this.selectEntity(items, this.feedbackEntity.id);
+                        }
+                        callback(items);
                     }.bind(this));
                 }
             }
