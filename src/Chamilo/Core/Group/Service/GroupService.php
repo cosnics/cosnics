@@ -100,16 +100,56 @@ class GroupService
 
         if (!$groupRelation instanceof GroupRelUser)
         {
-            $groupRelation = new GroupRelUser();
-            $groupRelation->set_user_id($user->getId());
-            $groupRelation->set_group_id($group->getId());
+            $this->subscribeUserToGroupBatchOperation($group->getId(), $user->getId());
+        }
+    }
 
-            if (!$this->groupRepository->create($groupRelation))
-            {
-                throw new \RuntimeException(
-                    sprintf('Could not subscribe the user %s to the group %s', $user->getId(), $group->getId())
-                );
-            }
+    /**
+     * Subscribes a user to a group without a subscription check. Only use this in batch operations where
+     * you know for sure that the subscription doesn't need to be checked
+     *
+     * @param int $groupId
+     * @param int $userId
+     */
+    public function subscribeUserToGroupBatchOperation(int $groupId, int $userId)
+    {
+        $groupRelation = new GroupRelUser();
+        $groupRelation->set_user_id($userId);
+        $groupRelation->set_group_id($groupId);
+
+        if (!$this->groupRepository->create($groupRelation))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not subscribe the user %s to the group %s', $userId, $groupId)
+            );
+        }
+    }
+
+    /**
+     * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     */
+    public function removeUserFromGroup(Group $group, User $user)
+    {
+        $groupRelation = $this->groupRepository->findGroupRelUserByGroupAndUserId($group->getId(), $user->getId());
+
+        if ($groupRelation instanceof GroupRelUser)
+        {
+            $this->removeUserFromGroupBatchOperation($group->getId(), $user->getId());
+        }
+    }
+
+    /**
+     * @param int $groupId
+     * @param int $userId
+     */
+    public function removeUserFromGroupBatchOperation(int $groupId, int $userId)
+    {
+        if(!$this->groupRepository->removeUserFromGroup($groupId, $userId))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not remove the user %s to the group %s', $userId, $groupId)
+            );
         }
     }
 

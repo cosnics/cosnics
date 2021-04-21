@@ -97,5 +97,7 @@
 
         <service id="Chamilo\Core\User\Renderer\LoginFormRenderer" autowire="true" />
 
+        <service id="Chamilo\Core\User\Service\UserPropertiesExtension\UserPropertiesExtensionManager" autowire="true" />
+
     </services>
 </container>

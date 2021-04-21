@@ -167,4 +167,27 @@ class GroupRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
     }
+
+    /**
+     * @param int $groupId
+     * @param int $userId
+     */
+    public function removeUserFromGroup(int $groupId, int $userId)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($groupId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->deletes(GroupRelUser::class, $condition);
+    }
 }

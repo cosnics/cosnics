@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(
- *     name="notification_user_notification",
+ *     name="notification_user_relation",
  *     indexes={
  *          @ORM\Index(name="nun_user_id", columns={"user_id"}),
  *          @ORM\Index(name="nun_user_notification", columns={"user_id", "notification_id"}),

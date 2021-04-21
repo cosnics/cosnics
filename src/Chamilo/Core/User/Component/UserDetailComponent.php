@@ -1,9 +1,11 @@
 <?php
+
 namespace Chamilo\Core\User\Component;
 
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Core\User\Manager;
+use Chamilo\Core\User\Service\UserPropertiesExtension\UserPropertiesExtensionManager;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
@@ -42,7 +44,7 @@ class UserDetailComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageUsers');
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -53,7 +55,8 @@ class UserDetailComponent extends Manager
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
                 \Chamilo\Core\User\Storage\DataClass\User::class_name(),
-                (int) $id);
+                (int) $id
+            );
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($user);
             $html = array();
@@ -92,7 +95,10 @@ class UserDetailComponent extends Manager
                     Translation::get(
                         'NoObjectSelected',
                         array('OBJECT' => Translation::get('User')),
-                        Utilities::COMMON_LIBRARIES)));
+                        Utilities::COMMON_LIBRARIES
+                    )
+                )
+            );
         }
     }
 
@@ -100,6 +106,7 @@ class UserDetailComponent extends Manager
      * Displays the user information
      *
      * @param User $user
+     *
      * @return String
      */
     public function display_user_info($user)
@@ -113,7 +120,9 @@ class UserDetailComponent extends Manager
             array(
                 Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user->get_id()));
+                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user->get_id()
+            )
+        );
 
         $table->setCellContents(1, 2, '<img src="' . $profilePhotoUrl->getUrl() . '" />');
         $table->setCellAttributes(1, 2, array('rowspan' => 4, 'style' => 'width: 120px; text-align: center;'));
@@ -133,14 +142,16 @@ class UserDetailComponent extends Manager
             'registration_date',
             'disk_quota',
             'database_quota',
-            'version_quota');
+            'version_quota'
+        );
 
         foreach ($attributes as $i => $attribute)
         {
             $table->setCellContents(
                 ($i + 1),
                 0,
-                Translation::get((string) StringUtilities::getInstance()->createString($attribute)->upperCamelize()));
+                Translation::get((string) StringUtilities::getInstance()->createString($attribute)->upperCamelize())
+            );
             $table->setCellAttributes(($i + 1), 0, array('style' => 'width: 150px;'));
 
             $value = $user->get_default_property($attribute);
@@ -149,7 +160,21 @@ class UserDetailComponent extends Manager
             $table->setCellContents(($i + 1), 1, $value);
 
             if ($i >= 4)
+            {
                 $table->setCellAttributes(($i + 1), 1, array('colspan' => 2));
+            }
+        }
+
+        $extendedProperties = $this->getUserPropertiesExtensionManager()->getExtendedUserProperties($user);
+        foreach($extendedProperties as $key => $value)
+        {
+            $table->setCellContents(($i + 1), 0, $key);
+            $table->setCellAttributes(($i + 1), 0, array('style' => 'width: 150px;'));
+
+            $value = $this->format_property($attribute, $value);
+            $table->setCellContents(($i + 1), 1, $value);
+            $table->setCellAttributes(($i + 1), 1, array('colspan' => 2));
+            $i++;
         }
 
         $table->altRowAttributes(0, array('class' => 'row_odd'), array('class' => 'row_even'), true);
@@ -165,7 +190,8 @@ class UserDetailComponent extends Manager
                 return $value ? Translation::get('ConfirmTrue', null, Utilities::COMMON_LIBRARIES) : Translation::get(
                     'ConfirmFalse',
                     null,
-                    Utilities::COMMON_LIBRARIES);
+                    Utilities::COMMON_LIBRARIES
+                );
             case 'activation_date' :
                 return $value == 0 ? Translation::get('Forever') : DatetimeUtilities::format_locale_date(null, $value);
             case 'expiration_date' :
@@ -181,6 +207,7 @@ class UserDetailComponent extends Manager
      * Displays the user groups
      *
      * @param User $user
+     *
      * @return String
      */
     public function display_groups($user)
@@ -196,7 +223,7 @@ class UserDetailComponent extends Manager
 
         $groups = $user->get_groups();
 
-        if (! $groups || $groups->size() == 0)
+        if (!$groups || $groups->size() == 0)
         {
             $table->setCellContents(2, 0, Translation::get('NoGroups'));
             $table->setCellAttributes(2, 0, array('colspan' => 2, 'style' => 'text-align: center;'));
@@ -211,7 +238,9 @@ class UserDetailComponent extends Manager
                     array(
                         Application::PARAM_CONTEXT => \Chamilo\Core\Group\Manager::package(),
                         \Chamilo\Core\Group\Manager::PARAM_ACTION => \Chamilo\Core\Group\Manager::ACTION_VIEW_GROUP,
-                        \Chamilo\Core\Group\Manager::PARAM_GROUP_ID => $group->get_id()));
+                        \Chamilo\Core\Group\Manager::PARAM_GROUP_ID => $group->get_id()
+                    )
+                );
 
                 $url = '<a href="' . $redirect->getUrl() . '">';
 
@@ -223,12 +252,13 @@ class UserDetailComponent extends Manager
         }
 
         $table->altRowAttributes(1, array('class' => 'row_odd'), array('class' => 'row_even'), true);
+
         return $table->toHtml();
     }
 
     public function getButtonToolbarRenderer($user)
     {
-        if (! isset($this->buttonToolbarRenderer))
+        if (!isset($this->buttonToolbarRenderer))
         {
             $buttonToolbar = new ButtonToolBar();
             $commonActions = new ButtonGroup();
@@ -239,29 +269,38 @@ class UserDetailComponent extends Manager
                     Translation::get('Edit', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Edit'),
                     $this->get_user_editing_url($user),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('Delete', null, Utilities::COMMON_LIBRARIES),
                     Theme::getInstance()->getCommonImagePath('Action/Delete'),
                     $this->get_user_delete_url($user),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $commonActions->addButton(
                 new Button(
                     Translation::get('ViewQuota'),
                     Theme::getInstance()->getCommonImagePath('Action/Browser'),
                     $this->get_url(
-                        array(self::PARAM_ACTION => self::ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                        array(self::PARAM_ACTION => self::ACTION_VIEW_QUOTA, 'user_id' => $user->get_id())
+                    ),
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $toolActions->addButton(
                 new Button(
                     Translation::get('LoginAsUser'),
                     Theme::getInstance()->getCommonImagePath('Action/Login'),
                     $this->get_change_user_url($user),
-                    ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                    ToolbarItem::DISPLAY_ICON_AND_LABEL
+                )
+            );
 
             $buttonToolbar->addButtonGroup($commonActions);
             $buttonToolbar->addButtonGroup($toolActions);
@@ -278,7 +317,9 @@ class UserDetailComponent extends Manager
             self::package(),
             'account_fields',
             $user_id,
-            Translation::get('AdditionalUserInformation'));
+            Translation::get('AdditionalUserInformation')
+        );
+
         return $form_viewer->render();
     }
 
@@ -287,7 +328,17 @@ class UserDetailComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                Translation::get('AdminUserBrowserComponent')
+            )
+        );
         $breadcrumbtrail->add_help('user_detail');
+    }
+
+    /**
+     * @return UserPropertiesExtensionManager
+     */
+    protected function getUserPropertiesExtensionManager()
+    {
+        return $this->getService(UserPropertiesExtensionManager::class);
     }
 }
