@@ -21,8 +21,9 @@
                 default="6" />
         <property
                 name="release_scores"
-                type="tinyint"
+                type="integer"
                 unsigned="1"
+                length="1"
                 default="0" />
     </properties>
     <index
