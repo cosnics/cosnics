@@ -4,3 +4,12 @@ ul.tree-menu li div a.evaluation, ul.tree-menu li div a.type_evaluation,
 	ul.tree-menu li div a.type_evaluation_default {
 	background-image: url(../../Images/Ruby/Logo/16.png);
 }
+
+.ident.ident-c165ec6feb785738b2ca5c4969a2a25a:before {
+	font-family: 'FontAwesome';
+	content: '\f201';
+}
+
+.ident.ident-c165ec6feb785738b2ca5c4969a2a25a {
+	top: 0;
+}
