@@ -1,6 +1,7 @@
 {{ HEADER|raw }}
 
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
 
 <style>
     tr.table-selected {
@@ -252,8 +253,8 @@
                     </div>
                 </div>
             </div>
-            <div v-if="feedback.length" class="panel panel-default panel-feedback" style="margin-top: 64px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
-                <h3>Feedback</h3>
+            <div v-if="feedbackEntity" class="panel panel-default panel-feedback" style="margin-top: 64px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
+                <div style="display:flex"><h3 style="color:#507177;font-size:2rem">Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
                 <div class="list-group">
                     <div v-for="item in feedback" :key="item.id" class="list-group-item">
                         <div style="display:flex;">
@@ -359,6 +360,14 @@
                         var items = this.$refs.table.computedItems;
                         this.selectEntity(items, this.feedbackEntity.id);
                     }.bind(this));
+                },
+                closeFeedback() {
+                    this.feedback = [];
+                    this.feedbackEntity = null;
+                    var items = this.$refs.table.computedItems;
+                    for (var i = 0; i < items.length; i += 1) {
+                        items[i]._rowVariant = undefined;
+                    }
                 },
                 createFeedback() {
                     $.ajax({
