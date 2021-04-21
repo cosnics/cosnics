@@ -260,7 +260,7 @@ abstract class DataClass
      */
     public function getId()
     {
-        return $this->getDefaultProperty(self::PROPERTY_ID);
+        return $this->getDefaultProperty(static::PROPERTY_ID);
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class DataClass
      */
     public static function get_cacheable_property_names($cacheablePropertyNames = array())
     {
-        $cacheablePropertyNames[] = self::PROPERTY_ID;
+        $cacheablePropertyNames[] = static::PROPERTY_ID;
 
         return $cacheablePropertyNames;
     }
@@ -310,7 +310,7 @@ abstract class DataClass
      */
     public static function get_default_property_names($extendedPropertyNames = array())
     {
-        $extendedPropertyNames[] = self::PROPERTY_ID;
+        $extendedPropertyNames[] = static::PROPERTY_ID;
 
         return $extendedPropertyNames;
     }
@@ -638,7 +638,7 @@ abstract class DataClass
     {
         if (isset($id) && strlen($id) > 0)
         {
-            $this->setDefaultProperty(self::PROPERTY_ID, $id);
+            $this->setDefaultProperty(static::PROPERTY_ID, $id);
         }
 
         return $this;
