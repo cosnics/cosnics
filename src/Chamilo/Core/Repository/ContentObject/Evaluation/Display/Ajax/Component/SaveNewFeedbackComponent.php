@@ -23,7 +23,7 @@ class SaveNewFeedbackComponent extends Manager
         {
             $this->validateEvaluationEntityInput(); // todo: check if necessary
             $newFeedback = $this->getRequest()->getFromPost('comment') ?? '';
-            $isPrivate = (bool) $this->getRequest()->getFromPost('is_private');
+            $isPrivate = $this->getRequest()->getFromPost('is_private') == 'true';
             $entityId = $this->getRequest()->getFromPost('entity_id');
 
             $this->initializeEntry();
@@ -53,7 +53,8 @@ class SaveNewFeedbackComponent extends Manager
                     'user' => $feedbackItem->get_user()->get_fullname(),
                     'photo' => $profilePhotoUrl->getUrl(),
                     'date' => $this->format_date($feedbackItem->get_creation_date()),
-                    'content' => $feedbackContentObject->get_description()
+                    'content' => $feedbackContentObject->get_description(),
+                    'isPrivate' => $feedbackItem->isPrivate()
                 ];
                 $result = new JsonAjaxResult(200, ['status' => 'ok', 'entity_id' => $entityId, 'feedback' => $feedback]);
                 $result->display();

@@ -6,8 +6,10 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager as AjaxManager;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -79,9 +81,18 @@ class BrowserComponent extends Manager
 
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $this->get_user()->get_id()
+            )
+        );
+
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
+            'PHOTO_URL' => $profilePhotoUrl->getUrl(),
             'EXPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT]),
             'SUPPORTS_RUBRICS' => $this->supportsRubrics(),
             'HAS_RUBRIC' => $hasRubric,

@@ -45,7 +45,8 @@ class LoadFeedbackComponent extends Manager
                     'user' => $feedbackItem->get_user()->get_fullname(),
                     'photo' => $profilePhotoUrl->getUrl(),
                     'date' => $this->format_date($feedbackItem->get_creation_date()),
-                    'content' => $contentObject->get_description()
+                    'content' => $contentObject->get_description(),
+                    'isPrivate' => $feedbackItem->isPrivate()
                 ];
             }
 

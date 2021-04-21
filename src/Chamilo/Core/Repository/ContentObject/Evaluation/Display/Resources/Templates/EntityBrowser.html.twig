@@ -258,15 +258,22 @@
                     <div v-for="item in feedback" :key="item.id" class="list-group-item">
                         <div style="display:flex;">
                             <img class="panel-feedback-profile" :src="item.photo" />
-                            <h4 class="list-group-item-heading" style="flex-grow: 2;">${item.user}<div class="feedback-date">${item.date}</div></h4>
+                            <h4 class="list-group-item-heading" style="flex-grow: 2;">${item.user}<div class="feedback-date">${item.date}</div>
+                                <div v-if="item.isPrivate" style="font-size: 11px;margin-top: 4px;background: #d35555;display: inline-block;color: white;padding: 2px;text-transform: uppercase">{{ 'Private'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</div>
+                            </h4>
                         </div>
                         <div class="list-group-item-text feedback-content" v-html="item.content"></div>
                     </div>
-                    <div style="padding: 0 10px 0 70px;margin-top:20px">
-                        <h4>Nieuwe feedback</h4>
-                        <textarea style="width: 100%;padding:5px;" name="comment" v-model="newFeedback"></textarea>
-                        <div><label for="#is_private">Private</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
-                        <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">Save</button>
+                    <div style="padding: 0 10px 0 15px;margin-top:20px">
+                        <div style="display:flex">
+                            <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
+                            <div style="flex:1">
+                                <h4 style="color: #507177">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
+                                <textarea style="width: 100%;padding:5px;" name="comment" v-model="newFeedback"></textarea>
+                                <div style="display: flex;gap:5px"><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
+                                <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">Save</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
