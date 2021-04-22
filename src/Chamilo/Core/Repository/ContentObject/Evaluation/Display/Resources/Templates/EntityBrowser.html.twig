@@ -7,6 +7,9 @@
     tr.table-selected {
         background-color: #e0e0e0!important;
     }
+    tr.table-selected td:not(:last-child) {
+        border-right-color: #d4d4d4!important;
+    }
     td.table-lastname {
       text-transform: uppercase;
     }
@@ -70,10 +73,12 @@
     .form-control-sm.mod-score {
         /*height: calc(1.9em + .5rem + 2px);*/
     }
-    /*td.table-score {
-        display: flex;
-        align-items: center;
-    }*/
+    table:not(.isScoresEditable) th.table-score {
+        text-align: center;
+    }
+    td.table-score {
+        min-width: 72px;
+    }
     table.isScoresEditable td.table-score {
         padding: 5px 8px!important;
         width: 8rem;
@@ -248,7 +253,7 @@
                     </ul>
                 </div>
             </div>
-            <div v-if="feedbackEntity" class="panel panel-default panel-feedback" style="margin-top: 64px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
+            <div v-if="feedbackEntity" class="panel panel-default panel-feedback" style="margin-top: 67px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
                 <div style="display:flex"><h3 style="color:#507177;font-size:2rem">Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
                 <div class="list-group">
                     <div v-for="item in feedback" :key="item.id" class="list-group-item">
@@ -312,7 +317,7 @@
                 fields: [
                     { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
                     { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
-                    { key: 'score', sortable: false, thClass: 'tbl-no-sort col-fit', variant: 'score' },
+                    { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
                     { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count'  }//,
                 ],
                 sortBy: 'lastname',
