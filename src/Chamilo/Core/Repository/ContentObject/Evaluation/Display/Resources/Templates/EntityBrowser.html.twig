@@ -240,15 +240,12 @@
                         </template>
                         <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
                         </template>
-                        <template #cell(actions)="data">
-                            <a class="btn btn-default btn-link" :href="getUrl(data.item.id)" style="text-decoration: none;padding:3px"><i class="fa fa-search" style="display:block;margin-top:-2px"></i><span class="sr-only">edit</span></a>
-                        </template>
                     </b-table>
                     <div class="pagination-container" style="display: flex; justify-content: flex-end;">
                         <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                       aria-controls="data-table"></b-pagination>
                         <ul class="pagination">
-                            <li class="page-item active"><a class="page-link">Totaal ${ pagination.total }</a></li>
+                            <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} ${ pagination.total }</a></li>
                         </ul>
                     </div>
                 </div>
@@ -272,7 +269,7 @@
                                 <h4 style="color: #507177">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
                                 <textarea style="width: 100%;padding:5px;" name="comment" v-model="newFeedback"></textarea>
                                 <div style="display: flex;gap:5px"><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
-                                <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">Save</button>
+                                <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
                             </div>
                         </div>
                     </div>
