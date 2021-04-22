@@ -117,7 +117,7 @@ HomeManagerTruncaterComponent = "Herstel homepagina"
 ViewDefault="Bekijk standaard"
 NoSystemAnnouncementsCurrently = "Momenteel geen aankondigingen"
 Edit = "Bewerk"
-Delete = "Vewijder"
+Delete = "Verwijder"
 Drag = "Verplaats"
 ToggleVisibility = "Zichtbaarheid aan/uit"
 
