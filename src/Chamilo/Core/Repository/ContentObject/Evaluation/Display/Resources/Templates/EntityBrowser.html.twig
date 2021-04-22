@@ -3,15 +3,49 @@
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
 {% set commonContext = 'Chamilo\\Libraries' %}
 
-<style>
-    tr.table-selected {
-        background-color: #e0e0e0!important;
+<style type="text/css">
+    .u-contents {
+        display: contents;
     }
-    tr.table-selected td:not(:last-child) {
-        border-right-color: #d4d4d4!important;
+    .u-inline-block {
+        display: inline-block;
     }
+    .u-flex {
+        display: flex;
+    }
+    .u-flex-1 {
+        flex: 1;
+    }
+    .u-flex-grow-1 {
+        flex-grow: 1;
+    }
+    .u-flex-grow-2 {
+        flex-grow: 2;
+    }
+    .u-align-items-center {
+        align-items: center;
+    }
+    .u-justify-content-start {
+        justify-content: flex-start;
+    }
+    .u-justify-content-end {
+        justify-content: flex-end;
+    }
+
+    .form-inline.mod-entity-search {
+        margin: 15px 0 0 5px;
+    }
+
+    .table-selected, .table-striped > tbody > tr.table-selected:nth-of-type(odd) {
+        background-color: #e0e0e0;
+    }
+
+    .table-bordered > tbody > tr.table-selected > td:not(:last-child) {
+        border-right-color: #d4d4d4;
+    }
+
     td.table-lastname {
-      text-transform: uppercase;
+        text-transform: uppercase;
     }
     td.table-fb-count {
         text-align: center;
@@ -22,14 +56,13 @@
 
     .presence {
         border-radius: 4px;
-        flex: 1;
         text-align: center;
     }
 
     .presence-absent {
         background-color: #eb6a38;
         padding: 0 5px;
-        color: white;
+        color: #fff;
     }
 
     .presence-present {
@@ -50,7 +83,6 @@
         background-repeat: no-repeat;
         background-size: .65em 1em;
         cursor: pointer;
-        display: inline-block;
         padding-right: calc(.75rem + .85em);
         pointer-events: all;
     }
@@ -63,79 +95,40 @@
     .tbl-sort-option[aria-sort=descending] {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
     }
-    .form-control-sm {
-        height: calc(1.5em + .5rem + 2px);
-        padding: .25rem .5rem;
-        font-size: 1.3rem;
-        line-height: 1.5;
-        border-radius: .2rem;
-    }
-    .form-control-sm.mod-score {
-        /*height: calc(1.9em + .5rem + 2px);*/
-    }
-    table:not(.isScoresEditable) th.table-score {
+    .table.mod-evaluation:not(.is-scores-editable) th.table-score {
         text-align: center;
     }
     td.table-score {
         min-width: 72px;
     }
-    table.isScoresEditable td.table-score {
-        padding: 5px 8px!important;
+    .table.is-scores-editable td.table-score {
+        padding: 5px 8px;
         width: 8rem;
     }
-    .form-control[type="text"].mod-score {
-        padding: .25rem .5rem;
+    input.form-control.mod-score {
+        border-radius: .2rem;
+        font-size: 1.3rem;
+        height: calc(1.5em + .5rem + 2px);
+        line-height: 1.5;
         min-width: 46px;
+        padding: .25rem .5rem;
     }
-    .table.mod-col-fit > thead > tr > th.col-fit {
+
+    .btn.mod-presence {
+        font-size: 14px;
+        margin-left: 5px;
+        padding: 2px 5px;
+    }
+    .table.mod-evaluation {
+        width: initial;
+    }
+
+    .table.mod-evaluation .col-fit, .table.mod-evaluation .col-fit[aria-sort]:not(.b-table-sort-icon-left) {
+        padding-right: 30px;
+        white-space: nowrap;
         width: 1px;
-        white-space: nowrap;
-        padding-right: 30px!important;
-    }
-    /*.table[css-grid] {
-        display: grid;
-        border-collapse: collapse;
-        min-width: 100%;
-        grid-template-columns:
-            minmax(60px, .33fr)
-            minmax(240px, 1fr)
-            minmax(130px, 1fr)
-            minmax(80px, .33fr)
-            minmax(150px, 5fr)
-    }
-    .table[css-grid] thead,
-    .table[css-grid] tbody,
-    .table[css-grid] tr {
-        display: contents;
     }
 
-    .table[css-grid] th,
-    .table[css-grid] td {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .table[css-grid] th {
-        position: sticky;
-        top: 0;
-        background: white;
-        text-align: left;
-    }
-
-    .table[css-grid] th {
-        border-bottom: 1px solid #ddd;
-    }
-
-    .table[css-grid] td {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        color: #808080;
-    }
-
-    .table[css-grid] tr:nth-child(even) td {
-        background: rgb(249, 249, 249);
-    }*/
     {% if not HAS_RUBRIC %}
     /* TODO: I copied these styles from rubrics but they should be global */
     .btn-check {
@@ -167,13 +160,57 @@
         outline: none;
     }
     {% endif %}
-    .panel .list-group-item:nth-child(odd) {
-        background-color: #e0e0e0;
+    .btn-check.mod-scores-editable {
+        margin: 0 auto 0 15px;
     }
-    .panel .list-group-item {
+    .panel-feedback {
+        border: none;
+        margin-right:30px;
+        margin-top: 67px;
+        max-width: 80ch;
+    }
+    .panel-feedback h3 {
+        color: #507177;
+        font-size: 2rem;
+    }
+    .panel-feedback .list-group-item {
         padding-top: 20px;
     }
-
+    .panel-feedback .list-group-item:nth-child(odd) {
+        background-color: #e0e0e0;
+    }
+    .feedback-private {
+        background-color: #d35555;
+        color: #fff;
+        font-size: 11px;
+        margin-top: 4px;
+        padding: 2px;
+        text-transform: uppercase
+    }
+    .feedback-count {
+        cursor: pointer;
+        padding: 6px;
+    }
+    .feedback-new {
+        margin-top: 20px;
+        padding: 0 10px 0 15px;
+    }
+    .feedback-new-heading {
+        color: #507177;
+    }
+    .feedback-new-input {
+        padding: 5px;
+        width: 100%;
+    }
+    .btn.mod-save-feedback {
+        margin-top: 10px;
+    }
+    .u-gap-small {
+        gap: 5px;
+    }
+    .u-gap-large {
+        gap: 45px;
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
@@ -190,11 +227,11 @@
 {% set MarkAs = 'MarkAs'|trans({}, appContext) %}
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
-        <div style="display: flex; gap: 45px;">
-            <div style="display: inline-block;max-width:100%;">
-                <div style="display: flex; align-items: center;">
+        <div class="u-flex u-gap-large">
+            <div>
+                <div class="u-flex u-align-items-center">
                     <div class="btn-toolbar btn-action-toolbar">
-                        <div class="form-inline" style="display: flex; justify-content: flex-start;margin-left:5px;margin-top:15px">
+                        <div class="form-inline u-flex u-justify-content-start mod-entity-search">
                             <div class="action-bar input-group">
                                 <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                                               type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
@@ -206,10 +243,8 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-left:15px;margin-right: auto">
-                        <button aria-label="" aria-expanded="false" class="btn-check" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
-                    </div>
-                    <div style="min-width: fit-content">
+                    <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                    <div>
                         <a class="btn btn-default btn-sm" disabled>{{ 'Import'|trans({}, appContext) }}</a>
                         <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
@@ -223,7 +258,7 @@
                          :filter="globalSearchQuery"
                          :per-page="pagination.perPage"
                          :current-page="pagination.currentPage"
-                         class="mod-col-fit" :class="{ 'isScoresEditable': scoresEditable }" style="width: initial">
+                         class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
                     <template #head(fullname)="data">
                         <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
                         <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
@@ -232,20 +267,20 @@
                         <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
                     </template>
                     <template #cell(score)="data">
-                        <div style="display: flex; align-items: center">
-                        <span v-if="isLabelShown(data.item)" :class="['presence', 'presence-' + data.item.presence_status]">
-                            ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
-                        </span>
-                            <b-form-input v-if="isInputShown(data.item)" class="form-control form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
-                            <button v-if="scoresEditable" class="btn btn-default btn-sm" @click.prevent="onPresenceStatusUpdated(data.item)" style="padding: 2px 5px; font-size: 14px; margin-left: 5px" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
-                                <span aria-hidden="true" :class="['fa', 'btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                        <div class="u-flex u-flex-align-items-center">
+                            <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]">
+                                ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
+                            </span>
+                            <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                            <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
+                                <span aria-hidden="true" class="fa" :class="['btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                             </button>
                         </div>
                     </template>
-                    <template #cell(feedback_count)="data"><a @click="loadFeedback(data.item)" style="cursor:pointer;padding:6px">${ data.item.feedback_count }</a>
+                    <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
                     </template>
                 </b-table>
-                <div class="pagination-container" style="display: flex; justify-content: flex-end;">
+                <div class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="data-table"></b-pagination>
                     <ul class="pagination">
@@ -253,27 +288,25 @@
                     </ul>
                 </div>
             </div>
-            <div v-if="feedbackEntity" class="panel panel-default panel-feedback" style="margin-top: 67px;margin-right:30px;max-width: 80ch;flex-grow:1;border:none">
-                <div style="display:flex"><h3 style="color:#507177;font-size:2rem">Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
+            <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
+                <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
                 <div class="list-group">
                     <div v-for="item in feedback" :key="item.id" class="list-group-item">
-                        <div style="display:flex;">
+                        <div class="u-flex">
                             <img class="panel-feedback-profile" :src="item.photo" />
-                            <h4 class="list-group-item-heading" style="flex-grow: 2;">${item.user}<div class="feedback-date">${item.date}</div>
-                                <div v-if="item.isPrivate" style="font-size: 11px;margin-top: 4px;background: #d35555;display: inline-block;color: white;padding: 2px;text-transform: uppercase">{{ 'Private'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</div>
+                            <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
+                                <div v-if="item.isPrivate" class="feedback-private u-inline-block">{{ 'Private'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</div>
                             </h4>
                         </div>
                         <div class="list-group-item-text feedback-content" v-html="item.content"></div>
                     </div>
-                    <div style="padding: 0 10px 0 15px;margin-top:20px">
-                        <div style="display:flex">
-                            <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
-                            <div style="flex:1">
-                                <h4 style="color: #507177">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
-                                <textarea style="width: 100%;padding:5px;" name="comment" v-model="newFeedback"></textarea>
-                                <div style="display: flex;gap:5px"><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
-                                <button class="btn btn-default" style="margin-top:10px" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
-                            </div>
+                    <div class="feedback-new u-flex">
+                        <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
+                        <div class="u-flex-1">
+                            <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
+                            <textarea class="feedback-new-input" name="comment" v-model="newFeedback"></textarea>
+                            <div class="u-flex u-gap-small"><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
+                            <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
                         </div>
                     </div>
                 </div>
@@ -289,13 +322,13 @@
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
             <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
-                <form action="{{ REMOVE_RUBRIC_URL }}" method="post" style="display: contents">
-                    <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
-                </form>
+            <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents"">
+                <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
+            </form>
             {% else %}
-                <div class="alert alert-warning">
-                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
-                </div>
+            <div class="alert alert-warning">
+                {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+            </div>
             {% endif %}
             <div class="clearfix"></div>
             <div>{{ RUBRIC_PREVIEW|raw }}</div>
