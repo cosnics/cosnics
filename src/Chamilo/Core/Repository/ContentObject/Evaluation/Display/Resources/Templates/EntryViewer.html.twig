@@ -4,19 +4,39 @@
 {% set commonContext = 'Chamilo\\Libraries' %}
 
 <style type="text/css">
+    .u-inline-block {
+        display: inline-block;
+    }
+    .u-flex {
+        display: flex;
+    }
+    .u-align-items-baseline {
+        align-items: baseline;
+    }
+    .u-align-items-center {
+        align-items: center;
+    }
+    .u-align-items-end {
+        align-items: flex-end;
+    }
+    .u-justify-content-between {
+        justify-content: space-between;
+    }
+    .u-gap-small {
+        gap: 5px;
+    }
+
     #page-title {
         padding-left: 15px;
     }
 
     .rubric-action {
-        display: inline-block;
         margin-top: 20px;
         padding-bottom: 5px;
     }
 
     .section-title {
         color: #507177;
-        display: inline-block;
         font-size: 2rem;
         font-weight: 500;
         margin-right: 15px;
@@ -49,10 +69,9 @@
         margin-bottom: 20px;
     }
 
-    .score-label {
+    .control-label.score-label {
         color: #507177;
-        margin-bottom: 5px !important;
-        margin-right: 10px;
+        margin: 0 10px 5px 0;
     }
 
     #score_score {
@@ -88,8 +107,6 @@
     }
 
     .form-inline.mod-score {
-        align-items: baseline;
-        display: flex;
         margin-left: 15px;
     }
 
@@ -126,20 +143,13 @@
         margin-bottom: 0;
         margin-left: -5px;
     }
-    .btn-group.mod-entities {
-        align-items: flex-end;
-        display: flex;
-        gap: 5px;
-    }
+
     /* Todo: simplify this code */
 
     .dropdown-toggle.mod-entities {
-        align-items: center;
         background-color: transparent;
         color: #333;
-        display: flex;
         float: unset;
-        justify-content: space-between;
         min-width: 222px;
         padding-top: 8px;
         text-align: inherit;
@@ -162,11 +172,13 @@
         background-color: transparent;
         border-color: #adadad;
     }
-    .btn-prevnext {
-        border-radius: 4px!important;
+    .btn-group > .btn.mod-btn-prev:not(:first-child):not(.dropdown-toggle),
+    .btn-group > .btn.mod-btn-next:not(:first-child):not(.dropdown-toggle) {
+        border-radius: 4px;
         padding: 7px 12px;
     }
-    .btn-prevnext:not(:hover) {
+
+    .btn.mod-btn-prev:not(:hover), .btn.mod-btn-next:not(:hover) {
         border-color: transparent;
     }
     .dropdown-entity-label {
@@ -195,14 +207,14 @@
 </style>
 <div class="col-xs-12">
     <div class="btn-toolbar btn-action-toolbar mod-entities">
-        <div class="btn-group mod-entities">
+        <div class="btn-group u-flex u-align-items-end u-gap-small">
             <div>
                 <div class="dropdown-entity-label">
                     <span class="inline-glyph fa fa-user mod-entity"></span>
                     <span class="entity-type">{{ 'UserEntity'|trans({}, appContext) }}</span>
                     <span class="entity-index">{{ USER_INDEX }} / {{ USER_COUNT }}</span>
                 </div>
-                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle mod-entities" title="{{ SELECTED_USER.fullname|raw }}">
+                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle u-flex u-align-items-center u-justify-content-between mod-entities" title="{{ SELECTED_USER.fullname|raw }}">
                     <span>{{ SELECTED_USER.fullname|raw }}</span> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-entities">
@@ -222,10 +234,10 @@
                     {% endfor %}
                 </ul>
             </div>
-            {% if PREVIOUS_USER %}<a class="btn btn-default btn-prevnext" title="{{ 'Previous'|trans({}, commonContext) }} {{ 'UserEntity'|trans({}, appContext)|lower }}" href="{{ PREVIOUS_USER.url|raw }}">
+            {% if PREVIOUS_USER %}<a class="btn btn-default mod-btn-prev" title="{{ 'Previous'|trans({}, commonContext) }} {{ 'UserEntity'|trans({}, appContext)|lower }}" href="{{ PREVIOUS_USER.url|raw }}">
                 <span class="inline-glyph fa fa-backward mod-btn-prev"></span>
             </a>{% endif %}
-            {% if NEXT_USER %}<a class="btn btn-default btn-prevnext" title="{{ 'Next'|trans({}, commonContext) }} {{ 'UserEntity'|trans({}, appContext)|lower }}" href="{{ NEXT_USER.url|raw }}">
+            {% if NEXT_USER %}<a class="btn btn-default mod-btn-next" title="{{ 'Next'|trans({}, commonContext) }} {{ 'UserEntity'|trans({}, appContext)|lower }}" href="{{ NEXT_USER.url|raw }}">
                 <span class="inline-glyph fa fa-forward mod-btn-next"></span>
             </a>{% endif %}
         </div>
@@ -236,11 +248,11 @@
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
                 {% if RUBRIC_ACTION == 'Entry' %}
-                    <h3 class="section-title">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
-                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="rubric-action">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
+                    <h3 class="section-title u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
+                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="rubric-action u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
                 {% elseif RUBRIC_ACTION == 'Result' %}
-                    <h3 class="section-title">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
-                    <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                    <h3 class="section-title u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
+                    <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</a>
                 {% endif %}
             </div>
             {{ RUBRIC_VIEW|raw }}
@@ -251,9 +263,9 @@
         <div class="row">
             <div class="col-xs-12" id="score">
                 <div class="title-underline-fw mod-score">
-                    <h3 class="section-title">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+                    <h3 class="section-title u-inline-block">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
                 </div>
-                <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline mod-score">
+                <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline u-flex u-align-items-baseline mod-score">
                     {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important"><i class="fa fa-exclamation-circle"></i> {{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
                     {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" class="form-control form-control-sm" autocomplete="off">
                     <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Save'|trans({}, commonContext) }}</button>
@@ -267,7 +279,7 @@
     <div class="row">
         <div class="col-xs-12" id="feedback">
             <div class="title-underline-fw mod-feedback">
-                <h3 class="section-title">Feedback</h3>
+                <h3 class="section-title u-inline-block">Feedback</h3>
             </div>
             {{ FEEDBACK_MANAGER|raw }}
         </div>
