@@ -271,7 +271,7 @@
                             <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]">
                                 ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
                             </span>
-                            <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)"></b-form-input>
+                            <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
                             <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
                                 <span aria-hidden="true" class="fa" :class="['btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                             </button>
@@ -370,6 +370,18 @@
             },
 
             methods: {
+                focusFollowingScore(index, isNext) {
+                    index = parseInt(index);
+                    if (isNaN(index)) { return; }
+                    index = index + (isNext ? 1 : -1);
+                    if (index < 0 || index >= this.pagination.perPage) { return; }
+                    var el = $('.form-control.mod-score[data-item-index=' + index + ']');
+                    if (el.length) {
+                        el.focus();
+                    } else {
+                        this.focusFollowingScore(index, isNext);
+                    }
+                },
                 isLabelShown(entity) {
                     return entity.presence_status === 'absent' || (entity.presence_status === 'present' && !this.scoresEditable);
                 },
