@@ -76,12 +76,15 @@
         color: #027461;
     }
 
+    .fa.btn-icon-absent {
+        transform: translateX(-1px);
+    }
     .fa.btn-icon-absent::before {
-        content: '\f0a2';
+        content: '\f1f7';
     }
 
     .fa.btn-icon-present::before, .fa.btn-icon-neutral::before {
-        content: '\f1f7';
+        content: '\f0a2';
     }
 
     .tbl-sort-option {
@@ -273,7 +276,7 @@
                             </span>
                             <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
                             <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
-                                <span aria-hidden="true" class="fa" :class="['btn-icon-' + data.item.presence_status]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                                <span aria-hidden="true" class="fa" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                             </button>
                         </div>
                     </template>
