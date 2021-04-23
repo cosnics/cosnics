@@ -267,7 +267,7 @@
                         <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
                     </template>
                     <template #cell(score)="data">
-                        <div class="u-flex u-flex-align-items-center">
+                        <div class="u-flex u-align-items-center">
                             <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]">
                                 ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
                             </span>
