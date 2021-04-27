@@ -160,7 +160,7 @@ class Embedder extends ContentObjectEmbedder
         $entityType = $entityData['entity_type'];
         $entityId = $entityData['entity_id'];
 
-        if ($entityType != $assignmentServiceBridge->getCurrentEntityType())
+        if ($entityType != $assignmentServiceBridge->getCurrentEntityType() || empty($entityId))
         {
             return;
         }
