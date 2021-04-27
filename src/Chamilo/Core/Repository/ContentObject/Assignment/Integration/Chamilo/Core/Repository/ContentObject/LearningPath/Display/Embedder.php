@@ -57,7 +57,7 @@ class Embedder extends ContentObjectEmbedder
         $applicationFactory = $this->getApplicationFactory();
         $applicationFactory->setAssignmentServiceBridge($assignmentServiceBridge);
 
-        $this->registerSelectedAssignmentEntity();
+        $this->registerSelectedAssignmentEntity($assignmentServiceBridge);
         $this->addSelectedAssignmentEntityToApplicationFactory($applicationFactory, $assignmentServiceBridge);
 
         $result = $applicationFactory->getApplication(
@@ -160,7 +160,7 @@ class Embedder extends ContentObjectEmbedder
         $entityType = $entityData['entity_type'];
         $entityId = $entityData['entity_id'];
 
-        if ($entityType != $assignmentServiceBridge->getCurrentEntityType() || empty($entityId))
+        if (is_null($entityType) || $entityType != $assignmentServiceBridge->getCurrentEntityType() || empty($entityId))
         {
             return;
         }
@@ -168,7 +168,7 @@ class Embedder extends ContentObjectEmbedder
         $applicationFactory->setViewAssignmentEntity($entityType, $entityId);
     }
 
-    protected function registerSelectedAssignmentEntity(): void
+    protected function registerSelectedAssignmentEntity(AssignmentServiceBridge $assignmentServiceBridge): void
     {
         if ($this->getRequest()->getFromPostOrUrl(
                 \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION
@@ -182,6 +182,11 @@ class Embedder extends ContentObjectEmbedder
             $entityType = $this->getRequest()->getFromPostOrUrl(
                 \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE
             );
+
+            if(empty($entityType))
+            {
+                $entityType = $assignmentServiceBridge->getCurrentEntityType();
+            }
 
             $this->getSessionUtilities()->register(
                 self::PARAM_SELECTED_ASSIGNMENT_ENTITY,
