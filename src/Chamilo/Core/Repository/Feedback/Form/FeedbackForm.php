@@ -28,6 +28,8 @@ class FeedbackForm extends FormValidator
 
     protected $supportsPrivateFeedback;
 
+    protected $canViewPrivateFeedback;
+
     /**
      * Constructor
      *
@@ -39,7 +41,7 @@ class FeedbackForm extends FormValidator
      * @throws \Exception
      */
     public function __construct(
-        Application $application, ContentObjectRepository $contentObjectRepository, $form_url, $feedback = null, $supportsPrivateFeedback = false
+        Application $application, ContentObjectRepository $contentObjectRepository, $form_url, $feedback = null, $supportsPrivateFeedback = false, $canViewPrivateFeedback = false
     )
     {
         parent::__construct('feedback', 'post', $form_url);
@@ -47,6 +49,7 @@ class FeedbackForm extends FormValidator
         $this->application = $application;
         $this->contentObjectRepository = $contentObjectRepository;
         $this->supportsPrivateFeedback = $supportsPrivateFeedback;
+        $this->canViewPrivateFeedback = $canViewPrivateFeedback;
 
         $this->build_form();
 
@@ -118,7 +121,7 @@ class FeedbackForm extends FormValidator
 //            '<div class="form-group">{element}</div>', self::PROPERTY_ATTACHMENTS_UPLOADER . '_static_data'
 //        );
 
-        if ($this->supportsPrivateFeedback)
+        if ($this->supportsPrivateFeedback && $this->canViewPrivateFeedback)
         {
             $this->addElement('checkbox', PrivateFeedbackSupport::PROPERTY_PRIVATE, Translation::get('IsPrivate'));
         }

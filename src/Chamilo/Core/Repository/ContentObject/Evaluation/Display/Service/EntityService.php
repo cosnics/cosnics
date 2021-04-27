@@ -211,7 +211,7 @@ class EntityService
         $evaluationEntry->setContextClass($contextIdentifier->getContextClass());
         $evaluationEntry->setContextId($contextIdentifier->getContextId());
         $evaluationEntry->setEntityType($entityType);
-        $evaluationEntry->setEntitityId($entityId);
+        $evaluationEntry->setEntityId($entityId);
         $this->entityRepository->createEvaluationEntry($evaluationEntry);
 
         return $evaluationEntry;

@@ -80,6 +80,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser)
+    {
+        return $currentUser->getId(); // Todo: get according to entity type
+    }
+
+    /**
      * @param ContextIdentifier $contextIdentifier
      */
     public function setContextIdentifier(ContextIdentifier $contextIdentifier)
@@ -141,5 +151,24 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore
     {
         return $this->entityService->saveEntityAsAbsent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+    }
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId)
+    {
+        if ($entityType == 0 && $user->getId() == $entityId)
+        {
+            return true;
+        }
+        // todo: all other cases
+        return false;
+
+        //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
 }

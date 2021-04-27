@@ -103,7 +103,7 @@ class EvaluationEntry extends DataClass
     /**
      * @return int
      */
-    public function getEntitityId()
+    public function getEntityId()
     {
         return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
@@ -111,7 +111,7 @@ class EvaluationEntry extends DataClass
     /**
      * @param int $entity_id
      */
-    public function setEntitityId($entity_id)
+    public function setEntityId($entity_id)
     {
         $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }

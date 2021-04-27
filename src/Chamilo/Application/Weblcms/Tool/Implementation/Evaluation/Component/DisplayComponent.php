@@ -7,14 +7,18 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component
@@ -47,6 +51,9 @@ class DisplayComponent extends Manager implements DelegateComponent
 
         $this->buildBridges($publication);
         $applicationFactory = $this->getApplicationFactory();
+        $applicationFactory->setEvaluationServiceBridge(
+            $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class)
+        );
 
         return $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context(),
@@ -108,6 +115,14 @@ class DisplayComponent extends Manager implements DelegateComponent
     public function get_root_content_object()
     {
         return $this->getContentObjectPublication()->getContentObject();
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Evaluation\Display\ApplicationFactory
+     */
+    public function getApplicationFactory()
+    {
+        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
     }
 
     /**

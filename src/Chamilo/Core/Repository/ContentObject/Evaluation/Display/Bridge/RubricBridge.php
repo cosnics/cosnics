@@ -71,7 +71,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getTargetUsers()
     {
-        return $this->evaluationServiceBridge->getUsersForEntity($this->entry->getEntityType(), $this->entry->getEntitityId());
+        return $this->evaluationServiceBridge->getUsersForEntity($this->entry->getEntityType(), $this->entry->getEntityId());
         /*return $this->assignmentServiceBridge->getUsersForEntity(
             $this->entry->getEntityType(), $this->entry->getEntityId()
         );*/

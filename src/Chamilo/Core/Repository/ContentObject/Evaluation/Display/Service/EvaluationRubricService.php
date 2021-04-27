@@ -86,7 +86,6 @@ class EvaluationRubricService
 
     public function isSelfEvaluationAllowed(Evaluation $evaluation) : bool
     {
-        // todo
-        return true;
+        return false;
     }
 }

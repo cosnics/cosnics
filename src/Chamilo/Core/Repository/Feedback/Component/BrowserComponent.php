@@ -46,8 +46,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
+        $canViewPrivateFeedback = $supportsPrivateFeedback ? $this->feedbackRightsServiceBridge->canViewPrivateFeedback() : false;
 
-        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), null, $supportsPrivateFeedback);
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), null, $supportsPrivateFeedback, $canViewPrivateFeedback);
 
         if ($form->validate())
         {
@@ -137,6 +138,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 foreach ($feedbacks as $feedback)
                 {
+                    if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+                    {
+                        if (!$canViewPrivateFeedback)
+                        {
+                            continue;
+                        }
+                    }
                     $html[] = '<div class="list-group-item" id="feedback' . $feedback->getId() . '">';
 
                     $html[] = '<div style="display:flex;">';

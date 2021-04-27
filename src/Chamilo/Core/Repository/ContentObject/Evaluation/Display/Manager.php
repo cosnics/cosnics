@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
@@ -29,6 +30,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const PARAM_ACTION = 'evaluation_display_action';
+    const PARAM_ENTITY_ID = 'entity_id';
 
     const DEFAULT_ACTION = 'Browser';
 
@@ -42,17 +44,87 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_SAVE_SCORE = 'SaveScore';
 
     /**
+     *
+     * @var integer
+     */
+    protected $entityType;
+
+    /**
+     *
+     * @var integer
+     */
+    protected $entityIdentifier;
+
+    /**
+     * @var RightsService
+     */
+    protected $rightsService;
+
+
+    /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
      */
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);
         $this->buildBridgeServices();
-        $entityIdentifier = $this->getRequest()->query->get('entity_id');
+        $entityIdentifier = $this->getEntityIdentifier();
         if ($entityIdentifier)
         {
-            $this->set_parameter('entity_id', $entityIdentifier);
+            $this->set_parameter(self::PARAM_ENTITY_ID, $entityIdentifier);
         }
+    }
+
+    /**
+     * @return RightsService
+     */
+    public function getRightsService()
+    {
+        if (!isset($this->rightsService))
+        {
+            $this->rightsService = new RightsService();
+            $this->rightsService->setEvaluationServiceBridge($this->getEvaluationServiceBridge());
+        }
+
+        return $this->rightsService;
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getEntityType()
+    {
+        if (!isset($this->entityType))
+        {
+            $this->entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+        }
+
+        return $this->entityType;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getEntityIdentifier() {
+        if (!isset($this->entityIdentifier))
+        {
+            $this->entityIdentifier = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTITY_ID);
+
+            if (empty($this->entityIdentifier))
+            {
+                $this->entityIdentifier =
+                    $this->getEvaluationServiceBridge()->getCurrentEntityIdentifier($this->getUser());
+            }
+        }
+
+        if (empty($this->entityIdentifier))
+        {
+            throw new UserException($this->getTranslator()->trans('CanNotViewEvaluation', [], Manager::context()));
+        }
+
+        return $this->entityIdentifier;
+
     }
 
     /**
@@ -61,7 +133,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function buildBridgeServices()
     {
         $rubricBridge = new RubricBridge($this->getEvaluationServiceBridge());
-        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge();
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge($this->getEvaluationServiceBridge());
         $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
 
         $feedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
@@ -157,7 +229,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface
+     * @return \Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface
      */
     protected function getRubricBridge()
     {
@@ -236,7 +308,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function validateEntity()
     {
-        $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
+        $entityId = $this->getEntityIdentifier();
 
         if (empty($entityId))
         {

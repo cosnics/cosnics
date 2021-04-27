@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -13,9 +14,24 @@ use Chamilo\Core\User\Storage\DataClass\User;
 class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterface
 {
     /**
+     * @var EvaluationServiceBridgeInterface
+     */
+    protected $evaluationServiceBridge;
+
+    /**
      * @var \Chamilo\Core\User\Storage\DataClass\User
      */
     protected $currentUser;
+
+    /**
+     * RubricBridge constructor.
+     *
+     * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
+     */
+    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge)
+    {
+        $this->evaluationServiceBridge = $evaluationServiceBridge;
+    }
 
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
@@ -39,6 +55,14 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     public function canViewFeedback()
     {
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canViewPrivateFeedback()
+    {
+        return $this->evaluationServiceBridge->canEditEvaluation();
     }
 
     /**

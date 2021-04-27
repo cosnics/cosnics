@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluatio
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -21,32 +22,75 @@ class EntryComponent extends Manager implements FeedbackSupport
     const PARAM_RUBRIC_ENTRY = 'RubricEntry';
     const PARAM_RUBRIC_RESULTS = 'RubricResult';
 
+    /**
+     *
+     * @var string
+     */
     private $entityName;
+
+    /**
+     * @var EvaluationEntry
+     */
+    protected $evaluationEntry;
 
     public function run()
     {
-        $evaluationEntry = $this->ensureEvaluationEntry();
+        $this->evaluationEntry = $this->ensureEvaluationEntry();
+        if (!$this->evaluationEntry )
+        {
+            throw new NotAllowedException();
+        }
+        $this->checkAccessRights();
 
         BreadcrumbTrail::getInstance()->get_last()->set_name(
             $this->getTranslator()->trans('Evaluation', [], Manager::context()) . ' ' . $this->getEntityName());
 
         return $this->getTwig()->render(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':EntryViewer.html.twig',
-             $this->getTemplateProperties($evaluationEntry)
+             $this->getTemplateProperties($this->evaluationEntry)
         );
     }
 
     /**
-     * @return EvaluationEntry
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
      */
-    private function ensureEvaluationEntry(): EvaluationEntry
+    protected function checkAccessRights()
+    {
+        if ($this->evaluationEntry &&
+            $this->getRightsService()->canUserViewEntry($this->getUser(), $this->evaluationEntry))
+        {
+            return;
+        }
+
+        if ($this->getRightsService()->canUserViewEntity(
+            $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
+        ))
+        {
+            return;
+        }
+
+        throw new NotAllowedException();
+    }
+
+    /**
+     * @return EvaluationEntry|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    private function ensureEvaluationEntry()
     {
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
-        $entityId = $this->getRequest()->query->get('entity_id');
+        $entityType = $this->getEntityType();
+        $entityId = $this->getEntityIdentifier();
         $evaluation = $this->get_root_content_object();
 
-        return $this->getEntityService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
+        if ($this->getRightsService()->canUserEditEvaluation())
+        {
+            return $this->getEntityService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
+        }
+        else
+        {
+            return $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        }
     }
 
     /**
@@ -56,8 +100,8 @@ class EntryComponent extends Manager implements FeedbackSupport
      */
     protected function getTemplateProperties(EvaluationEntry $evaluationEntry): array
     {
-        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
-        $entityId = $this->getRequest()->query->get('entity_id');
+        $entityType = $this->getEntityType();
+        $entityId = $this->getEntityIdentifier();
         $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';
         $presenceStatus = 'neutral';
@@ -136,7 +180,7 @@ class EntryComponent extends Manager implements FeedbackSupport
             'USER_COUNT' => $count,
             'USER_INDEX' => $userIndex,
             'ENTITY_TYPE' => $entityType,
-            'CAN_EDIT_EVALUATION' => true, //$this->getAssignmentServiceBridge()->canEditAssignment(),
+            'CAN_EDIT_EVALUATION' => $this->getRightsService()->canUserEditEvaluation(),
             'PRESENCE_STATUS' => $presenceStatus,
             'SCORE' => $score,
             'SAVE_SCORE_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_SAVE_SCORE]),
@@ -152,13 +196,13 @@ class EntryComponent extends Manager implements FeedbackSupport
     }
 
     /**
-     * @param bool $canUserRubricEvaluation
+     * @param bool $canUseRubricEvaluation
      * @param ContextIdentifier $contextIdentifier
      * @return string|null
      */
-    protected function getRubricActionFromRequest(bool $canUserRubricEvaluation, ContextIdentifier $contextIdentifier) : ?string
+    protected function getRubricActionFromRequest(bool $canUseRubricEvaluation, ContextIdentifier $contextIdentifier) : ?string
     {
-        if ($canUserRubricEvaluation && $this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY))
+        if ($canUseRubricEvaluation && $this->getRequest()->getFromUrl(self::PARAM_RUBRIC_ENTRY))
         {
             return 'Entry';
         }
@@ -173,7 +217,7 @@ class EntryComponent extends Manager implements FeedbackSupport
             return 'Result';
         }
 
-        if ($canUserRubricEvaluation)
+        if ($canUseRubricEvaluation)
         {
             return 'Entry';
         }
@@ -188,8 +232,8 @@ class EntryComponent extends Manager implements FeedbackSupport
             return $this->entityName;
         }
 
-        $entityId = $this->getRequest()->query->get('entity_id');
-        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+        $entityId = $this->getEntityIdentifier();
+        $entityType = $this->getEntityType();
 
         if ($entityType == 0)
         {

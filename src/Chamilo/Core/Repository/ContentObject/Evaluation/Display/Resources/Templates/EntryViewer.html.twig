@@ -206,6 +206,7 @@
     }
 </style>
 <div class="col-xs-12">
+    {% if CAN_EDIT_EVALUATION %}
     <div class="btn-toolbar btn-action-toolbar mod-entities">
         <div class="btn-group u-flex u-align-items-end u-gap-small">
             <div>
@@ -242,6 +243,7 @@
             </a>{% endif %}
         </div>
     </div>
+    {% endif %}
 
     {% if HAS_RUBRIC %}
     <div class="row">
@@ -252,30 +254,41 @@
                     <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="rubric-action u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
                 {% elseif RUBRIC_ACTION == 'Result' %}
                     <h3 class="section-title u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
-                    <a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</a>
+                    {% if CAN_USE_RUBRIC_EVALUATION %}<a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</a>{% endif %}
                 {% endif %}
             </div>
             {{ RUBRIC_VIEW|raw }}
         </div>
     </div>
     {% endif %}
+
     {% if CAN_EDIT_EVALUATION %}
-        <div class="row">
-            <div class="col-xs-12" id="score">
-                <div class="title-underline-fw mod-score">
-                    <h3 class="section-title u-inline-block">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
-                </div>
-                <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline u-flex u-align-items-baseline mod-score">
-                    {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important"><i class="fa fa-exclamation-circle"></i> {{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
-                    {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" class="form-control form-control-sm" autocomplete="off">
-                    <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Save'|trans({}, commonContext) }}</button>
-                    {% endif %}
-                    {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
-                </form>
+    <div class="row">
+        <div class="col-xs-12" id="score">
+            <div class="title-underline-fw mod-score">
+                <h3 class="section-title u-inline-block">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+            </div>
+            <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline u-flex u-align-items-baseline mod-score">
+                {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important"><i class="fa fa-exclamation-circle"></i> {{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
+                {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" class="form-control form-control-sm" autocomplete="off">
+                <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Save'|trans({}, commonContext) }}</button>
+                {% endif %}
+                {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-xs-12" id="score">
+            <div class="title-underline-fw mod-score">
+                <h3 class="section-title u-inline-block">{{ 'Score'|trans({}, appContext) }}</h3>
+                <span>{{ SCORE|raw }}</span>
             </div>
         </div>
+    </div>
     {% endif %}
+
     <div class="row">
         <div class="col-xs-12" id="feedback">
             <div class="title-underline-fw mod-feedback">

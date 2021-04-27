@@ -46,5 +46,6 @@ PresenceStatusComplete = "Entity presence has been successfully saved."
 PresenceStatusFail = "Entity presence hasn't been saved."
 Import = "Import"
 Export = "Export"
+CanNotViewEvaluation = "You can not view this evaluation because you are not part of the selected groups for this evaluation"
 
 

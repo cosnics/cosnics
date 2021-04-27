@@ -28,6 +28,13 @@ interface EvaluationServiceBridgeInterface
     public function getCurrentEntityType();
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser);
+
+    /**
      *
      * @return ContextIdentifier
      */
@@ -75,4 +82,14 @@ interface EvaluationServiceBridgeInterface
      * @return EvaluationEntryScore
      */
     public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore;
+
+    /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, $entityType, $entityId);
+
 }
