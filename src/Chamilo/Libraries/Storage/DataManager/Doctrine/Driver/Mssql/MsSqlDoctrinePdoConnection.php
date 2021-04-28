@@ -10,6 +10,10 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
  */
 class MsSqlDoctrinePdoConnection extends \Doctrine\DBAL\Driver\PDOConnection
 {
+    public function getServerVersion()
+    {
+        return null;
+    }
 
     /**
      *
