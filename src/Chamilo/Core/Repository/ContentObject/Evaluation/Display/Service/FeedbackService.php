@@ -4,48 +4,62 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\FeedbackRepository;
+use Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 
+/**
+ * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service
+ *
+ * @author Stefan Gabriëls - Hogeschool Gent
+ */
 class FeedbackService
 {
     /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\FeedbackRepository
+     * @var FeedbackRepository
      */
     protected $feedbackRepository;
 
     /**
      * FeedbackService constructor.
      *
-     * @param \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\FeedbackRepository $feedbackRepository
+     * @param FeedbackRepository $feedbackRepository
      */
     public function __construct(FeedbackRepository $feedbackRepository)
     {
         $this->feedbackRepository = $feedbackRepository;
     }
 
-    public function findFeedbackByEntryId(int $entryId)
+    /**
+     * @param int $entryId
+     *
+     * @return DataClassIterator
+     */
+    public function findFeedbackByEntryId(int $entryId): DataClassIterator
     {
         return $this->feedbackRepository->findFeedbackByEntryId($entryId);
     }
 
+    /**
+     * @param int $feedbackId
+     *
+     * @return EvaluationEntryFeedback|DataClass
+     */
     public function findFeedbackById(int $feedbackId)
     {
         return $this->feedbackRepository->retrieveFeedbackById($feedbackId);
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+     * @param User $user
+     * @param Feedback $feedbackContentObject
      * @param integer $entry_id
      * @param bool $isPrivate
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
+     * @return EvaluationEntryFeedback
      */
-    public function createFeedback(
-        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject,
-        int $entry_id, bool $isPrivate = false
-    )
+    public function createFeedback(User $user, Feedback $feedbackContentObject, int $entry_id, bool $isPrivate = false): EvaluationEntryFeedback
     {
         $feedbackObject = new EvaluationEntryFeedback();
         $feedbackObject->setEntryId($entry_id);
@@ -64,11 +78,8 @@ class FeedbackService
         return $feedbackObject;
     }
 
-
     /**
-     * @param Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback $feedback
-     *
-     * @throws \Exception
+     * @param EvaluationEntryFeedback $feedback
      */
     public function updateFeedback(EvaluationEntryFeedback $feedback)
     {
@@ -79,9 +90,7 @@ class FeedbackService
     }
 
     /**
-     * @param Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback $feedback
-     *
-     * @throws \Exception
+     * @param EvaluationEntryFeedback $feedback
      */
     public function deleteFeedback(EvaluationEntryFeedback $feedback)
     {
@@ -90,6 +99,5 @@ class FeedbackService
             throw new \RuntimeException('Could not delete feedback in the database');
         }
     }
-
 }
 

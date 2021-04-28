@@ -16,12 +16,12 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 class EvaluationRubricService
 {
     /**
-     * @var \Chamilo\Core\Repository\Workspace\Service\ContentObjectService
+     * @var ContentObjectService
      */
     protected $contentObjectService;
 
     /**
-     * @var Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricResultRepository
+     * @var RubricResultRepository
      */
     protected $rubricResultRepository;
 
@@ -41,7 +41,7 @@ class EvaluationRubricService
      *
      * @return bool
      */
-    public function evaluationHasRubric(Evaluation $evaluation): bool
+    public function evaluationHasRubric(Evaluation $evaluation) : bool
     {
         try
         {
@@ -56,6 +56,7 @@ class EvaluationRubricService
 
     /**
      * @param Evaluation $evaluation
+     *
      * @return Rubric|null
      */
     public function getRubricForEvaluation(Evaluation $evaluation)
@@ -77,6 +78,7 @@ class EvaluationRubricService
 
     /**
      * @param ContextIdentifier $entryContextIdentifier
+     *
      * @return bool
      */
     public function entryHasResults(ContextIdentifier $entryContextIdentifier) : bool
@@ -84,8 +86,14 @@ class EvaluationRubricService
         return $this->rubricResultRepository->countRubricResultsForContextIdentifier($entryContextIdentifier) > 0;
     }
 
+    /**
+     * @param Evaluation $evaluation
+     *
+     * @return bool
+     */
     public function isSelfEvaluationAllowed(Evaluation $evaluation) : bool
     {
+        // todo
         return false;
     }
 }

@@ -11,14 +11,19 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Stefan Gabriëls - Hogeschool Gent
  */
 class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
 {
     /**
-     * @var bool
+     * @var EntityService
      */
-    protected $canEditEvaluation;
+    protected $entityService;
+
+    /**
+     * @var integer
+     */
+    protected $publicationId;
 
     /**
      * @var integer
@@ -31,25 +36,72 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $contextIdentifier;
 
     /**
-     * @var integer
+     * @var bool
      */
-    protected $publicationId;
+    protected $canEditEvaluation;
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService $entityService
+     * @param EntityService $entityService
      */
-    public function __construct(
-        EntityService $entityService
-    )
+    public function __construct(EntityService $entityService)
     {
         $this->entityService = $entityService;
     }
 
     /**
+     * @param int $publicationId
+     */
+    public function setPublicationId(int $publicationId)
+    {
+        $this->publicationId = $publicationId;
+    }
+
+    /**
+     * @param User $currentUser
      *
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser): int
+    {
+        return $currentUser->getId(); // Todo: get according to entity type
+    }
+
+    /**
+     * @return integer
+     */
+    public function getCurrentEntityType(): int
+    {
+        return $this->currentEntityType;
+    }
+
+    /**
+     * @param integer $currentEntityType
+     */
+    public function setCurrentEntityType(int $currentEntityType)
+    {
+        $this->currentEntityType = $currentEntityType;
+    }
+
+    /**
+     * @return ContextIdentifier
+     */
+    public function getContextIdentifier(): ContextIdentifier
+    {
+        return $this->contextIdentifier;
+    }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     */
+    public function setContextIdentifier(ContextIdentifier $contextIdentifier)
+    {
+        $this->contextIdentifier = $contextIdentifier;
+    }
+
+    /**
      * @return boolean
      */
-    public function canEditEvaluation()
+    public function canEditEvaluation(): bool
     {
         return $this->canEditEvaluation;
     }
@@ -63,62 +115,9 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     }
 
     /**
-     * @param integer $currentEntityType
-     */
-    public function setCurrentEntityType(int $currentEntityType)
-    {
-        $this->currentEntityType = $currentEntityType;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentEntityType()
-    {
-        return $this->currentEntityType;
-    }
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
-     *
-     * @return int
-     */
-    public function getCurrentEntityIdentifier(User $currentUser)
-    {
-        return $currentUser->getId(); // Todo: get according to entity type
-    }
-
-    /**
-     * @param ContextIdentifier $contextIdentifier
-     */
-    public function setContextIdentifier(ContextIdentifier $contextIdentifier)
-    {
-        $this->contextIdentifier = $contextIdentifier;
-    }
-
-    /**
-     *
-     * @return ContextIdentifier
-     */
-    public function getContextIdentifier()
-    {
-        return $this->contextIdentifier;
-    }
-
-    /**
-     * @param int $publicationId
-     */
-    public function setPublicationId(int $publicationId)
-    {
-        $this->publicationId = $publicationId;
-    }
-
-    /**
-     *
      * @return int[]
      */
-    public function getTargetEntityIds()
+    public function getTargetEntityIds(): array
     {
         return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($this->publicationId, null);
     }
@@ -129,13 +128,32 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId)
+    public function getUsersForEntity(int $entityType, int $entityId): array
     {
         // Todo: actually search by entity type
         return [$this->entityService->getUserForEntity($entityId)];
         /*$entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
 
         return $entityService->getUsersForEntity($entityId);*/
+    }
+
+    /**
+     * @param User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool
+    {
+        if ($entityType == 0 && $user->getId() == $entityId)
+        {
+            return true;
+        }
+        // todo: all other cases
+        return false;
+
+        //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
 
     public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore
@@ -153,22 +171,4 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         return $this->entityService->saveEntityAsAbsent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
     }
 
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $entityType
-     * @param int $entityId
-     *
-     * @return bool
-     */
-    public function isUserPartOfEntity(User $user, $entityType, $entityId)
-    {
-        if ($entityType == 0 && $user->getId() == $entityId)
-        {
-            return true;
-        }
-        // todo: all other cases
-        return false;
-
-        //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
-    }
 }

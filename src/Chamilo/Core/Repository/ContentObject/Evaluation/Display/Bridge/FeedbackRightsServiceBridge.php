@@ -19,12 +19,12 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     protected $evaluationServiceBridge;
 
     /**
-     * @var \Chamilo\Core\User\Storage\DataClass\User
+     * @var User
      */
     protected $currentUser;
 
     /**
-     * RubricBridge constructor.
+     * FeedbackRightsServiceBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
      */
@@ -34,7 +34,7 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param User $currentUser
      */
     public function setCurrentUser(User $currentUser)
     {
@@ -44,7 +44,7 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     /**
      * @return bool
      */
-    public function canCreateFeedback()
+    public function canCreateFeedback(): bool
     {
         return true;
     }
@@ -52,7 +52,7 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     /**
      * @return bool
      */
-    public function canViewFeedback()
+    public function canViewFeedback(): bool
     {
         return true;
     }
@@ -60,27 +60,27 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     /**
      * @return bool
      */
-    public function canViewPrivateFeedback()
+    public function canViewPrivateFeedback(): bool
     {
         return $this->evaluationServiceBridge->canEditEvaluation();
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     * @param Feedback $feedback
      *
      * @return bool
      */
-    public function canEditFeedback(Feedback $feedback)
+    public function canEditFeedback(Feedback $feedback): bool
     {
         return $feedback->get_user_id() == $this->currentUser->getId();
     }
 
     /**
-     * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
+     * @param Feedback $feedback
      *
      * @return bool
      */
-    public function canDeleteFeedback(Feedback $feedback)
+    public function canDeleteFeedback(Feedback $feedback): bool
     {
         return $feedback->get_user_id() == $this->currentUser->getId();
     }

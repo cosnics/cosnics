@@ -9,43 +9,36 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Interfaces
- * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
+ * @author Stefan Gabriëls <stefan.gabriels@hogent.be>
  */
 interface EvaluationServiceBridgeInterface
 {
     /**
-     *
-     * @return boolean
-     */
-    public function canEditEvaluation();
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentEntityType();
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
+     * @param User $currentUser
      *
      * @return int
      */
-    public function getCurrentEntityIdentifier(User $currentUser);
+    public function getCurrentEntityIdentifier(User $currentUser): int;
 
     /**
-     *
+     * @return integer
+     */
+    public function getCurrentEntityType(): int;
+
+    /**
      * @return ContextIdentifier
      */
-    public function getContextIdentifier();
-
+    public function getContextIdentifier(): ContextIdentifier;
 
     /**
-     *
+     * @return boolean
+     */
+    public function canEditEvaluation(): bool;
+
+    /**
      * @return int[]
      */
-    public function getTargetEntityIds();
+    public function getTargetEntityIds(): array;
 
     /**
      * @param int $entityType
@@ -53,7 +46,26 @@ interface EvaluationServiceBridgeInterface
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId);
+    public function getUsersForEntity(int $entityType, int $entityId): array;
+
+    /**
+     * @param User $user
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool;
+
+    /**
+     * @param int $evaluationId
+     * @param int $userId
+     * @param int $entityId
+     * @param string $score
+     *
+     * @return EvaluationEntryScore
+     */
+    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore;
 
     /**
      * @param int $evaluationId
@@ -72,24 +84,4 @@ interface EvaluationServiceBridgeInterface
      * @return EvaluationEntryScore
      */
     public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore;
-
-    /**
-     * @param int $evaluationId
-     * @param int $userId
-     * @param int $entityId
-     * @param string $score
-     *
-     * @return EvaluationEntryScore
-     */
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore;
-
-    /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
-     * @param int $entityType
-     * @param int $entityId
-     *
-     * @return bool
-     */
-    public function isUserPartOfEntity(User $user, $entityType, $entityId);
-
 }

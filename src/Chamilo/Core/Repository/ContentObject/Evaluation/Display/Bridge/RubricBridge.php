@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 /**
  * Class RubricBridge
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge
+ * @author Stefan Gabriëls <stefan.gabriels@hogent.be>
  */
 class RubricBridge implements RubricBridgeInterface
 {
@@ -22,12 +23,9 @@ class RubricBridge implements RubricBridgeInterface
     /**
      * @var EvaluationEntry
      */
-    protected $entry;
+    protected $evaluationEntry;
 
-    /**
-     * @var ScoreService
-     */
-    protected $scoreService;
+    //protected $scoreService;
 
     /**
      * RubricBridge constructor.
@@ -44,7 +42,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function setEvaluationEntry(EvaluationEntry $entry)
     {
-        $this->entry = $entry;
+        $this->evaluationEntry = $entry;
     }
 
     /**
@@ -52,7 +50,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getContextIdentifier()
     {
-        return new ContextIdentifier(get_class($this->entry), $this->entry->getId());
+        return new ContextIdentifier(get_class($this->evaluationEntry), $this->evaluationEntry->getId());
     }
 
     /**
@@ -71,7 +69,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getTargetUsers()
     {
-        return $this->evaluationServiceBridge->getUsersForEntity($this->entry->getEntityType(), $this->entry->getEntityId());
+        return $this->evaluationServiceBridge->getUsersForEntity($this->evaluationEntry->getEntityType(), $this->evaluationEntry->getEntityId());
         /*return $this->assignmentServiceBridge->getUsersForEntity(
             $this->entry->getEntityType(), $this->entry->getEntityId()
         );*/

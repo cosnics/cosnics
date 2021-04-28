@@ -3,7 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -12,12 +14,12 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class FeedbackRepository
 {
     /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
+     * @var DataClassRepository
      */
     protected $dataClassRepository;
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
+     * @param DataClassRepository $dataClassRepository
      */
     public function __construct(DataClassRepository $dataClassRepository)
     {
@@ -27,9 +29,9 @@ class FeedbackRepository
     /**
      * @param integer $entryId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return DataClassIterator
      */
-    public function findFeedbackByEntryId(int $entryId)
+    public function findFeedbackByEntryId(int $entryId): DataClassIterator
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable($this->getFeedbackClassName(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
@@ -42,10 +44,9 @@ class FeedbackRepository
     }
 
     /**
-     *
      * @param integer $feedbackId
      *
-     * @return Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return EvaluationEntryFeedback|DataClass
      */
     public function retrieveFeedbackById(int $feedbackId)
     {
@@ -53,31 +54,31 @@ class FeedbackRepository
     }
 
     /**
-     * @param Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback $feedback
+     * @param EvaluationEntryFeedback $feedback
      *
      * @return bool
      */
-    public function createFeedback(EvaluationEntryFeedback $feedback)
+    public function createFeedback(EvaluationEntryFeedback $feedback): bool
     {
         return $this->dataClassRepository->create($feedback);
     }
 
     /**
-     * @param Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback $feedback
+     * @param EvaluationEntryFeedback $feedback
      *
      * @return bool
      */
-    public function updateFeedback(EvaluationEntryFeedback $feedback)
+    public function updateFeedback(EvaluationEntryFeedback $feedback): bool
     {
         return $this->dataClassRepository->update($feedback);
     }
 
     /**
-     * @param Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryFeedback $feedback
+     * @param EvaluationEntryFeedback $feedback
      *
      * @return bool
      */
-    public function deleteFeedback(EvaluationEntryFeedback $feedback)
+    public function deleteFeedback(EvaluationEntryFeedback $feedback): bool
     {
         return $this->dataClassRepository->delete($feedback);
     }
@@ -85,7 +86,7 @@ class FeedbackRepository
     /**
      * @return string
      */
-    private function getFeedbackClassName() : string
+    private function getFeedbackClassName(): string
     {
         return EvaluationEntryFeedback::class_name();
     }

@@ -23,7 +23,7 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Stefan Gabriëls - Hogeschool Gent
  */
 class DisplayComponent extends Manager implements DelegateComponent
 {

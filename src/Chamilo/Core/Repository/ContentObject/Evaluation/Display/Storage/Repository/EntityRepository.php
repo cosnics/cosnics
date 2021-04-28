@@ -7,6 +7,7 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -103,14 +104,29 @@ class EntityRepository
     }*/
 
     /**
+     * @return DataClassProperties
+     */
+    protected function getDataClassProperties(): DataClassProperties
+    {
+        $class_name = User::class_name();
+        $properties = new DataClassProperties([
+            new PropertyConditionVariable($class_name, User::PROPERTY_ID),
+            new PropertyConditionVariable($class_name, User::PROPERTY_FIRSTNAME),
+            new PropertyConditionVariable($class_name, User::PROPERTY_LASTNAME),
+            new PropertyConditionVariable($class_name, User::PROPERTY_OFFICIAL_CODE)
+        ]);
+        return $properties;
+    }
+
+    /**
      *
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
+     * @return RecordIterator
      */
-    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters)
+    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
     {
         $class_name = User::class_name();
         $condition = new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds);
@@ -191,7 +207,7 @@ class EntityRepository
      *
      * @return integer
      */
-    public function countUsersFromIDs(array $userIds, FilterParameters $filterParameters)
+    public function countUsersFromIDs(array $userIds, FilterParameters $filterParameters): int
     {
         $class_name = User::class_name();
         $condition = new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds);
@@ -203,21 +219,6 @@ class EntityRepository
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
         return $this->dataClassRepository->count($class_name, $parameters);
-    }
-
-    /**
-     * @return DataClassProperties
-     */
-    protected function getDataClassProperties(): DataClassProperties
-    {
-        $class_name = User::class_name();
-        $properties = new DataClassProperties([
-            new PropertyConditionVariable($class_name, User::PROPERTY_ID),
-            new PropertyConditionVariable($class_name, User::PROPERTY_FIRSTNAME),
-            new PropertyConditionVariable($class_name, User::PROPERTY_LASTNAME),
-            new PropertyConditionVariable($class_name, User::PROPERTY_OFFICIAL_CODE)
-        ]);
-        return $properties;
     }
 
     /**
@@ -259,7 +260,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function createEvaluationEntry(EvaluationEntry $entry)
+    public function createEvaluationEntry(EvaluationEntry $entry): bool
     {
         return $this->dataClassRepository->create($entry);
     }
@@ -269,7 +270,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function updateEvaluationEntry(EvaluationEntry $entry)
+    public function updateEvaluationEntry(EvaluationEntry $entry): bool
     {
         return $this->dataClassRepository->update($entry);
     }
@@ -299,7 +300,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function createEvaluationEntryScore(EvaluationEntryScore $entryScore)
+    public function createEvaluationEntryScore(EvaluationEntryScore $entryScore): bool
     {
         return $this->dataClassRepository->create($entryScore);
     }
@@ -309,7 +310,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function updateEvaluationEntryScore(EvaluationEntryScore $entryScore)
+    public function updateEvaluationEntryScore(EvaluationEntryScore $entryScore): bool
     {
         return $this->dataClassRepository->update($entryScore);
     }
@@ -319,7 +320,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function createEvaluationEntryScoreTargetUser(EvaluationEntryScoreTargetUser $targetUser)
+    public function createEvaluationEntryScoreTargetUser(EvaluationEntryScoreTargetUser $targetUser): bool
     {
         return $this->dataClassRepository->create($targetUser);
     }
@@ -329,7 +330,7 @@ class EntityRepository
      *
      * @return bool
      */
-    public function updateEvaluationEntryScoreTargetUser(EvaluationEntryScoreTargetUser $targetUser)
+    public function updateEvaluationEntryScoreTargetUser(EvaluationEntryScoreTargetUser $targetUser): bool
     {
         return $this->dataClassRepository->update($targetUser);
     }
