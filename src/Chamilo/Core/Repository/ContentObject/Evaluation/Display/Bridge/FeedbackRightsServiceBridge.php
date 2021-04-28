@@ -2,6 +2,8 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RightsService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -19,18 +21,30 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     protected $evaluationServiceBridge;
 
     /**
+     * @var RightsService
+     */
+    protected $rightsService;
+
+    /**
      * @var User
      */
     protected $currentUser;
 
     /**
+     * @var EvaluationEntry
+     */
+    protected $evaluationEntry;
+
+    /**
      * FeedbackRightsServiceBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
+     * @param RightsService $rightsService
      */
-    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge)
+    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge, RightsService $rightsService)
     {
         $this->evaluationServiceBridge = $evaluationServiceBridge;
+        $this->rightsService = $rightsService;
     }
 
     /**
@@ -42,11 +56,19 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
     }
 
     /**
+     * @param EvaluationEntry $evaluationEntry
+     */
+    public function setEvaluationEntry(EvaluationEntry $evaluationEntry)
+    {
+        $this->evaluationEntry = $evaluationEntry;
+    }
+
+    /**
      * @return bool
      */
     public function canCreateFeedback(): bool
     {
-        return true;
+        return $this->rightsService->canUserViewEntry($this->currentUser, $this->evaluationEntry);
     }
 
     /**
@@ -54,7 +76,7 @@ class FeedbackRightsServiceBridge implements FeedbackRightsServiceBridgeInterfac
      */
     public function canViewFeedback(): bool
     {
-        return true;
+        return $this->rightsService->canUserViewEntry($this->currentUser, $this->evaluationEntry);
     }
 
     /**

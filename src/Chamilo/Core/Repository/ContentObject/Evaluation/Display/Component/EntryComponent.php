@@ -42,8 +42,17 @@ class EntryComponent extends Manager implements FeedbackSupport
         }
         $this->checkAccessRights();
 
-        BreadcrumbTrail::getInstance()->get_last()->set_name(
-            $this->getTranslator()->trans('Evaluation', [], Manager::context()) . ' ' . $this->getEntityName());
+        $this->getFeedbackRightsServiceBridge()->setEvaluationEntry($this->evaluationEntry);
+
+        if ($this->getRightsService()->canUserEditEvaluation())
+        {
+            $title = $this->getTranslator()->trans('Evaluation', [], Manager::context()) . ' ' . $this->getEntityName();
+            BreadcrumbTrail::getInstance()->get_last()->set_name($title);
+        }
+        else
+        {
+            BreadcrumbTrail::getInstance()->remove(count(BreadcrumbTrail::getInstance()->getBreadcrumbs()) - 1);
+        }
 
         return $this->getTwig()->render(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':EntryViewer.html.twig',

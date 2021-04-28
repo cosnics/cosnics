@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
+use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\RubricBridge;
@@ -133,7 +134,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function buildBridgeServices()
     {
         $rubricBridge = new RubricBridge($this->getEvaluationServiceBridge());
-        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge($this->getEvaluationServiceBridge());
+        $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge($this->getEvaluationServiceBridge(), $this->getRightsService());
         $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
 
         $feedbackServiceBridge = $this->getService(FeedbackServiceBridge::class);
@@ -142,9 +143,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $this->getBridgeManager()->addBridge($rubricBridge);
     }
 
-    protected function getFeedbackServiceBridge() : FeedbackServiceBridge
+    protected function getFeedbackServiceBridge(): FeedbackServiceBridge
     {
         return $this->getBridgeManager()->getBridgeByInterface(FeedbackServiceBridgeInterface::class);
+    }
+
+    protected function getFeedbackRightsServiceBridge(): FeedbackRightsServiceBridge
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(FeedbackRightsServiceBridgeInterface::class);
     }
 
     /**

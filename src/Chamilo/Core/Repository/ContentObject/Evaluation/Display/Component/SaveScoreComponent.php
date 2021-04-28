@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use spec\Behat\MinkExtension\Listener\SessionsListenerSpec;
@@ -16,6 +17,10 @@ class SaveScoreComponent extends Manager implements CsrfComponentInterface
 {
     public function run()
     {
+        if (!$this->getRightsService()->canUserEditEvaluation()) {
+            throw new NotAllowedException();
+        }
+
         try
         {
             $this->validateEvaluationEntityInput();
