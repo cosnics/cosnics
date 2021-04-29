@@ -76,12 +76,14 @@
         background-color: #ddf8e1;
         color: #027461;
     }
-
     .presence-neutral {
         /*background-color: #00f7ff2e; */
         --color: #c1dcc5;
         background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
         background-size: 7px 7px;
+    }
+    .table-selected .presence-neutral {
+        --color: #b7d7bc;
     }
     .presence-neutral::before {
         content: '.';
@@ -180,6 +182,69 @@
     .btn-check, .lbl-check:focus {
         outline: none;
     }
+    .lds-ellipsis {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+
+    .lds-ellipsis div {
+        position: absolute;
+        top: 13px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: hsla(190, 40%, 45%, 1);
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .lds-ellipsis div:nth-child(1) {
+         left: 8px;
+         animation: lds-ellipsis1 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(2) {
+         left: 8px;
+         animation: lds-ellipsis2 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(3) {
+         left: 32px;
+         animation: lds-ellipsis2 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(4) {
+         left: 56px;
+         animation: lds-ellipsis3 0.6s infinite;
+     }
+
+    @keyframes lds-ellipsis1 {
+        0% {
+            transform: scale(0);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes lds-ellipsis3 {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
+    @keyframes lds-ellipsis2 {
+        0% {
+            transform: translate(0, 0);
+        }
+        100% {
+            transform: translate(24px, 0);
+        }
+    }
     {% endif %}
     .btn-check.mod-scores-editable {
         margin: 0 auto 0 15px;
@@ -230,6 +295,15 @@
         font-weight: 500;
         transform: translateY(1px);
     }
+    .table.mod-evaluation + .lds-ellipsis {
+        display: none;
+        left: calc(50% - 20px);
+        position: absolute;
+        top: 40px;
+    }
+    .table.mod-evaluation[aria-busy=true] + .lds-ellipsis {
+        display: inline-block;
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
@@ -270,35 +344,37 @@
                         <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
                 </div>
-
-                <b-table ref="table" striped bordered
-                         :items="entitiesProvider"
-                         :fields="fields"
-                         :sort-by.sync="sortBy"
-                         :sort-desc.sync="sortDesc"
-                         :filter="globalSearchQuery"
-                         :per-page="pagination.perPage"
-                         :current-page="pagination.currentPage"
-                         class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
-                    <template #head(fullname)="data">
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
-                    </template>
-                    <template #cell(fullname)="data">
-                        <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
-                    </template>
-                    <template #cell(score)="data">
-                        <div class="u-flex u-align-items-center">
-                            <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
-                            <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
-                            <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
-                                <span aria-hidden="true" class="fa" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
-                            </button>
-                        </div>
-                    </template>
-                    <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
-                    </template>
-                </b-table>
+                <div style="position: relative">
+                    <b-table ref="table" striped bordered
+                             :items="entitiesProvider"
+                             :fields="fields"
+                             :sort-by.sync="sortBy"
+                             :sort-desc.sync="sortDesc"
+                             :filter="globalSearchQuery"
+                             :per-page="pagination.perPage"
+                             :current-page="pagination.currentPage"
+                             class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
+                        <template #head(fullname)="data">
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                        </template>
+                        <template #cell(fullname)="data">
+                            <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                        </template>
+                        <template #cell(score)="data">
+                            <div class="u-flex u-align-items-center">
+                                <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
+                                <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
+                                <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
+                                    <span aria-hidden="true" class="fa" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                                </button>
+                            </div>
+                        </template>
+                        <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
+                        </template>
+                    </b-table>
+                    <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                </div>
                 <div class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="data-table"></b-pagination>
@@ -306,6 +382,9 @@
                         <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} ${ pagination.total }</a></li>
                     </ul>
                 </div>
+            </div>
+            <div v-if="isFeedbackLoading" class="panel panel-default panel-feedback u-flex-grow-1">
+                <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
                 <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
@@ -385,6 +464,7 @@
                 feedback: [],
                 feedbackEntity: null,
                 newFeedback: '',
+                isFeedbackLoading: false,
                 isFeedbackPrivate: false,
                 labelTitles: {
                     'absent': '{{ MarkedAsAbsent }}',
@@ -425,6 +505,8 @@
                     return '{{ ENTITY_BASE_URL|raw }}&entity_type=' + this.entityType + '&entity_id=' + entityId;
                 },
                 loadFeedback(entity) {
+                    this.feedbackEntity = null;
+                    this.isFeedbackLoading = true;
                     $.ajax({
                         url: '{{ LOAD_FEEDBACK_URL|raw }}',
                         method: 'get',
@@ -436,6 +518,7 @@
                         this.feedbackEntity = entity;
                         var items = this.$refs.table.computedItems;
                         this.selectEntity(items, this.feedbackEntity.id);
+                        this.isFeedbackLoading = false;
                     }.bind(this));
                 },
                 closeFeedback() {
