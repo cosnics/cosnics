@@ -140,12 +140,12 @@ class EntityService
     /**
      * @param int $entryId
      * @param int $evaluatorId
-     * @param string $score
+     * @param int $score
      * @param bool $isAbsent
      *
      * @return EvaluationEntryScore
      */
-    private function createEvaluationEntryScore(int $entryId, int $evaluatorId, string $score, bool $isAbsent = false): EvaluationEntryScore
+    private function createEvaluationEntryScore(int $entryId, int $evaluatorId, int $score = 0, bool $isAbsent = false): EvaluationEntryScore
     {
         $evaluationEntryScore = new EvaluationEntryScore();
         $evaluationEntryScore->setEvaluatorId($evaluatorId);
@@ -168,7 +168,7 @@ class EntityService
      *
      * @return EvaluationEntryScore
      */
-    public function createOrUpdateEvaluationEntryScoreForEntity(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId, string $score): EvaluationEntryScore
+    public function createOrUpdateEvaluationEntryScoreForEntity(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId, int $score): EvaluationEntryScore
     {
         $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
 
@@ -207,7 +207,7 @@ class EntityService
             $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
         } else
         {
-            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, '');
+            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId);
             $this->createEvaluationTargetUser($entityId, $evaluationEntryScore->getId());
         }
 
@@ -230,11 +230,12 @@ class EntityService
 
         if ($evaluationEntryScore instanceof EvaluationEntryScore)
         {
+            $evaluationEntryScore->setScore(0);
             $evaluationEntryScore->setIsAbsent(true);
             $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
         } else
         {
-            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, '', true);
+            $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, 0, true);
             $this->createEvaluationTargetUser($entityId, $evaluationEntryScore->getId());
         }
 

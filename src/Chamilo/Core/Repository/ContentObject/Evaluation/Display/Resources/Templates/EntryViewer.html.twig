@@ -25,7 +25,14 @@
     .u-gap-small {
         gap: 5px;
     }
-
+    .u-no-spin::-webkit-outer-spin-button,
+    .u-no-spin::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .u-no-spin {
+        -moz-appearance: textfield; /* Firefox */
+    }
     #page-title {
         padding-left: 15px;
     }
@@ -65,8 +72,9 @@
         margin: 5px 0 15px 15px;
     }
 
-    .save-rubric-area {
+    #rubric .save-rubric-area {
         margin-bottom: 20px;
+        margin-left: 1.2em;
     }
 
     .control-label.score-label {
@@ -204,6 +212,22 @@
     .fa-forward.mod-btn-next {
         transform: scale(1.2)translateX(1px);
     }
+    #feedback > .form-row.row {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        margin-top: -5px;
+    }
+    #feedback > .form-row.row > .form-label {
+        font-weight: 500;
+        padding: 0;
+        transform: translateY(2px);
+        width: initial;
+    }
+    #feedback > .form-row.row > .formw {
+        padding: 0;
+        width: initial;
+    }
 </style>
 <div class="col-xs-12">
     {% if CAN_EDIT_EVALUATION %}
@@ -269,11 +293,11 @@
                 <h3 class="section-title u-inline-block">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
             </div>
             <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline u-flex u-align-items-baseline mod-score">
-                {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important"><i class="fa fa-exclamation-circle"></i> {{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
-                {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="text" class="form-control form-control-sm" autocomplete="off">
+                {% if PRESENCE_STATUS == 'absent' %}<p class="alert-important">{{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</p><button name="action" value="present" class="btn btn-default btn-sm mod-mark" title="{{ 'MarkPresentTooltip'|trans({}, appContext) }}"><span aria-hidden="true" class="fa btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
+                {%  if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="number" min="0" required class="form-control form-control-sm u-no-spin" autocomplete="off">
                 <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Save'|trans({}, commonContext) }}</button>
                 {% endif %}
-                {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" class="btn btn-default btn-sm mod-mark"><span aria-hidden="true" class="fa btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
+                {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" class="btn btn-default btn-sm mod-mark" title="{{ 'MarkAbsentTooltip'|trans({}, appContext) }}"><span aria-hidden="true" class="fa btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
             </form>
         </div>

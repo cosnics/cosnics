@@ -51,7 +51,7 @@ class EvaluationEntryScore extends DataClass
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getScore()
     {
@@ -59,9 +59,9 @@ class EvaluationEntryScore extends DataClass
     }
 
     /**
-     * @param string $score
+     * @param int $score
      */
-    public function setScore($score)
+    public function setScore(int $score)
     {
         $this->set_default_property(self::PROPERTY_SCORE, $score);
     }

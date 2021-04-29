@@ -66,7 +66,8 @@
     }
 
     .presence-absent {
-        background-color: #eb6a38;
+        /*background-color: #eb6a38;*/
+        background-color: #437f7e;
         padding: 0 5px;
         color: #fff;
     }
@@ -74,6 +75,17 @@
     .presence-present {
         background-color: #ddf8e1;
         color: #027461;
+    }
+
+    .presence-neutral {
+        /*background-color: #00f7ff2e; */
+        --color: #c1dcc5;
+        background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
+        background-size: 7px 7px;
+    }
+    .presence-neutral::before {
+        content: '.';
+        color: transparent;
     }
 
     .fa.btn-icon-absent {
@@ -214,6 +226,10 @@
     .btn.mod-save-feedback {
         margin-top: 10px;
     }
+    #is_private + label {
+        font-weight: 500;
+        transform: translateY(1px);
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
@@ -227,7 +243,9 @@
 </ul>
 {% set Present = 'Present'|trans({}, appContext) %}
 {% set Absent = 'Absent'|trans({}, appContext) %}
-{% set MarkAs = 'MarkAs'|trans({}, appContext) %}
+{% set MarkedAsAbsent = 'MarkedAsAbsent'|trans({}, appContext) %}
+{% set MarkPresentTooltip = 'MarkPresentTooltip'|trans({}, appContext) %}
+{% set MarkAbsentTooltip = 'MarkAbsentTooltip'|trans({}, appContext) %}
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
         <div class="u-flex u-gap-large">
@@ -271,11 +289,9 @@
                     </template>
                     <template #cell(score)="data">
                         <div class="u-flex u-align-items-center">
-                            <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]">
-                                ${data.item.presence_status === 'present' ? data.item.score : '{{ Absent }}'}
-                            </span>
+                            <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
                             <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
-                            <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="'{{ MarkAs }} ' + (data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}')">
+                            <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
                                 <span aria-hidden="true" class="fa" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                             </button>
                         </div>
@@ -298,7 +314,7 @@
                         <div class="u-flex">
                             <img class="panel-feedback-profile" :src="item.photo" />
                             <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
-                                <div v-if="item.isPrivate" class="feedback-private u-inline-block">{{ 'Private'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</div>
+                                <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>
                             </h4>
                         </div>
                         <div class="list-group-item-text feedback-content" v-html="item.content"></div>
@@ -308,7 +324,7 @@
                         <div class="u-flex-1">
                             <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
                             <textarea class="feedback-new-input" name="comment" v-model="newFeedback"></textarea>
-                            <div class="u-flex u-gap-small"><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /></div>
+                            <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
                             <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
                         </div>
                     </div>
@@ -369,7 +385,11 @@
                 feedback: [],
                 feedbackEntity: null,
                 newFeedback: '',
-                isFeedbackPrivate: false
+                isFeedbackPrivate: false,
+                labelTitles: {
+                    'absent': '{{ MarkedAsAbsent }}',
+                    'neutral': 'Nog geen score'
+                }
             },
 
             methods: {
@@ -386,7 +406,16 @@
                     }
                 },
                 isLabelShown(entity) {
-                    return entity.presence_status === 'absent' || (entity.presence_status === 'present' && !this.scoresEditable);
+                    return entity.presence_status === 'absent' || (entity.presence_status !== 'absent' && !this.scoresEditable);
+                },
+                getLabelText(entity) {
+                    if (entity.presence_status === 'present') {
+                        return entity.score;
+                    }
+                    if (entity.presence_status === 'absent') {
+                        return '{{ Absent }}';
+                    }
+                    return null;
                 },
                 isInputShown(entity) {
                     return entity.presence_status !== 'absent' && this.scoresEditable;

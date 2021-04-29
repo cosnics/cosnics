@@ -156,7 +156,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
 
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore
+    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, int $score): EvaluationEntryScore
     {
         return $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId, $score);
     }

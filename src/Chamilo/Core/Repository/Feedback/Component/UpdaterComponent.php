@@ -44,8 +44,9 @@ class UpdaterComponent extends Manager
         }
 
         $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
+        $canViewPrivateFeedback = $supportsPrivateFeedback && $this->feedbackRightsServiceBridge->canViewPrivateFeedback();
 
-        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), $feedback, $supportsPrivateFeedback);
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), $feedback, $supportsPrivateFeedback, $canViewPrivateFeedback);
 
         if ($form->validate())
         {

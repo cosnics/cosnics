@@ -46,7 +46,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
-        $canViewPrivateFeedback = $supportsPrivateFeedback ? $this->feedbackRightsServiceBridge->canViewPrivateFeedback() : false;
+        $canViewPrivateFeedback = $supportsPrivateFeedback && $this->feedbackRightsServiceBridge->canViewPrivateFeedback();
 
         $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), null, $supportsPrivateFeedback, $canViewPrivateFeedback);
 
@@ -160,7 +160,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
                     {
                         // Todo: Move styling out
-                        $isPrivateHTML = '<div style="font-size: 11px;margin-top: 4px;background: #d35555;display: inline-block;color: white;padding: 2px;text-transform: uppercase">' . Translation::get('Private') . '</div>';
+                        $isPrivateHTML = '<div style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">' . Translation::get('IsPrivate') . '</em></div>';
                     }
 
                     $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';

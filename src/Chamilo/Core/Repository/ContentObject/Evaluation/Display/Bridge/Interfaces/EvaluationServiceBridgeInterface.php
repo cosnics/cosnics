@@ -61,11 +61,11 @@ interface EvaluationServiceBridgeInterface
      * @param int $evaluationId
      * @param int $userId
      * @param int $entityId
-     * @param string $score
+     * @param int $score
      *
      * @return EvaluationEntryScore
      */
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, string $score): EvaluationEntryScore;
+    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, int $score): EvaluationEntryScore;
 
     /**
      * @param int $evaluationId
