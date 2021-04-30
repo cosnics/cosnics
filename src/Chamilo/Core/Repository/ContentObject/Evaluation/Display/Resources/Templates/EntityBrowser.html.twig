@@ -37,6 +37,14 @@
     .u-gap-large {
         gap: 45px;
     }
+    .u-no-spin::-webkit-outer-spin-button,
+    .u-no-spin::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .u-no-spin {
+        -moz-appearance: textfield; /* Firefox */
+    }
 
     .form-inline.mod-entity-search {
         margin: 15px 0 0 5px;
@@ -364,7 +372,7 @@
                         <template #cell(score)="data">
                             <div class="u-flex u-align-items-center">
                                 <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
-                                <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score" :data-item-index="data.index" v-model="data.item.score" type="text" debounce="750" @update="onScoreUpdated(data.item, $event)" @keydown.enter="focusFollowingScore(data.index, true)" @keydown.down="focusFollowingScore(data.index, true)" @keydown.up="focusFollowingScore(data.index, false)"></b-form-input>
+                                <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score u-no-spin" :data-item-index="data.index" :value="data.item.score" type="number" required min="0" debounce="750" @update="onScoreUpdated(data.item, $event, data.index)" @keydown.enter.prevent="focusFollowingScore(data.index, true)" @keydown.down.prevent="focusFollowingScore(data.index, true)" @keydown.up.prevent="focusFollowingScore(data.index, false)"></b-form-input>
                                 <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
                                     <span aria-hidden="true" class="fa" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
                                 </button>
@@ -549,7 +557,12 @@
                         }
                     }.bind(this));
                 },
-                onScoreUpdated(entity, score) {
+                onScoreUpdated(entity, score, index) {
+                    var el = $('.form-control.mod-score[data-item-index=' + index + ']');
+                    if (el.length && !el[0].checkValidity()) {
+                        el[0].reportValidity();
+                        return;
+                    }
                     $.ajax({
                         url: '{{ SAVE_SCORE_URL|raw }}',
                         method: 'post',
@@ -559,6 +572,7 @@
                         }
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
+                        entity.score = data.properties.score;
                     });
                 },
                 onPresenceStatusUpdated(entity) {
@@ -571,6 +585,7 @@
                         }
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
+                        entity.score = data.properties.score;
                     });
                 },
                 getSortStatus(name) {

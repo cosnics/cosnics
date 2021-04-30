@@ -32,7 +32,7 @@ class SavePresenceStatusComponent extends Manager
                 $evaluationEntryScore = $this->getEvaluationServiceBridge()->saveEntityAsAbsent($evaluation->getId(), $this->getUser()->getId(), $entityId);
             }
 
-            $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'presence_status' => $evaluationEntryScore->isAbsent() ? 'absent' : 'present']);
+            $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $evaluationEntryScore->getScore(), 'presence_status' => $evaluationEntryScore->isAbsent() ? 'absent' : 'present']);
             $result->display();
         } catch (\Exception $ex)
         {

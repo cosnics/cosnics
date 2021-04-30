@@ -46,6 +46,11 @@ class LoadEntitiesComponent extends Manager
                     $user['presence_status'] = ($user['is_absent']) ? 'absent' : 'present';
                 }
 
+                if (is_null($user['score']))
+                {
+                    $user['score'] = '';
+                }
+
                 $users[] = $user;
             }
 

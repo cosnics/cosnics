@@ -19,7 +19,7 @@ class SaveScoreComponent extends Manager
             $this->validateEvaluationEntityInput();
 
             $entityId = $this->getRequest()->getFromPost('entity_id');
-            $score = $this->getRequest()->getFromPost('score') ?? '';
+            $score = (int) $this->getRequest()->getFromPost('score');
 
             $evaluation = $this->get_root_content_object();
 
