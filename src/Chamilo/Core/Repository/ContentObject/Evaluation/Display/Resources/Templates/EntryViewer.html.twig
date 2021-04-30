@@ -244,7 +244,25 @@
         margin-top: -15px;
         max-width: 107ch;
     }
+    .alert.alert-info.mod-neutral {
+        margin-left: 30px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        max-width: 107ch;
+    }
 </style>
+{% if not CAN_EDIT_EVALUATION %}
+    <div id="title-student" class="u-flex u-align-items-baseline">
+        <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
+        {% if PRESENCE_STATUS == 'present' %}<span class="badge score-badge score-success" style="margin-left:10px;min-width:37px;transform:translateY(-1px)">{{ SCORE|raw }}</span>{% endif %}
+        {% if PRESENCE_STATUS == 'absent' %}<span style="background-color: #437f7e;color: #fff;padding: 0 5px;transform: translateY(-1px);border-radius: 4px;margin-left: 10px;">Gewettigd afwezig</span>{% endif %}
+    </div>
+    {% if PRESENCE_STATUS == 'neutral' %}
+        <div class="alert alert-info mod-neutral">
+            Er is nog geen score gegeven
+        </div>
+    {% endif %}
+{% endif %}
 <div class="col-xs-12">
     {% if CAN_EDIT_EVALUATION %}
     <div class="btn-toolbar btn-action-toolbar mod-entities">
@@ -324,17 +342,7 @@
             </form>
         </div>
     </div>
-    {% else %}
-    <div class="row">
-        <div class="col-xs-12" id="score">
-            <div class="title-underline-fw mod-score">
-                <h3 class="section-title u-inline-block">{{ 'Score'|trans({}, appContext) }}</h3>
-                <span>{{ SCORE|raw }}</span>
-            </div>
-        </div>
-    </div>
     {% endif %}
-
     <div class="row">
         <div class="col-xs-12" id="feedback">
             <div class="title-underline-fw mod-feedback">

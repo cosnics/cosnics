@@ -182,6 +182,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         return [
             'HEADER' => $this->render_header(),
+            'EVALUATION_TITLE' => $this->getEvaluation()->get_title(),
             'USERS' => $users,
             'SELECTED_USER' => $selectedUser,
             'PREVIOUS_USER' => $previousUser,
@@ -254,12 +255,16 @@ class EntryComponent extends Manager implements FeedbackSupport
         return '';
     }
 
-    /*public function render_header($pageTitle = '')
+    public function render_header($pageTitle = '')
     {
+        if ($this->getRightsService()->canUserEditEvaluation())
+        {
+            return parent::render_header();
+        }
         $html = [];
-        $html[] = parent::render_header($pageTitle);
+        $html[] = parent::render_header('');
         return implode(PHP_EOL, $html);
-    }*/
+    }
 
 
     /**
