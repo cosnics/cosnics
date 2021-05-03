@@ -328,6 +328,7 @@
 {% set MarkedAsAbsent = 'MarkedAsAbsent'|trans({}, appContext) %}
 {% set MarkPresentTooltip = 'MarkPresentTooltip'|trans({}, appContext) %}
 {% set MarkAbsentTooltip = 'MarkAbsentTooltip'|trans({}, appContext) %}
+{% set NoScoreAvailable = 'NoScoreAvailable'|trans({}, appContext) %}
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
         <div class="u-flex u-gap-large">
@@ -476,7 +477,7 @@
                 isFeedbackPrivate: false,
                 labelTitles: {
                     'absent': '{{ MarkedAsAbsent }}',
-                    'neutral': 'Nog geen score'
+                    'neutral': '{{ NoScoreAvailable }}'
                 }
             },
 
