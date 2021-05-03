@@ -111,6 +111,19 @@ class GroupRepository extends CommonDataClassRepository
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|DataClass|false|Group
+     */
+    public function getRootGroup()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable(0)
+        );
+
+        return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
+    }
+
+    /**
      * Finds a group object by a given group code
      *
      * @param string $groupCode

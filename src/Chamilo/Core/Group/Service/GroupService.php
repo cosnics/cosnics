@@ -164,6 +164,14 @@ class GroupService
     }
 
     /**
+     * @return Group
+     */
+    public function getRootGroup()
+    {
+        return $this->groupRepository->getRootGroup();
+    }
+
+    /**
      * @param string $name
      * @param string $code
      * @param int $parentGroupId
@@ -181,6 +189,24 @@ class GroupService
         {
             throw new \RuntimeException(
                 sprintf('Could not create a group with name %s and code %s', $name, $code)
+            );
+        }
+
+        return $group;
+    }
+
+    /**
+     * @param Group $group
+     *
+     * @return Group
+     * @throws \Exception
+     */
+    public function updateGroup(Group $group)
+    {
+        if(!$this->groupRepository->update($group))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not update group with id %s', $group->getId())
             );
         }
 
