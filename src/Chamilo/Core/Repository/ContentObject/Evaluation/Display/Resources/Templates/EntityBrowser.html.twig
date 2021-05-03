@@ -518,16 +518,20 @@
                     $.ajax({
                         url: '{{ LOAD_FEEDBACK_URL|raw }}',
                         method: 'get',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
                         data: {
                             entity_id: entity.id
                         }
-                    }).done(function (data) {
+                    }).done(function(data) {
                         this.feedback = data.properties;
                         this.feedbackEntity = entity;
                         var items = this.$refs.table.computedItems;
                         this.selectEntity(items, this.feedbackEntity.id);
                         this.isFeedbackLoading = false;
-                    }.bind(this));
+                    }.bind(this)).fail(this.checkResponse);
                 },
                 closeFeedback() {
                     this.feedback = [];
@@ -541,12 +545,16 @@
                     $.ajax({
                         url: '{{ SAVE_NEW_FEEDBACK_URL|raw }}',
                         method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
                         data: {
                             entity_id: this.feedbackEntity.id,
                             comment: this.newFeedback,
                             is_private: this.isFeedbackPrivate
                         }
-                    }).done(function (data) {
+                    }).done(function(data) {
                         this.newFeedback = '';
                         this.isFeedbackPrivate = false;
                         if (data.properties.status === 'ok') {
@@ -555,7 +563,7 @@
                             }
                             this.$refs.table.refresh();
                         }
-                    }.bind(this));
+                    }.bind(this)).fail(this.checkResponse);
                 },
                 onScoreUpdated(entity, score, index) {
                     var el = $('.form-control.mod-score[data-item-index=' + index + ']');
@@ -566,6 +574,10 @@
                     $.ajax({
                         url: '{{ SAVE_SCORE_URL|raw }}',
                         method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
                         data: {
                             entity_id: entity.id,
                             score: score
@@ -573,12 +585,16 @@
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
                         entity.score = data.properties.score;
-                    });
+                    }).fail(this.checkResponse);
                 },
                 onPresenceStatusUpdated(entity) {
                     $.ajax({
                         url: '{{ SAVE_PRESENCE_STATUS_URL|raw }}',
                         method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
                         data: {
                             entity_id: entity.id,
                             presence_status: entity.presence_status === 'absent'
@@ -586,7 +602,7 @@
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
                         entity.score = data.properties.score;
-                    });
+                    }).fail(this.checkResponse);
                 },
                 getSortStatus(name) {
                     if (this.sortBy !== name) { return 'none'; }
@@ -621,6 +637,10 @@
                 entitiesProvider: function(ctx, callback) {
                     $.ajax({
                         url: '{{ LOAD_ENTITIES_URL|raw }}',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
                         data: {
                             global_search_query: ctx.filter,
                             sort_field: ctx.sortBy,
@@ -641,7 +661,13 @@
                             this.selectEntity(items, this.feedbackEntity.id);
                         }
                         callback(items);
-                    }.bind(this));
+                    }.bind(this)).fail(this.checkResponse);
+                },
+                checkResponse(jqXHR) {
+                    if (jqXHR.responseText.indexOf('formLogin') !== '-1') {
+                        // todo: make visible
+                        console.log('het lijkt alsof u niet meer ingelogd bent. gelieve opnieuw aan te melden.')
+                    }
                 }
             }
         });
