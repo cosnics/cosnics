@@ -250,18 +250,26 @@
         margin-top: 10px;
         max-width: 107ch;
     }
+    .alert.alert-warning.mod-neutral {
+        margin: 15px;
+    }
 </style>
-{% if not CAN_EDIT_EVALUATION %}
+{% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}
     <div id="title-student" class="u-flex u-align-items-baseline">
         <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
         {% if PRESENCE_STATUS == 'present' %}<span class="badge score-badge score-success" style="margin-left:10px;min-width:37px;transform:translateY(-1px)">{{ SCORE|raw }}</span>{% endif %}
-        {% if PRESENCE_STATUS == 'absent' %}<span style="background-color: #437f7e;color: #fff;padding: 0 5px;transform: translateY(-1px);border-radius: 4px;margin-left: 10px;">Gewettigd afwezig</span>{% endif %}
+        {% if PRESENCE_STATUS == 'absent' %}<span style="background-color: #437f7e;color: #fff;padding: 0 5px;transform: translateY(-1px);border-radius: 4px;margin-left: 10px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
     </div>
     {% if PRESENCE_STATUS == 'neutral' %}
         <div class="alert alert-info mod-neutral">
-            Er is nog geen score gegeven
+            {{ 'NoScoreAvailableYet'|trans({}, appContext) }}
         </div>
     {% endif %}
+{% elseif not CAN_EDIT_EVALUATION %}
+    <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
+    <div class="alert alert-warning mod-neutral">
+        {{ 'EvaluationNotReleased'|trans({}, appContext) }}
+    </div>
 {% endif %}
 <div class="col-xs-12">
     {% if CAN_EDIT_EVALUATION %}
@@ -303,7 +311,7 @@
     </div>
     {% endif %}
 
-    {% if HAS_RUBRIC %}
+    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and RELEASE_SCORES)) %}
     <div class="row">
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
@@ -343,6 +351,7 @@
         </div>
     </div>
     {% endif %}
+    {% if CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and RELEASE_SCORES) %}
     <div class="row">
         <div class="col-xs-12" id="feedback">
             <div class="title-underline-fw mod-feedback">
@@ -351,6 +360,7 @@
             {{ FEEDBACK_MANAGER|raw }}
         </div>
     </div>
+    {% endif %}
 </div>
 
 {{ FOOTER|raw }}

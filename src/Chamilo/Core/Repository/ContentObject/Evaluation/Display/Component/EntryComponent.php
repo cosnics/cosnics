@@ -141,6 +141,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
+        $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
 
         $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, new FilterParameters());
         $users = array();
@@ -201,6 +202,7 @@ class EntryComponent extends Manager implements FeedbackSupport
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
+            'RELEASE_SCORES' => $releaseScores,
             'FOOTER' => $this->render_footer()
         ];
     }

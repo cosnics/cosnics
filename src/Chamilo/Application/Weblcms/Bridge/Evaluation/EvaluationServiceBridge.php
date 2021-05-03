@@ -41,6 +41,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $canEditEvaluation;
 
     /**
+     * @var bool
+     */
+    protected $releaseScores;
+
+    /**
      * @param EntityService $entityService
      */
     public function __construct(EntityService $entityService)
@@ -112,6 +117,22 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     public function setCanEditEvaluation($canEditEvaluation = true)
     {
         $this->canEditEvaluation = $canEditEvaluation;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getReleaseScores(): bool
+    {
+        return $this->releaseScores;
+    }
+
+    /**
+     * @param bool $releaseScores
+     */
+    public function setReleaseScores($releaseScores)
+    {
+        $this->releaseScores = $releaseScores;
     }
 
     /**

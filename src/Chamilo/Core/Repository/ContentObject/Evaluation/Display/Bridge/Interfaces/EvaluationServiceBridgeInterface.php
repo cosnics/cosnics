@@ -36,6 +36,11 @@ interface EvaluationServiceBridgeInterface
     public function canEditEvaluation(): bool;
 
     /**
+     * @return boolean
+     */
+    public function getReleaseScores(): bool;
+
+    /**
      * @return int[]
      */
     public function getTargetEntityIds(): array;
