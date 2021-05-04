@@ -212,4 +212,14 @@ class GroupService
 
         return $group;
     }
+
+    public function updateGroupNameById(int $groupId, string $groupName)
+    {
+        if(!$this->groupRepository->updateGroupNameById($groupId, $groupName))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not update group with id %s', $groupId)
+            );
+        }
+    }
 }

@@ -6,6 +6,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -202,5 +204,23 @@ class GroupRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $this->dataClassRepository->deletes(GroupRelUser::class, $condition);
+    }
+
+    public function updateGroupNameById(int $groupId, string $groupName)
+    {
+        $properties = new DataClassProperties();
+        $properties->add(
+            new DataClassProperty(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
+                new StaticConditionVariable($groupName)
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+            new StaticConditionVariable($groupId)
+        );
+
+        return $this->dataClassRepository->updates(Group::class, $properties, $condition);
     }
 }
