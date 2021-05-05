@@ -19,19 +19,9 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     protected $publicationId;
 
     /**
-     * @var integer
-     */
-    protected $currentEntityType;
-
-    /**
      * @var bool
      */
     protected $canEditEvaluation;
-
-    /**
-     * @var bool
-     */
-    protected $releaseScores;
 
     /**
      * @param TreeNode $treeNode
@@ -52,22 +42,6 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     }
 
     /**
-     * @return int
-     */
-    public function getCurrentEntityType(): int
-    {
-        return $this->currentEntityType;
-    }
-
-    /**
-     * @param int $currentEntityType
-     */
-    public function setCurrentEntityType(int $currentEntityType)
-    {
-        $this->currentEntityType = $currentEntityType;
-    }
-
-    /**
      * @return bool
      */
     public function canEditEvaluation(): bool
@@ -81,22 +55,6 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     public function setCanEditEvaluation($canEditEvaluation = true)
     {
         $this->canEditEvaluation = $canEditEvaluation;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getReleaseScores(): bool
-    {
-        return $this->releaseScores;
-    }
-
-    /**
-     * @param bool $releaseScores
-     */
-    public function setReleaseScores($releaseScores)
-    {
-        $this->releaseScores = $releaseScores;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\C
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
@@ -40,6 +41,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $treeNodeAttempt;
 
     /**
+     * @var EvaluationConfiguration $treeNodeConfiguration
+     */
+    protected $treeNodeConfiguration;
+
+    /**
      * EvaluationServiceBridge constructor.
      *
      * @param LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge
@@ -64,6 +70,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         }
 
         $this->treeNode = $treeNode;
+        $this->treeNodeConfiguration = $this->treeNode->getConfiguration(new EvaluationConfiguration());
     }
 
     /**
@@ -89,7 +96,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getCurrentEntityType(): int
     {
-        return $this->learningPathEvaluationServiceBridge->getCurrentEntityType();
+        return $this->treeNodeConfiguration->getEntityType();
     }
 
     /**
@@ -113,7 +120,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getReleaseScores(): bool
     {
-        return $this->learningPathEvaluationServiceBridge->getReleaseScores();
+        return $this->treeNodeConfiguration->getReleaseScores();
     }
 
     /**

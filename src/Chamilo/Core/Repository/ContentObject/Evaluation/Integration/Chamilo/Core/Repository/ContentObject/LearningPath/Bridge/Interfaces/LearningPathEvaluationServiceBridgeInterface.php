@@ -8,19 +8,9 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 interface LearningPathEvaluationServiceBridgeInterface
 {
     /**
-     * @return int
-     */
-    public function getCurrentEntityType(): int;
-
-    /**
      * @return bool
      */
     public function canEditEvaluation(): bool;
-
-    /**
-     * @return bool
-     */
-    public function getReleaseScores(): bool;
 
     /**
      * @param TreeNode $treeNode
