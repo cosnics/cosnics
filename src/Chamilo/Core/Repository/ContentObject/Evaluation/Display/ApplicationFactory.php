@@ -5,6 +5,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\E
 
 
 /**
+ * Class ApplicationFactory
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display
  *
  * @author Stefan Gabriëls - Hogeschool Gent

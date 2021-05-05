@@ -1,7 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EvaluationServiceBridge;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\ApplicationFactory;
+use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
  *
@@ -12,4 +22,53 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\Con
  */
 class Embedder extends ContentObjectEmbedder
 {
+    use DependencyInjectionContainerTrait;
+
+    public function run()
+    {
+        $this->initializeContainer();
+
+        $configuration = new ApplicationConfiguration(
+            $this->get_application()->getRequest(), $this->get_application()->getUser(), $this->get_application()
+        );
+
+        $activeAttempt = $this->trackingService->getActiveAttempt(
+            $this->learningPath, $this->treeNode, $this->get_application()->getUser()
+        );
+
+        $this->buildBridgeServices($activeAttempt);
+
+        $applicationFactory = $this->getApplicationFactory();
+        $applicationFactory->setEvaluationServiceBridge(
+            $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class)
+        );
+        return $applicationFactory->getApplication(
+            \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context(),
+            $configuration
+        )->run();
+    }
+
+    /**
+     * @param TreeNodeAttempt $activeAttempt
+     */
+    protected function buildBridgeServices(TreeNodeAttempt $activeAttempt)
+    {
+        /** @var LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge */
+        $learningPathEvaluationServiceBridge =
+            $this->getBridgeManager()->getBridgeByInterface(LearningPathEvaluationServiceBridgeInterface::class);
+
+        $evaluationServiceBridge = new EvaluationServiceBridge($learningPathEvaluationServiceBridge, $this->getService(EntityService::class));
+        $evaluationServiceBridge->setTreeNode($this->treeNode);
+        $evaluationServiceBridge->setTreeNodeAttempt($activeAttempt);
+
+        $this->getBridgeManager()->addBridge($evaluationServiceBridge);
+    }
+
+    /**
+     * @return ApplicationFactory
+     */
+    protected function getApplicationFactory()
+    {
+        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
+    }
 }

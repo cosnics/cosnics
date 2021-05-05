@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EntryPlagiarismRe
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation\LearningPathEvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
@@ -22,6 +23,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataMan
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
@@ -168,6 +170,19 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $learningPath = $this->publication->getContentObject();
 
         $hasEditRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+
+
+        /** @var EvaluationConfiguration $configuration */
+        $treeNode = $this->getCurrentTreeNode();
+        $configuration = $treeNode->getConfiguration(new EvaluationConfiguration());
+
+        /** @var LearningPathEvaluationServiceBridge $learningPathEvaluationServiceBridge */
+        $learningPathEvaluationServiceBridge = $this->getService(LearningPathEvaluationServiceBridge::class);
+        $learningPathEvaluationServiceBridge->setPublicationId($this->publication->getId());
+        $learningPathEvaluationServiceBridge->setCurrentEntityType($configuration->getEntityType());
+        $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
+        $learningPathEvaluationServiceBridge->setReleaseScores($configuration->getReleaseScores());
+        $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
         $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
