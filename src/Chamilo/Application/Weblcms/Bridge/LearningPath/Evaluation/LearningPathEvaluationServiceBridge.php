@@ -3,8 +3,6 @@
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
-use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation
@@ -24,13 +22,11 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     protected $canEditEvaluation;
 
     /**
-     * @param TreeNode $treeNode
-     * @return ContextIdentifier
+     * @return int
      */
-    public function getContextIdentifier(TreeNode $treeNode): ContextIdentifier
+    public function getPublicationId(): int
     {
-        // todo
-        return new ContextIdentifier('', 0);
+        return $this->publicationId;
     }
 
     /**
@@ -55,13 +51,5 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     public function setCanEditEvaluation($canEditEvaluation = true)
     {
         $this->canEditEvaluation = $canEditEvaluation;
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getTargetEntityIds(): array
-    {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($this->publicationId, null);
     }
 }

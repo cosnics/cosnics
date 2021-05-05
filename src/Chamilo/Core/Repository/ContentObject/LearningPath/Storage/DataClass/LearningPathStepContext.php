@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class LearningPathStepContext extends DataClass
 {
+    const PROPERTY_LEARNING_PATH_STEP_ID = 'learning_path_step_id';
     const PROPERTY_CONTEXT_CLASS = 'context_class';
     const PROPERTY_CONTEXT_ID = 'context_id';
 
@@ -23,6 +24,7 @@ class LearningPathStepContext extends DataClass
     {
         return parent::get_default_property_names(
             array(
+                self::PROPERTY_LEARNING_PATH_STEP_ID,
                 self::PROPERTY_CONTEXT_CLASS,
                 self::PROPERTY_CONTEXT_ID
             )
@@ -30,9 +32,25 @@ class LearningPathStepContext extends DataClass
     }
 
     /**
+     * @return int
+     */
+    public function getLearningPathStepId(): int
+    {
+        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_STEP_ID);
+    }
+
+    /**
+     * @param int $step_id
+     */
+    public function setLearningPathStepId(int $step_id)
+    {
+        $this->set_default_property(self::PROPERTY_LEARNING_PATH_STEP_ID, $step_id);
+    }
+
+    /**
      * @return string
      */
-    public function getContextClass()
+    public function getContextClass(): string
     {
         return $this->get_default_property(self::PROPERTY_CONTEXT_CLASS);
     }
@@ -40,7 +58,7 @@ class LearningPathStepContext extends DataClass
     /**
      * @param string $context_class
      */
-    public function setContextClass($context_class)
+    public function setContextClass(string $context_class)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT_CLASS, $context_class);
     }
@@ -48,7 +66,7 @@ class LearningPathStepContext extends DataClass
     /**
      * @return int
      */
-    public function getContextId()
+    public function getContextId(): int
     {
         return $this->get_default_property(self::PROPERTY_CONTEXT_ID);
     }
@@ -56,7 +74,7 @@ class LearningPathStepContext extends DataClass
     /**
      * @param int $context_id
      */
-    public function setContextId($context_id)
+    public function setContextId(int $context_id)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT_ID, $context_id);
     }
@@ -64,7 +82,7 @@ class LearningPathStepContext extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function get_table_name(): string
     {
         return 'repository_learning_path_step_context';
     }

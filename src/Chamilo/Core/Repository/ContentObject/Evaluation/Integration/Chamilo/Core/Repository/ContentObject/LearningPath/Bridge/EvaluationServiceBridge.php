@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge;
 
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
@@ -13,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
 
 /**
  * Class EvaluationServiceBridge
@@ -24,6 +26,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      * @var EntityService
      */
     protected $entityService;
+
+    /**
+     * @var LearningPathStepContextService
+     */
+    protected $learningPathStepContextService;
 
     /**
      * @var LearningPathEvaluationServiceBridgeInterface
@@ -50,11 +57,13 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      *
      * @param LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge
      * @param EntityService $entityService
+     * @param LearningPathStepContextService $learningPathStepContextService
      */
-    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EntityService $entityService)
+    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EntityService $entityService, LearningPathStepContextService $learningPathStepContextService)
     {
         $this->learningPathEvaluationServiceBridge = $learningPathEvaluationServiceBridge;
         $this->entityService = $entityService;
+        $this->learningPathStepContextService = $learningPathStepContextService;
     }
 
     /**
@@ -104,7 +113,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getContextIdentifier(): ContextIdentifier
     {
-        return $this->learningPathEvaluationServiceBridge->getContextIdentifier($this->treeNode);
+        $stepId = $this->treeNode->getId();
+        $contextClass = ContentObjectPublication::class_name();
+        $contextId = $this->learningPathEvaluationServiceBridge->getPublicationId();
+        $learningPathStepContext = $this->learningPathStepContextService->getOrCreateLearningPathStepContext($stepId, $contextClass, $contextId);
+        return new ContextIdentifier(get_class($learningPathStepContext), $learningPathStepContext->getId());
     }
 
     /**
@@ -128,7 +141,8 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getTargetEntityIds(): array
     {
-        return $this->learningPathEvaluationServiceBridge->getTargetEntityIds();
+        $publicationId = $this->learningPathEvaluationServiceBridge->getPublicationId();
+        return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($publicationId, null);
     }
 
     /**

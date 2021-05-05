@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPathStepContext;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathStepContextRepository;
 
 /**
@@ -23,4 +24,24 @@ class LearningPathStepContextService
         $this->learningPathStepContextRepository = $learningPathStepContextRepository;
     }
 
+    /**
+     * @param int $stepId
+     * @param string $contextClass
+     * @param int $contextId
+     *
+     * @return LearningPathStepContext
+     */
+    public function getOrCreateLearningPathStepContext(int $stepId, string $contextClass, int $contextId): LearningPathStepContext
+    {
+        $learningPathStepContext = $this->learningPathStepContextRepository->findLearningPathStepContext($stepId, $contextClass, $contextId);
+        if (!$learningPathStepContext)
+        {
+            $learningPathStepContext = new LearningPathStepContext();
+            $learningPathStepContext->setLearningPathStepId($stepId);
+            $learningPathStepContext->setContextClass($contextClass);
+            $learningPathStepContext->setContextId($contextId);
+            $this->learningPathStepContextRepository->create($learningPathStepContext);
+        }
+        return $learningPathStepContext;
+    }
 }
