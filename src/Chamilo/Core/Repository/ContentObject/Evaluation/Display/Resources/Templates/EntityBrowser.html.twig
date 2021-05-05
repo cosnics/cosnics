@@ -527,7 +527,7 @@
                             entity_id: entity.id
                         }
                     }).done(function(data) {
-                        this.feedback = data.properties;
+                        this.feedback = data.result_code === 500 && data.result_message === 'EntryNotFound' ? [] : data.properties;
                         this.feedbackEntity = entity;
                         var items = this.$refs.table.computedItems;
                         this.selectEntity(items, this.feedbackEntity.id);

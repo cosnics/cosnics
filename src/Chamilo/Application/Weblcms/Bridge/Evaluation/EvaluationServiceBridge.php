@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Evaluation;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -175,6 +176,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
         return false;
 
         //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
+    }
+
+    /**
+     * @param int $evaluationId
+     * @param int $entityId
+     * @return EvaluationEntry
+     */
+    public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry
+    {
+        return $this->entityService->createEvaluationEntryIfNotExists($evaluationId, $this->contextIdentifier, $this->currentEntityType, $entityId);
     }
 
     /**

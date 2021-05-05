@@ -157,6 +157,17 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
 
         //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
     }
+
+    /**
+     * @param int $evaluationId
+     * @param int $entityId
+     * @return EvaluationEntry
+     */
+    public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry
+    {
+        return $this->entityService->createEvaluationEntryIfNotExists($evaluationId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
+    }
+
     /**
      * @param int $evaluationId
      * @param int $userId

@@ -22,11 +22,13 @@ class SaveNewFeedbackComponent extends Manager
         try
         {
             $this->validateEvaluationEntityInput(); // todo: check if necessary
+            $evaluation = $this->get_root_content_object();
             $newFeedback = $this->getRequest()->getFromPost('comment') ?? '';
             $isPrivate = $this->getRequest()->getFromPost('is_private') == 'true';
             $entityId = $this->getRequest()->getFromPost('entity_id');
 
-            $this->initializeEntry();
+            $evaluationEntry = $this->getEvaluationServiceBridge()->createEvaluationEntryIfNotExists($evaluation->getId(), $entityId);
+            $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
 
             $feedbackContentObject = $this->createFeedbackContentObject($this->getUser(), $newFeedback);
             $success = $feedbackContentObject->create();

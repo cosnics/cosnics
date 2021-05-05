@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -61,6 +62,13 @@ interface EvaluationServiceBridgeInterface
      * @return bool
      */
     public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool;
+
+    /**
+     * @param int $evaluationId
+     * @param int $entityId
+     * @return EvaluationEntry
+     */
+    public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry;
 
     /**
      * @param int $evaluationId

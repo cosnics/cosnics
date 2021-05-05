@@ -61,12 +61,19 @@ abstract class Manager extends AjaxManager
         return $this->get_application()->get_root_content_object();
     }
 
+    /**
+     * @throws UserException
+     */
     protected function initializeEntry(): void
     {
         $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        if (!$evaluationEntry)
+        {
+            $this->throwUserException('EntryNotFound');
+        }
         $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
     }
 
