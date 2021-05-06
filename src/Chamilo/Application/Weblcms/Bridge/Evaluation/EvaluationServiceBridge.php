@@ -190,36 +190,36 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      * @param int $score
      * @return EvaluationEntryScore
      */
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, int $score): EvaluationEntryScore
+    public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore
     {
-        return $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId, $score);
+        return $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId, $score);
     }
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      * @return EvaluationEntryScore
      */
-    public function saveEntityAsPresent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore
+    public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsPresent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+        return $this->entityService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId);
     }
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      * @return EvaluationEntryScore
      */
-    public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore
+    public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsAbsent($evaluationId, $userId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+        return $this->entityService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId);
     }
 
 }

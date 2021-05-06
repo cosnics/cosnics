@@ -72,29 +72,29 @@ interface EvaluationServiceBridgeInterface
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      * @param int $score
      *
      * @return EvaluationEntryScore
      */
-    public function saveEntryScoreForEntity(int $evaluationId, int $userId, int $entityId, int $score): EvaluationEntryScore;
+    public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore;
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      *
      * @return EvaluationEntryScore
      */
-    public function saveEntityAsPresent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore;
+    public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore;
 
     /**
      * @param int $evaluationId
-     * @param int $userId
+     * @param int $evaluatorId
      * @param int $entityId
      *
      * @return EvaluationEntryScore
      */
-    public function saveEntityAsAbsent(int $evaluationId, int $userId, int $entityId): EvaluationEntryScore;
+    public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore;
 }
