@@ -11,6 +11,7 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Core\Repository\ContentObject\Rubric\Display\Manager as RubricDisplayManager;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component
@@ -128,6 +129,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
         $this->getRubricBridge()->setEvaluationEntry($evaluationEntry);
+        $this->getRubricBridge()->setPostSaveRedirectParameters([RubricDisplayManager::PARAM_ACTION => RubricDisplayManager::ACTION_RESULT]);
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\Feedback', $configuration,

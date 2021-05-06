@@ -21,7 +21,7 @@ class EvaluationEntry extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = array()): array
     {
         return parent::get_default_property_names(
             array(
@@ -37,7 +37,7 @@ class EvaluationEntry extends DataClass
     /**
      * @return int
      */
-    public function getEvaluationId()
+    public function getEvaluationId(): int
     {
         return $this->get_default_property(self::PROPERTY_EVALUATION_ID);
     }
@@ -45,7 +45,7 @@ class EvaluationEntry extends DataClass
     /**
      * @param int $evaluationId
      */
-    public function setEvaluationId($evaluationId)
+    public function setEvaluationId(int $evaluationId)
     {
         $this->set_default_property(self::PROPERTY_EVALUATION_ID, $evaluationId);
     }
@@ -53,7 +53,7 @@ class EvaluationEntry extends DataClass
     /**
      * @return string
      */
-    public function getContextClass()
+    public function getContextClass(): string
     {
         return $this->get_default_property(self::PROPERTY_CONTEXT_CLASS);
     }
@@ -61,7 +61,7 @@ class EvaluationEntry extends DataClass
     /**
      * @param string $context_class
      */
-    public function setContextClass($context_class)
+    public function setContextClass(string $context_class)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT_CLASS, $context_class);
     }
@@ -69,7 +69,7 @@ class EvaluationEntry extends DataClass
     /**
      * @return int
      */
-    public function getContextId()
+    public function getContextId(): int
     {
         return $this->get_default_property(self::PROPERTY_CONTEXT_ID);
     }
@@ -77,7 +77,7 @@ class EvaluationEntry extends DataClass
     /**
      * @param int $context_id
      */
-    public function setContextId($context_id)
+    public function setContextId(int $context_id)
     {
         $this->set_default_property(self::PROPERTY_CONTEXT_ID, $context_id);
     }
@@ -86,7 +86,7 @@ class EvaluationEntry extends DataClass
      *
      * @return int
      */
-    public function getEntityType()
+    public function getEntityType(): int
     {
         return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
@@ -95,7 +95,7 @@ class EvaluationEntry extends DataClass
      *
      * @param int $entityType
      */
-    public function setEntityType($entityType)
+    public function setEntityType(int $entityType)
     {
         $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
@@ -103,7 +103,7 @@ class EvaluationEntry extends DataClass
     /**
      * @return int
      */
-    public function getEntityId()
+    public function getEntityId(): int
     {
         return $this->get_default_property(self::PROPERTY_ENTITY_ID);
     }
@@ -111,12 +111,12 @@ class EvaluationEntry extends DataClass
     /**
      * @param int $entity_id
      */
-    public function setEntityId($entity_id)
+    public function setEntityId(int $entity_id)
     {
         $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
-    public static function get_table_name()
+    public static function get_table_name(): string
     {
         return 'repository_evaluation_entry';
     }

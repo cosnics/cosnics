@@ -28,6 +28,11 @@ class RubricBridge implements RubricBridgeInterface
     //protected $scoreService;
 
     /**
+     * @var string[]
+     */
+    protected $postSaveRedirectParameters;
+
+    /**
      * RubricBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
@@ -48,7 +53,7 @@ class RubricBridge implements RubricBridgeInterface
     /**
      * @return ContextIdentifier
      */
-    public function getContextIdentifier()
+    public function getContextIdentifier(): ContextIdentifier
     {
         return new ContextIdentifier(get_class($this->evaluationEntry), $this->evaluationEntry->getId());
     }
@@ -67,12 +72,9 @@ class RubricBridge implements RubricBridgeInterface
     /**
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function getTargetUsers()
+    public function getTargetUsers(): array
     {
         return $this->evaluationServiceBridge->getUsersForEntity($this->evaluationEntry->getEntityType(), $this->evaluationEntry->getEntityId());
-        /*return $this->assignmentServiceBridge->getUsersForEntity(
-            $this->entry->getEntityType(), $this->entry->getEntityId()
-        );*/
     }
 
     /**
@@ -82,18 +84,34 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function saveScore(User $user, float $totalScore, float $maxScore)
     {
-        /*if (!$this->entry instanceof Entry)
+        if (!$this->evaluationEntry instanceof EvaluationEntry)
         {
             return;
         }
 
-        if (!$this->assignmentServiceBridge->canEditAssignment())
+        if (!$this->evaluationServiceBridge->canEditEvaluation())
         {
             return;
         }
 
         $relativeScore = round(($totalScore / $maxScore) * 100);
 
-        $this->scoreService->createOrUpdateScoreForEntry($this->entry, $relativeScore, $user);*/
+        $this->evaluationServiceBridge->saveEntryScoreForEntity($this->evaluationEntry->getEvaluationId(), $user->getId(), $this->evaluationEntry->getEntityId(), $relativeScore);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPostSaveRedirectParameters(): array
+    {
+        return $this->postSaveRedirectParameters;
+    }
+
+    /**
+     * @param string[] $postSaveRedirectParameters
+     */
+    public function setPostSaveRedirectParameters(array $postSaveRedirectParameters)
+    {
+        $this->postSaveRedirectParameters = $postSaveRedirectParameters;
     }
 }
