@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -15,6 +16,11 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
  */
 class RubricBridge implements RubricBridgeInterface
 {
+    /**
+     * @var EntityService
+     */
+    protected $entityService;
+
     /**
      * @var EvaluationServiceBridgeInterface
      */
@@ -36,10 +42,12 @@ class RubricBridge implements RubricBridgeInterface
      * RubricBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
+     * @param EntityService $entityService
      */
-    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge)
+    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge, EntityService $entityService)
     {
         $this->evaluationServiceBridge = $evaluationServiceBridge;
+        $this->entityService = $entityService;
     }
 
     /**
@@ -90,6 +98,11 @@ class RubricBridge implements RubricBridgeInterface
         }
 
         if (!$this->evaluationServiceBridge->canEditEvaluation())
+        {
+            return;
+        }
+
+        if ($this->entityService->getEvaluationEntryScore($this->evaluationEntry->getId()))
         {
             return;
         }

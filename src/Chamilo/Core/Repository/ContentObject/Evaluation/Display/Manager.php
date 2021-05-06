@@ -133,7 +133,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function buildBridgeServices()
     {
-        $rubricBridge = new RubricBridge($this->getEvaluationServiceBridge());
+        $rubricBridge = new RubricBridge($this->getEvaluationServiceBridge(), $this->getEntityService());
         $feedbackRightsServiceBridge = new FeedbackRightsServiceBridge($this->getEvaluationServiceBridge(), $this->getRightsService());
         $feedbackRightsServiceBridge->setCurrentUser($this->getUser());
 
