@@ -129,7 +129,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
         $this->getRubricBridge()->setEvaluationEntry($evaluationEntry);
-        $this->getRubricBridge()->setPostSaveRedirectParameters([RubricDisplayManager::PARAM_ACTION => RubricDisplayManager::ACTION_RESULT]);
+        $this->getRubricBridge()->setPostSaveRedirectParameters([RubricDisplayManager::PARAM_ACTION => null, RubricDisplayManager::ACTION_RESULT => 1]);
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\Feedback', $configuration,
