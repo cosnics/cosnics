@@ -130,6 +130,34 @@ class CourseGroupRepository extends CommonDataClassRepository
      */
     public function retrieveUserSubscriptionInCourseGroup(User $user, CourseGroup $courseGroup)
     {
+        $condition = $this->getCourseGroupUserCondition($user, $courseGroup);
+
+        return $this->dataClassRepository->retrieve(
+            CourseGroupUserRelation::class, new DataClassRetrieveParameters($condition)
+        );
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function removeUserFromCourseGroup(CourseGroup $courseGroup, User $user)
+    {
+        $condition = $this->getCourseGroupUserCondition($user, $courseGroup);
+
+        return $this->dataClassRepository->deletes(CourseGroupUserRelation::class, $condition);
+    }
+
+    /**
+     * @param User $user
+     * @param CourseGroup $courseGroup
+     *
+     * @return AndCondition
+     */
+    protected function getCourseGroupUserCondition(User $user, CourseGroup $courseGroup): AndCondition
+    {
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
@@ -146,8 +174,6 @@ class CourseGroupRepository extends CommonDataClassRepository
 
         $condition = new AndCondition($conditions);
 
-        return $this->dataClassRepository->retrieve(
-            CourseGroupUserRelation::class, new DataClassRetrieveParameters($condition)
-        );
-    }
+        return $condition;
+}
 }
