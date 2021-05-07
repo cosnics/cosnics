@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query\Condition;
 
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+
 /**
  * This class represents a selection condition that requires an equality.
  * An example of an instance would be a condition
@@ -16,8 +18,8 @@ class EqualityCondition extends ComparisonCondition
     /**
      * Constructor
      *
-     * @param $name string
-     * @param $value string
+     * @param $name string|ConditionVariable
+     * @param $value string|ConditionVariable
      * @param $storageUnit string
      * @param $isAlias boolean
      */

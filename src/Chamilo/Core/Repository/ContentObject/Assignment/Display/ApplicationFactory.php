@@ -16,6 +16,9 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
      */
     protected $assignmentServiceBridge;
 
+    protected int $viewAssignmentEntityType;
+    protected int $viewAssignmentEntityId;
+
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface $assignmentServiceBridge
      */
@@ -24,8 +27,22 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
         $this->assignmentServiceBridge = $assignmentServiceBridge;
     }
 
+    public function setViewAssignmentEntity(int $entityType, int $entityId)
+    {
+        $this->viewAssignmentEntityType = $entityType;
+        $this->viewAssignmentEntityId = $entityId;
+    }
+
     public function getDefaultAction($context)
     {
+        if(!empty($this->viewAssignmentEntityId))
+        {
+            $this->getRequest()->query->set(Manager::PARAM_ENTITY_TYPE, $this->viewAssignmentEntityType);
+            $this->getRequest()->query->set(Manager::PARAM_ENTITY_ID, $this->viewAssignmentEntityId);
+
+            return Manager::ACTION_ENTRY;
+        }
+
         if($this->assignmentServiceBridge->canEditAssignment())
         {
             return Manager::ACTION_VIEW;

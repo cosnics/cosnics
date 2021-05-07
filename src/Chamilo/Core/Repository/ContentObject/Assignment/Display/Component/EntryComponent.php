@@ -117,6 +117,11 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         if (!$this->entry instanceof Entry)
         {
+            if($this->getAssignmentServiceBridge()->canEditAssignment())
+            {
+                $this->redirect(null, false, [self::PARAM_ACTION => self::ACTION_VIEW]);
+            }
+
             $breadcrumbTrail = BreadcrumbTrail::getInstance();
             $breadcrumbTrail->get_last()->set_name(
                 Translation::getInstance()->getTranslation('ViewerComponent', null, Manager::context())

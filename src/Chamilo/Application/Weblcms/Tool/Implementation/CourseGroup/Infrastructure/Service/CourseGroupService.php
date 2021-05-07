@@ -120,7 +120,23 @@ class CourseGroupService
      */
     public function subscribeUserToCourseGroup(CourseGroup $courseGroup, User $user)
     {
+        $this->createCourseGroupUserRelation($courseGroup, $user);
+    }
 
+    /**
+     * @param CourseGroup $courseGroup
+     * @param User $user
+     */
+    public function unsubscribeUserFromCourseGroup(CourseGroup $courseGroup, User $user)
+    {
+        if (!$this->courseGroupRepository->removeUserFromCourseGroup($courseGroup, $user))
+        {
+            throw new \RuntimeException(
+                sprintf('The user %s could not be unsubscribed from group %s', $user->getId(), $courseGroup->getId())
+            );
+        }
+
+        $this->courseGroupDecoratorsManager->unsubscribeUser($courseGroup, $user);
     }
 
     /**

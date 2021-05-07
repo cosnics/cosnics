@@ -29,6 +29,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Embedder extends ContentObjectEmbedder
 {
+    const PARAM_SELECTED_ASSIGNMENT_ENTITY = 'SelectedLPAssignmentEntity';
+
     use DependencyInjectionContainerTrait;
 
     /**
@@ -48,18 +50,24 @@ class Embedder extends ContentObjectEmbedder
         );
 
         $this->buildBridgeServices($activeAttempt);
-
-        $applicationFactory = $this->getApplicationFactory();
-        $applicationFactory->setAssignmentServiceBridge(
-            $this->getBridgeManager()->getBridgeByInterface(
-                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface::class
-            )
+        $assignmentServiceBridge = $this->getBridgeManager()->getBridgeByInterface(
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Interfaces\AssignmentServiceBridgeInterface::class
         );
 
-        return $applicationFactory->getApplication(
+        $applicationFactory = $this->getApplicationFactory();
+        $applicationFactory->setAssignmentServiceBridge($assignmentServiceBridge);
+
+        $this->registerSelectedAssignmentEntity($assignmentServiceBridge);
+        $this->addSelectedAssignmentEntityToApplicationFactory($applicationFactory, $assignmentServiceBridge);
+
+        $result = $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
             $configuration
         )->run();
+
+        {
+            return $result;
+        }
     }
 
     /**
@@ -93,11 +101,12 @@ class Embedder extends ContentObjectEmbedder
         $notificationServiceBridge = new NotificationServiceBridge($learningPathNotificationServiceBridge);
         $notificationServiceBridge->setTreeNode($this->treeNode);
 
-        /** @var EntryPlagiarismResultServiceBridgeInterface  $learningPathEntryPlagiarismResultServiceBridge */
+        /** @var EntryPlagiarismResultServiceBridgeInterface $learningPathEntryPlagiarismResultServiceBridge */
         $learningPathEntryPlagiarismResultServiceBridge =
             $this->getBridgeManager()->getBridgeByInterface(EntryPlagiarismResultServiceBridgeInterface::class);
 
-        $entryPlagiarismResultServiceBridge = new EntryPlagiarismResultServiceBridge($learningPathEntryPlagiarismResultServiceBridge);
+        $entryPlagiarismResultServiceBridge =
+            new EntryPlagiarismResultServiceBridge($learningPathEntryPlagiarismResultServiceBridge);
         $entryPlagiarismResultServiceBridge->setTreeNode($this->treeNode);
 
         $this->getBridgeManager()->addBridge($assignmentServiceBridge);
@@ -123,6 +132,79 @@ class Embedder extends ContentObjectEmbedder
     protected function getApplicationFactory()
     {
         return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
+    }
+
+    /**
+     * @param ApplicationFactory $applicationFactory
+     * @param AssignmentServiceBridge $assignmentServiceBridge
+     */
+    protected function addSelectedAssignmentEntityToApplicationFactory(
+        ApplicationFactory $applicationFactory, AssignmentServiceBridge $assignmentServiceBridge
+    )
+    {
+        if ($this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION
+            ) == \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY
+        )
+        {
+            return null;
+        }
+
+        $selectedAssignmentEntity = $this->getSessionUtilities()->get(self::PARAM_SELECTED_ASSIGNMENT_ENTITY);
+        if (!is_array($selectedAssignmentEntity) || !array_key_exists($this->getLPIdentifier(), $selectedAssignmentEntity))
+        {
+            return;
+        }
+
+        $entityData = $selectedAssignmentEntity[$this->getLPIdentifier()];
+        $entityType = $entityData['entity_type'];
+        $entityId = $entityData['entity_id'];
+
+        if (is_null($entityType) || $entityType != $assignmentServiceBridge->getCurrentEntityType() || empty($entityId))
+        {
+            return;
+        }
+
+        $applicationFactory->setViewAssignmentEntity($entityType, $entityId);
+    }
+
+    protected function registerSelectedAssignmentEntity(AssignmentServiceBridge $assignmentServiceBridge): void
+    {
+        if ($this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION
+            ) == \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_ENTRY
+        )
+        {
+            $entityId = $this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_ID
+            );
+
+            $entityType = $this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ENTITY_TYPE
+            );
+
+            if(empty($entityType))
+            {
+                $entityType = $assignmentServiceBridge->getCurrentEntityType();
+            }
+
+            $this->getSessionUtilities()->register(
+                self::PARAM_SELECTED_ASSIGNMENT_ENTITY,
+                [$this->getLPIdentifier() => ['entity_type' => $entityType, 'entity_id' => $entityId]]
+            );
+        }
+    }
+
+    public function getLPIdentifier()
+    {
+        $publicationId = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+
+        if($publicationId)
+        {
+            return 'p' . $publicationId;
+        }
+
+        return 'lp' . $this->learningPath->getId();
     }
 
 }

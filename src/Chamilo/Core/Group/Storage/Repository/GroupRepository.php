@@ -6,6 +6,8 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -111,6 +113,19 @@ class GroupRepository extends CommonDataClassRepository
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|DataClass|false|Group
+     */
+    public function getRootGroup()
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
+            new StaticConditionVariable(0)
+        );
+
+        return $this->dataClassRepository->retrieve(Group::class, new DataClassRetrieveParameters($condition));
+    }
+
+    /**
      * Finds a group object by a given group code
      *
      * @param string $groupCode
@@ -166,5 +181,46 @@ class GroupRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(Group::class, new DataClassRetrievesParameters($condition));
+    }
+
+    /**
+     * @param int $groupId
+     * @param int $userId
+     */
+    public function removeUserFromGroup(int $groupId, int $userId)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
+            new StaticConditionVariable($groupId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
+            new StaticConditionVariable($userId)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->deletes(GroupRelUser::class, $condition);
+    }
+
+    public function updateGroupNameById(int $groupId, string $groupName)
+    {
+        $properties = new DataClassProperties();
+        $properties->add(
+            new DataClassProperty(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME),
+                new StaticConditionVariable($groupName)
+            )
+        );
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
+            new StaticConditionVariable($groupId)
+        );
+
+        return $this->dataClassRepository->updates(Group::class, $properties, $condition);
     }
 }

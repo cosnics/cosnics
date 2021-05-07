@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
+use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GroupNotExistsException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\UnknownAzureUserIdException;
 use Chamilo\Libraries\Utilities\UUID;
@@ -94,8 +95,8 @@ class GroupRepository
      * @param string $groupName
      *
      * @return \Microsoft\Graph\Model\Event | \Microsoft\Graph\Model\Entity
+     * @throws GraphException
      * @throws GroupNotExistsException
-     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
     public function updateGroup($groupIdentifier, $groupName)
     {
@@ -109,7 +110,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\Event::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -137,7 +138,7 @@ class GroupRepository
                 '/groups/' . $groupIdentifier, \Microsoft\Graph\Model\Group::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -169,7 +170,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\Event::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
             return null;
@@ -195,7 +196,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\Event::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -223,7 +224,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\User::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -252,7 +253,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\User::class, true
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -283,7 +284,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\Event::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             $this->handleSubscribeUserInGroupException($exception, $azureUserIdentifier, $groupIdentifier);
             return null;
@@ -291,23 +292,24 @@ class GroupRepository
     }
 
     /**
-     * @param \GuzzleHttp\Exception\ClientException $exception
+     * @param GraphException $exception
      *
      * @param string $azureUserIdentifier
      * @param string $groupIdentifier
      *
      * @throws GroupNotExistsException
      * @throws UnknownAzureUserIdException
+     * @throws GraphException
      */
     protected function handleSubscribeUserInGroupException(
-        \GuzzleHttp\Exception\ClientException $exception, string $azureUserIdentifier, string $groupIdentifier
+        GraphException $exception, string $azureUserIdentifier, string $groupIdentifier
     )
     {
         if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
         {
             //could also be that the user is not found.
             $userNotFoundMsgPosition = strpos(
-                $exception->getResponse()->getBody()->getContents(),
+                $exception->getMessage(),
                 'Resource \'' . $azureUserIdentifier . '\' does not exist'
             );
             if ($userNotFoundMsgPosition !== false)
@@ -324,7 +326,7 @@ class GroupRepository
         if ($exception->getCode() == GraphRepository::RESPONSE_CODE_BAD_REQUEST)
         {
             $alreadyAddedPosition = strpos(
-                $exception->getResponse()->getBody()->getContents(),
+                $exception->getMessage(),
                 'One or more added object references already exist'
             );
 
@@ -356,7 +358,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\Event::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {
@@ -384,7 +386,7 @@ class GroupRepository
                 \Microsoft\Graph\Model\User::class
             );
         }
-        catch (\GuzzleHttp\Exception\ClientException $exception)
+        catch (GraphException $exception)
         {
             if ($exception->getCode() == GraphRepository::RESPONSE_CODE_RESOURCE_NOT_FOUND)
             {

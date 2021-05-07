@@ -67,7 +67,7 @@ class ExcelUserExportRenderer implements UserExportRenderer
         
         foreach ($users as $user)
         {
-            $column = 0;
+            $column = 1;
             
             foreach ($user as $user_data)
             {
@@ -94,7 +94,7 @@ class ExcelUserExportRenderer implements UserExportRenderer
         $styleArray = array(
             'font' => array('underline' => Font::UNDERLINE_SINGLE, 'color' => array('argb' => $color)));
         
-        $column = 0;
+        $column = 1;
         
         foreach ($headers as $header)
         {
