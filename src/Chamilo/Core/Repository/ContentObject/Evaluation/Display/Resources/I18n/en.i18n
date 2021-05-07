@@ -51,5 +51,8 @@ PresenceStatusFail = "Entity presence hasn't been saved."
 Import = "Import"
 Export = "Export"
 CanNotViewEvaluation = "You can not view this evaluation because you are not part of the selected groups for this evaluation"
-
+OverwriteScoreEvaluationScore = "This evaluation currently has a score of"
+OverwriteScoreRubricScore = "Overwrite this score with the calculated rubric score of"
+Overwrite = "Overwrite"
+Cancel = "Cancel"
 

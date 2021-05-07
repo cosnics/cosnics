@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricScoreInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -18,7 +19,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Display\Manager as RubricDispla
  *
  * @author - Stefan Gabriëls - Hogeschool Gent
  */
-class EntryComponent extends Manager implements FeedbackSupport
+class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricScoreInterface
 {
     const PARAM_RUBRIC_ENTRY = 'RubricEntry';
     const PARAM_RUBRIC_RESULTS = 'RubricResult';
@@ -36,6 +37,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
     public function run()
     {
+        $this->getRubricBridge()->setConfirmRubricScore($this);
         $this->evaluationEntry = $this->ensureEvaluationEntry();
         if (!$this->evaluationEntry )
         {
@@ -115,12 +117,25 @@ class EntryComponent extends Manager implements FeedbackSupport
         $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';
         $presenceStatus = 'neutral';
+        $rubricScore = null;
+        $confirmOverwriteScore = false;
 
         if ($evaluationScore instanceof EvaluationEntryScore)
         {
             $score = $evaluationScore->getScore();
             $presenceStatus = $evaluationScore->isAbsent() ? 'absent' : 'present';
         }
+
+        if ($this->getRightsService()->canUserEditEvaluation() && $this->getRequest()->getFromUrl('RubricScoreUpdated') && !is_null($this->getRubricScore()))
+        {
+            $rubricScore = $this->getRubricScore();
+            if ($score != $rubricScore)
+            {
+                $confirmOverwriteScore = true;
+            }
+        }
+
+        $this->clearRubricScore();
 
         $this->set_parameter('entity_id', $entityId); // otherwise feedback update url doesn't pick this up
 
@@ -129,7 +144,7 @@ class EntryComponent extends Manager implements FeedbackSupport
 
         $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
         $this->getRubricBridge()->setEvaluationEntry($evaluationEntry);
-        $this->getRubricBridge()->setPostSaveRedirectParameters([RubricDisplayManager::PARAM_ACTION => null, RubricDisplayManager::ACTION_RESULT => 1]);
+        $this->getRubricBridge()->setPostSaveRedirectParameters([RubricDisplayManager::PARAM_ACTION => null, RubricDisplayManager::ACTION_RESULT => 1, 'RubricScoreUpdated' => 1]);
 
         $feedbackManager = $this->getApplicationFactory()->getApplication(
             'Chamilo\Core\Repository\Feedback', $configuration,
@@ -204,6 +219,8 @@ class EntryComponent extends Manager implements FeedbackSupport
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
+            'RUBRIC_SCORE' => $rubricScore,
+            'CONFIRM_OVERWRITE_SCORE' => $confirmOverwriteScore,
             'RELEASE_SCORES' => $releaseScores,
             'FOOTER' => $this->render_footer()
         ];
@@ -355,5 +372,26 @@ class EntryComponent extends Manager implements FeedbackSupport
         }
 
         return $this->getEvaluationRubricService()->isSelfEvaluationAllowed($this->getEvaluation());
+    }
+
+    /**
+     * @return int|null
+     */
+    protected function getRubricScore()
+    {
+        return $this->getSessionUtilities()->retrieve(self::SESSION_RUBRIC_SCORE);
+    }
+
+    /**
+     * @param int $score
+     */
+    public function registerRubricScore(int $score): void
+    {
+        $this->getSessionUtilities()->register(self::SESSION_RUBRIC_SCORE, $score);
+    }
+
+    protected function clearRubricScore()
+    {
+        $this->getSessionUtilities()->unregister(self::SESSION_RUBRIC_SCORE);
     }
 }

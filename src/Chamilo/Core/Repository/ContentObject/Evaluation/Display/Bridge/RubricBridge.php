@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricScoreInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -31,6 +32,11 @@ class RubricBridge implements RubricBridgeInterface
      */
     protected $evaluationEntry;
 
+    /**
+     * @var ConfirmRubricScoreInterface
+     */
+    protected $confirmRubricScore;
+
     //protected $scoreService;
 
     /**
@@ -48,6 +54,14 @@ class RubricBridge implements RubricBridgeInterface
     {
         $this->evaluationServiceBridge = $evaluationServiceBridge;
         $this->entityService = $entityService;
+    }
+
+    /**
+     * @param ConfirmRubricScoreInterface $confirmRubricScore
+     */
+    public function setConfirmRubricScore(ConfirmRubricScoreInterface $confirmRubricScore)
+    {
+        $this->confirmRubricScore = $confirmRubricScore;
     }
 
     /**
@@ -102,12 +116,13 @@ class RubricBridge implements RubricBridgeInterface
             return;
         }
 
+        $relativeScore = round(($totalScore / $maxScore) * 100);
+
         if ($this->entityService->getEvaluationEntryScore($this->evaluationEntry->getId()))
         {
+            $this->confirmRubricScore->registerRubricScore($relativeScore);
             return;
         }
-
-        $relativeScore = round(($totalScore / $maxScore) * 100);
 
         $this->evaluationServiceBridge->saveEntryScoreForEntity($this->evaluationEntry->getEvaluationId(), $user->getId(), $this->evaluationEntry->getEntityId(), $relativeScore);
     }

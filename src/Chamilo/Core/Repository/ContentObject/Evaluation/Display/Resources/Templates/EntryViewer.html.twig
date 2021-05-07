@@ -253,6 +253,44 @@
     .alert.alert-warning.mod-neutral {
         margin: 15px;
     }
+    .modal-overlay {
+        background-color: rgba(0, 0, 0, .4);
+        display: block;
+        height: 100%;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 50;
+        -webkit-animation: fadein 200ms; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 200ms; /* Firefox < 16 */
+        -ms-animation: fadein 200ms; /* Internet Explorer */
+        -o-animation: fadein 200ms; /* Opera < 12.1 */
+        animation: fadein 200ms;
+    }
+    .modal.mod-confirm-overwrite-score {
+        display: block;
+        margin: 80px auto 20px auto;
+        max-height: 600px;
+        max-width: 680px;
+        overflow: visible;
+        -webkit-animation: fadein 200ms; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 200ms; /* Firefox < 16 */
+        -ms-animation: fadein 200ms; /* Internet Explorer */
+        -o-animation: fadein 200ms; /* Opera < 12.1 */
+        animation: fadein 200ms;
+    }
+    .overwrite-form {
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.25);
+        max-height: 100%;
+        overflow: auto;
+        padding: 20px 15px 25px;
+    }
+    .overwrite-form p {
+        margin-left: 5px;
+    }
 </style>
 {% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}
     <div id="title-student" class="u-flex u-align-items-baseline">
@@ -348,6 +386,29 @@
                 {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" formnovalidate class="btn btn-default btn-sm mod-mark" title="{{ 'MarkAbsentTooltip'|trans({}, appContext) }}"><span aria-hidden="true" class="fa btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
             </form>
+            {% if CONFIRM_OVERWRITE_SCORE %}
+                <div class="modal-overlay"></div>
+                <div class="modal mod-confirm-overwrite-score">
+                    <div class="overwrite-form">
+                        <script type="text/javascript">
+                            var hideForm = function() {
+                                $('.modal.mod-confirm-overwrite-score').hide();
+                                $('.modal-overlay').hide();
+                            }
+                        </script>
+                        <p>{{ 'OverwriteScoreEvaluationScore'|trans({}, appContext)}} <strong>{{ SCORE|raw }}</strong>.</p>
+                        <p style="margin-bottom: 15px">{{ 'OverwriteScoreRubricScore'|trans({}, appContext)}} <strong>{{ RUBRIC_SCORE|raw }}</strong>?</p>
+                        <div>
+                            <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" style="display: contents">
+                                <input type="hidden" name="score" value="{{ RUBRIC_SCORE|raw }}">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
+                                <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Overwrite'|trans({}, appContext)}}</button>
+                            </form>
+                            <button class="btn btn-default mod-save-score" style="margin-left: 0" onclick="hideForm()">{{ 'Cancel'|trans({}, appContext)}}</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}

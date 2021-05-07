@@ -44,6 +44,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_ENTRY = 'Entry';
     const ACTION_SAVE_SCORE = 'SaveScore';
 
+    const SESSION_RUBRIC_SCORE = 'RUBRIC_SCORE';
+
     /**
      *
      * @var integer
@@ -235,9 +237,9 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface
+     * @return RubricBridge
      */
-    protected function getRubricBridge()
+    protected function getRubricBridge(): RubricBridge
     {
         return $this->getBridgeManager()->getBridgeByInterface(RubricBridgeInterface::class);
     }
