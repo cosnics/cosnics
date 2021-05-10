@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EmbeddedViewSupport;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricScoreInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
@@ -205,6 +206,8 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             'SELECTED_USER' => $selectedUser,
             'PREVIOUS_USER' => $previousUser,
             'NEXT_USER' => $nextUser,
+            'DISPLAY_ALL_ENTITIES_URL' => $this->getEvaluationServiceBridge() instanceof EmbeddedViewSupport,
+            'ALL_ENTITIES_URL' => $this->get_url([self::PARAM_ACTION => self::DEFAULT_ACTION, 'entity_id' => null]),
             'USER_COUNT' => $count,
             'USER_INDEX' => $userIndex,
             'ENTITY_TYPE' => $entityType,

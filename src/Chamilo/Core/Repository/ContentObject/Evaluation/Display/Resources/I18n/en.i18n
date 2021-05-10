@@ -55,4 +55,4 @@ OverwriteScoreEvaluationScore = "This evaluation currently has a score of"
 OverwriteScoreRubricScore = "Overwrite this score with the calculated rubric score of"
 Overwrite = "Overwrite"
 Cancel = "Cancel"
-
+BrowseEntities = "View all {NAME}"
