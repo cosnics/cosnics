@@ -106,6 +106,11 @@ class Security
 
             // we are done...
         }
+        else
+        {
+            // only remove really bad parts
+            $variable = preg_replace('#(<[^>]+?[\x00-\x20"\x2f\x5c\']+)(?:onerror|xmlns)[^>\x20=]*=[^>]*[>\b]?#iu', '$1>', $variable);
+        }
         return $variable;
     }
 
