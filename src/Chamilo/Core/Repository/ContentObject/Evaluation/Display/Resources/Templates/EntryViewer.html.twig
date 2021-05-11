@@ -303,6 +303,40 @@
     .overwrite-form p {
         margin-left: 5px;
     }
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        /* box-shadow: 0 1px 1px #e0e0e0; */
+        display: flex;
+        margin: 15px 0 0 8px;
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
 </style>
 {% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}
     <div id="title-student" class="u-flex u-align-items-baseline">
@@ -375,14 +409,14 @@
     <div class="row">
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
-                {% if RUBRIC_ACTION == 'Entry' %}
-                    <h3 class="section-title u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</h3>
-                    <a href="{{ RUBRIC_RESULTS_URL }}#rubric" class="rubric-action u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</a>
-                {% elseif RUBRIC_ACTION == 'Result' %}
-                    <h3 class="section-title u-inline-block">{{ 'ViewRubricResults'|trans({}, appContext) }}</h3>
-                    {% if CAN_USE_RUBRIC_EVALUATION %}<a href="{{ RUBRIC_ENTRY_URL }}#rubric" class="rubric-action u-inline-block">{{ 'FillInRubric'|trans({}, appContext) }}</a>{% endif %}
-                {% endif %}
+                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}{{ 'ViewRubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
             </div>
+            {% if CAN_EDIT_EVALUATION %}
+                <ul class="nav nav-buttons">
+                    <li {% if RUBRIC_ACTION == 'Entry' %}class="active"{% endif %}><a href="{{ RUBRIC_ENTRY_URL }}#rubric">{{ 'FillInRubric'|trans({}, appContext) }}</a></li>
+                    <li {% if RUBRIC_ACTION == 'Result' %}class="active"{% endif %}><a href="{{ RUBRIC_RESULTS_URL }}#rubric">{{ 'ViewRubricResults'|trans({}, appContext) }}</a></li>
+                </ul>
+            {% endif %}
             {{ RUBRIC_VIEW|raw }}
         </div>
     </div>

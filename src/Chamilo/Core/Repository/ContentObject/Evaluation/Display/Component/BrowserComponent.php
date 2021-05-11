@@ -160,4 +160,10 @@ class BrowserComponent extends Manager
         return $display->render();
     }
 
+    public function render_header($pageTitle = '')
+    {
+        $html = [];
+        $html[] = parent::render_header('');
+        return implode(PHP_EOL, $html);
+    }
 }

@@ -47,11 +47,11 @@
     }
 
     .form-inline.mod-entity-search {
-        margin: 15px 0 0 5px;
+        margin: 5px 0 0 5px;
     }
 
-    .table-selected, .table-striped > tbody > tr.table-selected:nth-of-type(odd) {
-        background-color: #e0e0e0;
+    .table-selected {
+        background-color: #ecf1f3;
     }
 
     .table-bordered > tbody > tr.table-selected > td:not(:last-child) {
@@ -293,6 +293,7 @@
         color: #507177;
     }
     .feedback-new-input {
+        margin-bottom: 5px;
         padding: 5px;
         width: 100%;
     }
@@ -312,13 +313,88 @@
     .table.mod-evaluation[aria-busy=true] + .lds-ellipsis {
         display: inline-block;
     }
+    .tab-pane.mod-pad {
+        padding: 10px 15px;
+    }
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        /* box-shadow: 0 1px 1px #e0e0e0; */
+        display: flex;
+        margin: 15px 0 5px 8px;
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
+
+    .table.mod-evaluation {
+        overflow: hidden;
+        width: initial;
+    }
+
+    .table.mod-evaluation thead {
+        background-color: #f8fbfb;
+        box-shadow: 0px 1px 5px #d5dfe6;
+    }
+    .table.mod-evaluation th {
+        color: #727879;
+    }
+    .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+        border: 1px solid #ebebeb;
+    }
+    .table-bordered > tbody > tr.table-selected > td:not(:last-child) {
+        border-right-color: #dedede;
+    }
+    .panel-feedback {
+        box-shadow: none;
+    }
+    .panel-feedback h3 {
+        margin-left: 69px;
+    }
+    .form-inline.mod-entity-search .action-bar-search {
+        box-shadow: none;
+    }
+    .controls.mod-mb {
+        margin-bottom: 15px;
+    }
+    .btn-action-toolbar.mod-mb {
+        margin-bottom: 0;
+    }
+    .panel-feedback .lds-ellipsis {
+        margin-left: 60px;
+        margin-top: -10px;
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
 
-<h3>{{ CONTENT_OBJECT_TITLE }}</h3>
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
 
-<ul class="nav nav-tabs dynamic-visual-tabs" role="tablist">
+<ul class="nav nav-buttons" role="tablist">
     <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ entityTypesPlural[ENTITY_TYPE]|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
     <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
@@ -330,14 +406,14 @@
 {% set MarkAbsentTooltip = 'MarkAbsentTooltip'|trans({}, appContext) %}
 {% set NoScoreAvailable = 'NoScoreAvailable'|trans({}, appContext) %}
 <div class="dynamic-visual-tab-content tab-content">
-    <div role="tabpanel" class="tab-pane tab-pane-with-border active" id="entities">
+    <div role="tabpanel" class="tab-pane mod-pad active" id="entities">
         <div class="u-flex u-gap-large">
             <div>
-                <div class="u-flex u-align-items-center">
-                    <div class="btn-toolbar btn-action-toolbar">
+                <div class="controls mod-mb u-flex u-align-items-center">
+                    <div class="btn-toolbar btn-action-toolbar mod-mb">
                         <div class="form-inline u-flex u-justify-content-start mod-entity-search">
                             <div class="action-bar input-group">
-                                <b-form-input class="form-group form-control action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                                               type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
                                 <div class="input-group-btn">
                                     <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
@@ -354,7 +430,7 @@
                     </div>
                 </div>
                 <div style="position: relative">
-                    <b-table ref="table" striped bordered
+                    <b-table ref="table" bordered
                              :items="entitiesProvider"
                              :fields="fields"
                              :sort-by.sync="sortBy"
@@ -411,7 +487,7 @@
                         <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
                         <div class="u-flex-1">
                             <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
-                            <textarea class="feedback-new-input" name="comment" v-model="newFeedback"></textarea>
+                            <textarea class="feedback-new-input form-control" name="comment" v-model="newFeedback"></textarea>
                             <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
                             <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
                         </div>
@@ -420,12 +496,12 @@
             </div>
         </div>
     </div>
-    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="properties">
+    <div role="tabpanel" class="tab-pane mod-pad" id="properties">
         <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
         {{ CONTENT_OBJECT_RENDITION|raw }}
     </div>
     {% if SUPPORTS_RUBRICS %}
-    <div role="tabpanel" class="tab-pane tab-pane-with-border" id="rubric">
+    <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
             <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
