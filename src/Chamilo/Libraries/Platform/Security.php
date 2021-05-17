@@ -48,13 +48,13 @@ class Security
             $isAdmin = self::isPlatformAdminOrTeacher();
         }
 
+        if (is_array($variable))
+        {
+            return self::removeXSSRecursive($variable, $isAdmin);
+        }
+
         if (! $isAdmin)
         { // don't question the actions of platform admins, they know what they are doing
-
-            if (is_array($variable))
-            {
-                return self::removeXSSRecursive($variable, $isAdmin);
-            }
 
             // from: http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
             // from: https://gist.github.com/mbijon/1098477
