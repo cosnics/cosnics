@@ -458,7 +458,7 @@ abstract class TreeNode
 
         foreach ($this->children as $child)
         {
-            if ($child == $childToRemove)
+            if ($child === $childToRemove)
             {
                 continue;
             }

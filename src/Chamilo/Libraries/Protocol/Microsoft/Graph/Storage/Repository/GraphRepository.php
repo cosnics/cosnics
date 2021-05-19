@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
+use GuzzleHttp\Exception\ClientException;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
@@ -268,7 +269,7 @@ class GraphRepository
                 }
             }
 
-            throw $exception;
+            throw new GraphException($exception->getMessage(), $exception->getCode(), $exception);
         }
         catch (\Microsoft\Graph\Exception\GraphException $exception)
         {
