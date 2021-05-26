@@ -2,13 +2,14 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackRightsServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricService;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackRightsServiceBridgeInterface;
@@ -249,11 +250,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return UserEntityService
+     * @return EvaluationEntityServiceInterface
      */
-    protected function getEntityService()
+    protected function getEntityService(): EvaluationEntityServiceInterface
     {
-        return $this->getService(UserEntityService::class);
+        /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
+        $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
+        return $evaluationEntityServiceManager->getEntityServiceByType($this->getEntityType());
     }
 
     /**

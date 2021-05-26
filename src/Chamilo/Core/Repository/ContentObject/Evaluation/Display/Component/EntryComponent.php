@@ -8,7 +8,6 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricSco
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -164,6 +163,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
 
         $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, new FilterParameters());
+
         $users = array();
         $selectedUser = null;
 
