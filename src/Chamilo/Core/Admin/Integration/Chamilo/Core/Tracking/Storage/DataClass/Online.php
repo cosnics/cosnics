@@ -59,7 +59,7 @@ class Online extends SimpleTracker
     /**
      * Inherited
      * 
-     * @see MainTracker :: empty_tracker
+     * @see MainTracker::empty_tracker
      */
     public function empty_tracker_before_date($date)
     {

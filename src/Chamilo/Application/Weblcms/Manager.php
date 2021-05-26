@@ -365,23 +365,6 @@ abstract class Manager extends Application
     }
 
     /**
-     * Returns the editing url for the course
-     *
-     * @param $course Course
-     *
-     * @return String
-     */
-    public function get_course_editing_url($course)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_CREATE_COURSE,
-                self::PARAM_COURSE => $course->get_id(),
-                self::PARAM_TOOL => 'course_settings',
-                'previous' => 'admin'));
-    }
-
-    /**
      * Returns the maintenance url for the course
      *
      * @param $course Course
@@ -456,22 +439,6 @@ abstract class Manager extends Application
                 self::PARAM_ACTION => self::ACTION_MANAGER_SORT,
                 self::PARAM_COMPONENT_ACTION => 'delete',
                 self::PARAM_COURSE_TYPE_USER_CATEGORY_ID => $course_type_user_category[CourseTypeUserCategory::PROPERTY_ID]));
-    }
-
-    /**
-     * Returns the editing url for the course category
-     *
-     * @param $course_category CourseCategory
-     *
-     * @return String
-     */
-    public function get_course_category_edit_url($course_category)
-    {
-        return $this->get_url(
-            array(
-                self::PARAM_ACTION => self::ACTION_COURSE_CATEGORY_MANAGER,
-                self::PARAM_COMPONENT_ACTION => 'edit',
-                self::PARAM_COURSE_CATEGORY => $course_category->get_code()));
     }
 
     /**

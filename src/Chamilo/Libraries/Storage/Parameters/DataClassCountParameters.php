@@ -66,7 +66,7 @@ class DataClassCountParameters extends DataClassParameters
         }
         else
         {
-            throw new Exception('Illegal parameter passed to the DataManager :: count() method.');
+            throw new Exception('Illegal parameter passed to the DataManager::count() method.');
         }
     }
 

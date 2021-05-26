@@ -23,7 +23,7 @@ class Xml
         $out = '<' . $element;
         if (! is_null($attribs))
         {
-            $out .= self :: expandAttributes($attribs);
+            $out .= self::expandAttributes($attribs);
         }
         if (is_null($contents))
         {
@@ -61,7 +61,7 @@ class Xml
         elseif (is_array($attribs))
         {
             foreach ($attribs as $name => $val)
-                $out .= " {$name}=\"" . MediawikiSanitizer :: encodeAttribute($val) . '"';
+                $out .= " {$name}=\"" . MediawikiSanitizer::encodeAttribute($val) . '"';
             return $out;
         }
         else
@@ -89,10 +89,10 @@ class Xml
         if ($contents)
         {
             wfProfileIn(__METHOD__ . '-norm');
-            $contents = UtfNormal :: cleanUp($contents);
+            $contents = UtfNormal::cleanUp($contents);
             wfProfileOut(__METHOD__ . '-norm');
         }
-        return self :: element($element, $attribs, $contents);
+        return self::element($element, $attribs, $contents);
     }
 
     /**
@@ -104,7 +104,7 @@ class Xml
      */
     public static function openElement($element, $attribs = null)
     {
-        return '<' . $element . self :: expandAttributes($attribs) . '>';
+        return '<' . $element . self::expandAttributes($attribs) . '>';
     }
 
     /**
@@ -130,7 +130,7 @@ class Xml
      */
     public static function tags($element, $attribs = null, $contents)
     {
-        return self :: openElement($element, $attribs) . $contents . "</$element>";
+        return self::openElement($element, $attribs) . $contents . "</$element>";
     }
 
     /**
@@ -165,16 +165,16 @@ class Xml
                 continue;
             if ($index === 0)
                 $name = wfMsg('blanknamespace');
-            $options[] = self :: option($name, $index, $index === $selected);
+            $options[] = self::option($name, $index, $index === $selected);
         }
         
-        $ret = Xml :: openElement(
+        $ret = Xml::openElement(
             'select', 
             array('id' => 'namespace', 'name' => $element_name, 'class' => 'namespaceselector')) . "\n" .
-             implode(PHP_EOL, $options) . "\n" . Xml :: closeElement('select');
+             implode(PHP_EOL, $options) . "\n" . Xml::closeElement('select');
         if (! is_null($label))
         {
-            $ret = Xml :: label($label, $element_name) . '&nbsp;' . $ret;
+            $ret = Xml::label($label, $element_name) . '&nbsp;' . $ret;
         }
         return $ret;
     }
@@ -194,11 +194,11 @@ class Xml
         if (is_null($selected))
             $selected = '';
         if (! is_null($allmonths))
-            $options[] = self :: option(wfMsg('monthsall'), $allmonths, $selected === $allmonths);
+            $options[] = self::option(wfMsg('monthsall'), $allmonths, $selected === $allmonths);
         for ($i = 1; $i < 13; $i ++)
-            $options[] = self :: option($wgLang->getMonthName($i), $i, $selected === $i);
-        return self :: openElement('select', array('id' => $id, 'name' => 'month', 'class' => 'mw-month-selector')) .
-             implode(PHP_EOL, $options) . self :: closeElement('select');
+            $options[] = self::option($wgLang->getMonthName($i), $i, $selected === $i);
+        return self::openElement('select', array('id' => $id, 'name' => 'month', 'class' => 'mw-month-selector')) .
+             implode(PHP_EOL, $options) . self::closeElement('select');
     }
 
     /**
@@ -237,9 +237,9 @@ class Xml
             {
                 $encYear = '';
             }
-        return Xml :: label(wfMsg('year'), 'year') . ' ' .
-             Xml :: input('year', 4, $encYear, array('id' => 'year', 'maxlength' => 4)) . ' ' .
-             Xml :: label(wfMsg('month'), 'month') . ' ' . Xml :: monthSelector($encMonth, - 1);
+        return Xml::label(wfMsg('year'), 'year') . ' ' .
+             Xml::input('year', 4, $encYear, array('id' => 'year', 'maxlength' => 4)) . ' ' .
+             Xml::label(wfMsg('month'), 'month') . ' ' . Xml::monthSelector($encMonth, - 1);
     }
 
     /**
@@ -255,7 +255,7 @@ class Xml
          * Make sure the site language is in the list; a custom language code
          * might not have a defined name...
          */
-        $languages = Language :: getLanguageNames($customisedOnly);
+        $languages = Language::getLanguageNames($customisedOnly);
         if (! array_key_exists($wgContLanguageCode, $languages))
         {
             $languages[$wgContLanguageCode] = $wgContLanguageCode;
@@ -271,12 +271,12 @@ class Xml
         $options = "\n";
         foreach ($languages as $code => $name)
         {
-            $options .= Xml :: option("$code - $name", $code, ($code == $selected)) . "\n";
+            $options .= Xml::option("$code - $name", $code, ($code == $selected)) . "\n";
         }
         
         return array(
-            Xml :: label(wfMsg('yourlanguage'), 'wpUserLanguage'), 
-            Xml :: tags('select', array('id' => 'wpUserLanguage', 'name' => 'wpUserLanguage'), $options));
+            Xml::label(wfMsg('yourlanguage'), 'wpUserLanguage'), 
+            Xml::tags('select', array('id' => 'wpUserLanguage', 'name' => 'wpUserLanguage'), $options));
     }
 
     /**
@@ -289,7 +289,7 @@ class Xml
      */
     public static function span($text, $class, $attribs = array())
     {
-        return self :: element('span', array('class' => $class) + $attribs, $text);
+        return self::element('span', array('class' => $class) + $attribs, $text);
     }
 
     /**
@@ -303,7 +303,7 @@ class Xml
      */
     public static function wrapClass($text, $class, $tag = 'span', $attribs = array())
     {
-        return self :: tags($tag, array('class' => $class) + $attribs, $text);
+        return self::tags($tag, array('class' => $class) + $attribs, $text);
     }
 
     /**
@@ -317,7 +317,7 @@ class Xml
      */
     public static function input($name, $size = false, $value = false, $attribs = array())
     {
-        return self :: element('input', array('name' => $name, 'size' => $size, 'value' => $value) + $attribs);
+        return self::element('input', array('name' => $name, 'size' => $size, 'value' => $value) + $attribs);
     }
 
     /**
@@ -331,7 +331,7 @@ class Xml
      */
     public static function password($name, $size = false, $value = false, $attribs = array())
     {
-        return self :: input($name, $size, $value, array_merge($attribs, array('type' => 'password')));
+        return self::input($name, $size, $value, array_merge($attribs, array('type' => 'password')));
     }
 
     /**
@@ -354,11 +354,11 @@ class Xml
      */
     public static function check($name, $checked = false, $attribs = array())
     {
-        return self :: element(
+        return self::element(
             'input', 
             array_merge(
                 array('name' => $name, 'type' => 'checkbox', 'value' => 1), 
-                self :: attrib('checked', $checked), 
+                self::attrib('checked', $checked), 
                 $attribs));
     }
 
@@ -373,9 +373,9 @@ class Xml
      */
     public static function radio($name, $value, $checked = false, $attribs = array())
     {
-        return self :: element(
+        return self::element(
             'input', 
-            array('name' => $name, 'type' => 'radio', 'value' => $value) + self :: attrib('checked', $checked) + $attribs);
+            array('name' => $name, 'type' => 'radio', 'value' => $value) + self::attrib('checked', $checked) + $attribs);
     }
 
     /**
@@ -387,7 +387,7 @@ class Xml
      */
     public static function label($label, $id)
     {
-        return self :: element('label', array('for' => $id), $label);
+        return self::element('label', array('for' => $id), $label);
     }
 
     /**
@@ -403,7 +403,7 @@ class Xml
      */
     public static function inputLabel($label, $name, $id, $size = false, $value = false, $attribs = array())
     {
-        list($label, $input) = self :: inputLabelSep($label, $name, $id, $size, $value, $attribs);
+        list($label, $input) = self::inputLabelSep($label, $name, $id, $size, $value, $attribs);
         return $label . '&nbsp;' . $input;
     }
 
@@ -412,7 +412,7 @@ class Xml
      */
     public static function inputLabelSep($label, $name, $id, $size = false, $value = false, $attribs = array())
     {
-        return array(Xml :: label($label, $id), self :: input($name, $size, $value, array('id' => $id) + $attribs));
+        return array(Xml::label($label, $id), self::input($name, $size, $value, array('id' => $id) + $attribs));
     }
 
     /**
@@ -422,7 +422,7 @@ class Xml
      */
     public static function checkLabel($label, $name, $id, $checked = false, $attribs = array())
     {
-        return self :: check($name, $checked, array('id' => $id) + $attribs) . '&nbsp;' . self :: label($label, $id);
+        return self::check($name, $checked, array('id' => $id) + $attribs) . '&nbsp;' . self::label($label, $id);
     }
 
     /**
@@ -432,8 +432,8 @@ class Xml
      */
     public static function radioLabel($label, $name, $value, $id, $checked = false, $attribs = array())
     {
-        return self :: radio($name, $value, $checked, array('id' => $id) + $attribs) . '&nbsp;' .
-             self :: label($label, $id);
+        return self::radio($name, $value, $checked, array('id' => $id) + $attribs) . '&nbsp;' .
+             self::label($label, $id);
     }
 
     /**
@@ -445,7 +445,7 @@ class Xml
      */
     public static function submitButton($value, $attribs = array())
     {
-        return self :: element('input', array('type' => 'submit', 'value' => $value) + $attribs);
+        return self::element('input', array('type' => 'submit', 'value' => $value) + $attribs);
     }
 
     /**
@@ -458,7 +458,7 @@ class Xml
      */
     public static function hidden($name, $value, $attribs = array())
     {
-        return self :: element('input', array('name' => $name, 'type' => 'hidden', 'value' => $value) + $attribs);
+        return self::element('input', array('name' => $name, 'type' => 'hidden', 'value' => $value) + $attribs);
     }
 
     /**
@@ -480,7 +480,7 @@ class Xml
         {
             $attribs['selected'] = 'selected';
         }
-        return self :: element('option', $attribs, $text);
+        return self::element('option', $attribs, $text);
     }
 
     /**
@@ -499,7 +499,7 @@ class Xml
         $options = '';
         $optgroup = false;
         
-        $options = self :: option($other, 'other', $selected === 'other');
+        $options = self::option($other, 'other', $selected === 'other');
         
         foreach (explode("\n", $list) as $option)
         {
@@ -513,27 +513,27 @@ class Xml
                 // A new group is starting ...
                 $value = trim(substr($value, 1));
                 if ($optgroup)
-                    $options .= self :: closeElement('optgroup');
-                $options .= self :: openElement('optgroup', array('label' => $value));
+                    $options .= self::closeElement('optgroup');
+                $options .= self::openElement('optgroup', array('label' => $value));
                 $optgroup = true;
             }
             elseif (substr($value, 0, 2) == '**')
             {
                 // groupmember
                 $value = trim(substr($value, 2));
-                $options .= self :: option($value, $value, $selected === $value);
+                $options .= self::option($value, $value, $selected === $value);
             }
             else
             {
                 // groupless reason list
                 if ($optgroup)
-                    $options .= self :: closeElement('optgroup');
-                $options .= self :: option($value, $value, $selected === $value);
+                    $options .= self::closeElement('optgroup');
+                $options .= self::option($value, $value, $selected === $value);
                 $optgroup = false;
             }
         }
         if ($optgroup)
-            $options .= self :: closeElement('optgroup');
+            $options .= self::closeElement('optgroup');
         
         $attribs = array();
         if ($name)
@@ -549,7 +549,7 @@ class Xml
         {
             $attribs['tabindex'] = $tabindex;
         }
-        return Xml :: openElement('select', $attribs) . "\n" . $options . "\n" . Xml :: closeElement('select');
+        return Xml::openElement('select', $attribs) . "\n" . $options . "\n" . Xml::closeElement('select');
     }
 
     /**
@@ -561,15 +561,15 @@ class Xml
      */
     public static function fieldset($legend = false, $content = false, $attribs = array())
     {
-        $s = Xml :: openElement('fieldset', $attribs) . "\n";
+        $s = Xml::openElement('fieldset', $attribs) . "\n";
         if ($legend)
         {
-            $s .= Xml :: element('legend', null, $legend) . "\n";
+            $s .= Xml::element('legend', null, $legend) . "\n";
         }
         if ($content !== false)
         {
             $s .= $content . "\n";
-            $s .= Xml :: closeElement('fieldset') . "\n";
+            $s .= Xml::closeElement('fieldset') . "\n";
         }
         
         return $s;
@@ -586,7 +586,7 @@ class Xml
      */
     public static function textarea($name, $content, $cols = 40, $rows = 5, $attribs = array())
     {
-        return self :: element(
+        return self::element(
             'textarea', 
             array('name' => $name, 'id' => $name, 'cols' => $cols, 'rows' => $rows) + $attribs, 
             $content, 
@@ -651,7 +651,7 @@ class Xml
                 {
                     $s .= ', ';
                 }
-                $s .= self :: encodeJsVar($elt);
+                $s .= self::encodeJsVar($elt);
             }
             $s .= ']';
         }
@@ -664,13 +664,13 @@ class Xml
                 {
                     $s .= ', ';
                 }
-                $s .= '"' . self :: escapeJsString($name) . '": ' . self :: encodeJsVar($elt);
+                $s .= '"' . self::escapeJsString($name) . '": ' . self::encodeJsVar($elt);
             }
             $s .= '}';
         }
         else
         {
-            $s = '"' . self :: escapeJsString($value) . '"';
+            $s = '"' . self::escapeJsString($value) . '"';
         }
         return $s;
     }
@@ -714,8 +714,8 @@ class Xml
      */
     public static function isWellFormedXmlFragment($text)
     {
-        $html = Sanitizer :: hackDocType() . '<html>' . $text . '</html>';
-        return Xml :: isWellFormed($html);
+        $html = Sanitizer::hackDocType() . '<html>' . $text . '</html>';
+        return Xml::isWellFormed($html);
     }
 
     /**
@@ -747,19 +747,19 @@ class Xml
         foreach ($fields as $labelmsg => $input)
         {
             $id = "mw-$labelmsg";
-            $form .= Xml :: openElement('tr', array('id' => $id));
-            $form .= Xml :: tags('td', array('class' => 'mw-label'), wfMsgExt($labelmsg, array('parseinline')));
-            $form .= Xml :: openElement('td', array('class' => 'mw-input')) . $input . Xml :: closeElement('td');
-            $form .= Xml :: closeElement('tr');
+            $form .= Xml::openElement('tr', array('id' => $id));
+            $form .= Xml::tags('td', array('class' => 'mw-label'), wfMsgExt($labelmsg, array('parseinline')));
+            $form .= Xml::openElement('td', array('class' => 'mw-input')) . $input . Xml::closeElement('td');
+            $form .= Xml::closeElement('tr');
         }
         
         if ($submitLabel)
         {
-            $form .= Xml :: openElement('tr');
-            $form .= Xml :: tags('td', array(), '');
-            $form .= Xml :: openElement('td', array('class' => 'mw-submit')) . Xml :: submitButton(wfMsg($submitLabel)) .
-                 Xml :: closeElement('td');
-            $form .= Xml :: closeElement('tr');
+            $form .= Xml::openElement('tr');
+            $form .= Xml::tags('td', array(), '');
+            $form .= Xml::openElement('td', array('class' => 'mw-submit')) . Xml::submitButton(wfMsg($submitLabel)) .
+                 Xml::closeElement('td');
+            $form .= Xml::closeElement('tr');
         }
         
         $form .= "</tbody></table>";
@@ -777,7 +777,7 @@ class Xml
      */
     public static function buildTable($rows, $attribs = array(), $headers = null)
     {
-        $s = Xml :: openElement('table', $attribs);
+        $s = Xml::openElement('table', $attribs);
         if (is_array($headers))
         {
             foreach ($headers as $id => $header)
@@ -785,7 +785,7 @@ class Xml
                 $attribs = array();
                 if (is_string($id))
                     $attribs['id'] = $id;
-                $s .= Xml :: element('th', $attribs, $header);
+                $s .= Xml::element('th', $attribs, $header);
             }
         }
         foreach ($rows as $id => $row)
@@ -793,9 +793,9 @@ class Xml
             $attribs = array();
             if (is_string($id))
                 $attribs['id'] = $id;
-            $s .= Xml :: buildTableRow($attribs, $row);
+            $s .= Xml::buildTableRow($attribs, $row);
         }
-        $s .= Xml :: closeElement('table');
+        $s .= Xml::closeElement('table');
         return $s;
     }
 
@@ -807,15 +807,15 @@ class Xml
      */
     public static function buildTableRow($attribs, $cells)
     {
-        $s = Xml :: openElement('tr', $attribs);
+        $s = Xml::openElement('tr', $attribs);
         foreach ($cells as $id => $cell)
         {
             $attribs = array();
             if (is_string($id))
                 $attribs['id'] = $id;
-            $s .= Xml :: element('td', $attribs, $cell);
+            $s .= Xml::element('td', $attribs, $cell);
         }
-        $s .= Xml :: closeElement('tr');
+        $s .= Xml::closeElement('tr');
         return $s;
     }
 }
@@ -852,11 +852,11 @@ class XmlSelect
     {
         // Stab stab stab
         $value = ($value !== false) ? $value : $name;
-        $this->options[] = Xml :: option($name, $value, $value === $this->default);
+        $this->options[] = Xml::option($name, $value, $value === $this->default);
     }
 
     public function getHTML()
     {
-        return Xml :: tags('select', $this->attributes, implode(PHP_EOL, $this->options));
+        return Xml::tags('select', $this->attributes, implode(PHP_EOL, $this->options));
     }
 }

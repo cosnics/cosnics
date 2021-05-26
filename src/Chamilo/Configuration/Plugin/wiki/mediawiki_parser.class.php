@@ -184,7 +184,7 @@ class MediawikiParser
     function __construct(MediaWikiParserContext $mediawiki_parser_context)
     {
         $this->mediawiki_parser_context = $mediawiki_parser_context;
-        $this->mUniqPrefix = "\x7fUNIQ" . self :: getRandomString();
+        $this->mUniqPrefix = "\x7fUNIQ" . self::getRandomString();
         $this->mLinkID = 0;
         $this->mOutput = new MediawikiParserOutput();
         $this->mStripState = new MediawikiStripState();
@@ -242,7 +242,7 @@ class MediawikiParser
     function internalParse($text)
     {
         $isMain = true;
-        // $text = Sanitizer :: removeHTMLtags($text, array(&$this, 'attributeStripCallback'), false,
+        // $text = Sanitizer::removeHTMLtags($text, array(&$this, 'attributeStripCallback'), false,
         // array_keys($this->mTransparentTagHooks));
         
         // Tables need to come after variable replacement for things to work
@@ -257,7 +257,7 @@ class MediawikiParser
         $text = $this->doHeadings($text);
         // //if ($this->mOptions->getUseDynamicDates())
         // //{
-        // // $df = DateFormatter :: getInstance();
+        // // $df = DateFormatter::getInstance();
         // // $text = $df->reformat($this->mOptions->getDateFormat(), $text);
         // //}
         $text = $this->doAllQuotes($text);
@@ -280,7 +280,7 @@ class MediawikiParser
      */
     function doTableStuff($text)
     {
-        $lines = MediawikiStringUtils :: explode("\n", $text);
+        $lines = MediawikiStringUtils::explode("\n", $text);
         $out = '';
         $td_history = array(); // Is currently a td tag open?
         $last_tag_history = array(); // Save history of last lag activated (td, th or caption)
@@ -307,7 +307,7 @@ class MediawikiParser
                 $indent_level = strlen($matches[1]);
                 
                 $attributes = $this->mStripState->unstripBoth($matches[2]);
-                $attributes = MediawikiSanitizer :: fixTagAttributes($attributes, 'table');
+                $attributes = MediawikiSanitizer::fixTagAttributes($attributes, 'table');
                 
                 $outLine = str_repeat('<dl><dd>', $indent_level) . "<table{$attributes}>";
                 array_push($td_history, false);
@@ -355,7 +355,7 @@ class MediawikiParser
                             
                             // Whats after the tag is now only attributes
                             $attributes = $this->mStripState->unstripBoth($line);
-                            $attributes = MediawikiSanitizer :: fixTagAttributes($attributes, 'tr');
+                            $attributes = MediawikiSanitizer::fixTagAttributes($attributes, 'tr');
                             array_pop($tr_attributes);
                             array_push($tr_attributes, $attributes);
                             
@@ -400,7 +400,7 @@ class MediawikiParser
                                 // FIXME : This can result in improper nesting of tags processed
                                 // by earlier parser steps, but should avoid splitting up eg
                                 // attribute values containing literal "||".
-                                $cells = MediawikiStringUtils :: explodeMarkup('||', $line);
+                                $cells = MediawikiStringUtils::explodeMarkup('||', $line);
                                 
                                 $outLine = '';
                                 
@@ -464,7 +464,7 @@ class MediawikiParser
                                         else
                                         {
                                             $attributes = $this->mStripState->unstripBoth($cell_data[0]);
-                                            $attributes = MediawikiSanitizer :: fixTagAttributes($attributes, $last_tag);
+                                            $attributes = MediawikiSanitizer::fixTagAttributes($attributes, $last_tag);
                                             $cell = "{$previous}<{$last_tag}{$attributes}>{$cell_data[1]}";
                                         }
                                     
@@ -532,7 +532,7 @@ class MediawikiParser
     function doAllQuotes($text)
     {
         $outtext = '';
-        $lines = MediawikiStringUtils :: explode("\n", $text);
+        $lines = MediawikiStringUtils::explode("\n", $text);
         foreach ($lines as $line)
         {
             $outtext .= $this->doQuotes($line) . "\n";
@@ -805,7 +805,7 @@ class MediawikiParser
         // happening here is handling of block-level elements p, pre,
         // and making lists from lines starting with * # : etc.
         //
-        $textLines = MediawikiStringUtils :: explode("\n", $text);
+        $textLines = MediawikiStringUtils::explode("\n", $text);
         
         $lastPrefix = $output = '';
         $this->mDTopen = $inBlockElem = false;
@@ -1066,12 +1066,12 @@ class MediawikiParser
         }
         
         // Ugly state machine to walk through avoiding tags.
-        $state = self :: COLON_STATE_TEXT;
+        $state = self::COLON_STATE_TEXT;
         $stack = 0;
         $len = strlen($str);
         for ($i = 0; $i < $len; $i ++)
         {
-            $c = $str{$i};
+            $c = $str[$i];
             
             switch ($state)
             {
@@ -1081,7 +1081,7 @@ class MediawikiParser
                     {
                         case "<" :
                             // Could be either a <start> tag or an </end> tag
-                            $state = self :: COLON_STATE_TAGSTART;
+                            $state = self::COLON_STATE_TAGSTART;
                             break;
                         case ":" :
                             if ($stack == 0)
@@ -1120,7 +1120,7 @@ class MediawikiParser
                             }
                             // Skip ahead to next tag start
                             $i = $lt;
-                            $state = self :: COLON_STATE_TAGSTART;
+                            $state = self::COLON_STATE_TAGSTART;
                     }
                     break;
                 case 1 : // self::COLON_STATE_TAG:
@@ -1129,11 +1129,11 @@ class MediawikiParser
                     {
                         case ">" :
                             $stack ++;
-                            $state = self :: COLON_STATE_TEXT;
+                            $state = self::COLON_STATE_TEXT;
                             break;
                         case "/" :
                             // Slash may be followed by >?
-                            $state = self :: COLON_STATE_TAGSLASH;
+                            $state = self::COLON_STATE_TAGSLASH;
                             break;
                         default :
                         
@@ -1144,17 +1144,17 @@ class MediawikiParser
                     switch ($c)
                     {
                         case "/" :
-                            $state = self :: COLON_STATE_CLOSETAG;
+                            $state = self::COLON_STATE_CLOSETAG;
                             break;
                         case "!" :
-                            $state = self :: COLON_STATE_COMMENT;
+                            $state = self::COLON_STATE_COMMENT;
                             break;
                         case ">" :
                             // Illegal early close? This shouldn't happen D:
-                            $state = self :: COLON_STATE_TEXT;
+                            $state = self::COLON_STATE_TEXT;
                             break;
                         default :
-                            $state = self :: COLON_STATE_TAG;
+                            $state = self::COLON_STATE_TAG;
                     }
                     break;
                 case 3 : // self::COLON_STATE_CLOSETAG:
@@ -1166,45 +1166,45 @@ class MediawikiParser
                         {
                             return false;
                         }
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     break;
-                case self :: COLON_STATE_TAGSLASH :
+                case self::COLON_STATE_TAGSLASH :
                     if ($c === ">")
                     {
                         // Yes, a self-closed tag <blah/>
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     else
                     {
                         // Probably we're jumping the gun, and this is an attribute
-                        $state = self :: COLON_STATE_TAG;
+                        $state = self::COLON_STATE_TAG;
                     }
                     break;
                 case 5 : // self::COLON_STATE_COMMENT:
                     if ($c === "-")
                     {
-                        $state = self :: COLON_STATE_COMMENTDASH;
+                        $state = self::COLON_STATE_COMMENTDASH;
                     }
                     break;
-                case self :: COLON_STATE_COMMENTDASH :
+                case self::COLON_STATE_COMMENTDASH :
                     if ($c === "-")
                     {
-                        $state = self :: COLON_STATE_COMMENTDASHDASH;
+                        $state = self::COLON_STATE_COMMENTDASHDASH;
                     }
                     else
                     {
-                        $state = self :: COLON_STATE_COMMENT;
+                        $state = self::COLON_STATE_COMMENT;
                     }
                     break;
-                case self :: COLON_STATE_COMMENTDASHDASH :
+                case self::COLON_STATE_COMMENTDASHDASH :
                     if ($c === ">")
                     {
-                        $state = self :: COLON_STATE_TEXT;
+                        $state = self::COLON_STATE_TEXT;
                     }
                     else
                     {
-                        $state = self :: COLON_STATE_COMMENT;
+                        $state = self::COLON_STATE_COMMENT;
                     }
                     break;
                 default :
@@ -1232,7 +1232,7 @@ class MediawikiParser
         
         for ($i = 0; $i < $shorter; ++ $i)
         {
-            if ($st1{$i} != $st2{$i})
+            if ($st1[$i] != $st2[$i])
             {
                 break;
             }
@@ -1367,7 +1367,7 @@ class MediawikiParser
         $prevlevel = 0;
         $toclevel = 0;
         $prevtoclevel = 0;
-        $markerRegex = "{$this->mUniqPrefix}-h-(\d+)-" . self :: MARKER_SUFFIX;
+        $markerRegex = "{$this->mUniqPrefix}-h-(\d+)-" . self::MARKER_SUFFIX;
         // $baseTitleText = $this->mTitle->getPrefixedDBkey();
         $tocraw = array();
         
@@ -1404,7 +1404,7 @@ class MediawikiParser
                     if ($toclevel < $wgMaxTocLevel)
                     {
                         $prevtoclevel = $toclevel;
-                        $toc .= MediawikiLinker :: tocIndent();
+                        $toc .= MediawikiLinker::tocIndent();
                         $numVisible ++;
                     }
                 }
@@ -1440,12 +1440,12 @@ class MediawikiParser
                         if ($prevtoclevel < $wgMaxTocLevel)
                         {
                             // Unindent only if the previous toc level was shown :p
-                            $toc .= MediawikiLinker :: tocUnindent($prevtoclevel - $toclevel);
+                            $toc .= MediawikiLinker::tocUnindent($prevtoclevel - $toclevel);
                             $prevtoclevel = $toclevel;
                         }
                         else
                         {
-                            $toc .= MediawikiLinker :: tocLineEnd();
+                            $toc .= MediawikiLinker::tocLineEnd();
                         }
                     }
                 }
@@ -1454,7 +1454,7 @@ class MediawikiParser
                     // No change in level, end TOC line
                     if ($toclevel < $wgMaxTocLevel)
                     {
-                        $toc .= MediawikiLinker :: tocLineEnd();
+                        $toc .= MediawikiLinker::tocLineEnd();
                     }
                 }
                 
@@ -1503,7 +1503,7 @@ class MediawikiParser
             $headlineHint = $safeHeadline;
             
             $legacyHeadline = false;
-            $safeHeadline = MediawikiSanitizer :: escapeId($safeHeadline, 'noninitial');
+            $safeHeadline = MediawikiSanitizer::escapeId($safeHeadline, 'noninitial');
             
             // HTML names must be case-insensitively unique (bug 10721). FIXME:
             // Does this apply to Unicode characters? Because we aren't
@@ -1556,7 +1556,7 @@ class MediawikiParser
             }
             if ($enoughToc && (! isset($wgMaxTocLevel) || $toclevel < $wgMaxTocLevel))
             {
-                $toc .= MediawikiLinker :: tocLine($anchor, $tocline, $numbering, $toclevel);
+                $toc .= MediawikiLinker::tocLine($anchor, $tocline, $numbering, $toclevel);
                 
                 $tocraw[] = array(
                     'toclevel' => $toclevel, 
@@ -1565,7 +1565,7 @@ class MediawikiParser
                     'number' => $numbering);
             }
             // give headline the correct <h#> tag
-            $head[$headlineCount] = MediawikiLinker :: makeHeadline(
+            $head[$headlineCount] = MediawikiLinker::makeHeadline(
                 $level, 
                 $matches['attrib'][$headlineCount], 
                 $anchor, 
@@ -1588,10 +1588,10 @@ class MediawikiParser
         {
             if ($prevtoclevel > 0 && $prevtoclevel < $wgMaxTocLevel)
             {
-                $toc .= MediawikiLinker :: tocUnindent($prevtoclevel - 1);
+                $toc .= MediawikiLinker::tocUnindent($prevtoclevel - 1);
             }
             
-            $toc = MediawikiLinker :: tocList($toc);
+            $toc = MediawikiLinker::tocList($toc);
         }
         
         // split up and insert constructed headlines
@@ -1641,7 +1641,7 @@ class MediawikiParser
         // the % is needed to support urlencoded titles as well
         if (! $tc)
         {
-            $tc = MediawikiTitle :: legalChars() . '#%';
+            $tc = MediawikiTitle::legalChars() . '#%';
             // Match a link having the form [[namespace:link|alternate]]trail
             $e1 = "/^([{$tc}]+)(?:\\|(.+?))?]](.*)\$/sD";
             // Match cases where there is no "]]", which might still be images
@@ -1651,7 +1651,7 @@ class MediawikiParser
         $holders = new MediawikiLinkHolderArray($this);
         
         // split the entire text string on occurences of [[
-        $a = MediawikiStringUtils :: explode('[[', ' ' . $s);
+        $a = MediawikiStringUtils::explode('[[', ' ' . $s);
         // get the first element (all text up to first [[), and remove the space we added
         $s = $a->current();
         $a->next();
@@ -1736,7 +1736,7 @@ class MediawikiParser
                 $link = substr($link, 1);
             }
             
-            $nt = MediawikiTitle :: newFromText($this->mStripState->unstripNoWiki($link));
+            $nt = MediawikiTitle::newFromText($this->mStripState->unstripNoWiki($link));
             if ($nt === NULL)
             {
                 $s .= $prefix . '[[' . $line;
@@ -1845,7 +1845,7 @@ class MediawikiParser
                     {
                         $sortkey = $text;
                     }
-                    $sortkey = Sanitizer :: decodeCharReferences($sortkey);
+                    $sortkey = Sanitizer::decodeCharReferences($sortkey);
                     $sortkey = str_replace("\n", '', $sortkey);
                     $sortkey = $wgContLang->convertCategoryKey($sortkey);
                     $this->mOutput->addCategory($nt->getDBkey(), $sortkey);
@@ -1930,8 +1930,8 @@ class MediawikiParser
      */
     function makeKnownLinkHolder($nt, $text = '', $query = array(), $trail = '', $prefix = '')
     {
-        list($inside, $trail) = MediawikiLinker :: splitTrail($trail);
-        $link = MediawikiLinker :: makeKnownLinkObj($nt, $text, $query, $inside, $prefix);
+        list($inside, $trail) = MediawikiLinker::splitTrail($trail);
+        $link = MediawikiLinker::makeKnownLinkObj($nt, $text, $query, $inside, $prefix);
         return $this->armorLinks($link) . $trail;
     }
 

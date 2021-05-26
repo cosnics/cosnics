@@ -33,7 +33,7 @@ class ViewAsComponent extends Manager
             $this->get_course(), 
             CourseSettingsConnector::COURSE_ACCESS);
         
-        // if ($course_access == CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+        // if ($course_access == CourseSettingsConnector::COURSE_ACCESS_CLOSED)
         // {
         // throw new NotAllowedException();
         // }

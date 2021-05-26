@@ -109,7 +109,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         }
     }
 
-    public function attach_content_object($aid, $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_object($aid, $type = self::ATTACHMENT_NORMAL)
     {
         $success = parent::attach_content_object($aid, $type);
 

@@ -63,7 +63,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      *
      * @return int NULL
      */
-    public function get_start_time($type = self :: FILTER_FROM_DATE)
+    public function get_start_time($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_START_TIME, $type);
     }
@@ -74,7 +74,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      *
      * @return int NULL
      */
-    public function get_end_time($type = self :: FILTER_FROM_DATE)
+    public function get_end_time($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_END_TIME, $type);
     }

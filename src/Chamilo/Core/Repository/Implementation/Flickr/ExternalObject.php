@@ -27,7 +27,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     const SIZE_THUMBNAIL = 'thumbnail';
 
-    public function get_available_size_dimensions($size = self :: SIZE_MEDIUM)
+    public function get_available_size_dimensions($size = self::SIZE_MEDIUM)
     {
         if (!in_array($size, self::get_default_sizes()))
         {
@@ -45,7 +45,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return array('width' => $urls[$size]['width'], 'height' => $urls[$size]['height']);
     }
 
-    public function get_available_size_dimensions_string($size = self :: SIZE_MEDIUM)
+    public function get_available_size_dimensions_string($size = self::SIZE_MEDIUM)
     {
         $available_size_dimensions = $this->get_available_size_dimensions($size);
 

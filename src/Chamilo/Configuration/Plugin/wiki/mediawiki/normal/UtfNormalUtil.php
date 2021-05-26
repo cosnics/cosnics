@@ -94,7 +94,7 @@ function utf8ToHexSequence($str)
 function utf8ToCodepoint($char)
 {
     // Find the length
-    $z = ord($char{0});
+    $z = ord($char[0]);
     if ($z & 0x80)
     {
         $length = 0;
@@ -126,7 +126,7 @@ function utf8ToCodepoint($char)
     for ($i = 1; $i < $length; $i ++)
     {
         $z <<= 6;
-        $z |= ord($char{$i}) & 0x3f;
+        $z |= ord($char[$i]) & 0x3f;
     }
     
     return $z;

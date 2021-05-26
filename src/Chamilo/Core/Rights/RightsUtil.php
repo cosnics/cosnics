@@ -110,8 +110,8 @@ class RightsUtil
      */
 
     public function create_location(
-        $context, $type = self :: TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0,
-        $tree_identifier = 0, $tree_type = self :: TREE_TYPE_ROOT, $return_location = false, $create_in_batch = false
+        $context, $type = self::TYPE_ROOT, $identifier = 0, $inherit = 0, $parent = 0, $locked = 0,
+        $tree_identifier = 0, $tree_type = self::TREE_TYPE_ROOT, $return_location = false, $create_in_batch = false
     )
     {
         $rights_location_class = $context . '\Storage\DataClass\RightsLocation';
@@ -437,7 +437,7 @@ class RightsUtil
      */
 
     public function get_location_by_identifier(
-        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
+        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self::TREE_TYPE_ROOT
     )
     {
         return DataManager::retrieve_rights_location_by_identifier(
@@ -450,7 +450,7 @@ class RightsUtil
      */
 
     public function get_location_id_by_identifier(
-        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self :: TREE_TYPE_ROOT
+        $context, $type, $identifier, $tree_identifier = '0', $tree_type = self::TREE_TYPE_ROOT
     )
     {
         $location = $this->get_location_by_identifier($context, $type, $identifier, $tree_identifier, $tree_type);
@@ -537,8 +537,7 @@ class RightsUtil
      * Idea: Retrieve the child-parent relation of location with as few queries as possible and store them in the
      * memory. The function
      * has_right_recursive(...) will loop over the child-parent tree, which is much faster than the recursive function
-     * calls to DataManager
-     * :: retrieve_granted_rights_array(...). This function actually retrieves the location tree level-by-level starting
+     * calls to DataManager::retrieve_granted_rights_array(...). This function actually retrieves the location tree level-by-level starting
      * with the leaf
      * level, followed by parent level, then grandparents until an empty level is found.
      * Result is a flat array mapping each ID in $location_ids onto its parent ID and each parent onto its grand parent
@@ -678,7 +677,7 @@ class RightsUtil
      * DONE
      */
 
-    public function get_root($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
+    public function get_root($context, $tree_type = self::TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $class = $context . '\Storage\DataClass\RightsLocation';
 
@@ -715,7 +714,7 @@ class RightsUtil
      * DONE
      */
 
-    public function get_root_id($context, $tree_type = self :: TREE_TYPE_ROOT, $tree_identifier = 0)
+    public function get_root_id($context, $tree_type = self::TREE_TYPE_ROOT, $tree_identifier = 0)
     {
         $root = $this->get_root($context, $tree_type, $tree_identifier);
         if ($root)
@@ -781,7 +780,7 @@ class RightsUtil
      *                                               ID's Values: True.
      *
      * @return boolean
-     * @see DataManager :: filter_location_identifiers_by_granted_right.
+     * @see DataManager::filter_location_identifiers_by_granted_right.
      */
     private function has_right_recursive($location_id, $location_parent_ids, $location_ids_with_granted_right)
     {
@@ -837,8 +836,8 @@ class RightsUtil
      */
 
     public function is_allowed(
-        $right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0,
-        $tree_type = self :: TREE_TYPE_ROOT
+        $right, $context, $user_id, $entities, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT
     )
     {
 

@@ -117,7 +117,7 @@ abstract class Action extends MessageLogger
      *
      * @param $type String
      */
-    public function process_result($title, $image, $final_message = null, $final_message_type = self :: TYPE_CONFIRM)
+    public function process_result($title, $image, $final_message = null, $final_message_type = self::TYPE_CONFIRM)
     {
         if ($final_message)
         {

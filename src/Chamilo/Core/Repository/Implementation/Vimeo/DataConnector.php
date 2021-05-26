@@ -133,7 +133,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             // }
             // elseif ($response['status'] == 400)
             // {
-            // error_log(Translation :: get('InvalidTypeForTags'));
+            // error_log(Translation::get('InvalidTypeForTags'));
             // return false;
             // }
             return true;
@@ -228,13 +228,13 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
         $query = ButtonSearchForm::get_query();
 
-        // if ($feed_type == Manager :: FEED_TYPE_MY_PHOTOS)
+        // if ($feed_type == Manager::FEED_TYPE_MY_PHOTOS)
         // {
         // return array(
-        // self :: SORT_DATE_POSTED,
-        // self :: SORT_DATE_TAKEN,
-        // self :: SORT_INTERESTINGNESS,
-        // self :: SORT_RELEVANCE);
+        // self::SORT_DATE_POSTED,
+        // self::SORT_DATE_TAKEN,
+        // self::SORT_INTERESTINGNESS,
+        // self::SORT_RELEVANCE);
         // }
         // else
         // {

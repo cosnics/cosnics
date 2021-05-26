@@ -32,7 +32,7 @@ class ImporterComponent extends Manager
 
         if ($contentObjectImportService->hasFinished())
         {
-            // Session :: register(self :: PARAM_MESSAGES, $controller->get_messages_for_url());
+            // Session::register(self::PARAM_MESSAGES, $controller->get_messages_for_url());
             $this->simple_redirect(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
         }
         else

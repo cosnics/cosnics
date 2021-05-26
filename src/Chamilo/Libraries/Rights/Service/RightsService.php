@@ -862,7 +862,7 @@ abstract class RightsService
      * Idea:
      * Retrieve the child-parent relation of location with as few queries as possible and store them in the memory. The
      * function has_right_recursive(...) will loop over the child-parent tree, which is much faster than the recursive
-     * function calls to DataManager :: retrieve_granted_rights_array(...). This function actually retrieves the
+     * function calls to DataManager::retrieve_granted_rights_array(...). This function actually retrieves the
      * location tree level-by-level starting with the leaf level, followed by parent level, then grandparents until an
      * empty level is found. Result is a flat array mapping each ID in $location_ids onto its parent ID and each parent
      * onto its grand parent D, etc. Result will only contain child location ID's if the 'inherit' property of the

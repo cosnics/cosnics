@@ -74,7 +74,7 @@ class Manager implements PublicationInterface
      * (non-PHPdoc) @see \core\repository\publication\PublicationInterface::getContentObjectPublicationsAttributes()
      */
 
-    public static function countPublicationAttributes($attributes_type = self :: ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
+    public static function countPublicationAttributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier = null, $condition = null)
     {
         switch ($attributes_type)
         {
@@ -186,7 +186,7 @@ class Manager implements PublicationInterface
         return self::create_publication_attributes_from_record($record);
     }
 
-    public static function getContentObjectPublicationsAttributes($object_id, $type = self :: ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
+    public static function getContentObjectPublicationsAttributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null)
     {
         switch ($type)

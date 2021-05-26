@@ -90,7 +90,7 @@ while (true)
     echo "$n\n";
     
     $str = randomString($size, true);
-    $clean = UtfNormal :: cleanUp($str);
+    $clean = UtfNormal::cleanUp($str);
     $norm = donorm($str);
     
     echo strlen($clean) . ", " . strlen($norm);

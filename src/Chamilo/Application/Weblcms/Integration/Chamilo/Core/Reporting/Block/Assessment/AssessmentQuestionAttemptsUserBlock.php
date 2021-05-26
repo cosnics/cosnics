@@ -63,7 +63,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
             $reporting_data->add_data_category_row($counter, Translation::get('Date'), $date);
             $reporting_data->add_data_category_row($counter, Translation::get('Score'), $score);
             /*
-             * $reporting_data->add_data_category_row( $counter, Translation :: get('Status'),
+             * $reporting_data->add_data_category_row( $counter, Translation::get('Status'),
              * $assessment_attempt->get_status_as_string() );
              */
             
@@ -99,7 +99,7 @@ class AssessmentQuestionAttemptsUserBlock extends AssessmentBlock
     protected function get_reporting_data_rows()
     {
         return array(Translation::get('Date'), Translation::get('Score'), 
-            // Translation :: get('Status'),
+            // Translation::get('Status'),
             Translation::get('Details'));
     }
 

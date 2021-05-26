@@ -51,141 +51,21 @@ class EventParser
      * @param integer $fromDate
      * @param integer $toDate
      */
-    public function __construct(AvailableCalendar $availableCalendar,
-        \Microsoft\Graph\Model\Event $office365CalendarEvent, $fromDate, $toDate)
+    public function __construct(
+        AvailableCalendar $availableCalendar, \Microsoft\Graph\Model\Event $office365CalendarEvent, $fromDate, $toDate
+    )
     {
         $this->availableCalendar = $availableCalendar;
         $this->office365CalendarEvent = $office365CalendarEvent;
         $this->fromDate = $fromDate;
         $this->toDate = $toDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
-     */
-    public function getAvailableCalendar()
-    {
-        return $this->availableCalendar;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
-     */
-    public function setAvailableCalendar(
-        AvailableCalendar $availableCalendar)
-    {
-        $this->availableCalendar = $availableCalendar;
-    }
-
-    /**
-     *
-     * @return \Microsoft\Graph\Model\Event
-     */
-    public function getOffice365CalendarEvent()
-    {
-        return $this->office365CalendarEvent;
-    }
-
-    /**
-     *
-     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
-     */
-    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
-    {
-        $this->office365CalendarEvent = $office365CalendarEvent;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getFromDate()
-    {
-        return $this->fromDate;
-    }
-
-    /**
-     *
-     * @param integer $fromDate
-     */
-    public function setFromDate($fromDate)
-    {
-        $this->fromDate = $fromDate;
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getToDate()
-    {
-        return $this->toDate;
-    }
-
-    /**
-     *
-     * @param integer $toDate
-     */
-    public function setToDate($toDate)
-    {
-        $this->toDate = $toDate;
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
-     */
-    public function getEvents()
-    {
-        $office365CalendarEvent = $this->getOffice365CalendarEvent();
-
-        $url = null;
-
-        $event = new Event(
-            $office365CalendarEvent->getId(),
-            $this->getTimestamp(
-                $office365CalendarEvent->getStart()->getDateTime(),
-                $office365CalendarEvent->getStart()->getTimeZone(),
-                $office365CalendarEvent->getIsAllDay()),
-            $this->getTimestamp(
-                $office365CalendarEvent->getEnd()->getDateTime(),
-                $office365CalendarEvent->getEnd()->getTimeZone(),
-                $office365CalendarEvent->getIsAllDay()),
-            $this->getRecurrence($office365CalendarEvent->getRecurrence()),
-            $url,
-            $office365CalendarEvent->getSubject(),
-            $office365CalendarEvent->getBody()->getContent(),
-            $office365CalendarEvent->getLocation()->getDisplayName(),
-            $this->getSource($this->getAvailableCalendar()->getName()),
-            Manager::context());
-
-        $event->setOffice365CalendarEvent($office365CalendarEvent);
-        return array($event);
-    }
-
-    /**
-     *
-     * @param string $eventDateTime
-     * @param string $eventTimeZone
-     */
-    private function getTimestamp($eventDateTime, $eventTimeZone, $isAllDay)
-    {
-        $dateTime = new DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone, $isAllDay));
-
-        if ($isAllDay)
-        {
-            return mktime(0, 0, 0, $dateTime->format('n'), $dateTime->format('j'), $dateTime->format('Y'));
-        }
-
-        return $dateTime->getTimestamp();
     }
 
     /**
      *
      * @param string $eventTimeZone
      * @param boolean $isAllDay
+     *
      * @return \DateTimeZone|NULL
      */
     private function determineTimeZone($eventTimeZone)
@@ -209,21 +89,177 @@ class EventParser
 
     /**
      *
-     * @param string $calendarName
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar
+     */
+    public function getAvailableCalendar()
+    {
+        return $this->availableCalendar;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar $availableCalendar
+     */
+    public function setAvailableCalendar(
+        AvailableCalendar $availableCalendar
+    )
+    {
+        $this->availableCalendar = $availableCalendar;
+    }
+
+    /**
+     *
+     * @param string[] $daysOfWeek
+     *
+     * @return string[]
+     */
+    private function getByDay($patternType, $patternIndex, $patternDaysOfWeek)
+    {
+        $byDay = array();
+
+        $prefix = $this->getNumericIndex($patternType, $patternIndex);
+
+        foreach ($patternDaysOfWeek as $dayOfWeek)
+        {
+            $byDay[] = $prefix . substr(strtoupper($dayOfWeek), 0, 2);
+        }
+
+        return $byDay;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Repository\Integration\Chamilo\Libraries\Calendar\Event\Event[]
+     */
+    public function getEvents()
+    {
+        $office365CalendarEvent = $this->getOffice365CalendarEvent();
+
+        $url = null;
+
+        $event = new Event(
+            $office365CalendarEvent->getId(), $this->getTimestamp(
+            $office365CalendarEvent->getStart()->getDateTime(), $office365CalendarEvent->getStart()->getTimeZone(),
+            $office365CalendarEvent->getIsAllDay()
+        ), $this->getTimestamp(
+            $office365CalendarEvent->getEnd()->getDateTime(), $office365CalendarEvent->getEnd()->getTimeZone(),
+            $office365CalendarEvent->getIsAllDay()
+        ), $this->getRecurrence($office365CalendarEvent->getRecurrence()), $url, $office365CalendarEvent->getSubject(),
+            $office365CalendarEvent->getBody()->getContent(), $office365CalendarEvent->getLocation()->getDisplayName(),
+            $this->getSource($this->getAvailableCalendar()->getName()), Manager::context()
+        );
+
+        $event->setOffice365CalendarEvent($office365CalendarEvent);
+
+        return array($event);
+    }
+
+    /**
+     *
+     * @param string $frequencyType
+     *
+     * @return integer
+     */
+    private function getFrequency($frequencyType)
+    {
+        switch ($frequencyType)
+        {
+            case 'Daily' :
+                return RecurrenceRules::FREQUENCY_DAILY;
+                break;
+            case 'Weekly' :
+                return RecurrenceRules::FREQUENCY_WEEKLY;
+                break;
+            case 'AbsoluteMonthly' :
+            case 'RelativeMonthly' :
+                return RecurrenceRules::FREQUENCY_MONTHLY;
+                break;
+            case 'AbsoluteYearly' :
+            case 'RelativeYearly' :
+                return RecurrenceRules::FREQUENCY_YEARLY;
+                break;
+            default :
+                return RecurrenceRules::FREQUENCY_NONE;
+        }
+    }
+
+    /**
+     *
+     * @return integer
+     */
+    public function getFromDate()
+    {
+        return $this->fromDate;
+    }
+
+    /**
+     *
+     * @param integer $fromDate
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+    }
+
+    /**
+     *
+     * @param string $patternType
+     * @param $patternIndex
+     *
      * @return string
      */
-    private function getSource($calendarName)
+    private function getNumericIndex($patternType, $patternIndex)
     {
-        return Translation::get(
-            'SourceName',
-            array('CALENDAR' => $calendarName),
-            Manager::context());
+        if (!in_array($patternType, array('RelativeMonthly', 'RelativeYearly')))
+        {
+            return '';
+        }
+
+        switch ($patternIndex)
+        {
+            case 'First' :
+                return '1';
+                break;
+            case 'Second' :
+                return '2';
+                break;
+            case 'Third' :
+                return '3';
+                break;
+            case 'Fourth' :
+                return '4';
+                break;
+            case 'Last' :
+                return '-1';
+                break;
+            default :
+                return '';
+        }
+    }
+
+    /**
+     *
+     * @return \Microsoft\Graph\Model\Event
+     */
+    public function getOffice365CalendarEvent()
+    {
+        return $this->office365CalendarEvent;
+    }
+
+    /**
+     *
+     * @param \Microsoft\Graph\Model\Event $office365CalendarEvent
+     */
+    public function setOffice365CalendarEvent(\Microsoft\Graph\Model\Event $office365CalendarEvent)
+    {
+        $this->office365CalendarEvent = $office365CalendarEvent;
     }
 
     /**
      *
      * @param \Microsoft\Graph\Model\PatternedRecurrence $recurrence
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     *
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
      */
     private function getRecurrence(PatternedRecurrence $recurrence = null)
     {
@@ -273,83 +309,49 @@ class EventParser
 
     /**
      *
-     * @param string[] $daysOfWeek
-     * @return string[]
-     */
-    private function getByDay($patternType, $patternIndex, $patternDaysOfWeek)
-    {
-        $byDay = array();
-
-        $prefix = $this->getNumericIndex($patternType, $patternIndex);
-
-        foreach ($patternDaysOfWeek as $dayOfWeek)
-        {
-            $byDay[] = $prefix . substr(strtoupper($dayOfWeek), 0, 2);
-        }
-
-        return $byDay;
-    }
-
-    /**
+     * @param string $calendarName
      *
-     * @param string $patternType
-     * @param unknown $patternIndex
      * @return string
      */
-    private function getNumericIndex($patternType, $patternIndex)
+    private function getSource($calendarName)
     {
-        if (! in_array($patternType, array('RelativeMonthly', 'RelativeYearly')))
-        {
-            return '';
-        }
-
-        switch ($patternIndex)
-        {
-            case 'First' :
-                return '1';
-                break;
-            case 'Second' :
-                return '2';
-                break;
-            case 'Third' :
-                return '3';
-                break;
-            case 'Fourth' :
-                return '4';
-                break;
-            case 'Last' :
-                return '-1';
-                break;
-            default :
-                return '';
-        }
+        return Translation::get(
+            'SourceName', array('CALENDAR' => $calendarName), Manager::context()
+        );
     }
 
     /**
      *
-     * @param string $frequencyType
+     * @param string $eventDateTime
+     * @param string $eventTimeZone
+     */
+    private function getTimestamp($eventDateTime, $eventTimeZone, $isAllDay)
+    {
+        $dateTime = new DateTime($eventDateTime, $this->determineTimeZone($eventTimeZone, $isAllDay));
+
+        if ($isAllDay)
+        {
+            return mktime(0, 0, 0, $dateTime->format('n'), $dateTime->format('j'), $dateTime->format('Y'));
+        }
+
+        return $dateTime->getTimestamp();
+    }
+
+    /**
+     *
      * @return integer
      */
-    private function getFrequency($frequencyType)
+    public function getToDate()
     {
-        switch ($frequencyType)
-        {
-            case 'Daily' :
-                return RecurrenceRules::FREQUENCY_DAILY;
-                break;
-            case 'Weekly' :
-                return RecurrenceRules::FREQUENCY_WEEKLY;
-                break;
-            case 'AbsoluteMonthly' :
-            case 'RelativeMonthly' :
-                return RecurrenceRules::FREQUENCY_MONTHLY;
-                break;
-            case 'AbsoluteYearly' :
-            case 'RelativeYearly' :
-                return RecurrenceRules::FREQUENCY_YEARLY;
-                break;
-            default :
-                return RecurrenceRules::FREQUENCY_NONE;
-        }
+        return $this->toDate;
+    }
+
+    /**
+     *
+     * @param integer $toDate
+     */
+    public function setToDate($toDate)
+    {
+        $this->toDate = $toDate;
     }
 }

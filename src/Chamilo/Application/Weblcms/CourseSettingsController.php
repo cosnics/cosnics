@@ -530,7 +530,7 @@ class CourseSettingsController
      * @return boolean
      */
     public function handle_settings_for_object_with_given_values(
-        DataClass $base_object, $values, $action = self :: SETTING_ACTION_CREATE, $force = false
+        DataClass $base_object, $values, $action = self::SETTING_ACTION_CREATE, $force = false
     )
     {
         $succes = true;

@@ -74,7 +74,7 @@ class InvitationRegistrationForm extends FormValidator
         );
         $this->addRule(User::PROPERTY_USERNAME, Translation::get('UsernameNotAvailable'), 'username_available');
 
-        // $this->add_warning_message('password_requirements', null, Translation :: get('GeneralPasswordRequirements'));
+        // $this->add_warning_message('password_requirements', null, Translation::get('GeneralPasswordRequirements'));
 
         $this->addElement(
             'password', self::PASSWORD, Translation::get('Password'),
@@ -110,9 +110,9 @@ class InvitationRegistrationForm extends FormValidator
 
         // Email
         $this->addElement('text', User::PROPERTY_EMAIL, Translation::get('Email'), array("size" => "50"));
-        // $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('ThisFieldIsRequired', null, Utilities ::
+        // $this->addRule(User::PROPERTY_EMAIL, Translation::get('ThisFieldIsRequired', null, Utilities ::
         // COMMON_LIBRARIES), 'required');
-        // $this->addRule(User :: PROPERTY_EMAIL, Translation :: get('WrongEmail'), 'email');
+        // $this->addRule(User::PROPERTY_EMAIL, Translation::get('WrongEmail'), 'email');
         $this->freeze(User::PROPERTY_EMAIL);
 
 

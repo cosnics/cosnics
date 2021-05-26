@@ -2,10 +2,10 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Service\Entity;
 
+use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\CourseGroup\EntityTable;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service\AssignmentService;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
-use Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\CourseGroup\EntityTable;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
 use Chamilo\Core\User\Service\UserService;
@@ -59,27 +59,6 @@ class CourseGroupEntityService implements EntityServiceInterface
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     * @param int $offset
-     * @param int $count
-     * @param array $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
-     */
-    public function retrieveEntities(
-        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
-    )
-    {
-        return $this->assignmentService->findTargetCourseGroupsForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication),
-            $condition, $offset, $count, $orderProperty
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
@@ -101,99 +80,6 @@ class CourseGroupEntityService implements EntityServiceInterface
         return $this->assignmentService->countTargetCourseGroupsWithEntriesForContentObjectPublication(
             $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
         );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
-    {
-        return $this->assignmentService->findTargetCourseGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return int[]
-     */
-    protected function getTargetCourseGroupIds(ContentObjectPublication $contentObjectPublication)
-    {
-        $id = $contentObjectPublication->getId();
-
-        if (!array_key_exists($id, $this->targetCourseGroupIds))
-        {
-            $this->targetCourseGroupIds[$id] = [];
-
-            /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $courseGroups */
-            $courseGroups = DataManager::retrieve_publication_target_course_groups(
-                $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
-            );
-
-            foreach($courseGroups as $courseGroup)
-            {
-                $this->targetCourseGroupIds[$id][] = $courseGroup->getId();
-            }
-        }
-
-        return $this->targetCourseGroupIds[$id];
-    }
-
-    /**
-     * @return string
-     */
-    public function getPluralEntityName()
-    {
-        return $this->translator->trans(
-            'CourseGroupsEntity', [],
-            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function getEntityName()
-    {
-        return $this->translator->trans(
-            'CourseGroupEntity', [],
-            'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
-        );
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\Application $application
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
-     */
-    public function getEntityTable(
-        Application $application, AssignmentDataProvider $assignmentDataProvider,
-        ContentObjectPublication $contentObjectPublication
-    )
-    {
-        return new EntityTable(
-            $application, $assignmentDataProvider, $contentObjectPublication, $this
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
-     *
-     * @return int
-     */
-    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
-    {
-        $availableEntityIdentifiers =
-            $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
-
-        return array_pop(array_reverse($availableEntityIdentifiers));
-       // return $availableEntityIdentifiers[0];
     }
 
     /**
@@ -224,17 +110,84 @@ class CourseGroupEntityService implements EntityServiceInterface
     }
 
     /**
-     * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityId
+     * @param \Chamilo\Core\User\Storage\DataClass\User $currentUser
      *
-     * @return bool
+     * @return int
      */
-    public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
+    public function getCurrentEntityIdentifier(ContentObjectPublication $contentObjectPublication, User $currentUser)
     {
-        $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+        $availableEntityIdentifiers =
+            $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $currentUser);
 
-        return in_array($entityId, $availableEntityIdentifiers);
+        $availableEntityIdentifiers = array_reverse($availableEntityIdentifiers);
+
+        return array_pop($availableEntityIdentifiers);
+        // return $availableEntityIdentifiers[0];
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName()
+    {
+        return $this->translator->trans(
+            'CourseGroupEntity', [], 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTable
+     */
+    public function getEntityTable(
+        Application $application, AssignmentDataProvider $assignmentDataProvider,
+        ContentObjectPublication $contentObjectPublication
+    )
+    {
+        return new EntityTable(
+            $application, $assignmentDataProvider, $contentObjectPublication, $this
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluralEntityName()
+    {
+        return $this->translator->trans(
+            'CourseGroupsEntity', [], 'Chamilo\Application\Weblcms\Tool\Implementation\Assignment'
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return int[]
+     */
+    protected function getTargetCourseGroupIds(ContentObjectPublication $contentObjectPublication)
+    {
+        $id = $contentObjectPublication->getId();
+
+        if (!array_key_exists($id, $this->targetCourseGroupIds))
+        {
+            $this->targetCourseGroupIds[$id] = [];
+
+            /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $courseGroups */
+            $courseGroups = DataManager::retrieve_publication_target_course_groups(
+                $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
+            );
+
+            foreach ($courseGroups as $courseGroup)
+            {
+                $this->targetCourseGroupIds[$id][] = $courseGroup->getId();
+            }
+        }
+
+        return $this->targetCourseGroupIds[$id];
     }
 
     /**
@@ -252,13 +205,27 @@ class CourseGroupEntityService implements EntityServiceInterface
     }
 
     /**
+     * @param \Chamilo\Core\User\Storage\DataClass\User $user
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityId
+     *
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, ContentObjectPublication $contentObjectPublication, $entityId)
+    {
+        $availableEntityIdentifiers = $this->getAvailableEntityIdentifiersForUser($contentObjectPublication, $user);
+
+        return in_array($entityId, $availableEntityIdentifiers);
+    }
+
+    /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
      *
      * @return String
      */
     public function renderEntityName(DataClass $entity)
     {
-        if(!$entity instanceof CourseGroup)
+        if (!$entity instanceof CourseGroup)
         {
             throw new InvalidArgumentException('The given entity must be of the type ' . CourseGroup::class);
         }
@@ -284,11 +251,44 @@ class CourseGroupEntityService implements EntityServiceInterface
     public function renderEntityNameById($entityId)
     {
         $entity = DataManager::retrieve_by_id(CourseGroup::class, $entityId);
-        if(!$entity instanceof CourseGroup)
+        if (!$entity instanceof CourseGroup)
         {
             throw new InvalidArgumentException('The given course group with id ' . $entityId . ' does not exist');
         }
 
         return $this->renderEntityName($entity);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int $offset
+     * @param int $count
+     * @param array $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     */
+    public function retrieveEntities(
+        ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
+        $orderProperty = []
+    )
+    {
+        return $this->assignmentService->findTargetCourseGroupsForContentObjectPublication(
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication), $condition, $offset,
+            $count, $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
+    {
+        return $this->assignmentService->findTargetCourseGroupsWithEntriesForContentObjectPublication(
+            $contentObjectPublication, $this->getTargetCourseGroupIds($contentObjectPublication)
+        );
     }
 }

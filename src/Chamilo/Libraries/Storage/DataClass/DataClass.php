@@ -115,8 +115,8 @@ abstract class DataClass
     protected function check_before_save()
     {
         /*
-         * Example: object with mandatory title if(stringUtilities :: is_null_or_empty($this->get_title())) {
-         * $this->add_error(Translation :: get('TitleIsRequired')); }
+         * Example: object with mandatory title if(stringUtilities::is_null_or_empty($this->get_title())) {
+         * $this->add_error(Translation::get('TitleIsRequired')); }
          */
         return !$this->has_errors();
     }

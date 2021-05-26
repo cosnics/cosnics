@@ -237,7 +237,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
      * @param array $visibility Keys: category ID's Values: True or False. @see DataManager ::
      *        retrieve_publication_category_visibility(...)
      *
-     * @see DataManager :: retrieve_publication_category_parent_ids_recursive(...)
+     * @see DataManager::retrieve_publication_category_parent_ids_recursive(...)
      */
     public static function is_recursive_visible_on_arrays($category_id, $category_parent_ids, $visibility)
     {

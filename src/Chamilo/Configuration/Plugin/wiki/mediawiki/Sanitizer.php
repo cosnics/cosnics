@@ -439,7 +439,7 @@ class MediawikiSanitizer
         }
         
         // Remove HTML comments
-        $text = self :: removeHTMLcomments($text);
+        $text = self::removeHTMLcomments($text);
         $bits = explode('<', $text);
         $text = str_replace('>', '&gt;', array_shift($bits));
         if (! $wgUseTidy)
@@ -563,7 +563,7 @@ class MediawikiSanitizer
                         }
                         
                         // Strip non-approved attributes from the tag
-                        $newparams = self :: fixTagAttributes($params, $t);
+                        $newparams = self::fixTagAttributes($params, $t);
                     }
                     if (! $badtag)
                     {
@@ -598,7 +598,7 @@ class MediawikiSanitizer
                     {
                         call_user_func_array($processCallback, array(&$params, $args));
                     }
-                    $newparams = self :: fixTagAttributes($params, $t);
+                    $newparams = self::fixTagAttributes($params, $t);
                     $rest = str_replace('>', '&gt;', $rest);
                     $text .= "<$slash$t$newparams$brace$rest";
                 }
@@ -679,7 +679,7 @@ class MediawikiSanitizer
      */
     static function validateTagAttributes($attribs, $element)
     {
-        return self :: validateAttributes($attribs, self :: attributeWhitelist($element));
+        return self::validateAttributes($attribs, self::attributeWhitelist($element));
     }
 
     /**
@@ -710,13 +710,13 @@ class MediawikiSanitizer
             // http://msdn.microsoft.com/workshop/author/dhtml/overview/recalc.asp
             if ($attribute == 'style')
             {
-                $value = self :: checkCss($value);
+                $value = self::checkCss($value);
             }
             
             if ($attribute === 'id')
             {
                 global $wgEnforceHtmlIds;
-                $value = self :: escapeId($value, $wgEnforceHtmlIds ? 'noninitial' : 'xml');
+                $value = self::escapeId($value, $wgEnforceHtmlIds ? 'noninitial' : 'xml');
             }
             
             // If this attribute was previously set, override it.
@@ -759,10 +759,10 @@ class MediawikiSanitizer
      */
     static function checkCss($value)
     {
-        $value = self :: decodeCharReferences($value);
+        $value = self::decodeCharReferences($value);
         
         // Remove any comments; IE gets token splitting wrong
-        $value = MediawikiStringUtils :: delimiterReplace('/*', '*/', ' ', $value);
+        $value = MediawikiStringUtils::delimiterReplace('/*', '*/', ' ', $value);
         
         // Decode escape sequences and line continuation
         // See the grammar in the CSS 2 spec, appendix D.
@@ -851,13 +851,13 @@ class MediawikiSanitizer
             return '';
         }
         
-        $stripped = self :: validateTagAttributes(self :: decodeTagAttributes($text), $element);
+        $stripped = self::validateTagAttributes(self::decodeTagAttributes($text), $element);
         
         $attribs = array();
         foreach ($stripped as $attribute => $value)
         {
             $encAttribute = htmlspecialchars($attribute);
-            $encValue = self :: safeEncodeAttribute($value);
+            $encValue = self::safeEncodeAttribute($value);
             
             $attribs[] = "$encAttribute=\"$encValue\"";
         }
@@ -891,7 +891,7 @@ class MediawikiSanitizer
      */
     static function safeEncodeAttribute($text)
     {
-        $encValue = self :: encodeAttribute($text);
+        $encValue = self::encodeAttribute($text);
         
         // Templates and links may be expanded in later parsing,
         // creating invalid or dangerous output. Suppress this.
@@ -947,7 +947,7 @@ class MediawikiSanitizer
             // HTML4-style escaping
             static $replace = array('%3A' => ':', '%' => '.');
             
-            $id = urlencode(self :: decodeCharReferences(strtr($id, ' ', '_')));
+            $id = urlencode(self::decodeCharReferences(strtr($id, ' ', '_')));
             $id = str_replace(array_keys($replace), array_values($replace), $id);
             
             if (! preg_match('/^[a-zA-Z]/', $id) && ! in_array('noninitial', $options))
@@ -1009,7 +1009,7 @@ class MediawikiSanitizer
         // hurt.
         $html = htmlspecialchars($html, ENT_QUOTES);
         $html = str_replace('&amp;', '&', $html);
-        $html = self :: normalizeCharReferences($html);
+        $html = self::normalizeCharReferences($html);
         return $html;
     }
 
@@ -1051,14 +1051,14 @@ class MediawikiSanitizer
         foreach ($pairs as $set)
         {
             $attribute = strtolower($set[1]);
-            $value = self :: getTagAttributeCallback($set);
+            $value = self::getTagAttributeCallback($set);
             
             // Normalize whitespace
             $value = preg_replace('/[\t\r\n ]+/', ' ', $value);
             $value = trim($value);
             
             // Decode character references
-            $attribs[$attribute] = self :: decodeCharReferences($value);
+            $attribs[$attribute] = self::decodeCharReferences($value);
         }
         return $attribs;
     }
@@ -1116,7 +1116,7 @@ class MediawikiSanitizer
      */
     private static function normalizeAttributeValue($text)
     {
-        return str_replace('"', '&quot;', self :: normalizeWhitespace(self :: normalizeCharReferences($text)));
+        return str_replace('"', '&quot;', self::normalizeWhitespace(self::normalizeCharReferences($text)));
     }
 
     private static function normalizeWhitespace($text)
@@ -1152,19 +1152,19 @@ class MediawikiSanitizer
         $ret = null;
         if ($matches[1] != '')
         {
-            $ret = self :: normalizeEntity($matches[1]);
+            $ret = self::normalizeEntity($matches[1]);
         }
         elseif ($matches[2] != '')
         {
-            $ret = self :: decCharReference($matches[2]);
+            $ret = self::decCharReference($matches[2]);
         }
         elseif ($matches[3] != '')
         {
-            $ret = self :: hexCharReference($matches[3]);
+            $ret = self::hexCharReference($matches[3]);
         }
         elseif ($matches[4] != '')
         {
-            $ret = self :: hexCharReference($matches[4]);
+            $ret = self::hexCharReference($matches[4]);
         }
         if (is_null($ret))
         {
@@ -1208,7 +1208,7 @@ class MediawikiSanitizer
     static function decCharReference($codepoint)
     {
         $point = intval($codepoint);
-        if (self :: validateCodepoint($point))
+        if (self::validateCodepoint($point))
         {
             return sprintf('&#%d;', $point);
         }
@@ -1221,7 +1221,7 @@ class MediawikiSanitizer
     static function hexCharReference($codepoint)
     {
         $point = hexdec($codepoint);
-        if (self :: validateCodepoint($point))
+        if (self::validateCodepoint($point))
         {
             return sprintf('&#x%x;', $point);
         }
@@ -1270,19 +1270,19 @@ class MediawikiSanitizer
     {
         if ($matches[1] != '')
         {
-            return self :: decodeEntity($matches[1]);
+            return self::decodeEntity($matches[1]);
         }
         elseif ($matches[2] != '')
         {
-            return self :: decodeChar(intval($matches[2]));
+            return self::decodeChar(intval($matches[2]));
         }
         elseif ($matches[3] != '')
         {
-            return self :: decodeChar(hexdec($matches[3]));
+            return self::decodeChar(hexdec($matches[3]));
         }
         elseif ($matches[4] != '')
         {
-            return self :: decodeChar(hexdec($matches[4]));
+            return self::decodeChar(hexdec($matches[4]));
         }
         // Last case should be an ampersand by itself
         return $matches[0];
@@ -1297,9 +1297,9 @@ class MediawikiSanitizer
      */
     static function decodeChar($codepoint)
     {
-        if (self :: validateCodepoint($codepoint))
+        if (self::validateCodepoint($codepoint))
         {
-            return MediawikiUtilities :: codepointToUtf8($codepoint);
+            return MediawikiUtilities::codepointToUtf8($codepoint);
         }
         else
         {
@@ -1325,7 +1325,7 @@ class MediawikiSanitizer
         }
         if (isset($wgHtmlEntities[$name]))
         {
-            return MediawikiUtilities :: codepointToUtf8($wgHtmlEntities[$name]);
+            return MediawikiUtilities::codepointToUtf8($wgHtmlEntities[$name]);
         }
         else
         {
@@ -1345,7 +1345,7 @@ class MediawikiSanitizer
         static $list;
         if (! isset($list))
         {
-            $list = self :: setupAttributeWhitelist();
+            $list = self::setupAttributeWhitelist();
         }
         return isset($list[$element]) ? $list[$element] : array();
     }
@@ -1499,11 +1499,11 @@ class MediawikiSanitizer
     static function stripAllTags($text)
     {
         // Actual <tags>
-        $text = StringUtils :: delimiterReplace('<', '>', '', $text);
+        $text = StringUtils::delimiterReplace('<', '>', '', $text);
         
         // Normalize &entities and whitespace
-        $text = self :: decodeCharReferences($text);
-        $text = self :: normalizeWhitespace($text);
+        $text = self::decodeCharReferences($text);
+        $text = self::normalizeWhitespace($text);
         
         return $text;
     }
@@ -1534,7 +1534,7 @@ class MediawikiSanitizer
     {
         // Normalize any HTML entities in input. They will be
         // re-escaped by makeExternalLink().
-        $url = self :: decodeCharReferences($url);
+        $url = self::decodeCharReferences($url);
         
         // Escape any control characters introduced by the above step
         $url = preg_replace('/[\][<>"\\x00-\\x20\\x7F]/e', "urlencode('\\0')", $url);

@@ -202,7 +202,7 @@ abstract class ContentObjectPublicationListRenderer
 
             if (!$publication[ContentObjectPublication::PROPERTY_EMAIL_SENT] &&
                 !$publication[ContentObjectPublication::PROPERTY_HIDDEN])
-                // && RightsUtilities :: is_allowed(EmailRights :: MAIL_ALLOWED, EmailRights :: LOCATION, EmailRights ::
+                // && RightsUtilities::is_allowed(EmailRights::MAIL_ALLOWED, EmailRights::LOCATION, EmailRights ::
                 // TYPE))
             {
                 $email_url = $this->get_url(
@@ -516,7 +516,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      *
-     * @see ContentObjectPublicationBrowser :: get_publication_count()
+     * @see ContentObjectPublicationBrowser::get_publication_count()
      */
     public function get_publication_count()
     {
@@ -537,7 +537,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      *
-     * @see ContentObjectPublicationBrowser :: get_publications()
+     * @see ContentObjectPublicationBrowser::get_publications()
      */
     public function get_publications($offset = 0, $max_objects = - 1, OrderBy $object_table_order = null)
     {
@@ -566,7 +566,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      *
-     * @see ContentObjectPublicationBrowser :: get_url()
+     * @see ContentObjectPublicationBrowser::get_url()
      */
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
     {
@@ -607,7 +607,7 @@ abstract class ContentObjectPublicationListRenderer
 
     /**
      *
-     * @see ContentObjectPublicationBrowser :: is_allowed()
+     * @see ContentObjectPublicationBrowser::is_allowed()
      */
     public function is_allowed($right, $publication = null)
     {

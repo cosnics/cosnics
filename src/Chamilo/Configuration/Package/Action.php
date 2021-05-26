@@ -23,7 +23,7 @@ abstract class Action
         $this->message = array();
     }
 
-    public function add_message($type = self :: TYPE_NORMAL, $message)
+    public function add_message($type = self::TYPE_NORMAL, $message)
     {
         switch ($type)
         {

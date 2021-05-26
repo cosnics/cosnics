@@ -72,12 +72,12 @@ class RightsGroupForm extends FormValidator
     {
         /*
          * $default_elements = new AdvancedElementFinderElements(); $targets_entities = Rights ::
-         * get_instance()->get_request_targets_entities(); $user_entity = UserEntity :: getInstance(); $group_entity =
-         * PlatformGroupEntity :: getInstance(); foreach ($targets_entities[UserEntity :: ENTITY_TYPE] as $entity) {
+         * get_instance()->get_request_targets_entities(); $user_entity = UserEntity::getInstance(); $group_entity =
+         * PlatformGroupEntity::getInstance(); foreach ($targets_entities[UserEntity::ENTITY_TYPE] as $entity) {
          * $default_elements->add_element($user_entity->get_element_finder_element($entity)); } foreach
-         * ($targets_entities[PlatformGroupEntity :: ENTITY_TYPE] as $entity) {
+         * ($targets_entities[PlatformGroupEntity::ENTITY_TYPE] as $entity) {
          * $default_elements->add_element($group_entity->get_element_finder_element($entity)); } $this->getElement(self
-         * :: PROPERTY_ACCESS)->setDefaultValues($default_elements);
+         *::PROPERTY_ACCESS)->setDefaultValues($default_elements);
          */
         parent::setDefaults(array());
     }

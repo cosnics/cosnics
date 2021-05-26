@@ -65,7 +65,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
     function testAscii()
     {
         $text = 'This is plain ASCII text.';
-        $this->assertEquals($text, UtfNormal :: cleanUp($text));
+        $this->assertEquals($text, UtfNormal::cleanUp($text));
     }
 
     /**
@@ -75,7 +75,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
     {
         $text = "a \x00 null";
         $expect = "a \xef\xbf\xbd null";
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -84,7 +84,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
     function testLatin()
     {
         $text = "L'\xc3\xa9cole";
-        $this->assertEquals($text, UtfNormal :: cleanUp($text));
+        $this->assertEquals($text, UtfNormal::cleanUp($text));
     }
 
     /**
@@ -94,7 +94,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
     {
         $text = "L'e\xcc\x81cole";
         $expect = "L'\xc3\xa9cole";
-        $this->assertEquals($expect, UtfNormal :: cleanUp($text));
+        $this->assertEquals($expect, UtfNormal::cleanUp($text));
     }
 
     /**
@@ -109,7 +109,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         for ($i = 0x0; $i < UNICODE_MAX; $i ++)
         {
             $char = codepointToUtf8($i);
-            $clean = UtfNormal :: cleanUp($char);
+            $clean = UtfNormal::cleanUp($char);
             $x = sprintf("%04X", $i);
             if ($i % 0x1000 == 0)
                 echo "U+$x\n";
@@ -118,7 +118,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
             {
                 if (isset($utfCanonicalComp[$char]) || isset($utfCanonicalDecomp[$char]))
                 {
-                    $comp = UtfNormal :: NFC($char);
+                    $comp = UtfNormal::NFC($char);
                     $this->assertEquals(bin2hex($comp), bin2hex($clean), "U+$x should be decomposed");
                 }
                 else
@@ -152,7 +152,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         for ($i = 0x0; $i < 256; $i ++)
         {
             $char = $head . chr($i) . $tail;
-            $clean = UtfNormal :: cleanUp($char);
+            $clean = UtfNormal::cleanUp($char);
             $x = sprintf("%02X", $i);
             if ($i == 0x0009 || $i == 0x000a || $i == 0x000d || ($i > 0x001f && $i < 0x80))
             {
@@ -192,11 +192,11 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
             for ($second = 0x80; $second < 0x100; $second ++)
             {
                 $char = $head . chr($first) . chr($second) . $tail;
-                $clean = UtfNormal :: cleanUp($char);
+                $clean = UtfNormal::cleanUp($char);
                 $x = sprintf("%02X,%02X", $first, $second);
                 if ($first > 0xc1 && $first < 0xe0 && $second < 0xc0)
                 {
-                    $norm = UtfNormal :: NFC($char);
+                    $norm = UtfNormal::NFC($char);
                     $this->assertEquals(bin2hex($norm), bin2hex($clean), "Pair $x should be intact");
                     if ($norm != $clean)
                         return;
@@ -244,7 +244,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
                 for ($third = 0x80; $third < 0x81; $third ++)
                 {
                     $char = $head . chr($first) . chr($second) . chr($third) . $tail;
-                    $clean = UtfNormal :: cleanUp($char);
+                    $clean = UtfNormal::cleanUp($char);
                     $x = sprintf("%02X,%02X,%02X", $first, $second, $third);
                     if ($first >= 0xe0 && $first < 0xf0 && $second < 0xc0 && $third < 0xc0)
                     {
@@ -265,7 +265,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
                         else
                         {
                             $this->assertEquals(
-                                bin2hex(UtfNormal :: NFC($char)), 
+                                bin2hex(UtfNormal::NFC($char)), 
                                 bin2hex($clean), 
                                 "Triplet $x should be intact");
                         }
@@ -273,14 +273,14 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
                     elseif ($first > 0xc1 && $first < 0xe0 && $second < 0xc0)
                     {
                         $this->assertEquals(
-                            bin2hex(UtfNormal :: NFC($head . chr($first) . chr($second)) . UTF8_REPLACEMENT . $tail), 
+                            bin2hex(UtfNormal::NFC($head . chr($first) . chr($second)) . UTF8_REPLACEMENT . $tail), 
                             bin2hex($clean), 
                             "Valid 2-byte $x + broken tail");
                     }
                     elseif ($second > 0xc1 && $second < 0xe0 && $third < 0xc0)
                     {
                         $this->assertEquals(
-                            bin2hex($head . UTF8_REPLACEMENT . UtfNormal :: NFC(chr($second) . chr($third) . $tail)), 
+                            bin2hex($head . UTF8_REPLACEMENT . UtfNormal::NFC(chr($second) . chr($third) . $tail)), 
                             bin2hex($clean), 
                             "Broken head + valid 2-byte $x");
                     }
@@ -323,7 +323,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         $expect = "\x46\x55\xef\xbf\xbd" . "\xdc\x96" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\x44" . "\xef\xbf\xbd" .
              "\x2f\x25";
         
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -342,7 +342,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         $expect = "\x4e\x30" . "\xef\xbf\xbd" . "\x3a" . "\xef\xbf\xbd" . "\x62\x3a" . "\xef\xbf\xbd" . "\x43" .
              "\xef\xbf\xbd" . "\x3f" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\x7d" . "\xd9\x95";
         
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -359,7 +359,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         "\x3c" . "\x9e"; // bad tail
         $expect = "\x67" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd" .
              "\xef\xbf\xbd" . "\x3c" . "\xef\xbf\xbd";
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -372,7 +372,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         "\xb4" .         // bad tail
         "\xac"; // bad head
         $expect = "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd";
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -385,7 +385,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         "\xef" .         // bad head
         "\x59";
         $expect = "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\xef\xbf\xbd" . "\x59";
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -395,7 +395,7 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
     {
         $text = "\xef\xbf\xbf"; // U+FFFF, illegal char
         $expect = "\xef\xbf\xbd";
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 
     /**
@@ -406,12 +406,12 @@ class CleanUpTest extends PHPUnit_Framework_TestCase
         $text = "\xed\x9c\xaf" .         // Hangul char
         "\xe1\x87\x81"; // followed by another final jamo
         $expect = $text; // Should *not* change.
-        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal :: cleanUp($text)));
+        $this->assertEquals(bin2hex($expect), bin2hex(UtfNormal::cleanUp($text)));
     }
 }
 
 $suite = new PHPUnit_Framework_TestSuite('CleanUpTest');
-$result = PHPUnit_TextUI_TestRunner :: run($suite);
+$result = PHPUnit_TextUI_TestRunner::run($suite);
 
 if (! $result->wasSuccessful())
 {

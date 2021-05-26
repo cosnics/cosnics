@@ -79,7 +79,7 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
         }
         else
         {
-            throw new Exception('Illegal parameter passed to the DataManager :: retrieves() method.');
+            throw new Exception('Illegal parameter passed to the DataManager::retrieves() method.');
         }
     }
 

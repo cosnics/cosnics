@@ -135,11 +135,6 @@ abstract class Manager extends Application
         return self::get_selected_class($this->get_selected_target_type(), $helper);
     }
 
-    public function get_selected_target_id()
-    {
-        return Request::get(self::PARAM_TARGET_ID);
-    }
-
     public function get_selected_target_type()
     {
         $selected_type = Request::get(self::PARAM_TARGET_TYPE, CourseEntity::ENTITY_TYPE);

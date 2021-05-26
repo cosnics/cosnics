@@ -21,7 +21,7 @@ class DeleterComponent extends Manager
         if ($this->get_parent()->get_parent()->is_allowed_to_delete_child())
         {
             /*
-             * if (Request :: get('selected_cloi')) { $cloi_ids = Request :: get('selected_cloi'); } else { $cloi_ids =
+             * if (Request::get('selected_cloi')) { $cloi_ids = Request::get('selected_cloi'); } else { $cloi_ids =
              * $_POST['selected_cloi']; }
              */
             

@@ -127,7 +127,7 @@ class ExporterComponent extends Manager
         return $user_array;
     }
 
-    public function prepare_for_other_export($user, $action = self :: EXPORT_ACTION_DEFAULT)
+    public function prepare_for_other_export($user, $action = self::EXPORT_ACTION_DEFAULT)
     {
         // action => needed for import back into chamilo
         $user_array['action'] = $action;

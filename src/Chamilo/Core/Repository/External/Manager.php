@@ -461,7 +461,7 @@ abstract class Manager extends Application implements NoContextComponent
         return $external_repository_managers;
     }
 
-    public static function get_registered_types($status = Registration :: STATUS_ACTIVE)
+    public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(

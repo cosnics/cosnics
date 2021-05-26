@@ -166,7 +166,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_group_id()
     {
-        // return $this->get_default_property(self :: PROPERTY_GROUP_ID);
+        // return $this->get_default_property(self::PROPERTY_GROUP_ID);
         return $this->get_optional_property(self::PROPERTY_GROUP_ID);
     }
 

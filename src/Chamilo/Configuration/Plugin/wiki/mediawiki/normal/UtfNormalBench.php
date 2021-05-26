@@ -48,7 +48,7 @@ $testfiles = array(
     'testdata/tokyo.txt' => 'Japanese text', 
     'testdata/young.txt' => 'Korean text');
 $normalizer = new UtfNormal();
-UtfNormal :: loadData();
+UtfNormal::loadData();
 foreach ($testfiles as $file => $desc)
 {
     benchmarkTest($normalizer, $file, $desc);

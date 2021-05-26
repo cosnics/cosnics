@@ -132,15 +132,15 @@ class MediaWikiTitle
          * caching them.
          * In theory these are value objects and won't get changed...
          */
-        if ($defaultNamespace == NS_MAIN && isset(MediawikiTitle :: $titleCache[$text]))
+        if ($defaultNamespace == NS_MAIN && isset(MediawikiTitle::$titleCache[$text]))
         {
-            return MediawikiTitle :: $titleCache[$text];
+            return MediawikiTitle::$titleCache[$text];
         }
         
         /**
          * Convert things like &eacute; &#257; or &#x3017; into real text...
          */
-        $filteredText = MediawikiSanitizer :: decodeCharReferences($text);
+        $filteredText = MediawikiSanitizer::decodeCharReferences($text);
         
         $t = new MediaWikiTitle();
         $t->mDbkeyform = str_replace(' ', '_', $filteredText);
@@ -151,14 +151,14 @@ class MediaWikiTitle
         {
             if ($defaultNamespace == NS_MAIN)
             {
-                if ($cachedcount >= self :: CACHE_MAX)
+                if ($cachedcount >= self::CACHE_MAX)
                 {
                     // Avoid memory leaks on mass operations...
-                    MediawikiTitle :: $titleCache = array();
+                    MediawikiTitle::$titleCache = array();
                     $cachedcount = 0;
                 }
                 $cachedcount ++;
-                MediawikiTitle :: $titleCache[$text] = & $t;
+                MediawikiTitle::$titleCache[$text] = & $t;
             }
             return $t;
         }
@@ -217,7 +217,7 @@ class MediaWikiTitle
         $row = $db->selectRow('page', array('page_namespace', 'page_title'), array('page_id' => $id), $fname);
         if ($row !== false)
         {
-            $title = MediawikiTitle :: makeTitle($row->page_namespace, $row->page_title);
+            $title = MediawikiTitle::makeTitle($row->page_namespace, $row->page_title);
         }
         else
         {
@@ -248,7 +248,7 @@ class MediaWikiTitle
         $titles = array();
         foreach ($res as $row)
         {
-            $titles[] = MediawikiTitle :: makeTitle($row->page_namespace, $row->page_title);
+            $titles[] = MediawikiTitle::makeTitle($row->page_namespace, $row->page_title);
         }
         return $titles;
     }
@@ -261,7 +261,7 @@ class MediaWikiTitle
      */
     public static function newFromRow($row)
     {
-        $t = self :: makeTitle($row->page_namespace, $row->page_title);
+        $t = self::makeTitle($row->page_namespace, $row->page_title);
         
         $t->mArticleID = isset($row->page_id) ? intval($row->page_id) : - 1;
         $t->mLength = isset($row->page_len) ? intval($row->page_len) : - 1;
@@ -309,7 +309,7 @@ class MediaWikiTitle
     public static function makeTitleSafe($ns, $title, $fragment = '')
     {
         $t = new Title();
-        $t->mDbkeyform = MediawikiTitle :: makeName($ns, $title, $fragment);
+        $t->mDbkeyform = MediawikiTitle::makeName($ns, $title, $fragment);
         if ($t->secureAndSplit())
         {
             return $t;
@@ -327,11 +327,11 @@ class MediaWikiTitle
      */
     public static function newMainPage()
     {
-        $title = MediawikiTitle :: newFromText(wfMsgForContent('mainpage'));
+        $title = MediawikiTitle::newFromText(wfMsgForContent('mainpage'));
         // Don't give fatal errors if the message is broken
         if (! $title)
         {
-            $title = MediawikiTitle :: newFromText('Main Page');
+            $title = MediawikiTitle::newFromText('Main Page');
         }
         return $title;
     }
@@ -347,7 +347,7 @@ class MediaWikiTitle
      */
     public static function newFromRedirect($text)
     {
-        return self :: newFromRedirectInternal($text);
+        return self::newFromRedirectInternal($text);
     }
 
     /**
@@ -361,7 +361,7 @@ class MediaWikiTitle
      */
     public static function newFromRedirectRecurse($text)
     {
-        $titles = self :: newFromRedirectArray($text);
+        $titles = self::newFromRedirectArray($text);
         return $titles ? array_pop($titles) : null;
     }
 
@@ -380,7 +380,7 @@ class MediaWikiTitle
         // are redirects disabled?
         if ($wgMaxRedirects < 1)
             return null;
-        $title = self :: newFromRedirectInternal($text);
+        $title = self::newFromRedirectInternal($text);
         if (is_null($title))
             return null;
             
@@ -423,7 +423,7 @@ class MediaWikiTitle
      */
     protected static function newFromRedirectInternal($text)
     {
-        $redir = MagicWord :: get('redirect');
+        $redir = MagicWord::get('redirect');
         $text = trim($text);
         if ($redir->matchStartAndRemove($text))
         {
@@ -442,7 +442,7 @@ class MediaWikiTitle
                     // It might be safe to just use rawurldecode instead, though.
                     $m[1] = urldecode(ltrim($m[1], ':'));
                 }
-                $title = MediawikiTitle :: newFromText($m[1]);
+                $title = MediawikiTitle::newFromText($m[1]);
                 // If the title is a redirect to bad special pages or is invalid, return null
                 if (! $title instanceof Title || ! $title->isValidRedirectTarget())
                 {
@@ -475,7 +475,7 @@ class MediaWikiTitle
             return NULL;
         }
         
-        $n = self :: makeName($s->page_namespace, $s->page_title);
+        $n = self::makeName($s->page_namespace, $s->page_title);
         return $n;
     }
 
@@ -502,7 +502,7 @@ class MediaWikiTitle
     {
         global $wgContLang;
         
-        $lc = SearchEngine :: legalSearchChars() . '&#;';
+        $lc = SearchEngine::legalSearchChars() . '&#;';
         $t = $wgContLang->stripForSearch($title);
         $t = preg_replace("/[^{$lc}]+/", ' ', $t);
         $t = $wgContLang->lc($t);
@@ -549,7 +549,7 @@ class MediaWikiTitle
      */
     public function getInterwikiLink($key)
     {
-        return Interwiki :: fetch($key)->getURL();
+        return Interwiki::fetch($key)->getURL();
     }
 
     /**
@@ -563,7 +563,7 @@ class MediaWikiTitle
     {
         if ($this->mInterwiki != '')
         {
-            return Interwiki :: fetch($this->mInterwiki)->isLocal();
+            return Interwiki::fetch($this->mInterwiki)->isLocal();
         }
         else
         {
@@ -582,7 +582,7 @@ class MediaWikiTitle
         if ($this->mInterwiki == '')
             return false;
         
-        return Interwiki :: fetch($this->mInterwiki)->isTranscludable();
+        return Interwiki::fetch($this->mInterwiki)->isTranscludable();
     }
 
     /**
@@ -594,7 +594,7 @@ class MediaWikiTitle
         // fragments appear not to work in IE (at least up to 7) or in at least
         // one version of Opera 9.x. The W3C validator, for one, doesn't seem
         // to care if they aren't encoded.
-        return MediawikiSanitizer :: escapeId($fragment, 'noninitial');
+        return MediawikiSanitizer::escapeId($fragment, 'noninitial');
     }
     
     // ----------------------------------------------------------------------------
@@ -687,7 +687,7 @@ class MediaWikiTitle
     public function getSubjectNsText()
     {
         global $wgContLang;
-        return $wgContLang->getNsText(MWNamespace :: getSubject($this->mNamespace));
+        return $wgContLang->getNsText(MWNamespace::getSubject($this->mNamespace));
     }
 
     /**
@@ -698,7 +698,7 @@ class MediaWikiTitle
     public function getTalkNsText()
     {
         global $wgContLang;
-        return ($wgContLang->getNsText(MWNamespace :: getTalk($this->mNamespace)));
+        return ($wgContLang->getNsText(MWNamespace::getTalk($this->mNamespace)));
     }
 
     /**
@@ -708,7 +708,7 @@ class MediaWikiTitle
      */
     public function canTalk()
     {
-        return (MWNamespace :: canTalk($this->mNamespace));
+        return (MWNamespace::canTalk($this->mNamespace));
     }
 
     /**
@@ -744,7 +744,7 @@ class MediaWikiTitle
         }
         else
         {
-            return '#' . MediawikiTitle :: escapeFragmentForURL($this->mFragment);
+            return '#' . MediawikiTitle::escapeFragmentForURL($this->mFragment);
         }
     }
 
@@ -766,7 +766,7 @@ class MediaWikiTitle
      */
     public function getIndexTitle()
     {
-        return MediawikiTitle :: indexTitle($this->mNamespace, $this->mTextform);
+        return MediawikiTitle::indexTitle($this->mNamespace, $this->mTextform);
     }
 
     /**
@@ -786,7 +786,7 @@ class MediaWikiTitle
      * Get the prefixed title with spaces.
      * This is the form usually used for display
      * 
-     * @return \type{\string} the prefixed title, with spaces
+     * @return string the prefixed title, with spaces
      */
     public function getPrefixedText()
     {
@@ -824,7 +824,7 @@ class MediaWikiTitle
      */
     public function getBaseText()
     {
-        if (! MWNamespace :: hasSubpages($this->mNamespace))
+        if (! MWNamespace::hasSubpages($this->mNamespace))
         {
             return $this->getText();
         }
@@ -844,7 +844,7 @@ class MediaWikiTitle
      */
     public function getSubpageText()
     {
-        if (! MWNamespace :: hasSubpages($this->mNamespace))
+        if (! MWNamespace::hasSubpages($this->mNamespace))
         {
             return ($this->mTextform);
         }
@@ -895,7 +895,7 @@ class MediaWikiTitle
             $query = wfArrayToCGI($query);
         }
         
-        $interwiki = Interwiki :: fetch($this->mInterwiki);
+        $interwiki = Interwiki::fetch($this->mInterwiki);
         if (! $interwiki)
         {
             $url = $this->getLocalUrl($query, $variant);
@@ -1294,7 +1294,7 @@ class MediaWikiTitle
      */
     public function getUserPermissionsErrors($action, $user, $doExpensiveQueries = true, $ignoreErrors = array())
     {
-        if (! StubObject :: isRealObject($user))
+        if (! StubObject::isRealObject($user))
         {
             // Since StubObject is always used on globals, we can unstub $wgUser here and set $user = $wgUser
             global $wgUser;
@@ -1330,7 +1330,7 @@ class MediaWikiTitle
             
             if (is_numeric($id))
             {
-                $name = User :: whoIs($id);
+                $name = User::whoIs($id);
             }
             else
             {
@@ -1458,7 +1458,7 @@ class MediaWikiTitle
         elseif (! $user->isAllowed($action))
         {
             $return = null;
-            $groups = array_map(array('User', 'makeGroupLinkWiki'), User :: getGroupsWithPermission($action));
+            $groups = array_map(array('User', 'makeGroupLinkWiki'), User::getGroupsWithPermission($action));
             if ($groups)
             {
                 $return = array('badaccess-groups', array(implode(', ', $groups), count($groups)));
@@ -1642,14 +1642,14 @@ class MediaWikiTitle
                 }
                 if ($pt_create_perm == '' || ! $user->isAllowed($pt_create_perm))
                 {
-                    $errors[] = array('titleprotected', User :: whoIs($pt_user), $pt_reason);
+                    $errors[] = array('titleprotected', User::whoIs($pt_user), $pt_reason);
                 }
             }
         }
         elseif ($action == 'move')
         {
             // Check for immobile pages
-            if (! MWNamespace :: isMovable($this->getNamespace()))
+            if (! MWNamespace::isMovable($this->getNamespace()))
             {
                 // Specific message for this case
                 $errors[] = array('immobile-source-namespace', $this->getNsText());
@@ -1662,7 +1662,7 @@ class MediaWikiTitle
         }
         elseif ($action == 'move-target')
         {
-            if (! MWNamespace :: isMovable($this->getNamespace()))
+            if (! MWNamespace::isMovable($this->getNamespace()))
             {
                 $errors[] = array('immobile-target-namespace', $this->getNsText());
             }
@@ -1729,7 +1729,7 @@ class MediaWikiTitle
         
         $dbw = wfGetDB(DB_MASTER);
         
-        $encodedExpiry = Block :: encodeExpiry($expiry, $dbw);
+        $encodedExpiry = Block::encodeExpiry($expiry, $dbw);
         
         $expiry_description = '';
         if ($encodedExpiry != 'infinity')
@@ -1756,7 +1756,7 @@ class MediaWikiTitle
                     'pt_namespace' => $namespace, 
                     'pt_title' => $title, 
                     'pt_create_perm' => $create_perm, 
-                    'pt_timestamp' => Block :: encodeExpiry(wfTimestampNow(), $dbw), 
+                    'pt_timestamp' => Block::encodeExpiry(wfTimestampNow(), $dbw), 
                     'pt_expiry' => $encodedExpiry, 
                     'pt_user' => $wgUser->getId(), 
                     'pt_reason' => $reason), 
@@ -1836,7 +1836,7 @@ class MediaWikiTitle
      */
     public function isMovable()
     {
-        return MWNamespace :: isMovable($this->getNamespace()) && $this->getInterwiki() == '';
+        return MWNamespace::isMovable($this->getNamespace()) && $this->getInterwiki() == '';
     }
 
     /**
@@ -1911,14 +1911,14 @@ class MediaWikiTitle
             if ($this->getNamespace() == NS_SPECIAL)
             {
                 $name = $this->getDBkey();
-                list($name,     /* $subpage */) = SpecialPage :: resolveAliasWithSubpage($name);
+                list($name,     /* $subpage */) = SpecialPage::resolveAliasWithSubpage($name);
                 if ($name === false)
                 {
                     // Invalid special page, but we show standard login required message
                     return false;
                 }
                 
-                $pure = SpecialPage :: getTitleFor($name)->getPrefixedText();
+                $pure = SpecialPage::getTitleFor($name)->getPrefixedText();
                 if (in_array($pure, $wgWhitelistRead, true))
                     return true;
             }
@@ -1933,7 +1933,7 @@ class MediaWikiTitle
      */
     public function isTalkPage()
     {
-        return MWNamespace :: isTalk($this->getNamespace());
+        return MWNamespace::isTalk($this->getNamespace());
     }
 
     /**
@@ -1943,7 +1943,7 @@ class MediaWikiTitle
      */
     public function isSubpage()
     {
-        return MWNamespace :: hasSubpages($this->mNamespace) ? strpos($this->getText(), '/') !== false : false;
+        return MWNamespace::hasSubpages($this->mNamespace) ? strpos($this->getText(), '/') !== false : false;
     }
 
     /**
@@ -1953,7 +1953,7 @@ class MediaWikiTitle
      */
     public function hasSubpages()
     {
-        if (! MWNamespace :: hasSubpages($this->mNamespace))
+        if (! MWNamespace::hasSubpages($this->mNamespace))
         {
             // Duh
             return false;
@@ -1983,7 +1983,7 @@ class MediaWikiTitle
      */
     public function getSubpages($limit = -1)
     {
-        if (! MWNamespace :: hasSubpages($this->getNamespace()))
+        if (! MWNamespace::hasSubpages($this->getNamespace()))
             return array();
         
         $dbr = wfGetDB(DB_SLAVE);
@@ -1992,7 +1992,7 @@ class MediaWikiTitle
         $options = array();
         if ($limit > - 1)
             $options['LIMIT'] = $limit;
-        return $this->mSubpages = TitleArray :: newFromResult(
+        return $this->mSubpages = TitleArray::newFromResult(
             $dbr->select(
                 'page', 
                 array('page_id', 'page_namespace', 'page_title', 'page_is_redirect'), 
@@ -2034,7 +2034,7 @@ class MediaWikiTitle
     {
         if ($this->isCssJsSubpage())
         {
-            $skinNames = Skin :: getSkinNames();
+            $skinNames = Skin::getSkinNames();
             return array_key_exists($this->getSkinFromCssJsSubpage(), $skinNames);
         }
         else
@@ -2167,7 +2167,7 @@ class MediaWikiTitle
         
         foreach ($res as $row)
         {
-            $expiry = Block :: decodeExpiry($row->pr_expiry);
+            $expiry = Block::decodeExpiry($row->pr_expiry);
             if ($expiry > $now)
             {
                 if ($get_pages)
@@ -2175,7 +2175,7 @@ class MediaWikiTitle
                     $page_id = $row->pr_page;
                     $page_ns = $row->page_namespace;
                     $page_title = $row->page_title;
-                    $sources[$page_id] = MediawikiTitle :: makeTitle($page_ns, $page_title);
+                    $sources[$page_id] = MediawikiTitle::makeTitle($page_ns, $page_title);
                     // Add groups needed for each restriction type if its not already there
                     // Make sure this restriction type still exists
                     if (isset($pagerestrictions[$row->pr_type]) &&
@@ -2197,7 +2197,7 @@ class MediaWikiTitle
         }
         if ($purgeExpired)
         {
-            MediawikiTitle :: purgeExpiredRestrictions();
+            MediawikiTitle::purgeExpiredRestrictions();
         }
         
         wfProfileOut(__METHOD__);
@@ -2237,7 +2237,7 @@ class MediaWikiTitle
         foreach ($wgRestrictionTypes as $type)
         {
             $this->mRestrictions[$type] = array();
-            $this->mRestrictionsExpiry[$type] = Block :: decodeExpiry('');
+            $this->mRestrictionsExpiry[$type] = Block::decodeExpiry('');
         }
         
         $this->mCascadeRestriction = false;
@@ -2290,7 +2290,7 @@ class MediaWikiTitle
                     
                     // This code should be refactored, now that it's being used more generally,
                     // But I don't really see any harm in leaving it in Block for now -werdna
-                $expiry = Block :: decodeExpiry($row->pr_expiry);
+                $expiry = Block::decodeExpiry($row->pr_expiry);
                 
                 // Only apply the restrictions if they haven't expired!
                 if (! $expiry || $expiry > $now)
@@ -2309,7 +2309,7 @@ class MediaWikiTitle
             
             if ($purgeExpired)
             {
-                MediawikiTitle :: purgeExpiredRestrictions();
+                MediawikiTitle::purgeExpiredRestrictions();
             }
         }
         
@@ -2340,7 +2340,7 @@ class MediaWikiTitle
                     extract($title_protection);
                     
                     $now = wfTimestampNow();
-                    $expiry = Block :: decodeExpiry($pt_expiry);
+                    $expiry = Block::decodeExpiry($pt_expiry);
                     
                     if (! $expiry || $expiry > $now)
                     {
@@ -2350,12 +2350,12 @@ class MediaWikiTitle
                     }
                     else
                     { // Get rid of the old restrictions
-                        MediawikiTitle :: purgeExpiredRestrictions();
+                        MediawikiTitle::purgeExpiredRestrictions();
                     }
                 }
                 else
                 {
-                    $this->mRestrictionsExpiry['create'] = Block :: decodeExpiry('');
+                    $this->mRestrictionsExpiry['create'] = Block::decodeExpiry('');
                 }
                 $this->mRestrictionsLoaded = true;
             }
@@ -2468,7 +2468,7 @@ class MediaWikiTitle
         {
             return $this->mArticleID = 0;
         }
-        $linkCache = MediawikiLinkCache :: singleton();
+        $linkCache = MediawikiLinkCache::singleton();
         if ($flags & GAID_FOR_UPDATE)
         {
             $oldUpdate = $linkCache->forUpdate(true);
@@ -2503,7 +2503,7 @@ class MediaWikiTitle
         {
             return $this->mRedirect = false;
         }
-        $linkCache = MediawikiLinkCache :: singleton();
+        $linkCache = MediawikiLinkCache::singleton();
         $this->mRedirect = (bool) $linkCache->getGoodLinkFieldObj($this, 'redirect');
         
         return $this->mRedirect;
@@ -2526,7 +2526,7 @@ class MediaWikiTitle
         {
             return $this->mLength = 0;
         }
-        $linkCache = LinkCache :: singleton();
+        $linkCache = LinkCache::singleton();
         $this->mLength = intval($linkCache->getGoodLinkFieldObj($this, 'length'));
         
         return $this->mLength;
@@ -2559,7 +2559,7 @@ class MediaWikiTitle
      */
     public function resetArticleID($newid)
     {
-        $linkCache = LinkCache :: singleton();
+        $linkCache = LinkCache::singleton();
         $linkCache->clearBadLink($this->getPrefixedDBkey());
         
         if ($newid === false)
@@ -2587,7 +2587,7 @@ class MediaWikiTitle
         }
         $dbw = wfGetDB(DB_MASTER);
         $success = $dbw->update('page', array('page_touched' => $dbw->timestamp()), $this->pageCond(), __METHOD__);
-        HTMLFileCache :: clearFileCache($this);
+        HTMLFileCache::clearFileCache($this);
         return $success;
     }
 
@@ -2634,7 +2634,7 @@ class MediaWikiTitle
         {
             // Matching titles will be held as illegal.
             $rxTc = '/' .             // Any character not allowed is forbidden...
-            '[^' . MediawikiTitle :: legalChars() . ']' .             // URL percent encoding sequences interfere with the ability
+            '[^' . MediawikiTitle::legalChars() . ']' .             // URL percent encoding sequences interfere with the ability
                                                           // to round-trip titles -- you can't link to them
                                                           // consistently.
             '|%[0-9A-Fa-f]{2}' .             // XML/HTML character references produce similar issues.
@@ -2671,7 +2671,7 @@ class MediaWikiTitle
         
         // Initial colon indicates main namespace rather than specified default
         // but should not create invalid {ns,title} pairs such as {0,Project:Foo}
-        if (':' == $dbkey{0})
+        if (':' == $dbkey[0])
         {
             $this->mNamespace = NS_MAIN;
             $dbkey = substr($dbkey, 1); // remove the colon but continue processing
@@ -2699,11 +2699,11 @@ class MediaWikiTitle
         // if ($wgContLang->getNsIndex($x[1]))
         // return false; # Disallow Talk:File:x type titles...
         // else
-        // if (Interwiki :: isValidInterwiki($x[1]))
+        // if (Interwiki::isValidInterwiki($x[1]))
         // return false; # Disallow Talk:Interwiki:x type titles...
         // }
         // }
-        // elseif (Interwiki :: isValidInterwiki($p))
+        // elseif (Interwiki::isValidInterwiki($p))
         // {
         // if (! $firstPass)
         // {
@@ -2829,9 +2829,9 @@ class MediaWikiTitle
         // there are numerous ways to present the same IP. Having sp:contribs scan
         // them all is silly and having some show the edits and others not is
         // inconsistent. Same for talk/userpages. Keep them normalized instead.
-        $dbkey = ($this->mNamespace == NS_USER || $this->mNamespace == NS_USER_TALK) ? IP :: sanitizeIP($dbkey) : $dbkey;
+        $dbkey = ($this->mNamespace == NS_USER || $this->mNamespace == NS_USER_TALK) ? IP::sanitizeIP($dbkey) : $dbkey;
         // Any remaining initial :s are illegal.
-        if ($dbkey !== '' && ':' == $dbkey{0})
+        if ($dbkey !== '' && ':' == $dbkey[0])
         {
             return false;
         }
@@ -2867,7 +2867,7 @@ class MediaWikiTitle
      */
     public function getTalkPage()
     {
-        return MediawikiTitle :: makeTitle(MWNamespace :: getTalk($this->getNamespace()), $this->getDBkey());
+        return MediawikiTitle::makeTitle(MWNamespace::getTalk($this->getNamespace()), $this->getDBkey());
     }
 
     /**
@@ -2879,12 +2879,12 @@ class MediaWikiTitle
     public function getSubjectPage()
     {
         // Is this the same title?
-        $subjectNS = MWNamespace :: getSubject($this->getNamespace());
+        $subjectNS = MWNamespace::getSubject($this->getNamespace());
         if ($this->getNamespace() == $subjectNS)
         {
             return $this;
         }
-        return MediawikiTitle :: makeTitle($subjectNS, $this->getDBkey());
+        return MediawikiTitle::makeTitle($subjectNS, $this->getDBkey());
     }
 
     /**
@@ -2898,7 +2898,7 @@ class MediaWikiTitle
      */
     public function getLinksTo($options = array(), $table = 'pagelinks', $prefix = 'pl')
     {
-        $linkCache = LinkCache :: singleton();
+        $linkCache = LinkCache::singleton();
         
         if (count($options) > 0)
         {
@@ -2924,7 +2924,7 @@ class MediaWikiTitle
         {
             foreach ($res as $row)
             {
-                if ($titleObj = MediawikiTitle :: makeTitle($row->page_namespace, $row->page_title))
+                if ($titleObj = MediawikiTitle::makeTitle($row->page_namespace, $row->page_title))
                 {
                     $linkCache->addGoodLinkObj($row->page_id, $titleObj, $row->page_len, $row->page_is_redirect);
                     $retVal[] = $titleObj;
@@ -2975,7 +2975,7 @@ class MediaWikiTitle
         $retVal = array();
         foreach ($res as $row)
         {
-            $retVal[] = MediawikiTitle :: makeTitle($row->pl_namespace, $row->pl_title);
+            $retVal[] = MediawikiTitle::makeTitle($row->pl_namespace, $row->pl_title);
         }
         return $retVal;
     }
@@ -3095,7 +3095,7 @@ class MediaWikiTitle
                 {
                     $errors[] = array('imageinvalidfilename');
                 }
-                if (! File :: checkExtensionCompatibility($file, $nt->getDBKey()))
+                if (! File::checkExtensionCompatibility($file, $nt->getDBKey()))
                 {
                     $errors[] = array('imagetypemismatch');
                 }
@@ -3112,7 +3112,7 @@ class MediaWikiTitle
                 $nt->getUserPermissionsErrors('edit', $wgUser));
         }
         
-        $match = EditPage :: matchSummarySpamRegex($reason);
+        $match = EditPage::matchSummarySpamRegex($reason);
         if ($match !== false)
         {
             // This is kind of lame, won't display nice
@@ -3238,7 +3238,7 @@ class MediaWikiTitle
         
         if ($oldnamespace != $newnamespace || $oldtitle != $newtitle)
         {
-            WatchedItem :: duplicateEntries($this, $nt);
+            WatchedItem::duplicateEntries($this, $nt);
         }
         
         // Update search engine
@@ -3348,7 +3348,7 @@ class MediaWikiTitle
         }
         
         // Save a null revision in the page's history notifying of the move
-        $nullRevision = Revision :: newNullRevision($dbw, $oldid, $comment, true);
+        $nullRevision = Revision::newNullRevision($dbw, $oldid, $comment, true);
         $nullRevId = $nullRevision->insertOn($dbw);
         
         $article = new Article($this);
@@ -3369,7 +3369,7 @@ class MediaWikiTitle
         // Recreate the redirect, this time in the other direction.
         if ($createRedirect || ! $wgUser->isAllowed('suppressredirect'))
         {
-            $mwRedir = MagicWord :: get('redirect');
+            $mwRedir = MagicWord::get('redirect');
             $redirectText = $mwRedir->getSynonym(0) . ' [[' . $nt->getPrefixedText() . "]]\n";
             $redirectArticle = new Article($this);
             $newid = $redirectArticle->insertOn($dbw);
@@ -3449,7 +3449,7 @@ class MediaWikiTitle
         $now = $dbw->timestamp();
         
         // Save a null revision in the page's history notifying of the move
-        $nullRevision = Revision :: newNullRevision($dbw, $oldid, $comment, true);
+        $nullRevision = Revision::newNullRevision($dbw, $oldid, $comment, true);
         $nullRevId = $nullRevision->insertOn($dbw);
         
         $article = new Article($this);
@@ -3470,7 +3470,7 @@ class MediaWikiTitle
         if ($createRedirect || ! $wgUser->isAllowed('suppressredirect'))
         {
             // Insert redirect
-            $mwRedir = MagicWord :: get('redirect');
+            $mwRedir = MagicWord::get('redirect');
             $redirectText = $mwRedir->getSynonym(0) . ' [[' . $nt->getPrefixedText() . "]]\n";
             $redirectArticle = new Article($this);
             $newid = $redirectArticle->insertOn($dbw);
@@ -3513,7 +3513,7 @@ class MediaWikiTitle
         $log->addEntry('move', $this, $reason, array(1 => $nt->getPrefixedText(), 2 => $redirectSuppressed));
         
         // Purge caches as per article creation
-        Article :: onArticleCreate($nt);
+        Article::onArticleCreate($nt);
         
         // Purge old title from squid
         // The new title, and links to the new title, are purged in Article::onArticleCreate()
@@ -3539,10 +3539,10 @@ class MediaWikiTitle
             return array('cant-move-subpages');
             
             // Do the source and target namespaces support subpages?
-        if (! MWNamespace :: hasSubpages($this->getNamespace()))
-            return array('namespace-nosubpages', MWNamespace :: getCanonicalName($this->getNamespace()));
-        if (! MWNamespace :: hasSubpages($nt->getNamespace()))
-            return array('namespace-nosubpages', MWNamespace :: getCanonicalName($nt->getNamespace()));
+        if (! MWNamespace::hasSubpages($this->getNamespace()))
+            return array('namespace-nosubpages', MWNamespace::getCanonicalName($this->getNamespace()));
+        if (! MWNamespace::hasSubpages($nt->getNamespace()))
+            return array('namespace-nosubpages', MWNamespace::getCanonicalName($nt->getNamespace()));
         
         $subpages = $this->getSubpages($wgMaximumMovedPages + 1);
         $retval = array();
@@ -3574,7 +3574,7 @@ class MediaWikiTitle
             }
             // Bug 14385: we need makeTitleSafe because the new page names may
             // be longer than 255 characters.
-            $newSubpage = MediawikiTitle :: makeTitleSafe($newNs, $newPageName);
+            $newSubpage = MediawikiTitle::makeTitleSafe($newNs, $newPageName);
             
             $success = $oldSubpage->moveTo($newSubpage, $auth, $reason, $createRedirect);
             if ($success === true)
@@ -3655,14 +3655,14 @@ class MediaWikiTitle
             return false;
         }
         // Get the article text
-        $rev = Revision :: newFromTitle($nt);
+        $rev = Revision::newFromTitle($nt);
         $text = $rev->getText();
         // Does the redirect point to the source?
         // Or is it a broken self-redirect, usually caused by namespace collisions?
         $m = array();
         if (preg_match("/\\[\\[\\s*([^\\]\\|]*)]]/", $text, $m))
         {
-            $redirTitle = MediawikiTitle :: newFromText($m[1]);
+            $redirTitle = MediawikiTitle::newFromText($m[1]);
             if (! is_object($redirTitle) ||
                  ($redirTitle->getPrefixedDBkey() != $this->getPrefixedDBkey() &&
                  $redirTitle->getPrefixedDBkey() != $nt->getPrefixedDBkey()))
@@ -3687,7 +3687,7 @@ class MediaWikiTitle
      */
     public function isWatchable()
     {
-        return ! $this->isExternal() && MWNamespace :: isWatchable($this->getNamespace());
+        return ! $this->isExternal() && MWNamespace::isWatchable($this->getNamespace());
     }
 
     /**
@@ -3747,7 +3747,7 @@ class MediaWikiTitle
                 }
                 else
                 {
-                    $nt = MediawikiTitle :: newFromText($parent);
+                    $nt = MediawikiTitle::newFromText($parent);
                     if ($nt)
                     {
                         $stack[$parent] = $nt->getParentCategoryTree($children + array($parent => 1));
@@ -3926,7 +3926,7 @@ class MediaWikiTitle
     /**
      * Return a string representation of this title
      * 
-     * @return \type{\string} String representation of this title
+     * @return string String representation of this title
      */
     public function __toString()
     {
@@ -3975,7 +3975,7 @@ class MediaWikiTitle
             case NS_FILE :
                 return wfFindFile($this); // file exists, possibly in a foreign repo
             case NS_SPECIAL :
-                return SpecialPage :: exists($this->getDBKey()); // valid special page
+                return SpecialPage::exists($this->getDBKey()); // valid special page
             case NS_MAIN :
                 return $this->mDbkeyform == ''; // selflink, possibly with fragment
             case NS_MEDIAWIKI :
@@ -4069,7 +4069,7 @@ class MediaWikiTitle
             return $this->mNotificationTimestamp[$uid] = false;
         }
         // Don't cache too much!
-        if (count($this->mNotificationTimestamp) >= self :: CACHE_MAX)
+        if (count($this->mNotificationTimestamp) >= self::CACHE_MAX)
         {
             $this->mNotificationTimestamp = array();
         }
@@ -4176,7 +4176,7 @@ class MediaWikiTitle
     {
         if ($this->getNamespace() == NS_SPECIAL)
         {
-            list($thisName,     /* $subpage */ ) = SpecialPage :: resolveAliasWithSubpage($this->getDBkey());
+            list($thisName,     /* $subpage */ ) = SpecialPage::resolveAliasWithSubpage($this->getDBkey());
             if ($name == $thisName)
             {
                 return true;
@@ -4194,13 +4194,13 @@ class MediaWikiTitle
     {
         if ($this->getNamespace() == NS_SPECIAL)
         {
-            $canonicalName = SpecialPage :: resolveAlias($this->mDbkeyform);
+            $canonicalName = SpecialPage::resolveAlias($this->mDbkeyform);
             if ($canonicalName)
             {
-                $localName = SpecialPage :: getLocalNameFor($canonicalName);
+                $localName = SpecialPage::getLocalNameFor($canonicalName);
                 if ($localName != $this->mDbkeyform)
                 {
-                    return MediawikiTitle :: makeTitle(NS_SPECIAL, $localName);
+                    return MediawikiTitle::makeTitle(NS_SPECIAL, $localName);
                 }
             }
         }
@@ -4216,7 +4216,7 @@ class MediaWikiTitle
      */
     public function isContentPage()
     {
-        return MWNamespace :: isContent($this->getNamespace());
+        return MWNamespace::isContent($this->getNamespace());
     }
 
     /**
@@ -4239,7 +4239,7 @@ class MediaWikiTitle
         
         foreach ($res as $row)
         {
-            $redirs[] = self :: newFromRow($row);
+            $redirs[] = self::newFromRow($row);
         }
         return $redirs;
     }

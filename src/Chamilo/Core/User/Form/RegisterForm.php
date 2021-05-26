@@ -208,7 +208,7 @@ class RegisterForm extends FormValidator
 
             if (!Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
             {
-                $values[User::PROPERTY_STATUS] = STUDENT;
+                $values[User::PROPERTY_STATUS] = User::STATUS_STUDENT;
             }
 
             $user->set_status(intval($values[User::PROPERTY_STATUS]));

@@ -68,34 +68,6 @@ class ConfigurationConsulter extends DataConsulter
 
     /**
      *
-     * @param string[] $keys
-     * @param string $value
-     */
-    protected function setSetting($keys, $value)
-    {
-        $variables = $keys;
-        $values = &$this->getSettings();
-
-        while (count($variables) > 0)
-        {
-            $key = array_shift($variables);
-
-            if (! isset($values[$key]))
-            {
-                $values[$key] = null;
-                $values = &$values[$key];
-            }
-            else
-            {
-                $values = &$values[$key];
-            }
-        }
-
-        $values = $value;
-    }
-
-    /**
-     *
      * @param string $context
      * @return boolean
      */

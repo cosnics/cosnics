@@ -222,7 +222,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_move_course_type_url($course_type_id, $direction = self :: MOVE_DIRECTION_UP)
+    public function get_move_course_type_url($course_type_id, $direction = self::MOVE_DIRECTION_UP)
     {
         return $this->get_course_type_url(
             self::ACTION_MOVE, 

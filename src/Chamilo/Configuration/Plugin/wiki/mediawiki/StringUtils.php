@@ -140,7 +140,7 @@ class MediawikiStringUtils
     static function delimiterReplace($startDelim, $endDelim, $replace, $subject, $flags = '')
     {
         $replacer = new RegexlikeReplacer($replace);
-        return self :: delimiterReplaceCallback($startDelim, $endDelim, $replacer->cb(), $subject, $flags);
+        return self::delimiterReplaceCallback($startDelim, $endDelim, $replacer->cb(), $subject, $flags);
     }
 
     /**
@@ -160,7 +160,7 @@ class MediawikiStringUtils
         
         // Replace instances of the separator inside HTML-like tags with the placeholder
         $replacer = new DoubleReplacer($separator, $placeholder);
-        $cleaned = MediawikiStringUtils :: delimiterReplaceCallback('<', '>', $replacer->cb(), $text);
+        $cleaned = MediawikiStringUtils::delimiterReplaceCallback('<', '>', $replacer->cb(), $text);
         
         // Explode, then put the replaced separators back in
         $items = explode($separator, $cleaned);

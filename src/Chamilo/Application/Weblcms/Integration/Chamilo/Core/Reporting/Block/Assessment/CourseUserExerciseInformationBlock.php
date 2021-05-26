@@ -134,7 +134,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             if ($exercises[$publication[ContentObjectPublication::PROPERTY_ID]])
             {
                 $value = $exercises[$publication[ContentObjectPublication::PROPERTY_ID]];
-                $time = mktime(0, 0, $value[total_time], 0, 0, 0);
+                $time = mktime(0, 0, $value['total_time'], 0, 0, 0);
                 $time = date('G:i:s', $time);
                 $score = $this->get_score_bar($value['score'] / $value['score_count']);
                 $last = DatetimeUtilities::format_locale_date(

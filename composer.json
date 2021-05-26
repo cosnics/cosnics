@@ -24,7 +24,7 @@
         "adodb/adodb-php": "5.*",
         "chamilo/pear-libraries": "*",
         "doctrine/cache": "1.10.*",
-        "doctrine/dbal": "2.10.*",
+        "doctrine/dbal": "2.13.*",
         "doctrine/migrations": "1.8.1",
         "doctrine/orm": "2.6.1",
         "google/apiclient": "1.*",

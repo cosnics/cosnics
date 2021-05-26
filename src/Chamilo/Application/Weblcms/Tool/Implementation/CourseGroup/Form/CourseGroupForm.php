@@ -154,7 +154,7 @@ class CourseGroupForm extends FormValidator
 
     public function add_top_fields()
     {
-        // $this->build_header(Translation :: get("NewCourseGroup"));
+        // $this->build_header(Translation::get("NewCourseGroup"));
         // $group = array();
         // $this->addRule(CourseGroupForm::COURSE_GROUP_QUANTITY, Translation
         // ::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
@@ -348,7 +348,7 @@ class CourseGroupForm extends FormValidator
                     Translation::getInstance()->getTranslation('CountedTitle', array('COUNT' => $numbering)), '', false
                 );
                 // fill the title field automatically
-                // $defaults[CourseGroup :: PROPERTY_NAME . $option_number] =
+                // $defaults[CourseGroup::PROPERTY_NAME . $option_number] =
                 // 'Group ' . $numbering;
                 parent::setDefaults($defaults);
                 $this->addRule(
@@ -573,7 +573,7 @@ class CourseGroupForm extends FormValidator
         $this->addElement(
             'select', CourseGroup::PROPERTY_PARENT_ID . $counter,
             Translation::getInstance()->getTranslation('GroupParent'),
-            // 'select', CourseGroup :: PROPERTY_PARENT_ID . $counter, null,
+            // 'select', CourseGroup::PROPERTY_PARENT_ID . $counter, null,
             $this->get_groups()
         );
         $this->addElement('html', '</div>');

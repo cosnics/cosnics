@@ -151,7 +151,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_user_id()
+     * @see Tool::get_user_id()
      */
     public function get_user_id()
     {
@@ -165,7 +165,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_course_groups()
+     * @see Tool::get_course_groups()
      */
     public function get_course_groups()
     {
@@ -174,7 +174,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_course_id()
+     * @see Tool::get_course_id()
      */
     public function get_course_id()
     {
@@ -183,7 +183,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_categories()
+     * @see Tool::get_categories()
      */
     public function get_categories($list = false)
     {
@@ -192,7 +192,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_url()
+     * @see Tool::get_url()
      */
     public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
     {
@@ -201,7 +201,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_parameters()
+     * @see Tool::get_parameters()
      */
     public function get_parameters()
     {
@@ -210,7 +210,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: get_parameter()
+     * @see Tool::get_parameter()
      */
     public function get_parameter($name)
     {
@@ -219,7 +219,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see Tool :: is_allowed()
+     * @see Tool::is_allowed()
      */
     public function is_allowed($right)
     {
@@ -228,7 +228,7 @@ abstract class ContentObjectPublicationBrowser
 
     /**
      *
-     * @see WeblcmsManager :: get_last_visit_date()
+     * @see WeblcmsManager::get_last_visit_date()
      */
     public function get_last_visit_date()
     {

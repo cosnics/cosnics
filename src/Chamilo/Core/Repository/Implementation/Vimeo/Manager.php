@@ -65,8 +65,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_external_repository_actions()
     {
         $actions = array(self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
-        // self :: ACTION_UPLOAD_EXTERNAL_REPOSITORY,
-        // self :: ACTION_EXPORT_EXTERNAL_REPOSITORY);
+        // self::ACTION_UPLOAD_EXTERNAL_REPOSITORY,
+        // self::ACTION_EXPORT_EXTERNAL_REPOSITORY);
 
         $is_platform = $this->get_user()->is_platform_admin() && (count(
                     Setting::get_all($this->get_external_repository()->get_id())

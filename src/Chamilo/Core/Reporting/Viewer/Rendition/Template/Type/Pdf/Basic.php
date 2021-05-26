@@ -68,7 +68,7 @@ class Basic extends Pdf
                         ) . date('_Y-m-d_H-i-s') . '.pdf';
 
                     $data = BlockRenditionImplementation::launch(
-                        $this, $current_block, $this->get_format(), PdfBlockRendition::VIEW_DEFAULT
+                        $this, $current_block, $this->get_format(), PdfBlockRendition::VIEW_BASIC
                     );
                 }
                 else
@@ -79,7 +79,7 @@ class Basic extends Pdf
                     {
                         $block = $this->get_template()->get_block($specific_view);
                         $rendered_block = BlockRenditionImplementation::launch(
-                            $this, $block, $this->get_format(), PdfBlockRendition::VIEW_DEFAULT
+                            $this, $block, $this->get_format(), PdfBlockRendition::VIEW_BASIC
                         );
                         $data[] = array(
                             Translation::get(
@@ -135,7 +135,7 @@ class Basic extends Pdf
                 ) . date('_Y-m-d_H-i-s') . '.pdf';
 
             $data = BlockRenditionImplementation::launch(
-                $this, $current_block, $this->get_format(), PdfBlockRendition::VIEW_DEFAULT
+                $this, $current_block, $this->get_format(), PdfBlockRendition::VIEW_BASIC
             );
         }
 

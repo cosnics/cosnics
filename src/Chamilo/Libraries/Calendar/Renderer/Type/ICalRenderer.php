@@ -132,8 +132,8 @@ class ICalRenderer extends Renderer
     {
         timezoneHandler::createTimezone(
             new TimeZoneCalendarWrapper($this->getCalendar()), date_default_timezone_get(), array()/*,
-            self :: TIMEZONE_START,
-            self :: TIMEZONE_END*/
+            self::TIMEZONE_START,
+            self::TIMEZONE_END*/
         );
     }
 

@@ -84,7 +84,7 @@ class PackageTypeMenu extends HtmlMenu
         // $breadcrumbs = $this->array_renderer->toArray();
         // foreach ($breadcrumbs as $crumb)
         // {
-        // $str = Translation :: get('MyRepository');
+        // $str = Translation::get('MyRepository');
         // if (substr($crumb['title'], 0, strlen($str)) == $str)
         // continue;
         // $trail->add(new Breadcrumb($crumb['url'], substr($crumb['title'], 0, strpos($crumb['title'], '('))));

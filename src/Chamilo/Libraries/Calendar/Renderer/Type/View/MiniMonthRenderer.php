@@ -24,8 +24,8 @@ class MiniMonthRenderer extends ViewRenderer
     use TableRenderer;
 
     /**
-     * One of 3 possible values (or null): MiniMonthCalendar :: PERIOD_MONTH, MiniMonthCalendar :: PERIOD_WEEK,
-     * MiniMonthCalendar :: PERIOD_DAY;
+     * One of 3 possible values (or null): MiniMonthCalendar::PERIOD_MONTH, MiniMonthCalendar::PERIOD_WEEK,
+     * MiniMonthCalendar::PERIOD_DAY;
      *
      * @var integer
      */

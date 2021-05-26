@@ -72,7 +72,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @see WeblcmsManager :: get_last_visit_date()
+     * @see WeblcmsManager::get_last_visit_date()
      */
     public function get_last_visit_date()
     {

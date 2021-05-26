@@ -22,7 +22,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      * @param string $format
      * @param string $view
      */
-    public static function launch($context, ReportingBlock $block, $format = BlockRendition :: FORMAT_HTML, $view = null)
+    public static function launch($context, ReportingBlock $block, $format = BlockRendition::FORMAT_HTML, $view = null)
     {
         return self::factory($context, $block, $format, $view)->render();
     }
@@ -35,7 +35,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
      * @param string $view
      * @return \core\reporting\DummyContentObjectRenditionImplementation \core\reporting\BlockRenditionImplementation
      */
-    public static function factory($context, ReportingBlock $block, $format = BlockRendition :: FORMAT_HTML, $view = null)
+    public static function factory($context, ReportingBlock $block, $format = BlockRendition::FORMAT_HTML, $view = null)
     {
         $namespace = ClassnameUtilities::getInstance()->getNamespaceFromObject($block);
         $class = $namespace . '\Implementation\\' .

@@ -236,7 +236,7 @@ class EventParser
      *
      * @param string[] $recurrenceRules
      *
-     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules
+     * @return \Chamilo\Libraries\Calendar\Event\RecurrenceRules\RecurrenceRules
      */
     private function getRecurrence($recurrenceRules)
     {

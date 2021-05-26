@@ -422,7 +422,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $username string
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User
-     * @deprecated Use DataManager :: retrieve_user_by_username() now
+     * @deprecated Use DataManager::retrieve_user_by_username() now
      */
     public static function retrieve_user_info($username)
     {

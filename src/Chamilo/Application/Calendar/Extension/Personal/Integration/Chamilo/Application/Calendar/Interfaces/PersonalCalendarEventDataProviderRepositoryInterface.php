@@ -18,7 +18,7 @@ interface PersonalCalendarEventDataProviderRepositoryInterface
      * @param int $fromDate
      * @param int $toDate
      *
-     * @return Publication[]
+     * @return \Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publication[]
      */
     public function getPublications(RecordRetrievesParameters $parameters, $fromDate, $toDate);
 }

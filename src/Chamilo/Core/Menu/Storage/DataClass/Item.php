@@ -125,7 +125,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
 
     /**
      * @return integer
-     * @deprecated Use Item :: getDisplay() now
+     * @deprecated Use Item::getDisplay() now
      */
     public function get_display()
     {
@@ -246,7 +246,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     /**
      * @param integer $display
      *
-     * @deprecated Use Item :: setDisplay() now
+     * @deprecated Use Item::setDisplay() now
      */
     public function set_display($display = self::DISPLAY_ICON)
     {

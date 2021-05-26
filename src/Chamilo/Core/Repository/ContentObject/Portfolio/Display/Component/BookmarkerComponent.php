@@ -59,7 +59,7 @@ class BookmarkerComponent extends ItemComponent
             $this->redirect(
                 $success ? Translation::get('BookmarkCreated') : Translation::get('BookmarkNotCreated'), !$success,
                 array(
-                    self::PARAM_DISPLAY_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+                    self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                     self::PARAM_STEP => $this->get_current_step()
                 )
             );

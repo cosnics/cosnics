@@ -64,7 +64,7 @@ class MWNamespace
      */
     public static function isMain($index)
     {
-        return ! self :: isTalk($index);
+        return ! self::isTalk($index);
     }
 
     /**
@@ -86,7 +86,7 @@ class MWNamespace
      */
     public static function getTalk($index)
     {
-        return self :: isTalk($index) ? $index : $index + 1;
+        return self::isTalk($index) ? $index : $index + 1;
     }
 
     /**
@@ -97,7 +97,7 @@ class MWNamespace
      */
     public static function getSubject($index)
     {
-        return self :: isTalk($index) ? $index - 1 : $index;
+        return self::isTalk($index) ? $index - 1 : $index;
     }
 
     /**

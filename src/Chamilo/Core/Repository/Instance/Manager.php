@@ -183,7 +183,7 @@ abstract class Manager extends Application
         return 'Chamilo\Core\Repository\Implementation\\' . $type;
     }
 
-    public static function get_registered_types($status = Registration :: STATUS_ACTIVE)
+    public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(

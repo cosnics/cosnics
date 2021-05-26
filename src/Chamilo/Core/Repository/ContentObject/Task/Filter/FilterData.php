@@ -68,7 +68,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      * @param string $type
      * @return int NULL
      */
-    public function get_start_date($type = self :: FILTER_FROM_DATE)
+    public function get_start_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_START_DATE, $type);
     }
@@ -78,7 +78,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      * @param string $type
      * @return int NULL
      */
-    public function get_due_date($type = self :: FILTER_FROM_DATE)
+    public function get_due_date($type = self::FILTER_FROM_DATE)
     {
         return $this->get_date(self::FILTER_DUE_DATE, $type);
     }

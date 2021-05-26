@@ -38,7 +38,7 @@ class FillInBlanksQuestionAnswer
      * @param int $default_positive_score The score that should be added as default (when score is missing)
      * @return array of question's answers
      */
-    public static function parse($text, $default_positive_score = FillInBlanksQuestion :: DEFAULT_POSITIVE_SCORE)
+    public static function parse($text, $default_positive_score = FillInBlanksQuestion::DEFAULT_POSITIVE_SCORE)
     {
         $result = array();
 

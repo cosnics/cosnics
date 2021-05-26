@@ -40,8 +40,8 @@ class ExportParameters
 
     private $category_content_object_ids;
 
-    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport :: FORMAT_CPO, $content_object_ids = array(),
-        $category_ids = array(), $type = ContentObjectExport :: TYPE_DEFAULT)
+    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = array(),
+        $category_ids = array(), $type = ContentObjectExport::TYPE_DEFAULT)
     {
         $this->workspace = $workspace;
         $this->user = $user;
@@ -68,7 +68,7 @@ class ExportParameters
             {
                 if (in_array(0, $this->get_category_ids()))
                 {
-                    // if (! RightsService :: getInstance()->canCopyContentObjects(
+                    // if (! RightsService::getInstance()->canCopyContentObjects(
                     // $this->get_user(),
                     // $this->getWorkspace()))
                     // {
@@ -204,7 +204,7 @@ class ExportParameters
                     ContentObject::class,
                     $contentObjectIdentifier);
 
-                // if (RightsService :: getInstance()->canCopyContentObject(
+                // if (RightsService::getInstance()->canCopyContentObject(
                 // $this->get_user(),
                 // $contentObject,
                 // $this->getWorkspace()))

@@ -50,7 +50,7 @@ class AssessmentResultViewerForm extends FormValidator
             $this->get_total_pages();
 
             // $this->addElement('html', '<div style="float: left; padding: 7px; font-weight: bold; line-height:
-            // 100%;">' . Translation :: get('PageNumberOfTotal', array(
+            // 100%;">' . Translation::get('PageNumberOfTotal', array(
             // 'CURRENT' => $this->get_page_number(),
             // 'TOTAL' => $this->get_total_pages())) . '</div>');
         }

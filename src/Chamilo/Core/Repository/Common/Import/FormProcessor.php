@@ -199,7 +199,7 @@ abstract class FormProcessor
      * @param string $fileName
      * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
-    public function getFileByName($fileName = ContentObjectImportForm :: IMPORT_FILE_NAME)
+    public function getFileByName($fileName = ContentObjectImportForm::IMPORT_FILE_NAME)
     {
         return $this->getRequest()->files->get($fileName);
     }
@@ -209,7 +209,7 @@ abstract class FormProcessor
      * @param string $fileName
      * @return \Chamilo\Libraries\File\Properties\FileProperties|NULL
      */
-    public function getFile($fileName = ContentObjectImportForm :: IMPORT_FILE_NAME)
+    public function getFile($fileName = ContentObjectImportForm::IMPORT_FILE_NAME)
     {
         $file = $this->getFileByName($fileName);
         

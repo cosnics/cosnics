@@ -46,7 +46,7 @@ class MediawikiLinker
      */
     function getExternalLinkAttributes($title, $unused = null, $class = '')
     {
-        return self :: getLinkAttributesInternal($title, $class, 'external');
+        return self::getLinkAttributesInternal($title, $class, 'external');
     }
 
     /**
@@ -67,7 +67,7 @@ class MediawikiLinker
         $title = $wgContLang->checkTitleEncoding($title);
         $title = preg_replace('/[\\x00-\\x1f]/', ' ', $title);
         
-        return self :: getLinkAttributesInternal($title, $class, 'external');
+        return self::getLinkAttributesInternal($title, $class, 'external');
     }
 
     /**
@@ -81,7 +81,7 @@ class MediawikiLinker
     {
         $title = urldecode($title);
         $title = str_replace('_', ' ', $title);
-        return self :: getLinkAttributesInternal($title, $class);
+        return self::getLinkAttributesInternal($title, $class);
     }
 
     /**
@@ -100,7 +100,7 @@ class MediawikiLinker
         {
             $title = $nt->getPrefixedText();
         }
-        return self :: getLinkAttributesInternal($title, $class);
+        return self::getLinkAttributesInternal($title, $class);
     }
 
     /**
@@ -142,7 +142,7 @@ class MediawikiLinker
             $colour = 'mw-redirect';
         }
         elseif ($threshold > 0 && $t->exists() && $t->getLength() < $threshold &&
-             MWNamespace :: isContent($t->getNamespace()))
+             MWNamespace::isContent($t->getNamespace()))
         {
             // Page is a stub
             $colour = 'stub';
@@ -206,19 +206,19 @@ class MediawikiLinker
         }
         
         // Note: we want the href attribute first, for prettiness.
-        $attribs = array('href' => self :: linkUrl($target, $query, $options));
+        $attribs = array('href' => self::linkUrl($target, $query, $options));
         if (in_array('forcearticlepath', $options) && $oldquery)
         {
             $attribs['href'] = wfAppendQuery($attribs['href'], wfArrayToCgi($oldquery));
         }
         
-        $attribs = array_merge($attribs, self :: linkAttribs($target, $customAttribs, $options));
+        $attribs = array_merge($attribs, self::linkAttribs($target, $customAttribs, $options));
         if (is_null($text))
         {
-            $text = self :: linkText($target);
+            $text = self::linkText($target);
         }
         
-        $ret = Xml :: openElement('a', $attribs) . $text . Xml :: closeElement('a');
+        $ret = Xml::openElement('a', $attribs) . $text . Xml::closeElement('a');
         
         return $ret;
     }
@@ -238,8 +238,8 @@ class MediawikiLinker
         // (i.e., for a nonexistent special page).
         if (in_array('broken', $options) and empty($query['action']) and $target->getNamespace() != NS_SPECIAL)
         {
-            $query[\Chamilo\Core\Repository\Display\Action\Manager :: PARAM_ACTION] = Manager :: ACTION_CREATE_PAGE;
-            $query[ContentObject :: PROPERTY_TITLE] = $target->getText();
+            $query[\Chamilo\Core\Repository\Display\Action\Manager::PARAM_ACTION] = Manager::ACTION_CREATE_PAGE;
+            $query[ContentObject::PROPERTY_TITLE] = $target->getText();
             
             // $query['redlink'] = '1';
         }
@@ -299,7 +299,7 @@ class MediawikiLinker
         // Finally, merge the custom attribs with the default ones, and iterate
         // over that, deleting all "false" attributes.
         $ret = array();
-        $merged = MediawikiSanitizer :: mergeAttributes($defaults, $attribs);
+        $merged = MediawikiSanitizer::mergeAttributes($defaults, $attribs);
         foreach ($merged as $key => $val)
         {
             // A false value suppresses the attribute, and we don't want the
@@ -341,10 +341,10 @@ class MediawikiLinker
      */
     function makeLink($title, $text = '', $query = '', $trail = '')
     {
-        $nt = MediawikiTitle :: newFromText($title);
+        $nt = MediawikiTitle::newFromText($title);
         if ($nt instanceof MediawikiTitle)
         {
-            $result = self :: makeLinkObj($nt, $text, $query, $trail);
+            $result = self::makeLinkObj($nt, $text, $query, $trail);
         }
         else
         {
@@ -366,10 +366,10 @@ class MediawikiLinker
      */
     function makeKnownLink($title, $text = '', $query = '', $trail = '', $prefix = '', $aprops = '')
     {
-        $nt = MediawikiTitle :: newFromText($title);
+        $nt = MediawikiTitle::newFromText($title);
         if ($nt instanceof MediawikiTitle)
         {
-            return self :: makeKnownLinkObj($nt, $text, $query, $trail, $prefix, $aprops);
+            return self::makeKnownLinkObj($nt, $text, $query, $trail, $prefix, $aprops);
         }
         else
         {
@@ -389,10 +389,10 @@ class MediawikiLinker
      */
     function makeBrokenLink($title, $text = '', $query = '', $trail = '')
     {
-        $nt = MediawikiTitle :: newFromText($title);
+        $nt = MediawikiTitle::newFromText($title);
         if ($nt instanceof MediawikiTitle)
         {
-            return self :: makeBrokenLinkObj($nt, $text, $query, $trail);
+            return self::makeBrokenLinkObj($nt, $text, $query, $trail);
         }
         else
         {
@@ -412,10 +412,10 @@ class MediawikiLinker
      */
     function makeStubLink($title, $text = '', $query = '', $trail = '')
     {
-        $nt = MediawikiTitle :: newFromText($title);
+        $nt = MediawikiTitle::newFromText($title);
         if ($nt instanceof MediawikiTitle)
         {
-            return self :: makeStubLinkObj($nt, $text, $query, $trail);
+            return self::makeStubLinkObj($nt, $text, $query, $trail);
         }
         else
         {
@@ -438,13 +438,13 @@ class MediawikiLinker
     function makeLinkObj($nt, $text = '', $query = '', $trail = '', $prefix = '')
     {
         $query = wfCgiToArray($query);
-        list($inside, $trail) = MediawikiLinker :: splitTrail($trail);
+        list($inside, $trail) = MediawikiLinker::splitTrail($trail);
         if ($text === '')
         {
-            $text = self :: linkText($nt);
+            $text = self::linkText($nt);
         }
         
-        $ret = self :: link($nt, "$prefix$text$inside", array(), $query) . $trail;
+        $ret = self::link($nt, "$prefix$text$inside", array(), $query) . $trail;
         
         return $ret;
     }
@@ -468,15 +468,15 @@ class MediawikiLinker
         // dump($query);
         if ($text == '')
         {
-            $text = self :: linkText($title);
+            $text = self::linkText($title);
         }
-        $attribs = MediawikiSanitizer :: mergeAttributes(
-            MediawikiSanitizer :: decodeTagAttributes($aprops), 
-            MediawikiSanitizer :: decodeTagAttributes($style));
+        $attribs = MediawikiSanitizer::mergeAttributes(
+            MediawikiSanitizer::decodeTagAttributes($aprops), 
+            MediawikiSanitizer::decodeTagAttributes($style));
         // $query = wfCgiToArray($query);
-        list($inside, $trail) = MediawikiLinker :: splitTrail($trail);
+        list($inside, $trail) = MediawikiLinker::splitTrail($trail);
         
-        $ret = self :: link($title, "$prefix$text$inside", $attribs, $query, array('known', 'noclasses')) . $trail;
+        $ret = self::link($title, "$prefix$text$inside", $attribs, $query, array('known', 'noclasses')) . $trail;
         
         return $ret;
     }
@@ -492,15 +492,15 @@ class MediawikiLinker
      */
     function makeBrokenLinkObj($title, $text = '', $query = array(), $trail = '', $prefix = '')
     {
-        list($inside, $trail) = self :: splitTrail($trail);
+        list($inside, $trail) = self::splitTrail($trail);
         if ($text === '')
         {
-            $text = self :: linkText($title);
+            $text = self::linkText($title);
         }
         
-        // $ret = self :: link($title, "$prefix$text$inside", array(),
+        // $ret = self::link($title, "$prefix$text$inside", array(),
         // wfCgiToArray($query), 'broken') . $trail;
-        $ret = self :: link($title, "$prefix$text$inside", array(), $query, 'broken') . $trail;
+        $ret = self::link($title, "$prefix$text$inside", array(), $query, 'broken') . $trail;
         
         return $ret;
     }
@@ -516,7 +516,7 @@ class MediawikiLinker
      */
     function makeStubLinkObj($nt, $text = '', $query = '', $trail = '', $prefix = '')
     {
-        return self :: makeColouredLinkObj($nt, 'stub', $text, $query, $trail, $prefix);
+        return self::makeColouredLinkObj($nt, 'stub', $text, $query, $trail, $prefix);
     }
 
     /**
@@ -533,11 +533,11 @@ class MediawikiLinker
     {
         if ($colour != '')
         {
-            $style = self :: getInternalLinkAttributesObj($nt, $text, $colour);
+            $style = self::getInternalLinkAttributesObj($nt, $text, $colour);
         }
         else
             $style = '';
-        return self :: makeKnownLinkObj($nt, $text, $query, $trail, $prefix, '', $style);
+        return self::makeKnownLinkObj($nt, $text, $query, $trail, $prefix, '', $style);
     }
 
     /**
@@ -555,7 +555,7 @@ class MediawikiLinker
     {
         $threshold = 0;
         $colour = ($size < $threshold) ? 'stub' : '';
-        return self :: makeColouredLinkObj($nt, $colour, $text, $query, $trail, $prefix);
+        return self::makeColouredLinkObj($nt, $colour, $text, $query, $trail, $prefix);
     }
 
     /**
@@ -569,7 +569,7 @@ class MediawikiLinker
         {
             $text = htmlspecialchars($nt->getPrefixedText());
         }
-        list($inside, $trail) = Linker :: splitTrail($trail);
+        list($inside, $trail) = Linker::splitTrail($trail);
         return "<strong class=\"selflink\">{$prefix}{$text}{$inside}</strong>{$trail}";
     }
 
@@ -577,10 +577,10 @@ class MediawikiLinker
     {
         if ($title->getNamespace() == NS_SPECIAL)
         {
-            list($name, $subpage) = SpecialPage :: resolveAliasWithSubpage($title->getDBkey());
+            list($name, $subpage) = SpecialPage::resolveAliasWithSubpage($title->getDBkey());
             if (! $name)
                 return $title;
-            $ret = SpecialPage :: getTitleFor($name, $subpage);
+            $ret = SpecialPage::getTitleFor($name, $subpage);
             $ret->mFragment = $title->getFragment();
             return $ret;
         }
@@ -613,7 +613,7 @@ class MediawikiLinker
      */
     function makeImage($url, $alt = '')
     {
-        return self :: makeExternalImage($url, $alt);
+        return self::makeExternalImage($url, $alt);
     }
 
     /**
@@ -624,10 +624,10 @@ class MediawikiLinker
     {
         if ('' == $alt)
         {
-            $alt = self :: fnamePart($url);
+            $alt = self::fnamePart($url);
         }
         
-        return Xml :: element('img', array('src' => $url, 'alt' => $alt));
+        return Xml::element('img', array('src' => $url, 'alt' => $alt));
     }
 
     /**
@@ -745,7 +745,7 @@ class MediawikiLinker
                 
                 if (! isset($wgThumbLimits[$wopt]))
                 {
-                    $wopt = User :: getDefaultOption('thumbsize');
+                    $wopt = User::getDefaultOption('thumbsize');
                 }
                 
                 // Reduce width for upright images when parameter 'upright' is
@@ -896,7 +896,7 @@ class MediawikiLinker
             if (isset($fp['manualthumb']))
             {
                 // Use manually specified thumbnail
-                $manual_title = Title :: makeTitleSafe(NS_FILE, $fp['manualthumb']);
+                $manual_title = Title::makeTitleSafe(NS_FILE, $fp['manualthumb']);
                 if ($manual_title)
                 {
                     $manual_img = wfFindFile($manual_title);
@@ -1006,10 +1006,10 @@ class MediawikiLinker
             $currentExists = $time ? (wfFindFile($title) != false) : false;
             if ($wgEnableUploads && ! $currentExists)
             {
-                $upload = SpecialPage :: getTitleFor('Upload');
+                $upload = SpecialPage::getTitleFor('Upload');
                 if ($text == '')
                     $text = htmlspecialchars($title->getPrefixedText());
-                $redir = RepoGroup :: singleton()->getLocalRepo()->checkRedirect($title);
+                $redir = RepoGroup::singleton()->getLocalRepo()->checkRedirect($title);
                 if ($redir)
                 {
                     return $this->makeKnownLinkObj($title, $text, $query, $trail, $prefix);
@@ -1017,7 +1017,7 @@ class MediawikiLinker
                 $q = 'wpDestFile=' . $title->getPartialUrl();
                 if ($query != '')
                     $q .= '&' . $query;
-                list($inside, $trail) = self :: splitTrail($trail);
+                list($inside, $trail) = self::splitTrail($trail);
                 $style = $this->getInternalLinkAttributesObj($title, $text, 'new');
                 wfProfileOut(__METHOD__);
                 return '<a href="' . $upload->escapeLocalUrl($q) . '"' . $style . '>' . $prefix . $text . $inside .
@@ -1041,7 +1041,7 @@ class MediawikiLinker
      */
     function makeMediaLink($name, $unused = '', $text = '', $time = false)
     {
-        $nt = Title :: makeTitleSafe(NS_FILE, $name);
+        $nt = Title::makeTitleSafe(NS_FILE, $name);
         return $this->makeMediaLinkObj($nt, $text, $time);
     }
 
@@ -1071,7 +1071,7 @@ class MediawikiLinker
             }
             else
             {
-                $upload = SpecialPage :: getTitleFor('Upload');
+                $upload = SpecialPage::getTitleFor('Upload');
                 $url = $upload->getLocalUrl('wpDestFile=' . urlencode($title->getDBkey()));
                 $class = 'new';
             }
@@ -1098,7 +1098,7 @@ class MediawikiLinker
             $key = strtolower($name);
         }
         $pn = $wgContLang->ucfirst($name);
-        return self :: makeKnownLink($wgContLang->specialPage($pn), wfMsg($key));
+        return self::makeKnownLink($wgContLang->specialPage($pn), wfMsg($key));
     }
 
     /**
@@ -1117,7 +1117,7 @@ class MediawikiLinker
      */
     function makeExternalLink($url, $text, $escape = true, $linktype = '', $attribs = array())
     {
-        $attribsText = self :: getExternalLinkAttributes($url, $text, 'external ' . $linktype);
+        $attribsText = self::getExternalLinkAttributes($url, $text, 'external ' . $linktype);
         $url = htmlspecialchars($url);
         if ($escape)
         {
@@ -1126,7 +1126,7 @@ class MediawikiLinker
         
         if ($attribs)
         {
-            $attribsText .= Xml :: expandAttributes($attribs);
+            $attribsText .= Xml::expandAttributes($attribs);
         }
         return '<a href="' . $url . '"' . $attribsText . '>' . $text . '</a>';
     }
@@ -1175,13 +1175,13 @@ class MediawikiLinker
     {
         // global $wgJsMimeType;
         // $title = wfMsgHtml('toc');
-        $title = Translation :: get('Contents');
+        $title = Translation::get('Contents');
         return '<table id="toc" class="toc" summary="' . $title . '"><tr><td>' . '<div id="toctitle"><h2>' . $title .
              "</h2></div>\n" . $toc . "</ul>\n</td></tr></table>";
         
         // '<script type="' . $wgJsMimeType . '">' . ' if (window.showTocToggle)
-        // {' . ' var tocShowText = "' . Xml :: escapeJsString(wfMsg('showtoc')) .
-        // '";' . ' var tocHideText = "' . Xml :: escapeJsString(wfMsg('hidetoc')) .
+        // {' . ' var tocShowText = "' . Xml::escapeJsString(wfMsg('showtoc')) .
+        // '";' . ' var tocHideText = "' . Xml::escapeJsString(wfMsg('hidetoc')) .
         // '";' . ' showTocToggle();' . ' } ' . "</script>\n";
     }
 
@@ -1223,7 +1223,7 @@ class MediawikiLinker
         {
             // CHAMILO | Use the default english regex for now
             // "Translations" should be provided for all languages
-            // $regex = Translation :: get('MediaWikiLinkTrail');
+            // $regex = Translation::get('MediaWikiLinkTrail');
             $regex = '/^([a-z]+)(.*)$/sD';
         }
         $inside = '';
@@ -1257,7 +1257,7 @@ class MediawikiLinker
         {
             unset($attribs['accesskey']);
         }
-        return Xml :: expandAttributes($attribs);
+        return Xml::expandAttributes($attribs);
     }
 
     /**
@@ -1274,7 +1274,7 @@ class MediawikiLinker
         {
             return '';
         }
-        return Xml :: expandAttributes(array('title' => $this->titleAttrib($name, $options)));
+        return Xml::expandAttributes(array('title' => $this->titleAttrib($name, $options)));
     }
 
     /**

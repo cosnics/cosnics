@@ -233,7 +233,7 @@ class Group extends NestedSet
      * @param $in_batch - delete groups in batch and fix nested values later
      *
      * @return boolean True if success, false otherwise.
-     * @deprecated should use $this->delete() of self :: deletes( $array ) instead
+     * @deprecated should use $this->delete() of self::deletes( $array ) instead
      */
     public function delete_group($in_batch = false)
     {

@@ -335,7 +335,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
 
         $pageNumber = ($offset / $count) + 1;
-        // $pageToken = PageTokenGenerator :: getInstance()->getToken($count, $pageNumber);
+        // $pageToken = PageTokenGenerator::getInstance()->getToken($count, $pageNumber);
 
         /** Limit to 50 (max allowed for youtube) */
         if ($max_result > 50)

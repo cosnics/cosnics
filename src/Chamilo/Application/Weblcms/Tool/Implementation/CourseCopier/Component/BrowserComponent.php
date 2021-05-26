@@ -39,7 +39,7 @@ class BrowserComponent extends Manager
 
         $courseGroupService = new CourseGroupService(new CourseGroupRepository());
 
-        // $trail = BreadcrumbTrail :: getInstance();
+        // $trail = BreadcrumbTrail::getInstance();
         if (!$this->get_course()->is_course_admin($this->get_parent()->get_user()))
         {
             throw new NotAllowedException();

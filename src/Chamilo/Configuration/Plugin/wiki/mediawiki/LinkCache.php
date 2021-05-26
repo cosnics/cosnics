@@ -148,7 +148,7 @@ class MediawikiLinkCache
      */
     public function addLink($title, $len = -1, $redir = NULL)
     {
-        $nt = MediawikiTitle :: newFromDBkey($title);
+        $nt = MediawikiTitle::newFromDBkey($title);
         if ($nt)
         {
             return $this->addLinkObj($nt, $len, $redir);

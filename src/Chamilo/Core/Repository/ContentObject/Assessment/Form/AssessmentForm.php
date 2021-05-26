@@ -39,13 +39,13 @@ class AssessmentForm extends ContentObjectForm
         // Number of attempts
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', self :: UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
                 'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::UNLIMITED_ATTEMPTS
             )
         );
         $choices[] = $this->createElement(
-            'radio', self :: UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS
             )
@@ -98,7 +98,7 @@ class AssessmentForm extends ContentObjectForm
         // Random questions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', self :: RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
+            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS
             )
@@ -186,13 +186,13 @@ class AssessmentForm extends ContentObjectForm
         // Number of attempts
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', self :: UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
-                'onclick' => 'javascript:window_hide(\'' . self :: UNLIMITED_ATTEMPTS . '_window\')',
-                'id' => self :: UNLIMITED_ATTEMPTS
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('UnlimitedAttempts'), 0, array(
+                'onclick' => 'javascript:window_hide(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
+                'id' => self::UNLIMITED_ATTEMPTS
             )
         );
         $choices[] = $this->createElement(
-            'radio', self :: UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
+            'radio', self::UNLIMITED_ATTEMPTS, '', Translation:: get('LimitedAttempts'), 1, array(
                 'onclick' => 'javascript:window_show(\'' . self::UNLIMITED_ATTEMPTS . '_window\')',
                 'id' => self::LIMITED_ATTEMPTS
             )
@@ -245,7 +245,7 @@ class AssessmentForm extends ContentObjectForm
         // Random questions
         $choices = array();
         $choices[] = $this->createElement(
-            'radio', self :: RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
+            'radio', self::RANDOM_QUESTIONS, '', Translation:: get('NoRandomization'), 0, array(
                 'onclick' => 'javascript:window_hide(\'' . self::RANDOM_QUESTIONS . '_window\')',
                 'id' => self::RANDOM_QUESTIONS
             )
@@ -378,7 +378,6 @@ class AssessmentForm extends ContentObjectForm
         }
         else
         {
-            $defaults[Assessment::PROPERTY_ASSESSMENT_TYPE] = 0;
             $defaults[self::UNLIMITED_ATTEMPTS] = 0;
             $defaults[self::ALL_QUESTIONS] = 0;
             $defaults[self::UNLIMITED_TIME] = 0;

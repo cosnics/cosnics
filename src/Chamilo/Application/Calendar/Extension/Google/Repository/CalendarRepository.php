@@ -10,6 +10,7 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Platform\Configuration\LocalSetting;
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use Google_Cache_File;
 use Google_Client;
@@ -24,6 +25,12 @@ use Google_Service_Calendar;
  */
 class CalendarRepository
 {
+
+    /**
+     *
+     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
+     */
+    private static $instance;
 
     /**
      *
@@ -77,49 +84,129 @@ class CalendarRepository
     }
 
     /**
+     * Clears the access token for a user when the access token can no longer be refreshed or has become invalid
      *
-     * @var \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
+     * @return bool
      */
-    private static $instance;
+    public function clearAccessToken()
+    {
+        return LocalSetting::getInstance()->create(
+            'token', null, Manager::context()
+        );
+    }
 
     /**
      *
-     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
+     * @param string $calendarIdentifier
+     * @param integer $fromDate
+     * @param integer $toDate
+     *
+     * @return \Google_Service_Calendar_Events
      */
-    static public function getInstance()
+    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
     {
-        if (is_null(static::$instance))
+        $timeMin = new DateTime();
+        $timeMin->setTimestamp($fromDate);
+
+        $timeMax = new DateTime();
+        $timeMax->setTimestamp($toDate);
+
+        try
         {
-            $configuration = Configuration::getInstance();
-            $configurationContext = Manager::context();
+            return $this->getCalendarClient()->events->listEvents(
+                $calendarIdentifier, array(
+                    'timeMin' => $timeMin->format(DateTimeInterface::RFC3339),
+                    'timeMax' => $timeMax->format(
+                        DateTimeInterface::RFC3339
+                    )
+                )
+            );
+        }
+        catch (Exception $ex)
+        {
+            $this->clearAccessToken();
 
-            $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
-            $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
-            $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
-            $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
+            return null;
+        }
+    }
 
-            self::$instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
+     */
+    public function findOwnedCalendars()
+    {
+        try
+        {
+            $calendarItems =
+                $this->getCalendarClient()->calendarList->listCalendarList(array('minAccessRole' => 'owner'))->getItems(
+                    );
+        }
+        catch (Exception $ex)
+        {
+            $this->clearAccessToken();
+
+            return [];
         }
 
-        return static::$instance;
+        $availableCalendars = array();
+
+        foreach ($calendarItems as $calendarItem)
+        {
+            $availableCalendar = new AvailableCalendar();
+
+            $availableCalendar->setType(Manager::package());
+            $availableCalendar->setIdentifier($calendarItem->id);
+            $availableCalendar->setName($calendarItem->summary);
+            $availableCalendar->setDescription($calendarItem->description);
+
+            $availableCalendars[] = $availableCalendar;
+        }
+
+        return $availableCalendars;
     }
 
     /**
      *
      * @return string
      */
-    public function getDeveloperKey()
+    public function getAccessToken()
     {
-        return $this->developerKey;
+        return $this->accessToken;
     }
 
     /**
      *
-     * @param string $developerKey
+     * @param string $accessToken
      */
-    public function setDeveloperKey($developerKey)
+    public function setAccessToken($accessToken)
     {
-        $this->developerKey = $developerKey;
+        $this->accessToken = $accessToken;
+    }
+
+    public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = array())
+    {
+        $identifiers = array();
+
+        $identifiers[] = $userToken;
+        $identifiers[] = $method;
+        $identifiers[] = $additionalIdentifiers;
+
+        return md5(serialize($identifiers));
+    }
+
+    /**
+     *
+     * @return \Google_Service_Calendar
+     */
+    public function getCalendarClient()
+    {
+        if (!isset($this->calendarClient))
+        {
+            $this->calendarClient = new Google_Service_Calendar($this->getGoogleClient());
+        }
+
+        return $this->calendarClient;
     }
 
     /**
@@ -162,18 +249,18 @@ class CalendarRepository
      *
      * @return string
      */
-    public function getAccessToken()
+    public function getDeveloperKey()
     {
-        return $this->accessToken;
+        return $this->developerKey;
     }
 
     /**
      *
-     * @param string $accessToken
+     * @param string $developerKey
      */
-    public function setAccessToken($accessToken)
+    public function setDeveloperKey($developerKey)
     {
-        $this->accessToken = $accessToken;
+        $this->developerKey = $developerKey;
     }
 
     /**
@@ -199,8 +286,7 @@ class CalendarRepository
             }
 
             $this->googleClient->setClassConfig(
-                'Google_Cache_File',
-                array('directory' => Path::getInstance()->getCachePath(__NAMESPACE__))
+                'Google_Cache_File', array('directory' => Path::getInstance()->getCachePath(__NAMESPACE__))
             );
 
             $this->googleClient->setCache(new Google_Cache_File($this->googleClient));
@@ -222,6 +308,39 @@ class CalendarRepository
         }
 
         return $this->googleClient;
+    }
+
+    /**
+     *
+     * @return \Chamilo\Application\Calendar\Extension\Google\Repository\CalendarRepository
+     */
+    static public function getInstance()
+    {
+        if (is_null(static::$instance))
+        {
+            $configuration = Configuration::getInstance();
+            $configurationContext = Manager::context();
+
+            $developerKey = $configuration->get_setting(array($configurationContext, 'developer_key'));
+            $clientId = $configuration->get_setting(array($configurationContext, 'client_id'));
+            $clientSecret = $configuration->get_setting(array($configurationContext, 'client_secret'));
+            $accessToken = LocalSetting::getInstance()->get('token', $configurationContext);
+
+            self::$instance = new static($developerKey, $clientId, $clientSecret, $accessToken);
+        }
+
+        return static::$instance;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function hasAccessToken()
+    {
+        $accessToken = $this->getAccessToken();
+
+        return !empty($accessToken);
     }
 
     public function login($authenticationCode = null)
@@ -281,125 +400,7 @@ class CalendarRepository
     public function saveAccessToken($accessToken)
     {
         return LocalSetting::getInstance()->create(
-            'token',
-            $accessToken,
-            Manager::context()
+            'token', $accessToken, Manager::context()
         );
-    }
-
-    /**
-     * Clears the access token for a user when the access token can no longer be refreshed or has become invalid
-     *
-     * @return bool
-     */
-    public function clearAccessToken()
-    {
-        return LocalSetting::getInstance()->create(
-            'token',
-            null,
-            Manager::context()
-        );
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function hasAccessToken()
-    {
-        $accessToken = $this->getAccessToken();
-
-        return !empty($accessToken);
-    }
-
-    /**
-     *
-     * @return \Google_Service_Calendar
-     */
-    public function getCalendarClient()
-    {
-        if (!isset($this->calendarClient))
-        {
-            $this->calendarClient = new Google_Service_Calendar($this->getGoogleClient());
-        }
-
-        return $this->calendarClient;
-    }
-
-    public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = array())
-    {
-        $identifiers = array();
-
-        $identifiers[] = $userToken;
-        $identifiers[] = $method;
-        $identifiers[] = $additionalIdentifiers;
-
-        return md5(serialize($identifiers));
-    }
-
-    /**
-     *
-     * @return \Chamilo\Application\Calendar\Storage\DataClass\AvailableCalendar[]
-     */
-    public function findOwnedCalendars()
-    {
-        try
-        {
-            $calendarItems = $this->getCalendarClient()->calendarList
-                ->listCalendarList(array('minAccessRole' => 'owner'))->getItems();
-        }
-        catch (Exception $ex)
-        {
-            $this->clearAccessToken();
-
-            return [];
-        }
-
-        $availableCalendars = array();
-
-        foreach ($calendarItems as $calendarItem)
-        {
-            $availableCalendar = new AvailableCalendar();
-
-            $availableCalendar->setType(Manager::package());
-            $availableCalendar->setIdentifier($calendarItem->id);
-            $availableCalendar->setName($calendarItem->summary);
-            $availableCalendar->setDescription($calendarItem->description);
-
-            $availableCalendars[] = $availableCalendar;
-        }
-
-        return $availableCalendars;
-    }
-
-    /**
-     *
-     * @param string $calendarIdentifier
-     * @param integer $fromDate
-     * @param integer $toDate
-     *
-     * @return \Google_Service_Calendar_Events
-     */
-    public function findEventsForCalendarIdentifierAndBetweenDates($calendarIdentifier, $fromDate, $toDate)
-    {
-        $timeMin = new DateTime();
-        $timeMin->setTimestamp($fromDate);
-
-        $timeMax = new DateTime();
-        $timeMax->setTimestamp($toDate);
-
-        try
-        {
-            return $this->getCalendarClient()->events->listEvents(
-                $calendarIdentifier,
-                array('timeMin' => $timeMin->format(DateTime::RFC3339), 'timeMax' => $timeMax->format(DateTime::RFC3339))
-            );
-        }
-        catch (Exception $ex)
-        {
-            $this->clearAccessToken();
-
-            return null;
-        }
     }
 }

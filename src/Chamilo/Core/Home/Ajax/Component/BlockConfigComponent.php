@@ -58,7 +58,7 @@ class BlockConfigComponent extends Manager
         {
             $postedValues = $this->getPostDataValue(self::PARAM_DATA);
             
-            // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer :: TYPE_BASIC, $this);
+            // $rendererFactory = new \Chamilo\Core\Home\Renderer\Factory(Renderer::TYPE_BASIC, $this);
             // $renderer = $rendererFactory->getRenderer();
             
             $homeService = new HomeService(new HomeRepository(), new ElementRightsService(new RightsRepository()));

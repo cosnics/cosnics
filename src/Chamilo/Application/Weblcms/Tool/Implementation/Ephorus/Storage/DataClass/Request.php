@@ -384,12 +384,12 @@ class Request extends EphorusDataClass
     public function get_status_as_string()
     {
         /*
-         * switch($this->get_status()) { case self :: STATUS_IN_PROGRESS: return Translation :: get('InProgress'); case
-         * self :: STATUS_OK: return Translation :: get('StatusOK'); case self :: STATUS_DUPLICATE: return Translation
-         * :: get('Duplicate'); case self :: STATUS_PROTECTED: return Translation :: get('Protected'); case self ::
-         * STATUS_NOT_ENOUGH_TEXT: return Translation :: get('NotEnoughText'); case self :: STATUS_NO_TEXT: return
-         * Translation :: get('NoText'); case self :: STATUS_OTHER: return Translation :: get('Other'); } return
-         * Translation :: get('InProgress');
+         * switch($this->get_status()) { case self::STATUS_IN_PROGRESS: return Translation::get('InProgress'); case
+         * self::STATUS_OK: return Translation::get('StatusOK'); case self::STATUS_DUPLICATE: return Translation
+         *::get('Duplicate'); case self::STATUS_PROTECTED: return Translation::get('Protected'); case self ::
+         * STATUS_NOT_ENOUGH_TEXT: return Translation::get('NotEnoughText'); case self::STATUS_NO_TEXT: return
+         * Translation::get('NoText'); case self::STATUS_OTHER: return Translation::get('Other'); } return
+         * Translation::get('InProgress');
          */
         return self::status_as_string($this->get_status());
     }

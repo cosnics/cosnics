@@ -37,8 +37,8 @@ class CourseGroupUserTableColumnModel extends RecordTableColumnModel
                 CourseGroupUserRelation::class,
                 CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME));
         
-        // $title = Translation :: get(self :: COURSE_GROUP_COLOMN, array(), Utilities::COMMON_LIBRARIES);
+        // $title = Translation::get(self::COURSE_GROUP_COLOMN, array(), Utilities::COMMON_LIBRARIES);
         // // $this->add_column(
-        // // new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup :: PROPERTY_ID, $title, false));
+        // // new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_ID, $title, false));
     }
 }

@@ -352,7 +352,7 @@ abstract class NestedSet extends DataClass
                 $nested_set->set_left_value($insert_after + 1);
                 $nested_set->set_right_value($insert_after + 2);
 
-                // The call_user_func_array corresponds to parent :: create()
+                // The call_user_func_array corresponds to parent::create()
                 if (!call_user_func_array(
                     array($nested_set, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), array()
                 ))

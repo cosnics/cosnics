@@ -34,9 +34,9 @@ use Exception;
  *         $style->getHeadingCellStyle()->setTextColor(array(255, 255, 255));
  *         $style->getHeadingCellStyle()->setBackgroundColor(array(150, 150, 150));
  *         $style->setRelativeWidth(0.2);
- *         $reportingData->add_row(Translation :: get('Title'), $style);
+ *         $reportingData->add_row(Translation::get('Title'), $style);
  *         $style->setRelativeWidth(0.15);
- *         $reportingData->add_row(Translation :: get('NumberOfSubmissions'), $style);
+ *         $reportingData->add_row(Translation::get('NumberOfSubmissions'), $style);
  */
 class ReportingTemplateStyle
 {

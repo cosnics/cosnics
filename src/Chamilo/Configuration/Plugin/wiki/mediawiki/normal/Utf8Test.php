@@ -133,7 +133,7 @@ exit(0);
 function testLine($test, $line, &$total, &$success, &$failed)
 {
     $stripped = $line;
-    UtfNormal :: quickisNFCVerify($stripped);
+    UtfNormal::quickisNFCVerify($stripped);
     
     $same = ($line == $stripped);
     $len = mb_strlen(substr($stripped, 0, strpos($stripped, '|')));

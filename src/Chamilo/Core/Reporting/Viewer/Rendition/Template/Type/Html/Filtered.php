@@ -65,7 +65,7 @@ class Filtered extends Basic
         {
             $current_block_id = $this->determine_current_block_id();
             $current_block = $this->get_template()->get_block($current_block_id);
-            // $this->get_context()->set_parameter(Manager :: PARAM_BLOCK_ID, $current_block_id);
+            // $this->get_context()->set_parameter(Manager::PARAM_BLOCK_ID, $current_block_id);
 
             $html = array();
             if ($current_block instanceof FilteredBlock)

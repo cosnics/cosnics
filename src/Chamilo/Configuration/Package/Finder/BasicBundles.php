@@ -33,7 +33,7 @@ class BasicBundles
      * @param string $namespace
      * @param integer $mode
      */
-    public function __construct($rootNamespace = PackageList :: ROOT)
+    public function __construct($rootNamespace = PackageList::ROOT)
     {
         $this->rootNamespace = $rootNamespace;
         $this->setup();

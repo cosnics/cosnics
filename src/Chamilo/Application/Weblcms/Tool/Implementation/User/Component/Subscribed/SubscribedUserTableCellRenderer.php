@@ -176,7 +176,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
                         $this->get_component()->get_course(), CourseSettingsConnector::COURSE_ACCESS
                     );
 
-                    // if ($course_access != CourseSettingsConnector :: COURSE_ACCESS_CLOSED)
+                    // if ($course_access != CourseSettingsConnector::COURSE_ACCESS_CLOSED)
                     {
                         $parameters = array();
                         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_AS;

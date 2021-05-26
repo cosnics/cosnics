@@ -77,7 +77,7 @@ class CourseUsersFeedComponent extends Manager
     /**
      * Returns all the elements for this feed
      *
-     * @return Array
+     * @return array
      */
     private function get_elements()
     {

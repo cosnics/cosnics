@@ -45,7 +45,7 @@ class CourseImportForm extends FormValidator
     public function build_importing_form()
     {
         $this->addElement('file', 'file', Translation::get('FileName'));
-        // $this->addElement('submit', 'course_import', Translation :: get('Ok',
+        // $this->addElement('submit', 'course_import', Translation::get('Ok',
         // null ,Utilities:: COMMON_LIBRARIES));
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Import', null, Utilities::COMMON_LIBRARIES), null, null,

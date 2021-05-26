@@ -186,8 +186,8 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         // uniform sized text field
         $this->addElement('html', '<div class="type_' . FillInBlanksQuestion::TYPE_UNIFORM_TEXT . '_options_box">');
         $field_size_options = array();
-        // $field_size_options[] = $this->createElement('radio', self :: UNIFORM_INPUT_TYPE, null, Translation ::
-        // get('Unlimited') . '<br />', self :: UNIFORM_UNLIMITED_ANSWER);
+        // $field_size_options[] = $this->createElement('radio', self::UNIFORM_INPUT_TYPE, null, Translation ::
+        // get('Unlimited') . '<br />', self::UNIFORM_UNLIMITED_ANSWER);
         $field_size_options[] = $this->createElement(
             'radio', self::UNIFORM_INPUT_TYPE, null, Translation::get('LongestAnswer') . '<br />',
             self::UNIFORM_LONGEST_ANSWER

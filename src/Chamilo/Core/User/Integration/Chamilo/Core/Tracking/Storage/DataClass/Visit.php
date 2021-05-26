@@ -46,7 +46,7 @@ class Visit extends SimpleTracker
     /**
      * Inherited
      *
-     * @see MainTracker :: empty_tracker
+     * @see MainTracker::empty_tracker
      */
     public function empty_tracker()
     {

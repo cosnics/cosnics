@@ -72,7 +72,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         );
 
         $this->flickr = new phpFlickr($this->key, $this->secret);
-        // $this->flickr->enableCache('fs', Path :: getInstance()->getCachePath(__NAMESPACE__));
+        // $this->flickr->enableCache('fs', Path::getInstance()->getCachePath(__NAMESPACE__));
 
         $this->session_token = $external_repository_instance->get_setting('session_token')->get_value();
 

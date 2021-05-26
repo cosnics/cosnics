@@ -849,7 +849,7 @@ class Course extends DataClass
     private function initialize_course_sections()
     {
         $sections = array();
-        // translationm :: get will be called on display, depending on the course language setting
+        // translationm::get will be called on display, depending on the course language setting
         // these strings go to the database
         $sections[] = array('name' => 'SectionTools', 'type' => 1, 'order' => 1);
         $sections[] = array('name' => 'SectionLinks', 'type' => 2, 'order' => 2);

@@ -161,13 +161,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // foreach ($formats as $format)
         // {
         // $conditions[] = new PatternMatchCondition(
-        // new PropertyConditionVariable(Element::class, Element :: PROPERTY_CONFIGURATION),
+        // new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION),
         // '*' . $format . '*');
         // }
         //
         // $condition = new OrCondition($conditions);
         //
-        // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager :: count(
+        // $usedInBlocks = \Chamilo\Core\Home\Storage\DataManager::count(
         // Block::class,
         // new DataClassCountParameters($condition));
         //
@@ -192,7 +192,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 return false;
             }
             $children = array();
-            // $children = self :: getInstance()->get_children_ids($object);
+            // $children = self::getInstance()->get_children_ids($object);
             $versions = array();
             $versions = Datamanager::get_version_ids($object);
             $forbidden = array_merge($children, $versions);
@@ -709,7 +709,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function get_number_of_categories($user_id)
     {
-        if (!isset(self::$number_of_categories{$user_id}))
+        if (!isset(self::$number_of_categories[$user_id]))
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
@@ -721,7 +721,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        return self::$number_of_categories{$user_id};
+        return self::$number_of_categories[$user_id];
     }
 
     public static function get_registered_applications()

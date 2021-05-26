@@ -32,8 +32,8 @@ class Filesystem
     /**
      * Call the chmod function on the given file path.
      * The chmod value must be the octal value, with or without its
-     * leading zero Ex: Filesystem :: chmod('/path/to/file', '666') OK Filesystem :: chmod('/path/to/file', '0666') OK
-     * Filesystem :: chmod('/path/to/file', 666) OK Filesystem :: chmod('/path/to/file', 0666) OK Note: This function
+     * leading zero Ex: Filesystem::chmod('/path/to/file', '666') OK Filesystem::chmod('/path/to/file', '0666') OK
+     * Filesystem::chmod('/path/to/file', 666) OK Filesystem::chmod('/path/to/file', 0666) OK Note: This function
      * was written to facilitate the storage of a chmod value. The PHP chmod value must be called with an octal number,
      * but it is not easy to store a value with a leading 0 that is a number and not a string.
      *
@@ -315,7 +315,7 @@ class Filesystem
         {
             // no forced download, just let the browser decide what to do
             // according to the mimetype
-            // $content_type = DocumentManager :: file_get_mime_type($filename);
+            // $content_type = DocumentManager::file_get_mime_type($filename);
             header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 

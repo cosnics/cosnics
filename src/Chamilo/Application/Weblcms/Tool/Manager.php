@@ -682,7 +682,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @see WeblcmsManager :: get_last_visit_date()
+     * @see WeblcmsManager::get_last_visit_date()
      */
     public function get_last_visit_date()
     {
@@ -691,7 +691,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @see Application :: get_category()
+     * @see Application::get_category()
      */
     public function get_category($id)
     {
