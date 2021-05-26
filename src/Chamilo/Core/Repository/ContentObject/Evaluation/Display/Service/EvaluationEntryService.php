@@ -2,84 +2,29 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\EntityRepository;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository\EvaluationEntryRepository;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScoreTargetUser;
-use Chamilo\Core\User\Service\UserService;
-use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class EntityService
+class EvaluationEntryService
 {
     /**
-     * @var EntityRepository
+     * @var EvaluationEntryRepository
      */
-    protected $entityRepository;
+    protected $evaluationEntryRepository;
 
-    /**
-     * @var UserService
-     */
-    protected $userService;
-
-    public function __construct(EntityRepository $entityRepository, UserService $userService)
+    public function __construct(EvaluationEntryRepository $evaluationEntryRepository)
     {
-        $this->entityRepository = $entityRepository;
-        $this->userService = $userService;
-    }
-
-    /**
-     *
-     * @param int[] $userIds
-     * @param ContextIdentifier $contextIdentifier
-     * @param FilterParameters|null $filterParameters
-     *
-     * @return RecordIterator
-     */
-    public function getUsersFromIDs(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): RecordIterator
-    {
-        if (is_null($filterParameters))
-        {
-            $filterParameters = new FilterParameters();
-        }
-
-        return $this->entityRepository->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
-    }
-
-    /*public function getUserEntity(ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
-    {
-        return $this->entityRepository->getUserEntity($contextIdentifier->getContextClass(), $contextIdentifier->getContextId(), $entityType, $entityId);
-    }*/
-
-    /**
-     *
-     * @param int[] $userIds
-     * @param FilterParameters $filterParameters
-     *
-     * @return integer
-     */
-    public function countUsersFromIDs(array $userIds, FilterParameters $filterParameters): int
-    {
-        return $this->entityRepository->countUsersFromIDs($userIds, $filterParameters);
-    }
-
-    /**
-     * @param int $entityId
-     *
-     * @return User
-     */
-    public function getUserForEntity(int $entityId): User
-    {
-        return $this->userService->findUserByIdentifier($entityId);
+        $this->evaluationEntryRepository = $evaluationEntryRepository;
     }
 
     /**
@@ -90,7 +35,7 @@ class EntityService
      */
     public function getEvaluationEntryForEntity(ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
     {
-        return $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId);
+        return $this->evaluationEntryRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId);
     }
 
     /**
@@ -109,7 +54,7 @@ class EntityService
         $evaluationEntry->setContextId($contextIdentifier->getContextId());
         $evaluationEntry->setEntityType($entityType);
         $evaluationEntry->setEntityId($entityId);
-        $this->entityRepository->createEvaluationEntry($evaluationEntry);
+        $this->evaluationEntryRepository->createEvaluationEntry($evaluationEntry);
 
         return $evaluationEntry;
     }
@@ -124,7 +69,7 @@ class EntityService
      */
     public function createEvaluationEntryIfNotExists(int $evaluationId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId)
     {
-        return $this->entityRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId) ?:
+        return $this->evaluationEntryRepository->getEvaluationEntry($contextIdentifier, $entityType, $entityId) ?:
             $this->createEvaluationEntry($evaluationId, $contextIdentifier, $entityType, $entityId);
     }
 
@@ -134,7 +79,7 @@ class EntityService
      */
     public function getEvaluationEntryScore(int $entryId)
     {
-        return $this->entityRepository->getEvaluationEntryScore($entryId);
+        return $this->evaluationEntryRepository->getEvaluationEntryScore($entryId);
     }
 
     /**
@@ -153,7 +98,7 @@ class EntityService
         $evaluationEntryScore->setScore($score);
         $evaluationEntryScore->setIsAbsent($isAbsent);
         $evaluationEntryScore->setCreatedTime(time());
-        $this->entityRepository->createEvaluationEntryScore($evaluationEntryScore);
+        $this->evaluationEntryRepository->createEvaluationEntryScore($evaluationEntryScore);
 
         return $evaluationEntryScore;
     }
@@ -172,12 +117,12 @@ class EntityService
     {
         $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
 
-        $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
+        $evaluationEntryScore = $this->evaluationEntryRepository->getEvaluationEntryScore($evaluationEntry->getId());
 
         if ($evaluationEntryScore instanceof EvaluationEntryScore)
         {
             $evaluationEntryScore->setScore($score);
-            $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
+            $this->evaluationEntryRepository->updateEvaluationEntryScore($evaluationEntryScore);
         } else
         {
             $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, $score);
@@ -199,12 +144,12 @@ class EntityService
     public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId): EvaluationEntryScore
     {
         $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
-        $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
+        $evaluationEntryScore = $this->evaluationEntryRepository->getEvaluationEntryScore($evaluationEntry->getId());
 
         if ($evaluationEntryScore instanceof EvaluationEntryScore)
         {
             $evaluationEntryScore->setIsAbsent(false);
-            $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
+            $this->evaluationEntryRepository->updateEvaluationEntryScore($evaluationEntryScore);
         } else
         {
             $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId);
@@ -226,13 +171,13 @@ class EntityService
     public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, ContextIdentifier $contextIdentifier, int $entityType, int $entityId): EvaluationEntryScore
     {
         $evaluationEntry = $this->createEvaluationEntryIfNotExists($evaluationId, $contextIdentifier, $entityType, $entityId);
-        $evaluationEntryScore = $this->entityRepository->getEvaluationEntryScore($evaluationEntry->getId());
+        $evaluationEntryScore = $this->evaluationEntryRepository->getEvaluationEntryScore($evaluationEntry->getId());
 
         if ($evaluationEntryScore instanceof EvaluationEntryScore)
         {
             $evaluationEntryScore->setScore(0);
             $evaluationEntryScore->setIsAbsent(true);
-            $this->entityRepository->updateEvaluationEntryScore($evaluationEntryScore);
+            $this->evaluationEntryRepository->updateEvaluationEntryScore($evaluationEntryScore);
         } else
         {
             $evaluationEntryScore = $this->createEvaluationEntryScore($evaluationEntry->getId(), $evaluatorId, 0, true);
@@ -253,7 +198,7 @@ class EntityService
         $targetUser = new EvaluationEntryScoreTargetUser();
         $targetUser->setTargetUserId($entityId);
         $targetUser->setScoreId($entryScoreId);
-        $this->entityRepository->createEvaluationEntryScoreTargetUser($targetUser);
+        $this->evaluationEntryRepository->createEvaluationEntryScoreTargetUser($targetUser);
 
         return $targetUser;
     }

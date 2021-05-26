@@ -2,7 +2,12 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation;
 
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\ContextIdentifier;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation
@@ -12,29 +17,49 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Re
 class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServiceBridgeInterface
 {
     /**
-     * @var integer
+     * @var LearningPathStepContextService
      */
-    protected $publicationId;
+    protected $learningPathStepContextService;
+
+    /**
+     * @var PublicationEntityServiceManager
+     */
+    protected $publicationEntityServiceManager;
+
+    /**
+     * @var ContentObjectPublication
+     */
+    protected $contentObjectPublication;
 
     /**
      * @var bool
      */
     protected $canEditEvaluation;
 
-    /**
-     * @return int
-     */
-    public function getPublicationId(): int
+    public function __construct(LearningPathStepContextService $learningPathStepContextService, PublicationEntityServiceManager $publicationEntityServiceManager)
     {
-        return $this->publicationId;
+        $this->learningPathStepContextService = $learningPathStepContextService;
+        $this->publicationEntityServiceManager = $publicationEntityServiceManager;
     }
 
     /**
-     * @param int $publicationId
+     * @param ContentObjectPublication $publication
      */
-    public function setPublicationId(int $publicationId)
+    public function setContentObjectPublication(ContentObjectPublication $publication)
     {
-        $this->publicationId = $publicationId;
+        $this->contentObjectPublication = $publication;
+    }
+
+    /**
+     * @param int $stepId
+     * @return ContextIdentifier
+     */
+    public function getContextIdentifier(int $stepId): ContextIdentifier
+    {
+        $publicationClass = ContentObjectPublication::class_name();
+        $publicationId = $this->contentObjectPublication->getId();
+        $learningPathStepContext = $this->learningPathStepContextService->getOrCreateLearningPathStepContext($stepId, $publicationClass, $publicationId);
+        return new ContextIdentifier(get_class($learningPathStepContext), $learningPathStepContext->getId());
     }
 
     /**
@@ -51,5 +76,49 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     public function setCanEditEvaluation($canEditEvaluation = true)
     {
         $this->canEditEvaluation = $canEditEvaluation;
+    }
+
+    /**
+     * @param int $entityType
+     * @return int[]
+     */
+    public function getTargetEntityIds(int $entityType): array
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+        return $publicationEntityService->getTargetEntityIds();
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     * @return User[]
+     */
+    public function getUsersForEntity(int $entityType, int $entityId): array
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+        return $publicationEntityService->getUsersForEntity($entityId);
+    }
+
+    /**
+     * @param User $user
+     * @param int $entityType
+     * @param int $entityId
+     * @return bool
+     */
+    public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+        return $publicationEntityService->isUserPartOfEntity($user, $entityId);
+    }
+
+    /**
+     * @param User $currentUser
+     * @param int $entityType
+     * @return int
+     */
+    public function getCurrentEntityIdentifier(User $currentUser, int $entityType): int
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+        return $publicationEntityService->getCurrentEntityIdentifier($currentUser);
     }
 }

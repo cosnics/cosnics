@@ -2,12 +2,11 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\EvaluationServiceBridge;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Type\ContentObjectEmbedder;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\ApplicationFactory;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
@@ -58,7 +57,7 @@ class Embedder extends ContentObjectEmbedder
         $learningPathEvaluationServiceBridge =
             $this->getBridgeManager()->getBridgeByInterface(LearningPathEvaluationServiceBridgeInterface::class);
 
-        $evaluationServiceBridge = new EvaluationServiceBridge($learningPathEvaluationServiceBridge, $this->getService(EntityService::class), $this->getService(LearningPathStepContextService::class));
+        $evaluationServiceBridge = new EvaluationServiceBridge($learningPathEvaluationServiceBridge, $this->getService(EvaluationEntryService::class));
         $evaluationServiceBridge->setTreeNode($this->treeNode);
         $evaluationServiceBridge->setTreeNodeAttempt($activeAttempt);
 

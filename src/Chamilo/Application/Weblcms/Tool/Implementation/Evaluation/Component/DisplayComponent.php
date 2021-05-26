@@ -3,11 +3,14 @@
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component;
 
 use Chamilo\Application\Weblcms\Bridge\Evaluation\EvaluationServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\CourseGroupEntityService;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
@@ -63,6 +66,14 @@ class DisplayComponent extends Manager implements DelegateComponent
 
     protected function buildBridges(ContentObjectPublication $contentObjectPublication)
     {
+        /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
+        $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
+        $evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
+
+        /** @var PublicationEntityServiceManager $publicationEntityServiceManager */
+        $publicationEntityServiceManager = $this->getService(PublicationEntityServiceManager::class);
+        $publicationEntityServiceManager->setContentObjectPublication($contentObjectPublication);
+
         /** @var EvaluationServiceBridge $evaluationServiceBridge */
         $evaluationServiceBridge = $this->getService(EvaluationServiceBridge::class);
         $evaluationServiceBridge->setCanEditEvaluation(
@@ -70,10 +81,9 @@ class DisplayComponent extends Manager implements DelegateComponent
         );
 
         $evaluationPublication = $this->getEvaluationPublication($contentObjectPublication);
-        $evaluationServiceBridge->setCurrentEntityType($evaluationPublication->getEntityType());
-        $evaluationServiceBridge->setContextIdentifier(new ContextIdentifier(get_class($evaluationPublication), $contentObjectPublication->getId()));
-        $evaluationServiceBridge->setReleaseScores($evaluationPublication->getReleaseScores());
-        $evaluationServiceBridge->setPublicationId($contentObjectPublication->getId());
+        $evaluationServiceBridge->setContentObjectPublication($contentObjectPublication);
+        $evaluationServiceBridge->setEvaluationPublication($evaluationPublication);
+
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
     }
 

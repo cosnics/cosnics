@@ -2,12 +2,16 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation;
 
+use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication as EvaluationPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation
@@ -17,24 +21,24 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
 {
     /**
-     * @var EntityService
+     * @var PublicationEntityServiceManager
      */
-    protected $entityService;
+    protected $publicationEntityServiceManager;
 
     /**
-     * @var integer
+     * @var EvaluationEntryService
      */
-    protected $publicationId;
+    protected $evaluationEntryService;
 
     /**
-     * @var integer
+     * @var ContentObjectPublication
      */
-    protected $currentEntityType;
+    protected $contentObjectPublication;
 
     /**
-     * @var ContextIdentifier
+     * @var EvaluationPublication
      */
-    protected $contextIdentifier;
+    protected $evaluationPublication;
 
     /**
      * @var bool
@@ -42,24 +46,29 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $canEditEvaluation;
 
     /**
-     * @var bool
+     * @param PublicationEntityServiceManager $publicationEntityServiceManager
+     * @param EvaluationEntryService $evaluationEntryService
      */
-    protected $releaseScores;
-
-    /**
-     * @param EntityService $entityService
-     */
-    public function __construct(EntityService $entityService)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntryService $evaluationEntryService)
     {
-        $this->entityService = $entityService;
+        $this->publicationEntityServiceManager = $publicationEntityServiceManager;
+        $this->evaluationEntryService = $evaluationEntryService;
     }
 
     /**
-     * @param int $publicationId
+     * @param ContentObjectPublication $contentObjectPublication
      */
-    public function setPublicationId(int $publicationId)
+    public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
-        $this->publicationId = $publicationId;
+        $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
+     * @param EvaluationPublication $evaluationPublication
+     */
+    public function setEvaluationPublication(EvaluationPublication $evaluationPublication)
+    {
+        $this->evaluationPublication = $evaluationPublication;
     }
 
     /**
@@ -69,7 +78,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getCurrentEntityIdentifier(User $currentUser): int
     {
-        return $currentUser->getId(); // Todo: get according to entity type
+        return $this->getPublicationEntityService()->getCurrentEntityIdentifier($currentUser);
     }
 
     /**
@@ -77,15 +86,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getCurrentEntityType(): int
     {
-        return $this->currentEntityType;
-    }
-
-    /**
-     * @param integer $currentEntityType
-     */
-    public function setCurrentEntityType(int $currentEntityType)
-    {
-        $this->currentEntityType = $currentEntityType;
+        return $this->evaluationPublication->getEntityType();
     }
 
     /**
@@ -93,15 +94,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getContextIdentifier(): ContextIdentifier
     {
-        return $this->contextIdentifier;
-    }
-
-    /**
-     * @param ContextIdentifier $contextIdentifier
-     */
-    public function setContextIdentifier(ContextIdentifier $contextIdentifier)
-    {
-        $this->contextIdentifier = $contextIdentifier;
+        return new ContextIdentifier(get_class($this->evaluationPublication), $this->contentObjectPublication->getId());
     }
 
     /**
@@ -125,15 +118,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getReleaseScores(): bool
     {
-        return $this->releaseScores;
-    }
-
-    /**
-     * @param bool $releaseScores
-     */
-    public function setReleaseScores($releaseScores)
-    {
-        $this->releaseScores = $releaseScores;
+        return $this->evaluationPublication->getReleaseScores();
     }
 
     /**
@@ -141,22 +126,25 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function getTargetEntityIds(): array
     {
-        return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($this->publicationId, null);
+        return $this->getPublicationEntityService()->getTargetEntityIds();
     }
 
     /**
-     * @param int $entityType
+     * @return PublicationEntityServiceInterface
+     */
+    private function getPublicationEntityService(): PublicationEntityServiceInterface
+    {
+        return $this->publicationEntityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+    }
+
+    /**
      * @param int $entityId
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId): array
+    public function getUsersForEntity(int $entityId): array
     {
-        // Todo: actually search by entity type
-        return [$this->entityService->getUserForEntity($entityId)];
-        /*$entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
-
-        return $entityService->getUsersForEntity($entityId);*/
+        return $this->getPublicationEntityService()->getUsersForEntity($entityId);
     }
 
     /**
@@ -168,14 +156,8 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool
     {
-        if ($entityType == 0 && $user->getId() == $entityId)
-        {
-            return true;
-        }
-        // todo: all other cases
-        return false;
-
-        //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+        return $publicationEntityService->isUserPartOfEntity($user, $entityId);
     }
 
     /**
@@ -185,7 +167,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry
     {
-        return $this->entityService->createEvaluationEntryIfNotExists($evaluationId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+        return $this->evaluationEntryService->createEvaluationEntryIfNotExists($evaluationId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
 
     /**
@@ -197,7 +179,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore
     {
-        return $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId, $score);
+        return $this->evaluationEntryService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId, $score);
     }
 
     /**
@@ -208,7 +190,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+        return $this->evaluationEntryService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
 
     /**
@@ -219,7 +201,6 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      */
     public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->contextIdentifier, $this->currentEntityType, $entityId);
+        return $this->evaluationEntryService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
-
 }

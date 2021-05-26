@@ -17,6 +17,8 @@ class SaveScoreComponent extends Manager implements CsrfComponentInterface
 {
     public function run()
     {
+        $this->ensureEntityIdentifier();
+
         if (!$this->getRightsService()->canUserEditEvaluation()) {
             throw new NotAllowedException();
         }

@@ -524,19 +524,39 @@
 </div>
 <script>
     $('document').ready(function () {
+
+        var entityTypeFields = [
+            // 0
+            [   { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
+                { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
+                { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ],
+            // 1
+            [   { key: 'name', sortable: true, thClass: '' },
+                { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ],
+            // 2
+            [   { key: 'name', sortable: true, thClass: '' },
+                { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ]
+        ];
+        var defaultSort = [
+            'lastname',
+            'name',
+            'name'
+        ];
+
         new Vue({
             el: '#entities',
             delimiters: ['${', '}'],
             data: {
                 entityType: {{ ENTITY_TYPE }},
                 context: '',
-                fields: [
-                    { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
-                    { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
-                    { key: 'score', sortable: false, thClass: 'tbl-no-sort', variant: 'score' },
-                    { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count'  }//,
-                ],
-                sortBy: 'lastname',
+                fields: entityTypeFields[{{ ENTITY_TYPE }}],
+                sortBy: defaultSort[{{ ENTITY_TYPE }}],
                 sortDesc: false,
                 pagination: {
                     currentPage: 1,

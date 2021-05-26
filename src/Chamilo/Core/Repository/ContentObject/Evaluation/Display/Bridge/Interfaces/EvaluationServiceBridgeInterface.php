@@ -47,12 +47,11 @@ interface EvaluationServiceBridgeInterface
     public function getTargetEntityIds(): array;
 
     /**
-     * @param int $entityType
      * @param int $entityId
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId): array;
+    public function getUsersForEntity(int $entityId): array;
 
     /**
      * @param User $user

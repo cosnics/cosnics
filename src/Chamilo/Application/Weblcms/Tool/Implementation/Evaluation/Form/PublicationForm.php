@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\Repository\PublicationRepository;
-use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Domain\EntityTypes;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Domain\EntityTypes;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\Translation\Translator;
 

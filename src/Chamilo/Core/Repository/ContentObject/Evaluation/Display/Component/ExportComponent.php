@@ -27,7 +27,7 @@ class ExportComponent extends Manager
             }
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier);
+            $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier);
 
             // output headers so that the file is downloaded rather than displayed
             header('Content-Type: text/csv; charset=utf-8');

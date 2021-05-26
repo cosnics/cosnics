@@ -1,9 +1,8 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository;
+namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Storage\Repository;
 
-use Chamilo\Core\Group\Storage\DataClass\Group;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -28,7 +27,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluatio
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
- * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Repository
+ * @package Chamilo\Application\Weblcms\Bridge\Evaluation\Storage\Repository
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
@@ -56,51 +55,6 @@ class EntityRepository
         $this->dataClassRepository = $dataClassRepository;
         $this->filterParametersTranslator = $filterParametersTranslator;
     }
-
-    /*public function getUserEntity(string $contextClass, int $contextId, int $entityType, int $entityId)
-    {
-        $class_name = EvaluationEntry::class_name();
-
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_CONTEXT_CLASS),
-            new StaticConditionVariable($contextClass)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_CONTEXT_ID),
-            new StaticConditionVariable($contextId)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entityType)
-        );
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($class_name, EvaluationEntry::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entityId)
-        );
-
-        $properties = new DataClassProperties([
-            new FixedPropertyConditionVariable(EvaluationEntry::class_name(), User::PROPERTY_ID, 'entry_id'),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_FIRSTNAME),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_LASTNAME),
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_OFFICIAL_CODE),
-        ]);
-
-        $userJoinConditions = array();
-        $userJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID),
-            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ENTITY_ID)
-        );
-
-        $joins = new Joins();
-        $joins->add(new Join(User::class_name(), new AndCondition($userJoinConditions), Join::TYPE_LEFT));
-
-        $parameters = new RecordRetrieveParameters($properties);
-        $parameters->setCondition(new AndCondition($conditions));
-        $parameters->setJoins($joins);
-
-        return $this->dataClassRepository->record($class_name, $parameters);
-    }*/
 
     protected function getRetrieveProperties(DataClassProperties $properties): DataClassProperties
     {
@@ -173,74 +127,11 @@ class EntityRepository
     /**
      * @return DataClassProperties
      */
-    protected function getUserEntityDataClassProperties(): DataClassProperties
-    {
-        $class_name = User::class_name();
-        return new DataClassProperties([
-            new PropertyConditionVariable($class_name, User::PROPERTY_ID),
-            new PropertyConditionVariable($class_name, User::PROPERTY_FIRSTNAME),
-            new PropertyConditionVariable($class_name, User::PROPERTY_LASTNAME),
-            new PropertyConditionVariable($class_name, User::PROPERTY_OFFICIAL_CODE)
-        ]);
-    }
-
-    /**
-     *
-     * @param int[] $userIds
-     * @param ContextIdentifier $contextIdentifier
-     * @param FilterParameters $filterParameters
-     *
-     * @return RecordIterator
-     */
-    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
-    {
-        $condition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
-
-        $searchProperties = $this->getUserEntityDataClassProperties();
-        $retrieveProperties = $this->getRetrieveProperties($this->getUserEntityDataClassProperties());
-
-        $joins = $this->getEvaluationEntryJoins(User::class, $contextIdentifier);
-
-        $group_by = new GroupBy();
-        $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
-
-        $parameters = new RecordRetrievesParameters($retrieveProperties);
-        $parameters->setJoins($joins);
-        $parameters->setGroupBy($group_by);
-
-        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
-
-        return $this->dataClassRepository->records(User::class_name(), $parameters);
-    }
-
-    /**
-     *
-     * @param int[] $userIds
-     * @param FilterParameters $filterParameters
-     *
-     * @return integer
-     */
-    public function countUsersFromIds(array $userIds, FilterParameters $filterParameters): int
-    {
-        $condition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
-
-        $retrieveProperties = $searchProperties = $this->getUserEntityDataClassProperties();
-        $parameters = new DataClassCountParameters();
-        $parameters->setDataClassProperties($retrieveProperties);
-
-        $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
-
-        return $this->dataClassRepository->count(User::class_name(), $parameters);
-    }
-
-    /**
-     * @return DataClassProperties
-     */
-    protected function getPlatformGroupEntityDataClassProperties(): DataClassProperties
+    protected function getCourseGroupEntityDataClassProperties(): DataClassProperties
     {
         return new DataClassProperties([
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_ID),
-            new PropertyConditionVariable(Group::class_name(), Group::PROPERTY_NAME)
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID),
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_NAME)
         ]);
     }
 
@@ -252,17 +143,17 @@ class EntityRepository
      *
      * @return RecordIterator
      */
-    public function getPlatformGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
+    public function getGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
     {
-        $condition = new InCondition(new PropertyConditionVariable(Group::class_name(), DataClass::PROPERTY_ID), $groupIds);
+        $condition = new InCondition(new PropertyConditionVariable(CourseGroup::class_name(), DataClass::PROPERTY_ID), $groupIds);
 
-        $searchProperties = $this->getPlatformGroupEntityDataClassProperties();
-        $retrieveProperties = $this->getRetrieveProperties($this->getPlatformGroupEntityDataClassProperties());
+        $searchProperties = $this->getCourseGroupEntityDataClassProperties();
+        $retrieveProperties = $this->getRetrieveProperties($this->getCourseGroupEntityDataClassProperties());
 
-        $joins = $this->getEvaluationEntryJoins(Group::class, $contextIdentifier);
+        $joins = $this->getEvaluationEntryJoins(CourseGroup::class, $contextIdentifier);
 
         $group_by = new GroupBy();
-        $group_by->add(new PropertyConditionVariable(Group::class_name(), User::PROPERTY_ID));
+        $group_by->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID));
 
         $parameters = new RecordRetrievesParameters($retrieveProperties);
         $parameters->setJoins($joins);
@@ -270,7 +161,7 @@ class EntityRepository
 
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
-        return $this->dataClassRepository->records(Group::class_name(), $parameters);
+        return $this->dataClassRepository->records(CourseGroup::class_name(), $parameters);
     }
 
     /**
@@ -280,17 +171,16 @@ class EntityRepository
      *
      * @return integer
      */
-    public function countPlatformGroupsFromIds(array $groupIds, FilterParameters $filterParameters): int
+    public function countGroupsFromIds(array $groupIds, FilterParameters $filterParameters): int
     {
-        $condition = new InCondition(new PropertyConditionVariable(Group::class_name(), DataClass::PROPERTY_ID), $groupIds);
+        $condition = new InCondition(new PropertyConditionVariable(CourseGroup::class_name(), DataClass::PROPERTY_ID), $groupIds);
 
-        $retrieveProperties = $searchProperties = $this->getPlatformGroupEntityDataClassProperties();
+        $retrieveProperties = $searchProperties = $this->getCourseGroupEntityDataClassProperties();
         $parameters = new DataClassCountParameters();
         $parameters->setDataClassProperties($retrieveProperties);
 
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 
-        return $this->dataClassRepository->count(Group::class_name(), $parameters);
+        return $this->dataClassRepository->count(CourseGroup::class_name(), $parameters);
     }
-
 }

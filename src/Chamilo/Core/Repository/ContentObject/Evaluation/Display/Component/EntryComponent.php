@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricSco
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
+use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -38,6 +39,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
 
     public function run()
     {
+        $this->ensureEntityIdentifier();
         $this->getRubricBridge()->setConfirmRubricScore($this);
         $this->evaluationEntry = $this->ensureEvaluationEntry();
         if (!$this->evaluationEntry )
@@ -98,11 +100,11 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
 
         if ($this->getRightsService()->canUserEditEvaluation())
         {
-            return $this->getEntityService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
+            return $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
         }
         else
         {
-            return $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+            return $this->getEvaluationEntryService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
         }
     }
 
@@ -115,7 +117,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
     {
         $entityType = $this->getEntityType();
         $entityId = $this->getEntityIdentifier();
-        $evaluationScore = $this->getEntityService()->getEvaluationEntryScore($evaluationEntry->getId());
+        $evaluationScore = $this->getEvaluationEntryService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';
         $presenceStatus = 'neutral';
         $rubricScore = null;
@@ -161,7 +163,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
 
-        $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, new FilterParameters());
+        $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, new FilterParameters());
         $users = array();
         $selectedUser = null;
 
@@ -271,7 +273,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
 
         if ($entityType == 0)
         {
-            $user = $this->getEntityService()->getUserForEntity($entityId);
+            $user = $this->getEvaluationServiceBridge()->getUsersForEntity($entityId)[0];
             $this->entityName = $user->get_fullname();
             return $this->entityName;
         }

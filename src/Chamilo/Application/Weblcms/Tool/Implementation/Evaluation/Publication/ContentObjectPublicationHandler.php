@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Publication
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Domain\EntityTypes;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Domain\EntityTypes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 
 /**

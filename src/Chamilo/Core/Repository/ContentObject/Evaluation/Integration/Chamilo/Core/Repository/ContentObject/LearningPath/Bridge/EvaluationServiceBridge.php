@@ -2,10 +2,9 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge;
 
-use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EmbeddedViewSupport;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
@@ -15,7 +14,6 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeA
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
 
 /**
  * Class EvaluationServiceBridge
@@ -24,14 +22,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepC
 class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, EmbeddedViewSupport
 {
     /**
-     * @var EntityService
+     * @var EvaluationEntryService
      */
-    protected $entityService;
-
-    /**
-     * @var LearningPathStepContextService
-     */
-    protected $learningPathStepContextService;
+    protected $evaluationEntryService;
 
     /**
      * @var LearningPathEvaluationServiceBridgeInterface
@@ -57,14 +50,12 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      * EvaluationServiceBridge constructor.
      *
      * @param LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge
-     * @param EntityService $entityService
-     * @param LearningPathStepContextService $learningPathStepContextService
+     * @param EvaluationEntryService $evaluationEntryService
      */
-    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EntityService $entityService, LearningPathStepContextService $learningPathStepContextService)
+    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EvaluationEntryService $evaluationEntryService)
     {
         $this->learningPathEvaluationServiceBridge = $learningPathEvaluationServiceBridge;
-        $this->entityService = $entityService;
-        $this->learningPathStepContextService = $learningPathStepContextService;
+        $this->evaluationEntryService = $evaluationEntryService;
     }
 
     /**
@@ -98,7 +89,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function getCurrentEntityIdentifier(User $currentUser): int
     {
-        return $currentUser->getId(); // Todo: get according to entity type
+        return $this->learningPathEvaluationServiceBridge->getCurrentEntityIdentifier($currentUser, $this->getCurrentEntityType());
     }
 
     /**
@@ -114,11 +105,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function getContextIdentifier(): ContextIdentifier
     {
-        $stepId = $this->treeNode->getId();
-        $contextClass = ContentObjectPublication::class_name();
-        $contextId = $this->learningPathEvaluationServiceBridge->getPublicationId();
-        $learningPathStepContext = $this->learningPathStepContextService->getOrCreateLearningPathStepContext($stepId, $contextClass, $contextId);
-        return new ContextIdentifier(get_class($learningPathStepContext), $learningPathStepContext->getId());
+        return $this->learningPathEvaluationServiceBridge->getContextIdentifier($this->treeNode->getId());
     }
 
     /**
@@ -142,23 +129,17 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function getTargetEntityIds(): array
     {
-        $publicationId = $this->learningPathEvaluationServiceBridge->getPublicationId();
-        return \Chamilo\Application\Weblcms\Storage\DataManager::getPublicationTargetUserIds($publicationId, null);
+        return $this->learningPathEvaluationServiceBridge->getTargetEntityIds($this->getCurrentEntityType());
     }
 
     /**
-     * @param int $entityType
      * @param int $entityId
      *
      * @return User[]
      */
-    public function getUsersForEntity(int $entityType, int $entityId): array
+    public function getUsersForEntity(int $entityId): array
     {
-        // Todo: actually search by entity type
-        return [$this->entityService->getUserForEntity($entityId)];
-        /*$entityService = $this->entityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
-
-        return $entityService->getUsersForEntity($entityId);*/
+        return $this->learningPathEvaluationServiceBridge->getUsersForEntity($this->getCurrentEntityType(), $entityId);
     }
 
     /**
@@ -170,14 +151,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool
     {
-        if ($entityType == 0 && $user->getId() == $entityId)
-        {
-            return true;
-        }
-        // todo: all other cases
-        return false;
-
-        //return $this->entityService->isUserPartOfEntity($user, $this->contentObjectPublication, $entityId);
+        return $this->learningPathEvaluationServiceBridge->isUserPartOfEntity($user, $entityType, $entityId);
     }
 
     /**
@@ -187,7 +161,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry
     {
-        return $this->entityService->createEvaluationEntryIfNotExists($evaluationId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
+        return $this->evaluationEntryService->createEvaluationEntryIfNotExists($evaluationId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
 
     /**
@@ -199,7 +173,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore
     {
-        return $this->entityService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId, $score);
+        return $this->evaluationEntryService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId, $score);
     }
 
     /**
@@ -210,7 +184,7 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
+        return $this->evaluationEntryService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
 
     /**
@@ -221,6 +195,6 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      */
     public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
     {
-        return $this->entityService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
+        return $this->evaluationEntryService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
     }
 }

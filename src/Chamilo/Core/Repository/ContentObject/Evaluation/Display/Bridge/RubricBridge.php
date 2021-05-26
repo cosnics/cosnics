@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricScoreInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
@@ -18,9 +18,9 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
 class RubricBridge implements RubricBridgeInterface
 {
     /**
-     * @var EntityService
+     * @var EvaluationEntryService
      */
-    protected $entityService;
+    protected $evaluationEntryService;
 
     /**
      * @var EvaluationServiceBridgeInterface
@@ -48,12 +48,12 @@ class RubricBridge implements RubricBridgeInterface
      * RubricBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
-     * @param EntityService $entityService
+     * @param EvaluationEntryService $evaluationEntryService
      */
-    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge, EntityService $entityService)
+    public function __construct(EvaluationServiceBridgeInterface $evaluationServiceBridge, EvaluationEntryService $evaluationEntryService)
     {
         $this->evaluationServiceBridge = $evaluationServiceBridge;
-        $this->entityService = $entityService;
+        $this->evaluationEntryService = $evaluationEntryService;
     }
 
     /**
@@ -96,7 +96,7 @@ class RubricBridge implements RubricBridgeInterface
      */
     public function getTargetUsers(): array
     {
-        return $this->evaluationServiceBridge->getUsersForEntity($this->evaluationEntry->getEntityType(), $this->evaluationEntry->getEntityId());
+        return $this->evaluationServiceBridge->getUsersForEntity($this->evaluationEntry->getEntityId());
     }
 
     /**
@@ -118,7 +118,7 @@ class RubricBridge implements RubricBridgeInterface
 
         $relativeScore = round(($totalScore / $maxScore) * 100);
 
-        if ($this->entityService->getEvaluationEntryScore($this->evaluationEntry->getId()))
+        if ($this->evaluationEntryService->getEvaluationEntryScore($this->evaluationEntry->getId()))
         {
             $this->confirmRubricScore->registerRubricScore($relativeScore);
             return;

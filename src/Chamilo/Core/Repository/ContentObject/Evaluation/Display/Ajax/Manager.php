@@ -4,7 +4,10 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxComponent;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\AjaxManager;
@@ -69,7 +72,7 @@ abstract class Manager extends AjaxManager
         $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-        $evaluationEntry = $this->getEntityService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        $evaluationEntry = $this->getEvaluationEntryService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
         if (!$evaluationEntry)
         {
             $this->throwUserException('EntryNotFound');
@@ -99,9 +102,19 @@ abstract class Manager extends AjaxManager
         return $this->getService(ContentObjectRepository::class);
     }
 
-    protected function getEntityService() : EntityService
+    protected function getEntityServiceByType(int $entityType): EvaluationEntityServiceInterface
     {
-        return $this->getService(EntityService::class);
+        return $this->getEvaluationEntityServiceManager()->getEntityServiceByType($entityType);
+    }
+
+    protected function getEvaluationEntryService(): EvaluationEntryService
+    {
+        return $this->getService(EvaluationEntryService::class);
+    }
+
+    protected function getEvaluationEntityServiceManager(): EvaluationEntityServiceManager
+    {
+        return $this->getService(EvaluationEntityServiceManager::class);
     }
 
     protected function getFilterParametersBuilder() : FilterParametersBuilder

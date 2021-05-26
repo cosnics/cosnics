@@ -5,8 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Componen
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
-use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
-use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
@@ -28,37 +27,39 @@ class LoadEntitiesComponent extends Manager
                 $this->throwUserException('EvaluationNotFound');
             }
 
-            $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+            $entityIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
+            $entityService = $this->getEntityServiceByType($this->getEvaluationServiceBridge()->getCurrentEntityType());
+
             $filterParametersBuilder = $this->getFilterParametersBuilder();
-            $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $this->getFieldMapper());
+            $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $entityService->getFieldMapper());
 
-            $selectedUsers = $this->getEntityService()->getUsersFromIDs($userIds, $contextIdentifier, $filterParameters);
+            $selectedEntities = $entityService->getEntitiesFromIds($entityIds, $contextIdentifier, $filterParameters);
 
-            $users = array();
-            foreach ($selectedUsers as $user)
+            $entities = array();
+            foreach ($selectedEntities as $entity)
             {
-                $user['presence_status'] = 'neutral';
+                $entity['presence_status'] = 'neutral';
 
-                if ($user['score_registered'])
+                if ($entity['score_registered'])
                 {
-                    $user['presence_status'] = ($user['is_absent']) ? 'absent' : 'present';
+                    $entity['presence_status'] = ($entity['is_absent']) ? 'absent' : 'present';
                 }
 
-                if (is_null($user['score']))
+                if (is_null($entity['score']))
                 {
-                    $user['score'] = '';
+                    $entity['score'] = '';
                 }
 
-                $users[] = $user;
+                $entities[] = $entity;
             }
 
-            $resultData = ['entities' => $users];
+            $resultData = ['entities' => $entities];
 
             if ($this->getRequest()->getFromPostOrUrl('request_count') == 'true')
             {
-                $resultData['count'] = $this->getEntityService()->countUsersFromIDs($userIds, $filterParameters);
+                $resultData['count'] = $entityService->countEntitiesFromIds($entityIds, new FilterParameters());
             }
 
             $result = new JsonAjaxResult(200, $resultData);
@@ -71,18 +72,5 @@ class LoadEntitiesComponent extends Manager
             $result->set_result_message($ex->getMessage());
             $result->display();
         }
-    }
-
-    /**
-     * @return FieldMapper
-     */
-    protected function getFieldMapper(): FieldMapper
-    {
-        $class_name = User::class_name();
-        $fieldMapper = new FieldMapper();
-        $fieldMapper->addFieldMapping('firstname', $class_name, User::PROPERTY_FIRSTNAME);
-        $fieldMapper->addFieldMapping('lastname', $class_name, User::PROPERTY_LASTNAME);
-        $fieldMapper->addFieldMapping('official_code', $class_name, User::PROPERTY_OFFICIAL_CODE);
-        return $fieldMapper;
     }
 }

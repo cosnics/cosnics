@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Domain;
+namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Domain;
 
 use MyCLabs\Enum\Enum;
 
