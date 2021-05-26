@@ -29,19 +29,19 @@ abstract class ComplexContentObjectPath
 
     /**
      *
-     * @var multitype:ComplexContentObjectPathNode
+     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $nodes = array();
 
     /**
      *
-     * @var multitype:ComplexContentObjectPathNode
+     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $children;
 
     /**
      *
-     * @var multitype:ComplexContentObjectPathNode
+     * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
     private $parents;
 
@@ -60,7 +60,7 @@ abstract class ComplexContentObjectPath
      * @param int $previous_id
      * @param ComplexContentObjectItem $complex_content_object_item
      * @param ContentObject $content_object
-     * @param multitype:mixed $propeties
+     * @param $propeties
      *
      * @return int
      */
@@ -177,7 +177,7 @@ abstract class ComplexContentObjectPath
     /**
      * Follow a route through the ComplexContentObjectPath based on a set a sequential content object ids
      *
-     * @param multitype:int $content_object_ids
+     * @param integer[] $content_object_ids
      *
      * @return ComplexContentObjectPathNode
      */
@@ -347,8 +347,6 @@ abstract class ComplexContentObjectPath
      * @param int $parent_id
      * @param ComplexContentObjectItem $complex_content_object_item
      * @param ContentObject $content_object
-     *
-     * @return multitype:mixed
      */
     public function get_properties($parent_id, $complex_content_object_item, $content_object)
     {

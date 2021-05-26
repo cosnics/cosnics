@@ -339,8 +339,8 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Retrieves a list of available course types joined with course type user order table
      *
-     * @param $join_condition \libraries\storage\Condition
-     * @param $condition \libraries\storage\Condition
+     * @param $join_condition \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $offset int
      * @param $max_objects int
      * @param $order_by \libraries\ObjectTableOrder

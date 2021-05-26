@@ -42,9 +42,9 @@ class Session extends DataClass
     /**
      * Get the default properties
      *
-     * @param multitype:string $extended_property_names
+     * @param string[] $extended_property_names
      *
-     * @return multitype:string The property names.
+     * @return string[] The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {

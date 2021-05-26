@@ -52,7 +52,7 @@ abstract class Action
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_message()
     {

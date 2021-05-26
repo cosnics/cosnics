@@ -13,11 +13,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 abstract class ContentObjectRemover extends Remover
 {
 
-    /**
-     * Constructor
-     * 
-     * @param $values multitype:mixed
-     */
     public function __construct($values)
     {
         parent::__construct($values, DataManager::getInstance());

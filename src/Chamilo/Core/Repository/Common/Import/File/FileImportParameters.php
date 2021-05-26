@@ -31,7 +31,7 @@ class FileImportParameters extends ImportParameters
      * @param int $user
      * @param int $category
      * @param \libraries\file\FileProperties $file
-     * @param multitype:mixed $values
+     * @param $values
      */
     public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {

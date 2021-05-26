@@ -17,7 +17,7 @@ abstract class TypeSelectorRenderer
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $parent;
 
@@ -40,7 +40,7 @@ abstract class TypeSelectorRenderer
 
     /**
      *
-     * @return \libraries\architecture\application\Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_parent()
     {

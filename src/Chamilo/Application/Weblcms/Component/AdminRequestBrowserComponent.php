@@ -148,6 +148,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
         $conditions = array();
+        $search_conditions = null;
 
         if (isset($query) && $query != '')
         {

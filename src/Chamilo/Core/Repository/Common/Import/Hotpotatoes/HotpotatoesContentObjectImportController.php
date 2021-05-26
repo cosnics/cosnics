@@ -287,7 +287,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_allowed_extensions()
     {

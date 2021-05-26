@@ -108,7 +108,7 @@ class ProgressBlock extends ReportingBlock
                 {
                     $delete_url = $this->get_parent()->get_parent()->get_url(
                         array(
-                            Manager::PARAM_ACTION => Manager::ACTION_DELETE_ATTEMPT,
+                            Manager::PARAM_ACTION => Manager::ACTION_DELETE_TREE_NODE_ATTEMPT,
                             Manager::PARAM_CHILD_ID => $treeNode->getId()
                         )
                     );

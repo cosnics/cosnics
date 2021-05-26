@@ -46,21 +46,21 @@ class PackageList
     /**
      * The packages of this specific type
      *
-     * @var multitype:string
+     * @var string[]
      */
     private $packages;
 
     /**
      * The list of PackageList objects for the sub-types of this type
      *
-     * @var multitype:\configuration\package\storage\data_class\PackageList
+     * @var \Chamilo\Configuration\Package\PackageList[]
      */
     private $children;
 
     /**
      * Property to cache the available types
      *
-     * @var multitype:boolean:string
+     * @var boolean[]:string
      */
     private $types;
 
@@ -145,7 +145,7 @@ class PackageList
     /**
      * Get the list of PackageList objects for the sub-types of this type
      *
-     * @return multitype:\configuration\package\storage\data_class\PackageList
+     * @return \Chamilo\Configuration\Package\PackageList[]
      */
     public function get_children()
     {
@@ -155,7 +155,7 @@ class PackageList
     /**
      * Set the list of PackageList objects for the sub-types of this type
      *
-     * @param $children multitype:\configuration\package\storage\data_class\PackageList
+     * @param $children \Chamilo\Configuration\Package\PackageList[]
      */
     public function set_children($children)
     {
@@ -206,7 +206,7 @@ class PackageList
     /**
      * Get the type packages
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_packages()
     {
@@ -216,7 +216,7 @@ class PackageList
     /**
      * Set the type packages
      *
-     * @param $packages multitype:string
+     * @param $packages string[]
      */
     public function set_packages($packages)
     {

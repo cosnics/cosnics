@@ -26,7 +26,7 @@ class DummyTemplateRenditionImplementation extends AbstractTemplateRenditionImpl
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      * @param ReportingTemplate $template
      * @param string $format
      * @param string $view

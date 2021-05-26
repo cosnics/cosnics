@@ -26,95 +26,49 @@ use RuntimeException;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const ACTION_ACTIVITY = 'Activity';
-
-    // Actions
-
     const ACTION_AJAX = 'Ajax';
-
     const ACTION_BOOKMARK = 'Bookmarker';
-
     const ACTION_BUILD = 'Builder';
-
     const ACTION_BUILD_PREREQUISITES = 'PrerequisitesBuilder';
-
     const ACTION_COPY_SECTIONS = 'SectionCopier';
-
     const ACTION_DELETE_ATTEMPTS_FOR_TREE_NODE = 'DeleteAttemptsForTreeNode';
-
     const ACTION_DELETE_TREE_NODE_ATTEMPT = 'DeleteTreeNodeAttempt';
-
     const ACTION_DISABLE_STUDENT_VIEW = 'DisableStudentView';
-
     const ACTION_EXPORT_REPORTING = 'ReportingExporter';
-
     const ACTION_FEEDBACK = 'Feedback';
-
     const ACTION_MAIL_USERS_WITH_INCOMPLETE_PROGRESS = 'UserIncompleteProgressMailer';
-
     const ACTION_MANAGE = 'Manager';
-
     const ACTION_MOVE = 'Mover';
-
     const ACTION_MOVE_DIRECTLY = 'DirectMover';
-
     const ACTION_REPORTING = 'Reporting';
-
     const ACTION_RIGHTS = 'Rights';
-
     const ACTION_SHOW_STUDENT_VIEW = 'ShowStudentView';
-
     const ACTION_TOGGLE_BLOCKED_STATUS = 'ToggleBlockedStatus';
-
     const ACTION_TOGGLE_ENFORCE_DEFAULT_TRAVERSING_ORDER = 'ToggleEnforceDefaultTraversingOrder';
-
     const ACTION_TYPE_SPECIFIC = 'TypeSpecific';
-
     const ACTION_USER = 'User';
-
     const ACTION_VIEW_ASSESSMENT_RESULT = 'AssessmentResultViewer';
-
     const ACTION_VIEW_USER_PROGRESS = 'UserProgress';
 
     const DEFAULT_ACTION = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
-    // Parameters
-
     const PARAM_ACTION = 'learning_path_action';
-
     const PARAM_CHILD_ID = 'child_id';
-
     const PARAM_CONTENT_OBJECT_ID = 'content_object_id';
-
     const PARAM_DETAILS = 'details';
-
     const PARAM_DISPLAY_ORDER = 'display_order';
-
     const PARAM_FULL_SCREEN = 'full_screen';
-
     const PARAM_ITEM_ATTEMPT_ID = 'item_attempt_id';
-
     const PARAM_LEARNING_PATH_ITEM_ID = 'learning_path_item_id';
-
     const PARAM_PARENT_ID = 'parent_id';
-
     const PARAM_REPORTING_MODE = 'reporting_mode';
-
     const PARAM_REPORTING_USER_ID = 'reporting_user';
-
     const PARAM_SHOW_PROGRESS = 'show_progress';
-
     const PARAM_SORT = 'sort';
-
     const PARAM_STEP = 'step';
-
-    // Sorting
-
     const PARAM_STUDENT_VIEW_SESSION = 'learning_path_student_view';
 
     const SORT_DOWN = 'Down';
-
-    // Default action
-
     const SORT_UP = 'Up';
 
     /**

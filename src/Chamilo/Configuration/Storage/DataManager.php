@@ -63,7 +63,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param string $integration The context that has been integrated
      * @param string $root The root context underneath which the integrating contexts should be looked for
-     * @return multitype:\configuration\Registration
+     * @return \Chamilo\Configuration\Storage\DataClass\Registration[]
      */
     public static function get_integrating_contexts($integration, $root = null)
     {

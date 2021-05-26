@@ -13,19 +13,19 @@ abstract class AbstractTemplateRenditionImplementation
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $context;
 
     /**
      *
-     * @var \core\reporting\ReportingTemplate
+     * @var \Chamilo\Core\Reporting\ReportingTemplate
      */
     private $template;
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      * @param ReportingTemplate $template
      */
     public function __construct($context, ReportingTemplate $template)
@@ -36,7 +36,7 @@ abstract class AbstractTemplateRenditionImplementation
 
     /**
      *
-     * @return \libraries\architecture\application\Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_context()
     {
@@ -45,7 +45,7 @@ abstract class AbstractTemplateRenditionImplementation
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      */
     public function set_context($context)
     {
@@ -54,7 +54,7 @@ abstract class AbstractTemplateRenditionImplementation
 
     /**
      *
-     * @return \core\reporting\ReportingTemplate
+     * @return \Chamilo\Core\Reporting\ReportingTemplate
      */
     public function get_template()
     {

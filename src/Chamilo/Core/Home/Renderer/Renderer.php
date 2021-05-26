@@ -75,11 +75,6 @@ abstract class Renderer
      */
     abstract public function render();
 
-    public function getCurrentTabIdentifier()
-    {
-        return Request::get(self::PARAM_TAB_ID);
-    }
-
     public function get_url($parameters = array (), $filter = array(), $encode_entities = false)
     {
         $redirect = new Redirect($parameters, $filter, $encode_entities);
@@ -96,11 +91,6 @@ abstract class Renderer
     {
         $redirect = new Redirect($parameters, $filter, $encode_entities);
         return $redirect->getUrl();
-    }
-
-    public function get_home_tab_viewing_url($home_tab)
-    {
-        return $this->get_url(array(self::PARAM_TAB_ID => $home_tab->get_id()));
     }
 
     /**

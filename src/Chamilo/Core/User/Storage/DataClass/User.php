@@ -168,9 +168,9 @@ class User extends DataClass
     /**
      * Returns all (unique) properties by which a DataClass object can be cached
      *
-     * @param $extended_property_names multitype:string
+     * @param $extended_property_names string[]
      *
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_cacheable_property_names($extended_property_names = array())
     {

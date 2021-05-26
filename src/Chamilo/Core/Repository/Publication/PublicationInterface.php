@@ -33,7 +33,7 @@ interface PublicationInterface
     /**
      * Determines whether any of the given content objects have been published in the implementing context
      * 
-     * @param multitype:int $object_ids
+     * @param integer[] $object_ids
      * @return boolean
      */
     public static function areContentObjectsPublished($object_ids);
@@ -43,8 +43,7 @@ interface PublicationInterface
      * 
      * @param int $type
      * @param int $object_id
-     * @param \libraries\storage\Condition $condition
-     * @return multitype:mixed
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public static function getContentObjectPublicationsAttributes($object_id, $type = self::ATTRIBUTES_TYPE_OBJECT, $condition = null, $count = null,
         $offset = null, $order_properties = null);
@@ -62,7 +61,7 @@ interface PublicationInterface
      * 
      * @param int $attributes_type
      * @param int $identifier
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return int
      */
     public static function countPublicationAttributes($attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null);

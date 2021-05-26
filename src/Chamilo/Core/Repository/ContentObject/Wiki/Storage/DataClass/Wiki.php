@@ -114,7 +114,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     /**
      * Returns the names of the properties which are UI-wise filled by the integrated html editor
      *
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_html_editors($html_editors = array())
     {

@@ -50,25 +50,6 @@ class Online extends SimpleTracker
         $object->set_user_id($parameters[self::PARAM_USER]);
         $object->set_last_access_date($parameters[self::PARAM_TIME]);
     }
-
-    public function empty_tracker($event)
-    {
-        return $this->remove();
-    }
-
-    /**
-     * Inherited
-     * 
-     * @see MainTracker::empty_tracker
-     */
-    public function empty_tracker_before_date($date)
-    {
-        $condition = new ComparisonCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_LAST_ACCESS_DATE),
-            InEqualityCondition::LESS_THAN_OR_EQUAL, 
-            new StaticConditionVariable($date));
-        return $this->remove($condition);
-    }
     
     // Properties getters and setters
     public function get_user_id()

@@ -23,13 +23,13 @@ class RarContentObjectImportController extends ContentObjectImportController
 
     /**
      *
-     * @var multitype:RepositoryCategory
+     * @var \Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory[]
      */
     private $created_categories;
 
     /**
      *
-     * @var multitype:integer
+     * @var integer[]
      */
     private $created_content_object_ids;
 

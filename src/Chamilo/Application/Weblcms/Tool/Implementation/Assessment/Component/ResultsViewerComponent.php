@@ -213,7 +213,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
      *
      * @param string $table_class_name
      *
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($table_class_name)
     {

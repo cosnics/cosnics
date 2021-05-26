@@ -32,7 +32,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
      * Returns the condition for the table
      * 
      * @param $object_table_class_name
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($object_table_class_name)
     {

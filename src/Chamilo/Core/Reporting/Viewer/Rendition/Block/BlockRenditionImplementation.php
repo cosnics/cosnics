@@ -17,7 +17,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      * @param ReportingBlock $block
      * @param string $format
      * @param string $view
@@ -29,7 +29,7 @@ abstract class BlockRenditionImplementation extends AbstractBlockRenditionImplem
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      * @param ReportingBlock $block
      * @param string $format
      * @param string $view

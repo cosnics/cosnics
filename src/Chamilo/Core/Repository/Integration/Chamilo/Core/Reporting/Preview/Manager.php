@@ -19,7 +19,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     abstract static public function get_available_actions();
 }

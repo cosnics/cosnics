@@ -20,7 +20,7 @@ class YoutubeImportParameters extends ImportParameters
      * @param int $user
      * @param int $category
      * @param FileProperties $file
-     * @param multitype:string $values
+     * @param string[] $values
      */
     public function __construct($type, $user, WorkspaceInterface $workspace, $category, $file, $values)
     {

@@ -58,7 +58,7 @@ abstract class ContentObjectImportController
 
     /**
      *
-     * @return boolean multitype:integer
+     * @return boolean integer[]
      */
     abstract public function run();
 

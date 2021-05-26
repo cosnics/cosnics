@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\Publication\Storage\DataManager;
 use ArrayIterator;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Configuration\Storage\DataClass\Registration;
+use Chamilo\Core\Repository\Publication\PublicationInterface;
 
 /**
  *
@@ -57,12 +58,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $attributes_type
      * @param int $identifier
-     * @param \libraries\storage\Condition $condition
-     *
-     * @return multitype:mixed
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public static function countPublicationAttributes(
-        $attributes_type = self::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
+        $attributes_type = PublicationInterface::ATTRIBUTES_TYPE_OBJECT, $identifier, $condition = null
     )
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
@@ -107,12 +106,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $attributes_type
      * @param int $identifier
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $count
      * @param int $offset
-     * @param multitype:ObjectTableOrder $order_property
-     *
-     * @return multitype:mixed
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
      */
     public static function getContentObjectPublicationsAttributes(
         $identifier, $attributes_type = null, $condition = null, $count = null, $offset = null, $order_property = null

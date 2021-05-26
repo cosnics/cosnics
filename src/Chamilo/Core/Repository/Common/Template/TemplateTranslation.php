@@ -11,10 +11,6 @@ use DOMXPath;
 class TemplateTranslation
 {
 
-    /**
-     *
-     * @var multitype:multitype:string
-     */
     private $storage;
 
     public function __construct($storage = array())
@@ -22,19 +18,11 @@ class TemplateTranslation
         $this->storage = $storage;
     }
 
-    /**
-     *
-     * @return \core\repository\multitype:multitype:boolean
-     */
     public function get_storage()
     {
         return $this->storage;
     }
 
-    /**
-     *
-     * @param \core\repository\multitype:multitype:boolean $storage
-     */
     public function set_storage($storage)
     {
         $this->storage = $storage;
@@ -44,7 +32,7 @@ class TemplateTranslation
      *
      * @param string $language
      * @param string $variable
-     * @return \core\repository\multitype:multitype:boolean
+     * @return boolean[][]
      */
     public function translate($language, $variable)
     {

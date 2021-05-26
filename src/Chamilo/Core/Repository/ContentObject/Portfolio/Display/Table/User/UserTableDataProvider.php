@@ -15,7 +15,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
     /**
      * Returns the data as a resultset
      * 
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param $condition
      * @param int $offset
      * @param int $count
@@ -35,7 +35,7 @@ class UserTableDataProvider extends DataClassTableDataProvider
     /**
      * Counts the data
      * 
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */

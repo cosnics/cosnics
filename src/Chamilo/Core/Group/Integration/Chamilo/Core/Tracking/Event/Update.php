@@ -16,7 +16,7 @@ class Update extends Event
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function getTrackerClasses()
     {

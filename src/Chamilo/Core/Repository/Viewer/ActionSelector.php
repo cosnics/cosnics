@@ -95,7 +95,7 @@ class ActionSelector
     /**
      *
      * @param string $label
-     * @param \Chamilo\Libraries\Format\Structure\ActionBar\InlineGlyph|string $image
+     * @param \Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph|string $image
      *
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */

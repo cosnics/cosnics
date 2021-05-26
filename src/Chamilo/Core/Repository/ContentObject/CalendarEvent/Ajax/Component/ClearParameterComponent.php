@@ -49,8 +49,8 @@ class ClearParameterComponent extends Manager
                     unset($session[CalendarEvent::PROPERTY_START_DATE]);
                     unset($session[CalendarEvent::PROPERTY_END_DATE]);
                     break;
-                case CalendarEvent::PROPERTY_REPEAT_TYPE :
-                    unset($session[CalendarEvent::PROPERTY_REPEAT_TYPE]);
+                case CalendarEvent::PROPERTY_FREQUENCY :
+                    unset($session[CalendarEvent::PROPERTY_FREQUENCY]);
                     break;
             }
             

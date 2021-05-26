@@ -110,6 +110,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $html_editor_options['show_tags'] = false;
 
         $label = 'A';
+
+        $defaults = array();
+
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {
             $group = array();
@@ -154,9 +157,9 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                 // Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
                 // 'required'))));
             }
-
-            $this->setConstants($defaults);
         }
+
+        $this->setConstants($defaults);
 
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';

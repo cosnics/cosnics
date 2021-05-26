@@ -144,7 +144,7 @@ class UserComponent extends ItemComponent implements TableSupport
      *
      * @param string $table_class_name
      *
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($table_class_name)
     {

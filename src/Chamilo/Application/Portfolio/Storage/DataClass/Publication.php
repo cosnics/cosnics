@@ -156,7 +156,7 @@ class Publication extends DataClass
     /**
      * Returns the dependencies for this dataclass
      *
-     * @return \libraries\storage\Condition[string]
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[string]
      */
     protected function get_dependencies()
     {

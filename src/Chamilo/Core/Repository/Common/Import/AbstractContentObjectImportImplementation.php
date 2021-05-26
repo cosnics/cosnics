@@ -35,7 +35,7 @@ abstract class AbstractContentObjectImportImplementation
 
     /**
      *
-     * @return ContentObjectExportController
+     * @return \Chamilo\Core\Repository\Common\Export\ContentObjectExportController
      */
     public function get_controller()
     {
@@ -44,7 +44,7 @@ abstract class AbstractContentObjectImportImplementation
 
     /**
      *
-     * @param $controller the $controller to set
+     * @param $controller
      */
     public function set_controller($controller)
     {

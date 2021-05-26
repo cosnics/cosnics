@@ -210,7 +210,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Counts the courses
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
      * @return int
      */
@@ -258,7 +258,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * by the courses by the status of user in that course
      *
      * @param \core\user\storage\data_class\User $user
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $user_status
      *
      * @return int
@@ -1210,7 +1210,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * Retrieves the courses from a given user where the user is a teacher
      *
      * @param User $user
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $max_objects
      * @param array $order_by
@@ -1313,7 +1313,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Retrieves a list of available courses
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $offset int
      * @param $max_objects int
      * @param $order_by \libraries\ObjectTableOrder
@@ -1491,7 +1491,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * result by the courses by the status of a user in that course
      *
      * @param \core\user\storage\data_class\User $user
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $max_objects
      * @param \libraries\ObjectTableOrder[] $order_by
@@ -1551,7 +1551,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Retrieves all the users that are directly subscribed to the course
      *
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder $order_property

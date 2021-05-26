@@ -54,10 +54,6 @@ abstract class ComplexContentObjectPathNode
      */
     private $content_object;
 
-    /**
-     *
-     * @var multitype:mixed
-     */
     private $properties;
 
     /**
@@ -117,7 +113,7 @@ abstract class ComplexContentObjectPathNode
      * @param int $next_sibling_id
      * @param \core\repository\storage\data_class\ComplexContentObjectItem $complex_content_object_item
      * @param \core\repository\ContentObject $content_object
-     * @param multitype:mixed $properties
+     * @param $properties
      */
     public function __construct($tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id, 
         ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = array())
@@ -257,8 +253,6 @@ abstract class ComplexContentObjectPathNode
     
     /**
      * Gets the additional properties of this ComplexContentObjectPathNode
-     * 
-     * @return multitype:mixed
      */
     public function get_properties()
     {
@@ -268,7 +262,7 @@ abstract class ComplexContentObjectPathNode
     /**
      * Sets the additional properties of this ComplexContentObjectPathNode
      * 
-     * @param multitype:mixed $properties
+     * @param $properties
      */
     public function set_properties($properties)
     {
@@ -731,14 +725,14 @@ abstract class ComplexContentObjectPathNode
     /**
      *
      * @param string $type
-     * @param \core\repository\common\path\ComplexContentObjectPath $tree
+     * @param \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPath $tree
      * @param int $id
      * @param int $parent
      * @param int $previous_sibling_id
      * @param int $next_sibling_id
-     * @param \core\repository\storage\data_class\ComplexContentObjectItem $complex_content_object_item
-     * @param \core\repository\ContentObject $content_object
-     * @param multitype:mixed $properties
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem $complex_content_object_item
+     * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $content_object
+     * @param $properties
      *
      * @return ComplexContentObjectPathNode
      */

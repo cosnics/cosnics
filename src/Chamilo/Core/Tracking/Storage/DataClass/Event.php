@@ -60,7 +60,7 @@ abstract class Event extends DataClass
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function getTrackerClasses()
     {

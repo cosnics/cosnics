@@ -11,7 +11,7 @@ class Authors
 
     /**
      *
-     * @var multitype:\configuration\package\Author
+     * @var \Chamilo\Configuration\Package\Properties\Authors\Author[]
      */
     private $authors;
 
@@ -26,7 +26,7 @@ class Authors
 
     /**
      *
-     * @return multitype:\common\package\libraries\Author
+     * @return \Chamilo\Configuration\Package\Properties\Authors\Author[]
      */
     public function get_authors()
     {
@@ -35,7 +35,7 @@ class Authors
 
     /**
      *
-     * @param multitype:\configuration\package\Author $authors
+     * @param \Chamilo\Configuration\Package\Properties\Authors\Author[] $authors
      */
     public function set_authors($authors)
     {

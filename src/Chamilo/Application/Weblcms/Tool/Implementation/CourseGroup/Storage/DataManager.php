@@ -80,7 +80,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve given course groups with their subgroups
      *
      * @param int[] $group_ids
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_by
@@ -191,7 +191,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieves the course group users as user objects
      *
      * @param int $course_group_id
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_property
@@ -383,7 +383,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Counts the course group users by a given course group and additionally user conditions
      *
      * @param int $course_group_id
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */

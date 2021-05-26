@@ -144,7 +144,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
 
     /**
      *
-     * @see \libraries\architecture\application\Application::get_additional_parameters()
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
      */
     public function get_additional_parameters()
     {

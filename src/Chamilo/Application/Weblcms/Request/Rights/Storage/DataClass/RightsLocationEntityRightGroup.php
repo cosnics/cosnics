@@ -42,9 +42,9 @@ class RightsLocationEntityRightGroup extends DataClass
     /**
      * Get the default properties
      *
-     * @param $extended_property_names multitype:string
+     * @param $extended_property_names string[]
      *
-     * @return multitype:string The property names.
+     * @return string[] The property names.
      */
     static function get_default_property_names($extended_property_names = array())
     {

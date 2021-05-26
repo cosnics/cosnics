@@ -47,13 +47,13 @@ class UserViewMenu extends HtmlMenu
 
     /**
      *
-     * @var \libraries\architecture\application\Application
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
     private $application;
 
     /**
      *
-     * @param \libraries\architecture\application\Application $application
+     * @param \Chamilo\Libraries\Architecture\Application\Application $application
      * @param int $current_user_view_id
      * @param string $url_format
      */

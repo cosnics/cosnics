@@ -55,7 +55,7 @@ abstract class TemplateRendition
 
     /**
      *
-     * @return \libraries\architecture\application\Application
+     * @return \Chamilo\Libraries\Architecture\Application\Application
      */
     public function get_context()
     {
@@ -64,7 +64,7 @@ abstract class TemplateRendition
 
     /**
      *
-     * @param \libraries\architecture\application\Application $context
+     * @param \Chamilo\Libraries\Architecture\Application\Application $context
      */
     public function set_context($context)
     {

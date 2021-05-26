@@ -27,7 +27,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Count the users who are currently active
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -50,7 +50,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Count the users who are currently not approved
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -73,7 +73,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Count the users who are currently approved
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -198,10 +198,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve the users who are currently active
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by multitype:\common\libraries\ObjectTableOrder
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -241,10 +241,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve the users who are currently not approved
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by multitype:\common\libraries\ObjectTableOrder
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -270,10 +270,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve the users who are currently approved
      *
-     * @param $condition \libraries\storage\Condition
+     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by multitype:\common\libraries\ObjectTableOrder
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -432,7 +432,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve a DataClassIterator of Users based on a set of email addresses
      *
-     * @param $email multitype:string
+     * @param $email string[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @deprecated Should no longer return an array, calls should be changed to use a while-loop now instead of a for
@@ -450,7 +450,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieve a DataClassIterator of Users based on a set of official codes
      *
-     * @param $official_codes multitype:string
+     * @param $official_codes string[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

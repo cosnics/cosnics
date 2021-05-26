@@ -461,7 +461,7 @@ class RightsService
      * @param \rights\RightsEntity[] $entities
      * @param boolean $to_string
      *
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     private function get_entities_condition($user_id, $entities)
     {
@@ -873,7 +873,7 @@ class RightsService
      * Retrieves the granted rights for a location
      *
      * @param RightsLocation $location
-     * @param \libraries\storage\Condition $entities_condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $entities_condition
      *
      * @return int[]
      */

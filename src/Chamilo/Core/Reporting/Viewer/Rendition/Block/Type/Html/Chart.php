@@ -42,10 +42,7 @@ abstract class Chart extends Html
      */
     abstract public function get_path();
 
-    /**
-     *
-     * @return multitype:mixed
-     */
+
     public function convert_reporting_data()
     {
         $reporting_data = $this->get_block()->retrieve_data();

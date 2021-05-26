@@ -194,6 +194,7 @@ class Activity extends Tracker
                 $glyphName = 'pen-square';
                 break;
             default :
+                $glyphName = 'circle';
                 break;
         }
 
@@ -240,6 +241,7 @@ class Activity extends Tracker
                 $activity = 'ItemUpdatedInObject';
                 break;
             default :
+                $activity = 'Unknown';
                 break;
         }
 

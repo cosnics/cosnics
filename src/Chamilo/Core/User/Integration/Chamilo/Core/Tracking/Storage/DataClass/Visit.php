@@ -45,35 +45,6 @@ class Visit extends SimpleTracker
 
     /**
      * Inherited
-     *
-     * @see MainTracker::empty_tracker
-     */
-    public function empty_tracker()
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_event()->get_name())
-        );
-
-        return $this->remove($condition);
-    }
-
-    /**
-     * Inherited
-     */
-    public function export($start_date, $end_date, $event)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
-            new StaticConditionVariable($event->get_name())
-        );
-
-        return parent::export($start_date, $end_date, $conditions);
-    }
-
-    /**
-     * Inherited
      */
     public static function get_default_property_names($extended_property_names = array())
     {

@@ -41,7 +41,7 @@ class Column extends Element
     public function is_empty()
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Block::class, Block::PROPERTY_COLUMN),
+            new PropertyConditionVariable(Block::class, Block::PROPERTY_PARENT_ID),
             new StaticConditionVariable($this->get_id())
         );
 

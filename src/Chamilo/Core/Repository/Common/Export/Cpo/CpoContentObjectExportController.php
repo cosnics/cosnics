@@ -56,13 +56,13 @@ class CpoContentObjectExportController extends ContentObjectExportController
 
     /**
      *
-     * @var multitype:integer
+     * @var integer[]
      */
     private $id_cache;
 
     /**
      *
-     * @var multitype:integer
+     * @var integer[]
      */
     private $category_id_cache;
 

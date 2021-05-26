@@ -46,11 +46,6 @@ abstract class Manager extends Application
     const TYPE_ROW = 'row';
     const TYPE_TAB = 'tab';
 
-    public function get_home_tab_viewing_url($home_tab)
-    {
-        return $this->get_url(array(self::PARAM_TAB_ID => $home_tab->get_id()));
-    }
-
     public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
     {
         parent::__construct($applicationConfiguration);

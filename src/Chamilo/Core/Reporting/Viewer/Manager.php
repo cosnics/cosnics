@@ -76,7 +76,7 @@ abstract class Manager extends Application
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_current_view()
     {

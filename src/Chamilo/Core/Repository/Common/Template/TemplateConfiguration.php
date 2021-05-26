@@ -13,10 +13,6 @@ class TemplateConfiguration
 {
     const ACTION_EDIT = 'edit';
 
-    /**
-     *
-     * @var multitype:multitype:boolean
-     */
     private $storage;
 
     public function __construct($storage = array())
@@ -24,19 +20,11 @@ class TemplateConfiguration
         $this->storage = $storage;
     }
 
-    /**
-     *
-     * @return \core\repository\multitype:multitype:boolean
-     */
     public function get_storage()
     {
         return $this->storage;
     }
 
-    /**
-     *
-     * @param \core\repository\multitype:multitype:boolean $storage
-     */
     public function set_storage($storage)
     {
         $this->storage = $storage;

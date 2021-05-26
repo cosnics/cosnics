@@ -221,7 +221,7 @@ class ExportParameters
 
     /**
      *
-     * @param $content_object_ids multitype:
+     * @param $content_object_ids
      */
     public function set_content_object_ids($content_object_ids)
     {
@@ -239,7 +239,7 @@ class ExportParameters
 
     /**
      *
-     * @param $category_ids multitype:
+     * @param $category_ids
      */
     public function set_category_ids($category_ids)
     {

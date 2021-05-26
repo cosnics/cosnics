@@ -23,7 +23,7 @@ abstract class AbstractContentObjectRenditionImplementation
 
     /**
      *
-     * @return the $context
+     * @return
      */
     public function get_context()
     {
@@ -32,7 +32,7 @@ abstract class AbstractContentObjectRenditionImplementation
 
     /**
      *
-     * @param $context the $context to set
+     * @param $context
      */
     public function set_context($context)
     {
@@ -41,7 +41,7 @@ abstract class AbstractContentObjectRenditionImplementation
 
     /**
      *
-     * @return the $content_object
+     * @return
      */
     public function get_content_object()
     {
@@ -50,7 +50,7 @@ abstract class AbstractContentObjectRenditionImplementation
 
     /**
      *
-     * @param $content_object the $content_object to set
+     * @param $content_object
      */
     public function set_content_object($content_object)
     {

@@ -85,7 +85,7 @@ abstract class ReportingTemplate
 
     /**
      *
-     * @return multitype:\reporting\ReportingBlock
+     * @return \Chamilo\Core\Reporting\ReportingBlock[]
      */
     public function get_blocks()
     {
@@ -94,7 +94,7 @@ abstract class ReportingTemplate
 
     /**
      *
-     * @param multitype:\reporting\ReportingBlock $blocks
+     * @param \Chamilo\Core\Reporting\ReportingBlock[] $blocks
      */
     public function set_blocks($blocks)
     {

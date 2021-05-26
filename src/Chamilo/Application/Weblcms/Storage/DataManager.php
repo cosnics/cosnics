@@ -134,7 +134,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $attributes_type
      * @param int $identifier
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */
@@ -179,7 +179,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Counts content object publications
      *
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return integer
      */
@@ -1455,7 +1455,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieves content object publications joined with the repository content object table
      *
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \libraries\ObjectTableOrder[] $order_by
      * @param int $offset
      * @param int $max_objects
@@ -1539,7 +1539,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Retrieves the course categories ordered by name
      *
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_by
@@ -2304,7 +2304,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_by
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
      */
@@ -2402,7 +2402,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $offset
      * @param int $count
      * @param \libraries\ObjectTableOrder[] $order_by
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\group\Group>
      */

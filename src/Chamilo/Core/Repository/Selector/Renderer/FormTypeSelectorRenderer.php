@@ -33,9 +33,9 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
 
     /**
      *
-     * @param \libraries\architecture\application\Application $parent
-     * @param multitype:string $content_object_types
-     * @param multitype:multitype:string $additional_links
+     * @param \Chamilo\Libraries\Architecture\Application\Application $parent
+     * @param string[] $content_object_types
+     * @param string[][] $additional_links
      * @param boolean $use_general_statistics
      * @param string $postback_url
      */

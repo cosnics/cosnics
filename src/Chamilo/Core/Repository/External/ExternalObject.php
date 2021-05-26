@@ -218,17 +218,6 @@ abstract class ExternalObject
     }
 
     /**
-     * Get the type of the ExternalObject
-     *
-     * @return string
-     * @deprecated Use context() to get the namespace (= type)
-     */
-    public static function get_object_type()
-    {
-        return self::OBJECT_TYPE;
-    }
-
-    /**
      *
      * @return string
      */

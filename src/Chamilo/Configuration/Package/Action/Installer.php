@@ -187,7 +187,7 @@ abstract class Installer extends Action
     /**
      * Returns the list with extra installable packages that are connected to this package
      *
-     * @return multitype:string
+     * @return string[]
      */
     public static function get_additional_packages()
     {

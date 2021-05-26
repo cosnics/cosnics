@@ -179,7 +179,7 @@ class BrowseComponent extends Manager implements TableSupport
      *
      * @param string $object_table_class_name
      *
-     * @return \libraries\storage\Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_table_condition($object_table_class_name)
     {

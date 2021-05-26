@@ -54,8 +54,8 @@ class Language extends DataClass
     /**
      * Get the default properties of all languages
      * 
-     * @param multitype:string $extended_property_names
-     * @return multitype:string
+     * @param string[] $extended_property_names
+     * @return string[]
      */
     public static function get_default_property_names($extended_property_names = array())
     {

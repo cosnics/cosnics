@@ -38,29 +38,17 @@ abstract class Manager extends Application implements NoContextComponent
 
     // Actions
     const ACTION_BROWSE_EXTERNAL_REPOSITORY = 'Browser';
-
     const ACTION_CONFIGURE_EXTERNAL_REPOSITORY = 'Configurer';
-
     const ACTION_DELETE_EXTERNAL_REPOSITORY = 'Deleter';
-
     const ACTION_DOWNLOAD_EXTERNAL_REPOSITORY = 'Downloader';
-
     const ACTION_EDIT_EXTERNAL_REPOSITORY = 'Editor';
-
     const ACTION_EXPORT_EXTERNAL_REPOSITORY = 'Exporter';
-
     const ACTION_IMPORT_EXTERNAL_REPOSITORY = 'Importer';
-
     const ACTION_NEW_FOLDER_EXTERNAL_REPOSITORY = 'NewFolder';
-
     const ACTION_SELECT_EXTERNAL_REPOSITORY = 'Selecter';
-
     const ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY = 'ExternalSyncer';
-
     const ACTION_SYNCHRONIZE_INTERNAL_REPOSITORY = 'InternalSyncer';
-
     const ACTION_UPLOAD_EXTERNAL_REPOSITORY = 'Uploader';
-
     const ACTION_VIEW_EXTERNAL_REPOSITORY = 'Viewer';
 
     // Default action
@@ -335,8 +323,7 @@ abstract class Manager extends Application implements NoContextComponent
                             if ($object->is_editable())
                             {
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false,
-                                    IdentGlyph::SIZE_MINI, array()
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, array()
                                 );
 
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
@@ -366,8 +353,7 @@ abstract class Manager extends Application implements NoContextComponent
                             {
 
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false,
-                                    IdentGlyph::SIZE_MINI, array()
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, array()
                                 );
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
@@ -400,7 +386,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @return multitype:string
+     * @return string[]
      */
     public function get_instance_identifier()
     {

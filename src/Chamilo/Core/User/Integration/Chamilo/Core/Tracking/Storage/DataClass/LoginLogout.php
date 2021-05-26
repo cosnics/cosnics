@@ -24,23 +24,6 @@ class LoginLogout extends SimpleTracker
         $this->set_type($this->get_event()->getType());
     }
 
-    public function empty_tracker($event)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
-            new StaticConditionVariable($event->get_name()));
-        return $this->remove($condition);
-    }
-
-    public function export($start_date, $end_date, $event)
-    {
-        $conditions = array();
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_TYPE),
-            new StaticConditionVariable($event->get_name()));
-        return parent::export($start_date, $end_date, $conditions);
-    }
-
     /**
      * Get's the userid of the login tracker
      * 

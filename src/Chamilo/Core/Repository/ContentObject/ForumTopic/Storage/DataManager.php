@@ -32,16 +32,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     const PREFIX = 'repository_';
 
     /**
-     * Gets the type of DataManager to be instantiated, by default configured in the main Chamilo configuration file
-     *
-     * @return string
-     */
-    public static function get_type()
-    {
-        return self::TYPE_DOCTRINE;
-    }
-
-    /**
      * **************************************************************************************************************
      * Posts *
      * **************************************************************************************************************

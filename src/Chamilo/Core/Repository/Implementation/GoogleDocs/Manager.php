@@ -16,13 +16,11 @@ use Chamilo\Libraries\Utilities\StringUtilities;
 abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 {
     const ACTION_LOGIN = 'Login';
-
     const ACTION_LOGOUT = 'Logout';
 
     const DEFAULT_ACTION = self::ACTION_LOGIN;
 
     const PARAM_EXPORT_FORMAT = 'export_format';
-
     const PARAM_FOLDER = 'folder';
 
     const REPOSITORY_TYPE = 'google_docs';

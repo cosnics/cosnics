@@ -59,27 +59,19 @@ class CpoContentObjectImportController extends ContentObjectImportController
      */
     private $temporary_directory;
 
-    /**
-     *
-     * @var multitype:multitype
-     */
     private $id_cache;
 
     /**
      *
-     * @var multitype:boolean
+     * @var boolean[]
      */
     private $object_number_created;
 
-    /**
-     *
-     * @var multitype:multitype
-     */
     private $version;
 
     /**
      *
-     * @param $content_object_ids multitype:integer
+     * @param $content_object_ids integer[]
      */
     public function __construct($parameters)
     {

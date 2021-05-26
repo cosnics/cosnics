@@ -42,7 +42,7 @@ class SubscribedUserTableDataProvider extends RecordTableDataProvider
     /**
      * Gets the number of users.
      * 
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */

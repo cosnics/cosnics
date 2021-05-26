@@ -165,7 +165,7 @@ class Request extends DataClass
      *
      * @param $types_only boolean
      *
-     * @return multitype:integer multitype:string
+     * @return multitype:integer string[]
      */
     public static function get_decision_types($types_only = false)
     {
@@ -181,9 +181,9 @@ class Request extends DataClass
     /**
      * Get the default properties
      *
-     * @param $extended_property_names multitype:string
+     * @param $extended_property_names string[]
      *
-     * @return multitype:string The property names.
+     * @return string[] The property names.
      */
     public static function get_default_property_names($extended_property_names = array())
     {

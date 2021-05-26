@@ -62,7 +62,7 @@ interface PortfolioComplexRights
     /**
      * Retrieve a set of users which can be emulated in the implementing context
      * 
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $count
      * @param int $offset
      * @param \libraries\ObjectTableOrder[] $order_property
@@ -73,7 +73,7 @@ interface PortfolioComplexRights
     /**
      * Count the set of users which can be emulated in the implementing context
      * 
-     * @param \libraries\storage\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      */
     public function count_portfolio_possible_view_users($condition);
 
