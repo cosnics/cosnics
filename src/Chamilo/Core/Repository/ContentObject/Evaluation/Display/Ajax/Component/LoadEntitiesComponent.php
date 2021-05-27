@@ -3,9 +3,14 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
@@ -30,11 +35,8 @@ class LoadEntitiesComponent extends Manager
             $entityIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
+            $filterParameters = $this->createFilterParameters();
             $entityService = $this->getEntityServiceByType($this->getEvaluationServiceBridge()->getCurrentEntityType());
-
-            $filterParametersBuilder = $this->getFilterParametersBuilder();
-            $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $entityService->getFieldMapper());
-
             $selectedEntities = $entityService->getEntitiesFromIds($entityIds, $contextIdentifier, $filterParameters);
 
             $entities = array();
@@ -72,5 +74,23 @@ class LoadEntitiesComponent extends Manager
             $result->set_result_message($ex->getMessage());
             $result->display();
         }
+    }
+
+    /**
+     * @return FilterParameters
+     */
+    protected function createFilterParameters(): FilterParameters
+    {
+        $entityService = $this->getEntityServiceByType($this->getEvaluationServiceBridge()->getCurrentEntityType());
+        $filterParametersBuilder = $this->getFilterParametersBuilder();
+        $fieldMapper = $entityService->getFieldMapper();
+        $fieldMapper->addFieldMapping('score', EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE);
+        $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $fieldMapper);
+        $sortDirection = strtoupper($this->getRequest()->getFromPostOrUrl(FilterParametersBuilder::PARAM_SORT_DIRECTION));
+        $filterParameters->addOrderBy(new OrderBy(
+            new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT),
+            $sortDirection == FilterParametersBuilder::SORT_ASC ? SORT_DESC : SORT_ASC
+        ));
+        return $filterParameters;
     }
 }
