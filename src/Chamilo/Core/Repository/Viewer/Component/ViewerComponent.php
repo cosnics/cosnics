@@ -69,7 +69,7 @@ class ViewerComponent extends Manager
 
             $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation::launch(

@@ -67,7 +67,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('file', array(), null, 'fas');
+        return new FontAwesomeGlyph('file', [], null, 'fas');
     }
 
     /**
@@ -109,7 +109,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             array(

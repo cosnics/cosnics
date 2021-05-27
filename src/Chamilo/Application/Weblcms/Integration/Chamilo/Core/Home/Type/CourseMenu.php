@@ -27,7 +27,7 @@ class CourseMenu extends Block
 
     public function displayAdminMenu($template)
     {
-        $result = array();
+        $result = [];
 
         if ($this->getUser()->is_platform_admin())
         {
@@ -48,7 +48,7 @@ class CourseMenu extends Block
 
     public function displayContent()
     {
-        $html = array();
+        $html = [];
         $html[] = '<div class="tool_menu">';
         $html[] = '<ul style="padding: 0; margin: 0">';
         $html[] = '{$ADMIN_MENU}';
@@ -70,7 +70,7 @@ class CourseMenu extends Block
         return SimpleTemplate::ex($html, array('ADMIN_MENU' => $ADMIN_MENU, 'USER_MENU' => $USER_MENU));
     }
 
-    public function getCourseActionUrl($action, $params = array())
+    public function getCourseActionUrl($action, $params = [])
     {
         $params[Manager::PARAM_CONTEXT] = Manager::context();
         $params[Manager::PARAM_ACTION] = $action;
@@ -87,7 +87,7 @@ class CourseMenu extends Block
             return '';
         }
 
-        $result = array();
+        $result = [];
 
         $course_management_rights = CourseManagementRights::getInstance();
 
@@ -156,7 +156,7 @@ class CourseMenu extends Block
 
     public function getEditCourseMenu()
     {
-        $result = array();
+        $result = [];
 
         $HREF = $this->getCourseActionUrl(
             Manager::ACTION_COURSE_MANAGER, array(
@@ -185,7 +185,7 @@ class CourseMenu extends Block
 
     public function getPlatformAdminMenu()
     {
-        $result = array();
+        $result = [];
 
         $HREF = $this->getCourseActionUrl(
             Manager::ACTION_COURSE_MANAGER, array(

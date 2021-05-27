@@ -15,7 +15,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         
-        $prepend = array();
+        $prepend = [];
         $prepend[] = '<div class="task_range" style="font-weight: bold;">';
         $prepend[] = Translation::get(
             'TaskDate', 
@@ -43,7 +43,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
                     }
                     break;
                 case 2 :
-                    $days = array();
+                    $days = [];
                     foreach (explode(',', $object->get_byday()) as $day)
                     {
                         $days[] = Task::get_day_string($day);

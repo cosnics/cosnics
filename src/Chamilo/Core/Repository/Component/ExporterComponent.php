@@ -76,7 +76,7 @@ class ExporterComponent extends Manager
         // If content objects are selected then do not use the category.
         if (count($content_object_ids) > 0)
         {
-            $category_ids = array();
+            $category_ids = [];
         }
 
         if (count($content_object_ids) > 0 || count($category_ids) > 0)
@@ -124,9 +124,9 @@ class ExporterComponent extends Manager
 
                 $table_data[] = $table_row;
 
-                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
-                $headers = array();
+                $headers = [];
                 $headers[] = new StaticTableColumn(Translation::get('Type'));
                 $headers[] = new StaticTableColumn(Translation::get('ShortCount'));
 
@@ -141,7 +141,7 @@ class ExporterComponent extends Manager
 
                 $export_table = new ExportTable($table_data, $headers);
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $export_table->toHtml();
@@ -157,7 +157,7 @@ class ExporterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_error_message(
@@ -190,15 +190,15 @@ class ExporterComponent extends Manager
 
         $types = DataManager::distinct(ContentObject::class, $parameters);
 
-        $this->is_exportable = array();
+        $this->is_exportable = [];
 
-        $table_data = array();
+        $table_data = [];
 
         foreach ($types as $type)
         {
             $type_namespace = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3);
 
-            $table_row = array();
+            $table_row = [];
 
             $glyph = new NamespaceIdentGlyph(
                 $type_namespace, true, false, false, IdentGlyph::SIZE_MINI,
@@ -208,7 +208,7 @@ class ExporterComponent extends Manager
             $table_row[] = $glyph->render();
             $table_row[] = Translation::get('TypeName', null, $type_namespace);
 
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $content_object_ids

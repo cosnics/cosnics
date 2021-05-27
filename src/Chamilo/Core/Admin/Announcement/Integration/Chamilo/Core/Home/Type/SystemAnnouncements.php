@@ -22,7 +22,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
 
     public function displayContent()
     {
-        $html = array();
+        $html = [];
         $publications = $this->getPublications();
 
         if ($publications->count() == 0)
@@ -67,7 +67,7 @@ class SystemAnnouncements extends BlockRenderer implements ConfigurableInterface
 
     public function getPublicationLink($publication)
     {
-        $paremeters = array();
+        $paremeters = [];
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Admin\Manager::package();
         $parameters[\Chamilo\Core\Admin\Manager::PARAM_ACTION] =
             \Chamilo\Core\Admin\Manager::ACTION_SYSTEM_ANNOUNCEMENTS;

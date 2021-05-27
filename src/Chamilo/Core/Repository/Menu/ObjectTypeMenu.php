@@ -118,15 +118,15 @@ class ObjectTypeMenu extends HtmlMenu
      */
     private function get_menu_items()
     {
-        $menu = array();
-        $menu_item = array();
+        $menu = [];
+        $menu_item = [];
 
         $typeSelectorFactory = new TypeSelectorFactory(DataManager::get_registered_types());
         $type_selector = $typeSelectorFactory->getTypeSelector();
 
         foreach ($type_selector->get_categories() as $category)
         {
-            $menu_item = array();
+            $menu_item = [];
 
             $glyph = new NamespaceIdentGlyph(
                 'Chamilo\Core\Repository\ContentObject\Category\\' . $category->get_type(), true, false, false, null, array('fa-fw')
@@ -137,7 +137,7 @@ class ObjectTypeMenu extends HtmlMenu
             $menu_item['url'] = $this->get_category_url($category->get_type());
             $menu_item[OptionsMenuRenderer::KEY_ID] = $category->get_type();
 
-            $sub_menu_items = array();
+            $sub_menu_items = [];
 
             foreach ($category->get_options() as $option)
             {
@@ -157,7 +157,7 @@ class ObjectTypeMenu extends HtmlMenu
                     $glyphNamespace, true, false, false, null, array('fa-fw')
                 );
 
-                $sub_menu_item = array();
+                $sub_menu_item = [];
                 $sub_menu_item['title'] = $option->get_label();
                 $sub_menu_item['url'] = $this->get_type_url($option->get_template_registration_id());
                 $sub_menu_item[OptionsMenuRenderer::KEY_ID] = $option->get_template_registration_id();

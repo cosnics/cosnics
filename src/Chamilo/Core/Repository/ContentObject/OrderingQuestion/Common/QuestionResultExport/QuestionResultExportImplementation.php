@@ -20,7 +20,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         $question = $this->get_complex_question()->get_ref_object();
         
         $options = $question->get_options();
-        $new_answer = array();
+        $new_answer = [];
         asort($answer, SORT_NUMERIC);
         
         foreach ($answer as $option_index => $answer_part)

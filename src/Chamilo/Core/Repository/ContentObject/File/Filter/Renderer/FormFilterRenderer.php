@@ -28,7 +28,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         
         $form_validator->addElement('category', Translation::get('Filesize'));
         
-        $group = array();
+        $group = [];
         $group[] = $form_validator->createElement(
             'select', 
             FilterData::FILTER_COMPARE, 
@@ -57,7 +57,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         asort($file_types);
         $file_types = array(0 => '-- ' . Translation::get('SelectAType') . ' --') + $file_types;
         
-        $group = array();
+        $group = [];
         $group[] = $form_validator->createElement(
             'select', 
             FilterData::FILTER_EXTENSION_TYPE, 
@@ -84,7 +84,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
         

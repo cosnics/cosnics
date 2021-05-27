@@ -122,7 +122,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function addSearchQueryContentObjectElement(AdvancedElementFinderElements $elements)
     {
         $contentObjects = $this->retrieveContentObjects();
-        $searchResults = array();
+        $searchResults = [];
         $filter = $this->getFilter();
 
         foreach ($contentObjects as $contentObject)
@@ -130,7 +130,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             $repositoryCategory = $this->retrieveRepositoryCategoryByIdentifier($contentObject->get_parent_id());
 
             $repositoryCategoryIdentifiers =
-                ($contentObject->get_parent_id() != 0 ? $repositoryCategory->get_parent_ids() : array());
+                ($contentObject->get_parent_id() != 0 ? $repositoryCategory->get_parent_ids() : []);
 
             $repositoryCategoryIdentifiers[] = $contentObject->get_parent_id();
 
@@ -145,8 +145,8 @@ class AttachmentContentObjectsFeedComponent extends Manager
                     $searchResult = new stdClass();
 
                     $searchResult->category = $repositoryCategory;
-                    $searchResult->subCategories = array();
-                    $searchResult->contentObjects = array();
+                    $searchResult->subCategories = [];
+                    $searchResult->contentObjects = [];
 
                     $searchResults[$repositoryCategoryIdentifier] = $searchResult;
                 }
@@ -221,7 +221,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         {
             if ($this->getFilter() == 0)
             {
-                return array();
+                return [];
             }
 
             $category = DataManager::retrieve_by_id(RepositoryCategory::class, $this->getFilter());
@@ -235,7 +235,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             }
             else
             {
-                return array();
+                return [];
             }
         }
         else
@@ -267,7 +267,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
         $excludedContentObjectIdentifiers = $this->getExcludedContentObjectIdentifiers();
         $searchQuery = $this->getSearchQuery();
 
-        $conditions = array();
+        $conditions = [];
 
         if (!empty($searchQuery))
         {
@@ -403,7 +403,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function retrieveCategories()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
@@ -450,7 +450,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
             $category = new RepositoryCategory();
             $category->setId($repositoryCategoryByIdentifier);
             $category->set_name(
-                $this->getTranslator()->trans('MyRepository', array(), Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('MyRepository', [], Utilities::COMMON_LIBRARIES)
             );
         }
 

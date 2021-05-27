@@ -123,7 +123,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function display_course_types()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="nav nav-tabs course-list-tabs">';
 
@@ -132,7 +132,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $selected_course_type_id = $this->get_selected_course_type_id();
 
-        $created_tabs = array();
+        $created_tabs = [];
 
         foreach ($this->course_types as $course_type)
         {
@@ -202,7 +202,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function display_course_user_categories_for_course_type()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="list-group">';
         $html[] = $this->display_course_user_category();
@@ -240,7 +240,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function display_course_user_category($course_type_user_category = null, $offset = 1, $count = 1)
     {
-        $html = array();
+        $html = [];
 
         if (isset($course_type_user_category))
         {
@@ -298,11 +298,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $this->loadCourseSettings($courses);
 
-        $html = array();
+        $html = [];
 
         if ($size > 0)
         {
-            $course_instances = array();
+            $course_instances = [];
             foreach ($courses as $course_properties)
             {
                 $course_instances[$course_properties[Course::PROPERTY_ID]] = DataClass::factory(
@@ -356,7 +356,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                             $url = null;
                         }
 
-                        $glyph = new FontAwesomeGlyph('lock', array(), null, 'fas');
+                        $glyph = new FontAwesomeGlyph('lock', [], null, 'fas');
                         $locked = $glyph->render();
                     }
 
@@ -364,7 +364,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
                     if ($course_closed)
                     {
-                        $glyph = new FontAwesomeGlyph('lock', array(), null, 'fas');
+                        $glyph = new FontAwesomeGlyph('lock', [], null, 'fas');
 
                         $html[] = $glyph->render() . ' ';
                     }
@@ -393,7 +393,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                     $html[] = '</div>';
                     $html[] = '<div class="clearfix"></div>';
 
-                    $text = array();
+                    $text = [];
 
                     if ($course_settings_controller->get_course_setting(
                         $course, CourseSettingsConnector::SHOW_COURSE_CODE
@@ -490,7 +490,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function get_course_type_url($course_type_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_SELECTED_COURSE_TYPE] = $course_type_id;
 
         return $this->get_parent()->get_url($parameters);
@@ -626,7 +626,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
     protected function loadCourseSettings($courses)
     {
-        $courseIdentifiers = array();
+        $courseIdentifiers = [];
 
         foreach ($courses as $course)
         {
@@ -646,7 +646,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected function parse_courses($courses)
     {
-        $parsed_courses = array();
+        $parsed_courses = [];
 
         foreach($courses as $course)
         {

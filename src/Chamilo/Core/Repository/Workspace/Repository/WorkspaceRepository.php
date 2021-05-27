@@ -156,7 +156,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = array())
+    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = [])
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty)
@@ -172,7 +172,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = array())
+    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = [])
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(
@@ -204,7 +204,7 @@ class WorkspaceRepository
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUser(
-        User $user, $entities, $limit = null, $offset = null, $orderProperty = array()
+        User $user, $entities, $limit = null, $offset = null, $orderProperty = []
     )
     {
         return DataManager::retrieves(
@@ -226,7 +226,7 @@ class WorkspaceRepository
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUserFast(
-        User $user, $limit = null, $offset = null, $orderProperty = array()
+        User $user, $limit = null, $offset = null, $orderProperty = []
     )
     {
         $joins = new Joins();
@@ -253,7 +253,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = array())
+    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = [])
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(
@@ -268,7 +268,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = array())
+    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = [])
     {
         $condition = new InCondition(
             new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID), $identifiers
@@ -361,11 +361,11 @@ class WorkspaceRepository
      */
     private function getSharedWorkspacesForEntitiesWithRightCondition($entities, $right = RightsService::RIGHT_VIEW)
     {
-        $conditions = array();
+        $conditions = [];
 
         foreach ($entities as $entityType => $entityIdentifiers)
         {
-            $entityConditions = array();
+            $entityConditions = [];
 
             $entityConditions[] = new InCondition(
                 new PropertyConditionVariable(
@@ -419,12 +419,12 @@ class WorkspaceRepository
      */
     private function getWorkspaceByUserCondition(User $user, $entities, $right, Condition $additionalCondition = null)
     {
-        $orConditions = array();
+        $orConditions = [];
 
         $orConditions[] = $this->getWorkspacesByCreatorCondition($user);
         $orConditions[] = $this->getSharedWorkspacesForEntitiesWithRightCondition($entities, $right);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new OrCondition($orConditions);
 
         if ($additionalCondition)
@@ -444,7 +444,7 @@ class WorkspaceRepository
      */
     private function getWorkspaceFavouritesByUserCondition(User $user, $entities, $right)
     {
-        $andConditions = array();
+        $andConditions = [];
 
         $andConditions[] = $this->getWorkspaceByUserCondition($user, $entities, $right);
         $andConditions[] = new EqualityCondition(

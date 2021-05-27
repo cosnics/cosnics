@@ -89,7 +89,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      *
      * @return bool
      */
-    public function publish($selectedContentObjects = array())
+    public function publish($selectedContentObjects = [])
     {
         if (! $this->hasForm())
         {
@@ -130,7 +130,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      *
      * @return bool
      */
-    public function createPublicationsWithoutForm($selectedContentObjects = array())
+    public function createPublicationsWithoutForm($selectedContentObjects = [])
     {
         $success = true;
         
@@ -229,7 +229,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function getBuilderParameters()
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_BUILD_COMPLEX_CONTENT_OBJECT;
 
@@ -245,7 +245,7 @@ class ContentObjectPublicationHandler implements PublicationHandlerInterface
      */
     protected function getDisplayParameters()
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT;
 

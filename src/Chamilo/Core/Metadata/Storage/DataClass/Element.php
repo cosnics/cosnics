@@ -51,7 +51,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * @param array $default_properties
      * @param array $optional_properties
      */
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -68,16 +68,16 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
         switch ($this->get_value_type())
         {
             case self::VALUE_TYPE_FREE :
-                return new FontAwesomeGlyph('file', array(), null, 'fas');
+                return new FontAwesomeGlyph('file', [], null, 'fas');
                 break;
             case self::VALUE_TYPE_VOCABULARY_PREDEFINED :
-                return new FontAwesomeGlyph('globe', array(), null, 'fas');
+                return new FontAwesomeGlyph('globe', [], null, 'fas');
                 break;
             case self::VALUE_TYPE_VOCABULARY_USER :
-                return new FontAwesomeGlyph('user', array(), null, 'fas');
+                return new FontAwesomeGlyph('user', [], null, 'fas');
                 break;
             case self::VALUE_TYPE_VOCABULARY_BOTH :
-                return new FontAwesomeGlyph('book', array(), null, 'fas');
+                return new FontAwesomeGlyph('book', [], null, 'fas');
                 break;
         }
     }
@@ -103,7 +103,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_SCHEMA_ID;
         $extended_property_names[] = self::PROPERTY_NAME;
@@ -129,7 +129,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     protected function get_dependencies()
     {
-        $dependencies = array();
+        $dependencies = [];
 
         $dependencies[EntityTranslation::class] = new AndCondition(
             array(

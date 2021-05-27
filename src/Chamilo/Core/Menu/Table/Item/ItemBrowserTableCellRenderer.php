@@ -150,7 +150,7 @@ class ItemBrowserTableCellRenderer extends DataClassTableCellRenderer implements
      *
      * @return string
      */
-    public function getItemUrl(Item $item, array $parameters = array())
+    public function getItemUrl(Item $item, array $parameters = [])
     {
         $parameters[Application::PARAM_CONTEXT] = Manager::package();
         $parameters[Manager::PARAM_ITEM] = $item->getId();

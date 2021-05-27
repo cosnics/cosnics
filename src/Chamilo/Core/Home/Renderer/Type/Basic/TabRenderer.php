@@ -110,7 +110,7 @@ class TabRenderer
         $tab = $this->getTab();
         $request = $this->getApplication()->getRequest();
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="row portal-tab ' . ($isActiveTab ? 'show' : 'hidden') . '" data-element-id="' .
              $tab->getId() . '">';

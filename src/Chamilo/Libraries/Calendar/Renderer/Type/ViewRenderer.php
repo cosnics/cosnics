@@ -74,7 +74,7 @@ abstract class ViewRenderer extends Renderer
      * @throws \Exception
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
         $linkTarget = ''
     )
     {
@@ -114,7 +114,7 @@ abstract class ViewRenderer extends Renderer
             return $this->getDataProvider()->getEventActions($event);
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -257,7 +257,7 @@ abstract class ViewRenderer extends Renderer
             $button->addSubButton(
                 new SubButton(
                     Translation::get($rendererType . 'View'), null, $typeUrl->getUrl(), SubButton::DISPLAY_LABEL, false,
-                    array(), null, $currentRendererType == $rendererType
+                    [], null, $currentRendererType == $rendererType
                 )
             );
         }

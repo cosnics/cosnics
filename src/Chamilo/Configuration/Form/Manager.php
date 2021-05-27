@@ -85,7 +85,7 @@ abstract class Manager extends Application
 
     private function retrieve_form($application, $name)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable($application));

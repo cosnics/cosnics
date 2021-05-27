@@ -162,7 +162,7 @@ class ContentObjectOwnerChanger
             return;
         }
 
-        $item_references = array();
+        $item_references = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(

@@ -22,7 +22,7 @@ class LinkApplicationItemRenderer extends ItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li>';
         $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';

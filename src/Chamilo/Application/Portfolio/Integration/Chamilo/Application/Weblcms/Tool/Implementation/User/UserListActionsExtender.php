@@ -28,7 +28,7 @@ class UserListActionsExtender implements UserListActionsExtenderInterface
      */
     public function getActions(Toolbar $toolbar, TableCellRenderer $tableCellRenderer, $currentUserId)
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Application::PARAM_CONTEXT] = Manager::context();
         $parameters[Application::PARAM_ACTION] = Manager::ACTION_HOME;
@@ -38,7 +38,7 @@ class UserListActionsExtender implements UserListActionsExtenderInterface
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::getInstance()->getTranslation('ViewPortfolio', array(), __NAMESPACE__),
+                Translation::getInstance()->getTranslation('ViewPortfolio', [], __NAMESPACE__),
                 new NamespaceIdentGlyph('Chamilo\Application\Portfolio'), $redirect->getUrl(),
                 ToolbarItem::DISPLAY_ICON, false, null, '_blank'
             )

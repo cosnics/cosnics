@@ -103,7 +103,7 @@ class RightsForm extends FormValidator
     {
         $translator = $this->getTranslator();
 
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PROPERTY_SUBMIT, $translator->trans('Submit', [], Utilities::COMMON_LIBRARIES),
@@ -132,7 +132,7 @@ class RightsForm extends FormValidator
 
         $this->addElement('category', $translator->trans('Inheritance', [], 'Chamilo\Libraries\Rights'));
 
-        $group = array();
+        $group = [];
 
         if ($this->isAllowedToInherit())
         {
@@ -172,7 +172,7 @@ class RightsForm extends FormValidator
         $this->addElement('category', $rightName);
         $this->addElement('html', '<div class="right">');
 
-        $group = array();
+        $group = [];
 
         $group[] = &$this->createElement(
             'radio', null, null, $translator->trans('Everyone', [], 'Chamilo\Libraries\Rights'), self::RIGHT_OPTION_ALL,
@@ -276,9 +276,9 @@ class RightsForm extends FormValidator
      *
      * @throws \Exception
      */
-    public function setRightDefaults(User $user, int $rightIdentifier, array $targetEntities = array())
+    public function setRightDefaults(User $user, int $rightIdentifier, array $targetEntities = [])
     {
-        $defaults = array();
+        $defaults = [];
 
         if (key_exists(0, $targetEntities))
         {
@@ -336,7 +336,7 @@ class RightsForm extends FormValidator
      */
     public function setRightsDefaults(User $user, bool $rightsLocationInherits, array $targetEntities)
     {
-        $defaults = array();
+        $defaults = [];
 
         if ($rightsLocationInherits)
         {

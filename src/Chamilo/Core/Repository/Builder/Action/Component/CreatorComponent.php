@@ -160,7 +160,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 
@@ -205,7 +205,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
     private function retrieve_used_items($parent)
     {
-        $items = array();
+        $items = [];
 
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, new EqualityCondition(

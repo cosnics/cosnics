@@ -53,12 +53,12 @@ class ResourceFixerCommand extends Command
         $this->setName('chamilo:repository:resource_fixer')
             ->setDescription(
                 $this->translator->trans(
-                    'ResourceFixerDescription', array(), 'Chamilo\Core\Repository'
+                    'ResourceFixerDescription', [], 'Chamilo\Core\Repository'
                 )
             )
             ->addOption(
                 self::OPT_FORCE, self::OPT_FORCE_SHORT, InputOption::VALUE_NONE,
-                $this->translator->trans('ResourceFixerForceOption', array(), 'Chamilo\Core\Repository')
+                $this->translator->trans('ResourceFixerForceOption', [], 'Chamilo\Core\Repository')
             );
     }
 

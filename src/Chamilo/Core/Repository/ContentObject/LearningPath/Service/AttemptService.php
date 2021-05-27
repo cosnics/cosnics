@@ -161,7 +161,7 @@ class AttemptService
         {
             $treeNodeAttempts = $this->trackingRepository->findTreeNodeAttempts($learningPath, $user);
 
-            $attempt_data = array();
+            $attempt_data = [];
 
             foreach ($treeNodeAttempts as $treeNodeAttempt)
             {
@@ -194,7 +194,7 @@ class AttemptService
             return $treeNodeAttempts[$treeNode->getId()];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -211,7 +211,7 @@ class AttemptService
         $treeNodeQuestionAttempts =
             $this->trackingRepository->findTreeNodeQuestionAttempts($learningPathItemAttempt);
 
-        $treeNodeQuestionAttemptsPerQuestion = array();
+        $treeNodeQuestionAttemptsPerQuestion = [];
 
         foreach ($treeNodeQuestionAttempts as $treeNodeQuestionAttempt)
         {

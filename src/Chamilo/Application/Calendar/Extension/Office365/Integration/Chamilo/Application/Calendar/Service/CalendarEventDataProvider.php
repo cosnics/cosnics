@@ -48,7 +48,7 @@ class CalendarEventDataProvider extends ExternalCalendar
     {
         try
         {
-            $events = array();
+            $events = [];
 
             $calendarIdentifiers = $this->getCalendarIdentifiers($calendarRendererProvider);
 
@@ -109,7 +109,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $calendarRendererProvider->getDataUser(),
             self::CALENDAR_EVENT_DATA_PROVIDER_TYPE);
 
-        $calendarIdentifiers = array();
+        $calendarIdentifiers = [];
 
         if ($availabilities->count() == 0)
         {
@@ -151,7 +151,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $toDate);
 
         $availableCalendar = $this->getCalendarByIdentifier($calendarIdentifier, $user);
-        $events = array();
+        $events = [];
 
         foreach ($office365CalenderEvents as $office365CalenderEvent)
         {
@@ -201,7 +201,7 @@ class CalendarEventDataProvider extends ExternalCalendar
         {
             try
             {
-                $availableCalendars = array();
+                $availableCalendars = [];
                 $ownedCalendars = $this->getCalendarService()->listOwnedCalendars($user);
 
                 foreach ($ownedCalendars as $calendarItem)

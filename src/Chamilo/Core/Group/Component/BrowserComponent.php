@@ -72,7 +72,7 @@ class BrowserComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
@@ -99,21 +99,21 @@ class BrowserComponent extends Manager implements TableSupport
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('Add', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
+                    $translator->trans('Add', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
                     $this->get_create_group_url($this->getGroupIdentifier()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('Root', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('home'),
+                    $translator->trans('Root', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('home'),
                     $this->get_group_viewing_url($this->getRootGroup()), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
 
             $commonActions->addButton(
                 new Button(
-                    $translator->trans('ShowAll', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
+                    $translator->trans('ShowAll', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('folder'),
                     $this->get_url(array(self::PARAM_GROUP_ID => $this->getGroupIdentifier())),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -159,7 +159,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function getGroupsCondition($query)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new PatternMatchCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
@@ -222,13 +222,13 @@ class BrowserComponent extends Manager implements TableSupport
         $group = $this->getGroup();
         $translator = $this->getTranslator();
 
-        $html = array();
+        $html = [];
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                 $this->get_group_editing_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
@@ -237,7 +237,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    $translator->trans('Delete', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_group_delete_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -278,7 +278,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Metadata', array(), Utilities::COMMON_LIBRARIES),
+                $translator->trans('Metadata', [], Utilities::COMMON_LIBRARIES),
                 new FontAwesomeGlyph('info-circle'), $this->get_group_metadata_url($group),
                 ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
@@ -290,7 +290,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($description)
         {
-            $html[] = '<b>' . $translator->trans('Description', array(), Utilities::COMMON_LIBRARIES) . '</b>: ' .
+            $html[] = '<b>' . $translator->trans('Description', [], Utilities::COMMON_LIBRARIES) . '</b>: ' .
                 $description . '<br />';
         }
 
@@ -325,7 +325,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (isset($query) && $query != '')
         {
-            $and_conditions = array();
+            $and_conditions = [];
 
             $and_conditions[] = $condition;
             $and_conditions[] = $this->getGroupsCondition($query);
@@ -389,7 +389,7 @@ class BrowserComponent extends Manager implements TableSupport
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
         $tabs->add_tab(
             new DynamicContentTab(
-                self::TAB_USERS, $translator->trans('Users', array(), \Chamilo\Core\User\Manager::context()),
+                self::TAB_USERS, $translator->trans('Users', [], \Chamilo\Core\User\Manager::context()),
                 new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $table->render()
             )
         );
@@ -408,7 +408,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_users_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->getGroupIdentifier())
@@ -433,7 +433,7 @@ class BrowserComponent extends Manager implements TableSupport
                 User::class, new DataClassRetrievesParameters($condition)
             );
 
-            $userconditions = array();
+            $userconditions = [];
 
             foreach ($users as $user)
             {

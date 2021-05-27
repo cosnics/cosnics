@@ -87,7 +87,7 @@ class ImpactViewComponent extends Manager
         {
             $view = $this->render_impact_view();
             
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $view;

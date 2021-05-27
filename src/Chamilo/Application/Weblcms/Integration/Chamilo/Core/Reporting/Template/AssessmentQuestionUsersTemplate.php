@@ -85,7 +85,7 @@ class AssessmentQuestionUsersTemplate extends ReportingTemplate
                     array(\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID)), 
                 Translation::get('Assessments')));
         
-        $params = array();
+        $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication_id;
         

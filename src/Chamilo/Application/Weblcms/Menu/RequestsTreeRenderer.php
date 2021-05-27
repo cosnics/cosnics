@@ -41,9 +41,9 @@ class RequestsTreeRenderer extends HtmlMenu
 
     private function get_menu_items()
     {
-        $menu = array();
-        $menu_item = array();
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $menu = [];
+        $menu_item = [];
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $menu_item['class'] = $glyph->getClassNamesString();
         $menu_item['title'] = Translation::get('Requests');
         $menu_item['description'] = Translation::get('Requests');
@@ -56,10 +56,10 @@ class RequestsTreeRenderer extends HtmlMenu
 
     private function get_requests_array()
     {
-        $sub_menu = array();
+        $sub_menu = [];
 
-        $menu_item = array();
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $menu_item = [];
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
         $menu_item['class'] = $glyph->getClassNamesString();
         $menu_item['title'] = Translation::get('SubscriptionRequests');
         $menu_item['description'] = Translation::get('SubscriptionRequests');
@@ -72,7 +72,7 @@ class RequestsTreeRenderer extends HtmlMenu
 
     private function get_sub_division($request_type)
     {
-        $sub_menu = array();
+        $sub_menu = [];
 
         $request_database_method = null;
         switch ($request_type)
@@ -93,7 +93,7 @@ class RequestsTreeRenderer extends HtmlMenu
             {
                 case 0 :
                     $translation = 'Pending';
-                    $glyph = new FontAwesomeGlyph('pause-circle', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('pause-circle', [], null, 'fas');
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::PENDING_REQUEST_VIEW;
                     $condition = new EqualityCondition(
@@ -103,7 +103,7 @@ class RequestsTreeRenderer extends HtmlMenu
                     break;
                 case 1 :
                     $translation = 'Allowed';
-                    $glyph = new FontAwesomeGlyph('check-square', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('check-square', [], null, 'fas');
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::ALLOWED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
@@ -113,7 +113,7 @@ class RequestsTreeRenderer extends HtmlMenu
                     break;
                 case 2 :
                     $translation = 'Denied';
-                    $glyph = new FontAwesomeGlyph('times-circle', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('times-circle', [], null, 'fas');
                     $class = $glyph->getClassNamesString();
                     $request_view = AdminRequestBrowserComponent::DENIED_REQUEST_VIEW;
                     $condition = new EqualityCondition(
@@ -125,7 +125,7 @@ class RequestsTreeRenderer extends HtmlMenu
 
             $count = $this->parent->$request_database_method($condition);
 
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['class'] = $class;
             $menu_item['title'] = Translation::get($translation) . ' (' . $count . ')';
             $menu_item['description'] = Translation::get($translation);

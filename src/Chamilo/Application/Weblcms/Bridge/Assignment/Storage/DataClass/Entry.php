@@ -29,7 +29,7 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Br
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID;
 

@@ -27,7 +27,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $values = $this->config->as_values_array();
         $all_keys = ArrayKeys($values);
 
-        $this->assertEquals(array(), array_diff($db_slots, $all_keys));
+        $this->assertEquals([], array_diff($db_slots, $all_keys));
     }
 
     public function test_as_values_array_should_contains_all_admin_slots()
@@ -43,7 +43,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $values = $this->config->as_values_array();
         $all_keys = ArrayKeys($values);
 
-        $this->assertEquals(array(), array_diff($admin_slots, $all_keys));
+        $this->assertEquals([], array_diff($admin_slots, $all_keys));
     }
 
     public function test_as_values_array_should_contains_all_platform_slots()
@@ -59,14 +59,14 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $values = $this->config->as_values_array();
         $all_keys = ArrayKeys($values);
 
-        $this->assertEquals(array(), array_diff($platform_slots, $all_keys));
+        $this->assertEquals([], array_diff($platform_slots, $all_keys));
     }
 
     public function test_load_file_should_be_able_to_load_a_install_config_file()
     {
         $this->config->load_config_file(__DIR__ . '/__files/config_ok.php');
 
-        $expected = array();
+        $expected = [];
         $expected['storage_type'] = 'mdb2';
         $expected['database_driver'] = 'mysqli';
         $expected['database_host'] = 'hostname';

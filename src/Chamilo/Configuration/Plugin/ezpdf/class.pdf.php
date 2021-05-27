@@ -27,7 +27,7 @@ class Cpdf
     /**
      * this array contains all of the pdf objects, ready for final assembly
      */
-    var $objects = array();
+    var $objects = [];
 
     /**
      * the objectId (number within the objects array) of the document catalog
@@ -38,7 +38,7 @@ class Cpdf
      * array carrying information about the fonts that the system currently knows about
      * used to ensure that a font is not loaded twice, among other things
      */
-    var $fonts = array();
+    var $fonts = [];
 
     /**
      * a record of the current font
@@ -94,7 +94,7 @@ class Cpdf
      * an array which is used to save the state of the document, mainly the colours and styles
      * it is used to temporarily change to another state, the change back to what it was before
      */
-    var $stateStack = array();
+    var $stateStack = [];
 
     /**
      * number of elements within the state stack
@@ -109,7 +109,7 @@ class Cpdf
     /**
      * object Id storage stack
      */
-    var $stack = array();
+    var $stack = [];
 
     /**
      * number of elements within the object Id storage stack
@@ -120,12 +120,12 @@ class Cpdf
      * an array which contains information about the objects which are not firmly attached to pages
      * these have been added with the addObject function
      */
-    var $looseObjects = array();
+    var $looseObjects = [];
 
     /**
      * array contains infomation about how the loose objects are to be added to the document
      */
-    var $addLooseObjects = array();
+    var $addLooseObjects = [];
 
     /**
      * the objectId of the information object for the document
@@ -165,7 +165,7 @@ class Cpdf
      * this used so that the code knows which font is the bold version of another font, etc.
      * the value of this array is initialised in the constuctor function.
      */
-    var $fontFamilies = array();
+    var $fontFamilies = [];
 
     /**
      * track if the current font is bolded or italicised
@@ -206,7 +206,7 @@ class Cpdf
     /**
      * array which forms a stack to keep track of nested callback functions
      */
-    var $callback = array();
+    var $callback = [];
 
     /**
      * the number of callback functions in the callback array
@@ -217,7 +217,7 @@ class Cpdf
      * store label->id pairs for named destinations, these will be used to replace internal links
      * done this way so that destinations can be defined after the location that links to them
      */
-    var $destinations = array();
+    var $destinations = [];
 
     /**
      * store the stack for the transaction commands, each item in here is a record of the values of all the
@@ -927,7 +927,7 @@ class Cpdf
             $len = strlen($data);
             // cycle through the file, identifying chunks
             $haveHeader = 0;
-            $info = array();
+            $info = [];
             $idata = '';
             $pdata = '';
             while ($p < $len)
@@ -969,7 +969,7 @@ class Cpdf
                     case 'tRNS' :
                         // this chunk can only occur once and it must occur after the PLTE chunk and before IDAT chunk
                         // print "tRNS found, color type = ".$info['colorType']."<BR>";
-                        $transparency = array();
+                        $transparency = [];
                         if ($info['colorType'] == 3)
                         { // indexed color, rbg
                             /*
@@ -1723,7 +1723,7 @@ class Cpdf
     function newDocument($pageSize = array(0, 0, 612, 792))
     {
         $this->numObj = 0;
-        $this->objects = array();
+        $this->objects = [];
 
         $this->numObj ++;
         $this->o_catalog($this->numObj, 'new');
@@ -1937,7 +1937,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'catalog', 'info' => array());
+                $this->objects[$id] = array('t' => 'catalog', 'info' => []);
                 $this->catalogId = $id;
                 break;
             case 'outlines' :
@@ -1994,7 +1994,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'contents', 'c' => '', 'info' => array());
+                $this->objects[$id] = array('t' => 'contents', 'c' => '', 'info' => []);
                 if (strlen($options) && intval($options))
                 {
                     // then this contents is the primary for a page
@@ -2061,7 +2061,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'destination', 'info' => array());
+                $this->objects[$id] = array('t' => 'destination', 'info' => []);
                 $tmp = '';
                 switch ($options['type'])
                 {
@@ -2410,7 +2410,7 @@ class Cpdf
         {
             case 'new' :
                 // make the new object
-                $this->objects[$id] = array('t' => 'image', 'data' => $options['data'], 'info' => array());
+                $this->objects[$id] = array('t' => 'image', 'data' => $options['data'], 'info' => []);
                 $this->objects[$id]['info']['Type'] = '/XObject';
                 $this->objects[$id]['info']['Subtype'] = '/Image';
                 $this->objects[$id]['info']['Width'] = $options['iw'];
@@ -2567,7 +2567,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'outlines', 'info' => array('outlines' => array()));
+                $this->objects[$id] = array('t' => 'outlines', 'info' => array('outlines' => []));
                 $this->o_catalog($this->catalogId, 'outlines', $id);
                 break;
             case 'outline' :
@@ -2625,7 +2625,7 @@ class Cpdf
                 $this->numObj ++;
                 $this->o_contents($this->numObj, 'new', $id);
                 $this->currentContents = $this->numObj;
-                $this->objects[$id]['info']['contents'] = array();
+                $this->objects[$id]['info']['contents'] = [];
                 $this->objects[$id]['info']['contents'][] = $this->numObj;
                 $match = ($this->numPages % 2 ? 'odd' : 'even');
                 foreach ($this->addLooseObjects as $oId => $target)
@@ -2643,7 +2643,7 @@ class Cpdf
                 // add an annotation to this page
                 if (!isset($o['info']['annot']))
                 {
-                    $o['info']['annot'] = array();
+                    $o['info']['annot'] = [];
                 }
                 // $options should contain the id of the annotation dictionary
                 $o['info']['annot'][] = $options;
@@ -2696,7 +2696,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'pages', 'info' => array());
+                $this->objects[$id] = array('t' => 'pages', 'info' => []);
                 $this->o_catalog($this->catalogId, 'pages', $id);
                 break;
             case 'page' :
@@ -2860,7 +2860,7 @@ class Cpdf
         switch ($action)
         {
             case 'new' :
-                $this->objects[$id] = array('t' => 'viewerPreferences', 'info' => array());
+                $this->objects[$id] = array('t' => 'viewerPreferences', 'info' => []);
                 break;
             case 'add' :
                 foreach ($options as $k => $v)
@@ -2938,7 +2938,7 @@ class Cpdf
         {
             // then rebuild the php_<font>.afm file from the <font>.afm file
             $this->addMessage('openFont: build php file from ' . $dir . $name . '.afm');
-            $data = array();
+            $data = [];
             $file = file($dir . $name . '.afm');
             foreach ($file as $rowA)
             {
@@ -2976,7 +2976,7 @@ class Cpdf
                         case 'C' :
                             // C 39 ; WX 222 ; N quoteright ; B 53 463 157 718 ;
                             $bits = explode(';', trim($row));
-                            $dtmp = array();
+                            $dtmp = [];
                             foreach ($bits as $bit)
                             {
                                 $bits2 = explode(' ', trim($bit));
@@ -2984,7 +2984,7 @@ class Cpdf
                                 {
                                     if (count($bits2) > 2)
                                     {
-                                        $dtmp[$bits2[0]] = array();
+                                        $dtmp[$bits2[0]] = [];
                                         for ($i = 1; $i < count($bits2); $i ++)
                                         {
                                             $dtmp[$bits2[0]][] = $bits2[$i];
@@ -3094,7 +3094,7 @@ class Cpdf
 
         $this->checkAllHere();
 
-        $xref = array();
+        $xref = [];
         $content = "%PDF-1.3\n%����\n";
         // $content="%PDF-1.3\n";
         $pos = strlen($content);
@@ -3310,7 +3310,7 @@ class Cpdf
                     // find the array of fond widths, and put that into an object.
                     $firstChar = - 1;
                     $lastChar = 0;
-                    $widths = array();
+                    $widths = [];
                     foreach ($this->fonts[$fontName]['C'] as $num => $d)
                     {
                         if (intval($num) > 0 || $num == '0')
@@ -3549,7 +3549,7 @@ class Cpdf
      * can be used to turn it on and/or set the passwords which it will have.
      * also the functions that the user will have are set here, such as print, modify, add
      */
-    function setEncryption($userPass = '', $ownerPass = '', $pc = array())
+    function setEncryption($userPass = '', $ownerPass = '', $pc = [])
     {
         $p = bindec(11000000);
 
@@ -3734,7 +3734,7 @@ class Cpdf
         // 'compress'=> 1 or 0 - apply content stream compression, this is on (1) by default
         if (!is_array($options))
         {
-            $options = array();
+            $options = [];
         }
         if (isset($options['compress']) && $options['compress'] == 0)
         {

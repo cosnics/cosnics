@@ -58,7 +58,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_HINT, self::PROPERTY_FEEDBACK));
     }

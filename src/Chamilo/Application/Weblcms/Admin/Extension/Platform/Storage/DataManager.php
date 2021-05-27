@@ -37,15 +37,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $helper_class = Manager::get_selected_class($entity_type, true);
         $expanded_entities = $helper_class::expand($entity_id);
 
-        $conditions = array();
+        $conditions = [];
 
         if (count($expanded_entities) > 0)
         {
-            $expanded_entities_conditions = array();
+            $expanded_entities_conditions = [];
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                $expanded_entity_conditions = array();
+                $expanded_entity_conditions = [];
 
                 $expanded_entity_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -74,15 +74,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $helper_class = Manager::get_selected_class($entity_type, true);
         $expanded_entities = $helper_class::expand($entity_id);
 
-        $conditions = array();
+        $conditions = [];
 
         if (count($expanded_entities) > 0)
         {
-            $expanded_entities_conditions = array();
+            $expanded_entities_conditions = [];
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                $expanded_entity_conditions = array();
+                $expanded_entity_conditions = [];
 
                 $expanded_entity_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -108,11 +108,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (count($expanded_targets) > 0)
         {
-            $expanded_targets_conditions = array();
+            $expanded_targets_conditions = [];
 
             foreach ($expanded_targets as $expanded_target_type => $expanded_target_ids)
             {
-                $expanded_target_conditions = array();
+                $expanded_target_conditions = [];
 
                 $expanded_target_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_TARGET_TYPE),
@@ -159,11 +159,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (count($expanded_entities) > 0)
         {
-            $expanded_entities_conditions = array();
+            $expanded_entities_conditions = [];
 
             foreach ($expanded_entities as $expanded_entity_type => $expanded_entity_ids)
             {
-                $expanded_entity_conditions = array();
+                $expanded_entity_conditions = [];
 
                 $expanded_entity_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -179,7 +179,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new OrCondition($expanded_entities_conditions);
 
             $admins = DataManager::retrieves(Admin::class, new DataClassRetrievesParameters($condition));
-            $course_ids = array();
+            $course_ids = [];
 
             foreach ($admins as $admin)
             {
@@ -220,7 +220,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         else
         {
-            return new DataClassIterator(Course::class, array());
+            return new DataClassIterator(Course::class, []);
         }
     }
 

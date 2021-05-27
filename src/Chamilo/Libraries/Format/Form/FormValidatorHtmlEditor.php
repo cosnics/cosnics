@@ -68,7 +68,7 @@ class FormValidatorHtmlEditor
      * @param string[] $options
      * @param string[] $attributes
      */
-    public function __construct($name, $label, $required = true, $options = array(), $attributes = array())
+    public function __construct($name, $label, $required = true, $options = [], $attributes = [])
     {
         $this->name = $name;
         $this->label = $label;
@@ -91,7 +91,7 @@ class FormValidatorHtmlEditor
     {
         $formValidator = new FormValidator('test');
 
-        $html = array();
+        $html = [];
 
         $html[] = $formValidator->createElement('textarea', $this->name, $this->label, $this->attributes)->toHtml();
         $html[] = implode(PHP_EOL, $this->get_javascript());
@@ -122,7 +122,7 @@ class FormValidatorHtmlEditor
      */
     public function add_pre_javascript_config()
     {
-        $javascript = array();
+        $javascript = [];
 
         $javascript[] = '<script>';
         $javascript[] = 'window.CKEDITOR_BASEPATH = "' . Path::getInstance()->getPluginPath('Chamilo\Libraries', true) .
@@ -208,7 +208,7 @@ class FormValidatorHtmlEditor
 
         $timestamp = filemtime($configFile);
 
-        $scripts = array();
+        $scripts = [];
 
         $scripts[] = $resourceManager->getResourceHtml(
             $pathUtilities->getPluginPath('Chamilo\Libraries', true) . 'HtmlEditor/Ckeditor/ckeditor.js'
@@ -233,7 +233,7 @@ class FormValidatorHtmlEditor
      */
     public function get_javascript()
     {
-        $javascript = array();
+        $javascript = [];
 
         $javascript[] = '<script>';
         $javascript[] = 'var web_path = \'' . Path::getInstance()->getBasePath(true) . '\'';

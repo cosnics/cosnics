@@ -46,7 +46,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
         CourseUserCategory $courseUserCategory, CourseType $courseType, $subscribedCourseIds = []
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

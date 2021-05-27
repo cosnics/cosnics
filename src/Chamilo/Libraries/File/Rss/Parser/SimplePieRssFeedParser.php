@@ -67,11 +67,11 @@ class SimplePieRssFeedParser implements RssFeedParserInterface
         $this->simplePie->set_item_limit($numberOfEntries);
         $this->simplePie->init();
 
-        $feed_items = array();
+        $feed_items = [];
 
         for ($i = 0; $i < $this->simplePie->get_item_quantity($numberOfEntries); $i ++)
         {
-            $item = array();
+            $item = [];
             $feed_item = $this->simplePie->get_item($i);
             $item['id'] = $feed_item->get_id();
             $item['title'] = $this->purifier->purify($feed_item->get_title());

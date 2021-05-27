@@ -21,7 +21,7 @@ class ForumSubforumDeleterComponent extends Manager
 
             $subforum = $this->get_selected_complex_content_object_item();
 
-            $params = array();
+            $params = [];
 
             if ($subforum->get_parent_object() == $this->get_root_content_object())
             {

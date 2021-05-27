@@ -150,7 +150,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     )
                 ) : null;
 
-                $extraClasses = $result->isVocabularyPredefined() ? array() : array('text-muted');
+                $extraClasses = $result->isVocabularyPredefined() ? [] : array('text-muted');
                 $glyph = new FontAwesomeGlyph(
                     'globe', $extraClasses,
                     Translation::get('PredefinedValues', null, $this->get_component()->package()), 'fas'
@@ -174,7 +174,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     )
                 ) : null;
 
-                $extraClasses = $result->isVocabularyUserDefined() ? array() : array('text-muted');
+                $extraClasses = $result->isVocabularyUserDefined() ? [] : array('text-muted');
                 $glyph = new FontAwesomeGlyph(
                     'users', $extraClasses, Translation::get('UserValues', null, $this->get_component()->package()),
                     'fas'

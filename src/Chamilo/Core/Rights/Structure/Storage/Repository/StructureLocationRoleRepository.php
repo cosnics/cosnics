@@ -35,7 +35,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
      */
     public function findStructureLocationRoleByStructureLocationAndRole($structureLocationId, $roleId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getStructureLocationIdCondition($structureLocationId);
         $conditions[] = $this->getRoleIdCondition($roleId);

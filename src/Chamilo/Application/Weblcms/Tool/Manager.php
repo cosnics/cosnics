@@ -213,7 +213,7 @@ abstract class Manager extends Application
 
     public function get_available_browser_types()
     {
-        $browser_types = array();
+        $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
 
@@ -247,7 +247,7 @@ abstract class Manager extends Application
      */
     protected function renderPageTitle()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-md-9">';
@@ -275,7 +275,7 @@ abstract class Manager extends Application
      */
     public function get_visible_tools()
     {
-        $tools = array();
+        $tools = [];
 
         $course_tools = DataManager::retrieves(
             CourseTool::class, new DataClassRetrievesParameters()
@@ -306,7 +306,7 @@ abstract class Manager extends Application
 
     public function display_course_menus($tools, $show_introduction_text = false)
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderShortcuts($tools);
         // $html[] = $this->renderHomeActions();
@@ -327,7 +327,7 @@ abstract class Manager extends Application
             $this->get_course(), CourseSettingsConnector::TOOL_SHORTCUT_MENU
         );
 
-        $html = array();
+        $html = [];
 
         if ($toolShortcut && count($tools) > 0)
         {
@@ -360,7 +360,7 @@ abstract class Manager extends Application
 
         // if (! $is_subscribed)
         // {
-        // $params = array();
+        // $params = [];
         // $params[Application::PARAM_ACTION] = Manager::ACTION_CREATE_BOOKMARK;
         //
         // $bookmark_url = $this->get_parent()->get_url($params);
@@ -403,7 +403,7 @@ abstract class Manager extends Application
             }
         }
 
-        $html = array();
+        $html = [];
 
         if ($buttonToolbar->hasItems())
         {
@@ -700,7 +700,7 @@ abstract class Manager extends Application
 
     public function display_introduction_text($introduction_text)
     {
-        $html = array();
+        $html = [];
 
         if ($introduction_text)
         {
@@ -811,7 +811,7 @@ abstract class Manager extends Application
 
     public static function get_allowed_types()
     {
-        return array();
+        return [];
     }
 
     public function get_access_details_toolbar_item($parent)
@@ -884,7 +884,7 @@ abstract class Manager extends Application
 
     public function get_entities()
     {
-        $entities = array();
+        $entities = [];
         $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance($this->get_course_id());
         $entities[CourseUserEntity::ENTITY_TYPE] = CourseUserEntity::getInstance();
         $entities[CoursePlatformGroupEntity::ENTITY_TYPE] = CoursePlatformGroupEntity::getInstance(
@@ -980,7 +980,7 @@ abstract class Manager extends Application
 
     public static function get_packages_from_filesystem()
     {
-        $types = array();
+        $types = [];
 
         $directories = Filesystem::get_directory_content(
             Path::getInstance()->namespaceToFullPath(__NAMESPACE__ . '\Implementation'), Filesystem::LIST_DIRECTORIES,
@@ -1018,7 +1018,7 @@ abstract class Manager extends Application
         $breadcrumbTrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE), array(self::PARAM_PUBLICATION_ID)),
-                Translation::getInstance()->getTranslation('BrowserComponent', array(), $this->context())
+                Translation::getInstance()->getTranslation('BrowserComponent', [], $this->context())
             )
         );
     }

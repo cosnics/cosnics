@@ -28,11 +28,11 @@ class SearchCompleteComponent extends Manager
 
     public function run()
     {
-        $response = array();
+        $response = [];
         
         $query = Request::get('term');
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));

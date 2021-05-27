@@ -40,7 +40,7 @@ class ChamiloStorageUnitCreator
      * @param string $contextNamespace
      * @param string[] $storageUnitNames
      */
-    public function createStorageUnitsForContext($contextNamespace, $storageUnitNames = array())
+    public function createStorageUnitsForContext($contextNamespace, $storageUnitNames = [])
     {
         $storagePath = $this->pathBuilder->namespaceToFullPath($contextNamespace) . 'Resources/Storage';
         if (!is_dir($storagePath) || !file_exists($storagePath))
@@ -83,8 +83,8 @@ class ChamiloStorageUnitCreator
      */
     public function createStorageUnitFromXMLFile($file)
     {
-        $properties = array();
-        $indexes = array();
+        $properties = [];
+        $indexes = [];
 
         $doc = new DOMDocument();
         $doc->load($file);
@@ -98,7 +98,7 @@ class ChamiloStorageUnitCreator
         {
             /** @var \DOMElement $property */
 
-            $propertyInfo = array();
+            $propertyInfo = [];
             foreach ($attributes as $attribute)
             {
                 if ($property->hasAttribute($attribute))
@@ -114,7 +114,7 @@ class ChamiloStorageUnitCreator
         {
             /** @var \DOMElement $index */
 
-            $indexInfo = array();
+            $indexInfo = [];
             $indexInfo['type'] = $index->getAttribute('type');
 
             $indexProperties = $index->getElementsByTagname('indexproperty');

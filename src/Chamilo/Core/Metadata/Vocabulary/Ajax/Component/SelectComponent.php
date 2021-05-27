@@ -73,7 +73,7 @@ class SelectComponent extends Manager implements TableSupport
         
         $content = $this->getContent();
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $content;
@@ -84,14 +84,14 @@ class SelectComponent extends Manager implements TableSupport
 
     public function getContent()
     {
-        $html = array();
+        $html = [];
         $vocabularyIds = $this->getSelectedVocabularyId();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         
         if (count($vocabularyIds) > 0)
         {
             $vocabularyItems = $this->getVocabularyItems($vocabularyIds);
-            $vocabularyItemValues = array();
+            $vocabularyItemValues = [];
             
             foreach($vocabularyItems as $vocabularyItem)
             {
@@ -153,7 +153,7 @@ class SelectComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE)));
@@ -177,7 +177,7 @@ class SelectComponent extends Manager implements TableSupport
     {
         $element = $this->getSelectedElement();
         
-        $userConditions = array();
+        $userConditions = [];
         
         if ($element->isVocabularyUserDefined())
         {
@@ -200,7 +200,7 @@ class SelectComponent extends Manager implements TableSupport
 
     public function getVocabularyItems($vocabularyIds)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = $this->getVocabularyCondition();
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ID), 

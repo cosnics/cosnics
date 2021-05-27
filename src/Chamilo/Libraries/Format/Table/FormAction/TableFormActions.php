@@ -38,7 +38,7 @@ class TableFormActions
      * @param string $identifierName
      * @param \Chamilo\Libraries\Format\Table\FormAction\TableFormAction[] $formActions
      */
-    public function __construct($tableNamespace, $identifierName, $formActions = array())
+    public function __construct($tableNamespace, $identifierName, $formActions = [])
     {
         $this->formActions = $formActions;
         $this->identifierName = $identifierName;

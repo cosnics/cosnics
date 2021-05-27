@@ -19,6 +19,6 @@ class WorkspaceConfigureItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('cog', array(), null, 'fas');
+        return new FontAwesomeGlyph('cog', [], null, 'fas');
     }
 }

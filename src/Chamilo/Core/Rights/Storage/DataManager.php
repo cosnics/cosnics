@@ -37,7 +37,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $join_conditions = array();
+        $join_conditions = [];
 
         if ($entities_condition)
         {
@@ -84,7 +84,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($location->get_id())
         );
 
-        $additional_conditions = array();
+        $additional_conditions = [];
         if ($entity_type != null)
         {
             $additional_conditions[] = new EqualityCondition(
@@ -146,7 +146,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $rights_location_entity_rights = self::records($context_class, $parameters);
 
-        $location_ids = array();
+        $location_ids = [];
 
         foreach ($rights_location_entity_rights as $rights_location_entity_right)
         {
@@ -192,10 +192,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins(array($join));
 
-        $parameters = new RecordRetrievesParameters($properties, $entities_condition, null, null, array(), $joins);
+        $parameters = new RecordRetrievesParameters($properties, $entities_condition, null, null, [], $joins);
         $result_set = $context_dm::records($context_location::class_name(), $parameters);
 
-        $granted_rights = array();
+        $granted_rights = [];
 
         foreach ($result_set as $result)
         {
@@ -292,7 +292,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             $joins = new Joins(array($join));
 
-            $non_inheriting_conditions = array();
+            $non_inheriting_conditions = [];
             $non_inheriting_conditions[] = $condition;
             $non_inheriting_conditions[] = $entities_condition;
             $non_inheriting_conditions[] = new EqualityCondition(
@@ -341,7 +341,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $locations = self::records($context_location, $parameters);
 
-        $location_ids = array();
+        $location_ids = [];
 
         foreach ($locations as $location)
         {
@@ -377,7 +377,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_IDENTIFIER)
         );
 
-        $join_conditions = array();
+        $join_conditions = [];
 
         if ($entities_condition)
         {
@@ -414,7 +414,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $locations = self::records($context_location, $parameters);
 
-        $location_parent_ids = array();
+        $location_parent_ids = [];
         foreach ($locations as $location)
         {
             $location_parent_ids[$location[$context_location::PROPERTY_ID]] =
@@ -476,7 +476,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_TREE_TYPE),
             new StaticConditionVariable($tree_type)
@@ -663,7 +663,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         if (is_null($location) && !is_object($location))
         {
-            return array();
+            return [];
         }
 
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
@@ -714,10 +714,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
         }
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
         $result_set = $context_dm::records($context_location::class_name(), $parameters);
 
-        $target_entities = array();
+        $target_entities = [];
         foreach ($result_set as $result)
         {
             $target_entities[$result[$context_entity_right::PROPERTY_ENTITY_TYPE]][] =

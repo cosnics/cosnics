@@ -62,7 +62,7 @@ class Join implements Hashable
      */
     public function getHashParts(): array
     {
-        $hashParts = array();
+        $hashParts = [];
 
         $hashParts[] = $this->get_data_class();
         $hashParts[] = $this->get_condition()->getHashParts();

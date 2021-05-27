@@ -22,9 +22,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $options = $content_object->get_options();
         $type = $content_object->get_matrix_type();
 
-        $html = array();
+        $html = [];
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';

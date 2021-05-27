@@ -67,7 +67,7 @@ class TreeNodeCopier
      * @param bool $copyInsteadOfReuse
      */
     public function copyNodesFromLearningPath(
-        TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = array(),
+        TreeNode $toNode, LearningPath $fromLearningPath, User $user, $selectedNodeIds = [],
         $copyInsteadOfReuse = false
     )
     {

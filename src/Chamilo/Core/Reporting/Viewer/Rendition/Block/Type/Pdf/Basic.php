@@ -25,7 +25,7 @@ class Basic extends Pdf
         $reportingData->setStyleAutomatically();
         
         // Column Style
-        $column_type = array();
+        $column_type = [];
         if ($reportingData->is_categories_visible())
         {
             $column_type[] = $reportingData->get_category_style();
@@ -39,7 +39,7 @@ class Basic extends Pdf
         // Heading
         if ($reportingData->is_row_heading_visible())
         {
-            $headingData = array();
+            $headingData = [];
             if ($reportingData->is_categories_visible())
             {
                 $headingData[] = '';
@@ -62,7 +62,7 @@ class Basic extends Pdf
         $pdfMcTable->SetTextColor(0);
         foreach ($reportingData->get_categories() as $category_index => $category_name)
         {
-            $rowData = array();
+            $rowData = [];
             if ($reportingData->is_categories_visible())
             {
                 $rowData[] = $category_name;
@@ -111,7 +111,7 @@ class Basic extends Pdf
     private function split_row_data($pdfMcTable, $rowData)
     {
         // Split each row item into array of items where each item fits on a page.
-        $split_row_items = array();
+        $split_row_items = [];
         $max_row_item_count = 0;
         foreach ($rowData as $column_index => $row_item)
         {
@@ -121,10 +121,10 @@ class Basic extends Pdf
         }
         
         // Create new rows.
-        $rows = array();
+        $rows = [];
         for ($i = 0; $i < $max_row_item_count; $i ++)
         {
-            $rowData = array();
+            $rowData = [];
             
             foreach ($split_row_items as $split_item)
             {
@@ -163,7 +163,7 @@ class Basic extends Pdf
         
         $column_item_length = strlen($row_item);
         
-        $split_row_item = array();
+        $split_row_item = [];
         
         if ($column_item_length <= $max_page_length)
         {
@@ -189,9 +189,9 @@ class Basic extends Pdf
                 }
                 else
                 {
-                    $current_matches = array();
+                    $current_matches = [];
                     preg_match('/(\s+)(\S*)$/', $current_page_string, $current_matches, PREG_OFFSET_CAPTURE);
-                    $next_matches = array();
+                    $next_matches = [];
                     preg_match('/^(\S*)(\s+)/', $next_page_string, $next_matches, PREG_OFFSET_CAPTURE);
                     
                     if (! empty($current_matches[2][0]) && ! empty($next_matches[1][0]))
@@ -300,7 +300,7 @@ class Basic extends Pdf
     private function replace_ordered_list($enumaration_match)
     {
         preg_match_all("/<li(\s+style=\".*\")?\s*>(.*)<\/li>/isU", $enumaration_match[1], $list_matches);
-        $result = array();
+        $result = [];
         foreach ($list_matches[2] as $index => $list_item)
         {
             $result[] = '  ' . ($index + 1) . '. ' . trim($list_item);
@@ -315,7 +315,7 @@ class Basic extends Pdf
             "/<li(\s+class=\".*\")?(\s+style=\".*\")?\s*>(.*)<\/li>/isU", 
             $unordered_list_match[3], 
             $list_matches);
-        $result = array();
+        $result = [];
         foreach ($list_matches[3] as $list_item)
         {
             $result[] = '  ' . chr(149) . ' ' . trim($list_item);

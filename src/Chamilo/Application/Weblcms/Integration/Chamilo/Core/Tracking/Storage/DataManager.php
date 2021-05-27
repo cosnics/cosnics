@@ -110,7 +110,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = self::get_course_visit_summary_select_properties();
         $properties->add($course_tool_name_variable);
 
-        $join_conditions = array();
+        $join_conditions = [];
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOOL_ID),
@@ -141,7 +141,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add($course_tool_name_variable);
 
-        $parameters = new RecordRetrievesParameters($properties, null, null, null, array(), $joins, $group_by);
+        $parameters = new RecordRetrievesParameters($properties, null, null, null, [], $joins, $group_by);
 
         return self::records(CourseVisit::class, $parameters);
     }
@@ -231,7 +231,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $category_id, $publication_id, $use_null_values = true
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = self::get_course_visit_conditions_by_user_data($user_id);
         $conditions[] = self::get_course_visit_conditions_by_course_data(
@@ -276,7 +276,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $publication_id, $use_null_values = true
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         if (!is_null($course_id) || $use_null_values)
         {
@@ -409,7 +409,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_assessment_attempts_with_user(
         $condition = null, $offset = null, $count = null,
-        $order_by = array()
+        $order_by = []
     )
     {
         $properties = new DataClassProperties();
@@ -458,7 +458,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_assessment_attempts_user_joins()
     {
-        $join_conditions = array();
+        $join_conditions = [];
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),

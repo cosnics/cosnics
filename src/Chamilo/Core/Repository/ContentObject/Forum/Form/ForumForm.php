@@ -36,7 +36,7 @@ class ForumForm extends ContentObjectForm
         $this->addElement('checkbox', 'locked', Translation::get('ForumLocked'));
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         if ($object != null)

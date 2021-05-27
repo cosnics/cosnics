@@ -31,7 +31,7 @@ class PrinterComponent extends BrowserComponent implements DelegateComponent
         $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
         $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->renderNormalCalendar();

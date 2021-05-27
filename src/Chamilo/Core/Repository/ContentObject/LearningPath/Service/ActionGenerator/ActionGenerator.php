@@ -34,7 +34,7 @@ abstract class ActionGenerator
      * @param Translation $translator
      * @param array $baseParameters
      */
-    public function __construct(Translation $translator, array $baseParameters = array())
+    public function __construct(Translation $translator, array $baseParameters = [])
     {
         $this->translator = $translator;
         $this->baseParameters = $baseParameters;
@@ -49,7 +49,7 @@ abstract class ActionGenerator
      *
      * @return string
      */
-    protected function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
+    protected function getUrl($parameters = [], $filter = [], $encode_entities = false)
     {
         $parameters = (count($parameters) ? array_merge($this->baseParameters, $parameters) : $this->baseParameters);
 
@@ -66,7 +66,7 @@ abstract class ActionGenerator
      *
      * @return string
      */
-    protected function getUrlForNode($parameters = array(), $treeNodeId = 0)
+    protected function getUrlForNode($parameters = [], $treeNodeId = 0)
     {
         $nodePlaceholder = '__NODE__';
 

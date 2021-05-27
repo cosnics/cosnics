@@ -44,7 +44,7 @@ class ProviderLinkerComponent extends Manager implements ApplicationSupport
             'Chamilo\Core\Repository\ContentObject'
         );
 
-        $entities = array();
+        $entities = [];
 
         foreach ($registrations as $registration)
         {

@@ -18,7 +18,7 @@ class PersonalBrowserComponent extends TabComponent implements TableSupport
     {
         $table = new PersonalWorkspaceTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

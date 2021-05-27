@@ -122,7 +122,7 @@ class ComparisonCondition extends Condition
                     $this->get_name();
                 break;
             case self::EQUAL :
-                $parts = array();
+                $parts = [];
                 $parts[] = $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() :
                     $this->get_name();
                 $parts[] = $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() :

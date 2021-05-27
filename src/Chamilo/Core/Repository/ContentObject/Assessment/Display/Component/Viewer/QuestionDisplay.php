@@ -95,7 +95,7 @@ abstract class QuestionDisplay
 
     public function add_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
 
@@ -115,7 +115,7 @@ abstract class QuestionDisplay
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
 
         if ($this->question->has_description())
         {
@@ -167,7 +167,7 @@ abstract class QuestionDisplay
         /*
          * Auxiliary array to hold the new order
          */
-        $aux = array();
+        $aux = [];
         /*
          * We work with an array of the keys
          */

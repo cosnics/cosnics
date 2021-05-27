@@ -40,7 +40,7 @@ trait ActionButtonRendererTrait
     public function renderAction()
     {
         $button = $this->getButton();
-        $html = array();
+        $html = [];
 
         if ($button->getAction())
         {
@@ -72,7 +72,7 @@ trait ActionButtonRendererTrait
      */
     public function renderLinkOpeningTag()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<a';
         $html[] = $this->renderClasses();

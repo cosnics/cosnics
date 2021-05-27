@@ -92,7 +92,7 @@ class PublicationUpdaterComponent extends Manager
 
             $show_details = $this->getRequest()->getFromUrl('details');
 
-            $params = array();
+            $params = [];
             if ($show_details == 1)
             {
                 $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $pid;
@@ -112,7 +112,7 @@ class PublicationUpdaterComponent extends Manager
             return null;
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $publication_form->toHtml();

@@ -55,7 +55,7 @@ class MediawikiStringUtils
         $encEnd = preg_quote($endDelim, '!');
         $strcmp = strpos($flags, 'i') === false ? 'strcmp' : 'strcasecmp';
         $endLength = strlen($endDelim);
-        $m = array();
+        $m = [];
         
         while ($inputPos < strlen($subject) &&
              preg_match("!($encStart)|($encEnd)!S$flags", $subject, $m, PREG_OFFSET_CAPTURE, $inputPos))
@@ -231,7 +231,7 @@ class RegexlikeReplacer extends Replacer
 
     function replace($matches)
     {
-        $pairs = array();
+        $pairs = [];
         foreach ($matches as $i => $match)
         {
             $pairs["\$$i"] = $match;
@@ -294,7 +294,7 @@ class ReplacementArray
      * Create an object with the specified replacement array
      * The array should have the same form as the replacement array for strtr()
      */
-    function __construct($data = array())
+    function __construct($data = [])
     {
         $this->data = $data;
     }

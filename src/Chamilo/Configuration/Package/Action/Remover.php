@@ -167,7 +167,7 @@ abstract class Remover extends Action
      */
     public function get_additional_packages()
     {
-        return array();
+        return [];
     }
 
     public function parse_application_settings($file)
@@ -178,7 +178,7 @@ abstract class Remover extends Action
         $object = $doc->getElementsByTagname('package')->item(0);
 
         $setting_elements = $doc->getElementsByTagname('setting');
-        $settings = array();
+        $settings = [];
 
         foreach ($setting_elements as $index => $setting_element)
         {

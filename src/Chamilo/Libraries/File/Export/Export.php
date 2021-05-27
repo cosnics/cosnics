@@ -120,10 +120,10 @@ abstract class Export
      *
      * @return string[] Array containig all supported filetypes (keys and values are the same)
      */
-    public static function get_supported_filetypes($exclude = array())
+    public static function get_supported_filetypes($exclude = [])
     {
         $directories = Filesystem::get_directory_content(__DIR__, Filesystem::LIST_DIRECTORIES, false);
-        $types = array();
+        $types = [];
 
         foreach ($directories as $index => $directory)
         {

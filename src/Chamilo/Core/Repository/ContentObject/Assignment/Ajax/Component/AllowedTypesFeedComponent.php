@@ -70,7 +70,7 @@ class AllowedTypesFeedComponent extends Manager
             'Chamilo\Core\Repository\ContentObject\Assignment'
         );
 
-        $types = array();
+        $types = [];
 
         foreach ($integrationPackages as $basePackage => $integrationPackageData)
         {
@@ -79,7 +79,7 @@ class AllowedTypesFeedComponent extends Manager
                 continue;
             }
 
-            $integrationPackageData['translation'] = $translator->trans('TypeName', array(), $basePackage);
+            $integrationPackageData['translation'] = $translator->trans('TypeName', [], $basePackage);
             $types[] = $integrationPackageData;
         }
 

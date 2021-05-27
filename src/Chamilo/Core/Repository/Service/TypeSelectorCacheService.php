@@ -74,7 +74,7 @@ class TypeSelectorCacheService extends DoctrineFilesystemCacheService implements
      */
     public function getIdentifiers()
     {
-        return array();
+        return [];
     }
 
     /**

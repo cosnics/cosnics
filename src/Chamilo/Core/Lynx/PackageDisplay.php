@@ -34,7 +34,7 @@ class PackageDisplay
 
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->get_properties_table();
         $html[] = $this->get_dependencies_table();
@@ -67,7 +67,7 @@ class PackageDisplay
     {
         $package_info = $this->get_package_info();
 
-        $html = array();
+        $html = [];
 
         if ($package_info->has_dependencies())
         {
@@ -94,7 +94,7 @@ class PackageDisplay
         $package_dependency = new DependencyVerifier($this->get_package_info());
         $success = $package_dependency->is_installable();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<h3>' . Translation::get(
                 'InstallationDependencies', array('VERSION' => $this->get_package_info()->get_version())
@@ -125,7 +125,7 @@ class PackageDisplay
     {
         $package_info = $this->get_package_info();
 
-        $html = array();
+        $html = [];
         $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
         $properties = $package_info->get_default_property_names();
 

@@ -16,7 +16,7 @@ class ElementTargetEntity extends HomeTargetEntity
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_ELEMENT_ID));
     }

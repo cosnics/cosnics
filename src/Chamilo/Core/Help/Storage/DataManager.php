@@ -14,7 +14,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_help_item_by_context($context, $identifier, $language)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(HelpItem::class, HelpItem::PROPERTY_CONTEXT),
             new StaticConditionVariable($context));

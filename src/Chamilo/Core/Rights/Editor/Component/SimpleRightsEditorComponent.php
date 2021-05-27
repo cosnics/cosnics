@@ -17,7 +17,7 @@ class SimpleRightsEditorComponent extends Manager implements DelegateComponent
 {
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 
@@ -49,7 +49,7 @@ class SimpleRightsEditorComponent extends Manager implements DelegateComponent
             $this->redirect($message, !$succes);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $form->toHtml();

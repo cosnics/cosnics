@@ -13,7 +13,7 @@ class TemplateTranslation
 
     private $storage;
 
-    public function __construct($storage = array())
+    public function __construct($storage = [])
     {
         $this->storage = $storage;
     }
@@ -56,7 +56,7 @@ class TemplateTranslation
      */
     public static function get(DOMXPath $dom_xpath)
     {
-        $storage = array();
+        $storage = [];
         
         $variables = $dom_xpath->query('/template/translations/variable');
         

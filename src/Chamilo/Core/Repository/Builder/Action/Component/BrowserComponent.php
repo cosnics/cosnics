@@ -44,7 +44,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $content_object = $this->get_root_content_object();
         }
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

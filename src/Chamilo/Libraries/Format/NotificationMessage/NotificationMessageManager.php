@@ -87,7 +87,7 @@ class NotificationMessageManager
      *
      * @return boolean
      */
-    protected function canAddMessage(NotificationMessage $notificationMessageToBeAdded, $notificationMessages = array(),
+    protected function canAddMessage(NotificationMessage $notificationMessageToBeAdded, $notificationMessages = [],
         $limitByCategory = 0)
     {
         if ($limitByCategory > 0 && ! is_null($notificationMessageToBeAdded->getCategory()))

@@ -571,7 +571,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             new StaticConditionVariable($contentObjectPublicationIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -598,7 +598,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
             $contentObjectPublicationIdentifiers
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

@@ -138,7 +138,7 @@ abstract class GalleryTable extends Table
         if (count($this->current_row) >= $this->get_default_column_count())
         {
             $tableData[] = $this->current_row;
-            $this->current_row = array();
+            $this->current_row = [];
         }
 
         $this->current_row[] = array(

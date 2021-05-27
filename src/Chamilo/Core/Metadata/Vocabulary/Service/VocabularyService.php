@@ -77,7 +77,7 @@ class VocabularyService
      */
     public function createVocabularyByElementUserValue(Element $element, User $user, $providedPropertyValue)
     {
-        $vocabularyValues = array();
+        $vocabularyValues = [];
 
         $vocabularyValues[Vocabulary::PROPERTY_ELEMENT_ID] = $element->getId();
         $vocabularyValues[Vocabulary::PROPERTY_VALUE] = $providedPropertyValue;
@@ -113,7 +113,7 @@ class VocabularyService
             throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
@@ -188,7 +188,7 @@ class VocabularyService
             throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
 
-        $values = array();
+        $values = [];
 
         $providedVocabularies = $this->getProvidedVocabulariesForUserEntitySchemaInstanceElement(
             $user, $entity, $schemaInstance, $element
@@ -283,7 +283,7 @@ class VocabularyService
             throw new Exception(Translation::get('ElementDoesNotUseVocabularies'));
         }
 
-        $values = array();
+        $values = [];
 
         try
         {
@@ -333,7 +333,7 @@ class VocabularyService
      */
     public function getVocabularyByElementUserValue(Element $element, User $user, $providedPropertyValue)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),

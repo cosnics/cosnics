@@ -90,7 +90,7 @@ class ParentChangerComponent extends Manager
                         {
                             $old_parent = $complex_content_object_item->get_parent();
                         }
-                        $children = array();
+                        $children = [];
                         $ref = $complex_content_object_item->get_ref();
                         $children = $this->get_children_from_content_object($ref, null, $children, $level = 1);
 
@@ -154,7 +154,7 @@ class ParentChangerComponent extends Manager
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

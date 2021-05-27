@@ -62,7 +62,7 @@ class EntityTableCellRenderer extends DataClassTableCellRenderer implements Tabl
 
                 $glyph = new NamespaceIdentGlyph(
                     $context, true, false, false, IdentGlyph::SIZE_MINI,
-                    array()
+                    []
                 );
 
                 return $glyph->render();

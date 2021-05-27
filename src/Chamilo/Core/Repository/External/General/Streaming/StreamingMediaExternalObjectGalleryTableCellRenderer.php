@@ -10,7 +10,7 @@ class StreamingMediaExternalObjectGalleryTableCellRenderer extends DefaultExtern
 
     public function renderContent($object)
     {
-        $html = array();
+        $html = [];
         
         $html[] = '<a href="' . $this->browser->get_external_repository_object_viewing_url($object) .
              '"><img class="thumbnail" src="' . $object->get_thumbnail() . '"/></a> <br/>';

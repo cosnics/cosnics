@@ -79,7 +79,7 @@ class WeblcmsRepository implements WeblcmsRepositoryInterface
      */
     public function retrieveCourseEntityRelationByEntityAndCourse($entityType, $entityId, $courseId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

@@ -101,7 +101,7 @@ class CourseGroupForm extends FormValidator
         {
             $counter = 0;
             $this->build_editing_form();
-            $this->setDefaultValues(array(), $counter);
+            $this->setDefaultValues([], $counter);
         }
         elseif ($this->form_type == self::TYPE_CREATE)
         {
@@ -155,7 +155,7 @@ class CourseGroupForm extends FormValidator
     public function add_top_fields()
     {
         // $this->build_header(Translation::get("NewCourseGroup"));
-        // $group = array();
+        // $group = [];
         // $this->addRule(CourseGroupForm::COURSE_GROUP_QUANTITY, Translation
         // ::get('ThisFieldShouldBeNumeric', null, Utilities::COMMON_LIBRARIES),
         // 'regex', '/^[0-9]*$/');
@@ -292,7 +292,7 @@ class CourseGroupForm extends FormValidator
 
         if (!isset($_SESSION['mc_skip_options']))
         {
-            $_SESSION['mc_skip_options'] = array();
+            $_SESSION['mc_skip_options'] = [];
         }
 
         if (isset($_POST['add']))
@@ -310,7 +310,7 @@ class CourseGroupForm extends FormValidator
 
         $numbering = 0;
 
-        $defaults = array();
+        $defaults = [];
 
         $this->addElement(
             'html', ResourceManager::getInstance()->getResourceHtml(
@@ -328,13 +328,13 @@ class CourseGroupForm extends FormValidator
         {
             if (!in_array($option_number, $_SESSION['mc_skip_options']))
             {
-                $group = array();
+                $group = [];
                 $group[] = $this->add_name_field($option_number);
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
                 {
                     $group[] = $this->createElement(
-                        'style_button', 'remove[' . $option_number . ']', null, array(), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        'style_button', 'remove[' . $option_number . ']', null, [], null,
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 // numbering of the titels
@@ -360,7 +360,7 @@ class CourseGroupForm extends FormValidator
         }
 
         $this->addElement(
-            'style_button', 'add[]', null, array(), null, new FontAwesomeGlyph(
+            'style_button', 'add[]', null, [], null, new FontAwesomeGlyph(
                 'plus', array("title" => Translation::getInstance()->getTranslation('AddGroupExplained')), null, 'fas'
             )
         );
@@ -552,7 +552,7 @@ class CourseGroupForm extends FormValidator
 
     public function build_parent_form_create($counter = '')
     {
-        $choices = array();
+        $choices = [];
         $choices[] = $this->createElement(
             'radio', self::PARENT_GROUP_SELECTION, '', Translation::getInstance()->getTranslation('NoParentGroup'),
             self::OPTION_PARENT_GROUP_NONE, array('id' => self::PARENT_GROUP_NONE)
@@ -728,7 +728,7 @@ class CourseGroupForm extends FormValidator
      */
     private function construct_course_groups($new_titles, $course_code, $values)
     {
-        $course_groups = array();
+        $course_groups = [];
         foreach ($new_titles as $new_title)
         {
             $course_groups[] = $this->construct_course_group($new_title, $course_code, $values);
@@ -746,7 +746,7 @@ class CourseGroupForm extends FormValidator
      */
     public function course_group_name_exists($course_group)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME),
             new StaticConditionVariable($course_group->get_name())
@@ -785,7 +785,7 @@ class CourseGroupForm extends FormValidator
      */
     public function create_course_group()
     {
-        $this->rights = array();
+        $this->rights = [];
         $this->rights[] = WeblcmsRights::VIEW_RIGHT;
         $this->rights[] = WeblcmsRights::ADD_RIGHT;
         $this->rights[] = WeblcmsRights::MANAGE_CATEGORIES_RIGHT;
@@ -795,7 +795,7 @@ class CourseGroupForm extends FormValidator
         $values = $this->exportValues();
         $new_titles = preg_grep('/^name*[0-9]*$/', array_keys($values));
         $qty = sizeof($new_titles);
-        $groups = array();
+        $groups = [];
 
         // check parent's max size >= combined total size of parent's children (could be more than just this group)
         // new children size
@@ -832,7 +832,7 @@ class CourseGroupForm extends FormValidator
                 break;
             case self::OPTION_PARENT_GROUP_NEW :
 
-                $parent_values = array();
+                $parent_values = [];
                 $parent_values[CourseGroup::PROPERTY_NAME] = $values['parent_' . CourseGroup::PROPERTY_NAME];
                 $parent_values[CourseGroup::PROPERTY_DESCRIPTION] = $values['parent_' . CourseGroup::PROPERTY_NAME];
                 $parent_values[CourseGroup::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER] =
@@ -955,14 +955,14 @@ class CourseGroupForm extends FormValidator
         // randomize course_users
         /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_users_data_set */
         $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code, null, null, null);
-        $course_users = array();
+        $course_users = [];
         foreach($course_users_data_set as $course_user)
         {
             $course_users[] = $course_user;
         }
         shuffle($course_users);
 
-        $members_to_add = array();
+        $members_to_add = [];
         $qty_course_users = sizeof($course_users);
 
         if ($max_num_members < $qty_course_users && $max_num_members > 0)
@@ -1005,7 +1005,7 @@ class CourseGroupForm extends FormValidator
         $course_users_drs = CourseDataManager::retrieve_all_course_users(
             $parent_course_group->get_course_code(), null, null, null
         );
-        $course_users = array();
+        $course_users = [];
         if ($course_users_drs)
         {
             foreach($course_users_drs as $course_user)
@@ -1020,7 +1020,7 @@ class CourseGroupForm extends FormValidator
         $course_groups = $parent_course_group->get_children(false);
 
         $max_number_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
-        $user_number_subscriptions = array();
+        $user_number_subscriptions = [];
 
         foreach ($course_groups as $course_group)
         {
@@ -1053,7 +1053,7 @@ class CourseGroupForm extends FormValidator
             }
             /** @var int[] $subscribed_users_drs */
             $subscribed_users_drs = $course_group->get_members(true, true);
-            $subscribed_users = array();
+            $subscribed_users = [];
             if ($subscribed_users_drs)
             {
                 foreach ($subscribed_users_drs as $user_id)
@@ -1064,7 +1064,7 @@ class CourseGroupForm extends FormValidator
                 }
             }
             $max_subscribed_users = $course_group->get_max_number_of_members();
-            $new_users = array();
+            $new_users = [];
             while (count($new_users) < $max_subscribed_users - count($subscribed_users) && count($course_users) > 0)
             {
                 $random_int = mt_rand(0, count($course_users) - 1);
@@ -1099,7 +1099,7 @@ class CourseGroupForm extends FormValidator
      * @param $defaults array Default values for this form's parameters.
      * @param string $counter
      */
-    public function setDefaultValues($defaults = array(), $counter = '')
+    public function setDefaultValues($defaults = [], $counter = '')
     {
         $course_group = $this->course_group;
         $defaults[CourseGroup::PROPERTY_NAME . $counter] = $course_group->get_name();
@@ -1173,7 +1173,7 @@ class CourseGroupForm extends FormValidator
         if ($this->course_group->get_errors() == null)
         {
             // group size check -> total size must not be greater than parent group's max size
-            $course_groups = array();
+            $course_groups = [];
             $parent_cgid = null;
             $total_size_diff = 0;
 

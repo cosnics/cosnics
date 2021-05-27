@@ -381,9 +381,9 @@ class AttemptSummaryCalculatorTest extends ChamiloTestCase
         $this->attemptSummaryCalculator->findTargetUsersWithPartialLearningPathAttempts($this->learningPath, $treeNode);
     }
 
-    protected function mockFindTargetUsersWithLearningPathAttempts(TreeNode $treeNode, $nodesCompletedPerUser = array())
+    protected function mockFindTargetUsersWithLearningPathAttempts(TreeNode $treeNode, $nodesCompletedPerUser = [])
     {
-        $usersWithCompletedNodesCount = array();
+        $usersWithCompletedNodesCount = [];
 
         foreach ($nodesCompletedPerUser as $userId => $nodesCompletedForUser)
         {
@@ -400,7 +400,7 @@ class AttemptSummaryCalculatorTest extends ChamiloTestCase
      *
      * @param TreeNode[] $treeNodes
      */
-    protected function mockGetTreeNodeAttemptsForTreeNodes($treeNodes = array())
+    protected function mockGetTreeNodeAttemptsForTreeNodes($treeNodes = [])
     {
         foreach ($treeNodes as $index => $treeNode)
         {

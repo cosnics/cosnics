@@ -85,7 +85,7 @@ abstract class Manager extends Application
     {
         if (!isset($this->buttonToolBarRenderer))
         {
-            $buttonToolBar = new ButtonToolBar(null, array(), array('pull-right'));
+            $buttonToolBar = new ButtonToolBar(null, [], array('pull-right'));
             $this->buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
             $dropdownButton = new DropdownButton(Translation::get('DisplayType'), new FontAwesomeGlyph('th'));
@@ -103,7 +103,7 @@ abstract class Manager extends Application
                     new SubButton(
                         Translation::get('DisplayPreview'), null,
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, false, array(), null, ($isDisplayAction ? true : false)
+                        SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, ($isDisplayAction ? true : false)
                     )
                 );
             }
@@ -145,7 +145,7 @@ abstract class Manager extends Application
                             self::PARAM_FORMAT => $this->getCurrentFormat(),
                             self::PARAM_VIEW => $view
                         )
-                    ), SubButton::DISPLAY_ICON_AND_LABEL, false, array(), null, $isActive
+                    ), SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, $isActive
                     )
                 );
             }
@@ -192,11 +192,11 @@ abstract class Manager extends Application
         $translator = $this->getTranslator();
 
         $translation =
-            $translator->trans('PreviewModeWarning', array(), $this->get_content_object()->package() . '\Display');
+            $translator->trans('PreviewModeWarning', [], $this->get_content_object()->package() . '\Display');
 
         if ($translation == 'PreviewModeWarning')
         {
-            $translation = $translator->trans('PreviewModeWarning', array(), Utilities::COMMON_LIBRARIES);
+            $translation = $translator->trans('PreviewModeWarning', [], Utilities::COMMON_LIBRARIES);
         }
 
         return $translation;
@@ -255,7 +255,7 @@ abstract class Manager extends Application
      */
     protected function renderPreviewHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
@@ -280,7 +280,7 @@ abstract class Manager extends Application
         $page = Page::getInstance();
         $page->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-        $html = array();
+        $html = [];
 
         $html[] = $page->getHeader()->toHtml();
         $html[] = $this->renderPreviewHeader();

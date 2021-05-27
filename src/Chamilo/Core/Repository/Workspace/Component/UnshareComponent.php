@@ -94,7 +94,7 @@ class UnshareComponent extends Manager
         {
             $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, 
-                array());
+                []);
         }
         
         return $this->selectedContentObjectIdentifiers;

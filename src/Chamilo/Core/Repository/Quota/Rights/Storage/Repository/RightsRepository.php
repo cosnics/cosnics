@@ -69,7 +69,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
      *
      * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
      */
-    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = array())
+    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = [])
     {
         $condition = new InCondition(
             new PropertyConditionVariable(
@@ -92,7 +92,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         int $rightsLocationEntityRightIdentifier, int $groupIdentifier
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -260,7 +260,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+            RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
         );
     }
 

@@ -171,7 +171,7 @@ class ButtonSearchForm extends FormValidator implements TableSupportedSearchForm
      *
      * @param string[] $tableParameters
      */
-    public function registerTableParametersInSearchForm(array $tableParameters = array())
+    public function registerTableParametersInSearchForm(array $tableParameters = [])
     {
         foreach ($tableParameters as $tableParameter => $value)
         {

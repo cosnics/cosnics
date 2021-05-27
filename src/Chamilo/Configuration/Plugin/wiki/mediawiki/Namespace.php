@@ -132,7 +132,7 @@ class MWNamespace
         static $xNamespaces = false;
         if ($xNamespaces === false)
         {
-            $xNamespaces = array();
+            $xNamespaces = [];
             foreach ($wgCanonicalNamespaceNames as $i => $text)
             {
                 $xNamespaces[strtolower($text)] = $i;

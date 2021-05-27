@@ -346,7 +346,7 @@ class Kernel
      */
     protected function getFallbackContexts()
     {
-        $fallbackContexts = array();
+        $fallbackContexts = [];
         $fallbackContexts[] = 'Chamilo\Application\\';
         $fallbackContexts[] = 'Chamilo\Core\\';
         $fallbackContexts[] = 'Chamilo\\';
@@ -488,7 +488,7 @@ class Kernel
             $page = Page::getInstance();
             $page->setApplication($this->getApplication());
 
-            $html = array();
+            $html = [];
             $html[] = $page->getHeader()->render();
             $html[] = '<br />';
             $html[] = '<div class="alert alert-danger text-center">';

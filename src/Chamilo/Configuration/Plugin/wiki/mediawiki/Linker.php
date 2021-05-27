@@ -175,7 +175,7 @@ class MediawikiLinker
      *        always, even with a querystring. Has compatibility issues on some setups, so avoid wherever possible.
      * @return string HTML <a> attribute
      */
-    public function link($target, $text = null, $customAttribs = array(), $query = array(), $options = array())
+    public function link($target, $text = null, $customAttribs = [], $query = [], $options = [])
     {
         if (! $target instanceof MediawikiTitle)
         {
@@ -198,11 +198,11 @@ class MediawikiLinker
             }
         }
         
-        $oldquery = array();
+        $oldquery = [];
         if (in_array("forcearticlepath", $options) && $query)
         {
             $oldquery = $query;
-            $query = array();
+            $query = [];
         }
         
         // Note: we want the href attribute first, for prettiness.
@@ -249,12 +249,12 @@ class MediawikiLinker
 
     private function linkAttribs($target, $attribs, $options)
     {
-        $defaults = array();
+        $defaults = [];
         
         if (! in_array('noclasses', $options))
         {
             // Now build the classes.
-            $classes = array();
+            $classes = [];
             
             if (in_array('broken', $options))
             {
@@ -280,7 +280,7 @@ class MediawikiLinker
                     $classes[] = 'stub';
                 }
             }
-            if ($classes != array())
+            if ($classes != [])
             {
                 $defaults['class'] = implode(' ', $classes);
             }
@@ -298,7 +298,7 @@ class MediawikiLinker
         
         // Finally, merge the custom attribs with the default ones, and iterate
         // over that, deleting all "false" attributes.
-        $ret = array();
+        $ret = [];
         $merged = MediawikiSanitizer::mergeAttributes($defaults, $attribs);
         foreach ($merged as $key => $val)
         {
@@ -444,7 +444,7 @@ class MediawikiLinker
             $text = self::linkText($nt);
         }
         
-        $ret = self::link($nt, "$prefix$text$inside", array(), $query) . $trail;
+        $ret = self::link($nt, "$prefix$text$inside", [], $query) . $trail;
         
         return $ret;
     }
@@ -462,7 +462,7 @@ class MediawikiLinker
      * @param $style String: style to apply - if empty, use getInternalLinkAttributesObj instead
      * @return the a-element
      */
-    function makeKnownLinkObj($title, $text = '', $query = array(), $trail = '', $prefix = '', $aprops = '', $style = '')
+    function makeKnownLinkObj($title, $text = '', $query = [], $trail = '', $prefix = '', $aprops = '', $style = '')
     {
         
         // dump($query);
@@ -490,7 +490,7 @@ class MediawikiLinker
      * @param $trail String: Optional trail. Alphabetic characters at the start of this string will be included in the
      *        link text. Other characters will be appended after the end of the link.
      */
-    function makeBrokenLinkObj($title, $text = '', $query = array(), $trail = '', $prefix = '')
+    function makeBrokenLinkObj($title, $text = '', $query = [], $trail = '', $prefix = '')
     {
         list($inside, $trail) = self::splitTrail($trail);
         if ($text === '')
@@ -498,9 +498,9 @@ class MediawikiLinker
             $text = self::linkText($title);
         }
         
-        // $ret = self::link($title, "$prefix$text$inside", array(),
+        // $ret = self::link($title, "$prefix$text$inside", [],
         // wfCgiToArray($query), 'broken') . $trail;
-        $ret = self::link($title, "$prefix$text$inside", array(), $query, 'broken') . $trail;
+        $ret = self::link($title, "$prefix$text$inside", [], $query, 'broken') . $trail;
         
         return $ret;
     }
@@ -529,7 +529,7 @@ class MediawikiLinker
      * @param $trail String: optional trail. Alphabetic characters at the start of this string will be included in the
      *        link text. Other characters will be appended after the end of the link.
      */
-    function makeColouredLinkObj($nt, $colour, $text = '', $query = array(), $trail = '', $prefix = '')
+    function makeColouredLinkObj($nt, $colour, $text = '', $query = [], $trail = '', $prefix = '')
     {
         if ($colour != '')
         {
@@ -646,7 +646,7 @@ class MediawikiLinker
      * @param $time, string timestamp of the file, set as false for current
      * @return string
      */
-    function makeImageLinkObj($title, $label, $alt, $align = '', $handlerParams = array(), $framed = false, $thumb = false, 
+    function makeImageLinkObj($title, $label, $alt, $align = '', $handlerParams = [], $framed = false, $thumb = false,
         $manualthumb = '', $valign = '', $time = false)
     {
         $frameParams = array('alt' => $alt, 'caption' => $label);
@@ -695,7 +695,7 @@ class MediawikiLinker
      * @param $query, string query params for desc url
      * @return string HTML for an image, with links, wrappers, etc.
      */
-    function makeImageLink2(Title $title, $file, $frameParams = array(), $handlerParams = array(), $time = false, $query = "")
+    function makeImageLink2(Title $title, $file, $frameParams = [], $handlerParams = [], $time = false, $query = "")
     {
         $res = null;
         if (! wfRunHooks(
@@ -849,7 +849,7 @@ class MediawikiLinker
      * @param $title Title
      * @param $file File File object or false if it doesn't exist
      */
-    function makeThumbLinkObj(Title $title, $file, $label = '', $alt, $align = 'right', $params = array(), $framed = false, $manualthumb = "")
+    function makeThumbLinkObj(Title $title, $file, $label = '', $alt, $align = 'right', $params = [], $framed = false, $manualthumb = "")
     {
         $frameParams = array('alt' => $alt, 'caption' => $label, 'align' => $align);
         if ($framed)
@@ -859,7 +859,7 @@ class MediawikiLinker
         return $this->makeThumbLink2($title, $file, $frameParams, $params);
     }
 
-    function makeThumbLink2(Title $title, $file, $frameParams = array(), $handlerParams = array(), $time = false, $query = "")
+    function makeThumbLink2(Title $title, $file, $frameParams = [], $handlerParams = [], $time = false, $query = "")
     {
         global $wgStylePath, $wgContLang;
         $exists = $file && $file->exists();
@@ -1115,7 +1115,7 @@ class MediawikiLinker
      *       $attribsText is just messy. Would make a lot more sense to make put the classes into $attribs, let the hook
      *       play with them, *then* expand it all at once.
      */
-    function makeExternalLink($url, $text, $escape = true, $linktype = '', $attribs = array())
+    function makeExternalLink($url, $text, $escape = true, $linktype = '', $attribs = [])
     {
         $attribsText = self::getExternalLinkAttributes($url, $text, 'external ' . $linktype);
         $url = htmlspecialchars($url);
@@ -1229,7 +1229,7 @@ class MediawikiLinker
         $inside = '';
         if ('' != $trail)
         {
-            $m = array();
+            $m = [];
             if (preg_match($regex, $trail, $m))
             {
                 $inside = $m[1];

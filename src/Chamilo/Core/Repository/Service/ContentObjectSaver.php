@@ -179,7 +179,7 @@ class ContentObjectSaver
      * @throws \ReflectionException
      */
     public function attachContentObjectsByIdentifierAndType(
-        ContentObject $contentObject, array $attachmentIdentifiers = array(),
+        ContentObject $contentObject, array $attachmentIdentifiers = [],
         string $type = ContentObject::ATTACHMENT_NORMAL
     )
     {
@@ -400,7 +400,7 @@ class ContentObjectSaver
      * @throws \Exception
      */
     public function findContentObjectAttachments(
-        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = array(), $offset = null,
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = [], $offset = null,
         $count = null
     )
     {

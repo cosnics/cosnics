@@ -70,7 +70,7 @@ class ViewerComponent extends Manager implements TableSupport
                 throw new NotAllowedException();
             }
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
@@ -221,7 +221,7 @@ class ViewerComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),

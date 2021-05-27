@@ -387,7 +387,7 @@ class ParametersProcessor
     {
         if (is_null($orderByCollection))
         {
-            $orderByCollection = array();
+            $orderByCollection = [];
         }
         elseif (!is_array($orderByCollection) && $orderByCollection instanceof OrderBy)
         {

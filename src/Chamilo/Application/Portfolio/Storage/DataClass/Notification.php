@@ -16,7 +16,7 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_PUBLICATION_ID));
     }

@@ -88,7 +88,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = '<li>';
                 $html[] = '<a href="' . $redirect->getUrl() . '">';
@@ -152,7 +152,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
     {
         $glyph = new FontAwesomeGlyph('language', array('fa-2x', 'fa-fw'), null, 'fas');
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div>';
 
@@ -187,7 +187,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      */
     public function renderDropdown(Item $item, User $user): string
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li class="dropdown">';
         $html[] =
@@ -223,7 +223,7 @@ class LanguageCategoryItemRenderer extends ItemRenderer
      */
     public function renderDropdownItems(Item $item, User $user)
     {
-        $html = array();
+        $html = [];
 
         $languages = $this->getLanguageConsulter()->getLanguages();
         $currentLanguage = $this->getTranslator()->getLocale();

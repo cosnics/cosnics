@@ -90,9 +90,9 @@ class ContentObject extends CompositeDataClass
     /**
      * objects attached to this object.
      */
-    private $attachments = array();
+    private $attachments = [];
 
-    private $attachment_ids = array();
+    private $attachment_ids = [];
 
     /**
      * Objects included into this object.
@@ -132,7 +132,7 @@ class ContentObject extends CompositeDataClass
      * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
      *        they are unknown at construction of the object; in this case, they will be retrieved when needed.
      */
-    public function __construct($default_properties = array(), $additional_properties = null)
+    public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties);
         $this->set_additional_properties($additional_properties);
@@ -166,7 +166,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function attach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
+    public function attach_content_objects($ids = [], $type = self::ATTACHMENT_NORMAL)
     {
         if (is_null($ids))
         {
@@ -394,7 +394,7 @@ class ContentObject extends CompositeDataClass
                 }
 
                 if (!call_user_func_array(
-                    array($content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), array()
+                    array($content_object, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), []
                 ))
                 {
 
@@ -403,7 +403,7 @@ class ContentObject extends CompositeDataClass
 
                 if ($version)
                 {
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER
@@ -538,7 +538,7 @@ class ContentObject extends CompositeDataClass
 
             foreach ($assisting_objects as $assisting_object)
             {
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
@@ -609,7 +609,7 @@ class ContentObject extends CompositeDataClass
             return false;
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
@@ -661,7 +661,7 @@ class ContentObject extends CompositeDataClass
      */
     public function detach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
@@ -693,7 +693,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function detach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
+    public function detach_content_objects($ids = [], $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {
@@ -720,7 +720,7 @@ class ContentObject extends CompositeDataClass
      */
     public function exclude_content_object($id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectInclude::class, ContentObjectInclude::PROPERTY_CONTENT_OBJECT_ID
@@ -773,7 +773,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array())
+    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = [])
     {
         $templateRegistration = $this->get_template_registration();
 
@@ -860,7 +860,7 @@ class ContentObject extends CompositeDataClass
             $rootPath = $this->get_owner_fullname();
         }
 
-        $virtual_path = array();
+        $virtual_path = [];
 
         while ($categoryId != 0)
         {
@@ -914,7 +914,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_ancestors()
     {
-        $ancestors = array();
+        $ancestors = [];
         $aid = $this->get_parent_id();
         while ($aid > 0)
         {
@@ -935,7 +935,7 @@ class ContentObject extends CompositeDataClass
     {
         if (!is_array($this->attachment_ids[$type]))
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID
@@ -966,7 +966,7 @@ class ContentObject extends CompositeDataClass
         return $this->attachment_ids[$type];
     }
 
-    public function get_attachers($order_by = array(), $offset = null, $count = null)
+    public function get_attachers($order_by = [], $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -996,7 +996,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function get_attachments(
-        $type = self::ATTACHMENT_NORMAL, $order_by = array(), $offset = null, $count = null
+        $type = self::ATTACHMENT_NORMAL, $order_by = [], $offset = null, $count = null
     )
     {
         if (!is_array($this->attachments[$type]))
@@ -1035,7 +1035,7 @@ class ContentObject extends CompositeDataClass
         return DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
     }
 
-    public function get_children($order_by = array(), $offset = null, $count = null)
+    public function get_children($order_by = [], $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1135,7 +1135,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return array The property names.
      */
-    static public function get_default_property_names($extended_property_names = array())
+    static public function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -1196,7 +1196,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return string[]
      */
-    static public function get_html_editors($html_editors = array())
+    static public function get_html_editors($html_editors = [])
 
     {
         $html_editors[] = self::PROPERTY_DESCRIPTION;
@@ -1213,7 +1213,7 @@ class ContentObject extends CompositeDataClass
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function get_icon_image(
-        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array()
+        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = []
     )
     {
         return $this->getGlyph($size, $isAvailable, $extraClasses)->render();
@@ -1229,7 +1229,7 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public function get_includers($order_by = array(), $offset = null, $count = null)
+    public function get_includers($order_by = [], $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1258,7 +1258,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return ContentObject[]
      */
-    public function get_includes($order_by = array(), $offset = null, $count = null)
+    public function get_includes($order_by = [], $offset = null, $count = null)
     {
         if (!is_array($this->includes))
         {
@@ -1301,7 +1301,7 @@ class ContentObject extends CompositeDataClass
      */
     public static function get_managers()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1366,7 +1366,7 @@ class ContentObject extends CompositeDataClass
 
     public function get_packages_from_filesystem()
     {
-        $types = array();
+        $types = [];
 
         $directories = Filesystem::get_directory_content(
             Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject'),
@@ -1397,7 +1397,7 @@ class ContentObject extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_PARENT_ID);
     }
 
-    public function get_parents($order_by = array(), $offset = null, $count = null)
+    public function get_parents($order_by = [], $offset = null, $count = null)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1436,7 +1436,7 @@ class ContentObject extends CompositeDataClass
 
     static public function get_searchable_property_names()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -1564,7 +1564,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph
      */
     public static function glyph(
-        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = []
     )
     {
         return new NamespaceIdentGlyph($glyphNamespace, true, false, !$isAvailable, $size, $extraClasses, $title);
@@ -1658,7 +1658,7 @@ class ContentObject extends CompositeDataClass
      * @return string
      */
     public static function icon_image(
-        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = array()
+        $glyphNamespace, $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $title = null, $extraClasses = []
     )
     {
         return self::glyph($glyphNamespace, $size, $isAvailable, $title, $extraClasses)->render();
@@ -1694,7 +1694,7 @@ class ContentObject extends CompositeDataClass
      */
     public function is_attached_to($object_id, $type = ContentObject::ATTACHMENT_NORMAL)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
@@ -1802,7 +1802,7 @@ class ContentObject extends CompositeDataClass
 
     public function is_included_in($object_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectInclude::class, ContentObjectInclude::PROPERTY_INCLUDE_ID
@@ -2015,7 +2015,7 @@ class ContentObject extends CompositeDataClass
 
         // Delete all types of attachments from persistent storage (only the
         // links, not the actual objects)
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_CONTENT_OBJECT_ID

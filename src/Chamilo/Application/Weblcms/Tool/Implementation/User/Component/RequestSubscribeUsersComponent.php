@@ -45,7 +45,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
         {
             $values = $this->form->exportValues();
             $success_requests = $this->create_course_request_for_users($users, $request, $values);
-            $array_type = array();
+            $array_type = [];
             $array_type['go'] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_WEBLCMS_HOME;
             $this->redirect(
                 Translation::get($success_requests ? 'CourseCreateRequestSent' : 'CourseCreateRequestNotSent'),
@@ -58,7 +58,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
             $this->form->addElement('hidden', 'user_ids');
             $this->form->setDefaults(array('user_ids' => json_encode($this->user_ids)));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_selected_users($users);
@@ -163,11 +163,11 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      */
     public function display_selected_users($users)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         if (count($users) > 1)
         {
@@ -182,7 +182,7 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
 
         $html[] = '<ul class="list-group">';
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         foreach ($users as $user)
         {
@@ -236,8 +236,8 @@ class RequestSubscribeUsersComponent extends Manager implements DelegateComponen
      */
     public function retrieve_selected_users()
     {
-        $users = array();
-        $allowed_user_ids = array();
+        $users = [];
+        $allowed_user_ids = [];
 
         foreach ($this->user_ids as $id)
         {

@@ -16,7 +16,7 @@ class DoublesTableColumnModel extends DataClassTableColumnModel implements Table
 
     public function initialize_columns()
     {
-        $typeGlyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 

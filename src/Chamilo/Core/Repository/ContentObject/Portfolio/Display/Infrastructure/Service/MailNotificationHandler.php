@@ -79,7 +79,7 @@ class MailNotificationHandler extends \Chamilo\Core\Repository\Feedback\Infrastr
      */
     protected function getMailContent(Feedback $feedback)
     {
-        $html = array();
+        $html = [];
         
         $html[] = '<!DOCTYPE html>';
         $html[] = '<html lang="en">';

@@ -45,7 +45,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_html();
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -101,7 +101,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $or_conditions = array();
+            $or_conditions = [];
             $or_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(UserView::class, UserView::PROPERTY_NAME), '*' . $query . '*'
             );
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             );
             $or_condition = new OrCondition($or_conditions);
 
-            $and_conditions[] = array();
+            $and_conditions[] = [];
             $and_conditions = $condition;
             $and_conditions = $or_condition;
             $condition = new AndCondition($and_conditions);

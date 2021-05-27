@@ -51,7 +51,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @param NodeActionGenerator[] $contentObjectTypeNodeActionGenerators
      */
     public function __construct(
-        Translation $translator, array $baseParameters = array(), $contentObjectTypeNodeActionGenerators = array()
+        Translation $translator, array $baseParameters = [], $contentObjectTypeNodeActionGenerators = []
     )
     {
         parent::__construct($translator, $baseParameters);
@@ -64,7 +64,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      * @param array $actions
      * @param TreeNode $treeNode
      */
-    protected function addSelectFromActions(&$actions = array(), TreeNode $treeNode)
+    protected function addSelectFromActions(&$actions = [], TreeNode $treeNode)
     {
         $repoViewerContext = 'Chamilo\Core\Repository\Viewer';
 
@@ -101,7 +101,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     public function generateNodeActions(TreeNode $treeNode, $canEditTreeNode = false): array
     {
-        $actions = array();
+        $actions = [];
 
         if ($canEditTreeNode)
         {
@@ -372,7 +372,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
             );
         }
 
-        return array();
+        return [];
     }
 
     /**

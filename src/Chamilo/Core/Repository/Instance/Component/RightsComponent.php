@@ -22,7 +22,7 @@ class RightsComponent extends Manager
         $identifiers = Request::get(self::PARAM_INSTANCE_ID);
         $this->set_parameter(self::PARAM_INSTANCE_ID, $identifiers);
 
-        $locations = array();
+        $locations = [];
 
         if (! $identifiers)
         {
@@ -40,7 +40,7 @@ class RightsComponent extends Manager
                 $identifier);
         }
 
-        $entities = array();
+        $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 

@@ -89,7 +89,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     public function determine_rights($video_entry)
     {
-        $rights = array();
+        $rights = [];
         $rights[ExternalObject::RIGHT_USE] = true;
         $rights[ExternalObject::RIGHT_EDIT] = $video_entry->get_owner_id() == $this->getCurrentUserId();
         $rights[ExternalObject::RIGHT_DELETE] = $video_entry->get_owner_id() == $this->getCurrentUserId();
@@ -147,7 +147,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     private function getSetting($setting)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable($setting)
@@ -188,7 +188,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
         else
         {
-            return array();
+            return [];
         }
     }
 
@@ -247,7 +247,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     public function retrieve_categories()
     {
         $categories = $this->youtube->videoCategories->listVideoCategories('id,snippet', array('regionCode' => 'BE'));
-        $list_categories = array();
+        $list_categories = [];
         foreach ($categories->getItems() as $videoCategory)
         {
             if ($videoCategory->getSnippet()->getAssignable())

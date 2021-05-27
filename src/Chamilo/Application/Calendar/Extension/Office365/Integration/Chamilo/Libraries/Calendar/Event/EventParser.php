@@ -115,7 +115,7 @@ class EventParser
      */
     private function getByDay($patternType, $patternIndex, $patternDaysOfWeek)
     {
-        $byDay = array();
+        $byDay = [];
 
         $prefix = $this->getNumericIndex($patternType, $patternIndex);
 

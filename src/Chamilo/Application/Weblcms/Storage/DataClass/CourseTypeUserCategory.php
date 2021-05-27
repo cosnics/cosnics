@@ -23,7 +23,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     const PROPERTY_SORT = 'sort';
     const PROPERTY_USER_ID = 'user_id';
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -104,7 +104,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return array(
             self::PROPERTY_ID,

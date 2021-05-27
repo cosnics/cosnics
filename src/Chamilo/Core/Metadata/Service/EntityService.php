@@ -120,7 +120,7 @@ class EntityService
      */
     private function getEntityCondition(DataClassEntity $entity)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(SchemaInstance::class, SchemaInstance::PROPERTY_ENTITY_TYPE),
             ComparisonCondition::EQUAL, new StaticConditionVariable($entity->getDataClassName())
@@ -218,7 +218,7 @@ class EntityService
      */
     public function getSourceRelationIdsForEntity($sourceType, Relation $relation, DataClassEntity $targetEntity)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE),
             ComparisonCondition::EQUAL, new StaticConditionVariable($sourceType)
@@ -256,7 +256,7 @@ class EntityService
      */
     public function getVocabularyByElementIdAndUserId(Element $element, User $user)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_ELEMENT_ID),
             ComparisonCondition::EQUAL, new StaticConditionVariable($element->getId())
@@ -372,7 +372,7 @@ class EntityService
     )
     {
         $existingSchemaInstances = $this->getSchemaInstancesForSchemaAndEntity($schema, $entity);
-        $existingSchemaInstanceIds = array();
+        $existingSchemaInstanceIds = [];
 
         foreach ($existingSchemaInstances as $existingSchemaInstance)
         {
@@ -443,7 +443,7 @@ class EntityService
         $existingElementInstances = $this->getElementService()->getElementInstancesForSchemaInstanceAndElement(
             $schemaInstance, $element
         );
-        $existingElementInstanceIds = array();
+        $existingElementInstanceIds = [];
 
         foreach ($existingElementInstances as $existingElementInstance)
         {
@@ -454,14 +454,14 @@ class EntityService
             $submittedElementValues[EntityService::PROPERTY_METADATA_SCHEMA_EXISTING];
         $submittedExistingElementInstanceIds = $submittedExistingElementInstanceIds ? explode(
             ',', $submittedExistingElementInstanceIds
-        ) : array();
+        ) : [];
 
         if ($element->isVocabularyUserDefined())
         {
             $submittedNewElementInstanceValues = $submittedElementValues[EntityService::PROPERTY_METADATA_SCHEMA_NEW];
             $submittedNewElementInstanceValues = $submittedNewElementInstanceValues ? explode(
                 ',', $submittedNewElementInstanceValues
-            ) : array();
+            ) : [];
 
             $totalValues = count($submittedExistingElementInstanceIds) + count($submittedNewElementInstanceValues);
         }

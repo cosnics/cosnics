@@ -46,8 +46,8 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
 
-        $options = array();
-        $matches = array();
+        $options = [];
+        $matches = [];
 
         // Get an array with a mapping from the match-id to its index in the $values['match'] array
         $matches_indexes = array_flip(array_keys($values[self::PROPERTY_DEFAULTS_MATCH]));
@@ -82,7 +82,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             array('id' => self::PROPERTY_MQ_NUMBER_OF_MATCHES)
         );
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => self::PROPERTY_ADD_MATCH), null,
             new FontAwesomeGlyph('plus')
@@ -91,7 +91,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $renderer = $this->defaultRenderer();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data matches">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -103,7 +103,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
@@ -111,11 +111,11 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $label = 'A';
 
-        $defaults = array();
+        $defaults = [];
 
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {
-            $group = array();
+            $group = [];
 
             if (!in_array($match_number, $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
             {
@@ -134,7 +134,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'style_button', 'remove_match[' . $match_number . ']', null,
                         array('class' => self::PROPERTY_REMOVE_MATCH, 'id' => 'remove_match_' . $match_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -183,7 +183,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
     public function add_options()
     {
         $number_of_options = intval($_SESSION[self::PROPERTY_MQ_NUMBER_OF_OPTIONS]);
-        $matches = array();
+        $matches = [];
         $match_label = 'A';
 
         for ($match_number = 0; $match_number < $_SESSION[self::PROPERTY_MQ_NUMBER_OF_MATCHES]; $match_number ++)
@@ -200,7 +200,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
             array('id' => self::PROPERTY_MQ_NUMBER_OF_OPTIONS)
         );
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'add_option[]', Translation::get('AddMatchingQuestionOption'),
             array('id' => self::PROPERTY_ADD_OPTION), null, new FontAwesomeGlyph('plus')
@@ -209,7 +209,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
 
         $renderer = $this->defaultRenderer();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data options">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -224,7 +224,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
@@ -235,7 +235,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
 
-            $group = array();
+            $group = [];
             if (!in_array($option_number, $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
             {
                 $visual_number ++;
@@ -261,7 +261,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'style_button', 'remove_option[' . $option_number . ']', null,
                         array('class' => self::PROPERTY_REMOVE_OPTION, 'id' => 'remove_option_' . $option_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -340,7 +340,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
      */
     private function build_options_and_matches()
     {
-        $select_options = array();
+        $select_options = [];
         $select_options[AssessmentMatchingQuestion::DISPLAY_LIST] = Translation::get('DisplayList');
         $select_options[AssessmentMatchingQuestion::DISPLAY_SELECT] = Translation::get('DisplaySelect');
 
@@ -373,7 +373,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -438,7 +438,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         }
         if (!isset($_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS]))
         {
-            $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS] = array();
+            $_SESSION[self::PROPERTY_MQ_SKIP_OPTIONS] = [];
         }
         if (isset($_POST[self::PROPERTY_ADD_OPTION]))
         {
@@ -455,7 +455,7 @@ class AssessmentMatchingQuestionForm extends ContentObjectForm
         }
         if (!isset($_SESSION[self::PROPERTY_MQ_SKIP_MATCHES]))
         {
-            $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES] = array();
+            $_SESSION[self::PROPERTY_MQ_SKIP_MATCHES] = [];
         }
         if (isset($_POST[self::PROPERTY_ADD_MATCH]))
         {

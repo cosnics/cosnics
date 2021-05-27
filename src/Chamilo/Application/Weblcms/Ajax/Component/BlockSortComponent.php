@@ -20,7 +20,7 @@ class BlockSortComponent extends Manager
     function unserialize_jquery($jquery)
     {
         $block_data = explode('&', $jquery);
-        $blocks = array();
+        $blocks = [];
         
         foreach ($block_data as $block)
         {

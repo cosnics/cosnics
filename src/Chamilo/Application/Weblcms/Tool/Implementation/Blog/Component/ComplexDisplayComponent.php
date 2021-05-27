@@ -41,7 +41,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
                 true,
-                array(),
+                [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));

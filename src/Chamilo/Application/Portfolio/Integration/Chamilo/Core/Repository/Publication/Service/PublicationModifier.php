@@ -179,7 +179,7 @@ class PublicationModifier implements PublicationModifierInterface
      * @see PublicationModifierInterface::publishContentObject()
      */
     public function publishContentObject(
-        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
+        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = []
     )
     {
         $publication =

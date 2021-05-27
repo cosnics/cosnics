@@ -42,7 +42,7 @@ class ViewerComponent extends Manager implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $table = $this->get_table_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<br />';
@@ -107,7 +107,7 @@ class ViewerComponent extends Manager implements TableSupport
     {
         $table = new CourseSectionsTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';

@@ -20,7 +20,7 @@ class ForumSubscribeComponent extends Manager
         
         $forum = $this->get_selected_complex_content_object_item();
         
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         $params[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         

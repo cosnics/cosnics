@@ -79,7 +79,7 @@ class TypeSelectorFactory
         $typeSelector = new TypeSelector();
         $helperTypes = DataManager::get_active_helper_types();
 
-        $contexts = array();
+        $contexts = [];
 
         foreach ($this->getContentObjectTypes() as $contentObjectType)
         {

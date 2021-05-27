@@ -45,7 +45,7 @@ class DatePickerFormType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $translation_variables = array('current_time', 'close', 'time', 'hour', 'minute');
-        $translations = array();
+        $translations = [];
 
         foreach ($translation_variables as $translation_variable)
         {

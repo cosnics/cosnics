@@ -63,7 +63,7 @@ class Display extends QuestionDisplay
         )
         );
 
-        $image_html = array();
+        $image_html = [];
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
 
@@ -93,7 +93,7 @@ class Display extends QuestionDisplay
         $image_html[] = '</div>';
         $formvalidator->addElement('html', implode(PHP_EOL, $image_html));
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] =
             '<table class="table table-striped table-bordered table-hover table-data take_assessment hotspot_question_options">';
         $table_header[] = '<thead>';
@@ -110,7 +110,7 @@ class Display extends QuestionDisplay
         {
             $answer_name = $question_id . '_' . $i;
 
-            $group = array();
+            $group = [];
             $group[] = $formvalidator->createElement(
                 'static', null, null,
                 '<div class="colour_box" id="colour_' . $answer_name . '" style="background-color: ' .

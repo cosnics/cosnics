@@ -9,11 +9,11 @@ use Chamilo\Libraries\Format\Display;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -22,6 +22,10 @@ use Chamilo\Libraries\Utilities\Utilities;
  */
 class ParentChangerComponent extends Manager
 {
+
+    private $tree;
+
+    private $level = 1;
 
     /**
      * Runs this component and displays its output.
@@ -36,12 +40,12 @@ class ParentChangerComponent extends Manager
             $ids = $this->getRequest()->query->get(self::PARAM_CATEGORY_ID);
         }
 
-        if (! $user)
+        if (!$user)
         {
             throw new NotAllowedException();
         }
 
-        if (! is_array($ids))
+        if (!is_array($ids))
         {
             $ids = array($ids);
         }
@@ -55,12 +59,11 @@ class ParentChangerComponent extends Manager
             $selected_category = $this->get_parent()->retrieve_categories(
                 new EqualityCondition(
                     new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
-                    new StaticConditionVariable($ids[0])),
-                null,
-                null,
-                array())->current();
+                    new StaticConditionVariable($ids[0])
+                ), null, null, []
+            )->current();
 
-            if (! $selected_category)
+            if (!$selected_category)
             {
                 throw new ObjectNotExistException(Translation::get('Category'), $ids[0]);
             }
@@ -69,7 +72,7 @@ class ParentChangerComponent extends Manager
 
             $success = true;
 
-            $categories = array();
+            $categories = [];
 
             foreach ($ids as $id)
             {
@@ -77,10 +80,7 @@ class ParentChangerComponent extends Manager
                     new EqualityCondition(
                         new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_ID),
                         new StaticConditionVariable($id)
-                    ),
-                    null,
-                    null,
-                    array()
+                    ), null, null, []
                 )->current();
             }
 
@@ -97,14 +97,16 @@ class ParentChangerComponent extends Manager
                 $trail->add(
                     new Breadcrumb(
                         $this->get_url(),
-                        Translation::get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))));
+                        Translation::get('MoveCategory', array('CATEGORY' => $categories[0]->get_name()))
+                    )
+                );
             }
 
             if ($form->validate())
             {
                 $new_parent = $form->exportValue('category');
 
-                if (! $this->get_parent()->allowed_to_add_category($new_parent))
+                if (!$this->get_parent()->allowed_to_add_category($new_parent))
                 {
                     throw new NotAllowedException();
                 }
@@ -120,13 +122,13 @@ class ParentChangerComponent extends Manager
                 $this->clean_display_order_old_parent($parent);
 
                 $this->redirect(
-                    Translation::get($success ? 'CategoryMoved' : 'CategoryNotMoved'),
-                    ($success ? false : true),
-                    array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $parent));
+                    Translation::get($success ? 'CategoryMoved' : 'CategoryNotMoved'), ($success ? false : true),
+                    array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $parent)
+                );
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -137,7 +139,7 @@ class ParentChangerComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = Display::error_message(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES));
@@ -147,63 +149,18 @@ class ParentChangerComponent extends Manager
         }
     }
 
-    private $tree;
-
-    public function get_move_form($categories, $current_parent)
-    {
-        foreach ($categories as $category)
-        {
-            $selected_categories[] = $category->get_id();
-        }
-
-        if ($current_parent != 0)
-        {
-            $this->tree[0] = Translation::get('Root');
-        }
-
-        $this->build_category_tree(0, $selected_categories, $current_parent);
-        $form = new FormValidator(
-            'select_category',
-            FormValidator::FORM_METHOD_POST,
-            $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT)));
-
-        foreach ($categories as $category)
-        {
-            $category_names[] = $category->get_name();
-        }
-        $form->addElement(
-            'static',
-            null,
-            Translation::get(
-                'ObjectSelected',
-                array('OBJECT' => Translation::get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
-                Utilities::COMMON_LIBRARIES),
-            implode('<br>', $category_names));
-
-        $form->addElement(
-            'select',
-            'category',
-            Translation::get('Category', null, Utilities::COMMON_LIBRARIES),
-            $this->tree);
-        $form->addElement('submit', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
-
-        return $form;
-    }
-
-    private $level = 1;
-
     public function build_category_tree($parent_id, $selected_categories, $current_parent)
     {
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent_id));
+            new StaticConditionVariable($parent_id)
+        );
 
-        $categories = $this->get_parent()->retrieve_categories($condition, null, null, array());
+        $categories = $this->get_parent()->retrieve_categories($condition, null, null, []);
 
-        $tree = array();
-        foreach($categories as $cat)
+        $tree = [];
+        foreach ($categories as $cat)
         {
             if (in_array($cat->get_id(), $selected_categories))
             {
@@ -226,23 +183,63 @@ class ParentChangerComponent extends Manager
         $category_class_name = get_class($this->get_parent()->get_category());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($parent));
+            new StaticConditionVariable($parent)
+        );
 
         $categories = $this->get_parent()->retrieve_categories(
-            $condition,
-            null,
-            null,
-            array(
+            $condition, null, null, array(
                 new OrderBy(
-                    new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER))));
+                    new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER)
+                )
+            )
+        );
 
         $i = 1;
 
-        foreach($categories as $cat)
+        foreach ($categories as $cat)
         {
             $cat->set_display_order($i);
             $cat->update();
             $i ++;
         }
+    }
+
+    public function get_move_form($categories, $current_parent)
+    {
+        foreach ($categories as $category)
+        {
+            $selected_categories[] = $category->get_id();
+        }
+
+        if ($current_parent != 0)
+        {
+            $this->tree[0] = Translation::get('Root');
+        }
+
+        $this->build_category_tree(0, $selected_categories, $current_parent);
+        $form = new FormValidator(
+            'select_category', FormValidator::FORM_METHOD_POST, $this->get_url(
+            array(self::PARAM_ACTION => self::ACTION_CHANGE_CATEGORY_PARENT)
+        )
+        );
+
+        foreach ($categories as $category)
+        {
+            $category_names[] = $category->get_name();
+        }
+        $form->addElement(
+            'static', null, Translation::get(
+            'ObjectSelected',
+            array('OBJECT' => Translation::get(count($selected_categories) > 1 ? 'Categories' : 'Category')),
+            Utilities::COMMON_LIBRARIES
+        ), implode('<br>', $category_names)
+        );
+
+        $form->addElement(
+            'select', 'category', Translation::get('Category', null, Utilities::COMMON_LIBRARIES), $this->tree
+        );
+        $form->addElement('submit', 'submit', Translation::get('Ok', null, Utilities::COMMON_LIBRARIES));
+
+        return $form;
     }
 }

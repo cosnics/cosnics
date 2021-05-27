@@ -115,7 +115,7 @@ class GroupEntityFeedComponent extends Manager
     private function getElements()
     {
         $elements = new AdvancedElementFinderElements();
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add groups
         $groups = $this->findGroups();
@@ -168,7 +168,7 @@ class GroupEntityFeedComponent extends Manager
     public function getGroupElement(Group $group)
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             GroupEntityProvider::ENTITY_TYPE . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(),
@@ -192,7 +192,7 @@ class GroupEntityFeedComponent extends Manager
      */
     public function getUserElement(User $user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),

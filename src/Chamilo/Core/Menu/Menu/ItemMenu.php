@@ -111,16 +111,16 @@ class ItemMenu extends HtmlMenu
         $itemService = $this->getItemService();
         $items = $itemService->findRootCategoryItems();
 
-        $subMenuItems = array();
+        $subMenuItems = [];
 
         foreach ($items as $item)
         {
-            $subMenuItem = array();
+            $subMenuItem = [];
 
             $subMenuItem['title'] = $itemService->getItemTitleForCurrentLanguage($item);
             $subMenuItem['url'] = $this->getCategoryUrl($item->getId());
 
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
             $subMenuItem['class'] = $glyph->getClassNamesString();
 
             $subMenuItem[OptionsMenuRenderer::KEY_ID] = $item->getId();
@@ -128,12 +128,12 @@ class ItemMenu extends HtmlMenu
             $subMenuItems[] = $subMenuItem;
         }
 
-        $menuItem = array();
+        $menuItem = [];
 
         $menuItem['title'] = $this->getTranslator()->trans('Home');
         $menuItem['url'] = $this->getCategoryUrl(0);
 
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $menuItem['class'] = $glyph->getClassNamesString();
 
         $menuItem[OptionsMenuRenderer::KEY_ID] = 0;

@@ -99,7 +99,7 @@ class TreeBuilderTest extends ChamiloTestCase
             ],
         ];
 
-        $contentObjects = $treeNodesData = array();
+        $contentObjects = $treeNodesData = [];
 
         foreach($nodesData as $nodeData)
         {

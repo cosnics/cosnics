@@ -52,7 +52,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|CourseGroup[]
      */
-    public function findCourseGroupUserRelationsForCourseAndUserIds(Course $course, array $userIds = array())
+    public function findCourseGroupUserRelationsForCourseAndUserIds(Course $course, array $userIds = [])
     {
         $conditions = [];
 
@@ -85,7 +85,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
         );
     }
 

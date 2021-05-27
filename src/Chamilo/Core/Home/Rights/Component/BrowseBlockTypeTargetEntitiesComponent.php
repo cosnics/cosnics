@@ -25,7 +25,7 @@ class BrowseBlockTypeTargetEntitiesComponent extends Manager implements TableSup
             throw new NotAllowedException();
         }
         
-        $html = array();
+        $html = [];
         
         $tableContent = $this->renderTable();
         

@@ -78,7 +78,7 @@ class FeedbackForm extends FormValidator
      */
     protected function set_defaults($feedback)
     {
-        $defaults = array();
+        $defaults = [];
         if ($feedback && $feedback->is_identified())
         {
             $defaults[Feedback::PROPERTY_COMMENT] = $feedback->get_comment();

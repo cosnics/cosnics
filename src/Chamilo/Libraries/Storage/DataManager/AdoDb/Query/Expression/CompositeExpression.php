@@ -38,14 +38,14 @@ class CompositeExpression implements Countable
      *
      * @var array
      */
-    private $parts = array();
+    private $parts = [];
 
     /**
      *
      * @param string $type Instance type of composite expression.
      * @param array $parts Composition of expressions to be joined on composite expression.
      */
-    public function __construct($type, array $parts = array())
+    public function __construct($type, array $parts = [])
     {
         $this->type = $type;
 
@@ -88,7 +88,7 @@ class CompositeExpression implements Countable
      *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
      */
-    public function addMultiple(array $parts = array())
+    public function addMultiple(array $parts = [])
     {
         foreach ((array) $parts as $part)
         {

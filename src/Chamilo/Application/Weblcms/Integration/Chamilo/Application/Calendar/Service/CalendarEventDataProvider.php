@@ -53,7 +53,7 @@ abstract class CalendarEventDataProvider extends InternalCalendar
     {
         $rightsService = ServiceFactory::getInstance()->getRightsService();
 
-        $events = array();
+        $events = [];
 
         $availabilityService = $this->getAvailabilityService();
         $packageContext = $this->getCalendarContext();

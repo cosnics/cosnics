@@ -39,7 +39,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $id = Request::get(self::PARAM_CONTENT_OBJECT_ID);
         $trail = BreadcrumbTrail::getInstance();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -77,7 +77,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
     public function get_full_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id()));
@@ -99,7 +99,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
     public function get_detail_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = $this->get_full_condition();
         $conditions[] = new NotCondition(
             new EqualityCondition(
@@ -123,7 +123,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
 
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
         if (isset($this->content_object))
         {
             $conditions[true] = $this->get_detail_condition();

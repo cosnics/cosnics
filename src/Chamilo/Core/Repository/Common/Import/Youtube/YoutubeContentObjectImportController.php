@@ -49,7 +49,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
             
             if (! $this->has_messages(self::TYPE_ERROR))
             {
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         Instance::class,
@@ -103,7 +103,7 @@ class YoutubeContentObjectImportController extends ContentObjectImportController
     {
         $youtube_object_available = in_array(self::FORMAT, DataManager::get_registered_types(true));
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 Instance::class,

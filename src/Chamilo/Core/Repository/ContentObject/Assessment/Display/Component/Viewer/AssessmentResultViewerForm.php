@@ -95,7 +95,7 @@ class AssessmentResultViewerForm extends FormValidator
             if ($this->assessment_result_processor->get_assessment_viewer()->get_root_content_object()
                 ->has_unlimited_attempts())
             {
-                $glyph = new FontAwesomeGlyph('sync', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('sync', [], null, 'fas');
                 $buttons[] = $this->createElement(
                     'static', null, null,
                     '<a href="' . $current_url . '" class="btn btn-default" target="_parent">' . $glyph->render() .
@@ -105,7 +105,7 @@ class AssessmentResultViewerForm extends FormValidator
 
             if (!StringUtilities::getInstance()->isNullOrEmpty($back_url))
             {
-                $glyph = new FontAwesomeGlyph('stop', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('stop', [], null, 'fas');
 
                 $buttons[] = $this->createElement(
                     'static', null, null,
@@ -117,7 +117,7 @@ class AssessmentResultViewerForm extends FormValidator
             if (!StringUtilities::getInstance()->isNullOrEmpty($continue_url))
             {
                 $glyph = new FontAwesomeGlyph(
-                    'check-circle', array(), null, 'fas'
+                    'check-circle', [], null, 'fas'
                 );
 
                 $buttons[] = $this->createElement(

@@ -70,7 +70,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $buttonToolbarRender = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -150,7 +150,7 @@ class BrowserComponent extends Manager implements TableSupport
                         new SubButton(
                             $workspace->getTitle(), null,
                             $this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())),
-                            SubButton::DISPLAY_LABEL, false, array(), null, $isActive
+                            SubButton::DISPLAY_LABEL, false, [], null, $isActive
                         )
                     );
                 }
@@ -338,7 +338,7 @@ class BrowserComponent extends Manager implements TableSupport
         $url =
             $this->get_url($this->get_parameters(), array(self::PARAM_QUERY)) . '&' . self::PROPERTY_CATEGORY . '=%s';
 
-        $extra = array();
+        $extra = [];
 
         $menu = new RepositoryCategoryMenu(
             $this, $this->get_user_id(), $this->getWorkspace(), $this->getCategoryId(), $url, $extra, $this->get_types()

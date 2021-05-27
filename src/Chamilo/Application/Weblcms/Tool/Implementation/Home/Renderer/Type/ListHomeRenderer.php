@@ -24,7 +24,7 @@ class ListHomeRenderer extends HomeRenderer
             $this->getHomeTool(), 
             $this->getCourseTools());
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->getHomeTool()->renderHomeActions();
         

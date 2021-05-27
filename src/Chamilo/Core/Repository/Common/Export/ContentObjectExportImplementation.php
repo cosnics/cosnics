@@ -39,7 +39,7 @@ abstract class ContentObjectExportImplementation extends AbstractContentObjectEx
         }
     }
 
-    public static function get_types(array $types = array())
+    public static function get_types(array $types = [])
     {
         $types[] = ContentObjectExport::FORMAT_CPO;
         return $types;

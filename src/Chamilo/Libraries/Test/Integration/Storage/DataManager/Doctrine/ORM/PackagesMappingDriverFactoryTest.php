@@ -140,7 +140,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
      */
     public function testCanNotAcceptEmptyPackages()
     {
-        $this->packagesMappingDriverFactory->createMappingDriverForPackages(array());
+        $this->packagesMappingDriverFactory->createMappingDriverForPackages([]);
     }
 
     /**

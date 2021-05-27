@@ -65,7 +65,7 @@ class TreeBuilder
 
         $treeNodesData = $this->treeNodeDataRepository->findTreeNodesDataForLearningPath($learningPath);
 
-        $orderedTreeNodesData = array();
+        $orderedTreeNodesData = [];
 
         foreach ($treeNodesData as $treeNodeData)
         {
@@ -88,7 +88,7 @@ class TreeBuilder
      * @param Tree $tree
      * @param TreeNode $parentTreeNode
      */
-    protected function addChildrenForSection($parentTreeNodeDataId = 0, $orderedTreeNodesData = array(), Tree $tree,
+    protected function addChildrenForSection($parentTreeNodeDataId = 0, $orderedTreeNodesData = [], Tree $tree,
         TreeNode $parentTreeNode = null)
     {
         $treeNodeDataForSection = $orderedTreeNodesData[$parentTreeNodeDataId];

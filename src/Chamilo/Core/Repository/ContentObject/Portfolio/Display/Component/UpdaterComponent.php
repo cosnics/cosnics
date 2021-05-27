@@ -104,7 +104,7 @@ class UpdaterComponent extends ItemComponent
                     )
                 );
 
-                $params = array();
+                $params = [];
                 $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
@@ -126,7 +126,7 @@ class UpdaterComponent extends ItemComponent
                     new Breadcrumb($this->get_url(array(self::PARAM_STEP => $this->get_current_step())), $title)
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

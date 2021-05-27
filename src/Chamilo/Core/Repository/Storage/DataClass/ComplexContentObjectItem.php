@@ -35,7 +35,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     private $reference_object;
 
-    public function __construct($default_properties = array(), $additional_properties = null)
+    public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties, $additional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -120,7 +120,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     public function get_allowed_types()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -128,7 +128,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

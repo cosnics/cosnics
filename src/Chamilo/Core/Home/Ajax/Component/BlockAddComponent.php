@@ -35,7 +35,7 @@ class BlockAddComponent extends Manager
     public function unserialize_jquery($jquery)
     {
         $block_data = explode('&', $jquery);
-        $blocks = array();
+        $blocks = [];
         
         foreach ($block_data as $block)
         {

@@ -34,7 +34,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
     public function getRequiredPostParameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -57,7 +57,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     public function get_group_element($group)
     {
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             self::PARAM_GROUP . '_' . $group->get_id(), $glyph->getClassNamesString(), $group->get_name(), $description,
@@ -74,7 +74,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
      */
     public function get_user_element($user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             self::PARAM_USER . '_' . $user->get_id(), $glyph->getClassNamesString(), $user->get_fullname(),
@@ -100,7 +100,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         );
         $relations = DataManager::retrieves(GroupRelUser::class, new DataClassRetrievesParameters($condition));
 
-        $user_ids = array();
+        $user_ids = [];
 
         foreach($relations as $relation)
         {

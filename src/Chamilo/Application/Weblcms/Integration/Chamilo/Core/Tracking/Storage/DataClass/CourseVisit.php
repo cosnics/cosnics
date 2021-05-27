@@ -48,7 +48,7 @@ class CourseVisit extends Tracker
      *
      * @return bool
      */
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $course_visit = $this->validate_parameters($parameters);
 
@@ -88,7 +88,7 @@ class CourseVisit extends Tracker
      *
      * @return \string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -370,7 +370,7 @@ class CourseVisit extends Tracker
      *
      * @return \application\weblcms\integration\core\tracking\CourseVisit
      */
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_id($parameters[self::PROPERTY_ID]);
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);

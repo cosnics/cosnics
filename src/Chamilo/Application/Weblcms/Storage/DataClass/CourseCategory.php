@@ -27,7 +27,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     const PROPERTY_STATE = 'state';
     const STATE_ARCHIVE = 0;
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -58,7 +58,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      *
      * @return array The property titles.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_CODE, self::PROPERTY_STATE));
     }
@@ -71,7 +71,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      */
     protected function get_dependencies()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -140,13 +140,13 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     {
         if ($this->get_parent() == 0)
         {
-            return array();
+            return [];
         }
         else
         {
             $parent = DataManager::retrieve_by_id(CourseCategory::class, $this->get_parent());
 
-            $parent_ids = array();
+            $parent_ids = [];
             $parent_ids[] = $parent->get_id();
             $parent_ids = array_merge($parent_ids, $parent->get_parent_ids());
             return $parent_ids;
@@ -156,7 +156,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     public function get_fully_qualified_name($include_self = true)
     {
         $parent_ids = $this->get_parent_ids();
-        $names = array();
+        $names = [];
 
         if ($include_self)
         {
@@ -187,7 +187,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         }
         else
         {
-            $children_ids = array();
+            $children_ids = [];
             $children = DataManager::retrieve_categories($condition);
 
             foreach($children as $child)

@@ -171,7 +171,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // $compatible_license = ($license == 0 ? false : true);
         $compatible_license = true;
 
-        $rights = array();
+        $rights = [];
         $rights[ExternalObject::RIGHT_USE] = $compatible_license || $users_match;
         $rights[ExternalObject::RIGHT_EDIT] = $users_match;
         $rights[ExternalObject::RIGHT_DELETE] = $users_match;
@@ -220,7 +220,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
         if (($feed_type == Manager::FEED_TYPE_GENERAL && $query) || $feed_type == Manager::FEED_TYPE_MY_PHOTOS)
         {
-            $properties = array();
+            $properties = [];
             $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_DATE_POSTED);
             $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_DATE_TAKEN);
             $properties[] = new PropertyConditionVariable(ExternalObject::class, self::SORT_INTERESTINGNESS);
@@ -230,7 +230,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         }
         else
         {
-            return array();
+            return [];
         }
     }
 
@@ -293,7 +293,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_owner_id($photo['owner']['nsid']);
         $object->set_owner_name($photo['owner']['username']);
 
-        $tags = array();
+        $tags = [];
         foreach ($photo['tags']['tag'] as $tag)
         {
             $tags[] = array('display' => $tag['raw'], 'text' => $tag['_content']);
@@ -301,7 +301,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_tags($tags);
 
         $photo_sizes = $this->flickr->photos_getSizes($photo['id']);
-        $photo_urls = array();
+        $photo_urls = [];
 
         foreach ($photo_sizes as $photo_size)
         {
@@ -318,7 +318,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $object->set_urls($photo_urls);
         $object->set_license($licenses[$photo['license']]);
 
-        $types = array();
+        $types = [];
         $types[] = $photo['media'];
         if (isset($photo['originalformat']))
         {
@@ -351,7 +351,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // $licenses = $this->retrieve_licenses();
         $licenses = ExternalObject::get_possible_licenses();
 
-        $objects = array();
+        $objects = [];
 
         foreach ($photos['photos']['photo'] as $photo)
         {
@@ -365,7 +365,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_owner_id($photo['owner']);
             $object->set_owner_name($photo['ownername']);
 
-            $photo_urls = array();
+            $photo_urls = [];
             foreach (ExternalObject::get_possible_sizes() as $key => $size)
             {
                 if (isset($photo['url_' . $key]))
@@ -379,7 +379,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             }
             $object->set_urls($photo_urls);
 
-            // $photo_size = array();
+            // $photo_size = [];
             // $photo_size['source'] = $photo['url_sq'];
             // $photo_size['width'] = 75;
             // $photo_size['height'] = 75;
@@ -387,7 +387,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             // $object->set_urls(array('square' => $photo_size));
             //
             // $photo_sizes = $this->flickr->photos_getSizes($photo['id']);
-            // $photo_urls = array();
+            // $photo_urls = [];
             //
             // foreach ($photo_sizes as $photo_size)
             // {
@@ -401,7 +401,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
             $object->set_license($licenses[$photo['license']]);
 
-            $types = array();
+            $types = [];
             $types[] = $photo['media'];
             if (isset($photo['originalformat']))
             {
@@ -426,7 +426,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $raw_licenses = $this->flickr->photos_licenses_getInfo();
 
-            $this->licenses = array();
+            $this->licenses = [];
             foreach ($raw_licenses as $raw_license)
             {
                 $this->licenses[$raw_license['id']] = array(
@@ -456,7 +456,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $attributes =
             'description,date_upload,owner_name,license,media,original_format,last_update,url_sq,url_t,url_s,url_m,url_l,url_o';
 
-        $search_parameters = array();
+        $search_parameters = [];
         $search_parameters['api_key'] = $this->key;
         $search_parameters['per_page'] = $count;
         $search_parameters['page'] = $offset;

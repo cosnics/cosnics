@@ -54,7 +54,7 @@ class LinkItemRenderer extends ItemRenderer
     {
         $title = $this->renderTitle($item);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<li>';
         $html[] = '<a href="' . $item->getUrl() . '" target="' . $item->getTargetString() . '">';

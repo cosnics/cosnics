@@ -115,7 +115,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
         }
         else
         {
-            $result = array();
+            $result = [];
             foreach ($this->answers as $answer)
             {
                 if ($answer->get_position() == $index)
@@ -278,7 +278,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
      */
     public function get_maximum_score()
     {
-        $maximum = array();
+        $maximum = [];
         $answers = $this->get_answers();
         foreach ($answers as $answer)
         {
@@ -370,7 +370,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     {
         $answers = $this->get_answers();
         $case_sensitive = $this->get_case_sensitive();
-        $scores = array();
+        $scores = [];
         foreach ($answers as $a)
         {
             if ($a->get_position() == $question_index)

@@ -51,7 +51,7 @@ abstract class NewBlock extends Block
 
         if (count($publications) == 0)
         {
-            $html = array();
+            $html = [];
 
             $html[] =
                 '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
@@ -73,7 +73,7 @@ abstract class NewBlock extends Block
      */
     public function displayNewItem($publication)
     {
-        $html = array();
+        $html = [];
 
         $course_id = $publication[ContentObjectPublication::PROPERTY_COURSE_ID];
         $title = $publication[ContentObject::PROPERTY_TITLE];
@@ -97,7 +97,7 @@ abstract class NewBlock extends Block
      */
     public function displayNewItems($publications)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="list-group portal-block-content portal-block-new-list' .
             ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
@@ -146,10 +146,10 @@ abstract class NewBlock extends Block
         // All user courses
         $user_courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser(), $archiveCondition);
 
-        $this->courses = array();
+        $this->courses = [];
 
         $course_settings_controller = CourseSettingsController::getInstance();
-        $unique_publications = array();
+        $unique_publications = [];
 
         foreach ($user_courses as $course)
         {
@@ -165,7 +165,7 @@ abstract class NewBlock extends Block
                     WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
                 );
 
-                $entities = array();
+                $entities = [];
                 $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance(
                     $course->get_id()
                 );
@@ -242,7 +242,7 @@ abstract class NewBlock extends Block
             $course->get_id(), $this->getUserId(), $tool, 0
         );
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = WeblcmsDataManager::get_publications_condition(
             $course, $this->getUser(), $tool, $this->getContentObjectTypes()
         );

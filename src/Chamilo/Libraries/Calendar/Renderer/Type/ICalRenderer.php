@@ -131,7 +131,7 @@ class ICalRenderer extends Renderer
     private function addTimeZone()
     {
         timezoneHandler::createTimezone(
-            new TimeZoneCalendarWrapper($this->getCalendar()), date_default_timezone_get(), array()/*,
+            new TimeZoneCalendarWrapper($this->getCalendar()), date_default_timezone_get(), []/*,
             self::TIMEZONE_START,
             self::TIMEZONE_END*/
         );
@@ -169,7 +169,7 @@ class ICalRenderer extends Renderer
      */
     private function sendResponse($serializedCalendar)
     {
-        $headers = array();
+        $headers = [];
 
         $headers['Content-Type'] = 'text/calendar; charset=utf-8';
         $headers['Content-Disposition'] = 'attachment; filename="myCalendar.ics"';

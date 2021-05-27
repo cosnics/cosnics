@@ -50,7 +50,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
 
         {
             // subscribe regular student
-            $parameters = array();
+            $parameters = [];
             $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status->get_id();
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBE;
             $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
@@ -66,7 +66,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
             );
 
             // subscribe as course admin
-            $parameters = array();
+            $parameters = [];
             $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status->get_id();
             $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_SUBSCRIBE_AS_ADMIN;
             $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
@@ -91,7 +91,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
                 $user_with_subscription_status->get_id(), $this->get_component()->get_course_id()
             ))
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status->get_id();
                 $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                     Manager::ACTION_REQUEST_SUBSCRIBE_USER;
@@ -100,7 +100,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
 
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('RequestUser'), new FontAwesomeGlyph('user-clock', array(), null, 'fas'),
+                        Translation::get('RequestUser'), new FontAwesomeGlyph('user-clock', [], null, 'fas'),
                         $subscribe_request_url, ToolbarItem::DISPLAY_ICON
                     )
                 );

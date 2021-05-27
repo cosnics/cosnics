@@ -228,7 +228,7 @@ class AssessmentTrackingService
             $treeNodeAttempt
         );
 
-        $questionAttemptPerQuestion = array();
+        $questionAttemptPerQuestion = [];
 
         foreach ($questionAttempts as $questionAttempt)
         {
@@ -250,14 +250,14 @@ class AssessmentTrackingService
      */
     public function registerQuestionAttempts(
         LearningPath $learningPath, User $user, TreeNode $treeNode,
-        $questionIdentifiers = array()
+        $questionIdentifiers = []
     )
     {
         $this->validateTreeNodeIsAssessment($treeNode);
 
         $activeAttempt = $this->attemptService->getOrCreateActiveTreeNodeAttempt($learningPath, $treeNode, $user);
 
-        $questionAttemptPerQuestion = array();
+        $questionAttemptPerQuestion = [];
         foreach ($questionIdentifiers as $questionIdentifier)
         {
             $questionAttemptPerQuestion[$questionIdentifier] =

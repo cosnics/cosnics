@@ -24,7 +24,7 @@ class CourseModule extends DataClass
 
     public static function convert_tools($tools, $course_code = null, $course_type_tools = false, $form = null)
     {
-        $tools_array = array();
+        $tools_array = [];
 
         foreach ($tools as $index => $tool)
         {
@@ -96,7 +96,7 @@ class CourseModule extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

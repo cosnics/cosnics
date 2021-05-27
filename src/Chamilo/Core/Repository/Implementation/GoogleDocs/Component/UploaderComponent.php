@@ -33,7 +33,7 @@ class UploaderComponent extends Manager
             {
                 Request::set_get(Application::PARAM_ERROR_MESSAGE, Translation::get('GoogleDocsUploadProblem'));
                 
-                $html = array();
+                $html = [];
                 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -44,7 +44,7 @@ class UploaderComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

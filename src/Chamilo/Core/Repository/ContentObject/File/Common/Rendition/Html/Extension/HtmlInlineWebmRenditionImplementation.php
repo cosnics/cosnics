@@ -18,7 +18,7 @@ class HtmlInlineWebmRenditionImplementation extends HtmlInlineMediaElementRendit
      */
     public function getSources($parameters)
     {
-        $html = array();
+        $html = [];
         
         $html[] = '<source type="video/webm" src="' . $this->getMediaUrl() . '" />';
         $html[] = '<source type="video/ogg" src="' . $this->getMediaUrl() . '" />';

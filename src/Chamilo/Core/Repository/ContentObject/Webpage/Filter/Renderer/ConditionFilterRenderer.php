@@ -26,7 +26,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         $filter_data = $this->get_filter_data();
         $general_condition = parent::render();
         
-        $conditions = array();
+        $conditions = [];
         
         if ($general_condition instanceof Condition)
         {
@@ -42,7 +42,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             
             if ($compare == ComparisonCondition::EQUAL)
             {
-                $equality_conditions = array();
+                $equality_conditions = [];
                 $equality_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_FILESIZE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL,

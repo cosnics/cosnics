@@ -14,7 +14,7 @@ class Manager implements ActionsSupportInterface
 
     public static function get_actions()
     {
-        $links = array();
+        $links = [];
 
         $rightsContext = \Chamilo\Core\Home\Rights\Manager::context();
 

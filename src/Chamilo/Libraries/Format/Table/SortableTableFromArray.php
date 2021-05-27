@@ -87,7 +87,7 @@ class SortableTableFromArray extends SortableTable
      * @param boolean $allowPageNavigation
      */
     public function __construct(
-        $tableData, $tableColumns, $additionalParameters = array(), $defaultOrderColumn = 1, $defaultPerPage = 20,
+        $tableData, $tableColumns, $additionalParameters = [], $defaultOrderColumn = 1, $defaultPerPage = 20,
         $defaultOrderDirection = SORT_ASC, $tableName = 'array_table', $allowPageSelection = true,
         $enableSorting = true, $allowPageNavigation = true
     )
@@ -364,7 +364,7 @@ class SortableTableFromArray extends SortableTable
 
         foreach ($this->getTableColumns() as $key => $tableColumn)
         {
-            $headerAttributes = $contentAttributes = array();
+            $headerAttributes = $contentAttributes = [];
 
             $cssClasses = $tableColumn->getCssClasses();
 

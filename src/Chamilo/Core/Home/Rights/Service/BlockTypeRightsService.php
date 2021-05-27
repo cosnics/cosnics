@@ -47,7 +47,7 @@ class BlockTypeRightsService
      * @param string $blockType
      * @param array $targetEntities
      */
-    public function setTargetEntitiesForBlockType($blockType, $targetEntities = array())
+    public function setTargetEntitiesForBlockType($blockType, $targetEntities = [])
     {
         if (! $this->rightsRepository->clearTargetEntitiesForBlockType($blockType))
         {
@@ -163,12 +163,12 @@ class BlockTypeRightsService
     {
         $targetEntitiesPerBlockType = $this->getTargetEntitiesPerBlockType();
         
-        $blockTypesWithTargetEntities = array();
+        $blockTypesWithTargetEntities = [];
         
         $blockTypes = $this->homeRepository->findBlockTypes();
         foreach ($blockTypes as $blockType)
         {
-            $blockTypeWithTargetEntity = array();
+            $blockTypeWithTargetEntity = [];
             $blockTypeWithTargetEntity['block_type'] = $blockType;
             
             if (array_key_exists($blockType, $targetEntitiesPerBlockType))
@@ -193,7 +193,7 @@ class BlockTypeRightsService
      */
     protected function getTargetEntitiesPerBlockType()
     {
-        $targetEntitiesPerBlockType = array();
+        $targetEntitiesPerBlockType = [];
         
         $blockTypeTargetEntities = $this->rightsRepository->findBlockTypeTargetEntities();
         

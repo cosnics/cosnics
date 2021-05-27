@@ -111,7 +111,7 @@ abstract class ChamiloTestCase extends TestCase
      */
     protected function get_constants($object, $prefix)
     {
-        $returned_constants = array();
+        $returned_constants = [];
         
         $reflection_class = new ReflectionClass($object);
         $constants = $reflection_class->getConstants();

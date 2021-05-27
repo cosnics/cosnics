@@ -20,7 +20,7 @@ class Actions implements ActionsInterface
      */
     public function getPrimary(Application $application)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -29,6 +29,6 @@ class Actions implements ActionsInterface
      */
     public function getAdditional(Application $application)
     {
-        return array();
+        return [];
     }
 }

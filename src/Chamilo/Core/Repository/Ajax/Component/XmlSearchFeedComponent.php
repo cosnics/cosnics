@@ -19,7 +19,7 @@ class XmlSearchFeedComponent extends Manager
 
     function run()
     {
-        $conditions = array();
+        $conditions = [];
 
         $query_condition = $this->getSearchQueryConditionGenerator()->getSearchConditions(
             Request::post('queryString'),

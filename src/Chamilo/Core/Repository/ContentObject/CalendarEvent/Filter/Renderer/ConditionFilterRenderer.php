@@ -26,7 +26,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         $filter_data = $this->get_filter_data();
         $general_condition = parent::render();
         
-        $conditions = array();
+        $conditions = [];
         
         if ($general_condition instanceof Condition)
         {
@@ -36,7 +36,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         // Start date
         if ($filter_data->has_date(FilterData::FILTER_START_DATE))
         {
-            $creation_date_conditions = array();
+            $creation_date_conditions = [];
             $creation_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_START_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL,
@@ -68,7 +68,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         // End date
         if ($filter_data->has_date(FilterData::FILTER_END_DATE))
         {
-            $modification_date_conditions = array();
+            $modification_date_conditions = [];
             $modification_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_END_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL,

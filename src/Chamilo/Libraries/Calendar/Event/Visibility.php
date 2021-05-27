@@ -62,7 +62,7 @@ abstract class Visibility extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_SOURCE;

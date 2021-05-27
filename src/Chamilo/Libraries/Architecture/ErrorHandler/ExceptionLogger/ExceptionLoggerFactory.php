@@ -72,9 +72,9 @@ class ExceptionLoggerFactory
      * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      * @throws \Exception
      */
-    protected function createExceptionLoggerByConfiguration($errorHandlingConfiguration = array())
+    protected function createExceptionLoggerByConfiguration($errorHandlingConfiguration = [])
     {
-        $exceptionLoggers = array();
+        $exceptionLoggers = [];
 
         foreach ($errorHandlingConfiguration['exception_logger'] as $exceptionLoggerAlias => $exceptionLoggerClass)
         {

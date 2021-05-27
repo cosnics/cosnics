@@ -108,7 +108,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_subscribed_platformgroup_ids($course_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id));
@@ -162,6 +162,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         $breadcrumbTrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER)),
-                Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', array(), $this->context())));
+                Translation::getInstance()->getTranslation('UnsubscribeBrowserComponent', [], $this->context())));
     }
 }

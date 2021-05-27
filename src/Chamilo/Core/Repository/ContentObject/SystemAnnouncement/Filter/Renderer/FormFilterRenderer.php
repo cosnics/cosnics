@@ -37,7 +37,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
         

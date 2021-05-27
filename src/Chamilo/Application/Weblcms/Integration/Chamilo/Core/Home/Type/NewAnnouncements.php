@@ -35,7 +35,7 @@ class NewAnnouncements extends NewBlock implements ConfigurableInterface
                     Application::PARAM_CONTEXT => \Chamilo\Application\Weblcms\Manager::package(), 
                     \Chamilo\Application\Weblcms\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_ANNOUNCEMENT));
             
-            $html = array();
+            $html = [];
             
             $html[] = '<div class="panel-body portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') .
                  '">';

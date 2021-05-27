@@ -116,7 +116,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     )
     {
         $registrations = Configuration::getInstance()->getIntegrationRegistrations('Chamilo\Core\Repository');
-        $publication_attributes = array();
+        $publication_attributes = [];
 
         foreach ($registrations as $registration)
         {
@@ -140,7 +140,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $order_column = $order_property[0]->get_property();
             $order_direction = $order_property[0]->get_direction();
-            $ordering_values = array();
+            $ordering_values = [];
 
             foreach ($publication_attributes as $key => $publication_attribute)
             {
@@ -159,7 +159,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     break;
             }
 
-            $ordered_publication_attributes = array();
+            $ordered_publication_attributes = [];
 
             foreach ($ordering_values as $key => $value)
             {

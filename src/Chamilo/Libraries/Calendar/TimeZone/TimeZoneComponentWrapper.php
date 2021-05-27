@@ -55,7 +55,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
      */
     private function implodeDate($dateArray)
     {
-        $date = array();
+        $date = [];
 
         $date[] = str_pad($dateArray['year'], 4, '0', STR_PAD_LEFT);
         $date[] = str_pad($dateArray['month'], 2, '0', STR_PAD_LEFT);

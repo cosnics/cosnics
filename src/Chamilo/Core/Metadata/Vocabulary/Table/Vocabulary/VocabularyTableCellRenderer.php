@@ -71,7 +71,7 @@ class VocabularyTableCellRenderer extends DataClassTableCellRenderer implements 
             case VocabularyTableColumnModel::COLUMN_DEFAULT :
                 $translationVariable = $result->isDefault() ? 'Default' : 'DefaultNa';
 
-                $extraClasses = $result->isDefault() ? array() : array('text-muted');
+                $extraClasses = $result->isDefault() ? [] : array('text-muted');
 
                 $glyph = new FontAwesomeGlyph(
                     'check-circle', $extraClasses,

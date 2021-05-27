@@ -114,7 +114,7 @@ class PublicationForm extends FormValidator
     public function build_rights_form()
     {
         // Add the rights options
-        $group = array();
+        $group = [];
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
@@ -178,7 +178,7 @@ class PublicationForm extends FormValidator
      */
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
 
         $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
@@ -195,7 +195,7 @@ class PublicationForm extends FormValidator
      */
     public function setPublicationDefaults(User $user, Publication $publication, array $targetUsersAndGroups)
     {
-        $defaults = array();
+        $defaults = [];
 
         if ($publication->get_from_date() != 0)
         {

@@ -46,7 +46,7 @@ class ImporterComponent extends Manager
                             'TYPE' => Translation::get(
                                 'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize())))));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $contentObjectImportService->renderForm();
@@ -58,7 +58,7 @@ class ImporterComponent extends Manager
         return null;
     }
 
-    public function get_additional_parameters($additionalParameters = array())
+    public function get_additional_parameters($additionalParameters = [])
     {
         return parent::get_additional_parameters([self::PARAM_IMPORT_TYPE]);
     }

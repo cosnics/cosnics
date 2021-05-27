@@ -72,7 +72,7 @@ abstract class ContentObjectRenderer implements TableSupport
 
     public function get_content_object_actions(ContentObject $content_object)
     {
-        $actions = array();
+        $actions = [];
 
         $rightsService = RightsService::getInstance();
 
@@ -297,7 +297,7 @@ abstract class ContentObjectRenderer implements TableSupport
         return $this->get_repository_browser()->get_type_filter_url($template_registration_id);
     }
 
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->get_repository_browser()->get_url($parameters, $filter, $encode_entities);
     }

@@ -41,7 +41,7 @@ class ServiceFactory
     public function __construct()
     {
         $this->initializeContainer();
-        $this->services = array();
+        $this->services = [];
     }
 
     /**

@@ -117,7 +117,7 @@ abstract class Manager extends Application implements NoContextComponent
         $language_path = Path::getInstance()->namespaceToFullPath('Chamilo\Configuration') . 'Resources/I18n/';
         $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
 
-        $language_list = array();
+        $language_list = [];
         foreach ($language_files as $language_file)
         {
             $file_info = pathinfo($language_file);
@@ -221,7 +221,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $wizardHeaderRenderer = new WizardHeaderRenderer($this->getWizardHeader());
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="container-install-wizard">';
         $html[] = $wizardHeaderRenderer->render();
@@ -236,7 +236,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -257,7 +257,7 @@ abstract class Manager extends Application implements NoContextComponent
         $page->setContainerMode('container');
         $page->setTitle(Translation::get('ChamiloInstallationTitle'));
 
-        $html = array();
+        $html = [];
 
         $html[] = $page->getHeader()->toHtml();
 

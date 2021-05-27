@@ -28,7 +28,7 @@ class BrowserComponent extends Manager
 
     public function get_tool_actions()
     {
-        $tool_actions = array();
+        $tool_actions = [];
 
         if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {

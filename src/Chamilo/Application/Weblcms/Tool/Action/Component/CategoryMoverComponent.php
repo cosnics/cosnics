@@ -39,7 +39,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
             if (!$form)
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $this->display_error_message('CategoryFormCouldNotBeBuild');
@@ -150,7 +150,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
                     );
                 }
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -163,7 +163,7 @@ class CategoryMoverComponent extends Manager implements DelegateComponent
 
     public function build_category_tree($parent_id, $exclude, $is_course_admin)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

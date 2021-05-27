@@ -39,7 +39,7 @@ class Footer extends BaseFooter
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->getHeader();
 
@@ -77,7 +77,7 @@ class Footer extends BaseFooter
 
         $stringUtilities = StringUtilities::getInstance();
 
-        $links = array();
+        $links = [];
 
         $links[] = '<a href="' . $institutionUrl . '" target="about:blank">' . $institution . '</a>';
 

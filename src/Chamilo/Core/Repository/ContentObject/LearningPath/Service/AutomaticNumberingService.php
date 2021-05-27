@@ -18,7 +18,7 @@ class AutomaticNumberingService
      *
      * @var string[][]
      */
-    protected $automaticNumberingCache = array();
+    protected $automaticNumberingCache = [];
 
     /**
      * Returns the automatic numbering for the given TreeNode

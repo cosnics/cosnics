@@ -53,7 +53,7 @@ class ContentObjectResourceParser
     public function getContentObjectParametersFromDomElement(DOMElement $DOMElement, DOMXPath $domXPath)
     {
         $parameters_list = $domXPath->query('@*', $DOMElement);
-        $parameters = array();
+        $parameters = [];
 
         foreach ($parameters_list as $parameter)
         {

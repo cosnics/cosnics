@@ -75,7 +75,7 @@ class NodeActionGeneratorFactory
      */
     protected function getContentObjectTypeNodeActionGenerators()
     {
-        $nodeActionGenerators = array();
+        $nodeActionGenerators = [];
 
         $integrationPackages = $this->configuration->getIntegrationRegistrations(LearningPath::package());
 

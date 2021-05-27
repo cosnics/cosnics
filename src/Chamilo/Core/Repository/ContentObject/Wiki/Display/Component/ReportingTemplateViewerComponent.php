@@ -59,7 +59,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
             );
             $wiki_page = $complex_wiki_page->get_ref_object();
 
-            $html = array();
+            $html = [];
 
             $html[] = parent::render_header($complex_wiki_page);
 

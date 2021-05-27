@@ -133,7 +133,7 @@ class PropertyProviderService
      */
     public function getProviderLinkForElement(DataClassEntity $entity, Element $element)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_ENTITY_TYPE),
             new StaticConditionVariable($entity->getDataClassName())

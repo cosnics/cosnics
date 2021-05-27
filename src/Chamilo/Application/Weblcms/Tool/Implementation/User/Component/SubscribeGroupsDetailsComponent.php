@@ -28,7 +28,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
      */
     protected function renderTabContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderGroupDetails();
         $html[] = $this->renderGroupUsersTable();
@@ -43,7 +43,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     {
         $group = $this->getCurrentGroup();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';
@@ -71,7 +71,7 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
     {
         $table = new GroupUsersTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = '<div class="tab-content-header">';
         $html[] = '<h5>' . $this->getTranslation('Users') . '</h5>';
         $html[] = '</div>';
@@ -126,13 +126,13 @@ class SubscribeGroupsDetailsComponent extends SubscribeGroupsTabComponent
         $group = $this->getCurrentGroup();
         $subscribedUserIds = $group->get_users();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_ID),
             $subscribedUserIds);
 
-        $conditionProperties = array();
+        $conditionProperties = [];
         $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
         $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
         $conditionProperties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);

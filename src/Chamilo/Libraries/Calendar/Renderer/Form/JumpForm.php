@@ -78,7 +78,7 @@ class JumpForm
 
             $isActive = date('j', $this->getCurrentTime()) == $day;
             $dateButton->addSubButton(
-                new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+                new SubButton($day, null, $dayUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
             );
         }
 
@@ -95,7 +95,7 @@ class JumpForm
 
             $isActive = date('n', $this->getCurrentTime()) == $month;
             $monthButton->addSubButton(
-                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+                new SubButton($monthLabel, null, $monthUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
             );
         }
 
@@ -111,7 +111,7 @@ class JumpForm
 
             $isActive = date('Y', $this->getCurrentTime()) == $year;
             $yearButton->addSubButton(
-                new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, array(), null, $isActive)
+                new SubButton($year, null, $yearUrl, SubButton::DISPLAY_LABEL, false, [], null, $isActive)
             );
         }
 
@@ -138,7 +138,7 @@ class JumpForm
     public function getDays()
     {
         $numberDays = date('t', $this->getCurrentTime());
-        $days = array();
+        $days = [];
 
         for ($i = 1; $i <= $numberDays; $i ++)
         {
@@ -157,20 +157,20 @@ class JumpForm
         $translator = Translation::getInstance();
 
         $monthNames = array(
-            $translator->getTranslation("JanuaryLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("FebruaryLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("MarchLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("AprilLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("MayLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("JuneLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("JulyLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("AugustLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("SeptemberLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("OctoberLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("NovemberLong", array(), Utilities::COMMON_LIBRARIES),
-            $translator->getTranslation("DecemberLong", array(), Utilities::COMMON_LIBRARIES)
+            $translator->getTranslation("JanuaryLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("FebruaryLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("MarchLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("AprilLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("MayLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("JuneLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("JulyLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("AugustLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("SeptemberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("OctoberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("NovemberLong", [], Utilities::COMMON_LIBRARIES),
+            $translator->getTranslation("DecemberLong", [], Utilities::COMMON_LIBRARIES)
         );
-        $months = array();
+        $months = [];
 
         foreach ($monthNames as $key => $month)
         {
@@ -196,7 +196,7 @@ class JumpForm
     public function getYears()
     {
         $year = date('Y', $this->getCurrentTime());
-        $years = array();
+        $years = [];
 
         for ($i = $year - 5; $i <= $year + 5; $i ++)
         {

@@ -15,7 +15,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
         
         $lo = $this->get_content_object();
         $options = $lo->get_options();
@@ -29,7 +29,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '</thead>';
         $html[] = '<tbody>';
         
-        $select_options = array();
+        $select_options = [];
         foreach ($options as $option)
         {
             $select_options[] = '<option>' . $option->get_value() . '</option>';

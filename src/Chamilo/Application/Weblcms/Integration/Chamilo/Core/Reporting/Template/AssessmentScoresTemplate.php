@@ -37,7 +37,7 @@ class AssessmentScoresTemplate extends ReportingTemplate
         $this->add_breadcrumbs();
 
         // Calculate number of assessments
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID

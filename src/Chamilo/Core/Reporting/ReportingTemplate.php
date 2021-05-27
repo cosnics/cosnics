@@ -18,7 +18,7 @@ abstract class ReportingTemplate
     use ClassContext;
     use DependencyInjectionContainerTrait;
 
-    private $blocks = array();
+    private $blocks = [];
 
     private $parent;
 
@@ -156,7 +156,7 @@ abstract class ReportingTemplate
         $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
     }
 
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->get_parent()->get_url($parameters, $filter, $encode_entities);
     }

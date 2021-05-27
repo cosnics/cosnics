@@ -34,7 +34,7 @@ class BlockListComponent extends Manager
         
         foreach ($platformBlocks as $context => &$contextBlocksInfo)
         {
-            $validComponents = array();
+            $validComponents = [];
             
             $components = $contextBlocksInfo['components'];
             foreach ($components as $component)

@@ -29,7 +29,7 @@ class AdminForm extends FormValidator
 
     public function build_form()
     {
-        $element_template = array();
+        $element_template = [];
         $element_template[] = '<div class="form-row">';
         $element_template[] =
             '<div class="element"><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}</div>';

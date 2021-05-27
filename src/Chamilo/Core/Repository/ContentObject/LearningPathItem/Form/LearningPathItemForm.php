@@ -35,7 +35,7 @@ class LearningPathItemForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         if ($object)

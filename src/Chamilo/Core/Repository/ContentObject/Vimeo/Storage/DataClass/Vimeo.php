@@ -41,7 +41,7 @@ class Vimeo extends ContentObject implements Versionable, Includeable
 
     public static function is_type_available()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
             new StaticConditionVariable(Manager::get_namespace('Vimeo'))

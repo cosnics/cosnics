@@ -20,5 +20,5 @@ interface NotificationHandlerInterface
      * @param Feedback $feedback
      * @param Notification[] $notifications
      */
-    public function handleNotifications(Feedback $feedback, array $notifications = array());
+    public function handleNotifications(Feedback $feedback, array $notifications = []);
 }

@@ -30,7 +30,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
 
         $phpVersion = phpversion();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -77,7 +77,7 @@ class IntroductionComponent extends Manager implements NoAuthenticationSupport
     {
         $phpVersion = phpversion();
 
-        $html = array();
+        $html = [];
 
         if ($phpVersion >= 5.4)
         {

@@ -27,7 +27,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $table = new FavouriteTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         

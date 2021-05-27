@@ -29,7 +29,7 @@ class CourseCategoryEntityHelper
 
     public static function get_table_columns()
     {
-        $columns = array();
+        $columns = [];
         $columns[] = new DataClassPropertyTableColumn(CourseCategory::class, CourseCategory::PROPERTY_NAME);
         $columns[] = new StaticTableColumn(self::PROPERTY_PATH);
         $columns[] = new DataClassPropertyTableColumn(CourseCategory::class, CourseCategory::PROPERTY_CODE);
@@ -146,7 +146,7 @@ class CourseCategoryEntityHelper
 
     public static function expand($entity_id)
     {
-        $entities = array();
+        $entities = [];
 
         $course_category = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             CourseCategory::class,
@@ -190,7 +190,7 @@ class CourseCategoryEntityHelper
         }
         else
         {
-            return array();
+            return [];
         }
     }
 

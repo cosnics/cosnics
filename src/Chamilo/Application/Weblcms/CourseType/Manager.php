@@ -244,7 +244,7 @@ abstract class Manager extends Application
      * @param $parameters String[] - Optional parameters
      * @return String
      */
-    private function get_course_type_url($action, $course_type_id, $parameters = array())
+    private function get_course_type_url($action, $course_type_id, $parameters = [])
     {
         $parameters[self::PARAM_ACTION] = $action;
         $parameters[self::PARAM_COURSE_TYPE_ID] = $course_type_id;

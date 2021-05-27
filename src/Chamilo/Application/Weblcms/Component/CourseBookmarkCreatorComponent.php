@@ -22,7 +22,7 @@ class CourseBookmarkCreatorComponent extends Manager
 
     private $parents;
 
-    private $items = array();
+    private $items = [];
 
     /**
      * Runs this component and displays its output.
@@ -45,7 +45,7 @@ class CourseBookmarkCreatorComponent extends Manager
         $content_object->set_application(self::package());
 
         // set url
-        $params_bookmark = array();
+        $params_bookmark = [];
         $params_bookmark[Application::PARAM_CONTEXT] = self::context();
         $params_bookmark[Application::PARAM_ACTION] = self::ACTION_VIEW_COURSE;
         $params_bookmark[self::PARAM_COURSE] = $course_id;
@@ -53,7 +53,7 @@ class CourseBookmarkCreatorComponent extends Manager
         $url_bookmark = $this->get_url($params_bookmark);
         $content_object->set_url($url_bookmark);
 
-        $params_form = array();
+        $params_form = [];
         $params_form[Application::PARAM_CONTEXT] = self::context();
         $params_form[self::PARAM_ACTION] = self::ACTION_CREATE_BOOKMARK;
         $params_form[self::PARAM_COURSE] = $course_id;
@@ -78,7 +78,7 @@ class CourseBookmarkCreatorComponent extends Manager
 
             $success = $bookmark->create();
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
 
@@ -106,7 +106,7 @@ class CourseBookmarkCreatorComponent extends Manager
             $content_object->set_application(self::package());
 
             // set url
-            $params_bookmark = array();
+            $params_bookmark = [];
             $params_bookmark[Application::PARAM_CONTEXT] = self::context();
             $params_bookmark[Application::PARAM_ACTION] = self::ACTION_VIEW_COURSE;
             $params_bookmark[self::PARAM_COURSE] = $course_id;
@@ -114,12 +114,12 @@ class CourseBookmarkCreatorComponent extends Manager
             $url_bookmark = $this->get_url($params_bookmark);
             $content_object->set_url($url_bookmark);
 
-            $params_form = array();
+            $params_form = [];
             $params_form[Application::PARAM_CONTEXT] = self::context();
             $params_form[self::PARAM_ACTION] = self::ACTION_CREATE_BOOKMARK;
             $params_form[self::PARAM_COURSE] = $course_id;
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

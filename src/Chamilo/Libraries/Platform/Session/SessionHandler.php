@@ -104,7 +104,7 @@ class SessionHandler implements SessionHandlerInterface
      */
     public function getCondition($sessionId)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 \Chamilo\Core\User\Storage\DataClass\Session::class,

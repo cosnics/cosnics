@@ -49,7 +49,7 @@ class SlideshowContentObjectRenderer extends ContentObjectRenderer
                 ConditionFilterRenderer::factory($filterData, $workspace),
                 1,
                 $slideshowIndex,
-                array()
+                []
             )->current();
 
             $contentObjectRenditionImplementation = ContentObjectRenditionImplementation::factory(

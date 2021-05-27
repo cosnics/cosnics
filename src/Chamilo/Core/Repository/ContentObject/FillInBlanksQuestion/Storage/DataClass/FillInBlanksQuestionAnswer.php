@@ -40,14 +40,14 @@ class FillInBlanksQuestionAnswer
      */
     public static function parse($text, $default_positive_score = FillInBlanksQuestion::DEFAULT_POSITIVE_SCORE)
     {
-        $result = array();
+        $result = [];
 
-        $questions = array();
+        $questions = [];
         preg_match_all(self::QUESTIONS_REGEX, $text, $questions);
 
         foreach ($questions[1] as $question_id => $question)
         {
-            $answers = array();
+            $answers = [];
             /*
              * The parts are parsed to give the following groups 0 => entire string 1 => value itself 2 => size given by
              * regex question (null otherwise) 3 => feedback 4 => score
@@ -96,7 +96,7 @@ class FillInBlanksQuestionAnswer
 
     public static function get_number_of_questions($text)
     {
-        $matches = array();
+        $matches = [];
         return preg_match_all(self::QUESTIONS_REGEX, $text, $matches);
     }
 
@@ -184,7 +184,7 @@ class FillInBlanksQuestionAnswer
      */
     public function get_regex_pattern()
     {
-        $regex_parts = array();
+        $regex_parts = [];
         preg_match(self::REGEX_REGEX, $this->get_value(), $regex_parts);
         $pattern = $regex_parts[2];
         return $pattern;
@@ -197,7 +197,7 @@ class FillInBlanksQuestionAnswer
      */
     private function regex_size()
     {
-        $regex_parts = array();
+        $regex_parts = [];
         preg_match(self::REGEX_REGEX, $this->get_value(), $regex_parts);
         return $regex_parts[1];
     }

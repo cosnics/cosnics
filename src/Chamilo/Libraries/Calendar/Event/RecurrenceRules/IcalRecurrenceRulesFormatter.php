@@ -17,7 +17,7 @@ class IcalRecurrenceRulesFormatter
      */
     public function format(RecurrenceRules $recurrenceRules)
     {
-        $iCalRules = array();
+        $iCalRules = [];
 
         switch ($recurrenceRules->getFrequency())
         {
@@ -95,7 +95,7 @@ class IcalRecurrenceRulesFormatter
      */
     private function getByDayParts($byDays)
     {
-        $parts = array();
+        $parts = [];
 
         foreach ($byDays as $byDay)
         {

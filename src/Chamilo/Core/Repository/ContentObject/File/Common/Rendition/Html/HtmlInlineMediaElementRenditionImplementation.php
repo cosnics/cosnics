@@ -22,7 +22,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
      */
     public function render($parameters)
     {
-        $html = array();
+        $html = [];
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getPluginPath(Utilities::COMMON_LIBRARIES, true) .
@@ -53,7 +53,7 @@ abstract class HtmlInlineMediaElementRenditionImplementation extends HtmlInlineM
      */
     public function getMediaElement($parameters)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="media-element-js-container">';
 

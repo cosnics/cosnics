@@ -41,7 +41,7 @@ class ImportTypeSelector
      * @param string[] $parameters
      * @param string[] $allowedContentObjectTypes
      */
-    public function __construct($parameters, $allowedContentObjectTypes = array())
+    public function __construct($parameters, $allowedContentObjectTypes = [])
     {
         $this->parameters = $parameters;
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
@@ -70,7 +70,7 @@ class ImportTypeSelector
      */
     public function getImportTypes()
     {
-        $importTypes = array();
+        $importTypes = [];
 
         foreach ($this->getAllowedContentObjectTypes() as $type)
         {
@@ -164,7 +164,7 @@ class ImportTypeSelector
      */
     public function getTypeSelectorSubButtons()
     {
-        $subButtons = array();
+        $subButtons = [];
 
         foreach ($this->getImportTypes() as $type => $properties)
         {
@@ -184,7 +184,7 @@ class ImportTypeSelector
      */
     public function renderTypeSelector()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group">';
 

@@ -58,7 +58,7 @@ abstract class DoctrineORMFixturesBasedTestCase extends FixturesBasedTestCase
         $mappingDriver = $packagesMappingDriverFactory->createMappingDriverForPackages($packageConfigurations);
         $allClassNames = $mappingDriver->getAllClassNames();
 
-        $this->classMetadata = array();
+        $this->classMetadata = [];
 
         foreach ($allClassNames as $fullyQualifiedClassName)
         {

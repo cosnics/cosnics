@@ -12,7 +12,7 @@ class LinkTableColumnModel extends DataClassTableColumnModel implements TableCol
 
     public function initialize_columns()
     {
-        $columns = array();
+        $columns = [];
         
         if ($this->get_table()->get_type() == LinkTable::TYPE_PUBLICATIONS)
         {

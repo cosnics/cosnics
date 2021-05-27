@@ -18,6 +18,6 @@ class LogoutItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('sign-out-alt', array(), null, 'fas');
+        return new FontAwesomeGlyph('sign-out-alt', [], null, 'fas');
     }
 }

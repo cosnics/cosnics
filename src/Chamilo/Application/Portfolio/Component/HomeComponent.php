@@ -127,7 +127,7 @@ class HomeComponent extends Manager
      */
     public function get_locations($nodes)
     {
-        $locations = array();
+        $locations = [];
 
         foreach ($nodes as $node)
         {

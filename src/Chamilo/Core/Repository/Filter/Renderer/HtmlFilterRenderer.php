@@ -28,7 +28,7 @@ class HtmlFilterRenderer extends FilterRenderer
 
     public function render()
     {
-        $html = array();
+        $html = [];
 
         if ($this->get_filter_data()->is_set())
         {
@@ -46,7 +46,7 @@ class HtmlFilterRenderer extends FilterRenderer
      */
     public function add_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -64,7 +64,7 @@ class HtmlFilterRenderer extends FilterRenderer
      */
     public function add_header()
     {
-        $html = array();
+        $html = [];
 
         $workspaceId = $this->get_workspace() instanceof PersonalWorkspace ? null : $this->get_workspace()->getId();
 
@@ -94,7 +94,7 @@ class HtmlFilterRenderer extends FilterRenderer
     {
         $filter_data = $this->get_filter_data();
 
-        $html = array();
+        $html = [];
 
         // Text
         if ($filter_data->has_filter_property(FilterData::FILTER_TEXT))
@@ -325,7 +325,7 @@ class HtmlFilterRenderer extends FilterRenderer
      */
     public function renderParameter($parameterIdentifier, $parameterText)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="list-group-item search-parameter" id="' . $parameterIdentifier . '">';
         $glyph = new FontAwesomeGlyph('times', array('pull-right', 'text-muted', 'fas-ci-va'));

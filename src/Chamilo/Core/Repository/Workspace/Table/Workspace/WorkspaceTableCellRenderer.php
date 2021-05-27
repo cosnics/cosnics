@@ -49,7 +49,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('RemoveFavourite', null, Manager::context()),
-                    new FontAwesomeGlyph('times', array(), null, 'fas'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('times', [], null, 'fas'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
                         \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_DELETE,
@@ -65,7 +65,7 @@ class WorkspaceTableCellRenderer extends DataClassTableCellRenderer implements T
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Favourite', null, Manager::context()),
-                    new FontAwesomeGlyph('star', array(), null, 'fas'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('star', [], null, 'fas'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_FAVOURITE,
                         \Chamilo\Core\Repository\Workspace\Favourite\Manager::PARAM_ACTION => \Chamilo\Core\Repository\Workspace\Favourite\Manager::ACTION_CREATE,

@@ -26,7 +26,7 @@ abstract class HtmlInlineMediaRenditionImplementation extends HtmlInlineRenditio
      */
     public function getErrorMessage($show = true)
     {
-        $html = array();
+        $html = [];
         
         $titleVariable = StringUtilities::getInstance()->createString($this->getMediaElementType())->upperCamelize() .
              'PlaybackNotSupportedTitle';

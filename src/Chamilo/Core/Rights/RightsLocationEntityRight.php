@@ -18,7 +18,7 @@ abstract class RightsLocationEntityRight extends DataClass
     const PROPERTY_LOCATION_ID = 'location_id';
     const PROPERTY_RIGHT_ID = 'right_id';
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

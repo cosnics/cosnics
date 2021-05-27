@@ -21,7 +21,7 @@ class Manager implements ActionsSupportInterface
 
     public static function get_actions()
     {
-        $links = array();
+        $links = [];
 
         $redirect = new Redirect(
             array(

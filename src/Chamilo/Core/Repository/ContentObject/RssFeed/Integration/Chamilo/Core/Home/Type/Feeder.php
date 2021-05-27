@@ -48,7 +48,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $content_object = $this->getObject();
 
-        $html = array();
+        $html = [];
 
         $target = $this->getLinkTarget();
         $target = $target ? 'target="' . $target . '"' : 'target="_blank"';
@@ -61,7 +61,7 @@ class Feeder extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Home\Bloc
 
         $glyph = new NamespaceIdentGlyph(
             'Chamilo\Core\Repository\ContentObject\RssFeed', true, false, false,
-            IdentGlyph::SIZE_MINI, array()
+            IdentGlyph::SIZE_MINI, []
         );
 
         $html[] = $glyph->render() . ' ' . '<a href="{{ entry.link }}" ' . $target . '>{{ entry.title }}</a>';

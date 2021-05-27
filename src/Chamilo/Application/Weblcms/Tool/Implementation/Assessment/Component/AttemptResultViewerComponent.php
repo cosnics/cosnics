@@ -84,7 +84,7 @@ class AttemptResultViewerComponent extends Manager
             $this->redirect(
                 Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
                 true,
-                array(),
+                [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
@@ -143,7 +143,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function get_registered_question_ids()
     {
-        $question_ids = array();
+        $question_ids = [];
 
         $question_attempts = $this->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)
@@ -176,7 +176,7 @@ class AttemptResultViewerComponent extends Manager
      */
     protected function retrieve_question_attempts()
     {
-        $question_attempts = array();
+        $question_attempts = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
@@ -199,7 +199,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         if (! Request::get(self::PARAM_SHOW_FULL))
         {
@@ -246,7 +246,7 @@ class AttemptResultViewerComponent extends Manager
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        $results = array();
+        $results = [];
 
         foreach($question_attempts as $question_attempt)
         {
@@ -269,7 +269,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function change_answer_data($question_cid, $score, $feedback)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
@@ -334,7 +334,7 @@ class AttemptResultViewerComponent extends Manager
      */
     public function get_assessment_parameters()
     {
-        return array();
+        return [];
     }
 
     /**

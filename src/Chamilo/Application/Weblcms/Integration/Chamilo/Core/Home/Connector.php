@@ -35,7 +35,7 @@ class Connector
      */
     public function get_course_types()
     {
-        $available_course_types = array();
+        $available_course_types = [];
         
         $available_course_types[json_encode(array(0))] = Translation::get('NoCourseType');
         
@@ -86,7 +86,7 @@ class Connector
      */
     private function get_user_course_categories_for_course_types_as_array($course_type_id, $course_type_title)
     {
-        $user_course_categories = array();
+        $user_course_categories = [];
         
         $categories = self::get_user_course_categories_for_course_type($course_type_id);
         foreach($categories as $user_course_category)
@@ -107,7 +107,7 @@ class Connector
      */
     private function get_user_course_categories_for_course_type($course_type_id)
     {
-        $subconditions = array();
+        $subconditions = [];
         
         $subconditions[] = new EqualityCondition(
             new PropertyConditionVariable(

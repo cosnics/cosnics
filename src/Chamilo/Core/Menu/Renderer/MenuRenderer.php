@@ -85,10 +85,10 @@ class MenuRenderer
      */
     public function render(string $containerMode = 'container-fluid', User $user = null)
     {
-        $html = array();
+        $html = [];
 
         $numberOfItems = 0;
-        $itemRenditions = array();
+        $itemRenditions = [];
 
         if ($user instanceof User)
         {
@@ -270,7 +270,7 @@ class MenuRenderer
      */
     public function renderFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</ul>';
         $html[] = '</div>';
@@ -288,7 +288,7 @@ class MenuRenderer
      */
     public function renderHeader(string $containerMode, int $numberOfItems = 0)
     {
-        $html = array();
+        $html = [];
 
         $class = 'navbar navbar-static-top navbar-cosnics navbar-inverse';
 

@@ -49,7 +49,7 @@ class ImporterComponent extends Manager
             new Breadcrumb($this->get_url(array(DynamicTabsRenderer::PARAM_SELECTED_TAB => $this->tab)), $tab_name)
         );
 
-        $html = array();
+        $html = [];
         $html[] = $this->render_header();
         $html[] = $this->get_tabs();
         $html[] = ResourceManager::getInstance()->getResourceHtml(
@@ -78,7 +78,7 @@ class ImporterComponent extends Manager
 
         $packages = PlatformPackageBundles::getInstance()->get_type_packages();
 
-        $package_names = array();
+        $package_names = [];
 
         foreach ($packages[$this->tab] as $package)
         {
@@ -120,7 +120,7 @@ class ImporterComponent extends Manager
 
                 $glyph = new NamespaceIdentGlyph(
                     $package, true, false, false, IdentGlyph::SIZE_SMALL,
-                    array()
+                    []
                 );
 
                 $index ++;

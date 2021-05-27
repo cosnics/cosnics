@@ -109,7 +109,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                     $externalParameters, [Application::PARAM_ACTION, \Chamilo\Application\Weblcms\Manager::PARAM_TOOL]
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
 
@@ -147,7 +147,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
         if (!isset($this->calendarRendererProvider))
         {
             $this->calendarRendererProvider = new CalendarRendererProvider(
-                $this->getPublicationService(), $this->get_course(), $this->get_tool_id(), $user, $user, array()
+                $this->getPublicationService(), $this->get_course(), $this->get_tool_id(), $user, $user, []
             );
         }
 

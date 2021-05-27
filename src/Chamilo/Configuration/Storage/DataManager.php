@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_setting_from_variable_name($variable, $context = 'Chamilo\Core\Admin')
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT),
             new StaticConditionVariable($context));
@@ -67,7 +67,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function get_integrating_contexts($integration, $root = null)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new PatternMatchCondition(
             new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT),
             '*\\\Integration\\' . $integration);

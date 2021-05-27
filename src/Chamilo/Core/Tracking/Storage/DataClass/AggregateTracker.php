@@ -20,11 +20,11 @@ abstract class AggregateTracker extends Tracker
 
     const PROPERTY_VALUE = 'value';
 
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $this->validate_parameters($parameters);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(static::class, self::PROPERTY_TYPE),
             new StaticConditionVariable($this->get_type())
@@ -60,7 +60,7 @@ abstract class AggregateTracker extends Tracker
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_TYPE, self::PROPERTY_NAME, self::PROPERTY_VALUE)

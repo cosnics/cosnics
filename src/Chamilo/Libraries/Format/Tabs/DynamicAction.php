@@ -64,7 +64,7 @@ class DynamicAction
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         if ($this->needs_confirmation())
         {

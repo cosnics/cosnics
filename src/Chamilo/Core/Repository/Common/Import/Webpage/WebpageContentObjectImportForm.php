@@ -45,7 +45,7 @@ class WebpageContentObjectImportForm extends ContentObjectImportForm
         );
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         parent::setDefaults(
             array(

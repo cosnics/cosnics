@@ -15,7 +15,7 @@ class Html5Format
      */
     static public function codecs_compatible()
     {
-        $codecs_compatible = array();
+        $codecs_compatible = [];
 
         $codecs_compatible['VP8'] = array('Vorbis');
         $codecs_compatible['AVC'] = array('AAC');
@@ -33,7 +33,7 @@ class Html5Format
      */
     static public function get_audio_codecs()
     {
-        $codecs = array();
+        $codecs = [];
 
         $codecs[] = 'Vorbis';
         $codecs[] = 'AAC';
@@ -48,7 +48,7 @@ class Html5Format
      */
     public static function get_audio_extensions()
     {
-        $extensions = array();
+        $extensions = [];
 
         $extensions[] = 'MP3';
         $extensions[] = 'AAC';
@@ -63,7 +63,7 @@ class Html5Format
      */
     public static function get_audio_mimetypes()
     {
-        $mimetypes = array();
+        $mimetypes = [];
 
         $mimetypes[] = 'audio/mp3';
         $mimetypes[] = 'audio/m4a';
@@ -96,7 +96,7 @@ class Html5Format
      */
     static public function get_video_codecs()
     {
-        $codecs = array();
+        $codecs = [];
 
         $codecs[] = 'Theora';
         $codecs[] = 'AVC';
@@ -111,7 +111,7 @@ class Html5Format
      */
     public static function get_video_extensions()
     {
-        $extensions = array();
+        $extensions = [];
 
         $extensions[] = 'OGV';
         $extensions[] = 'WEBM';
@@ -126,7 +126,7 @@ class Html5Format
      */
     public static function get_video_mimetypes()
     {
-        $mimetypes = array();
+        $mimetypes = [];
 
         $mimetypes[] = 'video/webm';
         $mimetypes[] = 'video/ogg';

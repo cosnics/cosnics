@@ -191,7 +191,7 @@ abstract class Installer extends Action
      */
     public static function get_additional_packages()
     {
-        return array();
+        return [];
     }
 
     public function get_form_values()
@@ -235,7 +235,7 @@ abstract class Installer extends Action
         $doc->load($file);
 
         $setting_elements = $doc->getElementsByTagname('setting');
-        $settings = array();
+        $settings = [];
 
         foreach ($setting_elements as $setting_element)
         {
@@ -260,8 +260,8 @@ abstract class Installer extends Action
     public static function parse_xml_file($file)
     {
         $name = '';
-        $properties = array();
-        $indexes = array();
+        $properties = [];
+        $indexes = [];
 
         $doc = new DOMDocument();
         $doc->load($file);
@@ -271,7 +271,7 @@ abstract class Installer extends Action
         $attributes = array('type', 'length', 'unsigned', 'notnull', 'default', 'autoincrement', 'fixed');
         foreach ($xml_properties as $index => $property)
         {
-            $property_info = array();
+            $property_info = [];
             foreach ($attributes as $index => $attribute)
             {
                 if ($property->hasAttribute($attribute))
@@ -284,7 +284,7 @@ abstract class Installer extends Action
         $xml_indexes = $doc->getElementsByTagname('index');
         foreach ($xml_indexes as $key => $index)
         {
-            $index_info = array();
+            $index_info = [];
             $index_info['type'] = $index->getAttribute('type');
             $index_properties = $index->getElementsByTagname('indexproperty');
             foreach ($index_properties as $subkey => $index_property)
@@ -295,7 +295,7 @@ abstract class Installer extends Action
             }
             $indexes[$index->getAttribute('name')] = $index_info;
         }
-        $result = array();
+        $result = [];
         $result['name'] = $name;
         $result['properties'] = $properties;
         $result['indexes'] = $indexes;

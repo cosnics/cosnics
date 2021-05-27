@@ -12,7 +12,7 @@ class HtmlFullRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_content_object();
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="panel panel-default panel-rss-feed">';
         

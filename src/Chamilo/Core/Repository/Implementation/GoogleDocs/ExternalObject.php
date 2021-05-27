@@ -15,7 +15,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     const PROPERTY_ICON_LINK = 'icon_link';
     const PROPERTY_EXPORT_LINKS = 'export_links';
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_VIEWED, self::PROPERTY_CONTENT, self::PROPERTY_MODIFIER_ID));
@@ -86,7 +86,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return array_keys($this->get_export_links());
     }
 
-    public function set_export_links($export_links = array())
+    public function set_export_links($export_links = [])
     {
         $this->set_default_property(self::PROPERTY_EXPORT_LINKS, $export_links);
     }

@@ -44,7 +44,7 @@ abstract class PackagesContentFinder
      * @param string[] $packages
      * @param string $cacheFile
      */
-    public function __construct(PathBuilder $pathBuilder, array $packages = array(), $cacheFile = null)
+    public function __construct(PathBuilder $pathBuilder, array $packages = [], $cacheFile = null)
     {
         $this->packages = $packages;
         $this->cacheFile = $cacheFile;
@@ -72,7 +72,7 @@ abstract class PackagesContentFinder
         }
         else
         {
-            $content = array();
+            $content = [];
 
             foreach ($this->packages as $package)
             {

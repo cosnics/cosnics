@@ -48,7 +48,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
         $toolName = ClassnameUtilities::getInstance()->getClassNameFromNamespace(LearningPath::class);
 
-        $params = array();
+        $params = [];
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $course_id;
@@ -58,7 +58,7 @@ class CourseUserLearningPathInformationBlock extends ToolBlock
 
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL

@@ -39,7 +39,7 @@ class Activity extends Tracker
      *
      * @return bool
      */
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $this->validate_parameters($parameters);
 
@@ -66,7 +66,7 @@ class Activity extends Tracker
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -198,7 +198,7 @@ class Activity extends Tracker
                 break;
         }
 
-        $glyph = new FontAwesomeGlyph($glyphName, array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph($glyphName, [], null, 'fas');
 
         return $glyph->render();
     }
@@ -248,7 +248,7 @@ class Activity extends Tracker
         return Translation::get($activity);
     }
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_type($parameters[self::PROPERTY_TYPE]);
         $this->set_user_id((int) $parameters[self::PROPERTY_USER_ID]);

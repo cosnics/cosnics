@@ -38,7 +38,7 @@ class ListRenderer extends FullRenderer
     {
         $events = parent::getEvents($startTime, $endTime);
 
-        $structuredEvents = array();
+        $structuredEvents = [];
 
         foreach ($events as $event)
         {
@@ -47,7 +47,7 @@ class ListRenderer extends FullRenderer
 
             if (!isset($structuredEvents[$dateKey]))
             {
-                $structuredEvents[$dateKey] = array();
+                $structuredEvents[$dateKey] = [];
             }
 
             $structuredEvents[$dateKey][] = $event;
@@ -91,7 +91,7 @@ class ListRenderer extends FullRenderer
     {
         $events = $this->getEvents($this->getStartTime(), $this->getEndTime());
 
-        $html = array();
+        $html = [];
 
         if (count($events) > 0)
         {

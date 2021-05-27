@@ -28,9 +28,9 @@ class MediaWikiTitle
      * @name Static cache variables
      */
     // @{
-    private static $titleCache = array();
+    private static $titleCache = [];
 
-    private static $interwikiCache = array();
+    private static $interwikiCache = [];
     // @}
     
     /**
@@ -57,11 +57,11 @@ class MediaWikiTitle
     var $mFragment; // /< Title fragment (i.e. the bit after the #)
     var $mArticleID = - 1; // /< Article ID, fetched from the link cache on demand
     var $mLatestID = false; // /< ID of most recent revision
-    var $mRestrictions = array(); // /< Array of groups allowed to edit this article
+    var $mRestrictions = []; // /< Array of groups allowed to edit this article
     var $mOldRestrictions = false;
 
     var $mCascadeRestriction; // /< Cascade restrictions on this page to included templates and images?
-    var $mRestrictionsExpiry = array(); // /< When do the restrictions on this page expire?
+    var $mRestrictionsExpiry = []; // /< When do the restrictions on this page expire?
     var $mHasCascadingRestrictions; // /< Are cascading restrictions in effect on this page?
     var $mCascadeSources; // /< Where are the cascading restrictions coming from on this page?
     var $mRestrictionsLoaded = false; // /< Boolean for initialisation on demand
@@ -73,7 +73,7 @@ class MediaWikiTitle
     var $mWatched = null; // /< Is $wgUser watching this page? null if unfilled, accessed through userIsWatching()
     var $mLength = - 1; // /< The page length, 0 for special pages
     var $mRedirect = null; // /< Is the article at this title a redirect?
-    var $mNotificationTimestamp = array(); // /< Associative array of user ID -> timestamp/false
+    var $mNotificationTimestamp = []; // /< Associative array of user ID -> timestamp/false
     var $mBacklinkCache = null; // /< Cache of links to this title
                                 
     // @}
@@ -154,7 +154,7 @@ class MediaWikiTitle
                 if ($cachedcount >= self::CACHE_MAX)
                 {
                     // Avoid memory leaks on mass operations...
-                    MediawikiTitle::$titleCache = array();
+                    MediawikiTitle::$titleCache = [];
                     $cachedcount = 0;
                 }
                 $cachedcount ++;
@@ -236,7 +236,7 @@ class MediaWikiTitle
     {
         if (! count($ids))
         {
-            return array();
+            return [];
         }
         $dbr = wfGetDB(DB_SLAVE);
         $res = $dbr->select(
@@ -245,7 +245,7 @@ class MediaWikiTitle
             'page_id IN (' . $dbr->makeList($ids) . ')', 
             __METHOD__);
         
-        $titles = array();
+        $titles = [];
         foreach ($res as $row)
         {
             $titles[] = MediawikiTitle::makeTitle($row->page_namespace, $row->page_title);
@@ -430,7 +430,7 @@ class MediaWikiTitle
             // Extract the first link and see if it's usable
             // Ensure that it really does come directly after #REDIRECT
             // Some older redirects included a colon, so don't freak about that!
-            $m = array();
+            $m = [];
             if (preg_match('!^\s*:?\s*\[{2}(.*?)(?:\|.*?)?\]{2}!', $text, $m))
             {
                 // Strip preceding colon used to "escape" categories, etc.
@@ -990,7 +990,7 @@ class MediaWikiTitle
             {
                 global $wgActionPaths;
                 $url = false;
-                $matches = array();
+                $matches = [];
                 if (! empty($wgActionPaths) && preg_match('/^(.*&|)action=([^&]*)(&(.*)|)$/', $query, $matches))
                 {
                     $action = urldecode($matches[2]);
@@ -1043,7 +1043,7 @@ class MediaWikiTitle
      *        for anonymous users).
      * @return \type{\string} the URL
      */
-    public function getLinkUrl($query = array(), $variant = false)
+    public function getLinkUrl($query = [], $variant = false)
     {
         if (! is_array($query))
         {
@@ -1278,7 +1278,7 @@ class MediaWikiTitle
     public function userCan($action, $doExpensiveQueries = true)
     {
         global $wgUser;
-        return ($this->getUserPermissionsErrorsInternal($action, $wgUser, $doExpensiveQueries, true) === array());
+        return ($this->getUserPermissionsErrorsInternal($action, $wgUser, $doExpensiveQueries, true) === []);
     }
 
     /**
@@ -1292,7 +1292,7 @@ class MediaWikiTitle
      *            be ignored.
      * @return \type{\array} Array of arrays of the arguments to wfMsg to explain permissions problems.
      */
-    public function getUserPermissionsErrors($action, $user, $doExpensiveQueries = true, $ignoreErrors = array())
+    public function getUserPermissionsErrors($action, $user, $doExpensiveQueries = true, $ignoreErrors = [])
     {
         if (! StubObject::isRealObject($user))
         {
@@ -1411,7 +1411,7 @@ class MediaWikiTitle
     {
         wfProfileIn(__METHOD__);
         
-        $errors = array();
+        $errors = [];
         
         // First stop is permissions checks, which fail most often, and which are easiest to test.
         if ($action == 'move')
@@ -1481,7 +1481,7 @@ class MediaWikiTitle
         if (! wfRunHooks('userCan', array(&$this, &$user, $action, &$result)))
         {
             wfProfileOut(__METHOD__);
-            return $result ? array() : array(array('badaccess-group0'));
+            return $result ? [] : array(array('badaccess-group0'));
         }
         // Check getUserPermissionsErrors hook
         if (! wfRunHooks('getUserPermissionsErrors', array(&$this, &$user, $action, &$result)))
@@ -1623,7 +1623,7 @@ class MediaWikiTitle
         
         if ($action == 'protect')
         {
-            if ($this->getUserPermissionsErrors('edit', $user) != array())
+            if ($this->getUserPermissionsErrors('edit', $user) != [])
             {
                 $errors[] = array('protect-cantedit'); // If they can't edit, they shouldn't protect.
             }
@@ -1984,12 +1984,12 @@ class MediaWikiTitle
     public function getSubpages($limit = -1)
     {
         if (! MWNamespace::hasSubpages($this->getNamespace()))
-            return array();
+            return [];
         
         $dbr = wfGetDB(DB_SLAVE);
         $conds['page_namespace'] = $this->getNamespace();
         $conds[] = 'page_title LIKE ' . $dbr->addQuotes($dbr->escapeLike($this->getDBkey()) . '/%');
-        $options = array();
+        $options = [];
         if ($limit > - 1)
             $options['LIMIT'] = $limit;
         return $this->mSubpages = TitleArray::newFromResult(
@@ -2115,9 +2115,9 @@ class MediaWikiTitle
         global $wgRestrictionTypes;
         
         // Define our dimension of restrictions types
-        $pagerestrictions = array();
+        $pagerestrictions = [];
         foreach ($wgRestrictionTypes as $action)
-            $pagerestrictions[$action] = array();
+            $pagerestrictions[$action] = [];
         
         if (isset($this->mCascadeSources) && $get_pages)
         {
@@ -2161,7 +2161,7 @@ class MediaWikiTitle
         
         $res = $dbr->select($tables, $cols, $where_clauses, __METHOD__);
         
-        $sources = $get_pages ? array() : false;
+        $sources = $get_pages ? [] : false;
         $now = wfTimestampNow();
         $purgeExpired = false;
         
@@ -2236,7 +2236,7 @@ class MediaWikiTitle
         
         foreach ($wgRestrictionTypes as $type)
         {
-            $this->mRestrictions[$type] = array();
+            $this->mRestrictions[$type] = [];
             $this->mRestrictionsExpiry[$type] = Block::decodeExpiry('');
         }
         
@@ -2385,7 +2385,7 @@ class MediaWikiTitle
         {
             $this->loadRestrictions();
         }
-        return isset($this->mRestrictions[$action]) ? $this->mRestrictions[$action] : array();
+        return isset($this->mRestrictions[$action]) ? $this->mRestrictions[$action] : [];
     }
 
     /**
@@ -2571,7 +2571,7 @@ class MediaWikiTitle
             $this->mArticleID = $newid;
         }
         $this->mRestrictionsLoaded = false;
-        $this->mRestrictions = array();
+        $this->mRestrictions = [];
     }
 
     /**
@@ -2683,7 +2683,7 @@ class MediaWikiTitle
         // $prefixRegexp = "/^(.+?)_*:_*(.*)$/S";
         // do
         // {
-        // $m = array();
+        // $m = [];
         // if (preg_match($prefixRegexp, $dbkey, $m))
         // {
         // $p = $m[1];
@@ -2896,7 +2896,7 @@ class MediaWikiTitle
      * @param array $options may be FOR UPDATE
      * @return \type{\arrayof{Title}} the Title objects linking here
      */
-    public function getLinksTo($options = array(), $table = 'pagelinks', $prefix = 'pl')
+    public function getLinksTo($options = [], $table = 'pagelinks', $prefix = 'pl')
     {
         $linkCache = LinkCache::singleton();
         
@@ -2919,7 +2919,7 @@ class MediaWikiTitle
             __METHOD__, 
             $options);
         
-        $retVal = array();
+        $retVal = [];
         if ($db->numRows($res))
         {
             foreach ($res as $row)
@@ -2944,7 +2944,7 @@ class MediaWikiTitle
      * @param array $options may be FOR UPDATE
      * @return \type{\arrayof{Title}} the Title objects linking here
      */
-    public function getTemplateLinksTo($options = array())
+    public function getTemplateLinksTo($options = [])
     {
         return $this->getLinksTo($options, 'templatelinks', 'tl');
     }
@@ -2960,7 +2960,7 @@ class MediaWikiTitle
         if ($this->getArticleId() == 0)
         {
             // All links from article ID 0 are false positives
-            return array();
+            return [];
         }
         
         $dbr = wfGetDB(DB_SLAVE);
@@ -2969,10 +2969,10 @@ class MediaWikiTitle
             array('pl_namespace', 'pl_title'), 
             array('pl_from' => $this->getArticleId(), 'page_namespace IS NULL'), 
             __METHOD__, 
-            array(), 
+            [], 
             array('page' => array('LEFT JOIN', array('pl_namespace=page_namespace', 'pl_title=page_title'))));
         
-        $retVal = array();
+        $retVal = [];
         foreach ($res as $row)
         {
             $retVal[] = MediawikiTitle::makeTitle($row->pl_namespace, $row->pl_title);
@@ -3045,7 +3045,7 @@ class MediaWikiTitle
     {
         global $wgUser;
         
-        $errors = array();
+        $errors = [];
         if (! $nt)
         {
             // Normally we'd add this to $errors, but we'll get
@@ -3545,7 +3545,7 @@ class MediaWikiTitle
             return array('namespace-nosubpages', MWNamespace::getCanonicalName($nt->getNamespace()));
         
         $subpages = $this->getSubpages($wgMaximumMovedPages + 1);
-        $retval = array();
+        $retval = [];
         $count = 0;
         foreach ($subpages as $oldSubpage)
         {
@@ -3659,7 +3659,7 @@ class MediaWikiTitle
         $text = $rev->getText();
         // Does the redirect point to the source?
         // Or is it a broken self-redirect, usually caused by namespace collisions?
-        $m = array();
+        $m = [];
         if (preg_match("/\\[\\[\\s*([^\\]\\|]*)]]/", $text, $m))
         {
             $redirTitle = MediawikiTitle::newFromText($m[1]);
@@ -3720,7 +3720,7 @@ class MediaWikiTitle
         }
         else
         {
-            $data = array();
+            $data = [];
         }
         return $data;
     }
@@ -3731,9 +3731,9 @@ class MediaWikiTitle
      * @param $children \type{\array} an array with the children in the keys, to check for circular refs
      * @return \type{\array} Tree of parent categories
      */
-    public function getParentCategoryTree($children = array())
+    public function getParentCategoryTree($children = [])
     {
-        $stack = array();
+        $stack = [];
         $parents = $this->getParentCategories();
         
         if ($parents)
@@ -3743,7 +3743,7 @@ class MediaWikiTitle
                 if (array_key_exists($parent, $children))
                 {
                     // Circular reference
-                    $stack[$parent] = array();
+                    $stack[$parent] = [];
                 }
                 else
                 {
@@ -3758,7 +3758,7 @@ class MediaWikiTitle
         }
         else
         {
-            return array();
+            return [];
         }
     }
 
@@ -4071,7 +4071,7 @@ class MediaWikiTitle
         // Don't cache too much!
         if (count($this->mNotificationTimestamp) >= self::CACHE_MAX)
         {
-            $this->mNotificationTimestamp = array();
+            $this->mNotificationTimestamp = [];
         }
         $dbr = wfGetDB(DB_SLAVE);
         $this->mNotificationTimestamp[$uid] = $dbr->selectField(
@@ -4228,7 +4228,7 @@ class MediaWikiTitle
      */
     public function getRedirectsHere($ns = null)
     {
-        $redirs = array();
+        $redirs = [];
         
         $dbr = wfGetDB(DB_SLAVE);
         $where = array('rd_namespace' => $this->getNamespace(), 'rd_title' => $this->getDBkey(), 'rd_from = page_id');

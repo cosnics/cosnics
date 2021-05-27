@@ -120,7 +120,7 @@ class RelationInstanceService
      */
     public function getDataClassEntitiesFromTypeFromSubmittedValues($type, $submittedValues)
     {
-        $dataClassEntities = array();
+        $dataClassEntities = [];
 
         foreach ($submittedValues[$type] as $encodedDataClassEntity)
         {
@@ -143,7 +143,7 @@ class RelationInstanceService
      */
     public function relationInstanceExists($sourceType, $sourceIdentifier, $targetType, $targetIdentifier, $relationId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RelationInstance::class, RelationInstance::PROPERTY_SOURCE_TYPE),

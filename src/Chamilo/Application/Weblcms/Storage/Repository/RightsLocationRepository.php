@@ -65,7 +65,7 @@ class RightsLocationRepository extends CommonDataClassRepository
      *
      * @throws \Exception
      */
-    public function removeEntitiesFromRightsByIds(Course $course, int $entityType, array $entityIds = array())
+    public function removeEntitiesFromRightsByIds(Course $course, int $entityType, array $entityIds = [])
     {
         $locationCondition = new EqualityCondition(
             new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_TREE_IDENTIFIER),

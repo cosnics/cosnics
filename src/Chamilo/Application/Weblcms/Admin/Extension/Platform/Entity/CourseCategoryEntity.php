@@ -106,7 +106,7 @@ class CourseCategoryEntity implements NestedRightsEntity
             return null;
         }
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course_category->get_name(),
@@ -120,7 +120,7 @@ class CourseCategoryEntity implements NestedRightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', array()
+            'course_categories', Translation::get('CourseCategories'), __NAMESPACE__, 'course_category_feed', []
         );
     }
 
@@ -155,7 +155,7 @@ class CourseCategoryEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return new FontAwesomeGlyph('folder', array(), null, 'fas');
+        return new FontAwesomeGlyph('folder', [], null, 'fas');
     }
 
     /**

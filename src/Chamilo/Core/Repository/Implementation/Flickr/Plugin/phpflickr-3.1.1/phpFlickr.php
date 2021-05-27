@@ -293,7 +293,7 @@ class phpFlickr
     function blogs_getServices()
     {
         /* https://www.flickr.com/services/api/flickr.blogs.getServices.html */
-        return $this->call('flickr.blogs.getServices', array());
+        return $this->call('flickr.blogs.getServices', []);
     }
 
     /* These functions are front ends for the flickr calls */
@@ -482,7 +482,7 @@ class phpFlickr
     function commons_getInstitutions()
     {
         /* https://www.flickr.com/services/api/flickr.commons.getInstitutions.html */
-        return $this->call('flickr.commons.getInstitutions', array());
+        return $this->call('flickr.commons.getInstitutions', []);
     }
 
     function contacts_getList($filter = null, $page = null, $per_page = null)
@@ -976,7 +976,7 @@ class phpFlickr
     function panda_getList()
     {
         /* https://www.flickr.com/services/api/flickr.panda.getList.html */
-        return $this->call('flickr.panda.getList', array());
+        return $this->call('flickr.panda.getList', []);
     }
 
     /* Interestingness methods */
@@ -1016,7 +1016,7 @@ class phpFlickr
         return $this->parsed_response ? $this->parsed_response['person'] : false;
     }
 
-    function people_getPhotos($user_id, $args = array())
+    function people_getPhotos($user_id, $args = [])
     {
         /*
          * This function strays from the method of arguments that I've used in the other functions for the fact that
@@ -1423,7 +1423,7 @@ class phpFlickr
         );
     }
 
-    function photos_getWithGeoData($args = array())
+    function photos_getWithGeoData($args = [])
     {
         /*
          * See the documentation included with the photos_search() function. I'm using the same style of arguments
@@ -1436,7 +1436,7 @@ class phpFlickr
         return $this->parsed_response ? $this->parsed_response['photos'] : false;
     }
 
-    function photos_getWithoutGeoData($args = array())
+    function photos_getWithoutGeoData($args = [])
     {
         /*
          * See the documentation included with the photos_search() function. I'm using the same style of arguments
@@ -1586,7 +1586,7 @@ class phpFlickr
         return $this->parsed_response ? true : false;
     }
 
-    function photos_search($args = array())
+    function photos_search($args = [])
     {
         /*
          * This function strays from the method of arguments that I've used in the other functions for the fact that
@@ -1932,7 +1932,7 @@ class phpFlickr
     function places_getPlaceTypes()
     {
         /* https://www.flickr.com/services/api/flickr.places.getPlaceTypes.html */
-        return $this->call('flickr.places.getPlaceTypes', array());
+        return $this->call('flickr.places.getPlaceTypes', []);
     }
 
     function places_getShapeHistory($place_id = null, $woe_id = null)
@@ -2153,7 +2153,7 @@ class phpFlickr
     function prefs_getContentType()
     {
         /* https://www.flickr.com/services/api/flickr.prefs.getContentType.html */
-        $rsp = $this->call('flickr.prefs.getContentType', array());
+        $rsp = $this->call('flickr.prefs.getContentType', []);
 
         return $rsp ? $rsp['person'] : $rsp;
     }
@@ -2161,13 +2161,13 @@ class phpFlickr
     function prefs_getGeoPerms()
     {
         /* https://www.flickr.com/services/api/flickr.prefs.getGeoPerms.html */
-        return $this->call('flickr.prefs.getGeoPerms', array());
+        return $this->call('flickr.prefs.getGeoPerms', []);
     }
 
     function prefs_getHidden()
     {
         /* https://www.flickr.com/services/api/flickr.prefs.getHidden.html */
-        $rsp = $this->call('flickr.prefs.getHidden', array());
+        $rsp = $this->call('flickr.prefs.getHidden', []);
 
         return $rsp ? $rsp['person'] : $rsp;
     }
@@ -2175,7 +2175,7 @@ class phpFlickr
     function prefs_getPrivacy()
     {
         /* https://www.flickr.com/services/api/flickr.prefs.getPrivacy.html */
-        $rsp = $this->call('flickr.prefs.getPrivacy', array());
+        $rsp = $this->call('flickr.prefs.getPrivacy', []);
 
         return $rsp ? $rsp['person'] : $rsp;
     }
@@ -2183,7 +2183,7 @@ class phpFlickr
     function prefs_getSafetyLevel()
     {
         /* https://www.flickr.com/services/api/flickr.prefs.getSafetyLevel.html */
-        $rsp = $this->call('flickr.prefs.getSafetyLevel', array());
+        $rsp = $this->call('flickr.prefs.getSafetyLevel', []);
 
         return $rsp ? $rsp['person'] : $rsp;
     }
@@ -2295,7 +2295,7 @@ class phpFlickr
         }
     }
 
-    function request($command, $args = array(), $nocache = false)
+    function request($command, $args = [], $nocache = false)
     {
         // Sends a request to Flickr's REST endpoint via POST.
         if (substr($command, 0, 7) != "flickr.")
@@ -2393,7 +2393,7 @@ class phpFlickr
     function stats_getCSVFiles()
     {
         /* https://www.flickr.com/services/api/flickr.stats.getCSVFiles.html */
-        return $this->call('flickr.stats.getCSVFiles', array());
+        return $this->call('flickr.stats.getCSVFiles', []);
     }
 
     /* Stats Methods */
@@ -2679,7 +2679,7 @@ class phpFlickr
         return $this->parsed_response ? $this->parsed_response['tags'] : false;
     }
 
-    function test_echo($args = array())
+    function test_echo($args = [])
     {
         /* https://www.flickr.com/services/api/flickr.test.echo.html */
         $this->request("flickr.test.echo", $args);
@@ -2779,7 +2779,7 @@ class phpFlickr_pager
         $this->total = 0;
         $this->pages = 0;
 
-        return array();
+        return [];
     }
 
     function load($page)
@@ -2873,7 +2873,7 @@ class phpFlickr_pager
         $this->total = 0;
         $this->pages = 0;
 
-        return array();
+        return [];
     }
 
     function set_phpFlickr($phpFlickr)

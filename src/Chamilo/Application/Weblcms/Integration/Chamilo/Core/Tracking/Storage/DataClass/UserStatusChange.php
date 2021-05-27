@@ -15,7 +15,7 @@ class UserStatusChange extends SimpleTracker
     const PROPERTY_COURSE_ID = 'course_id';
     const PROPERTY_DATE = 'date';
 
-    function validate_parameters(array $parameters = array())
+    function validate_parameters(array $parameters = [])
     {
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
         $this->set_subject_id($parameters[self::PROPERTY_SUBJECT_ID]);

@@ -29,7 +29,7 @@ class ActivityComponent extends ItemComponent implements TableSupport
                 $this->get_url(array(self::PARAM_STEP => $this->get_current_step())), 
                 Translation::get('ActivityComponent')));
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $activity_table->as_html();

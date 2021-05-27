@@ -97,7 +97,7 @@ class PlatformGroupEntity implements NestedRightsEntity
         }
 
         $description = strip_tags($group->get_fully_qualified_name() . ' [' . $group->get_code() . ']');
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $description
@@ -111,7 +111,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     {
         return new AdvancedElementFinderElementType(
             'platform_groups', Translation::get('PlatformGroups'), Manager::context() . '\Ajax',
-            'platform_group_entity_feed', array()
+            'platform_group_entity_feed', []
         );
     }
 
@@ -122,7 +122,7 @@ class PlatformGroupEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return new FontAwesomeGlyph('users', array(), null, 'fas');
+        return new FontAwesomeGlyph('users', [], null, 'fas');
     }
 
     /**

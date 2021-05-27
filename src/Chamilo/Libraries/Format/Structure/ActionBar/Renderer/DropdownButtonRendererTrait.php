@@ -19,7 +19,7 @@ trait DropdownButtonRendererTrait
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group">';
         $html[] = parent::render();
@@ -35,7 +35,7 @@ trait DropdownButtonRendererTrait
      */
     public function determineDropdownClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'dropdown-menu';
 
@@ -85,7 +85,7 @@ trait DropdownButtonRendererTrait
      */
     public function renderSubButtons()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="' . implode(' ', $this->determineDropdownClasses()) . '">';
 

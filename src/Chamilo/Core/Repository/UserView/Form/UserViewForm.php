@@ -175,7 +175,7 @@ class UserViewForm extends FormValidator
         $types = DataManager::retrieves(
             UserViewRelContentObject::class, new DataClassRetrievesParameters($condition)
         );
-        $existing_types = array();
+        $existing_types = [];
         foreach($types as $type)
         {
             $existing_types[] = $type->get_content_object_template_id();
@@ -242,7 +242,7 @@ class UserViewForm extends FormValidator
      *
      * @see HTML_QuickForm::setDefaults()
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $defaults[UserView::PROPERTY_ID] = $this->user_view->get_id();
         $defaults[UserView::PROPERTY_NAME] = $this->user_view->get_name();

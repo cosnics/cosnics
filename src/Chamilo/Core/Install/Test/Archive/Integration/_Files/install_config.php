@@ -1,5 +1,5 @@
 <?php
-$values = array();
+$values = [];
 $values['database_driver'] = 'mysql';
 $values['database_host'] = 'localhost';
 $values['database_username'] = 'chamilo_test';

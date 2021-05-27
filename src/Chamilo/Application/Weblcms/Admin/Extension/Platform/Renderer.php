@@ -104,7 +104,7 @@ class Renderer extends CourseListRenderer
 
         $selected_course_type_id = $this->get_selected_course_type_id();
 
-        $created_tabs = array();
+        $created_tabs = [];
 
         foreach ($this->course_types as $course_type)
         {
@@ -160,7 +160,7 @@ class Renderer extends CourseListRenderer
 
         $size = count($courses);
 
-        $html = array();
+        $html = [];
 
         if ($size > 0)
         {
@@ -217,7 +217,7 @@ class Renderer extends CourseListRenderer
                     $course->get_title();
                 $html[] = '</a>';
 
-                $text = array();
+                $text = [];
                 $text[] = $course->get_visual_code();
                 $text[] = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
                     $course->get_titular_id(), Translation::get('NoTitular')
@@ -250,7 +250,7 @@ class Renderer extends CourseListRenderer
      */
     protected function get_course_type_url($course_type_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_SELECTED_COURSE_TYPE] = $course_type_id;
 
         return $this->get_parent()->get_url($parameters);
@@ -367,7 +367,7 @@ class Renderer extends CourseListRenderer
      */
     protected function parse_courses($courses)
     {
-        $parsed_courses = array();
+        $parsed_courses = [];
 
         foreach ($courses as $course)
         {

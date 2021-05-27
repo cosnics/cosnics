@@ -22,7 +22,7 @@ class NamespaceIdentGlyph extends IdentGlyph
      */
     public function __construct(
         $namespace, $isAligned = false, $isNew = false, $isDisabled = false, $size = IdentGlyph::SIZE_SMALL,
-        $extraClasses = array(), $title = null, $style = 'fas-ci'
+        $extraClasses = [], $title = null, $style = 'fas-ci'
     )
     {
         parent::__construct(md5($namespace), $isAligned, $isNew, $isDisabled, $size, $extraClasses, $title, $style);

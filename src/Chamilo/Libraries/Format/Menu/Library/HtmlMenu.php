@@ -32,7 +32,7 @@ class HtmlMenu
      *
      * @var string[]
      */
-    var $_menu = array();
+    var $_menu = [];
 
     /**
      * Mapping from URL to menu path.
@@ -40,14 +40,14 @@ class HtmlMenu
      * @var array
      * @see getPath()
      */
-    var $_urlMap = array();
+    var $_urlMap = [];
 
     /**
      * Path to the current menu item.
      *
      * @var string[]
      */
-    var $_path = array();
+    var $_path = [];
 
     /**
      * Menu type: tree, rows, you-are-here.
@@ -207,7 +207,7 @@ class HtmlMenu
      */
     private function _renderPrevNext($menu, $level = 0, $flagStop = 0)
     {
-        static $last_node = array(), $up_node = array();
+        static $last_node = [], $up_node = [];
 
         foreach ($menu as $node_id => $node)
         {
@@ -414,7 +414,7 @@ class HtmlMenu
     public function getPath()
     {
         $this->_currentUrl = $this->getCurrentURL();
-        $this->_buildUrlMap($this->_menu, array());
+        $this->_buildUrlMap($this->_menu, []);
 
         // If there is no match for the current URL, try to come up with
         // the best approximation by shortening the url
@@ -423,7 +423,7 @@ class HtmlMenu
             $this->_currentUrl = substr($this->_currentUrl, 0, - 1);
         }
 
-        return isset($this->_urlMap[$this->_currentUrl]) ? $this->_urlMap[$this->_currentUrl] : array();
+        return isset($this->_urlMap[$this->_currentUrl]) ? $this->_urlMap[$this->_currentUrl] : [];
     }
 
     /**
@@ -433,7 +433,7 @@ class HtmlMenu
     public function setMenu($menu)
     {
         $this->_menu = $menu;
-        $this->_urlMap = array();
+        $this->_urlMap = [];
     }
 
     /**

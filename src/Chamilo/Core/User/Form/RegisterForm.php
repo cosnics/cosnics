@@ -96,7 +96,7 @@ class RegisterForm extends FormValidator
             'required'
         );
         // pw
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement('radio', 'pass', null, Translation::get('AutoGeneratePassword') . '<br />', 1);
         $group[] = &$this->createElement('radio', 'pass', null, null, 0);
         $group[] = &$this->createElement('password', User::PROPERTY_PASSWORD, null, null);
@@ -132,13 +132,13 @@ class RegisterForm extends FormValidator
         // Status
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_teacher_registration')))
         {
-            $status = array();
+            $status = [];
             $status[5] = Translation::get('Student');
             $status[1] = Translation::get('CourseAdmin');
             $this->addElement('select', User::PROPERTY_STATUS, Translation::get('Status'), $status);
         }
         // Send email
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
         );
@@ -300,7 +300,7 @@ class RegisterForm extends FormValidator
      */
     public function send_email($user)
     {
-        $options = array();
+        $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
@@ -329,7 +329,7 @@ class RegisterForm extends FormValidator
         }
 
         $mail = new Mail(
-            $subject, $body, $user->get_email(), true, array(), array(),
+            $subject, $body, $user->get_email(), true, [], [],
             $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
         );
 
@@ -350,7 +350,7 @@ class RegisterForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $user = $this->user;
         if ($this->form_type == self::TYPE_EDIT)

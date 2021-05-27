@@ -99,7 +99,7 @@ class ProgressDetailsBlock extends ReportingBlock
                     )
                 );
 
-                $glyph = new FontAwesomeGlyph('times', array(), Translation::get('DeleteAttempt'));
+                $glyph = new FontAwesomeGlyph('times', [], Translation::get('DeleteAttempt'));
                 $action = '<a href="' . $delete_url . '">' . $glyph->render() . '</a>';
 
                 $reporting_data->add_data_category_row($category, Translation::get('Action'), $action);

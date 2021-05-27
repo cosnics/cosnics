@@ -53,7 +53,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      * @param TypeSelector $type_selector
      */
     public function __construct(
-        Application $parent, TypeSelector $type_selector, $additional_links = array(), $use_general_statistics = false
+        Application $parent, TypeSelector $type_selector, $additional_links = [], $use_general_statistics = false
     )
     {
         parent::__construct($parent, $type_selector);
@@ -77,7 +77,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderMostUsedOptions();
         $html[] = $this->renderAllOptions();
@@ -93,7 +93,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      */
     protected function getAdditionalSubButtons()
     {
-        $buttons = array();
+        $buttons = [];
 
         foreach ($this->get_additional_links() as $link)
         {
@@ -122,14 +122,14 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
             $statistics_condition = null;
         }
 
-        $content_object_type_counts = array();
+        $content_object_type_counts = [];
         $most_used_type_count = 0;
 
         foreach ($this->get_type_selector()->get_categories() as $category)
         {
             foreach ($category->get_options() as $option)
             {
-                $conditions = array();
+                $conditions = [];
 
                 if (!is_null($statistics_condition))
                 {
@@ -171,7 +171,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
         $mostUsedTypes = array_slice($content_object_type_counts, 0, 10);
 
-        $options = array();
+        $options = [];
 
         foreach ($mostUsedTypes as $typeOption => $count)
         {
@@ -220,7 +220,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
     protected function renderAllOptions()
     {
-        $options = array();
+        $options = [];
 
         foreach ($this->get_type_selector()->get_categories() as $category)
         {
@@ -251,7 +251,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
      */
     protected function renderOption(TypeSelectorOption $option, $url)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li class="list-group-item">';
 
@@ -277,7 +277,7 @@ class BasicTypeSelectorRenderer extends TypeSelectorRenderer
 
     protected function renderOptions($id, $title, $options)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="content-object-options">';
         $html[] = '<div id="' . $id . '" class="content-object-options-type">';

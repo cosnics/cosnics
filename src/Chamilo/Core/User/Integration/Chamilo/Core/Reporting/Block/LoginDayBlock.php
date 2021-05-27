@@ -20,7 +20,7 @@ class LoginDayBlock extends Block
     {
         $reporting_data = new ReportingData();
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LoginLogout::class, LoginLogout::PROPERTY_TYPE
@@ -43,7 +43,7 @@ class LoginDayBlock extends Block
             LoginLogout::class, new DataClassRetrievesParameters($condition)
         );
 
-        $days = array();
+        $days = [];
         foreach ($data as $date)
         {
             $day = date('N', $date->get_date());
@@ -56,7 +56,7 @@ class LoginDayBlock extends Block
                 $days[$day] = 1;
             }
         }
-        $new_days = array();
+        $new_days = [];
 
         $day_names = array(
             Translation::get('MondayLong', null, Utilities::COMMON_LIBRARIES),

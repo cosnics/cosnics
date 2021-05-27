@@ -44,9 +44,9 @@ class LdapParser
      * @return \Chamilo\Core\User\Storage\DataClass\User
      * @throws \Chamilo\Libraries\Authentication\AuthenticationException
      */
-    public function parse($info = array(), $username)
+    public function parse($info = [], $username)
     {
-        $userProperties = array();
+        $userProperties = [];
 
         $userProperties[User::PROPERTY_LASTNAME] = $info[0]['sn'][0];
         $userProperties[User::PROPERTY_FIRSTNAME] = $info[0]['givenname'][0];

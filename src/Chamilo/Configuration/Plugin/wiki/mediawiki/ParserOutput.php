@@ -14,19 +14,19 @@ class MediawikiParserOutput
     $mTitleText,     // title text of the chosen language variant
     $mCacheTime = '',     // Time when this object was generated, or -1 for uncacheable. Used in ParserCache.
     $mVersion = MediawikiParser::VERSION,     // Compatibility check
-    $mLinks = array(),     // 2-D map of NS/DBK to ID for the links in the document. ID=zero for broken.
-    $mTemplates = array(),     // 2-D map of NS/DBK to ID for the template references. ID=zero for broken.
-    $mTemplateIds = array(),     // 2-D map of NS/DBK to rev ID for the template references. ID=zero for broken.
-    $mImages = array(),     // DB keys of the images used, in the array key only
-    $mExternalLinks = array(),     // External link URLs, in the key only
+    $mLinks = [],     // 2-D map of NS/DBK to ID for the links in the document. ID=zero for broken.
+    $mTemplates = [],     // 2-D map of NS/DBK to ID for the template references. ID=zero for broken.
+    $mTemplateIds = [],     // 2-D map of NS/DBK to rev ID for the template references. ID=zero for broken.
+    $mImages = [],     // DB keys of the images used, in the array key only
+    $mExternalLinks = [],     // External link URLs, in the key only
     $mNewSection = false,     // Show a new section link?
     $mHideNewSection = false,     // Hide the new section link?
     $mNoGallery = false,     // No gallery on category page? (__NOGALLERY__)
-    $mHeadItems = array(),     // Items to put in the <head> section
-    $mOutputHooks = array(),     // Hook tags as per $wgParserOutputHooks
-    $mWarnings = array(),     // Warning text to be returned to the user. Wikitext formatted, in the key only
-    $mSections = array(),     // Table of contents
-    $mProperties = array(); // Name/value pairs to be cached in the DB
+    $mHeadItems = [],     // Items to put in the <head> section
+    $mOutputHooks = [],     // Hook tags as per $wgParserOutputHooks
+    $mWarnings = [],     // Warning text to be returned to the user. Wikitext formatted, in the key only
+    $mSections = [],     // Table of contents
+    $mProperties = []; // Name/value pairs to be cached in the DB
     private $mIndexPolicy = ''; // 'index' or 'noindex'? Any other value will result in no change.
     
     /**
@@ -34,7 +34,7 @@ class MediawikiParserOutput
      */
     private $displayTitle = false;
 
-    function __construct($text = '', $languageLinks = array(), $categoryLinks = array(), $containsOldMagic = false, $titletext = '')
+    function __construct($text = '', $languageLinks = [], $categoryLinks = [], $containsOldMagic = false, $titletext = '')
     {
         $this->mText = $text;
         $this->mLanguageLinks = $languageLinks;
@@ -235,7 +235,7 @@ class MediawikiParserOutput
         }
         if (! isset($this->mLinks[$ns]))
         {
-            $this->mLinks[$ns] = array();
+            $this->mLinks[$ns] = [];
         }
         if (is_null($id))
         {
@@ -255,12 +255,12 @@ class MediawikiParserOutput
         $dbk = $title->getDBkey();
         if (! isset($this->mTemplates[$ns]))
         {
-            $this->mTemplates[$ns] = array();
+            $this->mTemplates[$ns] = [];
         }
         $this->mTemplates[$ns][$dbk] = $page_id;
         if (! isset($this->mTemplateIds[$ns]))
         {
-            $this->mTemplateIds[$ns] = array();
+            $this->mTemplateIds[$ns] = [];
         }
         $this->mTemplateIds[$ns][$dbk] = $rev_id; // For versioning
     }
@@ -350,7 +350,7 @@ class MediawikiParserOutput
     {
         if (! isset($this->mProperties))
         {
-            $this->mProperties = array();
+            $this->mProperties = [];
         }
         return $this->mProperties;
     }

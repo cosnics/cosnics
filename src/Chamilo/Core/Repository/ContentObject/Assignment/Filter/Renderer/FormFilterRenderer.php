@@ -26,7 +26,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
 
         // Start date
         $form_validator->addElement('category', Translation::get('StartTime'));
-        $start_time = array();
+        $start_time = [];
         $start_time[] = $form_validator->createElement(
             'static',
             '',
@@ -59,7 +59,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
 
         // End date
         $form_validator->addElement('category', Translation::get('EndTime'));
-        $end_time = array();
+        $end_time = [];
         $end_time[] = $form_validator->createElement(
             'static',
             '',
@@ -95,7 +95,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
 

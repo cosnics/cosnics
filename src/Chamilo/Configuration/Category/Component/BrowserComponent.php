@@ -48,7 +48,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $this->set_parameter(self::PARAM_CATEGORY_ID, $category_id);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
@@ -124,13 +124,13 @@ class BrowserComponent extends Manager implements TableSupport
         $search = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($search) && ($search != ''))
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME), '*' . $search . '*'
             );
             $orcondition = new OrCondition($conditions);
 
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $orcondition;
             $conditions[] = $condition;
             $condition = new AndCondition($conditions);
@@ -157,7 +157,7 @@ class BrowserComponent extends Manager implements TableSupport
             )
         );
         $table = new CategoryTable($this);
-        $html = array();
+        $html = [];
 
         if ($this->get_subcategories_allowed())
         {

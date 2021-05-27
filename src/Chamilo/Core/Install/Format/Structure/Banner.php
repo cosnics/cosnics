@@ -18,7 +18,7 @@ class Banner extends \Chamilo\Libraries\Format\Structure\Banner
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<nav class="navbar navbar-static-top navbar-cosnics navbar-inverse">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
@@ -28,7 +28,7 @@ class Banner extends \Chamilo\Libraries\Format\Structure\Banner
 
         $html[] = '<a class="navbar-brand" href="' . $this->getPathBuilder()->getBasePath(true) . '">';
         $html[] =
-            '<img alt="' . $this->getTranslator()->trans('ChamiloInstallationTitle', array(), 'Chamilo\Core\Install') .
+            '<img alt="' . $this->getTranslator()->trans('ChamiloInstallationTitle', [], 'Chamilo\Core\Install') .
             '" src="' . $brandSource . '">';
         $html[] = '</a>';
 

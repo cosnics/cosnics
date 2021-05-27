@@ -34,7 +34,7 @@ class ConditionFilterRenderer extends FilterRenderer
     public function render()
     {
         $filter_data = $this->get_filter_data();
-        $conditions = array();
+        $conditions = [];
 
         // Text
         if ($filter_data->has_filter_property(FilterData::FILTER_TEXT))
@@ -70,7 +70,7 @@ class ConditionFilterRenderer extends FilterRenderer
             $text = $filter_data->get_filter_property(FilterData::FILTER_TEXT);
             $searchable_property_names = $class_name::get_searchable_property_names();
 
-            $text_conditions = array();
+            $text_conditions = [];
             $text_conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), '*' . $text . '*'
             );
@@ -231,7 +231,7 @@ class ConditionFilterRenderer extends FilterRenderer
             }
             else
             {
-                $types = array();
+                $types = [];
             }
 
             // Category
@@ -246,7 +246,7 @@ class ConditionFilterRenderer extends FilterRenderer
                 }
                 catch (Exception $exception)
                 {
-                    $types = array();
+                    $types = [];
                 }
             }
 
@@ -286,7 +286,7 @@ class ConditionFilterRenderer extends FilterRenderer
         // Creation date
         if ($filter_data->has_date(FilterData::FILTER_CREATION_DATE))
         {
-            $creation_date_conditions = array();
+            $creation_date_conditions = [];
             $creation_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CREATION_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL,
@@ -323,7 +323,7 @@ class ConditionFilterRenderer extends FilterRenderer
         // Modification date
         if ($filter_data->has_date(FilterData::FILTER_MODIFICATION_DATE))
         {
-            $modification_date_conditions = array();
+            $modification_date_conditions = [];
             $modification_date_conditions[] = new ComparisonCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE),
                 ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(

@@ -47,7 +47,7 @@ class SynchronizerTest extends ChamiloTestCase
     public function setUp()
     {
         $this->configurationLoader = $this->getMockForAbstractClass(LoaderInterface::class);
-        $this->registrationConsulterMock = $this->createMock(RegistrationConsulter::class, array(), array(), '', false);
+        $this->registrationConsulterMock = $this->createMock(RegistrationConsulter::class, [], [], '', false);
         $this->structureLocationServiceMock = $this->getMockForAbstractClass(StructureLocationServiceInterface::class);
 
         $this->structureLocationRoleServiceMock =
@@ -121,11 +121,11 @@ class SynchronizerTest extends ChamiloTestCase
     {
         $this->registrationConsulterMock->expects($this->once())
             ->method('getRegistrationContexts')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->configurationLoader->expects($this->once())
             ->method('loadConfiguration')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->configurationSynchronizer->synchronize();
     }

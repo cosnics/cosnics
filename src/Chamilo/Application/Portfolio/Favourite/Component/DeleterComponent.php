@@ -43,7 +43,7 @@ class DeleterComponent extends Manager
         if (! $source || $source == self::SOURCE_FAVOURITES_BROWSER)
         {
             $returnParameters = array(self::PARAM_ACTION => self::ACTION_BROWSE);
-            $filterParameters = array();
+            $filterParameters = [];
         }
         else
         {

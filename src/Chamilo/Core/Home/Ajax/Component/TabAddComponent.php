@@ -51,7 +51,7 @@ class TabAddComponent extends Manager
             JsonAjaxResult::general_error(Translation::get('TabColumnNotAdded'));
         }
 
-        $content = array();
+        $content = [];
 
         $content[] = '<div class="row portal-tab show" data-element-id="' . $tab->get_id() . '">';
         $content[] =
@@ -64,7 +64,7 @@ class TabAddComponent extends Manager
             '<a href="#" class="portal-action portal-action-column-delete hidden" data-column-id="21" title="' .
             Translation::get('Delete') . '">';
 
-        $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('times', [], null, 'fas');
 
         $content[] = $glyph->render() . '</a>';
         $content[] = '</div>';
@@ -77,7 +77,7 @@ class TabAddComponent extends Manager
         $content[] = '</div>';
         $content[] = '</div>';
 
-        $title = array();
+        $title = [];
 
         $title[] = '<li class="portal-nav-tab active" data-tab-id="' . $tab->getId() . '">';
         $title[] = '<a class="portal-action-tab-title" href="#">';
@@ -103,6 +103,6 @@ class TabAddComponent extends Manager
 
     public function getRequiredPostParameters()
     {
-        return array();
+        return [];
     }
 }

@@ -22,7 +22,7 @@ class BrowserComponent extends Manager
 
     public function render_header($visible_tools = null, $show_introduction_text = false)
     {
-        $html = array();
+        $html = [];
         
         $html[] = parent::render_header($visible_tools, $show_introduction_text);
         

@@ -249,7 +249,7 @@ abstract class Manager extends Application
         return $this->getService(WorkspaceExtensionManager::class);
     }
 
-    public function get_additional_parameters($additionalParameters = array())
+    public function get_additional_parameters($additionalParameters = [])
     {
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
 
@@ -573,7 +573,7 @@ abstract class Manager extends Application
      */
     public function get_current_user_recycle_bin_conditions()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
@@ -623,7 +623,7 @@ abstract class Manager extends Application
     {
         $translator = Translation::getInstance();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div id="repository-tree-container">';
         $tabs = new DynamicTabsRenderer(self::TABS_FILTER);
@@ -770,7 +770,7 @@ abstract class Manager extends Application
      */
     public function get_type_filter_url($template_registration_id)
     {
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
         $params[FilterData::FILTER_TYPE] = $template_registration_id;
 
@@ -784,7 +784,7 @@ abstract class Manager extends Application
 
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

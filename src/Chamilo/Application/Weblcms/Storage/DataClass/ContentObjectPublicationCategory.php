@@ -30,7 +30,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
     const PROPERTY_TOOL = 'tool';
     const PROPERTY_VISIBLE = 'visible';
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -111,7 +111,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         return $this->get_default_property(self::PROPERTY_COURSE);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return array(
             self::PROPERTY_COURSE,

@@ -57,7 +57,7 @@ class ShareComponent extends Manager implements TableSupport
         if (!empty($selectedWorkspaceIdentifiers))
         {
             $selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, array()
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, []
             );
 
             $selectedContentObjectNumbers = DataManager::distinct(
@@ -128,7 +128,7 @@ class ShareComponent extends Manager implements TableSupport
                     );
                 }
 
-                $selectedObjectsPreviews = array();
+                $selectedObjectsPreviews = [];
 
                 $selectedObjectsPreviews[] = '<div class="panel panel-default">';
                 $selectedObjectsPreviews[] = '<div class="panel-heading">';
@@ -146,11 +146,11 @@ class ShareComponent extends Manager implements TableSupport
 
             $table = new ShareTable($this);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_CONTEXT] = Manager::context();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE;
 
@@ -178,7 +178,7 @@ class ShareComponent extends Manager implements TableSupport
         if (!isset($this->selectedContentObjectIdentifiers))
         {
             $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, array()
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, []
             );
         }
 
@@ -194,7 +194,7 @@ class ShareComponent extends Manager implements TableSupport
         if (!isset($this->selectedWorkspaceIdentifiers))
         {
             $this->selectedWorkspaceIdentifiers = (array) $this->getRequest()->get(
-                Manager::PARAM_SELECTED_WORKSPACE_ID, array()
+                Manager::PARAM_SELECTED_WORKSPACE_ID, []
             );
         }
 
@@ -209,7 +209,7 @@ class ShareComponent extends Manager implements TableSupport
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }

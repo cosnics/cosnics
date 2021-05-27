@@ -249,7 +249,7 @@ abstract class Manager extends Application
      * @param $parameters string[] - Optional parameters
      * @return string
      */
-    protected function get_course_url($action, $course_id, $parameters = array())
+    protected function get_course_url($action, $course_id, $parameters = [])
     {
         $parameters[self::PARAM_COURSE_ID] = $course_id;
         return $this->get_action_url($action, $parameters);
@@ -262,7 +262,7 @@ abstract class Manager extends Application
      * @param $parameters string[] - Optional parameters
      * @return string
      */
-    protected function get_action_url($action, $parameters = array())
+    protected function get_action_url($action, $parameters = [])
     {
         $parameters[self::PARAM_ACTION] = $action;
         return $this->get_url($parameters);

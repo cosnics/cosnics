@@ -23,33 +23,33 @@ class CalendarEventForm extends RecurringContentObjectForm
         $translator = $this->getTranslator();
 
         $this->addElement(
-            'category', $translator->trans('Properties', array(), 'Chamilo\Core\Repository\ContentObject\CalendarEvent')
+            'category', $translator->trans('Properties', [], 'Chamilo\Core\Repository\ContentObject\CalendarEvent')
         );
 
         $this->add_datepicker(
             CalendarEvent::PROPERTY_START_DATE,
-            $translator->trans('StartDate', array(), 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), true
+            $translator->trans('StartDate', [], 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), true
         );
         $this->add_datepicker(
             CalendarEvent::PROPERTY_END_DATE,
-            $translator->trans('EndDate', array(), 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), true
+            $translator->trans('EndDate', [], 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), true
         );
 
         $this->addRule(
             CalendarEvent::PROPERTY_START_DATE,
-            $translator->trans('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
         );
 
         $this->addRule(
             CalendarEvent::PROPERTY_END_DATE,
-            $translator->trans('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
+            $translator->trans('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
         );
 
         $this->addFrequencyPropertiesToForm();
 
         $this->add_textfield(
             CalendarEvent::PROPERTY_LOCATION,
-            $translator->trans('Location', array(), 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), false
+            $translator->trans('Location', [], 'Chamilo\Core\Repository\ContentObject\CalendarEvent'), false
         );
     }
 
@@ -59,7 +59,7 @@ class CalendarEventForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    protected function build_creation_form($htmleditorOptions = array(), $inTab = false)
+    protected function build_creation_form($htmleditorOptions = [], $inTab = false)
     {
         parent::build_creation_form($htmleditorOptions, $inTab);
         $this->addCalendarEventPropertiesToForm();
@@ -71,7 +71,7 @@ class CalendarEventForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    protected function build_editing_form($htmleditorOptions = array(), $inTab = false)
+    protected function build_editing_form($htmleditorOptions = [], $inTab = false)
     {
         parent::build_editing_form($htmleditorOptions, $inTab);
         $this->addCalendarEventPropertiesToForm();
@@ -115,7 +115,7 @@ class CalendarEventForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         /**
          * @var \Chamilo\Core\Repository\ContentObject\CalendarEvent\Storage\DataClass\CalendarEvent $calendarEvent

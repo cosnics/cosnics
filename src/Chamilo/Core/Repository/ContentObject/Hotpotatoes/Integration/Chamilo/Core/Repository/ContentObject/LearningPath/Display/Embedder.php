@@ -45,7 +45,7 @@ class Embedder extends ContentObjectEmbedder
             $activeAttemptId
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->get_application()->render_header();
         $html[] = '<iframe frameborder="0" class="link_iframe" src="' . $link . '" width="100%" height="700px">';

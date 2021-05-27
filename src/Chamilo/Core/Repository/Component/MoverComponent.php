@@ -40,7 +40,7 @@ class MoverComponent extends Manager
      */
     private $level = 1;
 
-    private $tree = array();
+    private $tree = [];
 
     /**
      * Runs this component and displays its output.
@@ -60,7 +60,7 @@ class MoverComponent extends Manager
             $object = DataManager::retrieve_by_id(ContentObject::class, $ids[0]);
             $parent = $object->get_parent_id();
 
-            $this->tree = array();
+            $this->tree = [];
             if ($parent != 0)
             {
                 $this->tree[] = Translation::get('Repository');
@@ -177,14 +177,14 @@ class MoverComponent extends Manager
                     }
                 }
 
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
                 $this->redirect($message, ($failures ? true : false), $parameters);
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -236,7 +236,7 @@ class MoverComponent extends Manager
 
         $categories = DataManager::retrieve_categories($condition);
 
-        $tree = array();
+        $tree = [];
         foreach($categories as $cat)
         {
             $this->tree[$cat->get_id()] = str_repeat('--', $this->level) . ' ' . $cat->get_name();

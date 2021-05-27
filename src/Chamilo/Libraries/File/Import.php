@@ -24,7 +24,7 @@ class Import
      */
     public function csv_to_array($filename)
     {
-        $result = array();
+        $result = [];
         $handle = fopen($filename, "r");
         $keys = fgetcsv($handle, 1000, ";");
 
@@ -36,7 +36,7 @@ class Import
         while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
         {
 
-            $row = array();
+            $row = [];
             foreach ($row_tmp as $index => $value)
             {
                 $row[$keys[$index]] = (trim($value));
@@ -59,7 +59,7 @@ class Import
      */
     public function read_csv($filename)
     {
-        $result = array();
+        $result = [];
         $handle = fopen($filename, "r");
 
         while (($row = fgetcsv($handle, 1000, ";")) !== false)

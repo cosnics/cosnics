@@ -51,7 +51,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $calendarId, $fromDate, $toDate
         );
 
-        $events = array();
+        $events = [];
 
         foreach ($eventIterator as $googleCalenderEvent)
         {
@@ -80,7 +80,7 @@ class CalendarEventDataProvider extends ExternalCalendar
             $calendarRendererProvider->getDataUser(), $package
         );
 
-        $calendarIdentifiers = array();
+        $calendarIdentifiers = [];
 
         if ($availabilities->count() == 0)
         {
@@ -112,7 +112,7 @@ class CalendarEventDataProvider extends ExternalCalendar
     public function getCalendars(User $user = null)
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
-        $calendars = array();
+        $calendars = [];
 
         if ($calendarService->isAuthenticated())
         {
@@ -131,7 +131,7 @@ class CalendarEventDataProvider extends ExternalCalendar
     )
     {
         $calendarService = new CalendarService(CalendarRepository::getInstance());
-        $events = array();
+        $events = [];
 
         if ($calendarService->isAuthenticated())
         {

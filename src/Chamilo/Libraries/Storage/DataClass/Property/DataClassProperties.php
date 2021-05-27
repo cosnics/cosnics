@@ -26,7 +26,7 @@ class DataClassProperties implements Hashable
      *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $properties
      */
-    public function __construct($properties = array())
+    public function __construct($properties = [])
     {
         $this->properties = (is_array($properties) ? $properties : func_get_args());
     }
@@ -56,7 +56,7 @@ class DataClassProperties implements Hashable
      */
     public function getHashParts(): array
     {
-        $hashParts = array();
+        $hashParts = [];
 
         $hashParts[] = __CLASS__;
 

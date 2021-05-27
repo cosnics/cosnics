@@ -62,7 +62,7 @@ class WorkspaceForm extends FormValidator
      */
     protected function setFormDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         if ($this->workspace instanceof Workspace)
         {

@@ -31,7 +31,7 @@ trait DirectoryScanner
 
         $regex = new RegexIterator($iterator, $pattern, RegexIterator::GET_MATCH);
 
-        $files = array();
+        $files = [];
 
         foreach ($regex as $matches)
         {

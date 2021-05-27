@@ -116,7 +116,7 @@ class RightsForm extends FormValidator
      */
     private function build_form_footer()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
@@ -156,7 +156,7 @@ class RightsForm extends FormValidator
 
         $this->addElement('category', Translation::get('Inheritance'));
 
-        $group = array();
+        $group = [];
 
         if (!$has_root_location)
         {
@@ -187,7 +187,7 @@ class RightsForm extends FormValidator
     {
         if (count($this->locations) > 1)
         {
-            $html = array();
+            $html = [];
             $html[] = '<ul>';
 
             foreach ($this->locations as $location)
@@ -215,7 +215,7 @@ class RightsForm extends FormValidator
         $this->addElement('category', $right_name);
         $this->addElement('html', '<div class="right">');
 
-        $group = array();
+        $group = [];
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
@@ -251,7 +251,7 @@ class RightsForm extends FormValidator
      *
      * @param string[] $defaults
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $locations = $this->locations;
         $first_location = $locations[0];
@@ -271,7 +271,7 @@ class RightsForm extends FormValidator
                 $defaults[self::PROPERTY_INHERIT] = self::INHERIT_FALSE;
             }
 
-            $selected_entities_per_right = array();
+            $selected_entities_per_right = [];
             foreach ($this->selected_entities as $selected_entity)
             {
                 $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;

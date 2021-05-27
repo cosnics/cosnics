@@ -85,7 +85,7 @@ class Viewer
      */
     public function get_form_values()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable($this->context)
@@ -100,7 +100,7 @@ class Viewer
 
         if (!$form)
         {
-            return new DataClassIterator(Value::class, array());
+            return new DataClassIterator(Value::class, []);
         }
 
         $subcondition = new EqualityCondition(
@@ -108,7 +108,7 @@ class Viewer
             new StaticConditionVariable($form->get_id())
         );
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), null, $subcondition

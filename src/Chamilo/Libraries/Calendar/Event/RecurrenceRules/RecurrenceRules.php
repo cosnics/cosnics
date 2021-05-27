@@ -76,8 +76,8 @@ class RecurrenceRules
      * @param integer[] $byWeekNumber
      */
     public function __construct(
-        $frequency = self::FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = array(),
-        $byMonthDay = array(), $byMonth = array(), $byWeekNumber = array()
+        $frequency = self::FREQUENCY_NONE, $until = null, $count = null, $interval = null, $byDay = [],
+        $byMonthDay = [], $byMonth = [], $byWeekNumber = []
     )
     {
         $this->frequency = $frequency;

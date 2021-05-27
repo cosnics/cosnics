@@ -44,7 +44,7 @@ class HtmlEditorFileComponent extends Manager
                 $this,
                 \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects());
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $processor->run();
@@ -61,7 +61,7 @@ class HtmlEditorFileComponent extends Manager
 
     public function get_allowed_content_object_types()
     {
-        $types = array();
+        $types = [];
 
         $active_types = DataManager::get_registered_types(true);
 

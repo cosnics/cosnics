@@ -39,7 +39,7 @@ abstract class Preview extends Application
      */
     public function not_available($message)
     {
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = Display::normal_message($message);

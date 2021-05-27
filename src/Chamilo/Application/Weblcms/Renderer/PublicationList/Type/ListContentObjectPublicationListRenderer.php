@@ -112,7 +112,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function determinePanelClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'panel';
         $classes[] = 'panel-default';
@@ -323,7 +323,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-all'
             )
         );
@@ -331,7 +331,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $buttonToolBar->addItem(
             new Button(
                 Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('check-square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-none'
             )
         );
@@ -360,7 +360,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-        $html = array();
+        $html = [];
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->getListName() . '_namespace" value="' .
@@ -376,7 +376,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -416,7 +416,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderHeader()
     {
-        $html = array();
+        $html = [];
 
         if ($this->hasActions())
         {
@@ -466,7 +466,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         $queryParameters = $this->get_tool_browser()->get_parameters();
         $queryParameters[self::PARAM_PAGE_NUMBER] = $this->getCurrentPageNumber();
 
-        $translationVariables = array();
+        $translationVariables = [];
         $translationVariables[Application::PARAM_CONTEXT] = Manager::package();
         $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_TITLE] = 'ShowNumberOfPublicationsPerPage';
         $translationVariables[PagerRenderer::PAGE_SELECTOR_TRANSLATION_ROW] = 'NumberOfPublicationsPerPage';
@@ -499,7 +499,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderPublicationActions($publication)
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderPublicationActionsToolbar($publication, false);
 
@@ -595,7 +595,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $dropdownButton->addSubButton(
                 new SubButton(
                     Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('edit', array(), null, 'fas'), $this->get_url(
+                    new FontAwesomeGlyph('edit', [], null, 'fas'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -772,7 +772,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderPublicationBody($publication)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-body">';
         $html[] = '<div class="col-xs-12">';
@@ -791,7 +791,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderPublicationFooter($publication)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-footer">';
 
@@ -805,7 +805,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
 
         $html[] = '<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         $html[] = $glyph->render();
         $html[] = $this->render_publication_targets($publication);
@@ -824,7 +824,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderPublicationHeader($publication)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-header">';
 
@@ -860,11 +860,11 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
     {
         $lastVisitDate = $this->get_tool_browser()->get_last_visit_date();
 
-        $html = array();
+        $html = [];
 
         if ($this->hasActions())
         {
-            $checkboxHtml = array();
+            $checkboxHtml = [];
 
             $checkboxHtml[] = '<span class="label-checkbox checkbox checkbox-primary">';
             $checkboxHtml[] = '<input type="checkbox" class="publication-select styled styled-primary" name="' .
@@ -927,12 +927,12 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function renderVisibilityData($publication)
     {
-        $html = array();
+        $html = [];
         if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
         {
             $html[] = '<span class="text-warning">';
 
-            $glyph = new FontAwesomeGlyph('eye-slash', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('eye-slash', [], null, 'fas');
 
             $html[] = $glyph->render();
             $html[] = Translation::get('PublicationLabelHidden');
@@ -941,7 +941,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
         elseif ($publication[ContentObjectPublication::PROPERTY_FROM_DATE] != 0 ||
             $publication[ContentObjectPublication::PROPERTY_TO_DATE] != 0)
         {
-            $glyph = new FontAwesomeGlyph('eye', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('eye', [], null, 'fas');
 
             $html[] = $glyph->render();
             $html[] = $this->render_publication_period($publication);
@@ -996,14 +996,14 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
             $visibleDate = $this->format_date($publicationCreationDate);
         }
 
-        $html = array();
+        $html = [];
 
         if ($contentModified)
         {
             $html[] = '<span class="text-danger">';
         }
 
-        $glyph = new FontAwesomeGlyph('clock', array(), null, 'far');
+        $glyph = new FontAwesomeGlyph('clock', [], null, 'far');
 
         $html[] = $glyph->render();
         $html[] = $visibleDate;
@@ -1027,7 +1027,7 @@ class ListContentObjectPublicationListRenderer extends ContentObjectPublicationL
      */
     public function render_publication($publication, $first = false, $last = false, $position = 0)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="' . $this->determinePanelClasses() . '">';
         $html[] = '<div class="panel-body">';

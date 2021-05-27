@@ -63,7 +63,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * @param string[] $config
      */
     public function __construct(
-        $elementName = null, $elementLabel = null, $elementTypes = null, $defaultValues = null, $config = array()
+        $elementName = null, $elementLabel = null, $elementTypes = null, $defaultValues = null, $config = []
     )
     {
         HTML_QuickForm_element::__construct($elementName, $elementLabel);
@@ -111,13 +111,13 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $deactivate_button_id = 'deactivate_button';
         $element_types_select_box_id = 'element_types_selector';
 
-        $this->_elements = array();
+        $this->_elements = [];
 
         $this->_elements[] = new HTML_QuickForm_hidden(
             'active_hidden_' . $this->getName(), null, array('id' => $active_hidden_id)
         );
 
-        $element_types_array = array();
+        $element_types_array = [];
         $element_types_array[- 1] =
             '-- ' . Translation::get('SelectElementType', null, Utilities::COMMON_LIBRARIES) . ' --';
         foreach ($this->element_types->get_types() as $element_type)
@@ -139,16 +139,16 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
-            'activate_' . $this->getName(), Translation::get('AddToSelection', array(), Utilities::COMMON_LIBRARIES),
+            'activate_' . $this->getName(), Translation::get('AddToSelection', [], Utilities::COMMON_LIBRARIES),
             array('id' => $activate_button_id, 'class' => 'btn-primary activate_elements form-control'), '',
-            new FontAwesomeGlyph('arrow-alt-circle-right', array(), null, 'fas')
+            new FontAwesomeGlyph('arrow-alt-circle-right', [], null, 'fas')
         );
 
         $this->_elements[] = new HTML_QuickForm_stylebutton(
             'deactivate_' . $this->getName(),
-            Translation::get('RemoveFromSelection', array(), Utilities::COMMON_LIBRARIES),
+            Translation::get('RemoveFromSelection', [], Utilities::COMMON_LIBRARIES),
             array('id' => $deactivate_button_id, 'class' => 'btn-danger deactivate_elements form-control'), '',
-            new FontAwesomeGlyph('arrow-alt-circle-left', array(), null, 'fas')
+            new FontAwesomeGlyph('arrow-alt-circle-left', [], null, 'fas')
         );
     }
 
@@ -190,7 +190,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      */
     public function getValue()
     {
-        $results = array();
+        $results = [];
         $values = json_decode($this->_elements[0]->getValue());
 
         foreach ($values as $value)
@@ -237,7 +237,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
 
         $this->defaultValues = $defaultValues;
 
-        $default_ids = array();
+        $default_ids = [];
         foreach ($defaultValues->get_elements() as $default_value)
         {
             $default_ids[] = $default_value->get_id();
@@ -258,7 +258,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
         $safe_name = str_replace(']', '', $safe_name);
         $id = 'tbl_' . $safe_name;
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="element_finder" id="' . $id . '">';
 

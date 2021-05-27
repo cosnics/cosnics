@@ -87,7 +87,7 @@ class CourseGroupEntity implements NestedRightsEntity
 
         if ($condition)
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = $condition;
             $conditions[] = $course_condition;
@@ -114,7 +114,7 @@ class CourseGroupEntity implements NestedRightsEntity
             return null;
         }
 
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $group->get_name(), $group->get_description()
@@ -139,7 +139,7 @@ class CourseGroupEntity implements NestedRightsEntity
      */
     public function get_entity_icon()
     {
-        return new FontAwesomeGlyph('users', array(), null, 'fas');
+        return new FontAwesomeGlyph('users', [], null, 'fas');
     }
 
     /**

@@ -46,7 +46,7 @@ class CourseGroupOffice365Reference extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_COURSE_GROUP_ID;
         $extended_property_names[] = self::PROPERTY_OFFICE365_HAS_TEAM;

@@ -33,11 +33,11 @@ class DeleteTemporaryFileComponent extends Manager
 
         if (!$result)
         {
-            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', array(), Utilities::COMMON_LIBRARIES));
+            JsonAjaxResult::general_error($translator->trans('FileNotRemoved', [], Utilities::COMMON_LIBRARIES));
         }
         else
         {
-            JsonAjaxResult::success($translator->trans('FileRemoved', array(), Utilities::COMMON_LIBRARIES));
+            JsonAjaxResult::success($translator->trans('FileRemoved', [], Utilities::COMMON_LIBRARIES));
         }
     }
 

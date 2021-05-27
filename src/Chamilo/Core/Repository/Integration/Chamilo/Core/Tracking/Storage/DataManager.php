@@ -156,7 +156,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         ContentObject $current_content_object, $condition, $offset, $count, $order_property = null
     )
     {
-        $content_object_activities = array();
+        $content_object_activities = [];
 
         if ($current_content_object instanceof ComplexContentObjectSupport)
         {

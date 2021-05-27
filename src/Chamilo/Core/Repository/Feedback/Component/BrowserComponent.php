@@ -68,7 +68,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         else
 
         {
-            $html = array();
+            $html = [];
 
             $feedbacks = $this->feedbackServiceBridge->getFeedback(
                 $this->getPager()->getNumberOfItemsPerPage(),
@@ -198,7 +198,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     protected function renderFeedbackButtonToolbar()
     {
-        $buttonToolbar = new ButtonToolBar(null, array(), array('receive-feedback-buttons'));
+        $buttonToolbar = new ButtonToolBar(null, [], array('receive-feedback-buttons'));
         $buttonToolbarRenderer = new ButtonToolBarRenderer($buttonToolbar);
 
         if (!$this->get_application() instanceof FeedbackNotificationSupport)
@@ -213,7 +213,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
-            $baseParameters = array();
+            $baseParameters = [];
 
             if ($isAllowedToViewFeedback)
             {
@@ -238,7 +238,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $buttonToolbar->addItems($actionsGenerator->run());
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="receive-feedback-spacer"></div>';
 

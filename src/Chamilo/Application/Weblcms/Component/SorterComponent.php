@@ -121,7 +121,7 @@ class SorterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -144,7 +144,7 @@ class SorterComponent extends Manager
         }
         else
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
@@ -191,7 +191,7 @@ class SorterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -218,7 +218,7 @@ class SorterComponent extends Manager
 
     public function display_page_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<div class="clearfix"></div><br />';
@@ -252,7 +252,7 @@ class SorterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -382,7 +382,7 @@ class SorterComponent extends Manager
         return $this->getService(DataClassRepositoryCache::class);
     }
 
-    public function get_course_actions($course_type_user_category = array(), $course = null, $offset = 1, $count = 1)
+    public function get_course_actions($course_type_user_category = [], $course = null, $offset = 1, $count = 1)
     {
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
@@ -558,7 +558,7 @@ class SorterComponent extends Manager
 
     public function move_course($course_id, $course_type_user_category_id, $direction)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -671,7 +671,7 @@ class SorterComponent extends Manager
     {
         $renderer = new CourseTypeCourseListRenderer($this);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->display_page_header();
         $html[] = $this->getButtonToolbarRenderer($renderer)->render();

@@ -53,7 +53,7 @@ class SubscribeComponent extends Manager
             if (isset($userIds) && count($userIds) > 0)
             {
                 $failures = 0;
-                $usersStatus = array();
+                $usersStatus = [];
 
                 $course_management_rights = CourseManagementRights::getInstance();
 
@@ -150,7 +150,7 @@ class SubscribeComponent extends Manager
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    protected function findUsersByIds(array $userIds = array())
+    protected function findUsersByIds(array $userIds = [])
     {
         return $this->getUserService()->findUsers(
             new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIds)
@@ -165,9 +165,9 @@ class SubscribeComponent extends Manager
      *
      * @return string
      */
-    protected function renderRequestUserList(Translation $translator, $requestUsers = array())
+    protected function renderRequestUserList(Translation $translator, $requestUsers = [])
     {
-        $requestUserIds = array();
+        $requestUserIds = [];
 
         foreach ($requestUsers as $requestUser)
         {
@@ -197,11 +197,11 @@ class SubscribeComponent extends Manager
      *
      * @return string
      */
-    protected function renderStatusPage($usersStatus = array())
+    protected function renderStatusPage($usersStatus = [])
     {
         $translator = Translation::getInstance();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -232,14 +232,14 @@ class SubscribeComponent extends Manager
      *
      * @return string
      */
-    protected function renderUserList($statusClass, $statusTitle, $users = array(), array $additionalItems = array())
+    protected function renderUserList($statusClass, $statusTitle, $users = [], array $additionalItems = [])
     {
         if (empty($users))
         {
             return '';
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel ' . $statusClass . '">';
         $html[] = '<div class="panel-heading">';

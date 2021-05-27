@@ -27,7 +27,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function get_additional_links()
     {
-        $links = array();
+        $links = [];
 
         $links[] = new LinkTypeSelectorOption(
             self::package(), 'MergeAssessment', $this->get_url(

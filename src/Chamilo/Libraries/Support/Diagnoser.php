@@ -121,9 +121,9 @@ class Diagnoser
      */
     public function format_on_off($value)
     {
-        return $value ? $this->getTranslation('ConfirmOn', array(), Utilities::COMMON_LIBRARIES) :
+        return $value ? $this->getTranslation('ConfirmOn', [], Utilities::COMMON_LIBRARIES) :
             $this->getTranslation(
-                'ConfirmOff', array(), Utilities::COMMON_LIBRARIES
+                'ConfirmOff', [], Utilities::COMMON_LIBRARIES
             );
     }
 
@@ -135,9 +135,9 @@ class Diagnoser
      */
     public function format_yes_no($value)
     {
-        return $value ? $this->getTranslation('ConfirmYes', array(), Utilities::COMMON_LIBRARIES) :
+        return $value ? $this->getTranslation('ConfirmYes', [], Utilities::COMMON_LIBRARIES) :
             $this->getTranslation(
-                'ConfirmNo', array(), Utilities::COMMON_LIBRARIES
+                'ConfirmNo', [], Utilities::COMMON_LIBRARIES
             );
     }
 
@@ -148,9 +148,9 @@ class Diagnoser
      *
      * @return string
      */
-    public function getTranslation($variable, $parameters = array(), $context = Utilities::COMMON_LIBRARIES)
+    public function getTranslation($variable, $parameters = [], $context = Utilities::COMMON_LIBRARIES)
     {
-        return Translation::get($variable, array(), Utilities::COMMON_LIBRARIES);
+        return Translation::get($variable, [], Utilities::COMMON_LIBRARIES);
     }
 
     /**
@@ -161,11 +161,11 @@ class Diagnoser
      */
     public function get_chamilo_data()
     {
-        $array = array();
+        $array = [];
 
         $pathRenderer = Path::getInstance();
 
-        $writable_folders = array();
+        $writable_folders = [];
         $writable_folders[] = $pathRenderer->getStoragePath();
         $writable_folders[] = $pathRenderer->getRepositoryPath();
         $writable_folders[] = $pathRenderer->getTemporaryPath();
@@ -192,8 +192,8 @@ class Diagnoser
 
         $date = Configuration::get('Chamilo\Configuration', 'general', 'install_date');
         $date = DatetimeUtilities::format_locale_date(
-            $this->getTranslation('DateFormatShort', array(), Utilities::COMMON_LIBRARIES) . ', ' .
-            $this->getTranslation('TimeNoSecFormat', array(), Utilities::COMMON_LIBRARIES), $date
+            $this->getTranslation('DateFormatShort', [], Utilities::COMMON_LIBRARIES) . ', ' .
+            $this->getTranslation('TimeNoSecFormat', [], Utilities::COMMON_LIBRARIES), $date
         );
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
@@ -224,7 +224,7 @@ class Diagnoser
         $proto_info = $connection->protocol_version;
         $client_info = $connection->client_info;
 
-        $array = array();
+        $array = [];
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[Database]', 'host_info',
@@ -273,7 +273,7 @@ class Diagnoser
      */
     public function get_php_data()
     {
-        $array = array();
+        $array = [];
 
         // General Functions
 
@@ -484,7 +484,7 @@ class Diagnoser
      */
     public function get_webserver_data()
     {
-        $array = array();
+        $array = [];
 
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]',

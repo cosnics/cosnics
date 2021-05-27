@@ -67,7 +67,7 @@ class ToolSelectorComponent extends Manager
                                 self::PARAM_COURSE_SECTION_ID => $id)),
                         Translation::get('SelectTools')));
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

@@ -41,7 +41,7 @@ class LinkForm extends ContentObjectForm
      */
     protected function check_https_compliance($fields)
     {
-        $errors = array();
+        $errors = [];
 
         if (!isset($_SERVER['HTTPS']))
         {
@@ -79,7 +79,7 @@ class LinkForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $co = $this->get_content_object();
         $co_id = $co->get_id();

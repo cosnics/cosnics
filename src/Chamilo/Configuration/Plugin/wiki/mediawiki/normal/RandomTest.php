@@ -73,7 +73,7 @@ function showDiffs($a, $b)
     $diffs = new Diff($ota, $nta);
     $formatter = new TableDiffFormatter();
     $funky = $formatter->format($diffs);
-    $matches = array();
+    $matches = [];
     preg_match_all('/<(?:ins|del) class="diffchange">(.*?)<\/(?:ins|del)>/', $funky, $matches);
     foreach ($matches[1] as $bit)
     {

@@ -116,7 +116,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
 
     public function get_assessment_parameters()
     {
-        return array();
+        return [];
     }
 
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
@@ -183,7 +183,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
      */
     public function get_registered_question_ids()
     {
-        $question_ids = array();
+        $question_ids = [];
 
         $question_attempts = $this->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)

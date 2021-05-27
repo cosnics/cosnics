@@ -16,7 +16,7 @@ abstract class EmailNotificator
      * Variables *
      * **************************************************************************************************************
      */
-    public $users = array();
+    public $users = [];
 
     public $topic;
 

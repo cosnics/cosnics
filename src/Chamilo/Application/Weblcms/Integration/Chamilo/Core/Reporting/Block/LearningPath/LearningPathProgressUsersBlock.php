@@ -40,7 +40,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $course_id = $this->getCourseId();
         $users = CourseDataManager::retrieve_all_course_users($course_id);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
@@ -67,8 +67,8 @@ class LearningPathProgressUsersBlock extends ToolBlock
             $condition, $order_by
         );
 
-        $publications = array();
-        $headings = array();
+        $publications = [];
+        $headings = [];
         $headings[] = Translation::get('Name');
         foreach ($publication_resultset as $publication)
         {

@@ -28,7 +28,7 @@ class AssessmentResultProcessor
      *
      * @var array
      */
-    private $question_results = array();
+    private $question_results = [];
 
     public function __construct(AssessmentViewerComponent $assessment_viewer)
     {

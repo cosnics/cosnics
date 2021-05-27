@@ -56,7 +56,7 @@ class BrowserComponent extends Manager
 
     public function getFilterActions()
     {
-        $showActions = array();
+        $showActions = [];
         $filter = $this->getFilter();
 
         $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
@@ -64,7 +64,7 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButton(
             Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL, false, array(), null, ($filter == '' ? true : false)
+            Button::DISPLAY_LABEL, false, [], null, ($filter == '' ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -73,7 +73,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_TODAY ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_TODAY ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -82,7 +82,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_WEEK ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_THIS_WEEK ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -91,7 +91,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_MONTH ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_THIS_MONTH ? true : false)
         );
 
         $showActions[] = new SubButtonDivider();
@@ -120,7 +120,7 @@ class BrowserComponent extends Manager
 
     public function get_tool_conditions()
     {
-        $conditions = array();
+        $conditions = [];
         $filter = Request::get(self::PARAM_FILTER);
 
         switch ($filter)

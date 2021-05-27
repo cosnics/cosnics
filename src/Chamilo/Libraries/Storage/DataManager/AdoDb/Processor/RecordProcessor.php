@@ -16,7 +16,7 @@ class RecordProcessor
      *
      * @return NULL|string
      */
-    protected function determineFieldTypeFromMap($key, $typeMap = array())
+    protected function determineFieldTypeFromMap($key, $typeMap = [])
     {
         return isset($typeMap[$key]) ? $typeMap[$key] : null;
     }
@@ -48,7 +48,7 @@ class RecordProcessor
      *
      * @return string[]
      */
-    public function processRecord($record, $typeMap = array())
+    public function processRecord($record, $typeMap = [])
     {
         foreach ($record as $key => &$field)
         {

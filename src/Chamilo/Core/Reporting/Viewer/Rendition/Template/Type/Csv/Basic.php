@@ -22,7 +22,7 @@ class Basic extends Csv
         if ($this->show_all())
         {
             $views = $this->get_context()->get_current_view();
-            $specific_views = array();
+            $specific_views = [];
             
             foreach ($views as $key => $view)
             {
@@ -52,7 +52,7 @@ class Basic extends Csv
                 }
                 else
                 {
-                    $data = array();
+                    $data = [];
                     
                     foreach ($specific_views as $specific_view)
                     {
@@ -67,9 +67,9 @@ class Basic extends Csv
                                 ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
                                 null, 
                                 ClassnameUtilities::getInstance()->getNamespaceFromObject($block)));
-                        $data[] = array();
+                        $data[] = [];
                         $data = array_merge($data, $rendered_block);
-                        $data[] = array();
+                        $data[] = [];
                     }
                     
                     $file_name = Translation::get(
@@ -82,7 +82,7 @@ class Basic extends Csv
             // No specific view was set and we are rendering everything, so render everything
             else
             {
-                $data = array();
+                $data = [];
                 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {
@@ -96,9 +96,9 @@ class Basic extends Csv
                             ClassnameUtilities::getInstance()->getClassnameFromObject($block), 
                             null, 
                             ClassnameUtilities::getInstance()->getNamespaceFromObject($block)));
-                    $data[] = array();
+                    $data[] = [];
                     $data = array_merge($data, $rendered_block);
-                    $data[] = array();
+                    $data[] = [];
                 }
                 
                 $file_name = Translation::get(

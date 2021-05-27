@@ -39,7 +39,7 @@ class LanguageConsulter extends DataConsulter
      */
     public function getOtherLanguages(string $isocodeToExclude)
     {
-        $languages = array();
+        $languages = [];
 
         foreach ($this->getLanguages() as $isocode => $language)
         {

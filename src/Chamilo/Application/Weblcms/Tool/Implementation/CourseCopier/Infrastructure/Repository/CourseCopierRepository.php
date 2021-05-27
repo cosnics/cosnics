@@ -42,11 +42,11 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    public function findPublicationCategoriesByIds($categoryIds = array())
+    public function findPublicationCategoriesByIds($categoryIds = [])
     {
         if (empty($categoryIds))
         {
-            return array();
+            return [];
         }
         
         $condition = new InCondition(
@@ -55,7 +55,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
                 ContentObjectPublicationCategory::PROPERTY_ID), 
             $categoryIds);
         
-        $order_by = array();
+        $order_by = [];
         
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(

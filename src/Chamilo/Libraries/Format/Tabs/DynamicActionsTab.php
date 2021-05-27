@@ -21,7 +21,7 @@ class DynamicActionsTab extends DynamicTab
      * @param string|\Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph $image
      * @param \Chamilo\Libraries\Format\Tabs\DynamicAction[] $actions
      */
-    public function __construct($id, $name, $image, $actions = array())
+    public function __construct($id, $name, $image, $actions = [])
     {
         parent::__construct($id, $name, $image);
         $this->actions = $actions;
@@ -43,7 +43,7 @@ class DynamicActionsTab extends DynamicTab
      */
     public function body($isOnlyTab = false)
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->body_header();
 
@@ -63,7 +63,7 @@ class DynamicActionsTab extends DynamicTab
      */
     public function body_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
         $html[] = '<div class="list-group">';

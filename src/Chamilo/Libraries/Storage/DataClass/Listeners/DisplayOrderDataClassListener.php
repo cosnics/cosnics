@@ -76,7 +76,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         $data_class = $this->data_class;
         $properties = $this->data_class->get_display_order_context_properties();
 
-        $conditions = array();
+        $conditions = [];
 
         foreach ($properties as $property)
         {
@@ -192,7 +192,7 @@ class DisplayOrderDataClassListener extends DataClassListener
             }
         }
 
-        $display_order_context_properties = array();
+        $display_order_context_properties = [];
         foreach ($data_class->get_display_order_context_properties() as $display_order_context_property)
         {
             $display_order_context_properties[] = $display_order_context_property->get_property();

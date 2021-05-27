@@ -24,7 +24,7 @@ class UserEntityHelper
 
     public static function get_table_columns()
     {
-        $columns = array();
+        $columns = [];
         $columns[] = new DataClassPropertyTableColumn(
             User::class,
             User::PROPERTY_LASTNAME);
@@ -138,7 +138,7 @@ class UserEntityHelper
 
     public static function expand($entity_id)
     {
-        $entities = array();
+        $entities = [];
 
         $user = DataManager::retrieve_by_id(
             User::class,

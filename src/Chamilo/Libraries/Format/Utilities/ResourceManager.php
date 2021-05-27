@@ -37,7 +37,7 @@ class ResourceManager
     public function __construct(PathBuilder $pathBuilder)
     {
         $this->pathBuilder = $pathBuilder;
-        $this->resources = array();
+        $this->resources = [];
     }
 
     /**
@@ -127,7 +127,7 @@ class ResourceManager
         $systemPath = str_replace($webPath, $basePath, $path);
         $modificationTime = filemtime($systemPath);
 
-        $matches = array();
+        $matches = [];
         preg_match('/[^.]*$/', $path, $matches);
         $extension = $matches[0];
         switch (strtolower($extension))

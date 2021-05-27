@@ -19,7 +19,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
     const TOLERANCE_TYPE_ABSOLUTE = 'absolute';
     const TOLERANCE_TYPE_RELATIVE = 'relative';
 
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = null)
     {
         parent::__construct($defaultProperties, $additionalProperties);
         if (!isset($additionalProperties[self::PROPERTY_TOLERANCE_TYPE]))
@@ -73,7 +73,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_HINT));
     }
@@ -121,7 +121,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**

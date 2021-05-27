@@ -107,7 +107,7 @@ abstract class RightsLocation extends NestedTreeNode
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             array(
@@ -210,7 +210,7 @@ abstract class RightsLocation extends NestedTreeNode
      */
     public function get_rights_entities($right_id = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $class_name = static::package() . '\Storage\DataClass\RightsLocationEntityRight';
 

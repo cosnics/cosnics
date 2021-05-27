@@ -16,7 +16,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
     protected function renderRssFeeds()
     {
         $object = $this->get_content_object();
-        $html = array();
+        $html = [];
         
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\ContentObject\RssFeed', true) .

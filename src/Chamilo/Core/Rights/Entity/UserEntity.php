@@ -95,7 +95,7 @@ class UserEntity implements RightsEntity
             return null;
         }
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $user->get_fullname(),
@@ -109,7 +109,7 @@ class UserEntity implements RightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'users', Translation::get('Users'), Manager::context() . '\Ajax', 'user_entity_feed', array()
+            'users', Translation::get('Users'), Manager::context() . '\Ajax', 'user_entity_feed', []
         );
     }
 
@@ -120,7 +120,7 @@ class UserEntity implements RightsEntity
      */
     public function get_entity_icon()
     {
-        return new FontAwesomeGlyph('user', array(), null, 'fas');
+        return new FontAwesomeGlyph('user', [], null, 'fas');
     }
 
     /**

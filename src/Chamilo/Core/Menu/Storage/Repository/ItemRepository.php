@@ -152,7 +152,7 @@ class ItemRepository
      */
     public function findItems()
     {
-        $orderBy = array();
+        $orderBy = [];
         $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT));
         $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
 
@@ -185,7 +185,7 @@ class ItemRepository
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = array()
+        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = []
     )
     {
         $condition = new EqualityCondition(
@@ -206,7 +206,7 @@ class ItemRepository
      */
     public function findRootCategoryItems()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT), new StaticConditionVariable(0)

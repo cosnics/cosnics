@@ -50,7 +50,7 @@ class ViewerComponent extends Manager implements DelegateComponent
 
         $display = new PackageDisplay($this);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -79,8 +79,8 @@ class ViewerComponent extends Manager implements DelegateComponent
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation::get('Deactivate', array(), Utilities::COMMON_LIBRARIES),
-                                new FontAwesomeGlyph('pause-circle', array(), null, 'fas'), $this->get_url(
+                                Translation::get('Deactivate', [], Utilities::COMMON_LIBRARIES),
+                                new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                                 array(
                                     self::PARAM_ACTION => self::ACTION_DEACTIVATE, self::PARAM_CONTEXT => $this->context
                                 )
@@ -98,8 +98,8 @@ class ViewerComponent extends Manager implements DelegateComponent
                     {
                         $commonActions->addButton(
                             new Button(
-                                Translation::get('Activate', array(), Utilities::COMMON_LIBRARIES),
-                                new FontAwesomeGlyph('play-circle', array(), null, 'fas'), $this->get_url(
+                                Translation::get('Activate', [], Utilities::COMMON_LIBRARIES),
+                                new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
                                 array(
                                     self::PARAM_ACTION => self::ACTION_ACTIVATE, self::PARAM_CONTEXT => $this->context
                                 )
@@ -113,8 +113,8 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Install', array(), Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('box', array(), null, 'fas'), $this->get_url(
+                        Translation::get('Install', [], Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
                         array(self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $this->context)
                     ), ToolbarItem::DISPLAY_ICON_AND_LABEL, true
                     )

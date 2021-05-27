@@ -72,7 +72,7 @@ class WidgetItemRenderer extends ItemRenderer
 
         $userPicture = $this->getUserPictureProvider()->getUserPictureAsBase64String($user, $user);
 
-        $html = array();
+        $html = [];
 
         $selected = $this->isSelected($item);
         $title = $this->renderTitle($item);

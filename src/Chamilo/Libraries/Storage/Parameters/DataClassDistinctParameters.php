@@ -24,7 +24,7 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
      */
     public function __construct(
         Condition $condition = null, DataClassProperties $dataClassProperties = null, Joins $joins = null,
-        $orderBy = array()
+        $orderBy = []
     )
     {
         DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy);

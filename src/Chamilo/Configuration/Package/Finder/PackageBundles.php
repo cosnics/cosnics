@@ -39,7 +39,7 @@ class PackageBundles extends BasicBundles
      *
      * @var \Chamilo\Configuration\Package\PackageList[]
      */
-    private $packageLists = array();
+    private $packageLists = [];
 
     /**
      *
@@ -64,7 +64,7 @@ class PackageBundles extends BasicBundles
      */
     private function determinePackageNamespaceAncestors($packageNamespace)
     {
-        $packageNamespacePath = array();
+        $packageNamespacePath = [];
         $packageParentNamespace = $this->determinePackageParentNamespace($packageNamespace);
         $packagePath[] = $packageParentNamespace;
 

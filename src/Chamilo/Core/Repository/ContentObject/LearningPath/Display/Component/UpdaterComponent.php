@@ -86,7 +86,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                     )
                 );
 
-                $params = array();
+                $params = [];
                 $params[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
                 $values = $form->exportValues();
@@ -127,7 +127,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -156,7 +156,7 @@ class UpdaterComponent extends BaseHtmlTreeComponent
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $this->renderRepoDragPanel();

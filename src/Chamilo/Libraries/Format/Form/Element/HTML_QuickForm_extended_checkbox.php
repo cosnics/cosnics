@@ -225,7 +225,7 @@ class HTML_QuickForm_extended_checkbox extends HTML_QuickForm_checkbox
     {
         if (!$this->isFrozen())
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<div class="' . $this->getCheckboxClasses() . '">';
             $html[] = HTML_QuickForm_input::toHtml();

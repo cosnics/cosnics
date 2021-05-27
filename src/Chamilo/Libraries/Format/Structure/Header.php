@@ -44,7 +44,7 @@ class Header extends BaseHeader
 
         if (!empty($googleAnalyticsTrackingId))
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<script>';
             $html[] = '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){';

@@ -121,7 +121,7 @@ class ErrorHandler
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Configuration')
+    protected function getTranslation($variable, $parameters = [], $context = 'Chamilo\Configuration')
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
     }

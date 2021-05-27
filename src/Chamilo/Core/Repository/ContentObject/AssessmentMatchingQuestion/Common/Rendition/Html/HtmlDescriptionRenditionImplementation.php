@@ -20,10 +20,10 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $matches = $content_object->get_matches();
         $options = $content_object->get_options();
         
-        $html = array();
+        $html = [];
         
         // Adding the matches
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -54,7 +54,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $html[] = '<br />';
         
         // Adding the items to be matched
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';

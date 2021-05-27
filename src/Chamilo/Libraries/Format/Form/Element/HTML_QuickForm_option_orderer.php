@@ -29,7 +29,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      * @param string $separator
      * @param string[] $attributes
      */
-    public function __construct($name = null, $label = null, $options = null, $separator = '|', $attributes = array())
+    public function __construct($name = null, $label = null, $options = null, $separator = '|', $attributes = [])
     {
         $this->separator = $separator;
         $value = (isset($_REQUEST[$name]) ? $_REQUEST[$name] : implode($this->separator, array_keys($options)));
@@ -60,7 +60,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      */
     public function getFrozenHtml()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ol class="option-orderer oord-name_' . $this->getName() . '">';
 
@@ -96,7 +96,7 @@ class HTML_QuickForm_option_orderer extends HTML_QuickForm_hidden
      */
     public function toHtml()
     {
-        $html = array();
+        $html = [];
 
         $html[] = ResourceManager::getInstance()->getResourceHtml(
             Path::getInstance()->getJavascriptPath('Chamilo\Libraries', true) . 'OptionOrderer.js'

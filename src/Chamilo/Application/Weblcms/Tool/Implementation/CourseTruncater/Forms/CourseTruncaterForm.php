@@ -51,8 +51,8 @@ class CourseTruncaterForm extends FormValidator
      */
     public function buildForm()
     {
-        $defaults = array();
-        $translations = array();
+        $defaults = [];
+        $translations = [];
         
         $this->addElement('category', Translation::get('Publications'));
         
@@ -125,7 +125,7 @@ class CourseTruncaterForm extends FormValidator
             'confirm', 
             Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 
             'required');
-        $prevnext = array();
+        $prevnext = [];
         $prevnext[] = $this->createElement('style_submit_button', self::PARAM_SUBMIT, Translation::get('Truncate'));
         $this->addGroup($prevnext, 'buttons', '', '&nbsp;', false);
         $this->updateAttributes(array('action' => $this->parent->get_url()));

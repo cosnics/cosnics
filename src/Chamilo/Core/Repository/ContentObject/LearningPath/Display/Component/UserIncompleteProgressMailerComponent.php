@@ -40,7 +40,7 @@ class UserIncompleteProgressMailerComponent extends Manager
             $this->learningPath, $currentTreeNode
         );
 
-        $emailAddresses = array();
+        $emailAddresses = [];
 
         $emailAddresses[] = $this->getUser()->get_email();
 
@@ -63,7 +63,7 @@ class UserIncompleteProgressMailerComponent extends Manager
             $mailerFactory = new MailerFactory();
             $mail = new Mail(
                 $translator->getTranslation('IncompleteProgressMailTitle', $this->getParameters()),
-                $mailContent, $emailAddresses, true, array(), array(), $this->getUser()->get_fullname(),
+                $mailContent, $emailAddresses, true, [], [], $this->getUser()->get_fullname(),
                 $this->getUser()->get_email()
             );
 

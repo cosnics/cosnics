@@ -95,7 +95,7 @@ class RawExportResultsComponent extends Manager
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($this->get_publication_id()));
         
-        $assessment_results = array();
+        $assessment_results = [];
         
         $assessment_attempts = WeblcmsTrackingDataManager::retrieves(
             AssessmentAttempt::class,
@@ -106,7 +106,7 @@ class RawExportResultsComponent extends Manager
                 $assessment_attempt->get_id(), 
                 $assessment_attempt->get_assessment_id(), 
                 $assessment_attempt->get_end_time(), 
-                array(), 
+                [], 
                 $assessment_attempt->get_start_time(), 
                 $assessment_attempt->get_total_score(), 
                 $assessment_attempt->get_total_time(), 
@@ -143,7 +143,7 @@ class RawExportResultsComponent extends Manager
                 QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID), 
             new StaticConditionVariable($assessment_attempt->get_id()));
         
-        $question_results = array();
+        $question_results = [];
         
         $question_attempts = DataManager::retrieves(
             QuestionAttempt::class,

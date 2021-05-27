@@ -32,7 +32,7 @@ class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, D
                 $this->get_url(array(self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId())),
                 Translation::get('ActivityComponent')));
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $activity_table->as_html();

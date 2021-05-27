@@ -41,7 +41,7 @@ class ProgressBarRenderer
             $contextualClass .= ' progress-bar-striped';
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="progress" style="margin-bottom: 0; max-width: ' . $maxWidth . ';">';
         $html[] = '<div class="progress-bar ' . $contextualClass . '" role="progressbar" aria-valuenow="' . $progress;

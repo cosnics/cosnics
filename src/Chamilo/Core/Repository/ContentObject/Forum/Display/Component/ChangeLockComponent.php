@@ -31,7 +31,7 @@ class ChangeLockComponent extends Manager
             $message = Translation::get('LockNotChanged');
         }
 
-        $params = array();
+        $params = [];
         if ($object->get_type() == Forum::class)
         {
             $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;

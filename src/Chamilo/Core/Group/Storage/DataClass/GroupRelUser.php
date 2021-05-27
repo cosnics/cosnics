@@ -25,7 +25,7 @@ class GroupRelUser extends DataClass
 
     public function delete()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($this->get_group_id())
@@ -53,7 +53,7 @@ class GroupRelUser extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_GROUP_ID, self::PROPERTY_USER_ID));
     }

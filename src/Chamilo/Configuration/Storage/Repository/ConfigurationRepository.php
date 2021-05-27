@@ -74,7 +74,7 @@ class ConfigurationRepository
      */
     public function findSettingByContextAndVariableName($context, $variable)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT),

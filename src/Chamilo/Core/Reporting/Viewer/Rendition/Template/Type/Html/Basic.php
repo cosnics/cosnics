@@ -38,7 +38,7 @@ class Basic extends Html
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $this->render_block();
@@ -109,7 +109,7 @@ class Basic extends Html
 
                     $toolActions->addButton(
                         new Button(
-                            Translation::get('ShowOne'), new FontAwesomeGlyph('clone', array(), null, 'fas'),
+                            Translation::get('ShowOne'), new FontAwesomeGlyph('clone', [], null, 'fas'),
                             $this->get_context()->get_url($parameters)
                         )
                     );
@@ -120,7 +120,7 @@ class Basic extends Html
 
                     $toolActions->addButton(
                         new Button(
-                            Translation::get('ShowAll'), new FontAwesomeGlyph('desktop', array(), null, 'fas'),
+                            Translation::get('ShowAll'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                             $this->get_context()->get_url($parameters)
                         )
                     );
@@ -134,7 +134,7 @@ class Basic extends Html
 
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ExportToExcel'), new FontAwesomeGlyph('file-excel', array(), null, 'fas'),
+                    Translation::get('ExportToExcel'), new FontAwesomeGlyph('file-excel', [], null, 'fas'),
                     $this->get_context()->get_url($parameters)
                 )
             );
@@ -145,7 +145,7 @@ class Basic extends Html
             $parameters[Manager::PARAM_FORMAT] = TemplateRendition::FORMAT_PDF;
             $commonActions->addButton(
                 new Button(
-                    Translation::get('ExportToPdf'), new FontAwesomeGlyph('file-pdf', array(), null, 'fas'),
+                    Translation::get('ExportToPdf'), new FontAwesomeGlyph('file-pdf', [], null, 'fas'),
                     $this->get_context()->get_url($parameters)
                 )
             );
@@ -166,7 +166,7 @@ class Basic extends Html
             $this->get_context()->set_parameter(Manager::PARAM_SHOW_ALL, 1);
             $this->get_context()->set_parameter(Manager::PARAM_VIEWS, $this->get_context()->get_current_view());
 
-            $html = array();
+            $html = [];
 
             foreach ($this->get_template()->get_blocks() as $key => $block)
             {
@@ -177,7 +177,7 @@ class Basic extends Html
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
                     ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null,
-                    array()
+                    []
                 );
 
                 $html[] = $glyph->render();
@@ -226,7 +226,7 @@ class Basic extends Html
                     $glyph = new NamespaceIdentGlyph(
                         $this->getBlockNamespace($block) . '\Block\\' .
                         ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
-                        IdentGlyph::SIZE_SMALL, array()
+                        IdentGlyph::SIZE_SMALL, []
                     );
 
                     $tabs->add_tab(

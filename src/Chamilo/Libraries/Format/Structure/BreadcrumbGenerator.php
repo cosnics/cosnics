@@ -94,7 +94,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
 
         $this->breadcrumb_trail->add(
             new Breadcrumb(
-                $component->get_url(array(), $filter_parameters), Translation::get('TypeName', null, $context)
+                $component->get_url([], $filter_parameters), Translation::get('TypeName', null, $context)
             )
         );
     }

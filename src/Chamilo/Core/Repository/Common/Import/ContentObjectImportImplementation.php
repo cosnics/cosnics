@@ -44,7 +44,7 @@ abstract class ContentObjectImportImplementation extends AbstractContentObjectIm
         }
     }
 
-    public static function get_types(array $types = array())
+    public static function get_types(array $types = [])
     {
         $types[] = ContentObjectImport::FORMAT_CPO;
         return $types;

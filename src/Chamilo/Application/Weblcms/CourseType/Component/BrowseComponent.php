@@ -42,7 +42,7 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_html();
@@ -105,7 +105,7 @@ class BrowseComponent extends Manager implements TableSupport
      */
     private function get_html()
     {
-        $html = array();
+        $html = [];
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 

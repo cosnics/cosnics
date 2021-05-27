@@ -35,7 +35,7 @@ class ButtonToolBar
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButtonToolBarItem[] $items
      * @param string[] $classes
      */
-    public function __construct($searchUrl = null, $items = array(), $classes = array())
+    public function __construct($searchUrl = null, $items = [], $classes = [])
     {
         $this->searchUrl = $searchUrl;
         $this->items = $items;
@@ -73,7 +73,7 @@ class ButtonToolBar
      *
      * @param AbstractButtonToolBarItem[] $buttonToolbarItems
      */
-    public function addItems($buttonToolbarItems = array())
+    public function addItems($buttonToolbarItems = [])
     {
         foreach ($buttonToolbarItems as $buttonToolbarItem)
         {

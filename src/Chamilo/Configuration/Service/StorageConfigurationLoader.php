@@ -53,7 +53,7 @@ class StorageConfigurationLoader implements CacheableDataLoaderInterface
      */
     public function getData()
     {
-        $settings = array();
+        $settings = [];
         $settingRecords = $this->getConfigurationRepository()->findSettingsAsRecords();
 
         foreach ($settingRecords as $settingRecord)

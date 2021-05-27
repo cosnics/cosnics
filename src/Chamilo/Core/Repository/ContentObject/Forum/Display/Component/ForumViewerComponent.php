@@ -88,7 +88,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -109,7 +109,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     public function renderDescription()
     {
         $forum = $this->getForum();
-        $html = array();
+        $html = [];
 
         if ($forum->has_description())
         {
@@ -144,7 +144,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         if ($this->get_complex_content_object_item())
         {
-            $forums_with_key_cloi = array();
+            $forums_with_key_cloi = [];
             $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
                 $this->get_root_content_object()->get_id(),
                 $this->get_complex_content_object_item()->get_id());
@@ -214,7 +214,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
     private function prepareTopicsAndSubforums()
     {
-        $order_property = array();
+        $order_property = [];
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class,
@@ -234,8 +234,8 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             ComplexContentObjectItem::class,
             $parameters);
 
-        $this->topics = array();
-        $this->subforums = array();
+        $this->topics = [];
+        $this->subforums = [];
 
         foreach($children as $child)
         {
@@ -265,7 +265,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      */
     private function sortTopics($topics)
     {
-        $sorted_array = array();
+        $sorted_array = [];
 
         foreach ($topics as $key => $value)
         {
@@ -275,7 +275,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         ksort($sorted_array);
 
-        $array = array();
+        $array = [];
 
         foreach ($sorted_array as $key => $value)
         {
@@ -302,15 +302,15 @@ class ForumViewerComponent extends Manager implements DelegateComponent
         $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
         $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Topics') . '</h3>');
 
-        $bootstrapGlyph = new FontAwesomeGlyph('user', array(), Translation::get("Author", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('user', [], Translation::get("Author", null, Forum::package()));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat-2x text-center'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation::get("Replies", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Replies", null, Forum::package()));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('eye', array(), Translation::get("Views", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('eye', [], Translation::get("Views", null, Forum::package()));
         $header->setHeaderContents(0, 4, $bootstrapGlyph->render());
 
         $header->setCellAttributes(0, 4, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
@@ -377,11 +377,11 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             $header->setCellAttributes(0, 0, array('class' => 'cell-stat'));
             $header->setHeaderContents(0, 1, '<h3>' . Translation::get('Subforums') . '</h3>');
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comments', array(), Translation::get("Topics", null, Forum::package()));
+            $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::package()));
             $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-            $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation::get("Posts", null, Forum::package()));
+            $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::package()));
             $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
             $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
@@ -450,7 +450,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     self::PARAM_ACTION => self::ACTION_VIEW_FORUM,
                     self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $subforum->get_id()));
 
-            $titleParts = array();
+            $titleParts = [];
 
             $titleParts[] = '<a href="' . $viewUrl . '">';
             $titleParts[] = $title;
@@ -535,7 +535,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             {
                 $fileFontAwesomeGlyph = new FontAwesomeGlyph(
                     'file',
-                    array(),
+                    [],
                     Translation::get('ViewLastPost', null, Forum::package()));
 
                 $html[] = '&nbsp;';
@@ -579,7 +579,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
         if ($this->isLocked() || $topic->get_ref()->get_locked())
         {
-            $forumGlyph = new FontAwesomeGlyph('lock', array(), Translation::get('Locked'));
+            $forumGlyph = new FontAwesomeGlyph('lock', [], Translation::get('Locked'));
         }
 
         return $forumGlyph->render();
@@ -647,7 +647,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
     {
         $buttonToolBar = new ButtonToolBar();
 
-        $parameters = array();
+        $parameters = [];
 
         $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $topic->get_id();
@@ -718,7 +718,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeSticky'),
-                                    new FontAwesomeGlyph('star', array(), null, 'far'),
+                                    new FontAwesomeGlyph('star', [], null, 'far'),
                                     $this->get_url($parameters),
                                     Button::DISPLAY_ICON,
                                     false,
@@ -728,7 +728,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                             $buttonToolBar->addItem(
                                 new Button(
                                     Translation::get('MakeImportant'),
-                                    new FontAwesomeGlyph('circle', array(), null, 'far'),
+                                    new FontAwesomeGlyph('circle', [], null, 'far'),
                                     $this->get_url($parameters),
                                     Button::DISPLAY_ICON,
                                     false,
@@ -789,7 +789,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe', null, ForumTopic::package()),
-                        new FontAwesomeGlyph('envelope', array(), null, 'far'),
+                        new FontAwesomeGlyph('envelope', [], null, 'far'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         true,
@@ -823,7 +823,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     new FontAwesomeGlyph('plus'),
                     array(ForumTopic::class),
                     $publishParameters,
-                    array(),
+                    [],
                     'btn-primary'));
 
             if ($this->get_user()->is_platform_admin() || $this->get_user_id() == $this->forum->get_owner_id() ||
@@ -874,7 +874,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $parent_cloi = Request::get('cloi');
                 }
 
-                $parameters = array();
+                $parameters = [];
                 $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                 $parameters[self::PARAM_ACTION] = self::ACTION_EDIT_SUBFORUM;
@@ -894,7 +894,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     {
                         if ($forum->get_ref()->get_locked())
                         {
-                            $parameters = array();
+                            $parameters = [];
                             $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                             $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                             $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
@@ -910,7 +910,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                         }
                         else
                         {
-                            $parameters = array();
+                            $parameters = [];
                             $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                             $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                             $parameters[self::PARAM_ACTION] = self::ACTION_CHANGE_LOCK;
@@ -934,7 +934,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
             if (! $subscribed)
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                 $parameters[self::PARAM_ACTION] = self::ACTION_FORUM_SUBSCRIBE;
@@ -950,7 +950,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                 $parameters[self::PARAM_ACTION] = self::ACTION_FORUM_UNSUBSCRIBE;
@@ -959,7 +959,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe'),
-                        new FontAwesomeGlyph('envelope', array(), null, 'far'),
+                        new FontAwesomeGlyph('envelope', [], null, 'far'),
                         $this->get_url($parameters),
                         Button::DISPLAY_ICON,
                         true,
@@ -977,7 +977,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                     $parent_cloi = Request::get('cloi');
                 }
 
-                $parameters = array();
+                $parameters = [];
                 $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $parameters[self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $forum->get_id();
                 $parameters[self::PARAM_ACTION] = self::ACTION_DELETE_SUBFORUM;
@@ -1011,7 +1011,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton($label, $glyph, $allowedContentObjectTypes, $parameters,
-        $extraActions = array(), $classes = null)
+        $extraActions = [], $classes = null)
     {
         $actionSelector = new ActionSelector(
             $this,

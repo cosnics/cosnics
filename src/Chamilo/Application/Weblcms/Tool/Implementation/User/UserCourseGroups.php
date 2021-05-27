@@ -49,7 +49,7 @@ class UserCourseGroups
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
 
-        $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
         $html[] = $glyph->render() . '&nbsp;' . Translation::get('Coursegroups');
 
         $html[] = '</h3>';

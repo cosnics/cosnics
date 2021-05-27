@@ -31,7 +31,7 @@ class AngularConnectorService
             $configuration = Configuration::getInstance();
         }
         
-        $this->angularConnectors = array();
+        $this->angularConnectors = [];
         
         $homeIntegrationPackages = $configuration->getIntegrationRegistrations('Chamilo\Core\Home');
         foreach ($homeIntegrationPackages as $homeIntegrationPackage)
@@ -53,7 +53,7 @@ class AngularConnectorService
      */
     public function loadAngularModules()
     {
-        $html = array();
+        $html = [];
         
         foreach ($this->angularConnectors as $angularConnector)
         {
@@ -70,7 +70,7 @@ class AngularConnectorService
      */
     public function getAngularModules()
     {
-        $angularModules = array();
+        $angularModules = [];
         
         foreach ($this->angularConnectors as $angularConnector)
         {

@@ -36,8 +36,8 @@ class SettingsConnector
     {
         $registrations = Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
 
-        $options = array();
-        $options['Chamilo\Core\Home'] = Translation::get('Homepage', array(), 'Chamilo\Core\Home');
+        $options = [];
+        $options['Chamilo\Core\Home'] = Translation::get('Homepage', [], 'Chamilo\Core\Home');
 
         foreach ($registrations as $registration)
         {
@@ -71,7 +71,7 @@ class SettingsConnector
     {
         $start = 0;
         $end = 24;
-        $working_hours = array();
+        $working_hours = [];
 
         for ($i = $start; $i <= $end; $i ++)
         {

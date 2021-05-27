@@ -103,7 +103,7 @@ class TranslationResourcesOptimizer
      */
     protected function optimizeResources($cachePath, $optimizedTranslationsCache)
     {
-        $resources = array();
+        $resources = [];
 
         $foundResources = $this->translationResourcesFinder->findTranslationResources();
         foreach ($foundResources as $locale => $localeFoundResources)
@@ -143,7 +143,7 @@ class TranslationResourcesOptimizer
      */
     protected function retrieveOptimizedResources($cachePath, $optimizedTranslationsCache)
     {
-        $resources = array();
+        $resources = [];
 
         $locales = require($optimizedTranslationsCache);
         foreach ($locales as $locale)

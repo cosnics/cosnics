@@ -38,7 +38,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header($complex_wiki_homepage);
 

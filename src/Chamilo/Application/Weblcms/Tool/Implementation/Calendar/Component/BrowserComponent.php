@@ -57,7 +57,7 @@ class BrowserComponent extends Manager
         $defaultComponent = $this->getDefaultComponent();
         $defaultComponent->checkAuthorization();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $defaultComponent->renderToolHeader();
@@ -171,7 +171,7 @@ class BrowserComponent extends Manager
 
     public function get_tool_actions()
     {
-        $toolActions = array();
+        $toolActions = [];
 
         $toolActions[] = new Button(
             Translation::get('ICalExternal'),

@@ -49,7 +49,7 @@ class StorageUnitRepository
      *
      * @return boolean
      */
-    public function alter($type, $storageUnitName, $property, $attributes = array())
+    public function alter($type, $storageUnitName, $property, $attributes = [])
     {
         return $this->getStorageUnitDatabase()->alter($type, $storageUnitName, $property, $attributes);
     }
@@ -64,7 +64,7 @@ class StorageUnitRepository
      *
      * @return boolean
      */
-    public function alterIndex($type, $storageUnitName, $indexName = null, $columns = array())
+    public function alterIndex($type, $storageUnitName, $indexName = null, $columns = [])
     {
         return $this->getStorageUnitDatabase()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }

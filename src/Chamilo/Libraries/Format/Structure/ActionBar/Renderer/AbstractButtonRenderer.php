@@ -29,7 +29,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function determineClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'btn';
         $classes[] = 'btn-default';
@@ -67,7 +67,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function renderLink()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderLinkOpeningTag();
         $html[] = $this->renderLinkContent();
@@ -95,7 +95,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
         $label = $this->getLabel();
         $imagePath = $button->getImagePath();
 
-        $html = array();
+        $html = [];
 
         $displayLabel = $button->getDisplay() != AbstractButton::DISPLAY_ICON && !empty($label);
         $displayIcon = $button->getDisplay() != AbstractButton::DISPLAY_LABEL && !empty($imagePath);
@@ -140,7 +140,7 @@ abstract class AbstractButtonRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function renderLinkOpeningTag()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<a';
         $html[] = $this->renderClasses();

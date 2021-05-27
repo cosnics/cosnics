@@ -44,7 +44,7 @@ class CourseCategoryMenu extends HtmlMenu
      *        string "?category=%s".
      * @param $extra_items array An array of extra tree items, added to the root.
      */
-    public function __construct($current_category, $url_format = '?category=%s', $extra_items = array())
+    public function __construct($current_category, $url_format = '?category=%s', $extra_items = [])
     {
         $this->urlFmt = $url_format;
         $menu = $this->get_menu_items($extra_items);
@@ -64,7 +64,7 @@ class CourseCategoryMenu extends HtmlMenu
     {
         $usercategories = DataManager::retrieve_course_categories_ordered_by_name();
 
-        $categories = array();
+        $categories = [];
         foreach($usercategories as $category)
         {
             $categories[$category->get_parent()][] = $category;
@@ -75,11 +75,11 @@ class CourseCategoryMenu extends HtmlMenu
             $menu = array_merge($menu, $extra_items);
         }
 
-        $home = array();
+        $home = [];
         $home['title'] = Translation::get('AllCourses');
         $home['url'] = $this->get_home_url(0);
 
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $home['class'] = $glyph->getClassNamesString();
         $home_item[] = $home;
         $menu = array_merge($home_item, $menu);
@@ -96,10 +96,10 @@ class CourseCategoryMenu extends HtmlMenu
      */
     private function get_sub_menu_items($categories, $parent)
     {
-        $sub_tree = array();
+        $sub_tree = [];
         foreach ($categories[$parent] as $category)
         {
-            $menu_item = array();
+            $menu_item = [];
 
             $menu_item['title'] = $category->get_name();
             if (Request::get(Application::PARAM_ACTION) == Manager::ACTION_COURSE_CATEGORY_MANAGER)
@@ -116,7 +116,7 @@ class CourseCategoryMenu extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
 
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
             $menu_item['class'] = $glyph->getClassNamesString();
 
             $menu_item['node_id'] = $category->get_id();

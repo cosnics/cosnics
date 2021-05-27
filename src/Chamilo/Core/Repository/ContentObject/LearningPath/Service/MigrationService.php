@@ -92,7 +92,7 @@ class MigrationService
         $learningPaths = $this->learningPathService->getLearningPaths();
         foreach ($learningPaths as $learningPath)
         {
-            $this->complexContentObjectItemsMappingForLearningPath = array();
+            $this->complexContentObjectItemsMappingForLearningPath = [];
 
             $user = new User();
             $user->setId($learningPath->get_owner_id());
@@ -321,7 +321,7 @@ class MigrationService
      */
     protected function hasLearningPathPrerequisites()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new NotCondition(
             new EqualityCondition(

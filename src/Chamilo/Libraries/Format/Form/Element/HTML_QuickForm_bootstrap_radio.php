@@ -41,7 +41,7 @@ class HTML_QuickForm_bootstrap_radio extends HTML_QuickForm_radio
     {
         if (!$this->isFrozen())
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<div class="radio">';
             $html[] = HTML_QuickForm_input::toHtml();

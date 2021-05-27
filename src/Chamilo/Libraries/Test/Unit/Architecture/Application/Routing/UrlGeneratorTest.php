@@ -82,7 +82,7 @@ class UrlGeneratorTest extends ChamiloTestCase
      */
     public function test_generate_url_with_filters()
     {
-        $url = $this->urlGenerator->generateURL(array(), array('course_id', 'publication_id'));
+        $url = $this->urlGenerator->generateURL([], array('course_id', 'publication_id'));
         $this->assertEquals('index.php', $url);
     }
 
@@ -105,7 +105,7 @@ class UrlGeneratorTest extends ChamiloTestCase
     {
         $url1 = $this->urlGenerator->generateURL(array('go' => 'tryout'));
 
-        $url2 = $this->urlGenerator->generateURL(array());
+        $url2 = $this->urlGenerator->generateURL([]);
         $this->assertEquals('index.php?course_id=1&publication_id=2', $url2);
     }
 

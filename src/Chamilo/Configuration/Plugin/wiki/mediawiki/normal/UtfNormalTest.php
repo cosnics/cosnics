@@ -78,13 +78,13 @@ $total = 0;
 $success = 0;
 $failure = 0;
 $ok = true;
-$testedChars = array();
+$testedChars = [];
 while (false !== ($line = fgets($in)))
 {
     list($data, $comment) = explode('#', $line);
     if ($data === '')
         continue;
-    $matches = array();
+    $matches = [];
     if (preg_match('/@Part([\d])/', $data, $matches))
     {
         if ($matches[1] > 0)

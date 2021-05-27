@@ -64,7 +64,7 @@ class Html extends BlockRendition
             foreach ($this->get_block()->get_views() as $view)
             {
                 $view_parameters =
-                    $context_parameters[Manager::PARAM_VIEWS] ? $context_parameters[Manager::PARAM_VIEWS] : array();
+                    $context_parameters[Manager::PARAM_VIEWS] ? $context_parameters[Manager::PARAM_VIEWS] : [];
                 $view_parameters[$this->get_block()->get_id()] = $view;
 
                 $view_parameters = array_merge($context_parameters, array(Manager::PARAM_VIEWS => $view_parameters));

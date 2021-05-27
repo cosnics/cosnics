@@ -122,7 +122,7 @@ class GalleryHTMLTable extends HtmlTable
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('check-square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                new FontAwesomeGlyph('check-square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-all'
             )
         );
@@ -130,7 +130,7 @@ class GalleryHTMLTable extends HtmlTable
         $buttonToolBar->prependItem(
             new Button(
                 Translation::get('UnselectAll', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('square', array(), null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
+                new FontAwesomeGlyph('square', [], null, 'far'), '#', Button::DISPLAY_ICON_AND_LABEL, false,
                 'btn-sm select-none'
             )
         );
@@ -232,12 +232,12 @@ class GalleryHTMLTable extends HtmlTable
         $propertyModel = $this->getSourceProperties();
         $currentOrderDirections = $this->getOrderDirection();
         $currentFirstOrderDirection = $currentOrderDirections[0];
-        $subButtons = array();
+        $subButtons = [];
 
         if ($this->allowOrderDirection && $propertyModel instanceof GalleryTablePropertyModel &&
             count($propertyModel->get_properties()) > 0)
         {
-            $queryParameters = array();
+            $queryParameters = [];
             $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
             $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = $this->getOrderColumn();
             $queryParameters = array_merge($queryParameters, $this->getAdditionalParameters());
@@ -247,7 +247,7 @@ class GalleryHTMLTable extends HtmlTable
             $isSelected = $currentFirstOrderDirection == SORT_ASC;
 
             $subButtons[] = new SubButton(
-                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null,
+                Translation::get('ASC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null,
                 $isSelected
             );
 
@@ -256,7 +256,7 @@ class GalleryHTMLTable extends HtmlTable
             $isSelected = $currentFirstOrderDirection == SORT_DESC;
 
             $subButtons[] = new SubButton(
-                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null,
+                Translation::get('DESC'), null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null,
                 $isSelected
             );
         }
@@ -272,7 +272,7 @@ class GalleryHTMLTable extends HtmlTable
     {
         $propertyModel = $this->getSourceProperties();
 
-        $html = array();
+        $html = [];
 
         if ($propertyModel instanceof GalleryTablePropertyModel && count($propertyModel->get_properties()) > 0)
         {
@@ -346,7 +346,7 @@ class GalleryHTMLTable extends HtmlTable
             $this->getTableFormActions()->has_form_actions();
         $currentOrderColumns = $this->getOrderColumn();
         $currentFirstOrderColumn = $currentOrderColumns[0];
-        $subButtons = array();
+        $subButtons = [];
 
         if ($propertyModel instanceof GalleryTablePropertyModel && count($propertyModel->get_properties()) > 0)
         {
@@ -356,7 +356,7 @@ class GalleryHTMLTable extends HtmlTable
             {
                 $propertyIndex = $index + ($hasFormActions ? 1 : 0);
 
-                $queryParameters = array();
+                $queryParameters = [];
                 $queryParameters[$this->getParameterName(self::PARAM_ORDER_DIRECTION)] = $this->getOrderDirection();
                 $queryParameters[$this->getParameterName(self::PARAM_PAGE_NUMBER)] = $this->getPageNumber();
                 $queryParameters[$this->getParameterName(self::PARAM_ORDER_COLUMN)] = array($propertyIndex);
@@ -370,7 +370,7 @@ class GalleryHTMLTable extends HtmlTable
                 $isSelected = $currentFirstOrderColumn == $propertyIndex;
 
                 $subButtons[] = new SubButton(
-                    $label, null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, array(), null, $isSelected
+                    $label, null, $propertyUrl->getUrl(), SubButton::DISPLAY_LABEL, false, [], null, $isSelected
                 );
             }
         }
@@ -384,7 +384,7 @@ class GalleryHTMLTable extends HtmlTable
      */
     public function renderTableFilters()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::renderTableFilters();
         $html[] = $this->renderPropertySorting();

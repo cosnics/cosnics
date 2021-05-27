@@ -54,7 +54,7 @@ class CreatorComponent extends Manager
                 $message = $ex->getMessage();
             }
             
-            $parameters = $filters = array();
+            $parameters = $filters = [];
             
             if ($values['submit'] == Translation::get('SaveAndAddNew', null, Manager::context()))
             {
@@ -71,7 +71,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

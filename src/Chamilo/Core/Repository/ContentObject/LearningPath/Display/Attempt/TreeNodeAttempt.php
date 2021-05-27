@@ -22,7 +22,7 @@ abstract class TreeNodeAttempt extends DataClass
     const PROPERTY_SCORE = 'score';
     const PROPERTY_COMPLETED = 'completed';
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_LEARNING_PATH_ID;
         $extended_property_names[] = self::PROPERTY_USER_ID;

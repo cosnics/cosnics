@@ -50,7 +50,7 @@ abstract class AssignmentRepository extends \Chamilo\Core\Repository\ContentObje
             new StaticConditionVariable($treeNodeDataIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

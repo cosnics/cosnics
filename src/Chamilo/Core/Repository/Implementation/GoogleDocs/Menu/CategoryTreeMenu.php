@@ -33,7 +33,7 @@ class CategoryTreeMenu extends GenericTree
      * @param $parent - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
-    public function __construct(DataConnector $connector, $additional_items = array())
+    public function __construct(DataConnector $connector, $additional_items = [])
     {
         $this->connector = $connector;
         $this->additional_items = $additional_items;
@@ -63,7 +63,7 @@ class CategoryTreeMenu extends GenericTree
      */
     public function get_node_url($node_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Application::PARAM_CONTEXT] = Manager::context();
         $parameters[Manager::PARAM_EXTERNAL_REPOSITORY] = $this->get_connector()->get_external_repository_instance_id();
         $parameters[Manager::PARAM_FOLDER] = $node_id;
@@ -113,14 +113,14 @@ class CategoryTreeMenu extends GenericTree
 
     public function get_root_node_class()
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }
 
     public function get_node_class($node)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }

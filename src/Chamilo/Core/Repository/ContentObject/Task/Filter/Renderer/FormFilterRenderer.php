@@ -26,7 +26,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         
         // Start date
         $form_validator->addElement('category', Translation::get('StartDate'));
-        $start_date = array();
+        $start_date = [];
         $start_date[] = $form_validator->createElement(
             'static', 
             '', 
@@ -55,7 +55,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         
         // End date
         $form_validator->addElement('category', Translation::get('EndDate'));
-        $due_date = array();
+        $due_date = [];
         $due_date[] = $form_validator->createElement(
             'static', 
             '', 
@@ -85,7 +85,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         // Frequency
         $form_validator->addElement('category', Translation::get('RepeatType'));
         
-        $options = array();
+        $options = [];
         $options[0] = '-- ' . Translation::get('SelectRepeatType') . ' --';
         $options[- 1] = Translation::get('NoRepeat');
         
@@ -100,7 +100,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         // Task type
         $form_validator->addElement('category', Translation::get('TaskType'));
         
-        $options = array();
+        $options = [];
         $options[0] = '-- ' . Translation::get('SelectTaskType') . ' --';
         
         $types_options = Task::get_types_options();
@@ -114,7 +114,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         // Priority
         $form_validator->addElement('category', Translation::get('Priority'));
         
-        $options = array();
+        $options = [];
         $options[0] = '-- ' . Translation::get('SelectPriority') . ' --';
         
         $priority_options = Task::get_priority_options();
@@ -130,7 +130,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
         

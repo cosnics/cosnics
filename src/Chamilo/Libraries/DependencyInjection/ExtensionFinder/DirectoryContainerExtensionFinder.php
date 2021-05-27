@@ -57,7 +57,7 @@ class DirectoryContainerExtensionFinder implements ContainerExtensionFinderInter
             '/DependencyInjection\//'
         )->name('DependencyInjectionExtension.php');
 
-        $containerExtensionClasses = array();
+        $containerExtensionClasses = [];
 
         foreach ($this->finder as $file)
         {

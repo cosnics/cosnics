@@ -47,7 +47,7 @@ abstract class ContentObjectDifference
             ContentObject::PROPERTY_MODIFICATION_DATE
         );
 
-        $differences = array();
+        $differences = [];
 
         foreach ($defaultPropertyNames as $defaultPropertyName)
         {

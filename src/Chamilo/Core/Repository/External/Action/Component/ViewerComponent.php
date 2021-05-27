@@ -57,7 +57,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 }
             }
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $display->as_html();

@@ -20,7 +20,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1';
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div style="border: 1px solid grey;">';
         $html[] = '<iframe border="0" style="border: 0;"

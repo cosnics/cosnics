@@ -30,7 +30,7 @@ class EventListRenderer extends EventRenderer
         $sourceClasses = $legend->getSourceClasses($event->getSource());
         $eventClasses = implode(' ', array('event-container', $sourceClasses));
 
-        $html = array();
+        $html = [];
 
         if (!$this->getRenderer()->isSourceVisible($event->getSource()))
         {
@@ -75,7 +75,7 @@ class EventListRenderer extends EventRenderer
 
     public function getActions()
     {
-        $html = array();
+        $html = [];
 
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
@@ -100,7 +100,7 @@ class EventListRenderer extends EventRenderer
      */
     public function getRange()
     {
-        $html = array();
+        $html = [];
 
         $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
 

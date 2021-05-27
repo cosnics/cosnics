@@ -264,7 +264,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @return \Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph
      */
-    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = array())
+    public function getGlyph($size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = [])
     {
         $glyph = FileType::getGlyphForExtension($this->get_extension(), $size);
 
@@ -364,7 +364,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public static function get_flash_video_types()
     {
-        $flash_types = array();
+        $flash_types = [];
         $flash_types[] = 'flv';
 
         return $flash_types;
@@ -463,7 +463,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public static function get_showable_types()
     {
-        $showable_types = array();
+        $showable_types = [];
         $showable_types[] = 'html';
         $showable_types[] = 'htm';
         $showable_types[] = 'txt';

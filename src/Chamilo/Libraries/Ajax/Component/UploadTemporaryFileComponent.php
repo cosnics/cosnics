@@ -28,7 +28,7 @@ class UploadTemporaryFileComponent extends Manager
         if (!$file->isValid())
         {
             JsonAjaxResult::bad_request(
-                $this->getTranslator()->trans('NoValidFileUploaded', array(), Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('NoValidFileUploaded', [], Utilities::COMMON_LIBRARIES)
             );
         }
         $temporaryPath = $this->getConfigurablePathBuilder()->getTemporaryPath(__NAMESPACE__);
@@ -43,7 +43,7 @@ class UploadTemporaryFileComponent extends Manager
         if (!$result)
         {
             JsonAjaxResult::general_error(
-                $this->getTranslator()->trans('FileNotUploaded', array(), Utilities::COMMON_LIBRARIES)
+                $this->getTranslator()->trans('FileNotUploaded', [], Utilities::COMMON_LIBRARIES)
             );
         }
         else

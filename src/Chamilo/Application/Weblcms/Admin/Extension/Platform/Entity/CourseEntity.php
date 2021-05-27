@@ -94,7 +94,7 @@ class CourseEntity implements RightsEntity
             return null;
         }
 
-        $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             self::ENTITY_TYPE . '_' . $id, $glyph->getClassNamesString(), $course->get_title(),
@@ -108,7 +108,7 @@ class CourseEntity implements RightsEntity
     public function get_element_finder_type()
     {
         return new AdvancedElementFinderElementType(
-            'courses', Translation::get('Courses'), __NAMESPACE__, 'course_feed', array()
+            'courses', Translation::get('Courses'), __NAMESPACE__, 'course_feed', []
         );
     }
 
@@ -143,7 +143,7 @@ class CourseEntity implements RightsEntity
      */
     public function get_entity_icon()
     {
-        return new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+        return new FontAwesomeGlyph('chalkboard', [], null, 'fas');
     }
 
     /**

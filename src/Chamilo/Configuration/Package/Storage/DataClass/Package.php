@@ -109,7 +109,7 @@ class Package extends DataClass
      *
      * @return mixed
      */
-    public static function getDefaultProperty_names($extended_property_names = array())
+    public static function getDefaultProperty_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_CONTEXT;
         $extended_property_names[] = self::PROPERTY_NAME;
@@ -171,7 +171,7 @@ class Package extends DataClass
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      * @throws \Exception
      */
-    public function get_dependencies($dependencies = array())
+    public function get_dependencies($dependencies = [])
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
     }

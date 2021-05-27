@@ -140,7 +140,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
 
     public function count_category_publications($category_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class,
@@ -200,6 +200,6 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
      */
     public function get_category_parameters()
     {
-        return array();
+        return [];
     }
 }

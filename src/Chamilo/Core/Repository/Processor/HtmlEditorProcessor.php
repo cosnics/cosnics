@@ -69,7 +69,7 @@ abstract class HtmlEditorProcessor
         return $this->get_parent()->get_parameter($key);
     }
 
-    public function get_repository_document_display_url($parameters = array (), $filter = array(), $encode_entities = false)
+    public function get_repository_document_display_url($parameters = array (), $filter = [], $encode_entities = false)
     {
         $parameters = array_merge(
             array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_DOCUMENT, 'display' => 1), 

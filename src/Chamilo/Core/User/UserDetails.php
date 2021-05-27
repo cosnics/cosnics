@@ -48,7 +48,7 @@ class UserDetails
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
 
-        $glyph = new FontAwesomeGlyph('user-circle', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user-circle', [], null, 'fas');
         $html[] = $glyph->render() . '&nbsp;' . $this->user->get_fullname();
 
         $html[] = '</h3>';

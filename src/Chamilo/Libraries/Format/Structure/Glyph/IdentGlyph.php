@@ -27,10 +27,10 @@ class IdentGlyph extends FontAwesomeGlyph
      */
     public function __construct(
         $type, $isAligned = false, $isNew = false, $isDisabled = false, $size = IdentGlyph::SIZE_SMALL,
-        $extraClasses = array(), $title = null, $style = 'fas-ci'
+        $extraClasses = [], $title = null, $style = 'fas-ci'
     )
     {
-        $classes = array();
+        $classes = [];
 
         if ($isAligned)
         {

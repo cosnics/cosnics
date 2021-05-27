@@ -57,11 +57,11 @@ class TabHeaderRenderer
         $tab = $this->getTab();
         $request = $this->getApplication()->getRequest();
 
-        $html = array();
+        $html = [];
 
         $tab_id = $tab->get_id();
 
-        $listItem = array();
+        $listItem = [];
 
         $listItem[] = '<li';
 

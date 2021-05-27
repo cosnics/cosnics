@@ -29,7 +29,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             $this->get_question()->get_option($user_answer[0], $this->get_question()->get_tolerance_type());
         $configuration = $this->getViewerApplication()->get_configuration();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $html[] = '<thead>';
@@ -59,7 +59,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $glyph = new FontAwesomeGlyph(
                         'check', array('text-success'),
-                        Translation::get('Correct', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Correct', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
 
                     $result = ' ' . $glyph->render();
@@ -68,7 +68,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $glyph = new FontAwesomeGlyph(
                         'exclamation-triangle', array('text-warning'), Translation::get(
-                        'CorrectButNotBest', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'
+                        'CorrectButNotBest', [], 'Chamilo\Core\Repository\ContentObject\Assessment'
                     ), 'fas'
                     );
                     $result = ' ' . $glyph->render();
@@ -77,7 +77,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $glyph = new FontAwesomeGlyph(
                         'times', array('text-danger'),
-                        Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Wrong', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                     $result = ' ' . $glyph->render();
                 }
@@ -95,7 +95,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
             {
                 $glyph = new FontAwesomeGlyph(
                     'times', array('text-danger'),
-                    Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                    Translation::get('Wrong', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                 );
                 $result = ' ' . $glyph->render();
             }

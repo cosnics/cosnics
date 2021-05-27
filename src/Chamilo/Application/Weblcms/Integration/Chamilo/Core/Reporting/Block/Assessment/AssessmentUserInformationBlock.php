@@ -67,7 +67,7 @@ class AssessmentUserInformationBlock extends AssessmentUsersBlock
 
     protected function get_assessment_attempts_condition()
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = parent::get_assessment_attempts_condition();
         

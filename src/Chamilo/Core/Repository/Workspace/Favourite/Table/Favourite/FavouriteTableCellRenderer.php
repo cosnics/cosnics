@@ -28,7 +28,7 @@ class FavouriteTableCellRenderer extends WorkspaceTableCellRenderer
 
         $unfavouriteItem = new ToolbarItem(
             Translation::get('Unfavourite', null, Utilities::COMMON_LIBRARIES),
-            new FontAwesomeGlyph('times', array(), null, 'fas'), $this->get_component()->get_url(
+            new FontAwesomeGlyph('times', [], null, 'fas'), $this->get_component()->get_url(
             array(
                 Manager::PARAM_ACTION => Manager::ACTION_DELETE,
                 \Chamilo\Core\Repository\Workspace\Manager::PARAM_WORKSPACE_ID => $workspace->get_id()

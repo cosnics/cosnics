@@ -55,7 +55,7 @@ class CourseRelCourseSetting extends CourseSettingRelation
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_COURSE_ID;
 

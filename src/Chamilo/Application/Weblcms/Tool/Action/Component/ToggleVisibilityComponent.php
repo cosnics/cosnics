@@ -67,7 +67,7 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
                 }
             }
 
-            $params = array();
+            $params = [];
             $params['tool_action'] = null;
             if (Request::get('details') == 1)
             {
@@ -79,7 +79,7 @@ class ToggleVisibilityComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_error_message(Translation::get('NoObjectsSelected'));

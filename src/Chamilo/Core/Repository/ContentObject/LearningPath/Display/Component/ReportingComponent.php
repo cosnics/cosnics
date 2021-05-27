@@ -81,7 +81,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         if ($this->getCurrentTreeNode()->hasChildNodes())
         {
             $table = new TreeNodeProgressTable($this);
-            $panelHtml = array();
+            $panelHtml = [];
 
             $panelHtml[] = $this->getTreeNodeProgressButtonToolbar($translator)->render();
             $panelHtml[] = $table->as_html();
@@ -90,7 +90,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         }
 
         $table = new TreeNodeAttemptTable($this);
-        $panelHtml = array();
+        $panelHtml = [];
 
         $panelHtml[] = $this->getTreeNodeAttemptsButtonToolbar($translator)->render();
         $panelHtml[] = $table->as_html();
@@ -217,7 +217,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
         PanelRenderer $panelRenderer
     )
     {
-        $parentTitles = array();
+        $parentTitles = [];
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
         {
             $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
@@ -313,7 +313,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
 
         $notCompleted = 100 - $progress;
 
-        $panelHtml = array();
+        $panelHtml = [];
         $panelHtml[] = '<canvas id="myChart" width="270" height="135" style="margin: auto;"></canvas>';
         $panelHtml[] = '<script>';
         $panelHtml[] = 'var ctx = document.getElementById("myChart");';
@@ -389,7 +389,7 @@ class ReportingComponent extends BaseReportingComponent implements TableSupport
             $scores[] = (int) $treeNodeAttempt->get_score();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<canvas id="scoreChart" style="margin: auto;"></canvas>';
         $html[] = '<script>';

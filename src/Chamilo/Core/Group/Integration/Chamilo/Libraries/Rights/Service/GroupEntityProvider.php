@@ -41,7 +41,7 @@ class GroupEntityProvider implements RightsEntityProvider
     /**
      * @var integer[]
      */
-    private $groupCache = array();
+    private $groupCache = [];
 
     /**
      * @param \Chamilo\Core\Group\Service\GroupService $groupService
@@ -113,7 +113,7 @@ class GroupEntityProvider implements RightsEntityProvider
             return null;
         }
 
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             static::ENTITY_TYPE . '_' . $entityIdentifier, $glyph->getClassNamesString(),
@@ -129,7 +129,7 @@ class GroupEntityProvider implements RightsEntityProvider
     {
         return new AdvancedElementFinderElementType(
             'groups', $this->getTranslator()->trans('PlatformGroups', [], 'Chamilo\Core\Group'), Manager::context(),
-            'GroupEntityFeed', array()
+            'GroupEntityFeed', []
         );
     }
 

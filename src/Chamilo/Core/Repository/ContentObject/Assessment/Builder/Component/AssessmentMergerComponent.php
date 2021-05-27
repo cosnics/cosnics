@@ -48,7 +48,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
                 $this->get_root_content_object()->get_title()
             )
         );
-        $trail->add(new Breadcrumb($this->get_url(array()), Translation::get('MergeAssessment')));
+        $trail->add(new Breadcrumb($this->get_url([]), Translation::get('MergeAssessment')));
         $trail->add_help('repository assessment builder');
         $assessment = $this->get_root_content_object();
 
@@ -77,7 +77,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($selected_assessment);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $display;

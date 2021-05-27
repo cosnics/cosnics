@@ -51,7 +51,7 @@ abstract class MenuItemRenderer extends ItemRenderer
      */
     public function render(Item $item, User $user)
     {
-        $html = array();
+        $html = [];
 
         $selected = $this->isSelected($item);
 

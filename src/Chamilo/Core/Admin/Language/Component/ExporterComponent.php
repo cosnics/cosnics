@@ -50,7 +50,7 @@ class ExporterComponent extends Manager
         {
             foreach ($packages as $package)
             {
-                $translations = array();
+                $translations = [];
                 $language_path = Path::getInstance()->namespaceToFullPath($package) . 'resources/i18n/';
 
                 foreach (array_unique($languages) as $language)
@@ -59,7 +59,7 @@ class ExporterComponent extends Manager
                     $translations[$language] = parse_ini_file($language_file);
                 }
 
-                $variables = array();
+                $variables = [];
 
                 foreach ($translations as $language => $translation_values)
                 {
@@ -70,7 +70,7 @@ class ExporterComponent extends Manager
 
                 foreach ($variables as $variable)
                 {
-                    $row = array();
+                    $row = [];
                     $row[] = $package;
                     $row[] = $variable;
                     $row[] = $translations[$base_language][$variable];
@@ -96,7 +96,7 @@ class ExporterComponent extends Manager
      *
      * @param Row $row - The row as array
      */
-    private function write_line($file_handle, $row = array())
+    private function write_line($file_handle, $row = [])
     {
         fputcsv($file_handle, $row, ';', '"');
     }

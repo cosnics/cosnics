@@ -303,7 +303,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         NestedSet $nestedSet, bool $includeSelf = false, Condition $condition = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -361,7 +361,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         NestedSet $nestedSet, bool $recursive = false, bool $includeSelf = false, Condition $condition = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -489,7 +489,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     protected function getSiblingsCondition(NestedSet $nestedSet, bool $includeSelf = false, Condition $condition = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -534,7 +534,7 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         if (count($subTreePropertyNames) > 0)
         {
-            $conditions = array();
+            $conditions = [];
 
             foreach ($subTreePropertyNames as $subTreePropertyName)
             {
@@ -670,7 +670,7 @@ class NestedSetDataClassRepository extends DataClassRepository
                 }
 
                 // Step 2: Move the node and its offspring to fill the newly created gap
-                $conditions = array();
+                $conditions = [];
 
                 $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -700,7 +700,7 @@ class NestedSetDataClassRepository extends DataClassRepository
                 $rightValueVariable =
                     new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE);
 
-                $properties = array();
+                $properties = [];
 
                 $properties[] = new DataClassProperty(
                     $leftValueVariable, new OperationConditionVariable(
@@ -772,7 +772,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // 1. Update the left and right values of all successors of the deleted node.
         // A successor has a left-value which is higher than the left-value of the deleted node.
 
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -802,7 +802,7 @@ class NestedSetDataClassRepository extends DataClassRepository
             )
         );
 
-        $properties = array();
+        $properties = [];
         $properties[] = $rightValueDataClassProperty;
         $properties[] = new DataClassProperty(
             $leftValueVariable, new OperationConditionVariable(
@@ -819,7 +819,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // An ancestor has a left value less than the left value of the deleted node
         // and a right value greater than the right value of the deleted node
 
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -845,7 +845,7 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         $updateCondition = new AndCondition($conditions);
 
-        $properties = array();
+        $properties = [];
         $properties[] = $rightValueDataClassProperty;
 
         if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
@@ -884,7 +884,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         // This implies that we may end up with an inconsistent nested set.
 
         // Update all necessary left-values
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -907,7 +907,7 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         $leftValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE);
 
-        $properties = array();
+        $properties = [];
         $properties[] = new DataClassProperty(
             $leftValueVariable, new OperationConditionVariable(
                 $leftValueVariable, OperationConditionVariable::ADDITION,
@@ -921,7 +921,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         }
 
         // Update all necessary right-values
-        $conditions = array();
+        $conditions = [];
 
         $subtreeCondition = $this->getSubTreeCondition($nestedSet);
 
@@ -944,7 +944,7 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         $rightValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE);
 
-        $properties = array();
+        $properties = [];
         $properties[] = new DataClassProperty(
             $rightValueVariable, new OperationConditionVariable(
                 $rightValueVariable, OperationConditionVariable::ADDITION,

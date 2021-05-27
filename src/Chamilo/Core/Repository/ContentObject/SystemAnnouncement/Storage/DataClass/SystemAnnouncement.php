@@ -46,7 +46,7 @@ class SystemAnnouncement extends ContentObject implements Versionable
 
     public static function get_possible_icons()
     {
-        $icons = array();
+        $icons = [];
 
         $icons[self::ICON_CONFIRMATION] = Translation::get('Confirmation');
         $icons[self::ICON_ERROR] = Translation::get('Error');

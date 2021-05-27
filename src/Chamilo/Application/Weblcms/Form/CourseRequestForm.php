@@ -103,7 +103,7 @@ class CourseRequestForm extends FormValidator
             $this->addElement('category', Translation::get('CourseRequestProperties'));
             if ($this->multiple_users)
             {
-                $order = array();
+                $order = [];
                 $order[] = new OrderBy(
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
                 );
@@ -115,7 +115,7 @@ class CourseRequestForm extends FormValidator
                 $users_result = DataManager::retrieves(
                     User::class, $parameters
                 );
-                $users = array();
+                $users = [];
                 foreach($users_result as $user)
                 {
                     $user_name = $user->get_fullname();
@@ -243,7 +243,7 @@ class CourseRequestForm extends FormValidator
         return $this->form_type;
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $request = $this->request;
         $defaults[CourseRequest::PROPERTY_COURSE_ID] = $request->get_course_id();

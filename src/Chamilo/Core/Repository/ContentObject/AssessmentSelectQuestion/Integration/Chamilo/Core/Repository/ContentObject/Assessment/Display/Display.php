@@ -23,7 +23,7 @@ class Display extends QuestionDisplay
         if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
             $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
@@ -55,7 +55,7 @@ class Display extends QuestionDisplay
 
         $type = $question->get_answer_type();
         $question_id = $clo_question->get_id();
-        $answers = array();
+        $answers = [];
 
         if ($type == AssessmentSelectQuestion::ANSWER_TYPE_RADIO)
         {
@@ -67,7 +67,7 @@ class Display extends QuestionDisplay
             $answers[$key] = $option->get_value();
         }
 
-        $element_template = array();
+        $element_template = [];
         $element_template[] =
             '<div><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clearfix"></div>';

@@ -337,7 +337,7 @@ class MediawikiSanitizer
      * @param array $args for the processing callback
      * @return string
      */
-    static function removeHTMLtags($text, $processCallback = null, $args = array(), $extratags = array())
+    static function removeHTMLtags($text, $processCallback = null, $args = [], $extratags = [])
     {
         global $wgUseTidy;
         
@@ -444,10 +444,10 @@ class MediawikiSanitizer
         $text = str_replace('>', '&gt;', array_shift($bits));
         if (! $wgUseTidy)
         {
-            $tagstack = $tablestack = array();
+            $tagstack = $tablestack = [];
             foreach ($bits as $x)
             {
-                $regs = array();
+                $regs = [];
                 if (preg_match('!^(/?)(\\w+)([^>]*?)(/{0,1}>)([^<]*)$!', $x, $regs))
                 {
                     list( /* $qbar */, $slash, $t, $params, $brace, $rest) = $regs;
@@ -474,7 +474,7 @@ class MediawikiSanitizer
                             {
                                 // Pop all elements with an optional close tag
                                 // and see if we find a match below them
-                                $optstack = array();
+                                $optstack = [];
                                 array_push($optstack, $ot);
                                 while ((($ot = @array_pop($tagstack)) != $t) && isset($htmlsingleallowed[$ot]))
                                 {
@@ -550,7 +550,7 @@ class MediawikiSanitizer
                                             if ($t == 'table')
                                             {
                                                 array_push($tablestack, $tagstack);
-                                                $tagstack = array();
+                                                $tagstack = [];
                                             }
                                             array_push($tagstack, $t);
                                         }
@@ -699,7 +699,7 @@ class MediawikiSanitizer
     static function validateAttributes($attribs, $whitelist)
     {
         $whitelist = array_flip($whitelist);
-        $out = array();
+        $out = [];
         foreach ($attribs as $attribute => $value)
         {
             if (! isset($whitelist[$attribute]))
@@ -853,7 +853,7 @@ class MediawikiSanitizer
         
         $stripped = self::validateTagAttributes(self::decodeTagAttributes($text), $element);
         
-        $attribs = array();
+        $attribs = [];
         foreach ($stripped as $attribute => $value)
         {
             $encAttribute = htmlspecialchars($attribute);
@@ -927,7 +927,7 @@ class MediawikiSanitizer
      *      name attributes
      * @see http://www.w3.org/TR/html401/struct/links.html#h-12.2.3 Anchors with the id attribute
      * @param string $id Id to validate
-     * @param mixed $options String or array of strings (default is array()):
+     * @param mixed $options String or array of strings (default is []):
      *        'noninitial': This is a non-initial fragment of an id, not a full id,
      *        so don't pay attention if the first character isn't valid at the
      *        beginning of an id.
@@ -938,7 +938,7 @@ class MediawikiSanitizer
      *        whitespace) are just compressed into a single underscore.
      * @return string
      */
-    static function escapeId($id, $options = array())
+    static function escapeId($id, $options = [])
     {
         $options = (array) $options;
         
@@ -1035,14 +1035,14 @@ class MediawikiSanitizer
      */
     public static function decodeTagAttributes($text)
     {
-        $attribs = array();
+        $attribs = [];
         
         if (trim($text) == '')
         {
             return $attribs;
         }
         
-        $pairs = array();
+        $pairs = [];
         if (! preg_match_all(MW_ATTRIBS_REGEX, $text, $pairs, PREG_SET_ORDER))
         {
             return $attribs;
@@ -1347,7 +1347,7 @@ class MediawikiSanitizer
         {
             $list = self::setupAttributeWhitelist();
         }
-        return isset($list[$element]) ? $list[$element] : array();
+        return isset($list[$element]) ? $list[$element] : [];
     }
 
     /**
@@ -1540,7 +1540,7 @@ class MediawikiSanitizer
         $url = preg_replace('/[\][<>"\\x00-\\x20\\x7F]/e', "urlencode('\\0')", $url);
         
         // Validate hostname portion
-        $matches = array();
+        $matches = [];
         if (preg_match('!^([^:]+:)(//[^/]+)?(.*)$!iD', $url, $matches))
         {
             list( /* $whole */, $protocol, $host, $rest) = $matches;

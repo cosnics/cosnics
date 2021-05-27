@@ -178,7 +178,7 @@ class ConfigurationForm extends FormValidator
                         if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox' ||
                             $setting['field'] == 'toggle')
                         {
-                            $group = array();
+                            $group = [];
 
                             foreach ($options as $option_value => $option_name)
                             {
@@ -224,12 +224,12 @@ class ConfigurationForm extends FormValidator
                 }
             }
 
-            $buttons = array();
+            $buttons = [];
             $buttons[] = $this->createElement(
-                'style_submit_button', 'submit', Translation::get('Save', array(), Utilities::COMMON_LIBRARIES)
+                'style_submit_button', 'submit', Translation::get('Save', [], Utilities::COMMON_LIBRARIES)
             );
             $buttons[] = $this->createElement(
-                'style_reset_button', 'reset', Translation::get('Reset', array(), Utilities::COMMON_LIBRARIES)
+                'style_reset_button', 'reset', Translation::get('Reset', [], Utilities::COMMON_LIBRARIES)
             );
             $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
@@ -237,7 +237,7 @@ class ConfigurationForm extends FormValidator
         {
             $this->addElement(
                 'html', '<div class="warning-message">' .
-                Translation::get('NoConfigurableSettings', array(), Utilities::COMMON_LIBRARIES) . '</div>'
+                Translation::get('NoConfigurableSettings', [], Utilities::COMMON_LIBRARIES) . '</div>'
             );
         }
     }
@@ -269,7 +269,7 @@ class ConfigurationForm extends FormValidator
         $context = $this->context;
 
         $file = Path::getInstance()->namespaceToFullPath($context) . 'Resources/Settings/settings.xml';
-        $result = array();
+        $result = [];
 
         if (file_exists($file))
         {
@@ -280,12 +280,12 @@ class ConfigurationForm extends FormValidator
 
             // Get categories
             $categories = $doc->getElementsByTagname('category');
-            $settings = array();
+            $settings = [];
 
             foreach ($categories as $index => $category)
             {
                 $category_name = $category->getAttribute('name');
-                $category_properties = array();
+                $category_properties = [];
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
@@ -293,7 +293,7 @@ class ConfigurationForm extends FormValidator
 
                 foreach ($properties as $index => $property)
                 {
-                    $property_info = array();
+                    $property_info = [];
 
                     foreach ($attributes as $index => $attribute)
                     {
@@ -325,7 +325,7 @@ class ConfigurationForm extends FormValidator
                                 $property_options->hasChildNodes())
                             {
                                 $options = $property_options->getElementsByTagname('option');
-                                $options_info = array();
+                                $options_info = [];
                                 foreach ($options as $option)
                                 {
                                     $options_info[$option->getAttribute('value')] = $option->getAttribute('name');
@@ -341,7 +341,7 @@ class ConfigurationForm extends FormValidator
                             if ($property_validations->hasChildNodes())
                             {
                                 $validations = $property_validations->getElementsByTagname('validation');
-                                $validation_info = array();
+                                $validation_info = [];
                                 foreach ($validations as $validation)
                                 {
                                     $validation_info[] = array(
@@ -392,7 +392,7 @@ class ConfigurationForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $configuration = $this->configuration;
 
@@ -573,7 +573,7 @@ class ConfigurationForm extends FormValidator
                         $name, $this->context
                     );
 
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_SETTING_ID),
                         new StaticConditionVariable($setting->get_id())

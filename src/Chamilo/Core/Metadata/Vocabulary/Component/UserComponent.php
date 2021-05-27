@@ -47,7 +47,7 @@ class UserComponent extends Manager implements TableSupport
             throw new NoObjectSelectedException(Translation::get('Element', null, 'Chamilo\Core\Metadata\Element'));
         }
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -60,7 +60,7 @@ class UserComponent extends Manager implements TableSupport
     {
         $table = new UserTable($this);
         
-        $html = array();
+        $html = [];
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
         return implode(PHP_EOL, $html);
@@ -93,7 +93,7 @@ class UserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
         
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(

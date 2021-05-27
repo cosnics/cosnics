@@ -34,7 +34,7 @@ class BrowserComponent extends TabComponent implements TableSupport
         );
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -60,7 +60,7 @@ class BrowserComponent extends TabComponent implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $searchConditions = $this->buttonToolbarRenderer->getConditions(
             array(

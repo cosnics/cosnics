@@ -27,7 +27,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     public function get_preview($is_thumbnail = false)
     {
         $object = $this->get_object();
-        $html = array();
+        $html = [];
         $html[] = '<iframe frameborder="0" height="480" width="600" src="' . $object->get_video_url() . '"></iframe>';
         return implode(PHP_EOL, $html);
     }

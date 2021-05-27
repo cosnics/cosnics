@@ -54,7 +54,7 @@ class ViewerComponent extends Manager
                     $this->get_url($parameters),
                     Translation::get('View', null, Utilities::COMMON_LIBRARIES) . ' ' . $content_object->get_title()));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation::launch(

@@ -77,7 +77,7 @@ class Translation
      *
      * @return string
      */
-    protected function doTranslation($variable, $parameters = array(), $context = null, $isocode = null)
+    protected function doTranslation($variable, $parameters = [], $context = null, $isocode = null)
     {
         $translation = $this->getTranslator()->trans($variable, (array) $parameters, $context, $isocode);
 
@@ -107,7 +107,7 @@ class Translation
      *
      * @deprecated Use getTranslation() now
      */
-    public static function get($variable, $parameters = array(), $context = null, $isocode = null)
+    public static function get($variable, $parameters = [], $context = null, $isocode = null)
     {
         return self::getInstance()->getTranslation($variable, (array) $parameters, $context, $isocode);
     }
@@ -173,7 +173,7 @@ class Translation
      * @return string
      * @throws \ReflectionException
      */
-    public function getTranslation($variable, $parameters = array(), $context = null, $isocode = null)
+    public function getTranslation($variable, $parameters = [], $context = null, $isocode = null)
     {
         $this->determineDefaultTranslationContext();
 
@@ -185,7 +185,7 @@ class Translation
             }
         }
 
-        $parsedParameters = array();
+        $parsedParameters = [];
 
         foreach ($parameters as $key => $value)
         {

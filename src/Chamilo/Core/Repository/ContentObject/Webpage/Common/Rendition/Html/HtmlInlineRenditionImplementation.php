@@ -14,7 +14,7 @@ class HtmlInlineRenditionImplementation extends HtmlRenditionImplementation
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1';
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div style="border: 1px solid grey;"><iframe border="0" style="border: 0;"
                 width="100%" height="500"  src="' . $url . '"></iframe></div>';

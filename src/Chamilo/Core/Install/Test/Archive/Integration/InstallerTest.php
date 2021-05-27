@@ -266,7 +266,7 @@ namespace Chamilo\Install\Test;
 class DumbObserver implements InstallerObserver
 {
 
-    private $events = array();
+    private $events = [];
 
     public function getEvents()
     {

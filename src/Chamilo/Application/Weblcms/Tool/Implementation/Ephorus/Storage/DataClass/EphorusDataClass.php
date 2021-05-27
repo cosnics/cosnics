@@ -38,7 +38,7 @@ abstract class EphorusDataClass extends DataClass
      * Constructor Initializes the dependency container if it's not given
      */
     public function __construct(
-        $default_properties = array(), $optional_properties = array(), DependencyContainer $dependency_container = null
+        $default_properties = [], $optional_properties = [], DependencyContainer $dependency_container = null
     )
     {
         parent::__construct($default_properties, $optional_properties);

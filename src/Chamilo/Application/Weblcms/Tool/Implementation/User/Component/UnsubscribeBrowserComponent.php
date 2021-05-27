@@ -77,7 +77,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery()
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -101,7 +101,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         if (!isset($this->buttonToolbarRenderer))
         {
 
-            $parameters = array();
+            $parameters = [];
 
             $group_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
             if (isset($group_id))
@@ -131,7 +131,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                     )
                 );
 
-                $param_export_subscriptions_overview = array();
+                $param_export_subscriptions_overview = [];
                 $param_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                     self::ACTION_EXPORT;
                 $param_export_subscriptions_overview[self::PARAM_TAB] = $this->current_tab;
@@ -157,7 +157,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
     public function get_additional_parameters()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[] = self::PARAM_TAB;
 
         $current_tab = self::TAB_ALL;
@@ -183,7 +183,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $search_condition = $this->get_search_condition();
         if ($search_condition)
         {
@@ -276,7 +276,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_platformgroup_tabs()
     {
-        $html = array();
+        $html = [];
 
         $tabs = new DynamicVisualTabsRenderer('weblcms_course_user_platformgroups_browser');
 
@@ -354,7 +354,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_platformgroup_tabs_footer()
     {
-        $html = array();
+        $html = [];
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
 
@@ -383,7 +383,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
     private function get_platformgroups_tab()
     {
         $menu_tree = $this->get_menu_tree();
-        $html = array();
+        $html = [];
         if ($menu_tree)
         {
             $html[] = '<div class="row">';
@@ -415,7 +415,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $conditions = array();
+            $conditions = [];
             switch ($this->current_tab)
             {
                 case self::TAB_ALL :
@@ -467,7 +467,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_tabs()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->get_tabs_header();
         $html[] = $this->get_tabs_content();
@@ -502,7 +502,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_tabs_footer()
     {
-        $html = array();
+        $html = [];
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
 
@@ -516,7 +516,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
      */
     private function get_tabs_header()
     {
-        $html = array();
+        $html = [];
 
         $this->tabs = new DynamicVisualTabsRenderer('weblcms_course_user_browser');
 

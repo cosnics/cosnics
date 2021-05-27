@@ -88,7 +88,7 @@ abstract class RightsRepository
      * @return integer
      */
     public function countLocationOverviewWithGrantedRights(
-        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
         $treeIdentifier = null
     )
     {
@@ -188,7 +188,7 @@ abstract class RightsRepository
     {
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -320,7 +320,7 @@ abstract class RightsRepository
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $condition;
         $conditions[] = new EqualityCondition(
@@ -367,7 +367,7 @@ abstract class RightsRepository
             )
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getEntitiesCondition($userIdentifier, $entities);
 
@@ -399,7 +399,7 @@ abstract class RightsRepository
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID),
@@ -440,7 +440,7 @@ abstract class RightsRepository
      * @throws \Exception
      */
     public function findLocationsWithGrantedRights(
-        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
         $treeIdentifier = null
     )
     {
@@ -477,7 +477,7 @@ abstract class RightsRepository
         $rightsLocationClassName = $this->getRightsLocationClassName();
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $nonInheritingConditions = array();
+        $nonInheritingConditions = [];
         $nonInheritingConditions[] = $condition;
         $nonInheritingConditions[] = $entitiesCondition;
         $nonInheritingConditions[] = new EqualityCondition(
@@ -515,7 +515,7 @@ abstract class RightsRepository
     {
         if (is_null($location) && !is_object($location))
         {
-            return array();
+            return [];
         }
 
         $rightsLocationClassName = $this->getRightsLocationClassName();
@@ -552,7 +552,7 @@ abstract class RightsRepository
         }
 
         $parameters = new RecordRetrievesParameters(
-            $properties, $condition, null, null, array(), $this->getRightsLocationEntityRightJoins()
+            $properties, $condition, null, null, [], $this->getRightsLocationEntityRightJoins()
         );
 
         return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
@@ -600,7 +600,7 @@ abstract class RightsRepository
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TREE_TYPE),
             new StaticConditionVariable($treeType)
@@ -657,7 +657,7 @@ abstract class RightsRepository
     {
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -721,7 +721,7 @@ abstract class RightsRepository
     {
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
@@ -773,7 +773,7 @@ abstract class RightsRepository
 
         $entitiesCondition = $this->getEntitiesCondition($userIdentifier, $entities);
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID),
@@ -789,7 +789,7 @@ abstract class RightsRepository
 
         if (!$parentHasRight)
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
@@ -902,7 +902,7 @@ abstract class RightsRepository
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID),
             new StaticConditionVariable(0)
@@ -971,11 +971,11 @@ abstract class RightsRepository
             {
                 $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-                $orConditions = array();
+                $orConditions = [];
 
                 foreach ($entities as $entity)
                 {
-                    $andConditions = array();
+                    $andConditions = [];
 
                     $andConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
@@ -993,7 +993,7 @@ abstract class RightsRepository
 
                 // add everyone 'entity'
 
-                $andConditions = array();
+                $andConditions = [];
 
                 $andConditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
@@ -1027,7 +1027,7 @@ abstract class RightsRepository
      */
     private function getEntitiesHash(array $entities)
     {
-        $entitiesIdentifiers = array();
+        $entitiesIdentifiers = [];
 
         foreach ($entities as $entityType => $entityProvider)
         {
@@ -1053,7 +1053,7 @@ abstract class RightsRepository
 
         if (is_null($this->entityItemConditionCache[$cacheKey]))
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -1088,7 +1088,7 @@ abstract class RightsRepository
         $rightsLocationClassName = $this->getRightsLocationClassName();
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $conditions = array();
+        $conditions = [];
 
         foreach ($rights as $right_id)
         {
@@ -1147,7 +1147,7 @@ abstract class RightsRepository
         $rightsLocationClassName = $this->getRightsLocationClassName();
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $joinConditions = array();
+        $joinConditions = [];
 
         $entitiesCondition = $this->getEntitiesCondition($userIdentifier, $entities);
 

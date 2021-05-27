@@ -29,7 +29,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $strings = array();
+        $strings = [];
         switch ($this->getConditionVariable()->get_function())
         {
             case FunctionConditionVariable::SUM :

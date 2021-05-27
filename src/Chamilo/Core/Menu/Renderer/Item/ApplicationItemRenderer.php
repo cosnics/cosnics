@@ -61,7 +61,7 @@ class ApplicationItemRenderer extends ItemRenderer
 
         $url = $this->getApplicationItemUrl($item);
 
-        $html = array();
+        $html = [];
 
         $isSelected = $this->isSelected($item);
 
@@ -80,7 +80,7 @@ class ApplicationItemRenderer extends ItemRenderer
             else
             {
                 $glyph = new NamespaceIdentGlyph(
-                    $item->getApplication(), false, false, false, IdentGlyph::SIZE_MEDIUM, array(), $title
+                    $item->getApplication(), false, false, false, IdentGlyph::SIZE_MEDIUM, [], $title
                 );
 
                 $html[] = $glyph->render();

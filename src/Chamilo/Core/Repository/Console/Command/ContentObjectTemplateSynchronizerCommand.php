@@ -54,12 +54,12 @@ class ContentObjectTemplateSynchronizerCommand extends Command
         $this->setName('chamilo:repository:content_object:template_synchronizer')
             ->setDescription(
                 $this->translator->trans(
-                    'ContentObjectTemplateSynchronizerDescription', array(), 'Chamilo\Core\Repository'
+                    'ContentObjectTemplateSynchronizerDescription', [], 'Chamilo\Core\Repository'
                 )
             )
             ->addArgument(
                 self::ARG_CONTENT_OBJECT_TYPE, InputArgument::REQUIRED,
-                $this->translator->trans('ContentObjectType', array(), 'Chamilo\Core\Repository')
+                $this->translator->trans('ContentObjectType', [], 'Chamilo\Core\Repository')
             );
     }
 

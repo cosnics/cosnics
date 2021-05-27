@@ -38,7 +38,7 @@ class BrowseComponent extends Manager implements TableSupport
         $table = new OpenCourseTable($this);
         $table->setSearchForm($buttonToolbarRenderer->getSearchForm());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $buttonToolbarRenderer->render();

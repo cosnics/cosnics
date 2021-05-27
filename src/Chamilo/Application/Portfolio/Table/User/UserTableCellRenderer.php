@@ -221,7 +221,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
                 $toolbar->add_item(
                     new ToolbarItem(
                         $this->getTranslator()->trans('CreateFavourite', [], $favouriteContext),
-                        new FontAwesomeGlyph('star', array(), null, 'fas'), $this->get_component()->get_url(
+                        new FontAwesomeGlyph('star', [], null, 'fas'), $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_BROWSE_FAVOURITES,
                             FavouriteManager::PARAM_ACTION => FavouriteManager::ACTION_CREATE,
@@ -240,7 +240,7 @@ class UserTableCellRenderer extends DataClassTableCellRenderer implements TableC
                 $toolbar->add_item(
                     new ToolbarItem(
                         $this->getTranslator()->trans('DeleteFavourite', [], $favouriteContext),
-                        new FontAwesomeGlyph('star', array(), null, 'far'), $this->get_component()->get_url(
+                        new FontAwesomeGlyph('star', [], null, 'far'), $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_BROWSE_FAVOURITES,
                             FavouriteManager::PARAM_ACTION => FavouriteManager::ACTION_DELETE,

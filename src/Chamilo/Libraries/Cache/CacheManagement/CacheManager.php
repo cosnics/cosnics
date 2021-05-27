@@ -24,7 +24,7 @@ class CacheManager
 
     public function __construct()
     {
-        $this->cacheServices = array();
+        $this->cacheServices = [];
     }
 
     /**
@@ -43,7 +43,7 @@ class CacheManager
      *
      * @param string[] $cacheServiceAliases
      */
-    public function clear($cacheServiceAliases = array())
+    public function clear($cacheServiceAliases = [])
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
 
@@ -81,14 +81,14 @@ class CacheManager
      *
      * @return \Chamilo\Libraries\Cache\Interfaces\CacheResetterInterface[]
      */
-    protected function getCacheServicesByAliases($cacheServiceAliases = array())
+    protected function getCacheServicesByAliases($cacheServiceAliases = [])
     {
         if (empty($cacheServiceAliases))
         {
             return $this->cacheServices;
         }
 
-        $cacheServices = array();
+        $cacheServices = [];
 
         foreach ($cacheServiceAliases as $cacheServiceAlias)
         {
@@ -110,7 +110,7 @@ class CacheManager
      *
      * @param string[] $cacheServiceAliases
      */
-    public function warmUp($cacheServiceAliases = array())
+    public function warmUp($cacheServiceAliases = [])
     {
         $cacheServices = $this->getCacheServicesByAliases($cacheServiceAliases);
 

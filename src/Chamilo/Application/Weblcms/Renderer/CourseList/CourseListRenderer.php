@@ -72,7 +72,7 @@ class CourseListRenderer
      */
     protected function display_courses()
     {
-        $html = array();
+        $html = [];
         $courses = $this->retrieve_courses();
 
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
@@ -140,7 +140,7 @@ class CourseListRenderer
      */
     protected function display_new_publication_icons(Course $course)
     {
-        $html = array();
+        $html = [];
         $target = $this->target ? ' target="' . $this->target . '" ' : '';
 
         $course_settings_controller = CourseSettingsController::getInstance();
@@ -189,7 +189,7 @@ class CourseListRenderer
      */
     public function get_course_url(Course $course)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Manager::PARAM_CONTEXT] = Manager::context();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
@@ -251,7 +251,7 @@ class CourseListRenderer
      */
     public function get_tool_url($tool, Course $course)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Manager::PARAM_CONTEXT] = Manager::context();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $parameters[Manager::PARAM_COURSE] = $course->get_id();
@@ -272,7 +272,7 @@ class CourseListRenderer
 
     protected function loadCourseSettings($courses)
     {
-        $courseIdentifiers = array();
+        $courseIdentifiers = [];
 
         foreach ($courses as $course)
         {

@@ -96,7 +96,7 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_node_class($node)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }
@@ -130,7 +130,7 @@ class PlatformgroupMenuRenderer extends GenericTree
      */
     public function get_node_url($node_id)
     {
-        $params = array();
+        $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_GROUP] = $node_id;
         $params[Manager::PARAM_TAB] = UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS;
 
@@ -139,7 +139,7 @@ class PlatformgroupMenuRenderer extends GenericTree
 
     public function get_root_node_class()
     {
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }

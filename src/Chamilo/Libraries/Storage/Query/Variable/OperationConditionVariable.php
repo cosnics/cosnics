@@ -96,7 +96,7 @@ class OperationConditionVariable extends ConditionVariable
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $parts = array();
+        $parts = [];
         $parts[] = $this->get_left()->getHashParts();
         $parts[] = $this->get_right()->getHashParts();
 

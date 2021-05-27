@@ -17,7 +17,7 @@ class LogoutComponent extends Manager
 
     public function run()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID),
             new StaticConditionVariable($this->get_external_repository()->get_id()));

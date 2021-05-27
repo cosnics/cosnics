@@ -17,7 +17,7 @@ class TopicPreviewerComponent extends TopicViewerComponent implements DelegateCo
     {
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $this->renderPosts();

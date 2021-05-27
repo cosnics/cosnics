@@ -113,14 +113,14 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
                 }
                 else
                 {
-                    $filter = array();
+                    $filter = [];
                 }
 
                 $this->redirect(Translation::get('ContentObjectUpdated'), false, $params, $filter);
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

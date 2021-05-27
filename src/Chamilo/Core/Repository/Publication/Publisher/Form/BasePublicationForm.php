@@ -70,7 +70,7 @@ abstract class BasePublicationForm extends FormValidator
      *
      * @param ContentObject[] $selectedContentObjects
      */
-    public function setSelectedContentObjects($selectedContentObjects = array())
+    public function setSelectedContentObjects($selectedContentObjects = [])
     {
         $this->selectedContentObjects = $selectedContentObjects;
     }

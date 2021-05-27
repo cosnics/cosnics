@@ -29,7 +29,7 @@ class NodeActionGenerator
         TreeNode $learningPathTreeNode, $canEditTreeNode = false
     ): array
     {
-        $actions = array();
+        $actions = [];
         $actions[] = $this->getForumSubscribeAction($learningPathTreeNode);
 
         return $actions;

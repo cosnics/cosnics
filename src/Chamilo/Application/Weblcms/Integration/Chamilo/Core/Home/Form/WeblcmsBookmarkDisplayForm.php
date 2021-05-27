@@ -22,7 +22,7 @@ class WeblcmsBookmarkDisplayForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY] = $this->getBlock()->getSetting(
             WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY, 

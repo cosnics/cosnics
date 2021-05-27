@@ -70,7 +70,7 @@ abstract class Menu extends BootstrapTreeMenu
      */
     protected function getExtraMenuItems()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -128,7 +128,7 @@ abstract class Menu extends BootstrapTreeMenu
 
         if ($node->has_children())
         {
-            $menuItem['nodes'] = array();
+            $menuItem['nodes'] = [];
 
             $children = $node->get_children();
 
@@ -143,7 +143,7 @@ abstract class Menu extends BootstrapTreeMenu
 
     public function getNodes()
     {
-        $menu = array();
+        $menu = [];
 
         $menu[] = $this->getMenuItem($this->getComplexContentObjectPath()->get_root());
 

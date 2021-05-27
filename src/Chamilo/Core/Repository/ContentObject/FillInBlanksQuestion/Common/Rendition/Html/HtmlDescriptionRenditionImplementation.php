@@ -32,14 +32,14 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $questions = $object->get_number_of_questions();
         
         // position the answers
-        $question_answers = array();
+        $question_answers = [];
         foreach ($answers as $answer)
         {
             $question_answers[$answer->get_position()][] = $answer;
         }
         
         // construct HTML
-        $html = array();
+        $html = [];
         
         // default scores
         $html[] = '<br/><b>' . Translation::get('DefaultScores') . ':</b><br/>';
@@ -60,7 +60,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
             if ($object->get_question_type() == FillInBlanksQuestion::TYPE_SELECT)
             {
                 // combobox
-                $answer_select = array();
+                $answer_select = [];
                 $answer_select[] = '<select name="answer">';
                 foreach ($question_answers[$i] as $answer)
                 {

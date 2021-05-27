@@ -80,7 +80,7 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('MakeStudent'),
-                            new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                            new FontAwesomeGlyph('user-graduate', [], null, 'fas'), $status_change_url,
                             ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -93,7 +93,7 @@ class DirectSubscribedPlatformGroupTableCellRenderer extends RecordTableCellRend
 
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                            Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', [], null, 'fas'),
                             $status_change_url, ToolbarItem::DISPLAY_ICON
                         )
                     );

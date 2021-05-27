@@ -171,7 +171,7 @@ class ContentObjectCopier
     {
         if (!isset($this->messages[$type]))
         {
-            $this->messages[$type] = array();
+            $this->messages[$type] = [];
         }
 
         $this->messages[$type][] = $message;
@@ -183,7 +183,7 @@ class ContentObjectCopier
      *
      * @param array $contentObjectIdentifiers
      */
-    protected function changeContentObjectNames($contentObjectIdentifiers = array())
+    protected function changeContentObjectNames($contentObjectIdentifiers = [])
     {
         if (empty($contentObjectIdentifiers))
         {
@@ -247,7 +247,7 @@ class ContentObjectCopier
     {
         if ($type)
         {
-            return isset($this->messages[$type]) ? $this->messages[$type] : array();
+            return isset($this->messages[$type]) ? $this->messages[$type] : [];
         }
         else
         {
@@ -261,8 +261,8 @@ class ContentObjectCopier
      */
     public function get_messages_for_url()
     {
-        $messages = array();
-        $message_types = array();
+        $messages = [];
+        $message_types = [];
 
         foreach ($this->get_messages() as $type => $type_messages)
         {

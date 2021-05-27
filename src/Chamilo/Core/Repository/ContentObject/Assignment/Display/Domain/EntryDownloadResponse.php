@@ -27,7 +27,7 @@ class EntryDownloadResponse extends BinaryFileResponse
      * @param bool $removeFileAfterDownload
      */
     public function __construct(
-        $file, $status = 200, $headers = array(), $public = true, $contentDisposition = null, $autoEtag = false,
+        $file, $status = 200, $headers = [], $public = true, $contentDisposition = null, $autoEtag = false,
         $autoLastModified = true, $removeFileAfterDownload = true
     )
     {

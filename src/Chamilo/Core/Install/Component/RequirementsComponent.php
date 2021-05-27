@@ -40,7 +40,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
 
         $table = new SimpleTable($this->get_data(), new DiagnoserCellRenderer(), 'diagnoser');
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $table->toHtml();
@@ -96,7 +96,7 @@ class RequirementsComponent extends Manager implements NoAuthenticationSupport
      */
     public function get_data()
     {
-        $array = array();
+        $array = [];
         $diagnoser = new Diagnoser();
         $files_folder = Path::getInstance()->getStoragePath();
 

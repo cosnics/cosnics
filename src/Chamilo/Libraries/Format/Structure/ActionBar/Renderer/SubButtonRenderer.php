@@ -17,7 +17,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li' . ($this->getButton()->isActive() ? ' class="active"' : '') . '>';
         $html[] = parent::render();
@@ -32,7 +32,7 @@ class SubButtonRenderer extends AbstractButtonRenderer
      */
     public function determineClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = $this->getButton()->getClasses();
 

@@ -40,7 +40,7 @@ abstract class MultipleAggregateCondition extends AggregateCondition
 
         $hashParts[] = $this->get_operator();
 
-        $aggregateParts = array();
+        $aggregateParts = [];
 
         foreach ($this->get_conditions() as $condition)
         {

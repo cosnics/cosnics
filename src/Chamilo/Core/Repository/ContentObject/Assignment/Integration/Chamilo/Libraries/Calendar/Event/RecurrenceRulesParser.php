@@ -52,9 +52,9 @@ class RecurrenceRulesParser
     {
         $calendarEvent = $this->getCalendarEvent();
 
-        $byDay = $calendarEvent->get_byday() ? explode(',', $calendarEvent->get_byday()) : array();
-        $byMonthDay = $calendarEvent->get_bymonthday() ? explode(',', $calendarEvent->get_bymonthday()) : array();
-        $byMonth = $calendarEvent->get_bymonth() ? explode(',', $calendarEvent->get_bymonth()) : array();
+        $byDay = $calendarEvent->get_byday() ? explode(',', $calendarEvent->get_byday()) : [];
+        $byMonthDay = $calendarEvent->get_bymonthday() ? explode(',', $calendarEvent->get_bymonthday()) : [];
+        $byMonth = $calendarEvent->get_bymonth() ? explode(',', $calendarEvent->get_bymonth()) : [];
 
         return new RecurrenceRules(
             $calendarEvent->get_frequency(),

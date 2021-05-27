@@ -37,7 +37,7 @@ class AssessmentUsersBlock extends AssessmentBlock
     {
         $assessment_attempts = $this->retrieve_assessment_attempts();
 
-        $user_attempts = array();
+        $user_attempts = [];
 
         foreach($assessment_attempts as $assessment_attempt)
         {
@@ -155,7 +155,7 @@ class AssessmentUsersBlock extends AssessmentBlock
      */
     protected function get_user_reporting_info($user, $user_attempt_summary_data)
     {
-        $reporting_info = array();
+        $reporting_info = [];
 
         $score = $first = $last = $time = $min_score = $max_score = null;
         if ($user_attempt_summary_data['status'] == AssessmentAttempt::STATUS_COMPLETED)

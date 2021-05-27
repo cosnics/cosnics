@@ -184,7 +184,7 @@ class InvitationRegistrationForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $invitation = $this->invitation;
         $defaults[User::PROPERTY_EMAIL] = $invitation->get_email();
@@ -197,7 +197,7 @@ class InvitationRegistrationForm extends FormValidator
      */
     public function send_mail($user)
     {
-        $options = array();
+        $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();

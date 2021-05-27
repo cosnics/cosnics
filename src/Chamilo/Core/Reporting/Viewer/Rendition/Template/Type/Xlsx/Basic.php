@@ -66,7 +66,7 @@ class Basic extends Xlsx
         if ($this->show_all())
         {
             $views = $this->get_context()->get_current_view();
-            $specific_views = array();
+            $specific_views = [];
             
             foreach ($views as $key => $view)
             {
@@ -97,7 +97,7 @@ class Basic extends Xlsx
                 else
                 {
                     $this->php_excel->removeSheetByIndex(0);
-                    $data = array();
+                    $data = [];
                     
                     foreach ($specific_views as $key => $specific_view)
                     {
@@ -123,7 +123,7 @@ class Basic extends Xlsx
             else
             {
                 $this->php_excel->removeSheetByIndex(0);
-                $data = array();
+                $data = [];
                 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {

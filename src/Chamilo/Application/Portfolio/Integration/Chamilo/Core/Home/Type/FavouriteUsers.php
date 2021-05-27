@@ -19,7 +19,7 @@ class FavouriteUsers extends BlockRenderer
 
     public function displayContent()
     {
-        $html = array();
+        $html = [];
 
         $favouriteUsers = $this->getFavouriteService()->findFavouriteUsers($this->getUser());
         if ($favouriteUsers->count() > 0)

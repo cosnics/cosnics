@@ -22,9 +22,9 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 class ExportParameters
 {
 
-    private $content_object_ids = array();
+    private $content_object_ids = [];
 
-    private $category_ids = array();
+    private $category_ids = [];
 
     private $type = ContentObjectExport::TYPE_DEFAULT;
 
@@ -40,8 +40,8 @@ class ExportParameters
 
     private $category_content_object_ids;
 
-    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = array(),
-        $category_ids = array(), $type = ContentObjectExport::TYPE_DEFAULT)
+    public function __construct(WorkspaceInterface $workspace, $user, $format = ContentObjectExport::FORMAT_CPO, $content_object_ids = [],
+        $category_ids = [], $type = ContentObjectExport::TYPE_DEFAULT)
     {
         $this->workspace = $workspace;
         $this->user = $user;
@@ -72,12 +72,12 @@ class ExportParameters
                     // $this->get_user(),
                     // $this->getWorkspace()))
                     // {
-                    // return array();
+                    // return [];
                     // }
 
                     if ($this->getWorkspace() instanceof PersonalWorkspace)
                     {
-                        $conditions = array();
+                        $conditions = [];
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                             new StaticConditionVariable($this->get_user()));
@@ -121,7 +121,7 @@ class ExportParameters
                 }
                 else
                 {
-                    $category_ids = array();
+                    $category_ids = [];
 
                     foreach ($this->get_category_ids() as $category_id)
                     {
@@ -133,7 +133,7 @@ class ExportParameters
 
                     if ($this->getWorkspace() instanceof PersonalWorkspace)
                     {
-                        $conditions = array();
+                        $conditions = [];
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                             new StaticConditionVariable($this->get_user()));
@@ -165,7 +165,7 @@ class ExportParameters
                                         ContentObject::class,
                                         ContentObject::PROPERTY_OBJECT_NUMBER))));
 
-                        $conditions = array();
+                        $conditions = [];
 
                         $conditions[] = new EqualityCondition(
                             new PropertyConditionVariable(
@@ -196,7 +196,7 @@ class ExportParameters
         }
         else
         {
-            $checkedContentObjects = array();
+            $checkedContentObjects = [];
 
             foreach ($this->content_object_ids as $contentObjectIdentifier)
             {

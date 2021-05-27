@@ -90,7 +90,7 @@ class LocalSettingCacheService extends DoctrinePhpFileCacheService implements Us
      */
     public function warmUpForIdentifier($identifier)
     {
-        $localSettings = array();
+        $localSettings = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),

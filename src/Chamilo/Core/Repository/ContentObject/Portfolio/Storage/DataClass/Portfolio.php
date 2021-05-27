@@ -27,7 +27,7 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             'Chamilo\Core\Repository\ContentObject\Portfolio', Manager::package() . '\ContentObject'
         );
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {

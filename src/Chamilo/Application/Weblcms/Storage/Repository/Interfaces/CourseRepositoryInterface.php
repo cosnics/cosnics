@@ -63,7 +63,7 @@ interface CourseRepositoryInterface
      *
      * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
      */
-    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array());
+    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = []);
 
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
@@ -72,7 +72,7 @@ interface CourseRepositoryInterface
      *
      * @return int
      */
-    public function countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(Course $course, int $entityType, array $entityIdentifiers = array());
+    public function countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(Course $course, int $entityType, array $entityIdentifiers = []);
 
     /**
      * Returns Courses with a given set of parameters

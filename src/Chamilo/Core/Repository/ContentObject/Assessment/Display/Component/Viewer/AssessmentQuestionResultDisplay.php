@@ -52,7 +52,7 @@ abstract class AssessmentQuestionResultDisplay
 
     public function as_html()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->header();
 
@@ -113,7 +113,7 @@ abstract class AssessmentQuestionResultDisplay
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
 
         if ($this->question->has_description())
         {
@@ -156,7 +156,7 @@ abstract class AssessmentQuestionResultDisplay
 
     public function header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
 
@@ -171,7 +171,7 @@ abstract class AssessmentQuestionResultDisplay
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
             $label = Translation::get($variable, array('COUNT' => $this->hints));
 
-            $glyph = new FontAwesomeGlyph('magic', array(), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('magic', [], $label, 'fas');
 
             $html[] = $glyph->render() . '&nbsp;&nbsp;';
         }

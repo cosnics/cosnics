@@ -363,7 +363,7 @@ abstract class ContentObjectForm extends FormValidator
                 break;
         }
 
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit_button',
@@ -401,7 +401,7 @@ abstract class ContentObjectForm extends FormValidator
      *
      * @throws \Exception
      */
-    private function build_basic_form($htmleditor_options = array())
+    private function build_basic_form($htmleditor_options = [])
     {
         $this->addElement('html', '<div id="message"></div>');
         $this->addElement(
@@ -410,7 +410,7 @@ abstract class ContentObjectForm extends FormValidator
         );
         $this->add_textfield(
             ContentObject::PROPERTY_TITLE,
-            Translation::get('Title', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), true,
+            Translation::get('Title', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), true,
             array('id' => 'title', 'class' => 'form-control')
         );
 
@@ -421,7 +421,7 @@ abstract class ContentObjectForm extends FormValidator
                 $this->get_categories(), array('class' => 'form-control', 'id' => "parent_id")
             );
 
-            $category_group = array();
+            $category_group = [];
 
             $category_group[] = $this->createElement('static', null, null, '<div class="input-group">');
 
@@ -445,7 +445,7 @@ abstract class ContentObjectForm extends FormValidator
         $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));
         $required = ($value == 1) ? true : false;
         $name =
-            Translation::get('Description', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
+            Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
     }
 
@@ -455,7 +455,7 @@ abstract class ContentObjectForm extends FormValidator
      *
      * @throws \Exception
      */
-    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         if (!$in_tab)
         {
@@ -471,7 +471,7 @@ abstract class ContentObjectForm extends FormValidator
      *
      * @throws \Exception
      */
-    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         $object = $this->content_object;
 
@@ -621,7 +621,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public function create_new_category($category_name, $parent_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id)
@@ -684,7 +684,7 @@ abstract class ContentObjectForm extends FormValidator
      */
     public static function factory(
         $form_type, WorkspaceInterface $workspace, $content_object, $form_name, $method = self::FORM_METHOD_POST,
-        $action = null, $extra = null, $additional_elements = array(), $allow_new_version = true, $form_variant = null
+        $action = null, $extra = null, $additional_elements = [], $allow_new_version = true, $form_variant = null
     )
     {
         $base_class_name = $content_object->package() . '\Form\\' . $content_object->class_name(false);
@@ -907,7 +907,7 @@ abstract class ContentObjectForm extends FormValidator
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         $content_object = $this->content_object;
         $defaults[ContentObject::PROPERTY_ID] = $content_object->get_id();

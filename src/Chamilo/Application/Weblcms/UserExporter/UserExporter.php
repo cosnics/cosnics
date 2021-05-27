@@ -37,7 +37,7 @@ class UserExporter
      * @param UserExportRenderer $user_export_renderer
      * @param UserExportExtender[] $user_export_extenders
      */
-    public function __construct(UserExportRenderer $user_export_renderer = null, array $user_export_extenders = array())
+    public function __construct(UserExportRenderer $user_export_renderer = null, array $user_export_extenders = [])
     {
         $this->set_user_export_renderer($user_export_renderer);
         $this->set_user_export_extenders($user_export_extenders);
@@ -94,7 +94,7 @@ class UserExporter
      */
     public function export(array $users)
     {
-        $user_export_headers = array();
+        $user_export_headers = [];
 
         $user_export_headers[User::PROPERTY_OFFICIAL_CODE] = Translation::get(
             'OfficialCode',
@@ -134,7 +134,7 @@ class UserExporter
 
         $this->add_additional_headers($user_export_headers);
 
-        $exported_users = array();
+        $exported_users = [];
 
         foreach ($users as $user)
         {
@@ -143,7 +143,7 @@ class UserExporter
                 throw new InvalidArgumentException('The given user must be an instance of User');
             }
 
-            $user_export_data = array();
+            $user_export_data = [];
 
             $user_export_data[User::PROPERTY_OFFICIAL_CODE] = $user->get_official_code();
             $user_export_data[User::PROPERTY_USERNAME] = $user->get_username();

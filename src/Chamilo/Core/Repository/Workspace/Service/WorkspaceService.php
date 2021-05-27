@@ -106,7 +106,7 @@ class WorkspaceService
      * @return int
      */
     public function countWorkspacesForUserWithExcludedWorkspaces(
-        User $user, $right = RightsService::RIGHT_VIEW, $excludedWorkspaceIdentifiers = array()
+        User $user, $right = RightsService::RIGHT_VIEW, $excludedWorkspaceIdentifiers = []
     )
     {
         return $this->getWorkspaceRepository()->countWorkspacesForUserWithExcludedWorkspaces(
@@ -190,10 +190,10 @@ class WorkspaceService
      */
     public function getEntitiesForUser(User $user)
     {
-        $entities = array();
+        $entities = [];
 
         $entities[UserEntity::ENTITY_TYPE] = array($user->get_id());
-        $entities[PlatformGroupEntity::ENTITY_TYPE] = array();
+        $entities[PlatformGroupEntity::ENTITY_TYPE] = [];
 
         $userGroupIdentifiers = $user->get_groups(true);
 
@@ -381,7 +381,7 @@ class WorkspaceService
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesForUserWithExcludedWorkspaces(
-        User $user, $right = RightsService::RIGHT_VIEW, $excludedWorkspaceIdentifiers = array(), $limit, $offset,
+        User $user, $right = RightsService::RIGHT_VIEW, $excludedWorkspaceIdentifiers = [], $limit, $offset,
         $orderProperty = null
     )
     {

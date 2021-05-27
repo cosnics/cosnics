@@ -35,7 +35,7 @@ class HTML_QuickForm_styleresetbutton extends HTML_QuickForm_stylebutton
 
         $this->setType('reset');
 
-        $defaultAttributes = array();
+        $defaultAttributes = [];
         $defaultAttributes[] = $this->getAttribute('class');
 
         $this->setAttribute('class', implode(' ', $defaultAttributes));

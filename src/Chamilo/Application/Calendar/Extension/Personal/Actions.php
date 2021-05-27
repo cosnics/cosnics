@@ -26,7 +26,7 @@ class Actions implements ActionsInterface
      */
     public function getPrimary(Application $application)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_CREATE;
 
@@ -51,7 +51,7 @@ class Actions implements ActionsInterface
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             Manager::package(),
             \Chamilo\Core\Repository\Manager::package() . '\ContentObject');
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {
@@ -71,6 +71,6 @@ class Actions implements ActionsInterface
      */
     public function getAdditional(Application $application)
     {
-        return array();
+        return [];
     }
 }

@@ -117,7 +117,7 @@ class BuilderForm extends FormValidator
 
         if (!isset($_SESSION['mc_skip_options']))
         {
-            $_SESSION['mc_skip_options'] = array();
+            $_SESSION['mc_skip_options'] = [];
         }
 
         if (isset($_POST['add']))
@@ -136,7 +136,7 @@ class BuilderForm extends FormValidator
         {
             if (!in_array($option_number, $_SESSION['mc_skip_options']))
             {
-                $group = array();
+                $group = [];
                 $group[] = $this->createElement(
                     'text', 'option_' . Option::PROPERTY_NAME . '[' . $option_number . ']', Translation::get('Name'),
                     array("size" => "50")
@@ -144,8 +144,8 @@ class BuilderForm extends FormValidator
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
                 {
                     $group[] = $this->createElement(
-                        'style_button', 'remove[' . $option_number . ']', null, array(), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        'style_button', 'remove[' . $option_number . ']', null, [], null,
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 $this->addGroup(
@@ -160,7 +160,7 @@ class BuilderForm extends FormValidator
         }
 
         $this->addElement(
-            'style_button', 'add[]', null, array(), null, new FontAwesomeGlyph('plus', array(), null, 'fas')
+            'style_button', 'add[]', null, [], null, new FontAwesomeGlyph('plus', [], null, 'fas')
         );
     }
 
@@ -189,7 +189,7 @@ class BuilderForm extends FormValidator
         return $succes;
     }
 
-    public function setDefaults($parameters = array())
+    public function setDefaults($parameters = [])
     {
         $parameters[Element::PROPERTY_NAME] = $this->element->get_name();
         $parameters[Element::PROPERTY_REQUIRED] = $this->element->get_required();

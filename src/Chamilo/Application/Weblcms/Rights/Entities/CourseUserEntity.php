@@ -55,7 +55,7 @@ class CourseUserEntity extends UserEntity
         return self::$instance;
     }
 
-    public function __construct($course_id = 0, $limited_users = array(), $excluded_users = array())
+    public function __construct($course_id = 0, $limited_users = [], $excluded_users = [])
     {
         $this->limited_users = $limited_users;
         $this->excluded_users = $excluded_users;
@@ -80,7 +80,7 @@ class CourseUserEntity extends UserEntity
      */
     public function get_condition(Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
         
         if ($this->limited_users)
         {

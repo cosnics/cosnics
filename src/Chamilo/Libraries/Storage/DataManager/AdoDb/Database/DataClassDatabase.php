@@ -216,7 +216,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($statement instanceof ADORecordSet)
         {
-            $counts = array();
+            $counts = [];
             while ($record = $statement->FetchRow())
             {
                 $counts[array_shift($record)] = array_pop($record);
@@ -380,7 +380,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if ($statement instanceof ADORecordSet)
         {
-            $distinctElements = array();
+            $distinctElements = [];
 
             while ($record = $statement->FetchRow())
             {
@@ -502,7 +502,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function fetchRecords(ADORecordSet $statement)
     {
-        $records = array();
+        $records = [];
 
         while ($record = $statement->FetchRow())
         {

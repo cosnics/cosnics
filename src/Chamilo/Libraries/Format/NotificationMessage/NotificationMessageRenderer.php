@@ -21,7 +21,7 @@ class NotificationMessageRenderer
      *
      * @return string
      */
-    public function render($notificationMessages = array())
+    public function render($notificationMessages = [])
     {
         if (empty($notificationMessages))
         {
@@ -33,7 +33,7 @@ class NotificationMessageRenderer
             $notificationMessages = array($notificationMessages);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="notifications">';
 
@@ -56,7 +56,7 @@ class NotificationMessageRenderer
      */
     protected function renderNotificationMessage(NotificationMessage $notificationMessage)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="alert alert-' . $notificationMessage->getType() . ' alert-dismissible" role="alert">';
         $html[] = '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';

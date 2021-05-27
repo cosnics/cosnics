@@ -82,7 +82,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
         $this->setBreadcrumbs();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<a name="top"></a>';
@@ -107,7 +107,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         {
             $buttonToolbar = new ButtonToolBar($this->get_url());
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_FORUM_POST;
 
@@ -157,7 +157,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         {
             $children = DataManager::retrieve_forum_posts($this->getForumTopic()->getId(), $this->get_condition());
 
-            $this->forumTopicPosts = array();
+            $this->forumTopicPosts = [];
 
             foreach($children as $child)
             {
@@ -252,7 +252,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
             if (isset($query) && $query != '')
             {
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE),
                     '*' . $query . '*', ForumPost::get_table_name(), false
@@ -319,7 +319,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
         if (!$this->isLocked())
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
             $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
             $parameters[self::PARAM_ACTION] = self::ACTION_QUOTE_FORUM_POST;
@@ -331,7 +331,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 )
             );
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
             $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
             $parameters[self::PARAM_ACTION] = self::ACTION_CREATE_FORUM_POST;
@@ -346,7 +346,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin() == true) ||
                 $this->is_forum_manager($this->get_user()))
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
                 $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
                 $parameters[self::PARAM_ACTION] = self::ACTION_EDIT_FORUM_POST;
@@ -364,7 +364,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 if (($forumPost->get_user_id() == $this->get_user_id() ||
                         $this->get_user()->is_platform_admin() == true) || $this->is_forum_manager($this->get_user()))
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
                         $this->get_complex_content_object_item_id();
                     $parameters[self::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();
@@ -395,7 +395,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
     public function renderPostBody(ForumPost $forumPost)
     {
         $rendition = new ForumPostRendition($this, $forumPost);
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="media-body">';
         $html[] = $this->renderPostActions($forumPost);
@@ -412,7 +412,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
         $dateFormat = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         $fontAwesomeGlyph = new FontAwesomeGlyph($glyphType);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<span class="' . $textClass . '">';
         $html[] = $fontAwesomeGlyph->render();
@@ -430,7 +430,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
      */
     public function renderPostDates(ForumPost $forumTopicPost)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="forum-post-panel">';
         $html[] = '<small>';
@@ -451,7 +451,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function renderPostTitle(ForumPost $forumPost)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<h4 class="media-body-title">';
         $html[] = $forumPost->get_title();
@@ -499,7 +499,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
     public function renderPosts()
     {
-        $html = array();
+        $html = [];
 
         $forumPosts = $this->getVisibleForumTopicPosts();
 

@@ -24,12 +24,12 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
     public function get_actions($course_group)
     {
         $toolbar = new Toolbar();
-        $parameters = array();
+        $parameters = [];
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
 
         if ($this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_EDIT_COURSE_GROUP;
             $edit_url = $this->get_component()->get_url($parameters);
@@ -40,12 +40,12 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                 )
             );
 
-            $parameters = array();
+            $parameters = [];
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_DELETE_COURSE_GROUP;
             $delete_url = $this->get_component()->get_url($parameters);
 
-            $confirm_messages = array();
+            $confirm_messages = [];
             $confirm_messages[] = Translation::get('DeleteConfirm', array('NAME' => $course_group->geT_name())); // TODO
             // ::
             // Better
@@ -75,7 +75,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
                         $course_group->get_parent_id(), $user->get_id()
                     ))
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
                     $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_USER_SELF_SUBSCRIBE;
                     $subscribe_url = $this->get_component()->get_url($parameters);
@@ -90,7 +90,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
         }
         else
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_MANAGE_SUBSCRIPTIONS;
             $subscribe_url = $this->get_component()->get_url($parameters);
@@ -105,7 +105,7 @@ class CourseGroupTableCellRenderer extends DataClassTableCellRenderer implements
         if (!$this->get_component()->is_allowed(WeblcmsRights::EDIT_RIGHT) &&
             $course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_USER_SELF_UNSUBSCRIBE;
             $unsubscribe_url = $this->get_component()->get_url($parameters);

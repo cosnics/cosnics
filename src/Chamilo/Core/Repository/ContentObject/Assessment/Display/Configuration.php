@@ -112,7 +112,7 @@ class Configuration
      */
     static public function answerFeedbackGlyph($answerFeedbackType, $isDisabled = false)
     {
-        $extraClasses = array();
+        $extraClasses = [];
 
         switch ($answerFeedbackType)
         {

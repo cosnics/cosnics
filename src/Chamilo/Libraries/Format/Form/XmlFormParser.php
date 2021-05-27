@@ -190,7 +190,7 @@ class XmlFormParser
     {
         $element_options = $this->parse_element_options($elementNode);
 
-        $group_elements = array();
+        $group_elements = [];
 
         foreach ($element_options as $option_value => $option_name)
         {
@@ -475,7 +475,7 @@ class XmlFormParser
         }
         else
         {
-            $options = array();
+            $options = [];
 
             $option_node_list = $this->get_dom_xpath()->query('option', $options_node);
             foreach ($option_node_list as $option_node)

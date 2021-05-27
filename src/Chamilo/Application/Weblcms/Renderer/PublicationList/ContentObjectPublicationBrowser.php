@@ -194,7 +194,7 @@ abstract class ContentObjectPublicationBrowser
      *
      * @see Tool::get_url()
      */
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->parent->get_url($parameters, $filter, $encode_entities);
     }

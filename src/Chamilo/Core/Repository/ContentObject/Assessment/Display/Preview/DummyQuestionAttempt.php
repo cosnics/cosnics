@@ -20,7 +20,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      * @param string[] $extended_property_names
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_ATTEMPT_ID;
         return parent::get_default_property_names($extended_property_names);

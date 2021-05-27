@@ -162,7 +162,7 @@ abstract class FeedbackRepository
         $entityType, $entityId, Condition $condition = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -274,7 +274,7 @@ abstract class FeedbackRepository
      */
     protected function getEntityTypeCondition($entityType, Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -297,7 +297,7 @@ abstract class FeedbackRepository
      */
     protected function getEntityTypeAndIdCondition($entityType, $entityId, Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

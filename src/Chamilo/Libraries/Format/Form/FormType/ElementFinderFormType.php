@@ -43,7 +43,7 @@ class ElementFinderFormType extends AbstractType
                 'width' => self::DEFAULT_WIDTH,
                 'collapsed' => false,
                 'element_types' => null,
-                'element_finder_configuration' => array(),
+                'element_finder_configuration' => [],
                 'compound' => false,
                 'data_class' => null
             )
@@ -95,7 +95,7 @@ class ElementFinderFormType extends AbstractType
     protected function add_element_types(FormView $view, array $options)
     {
         $element_types = $options['element_types'];
-        $element_types_array = array();
+        $element_types_array = [];
 
         foreach ($element_types->get_types() as $element_type)
         {

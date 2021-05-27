@@ -27,11 +27,11 @@ class EntityTableDataProvider
 
     private function generateUsers()
     {
-        $users = array();
+        $users = [];
 
         for ($i = 1; $i <= 10; $i ++)
         {
-            $user = array();
+            $user = [];
             $user[EntityTableColumnModel::PROPERTY_NAME] = 'Preview User ' . $i;
             // $user = new User();
             // $user->set_lastname('User');

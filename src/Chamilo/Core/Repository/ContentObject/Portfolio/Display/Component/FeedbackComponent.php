@@ -31,7 +31,7 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
             Manager::context(),
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $result;

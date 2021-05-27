@@ -81,7 +81,7 @@ class FavouriteRepository
      */
     public function findUserFavouriteBySourceAndFavouriteUserId($sourceUserId, $favouriteUserId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_SOURCE_USER_ID),
@@ -128,7 +128,7 @@ class FavouriteRepository
      */
     public function findFavouriteUsers(User $sourceUser, $condition = null, $offset = null, $count = null, $orderProperty = null)
     {
-        $properties = array();
+        $properties = [];
 
         $properties[] = new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_ID);
 
@@ -168,7 +168,7 @@ class FavouriteRepository
      */
     protected function getUserFavouriteCondition(User $sourceUser, $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getSourceUserCondition($sourceUser);
 

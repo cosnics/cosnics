@@ -182,13 +182,13 @@ class SessionUtilities
     {
 //        session_regenerate_id();
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
     }
 
     public function destroy()
     {
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
         session_destroy();
     }
 

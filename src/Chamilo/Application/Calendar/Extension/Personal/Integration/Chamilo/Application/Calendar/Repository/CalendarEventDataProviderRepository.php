@@ -55,7 +55,7 @@ class CalendarEventDataProviderRepository
     {
         $user_groups = $user->get_groups(true);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(PublicationUser::class, PublicationUser::PROPERTY_USER),
             new StaticConditionVariable($user->getId()));
@@ -76,7 +76,7 @@ class CalendarEventDataProviderRepository
 
         $condition = new AndCondition(array($share_condition, $publisher_condition));
 
-        $joins = array();
+        $joins = [];
         $joins[] = new Join(
             PublicationUser::class,
             new EqualityCondition(
@@ -95,7 +95,7 @@ class CalendarEventDataProviderRepository
             $condition,
             null,
             null,
-            array(),
+            [],
             new Joins($joins));
     }
 }

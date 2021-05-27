@@ -72,7 +72,7 @@ abstract class GroupsFeedComponent extends Manager
     private function get_elements()
     {
         $elements = new AdvancedElementFinderElements();
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add groups
         $groups = $this->retrieve_groups();
@@ -82,8 +82,8 @@ abstract class GroupsFeedComponent extends Manager
             // Add group category
             $group_category = new AdvancedElementFinderElement(
                 'groups', $glyph->getClassNamesString(),
-                $translator->trans('Groups', array(), Utilities::COMMON_LIBRARIES),
-                $translator->trans('Groups', array(), Utilities::COMMON_LIBRARIES)
+                $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES),
+                $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES)
             );
             $elements->add_element($group_category);
 
@@ -161,13 +161,13 @@ abstract class GroupsFeedComponent extends Manager
      */
     private function retrieve_users()
     {
-        $conditions = array();
+        $conditions = [];
 
         $user_ids = $this->get_user_ids();
 
         if (count($user_ids) == 0)
         {
-            return array();
+            return [];
         }
 
         $conditions[] = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $user_ids);

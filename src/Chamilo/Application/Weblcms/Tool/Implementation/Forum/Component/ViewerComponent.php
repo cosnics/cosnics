@@ -108,7 +108,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
     public function forum_topic_viewed($complex_topic_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
         $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->publication_id;
         $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;

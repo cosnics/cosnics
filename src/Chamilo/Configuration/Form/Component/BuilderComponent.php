@@ -25,7 +25,7 @@ class BuilderComponent extends Manager implements TableSupport
     {
         $table = new ElementTable($this);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->display_element_types();

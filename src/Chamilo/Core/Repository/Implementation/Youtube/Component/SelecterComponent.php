@@ -13,7 +13,7 @@ class SelecterComponent extends Manager
         $id = Request::get(Manager::PARAM_EXTERNAL_REPOSITORY_ID);
         $object = $this->retrieve_external_repository_object($id);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = '<script>';

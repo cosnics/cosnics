@@ -16,5 +16,5 @@ interface LoaderInterface
      *
      * @return string[]
      */
-    public function loadConfiguration($packageNamespaces = array());
+    public function loadConfiguration($packageNamespaces = []);
 }

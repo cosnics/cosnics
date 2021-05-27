@@ -49,7 +49,7 @@ abstract class ToolListRenderer
      * @throws Exception
      * @return \Chamilo\Application\Weblcms\Renderer\ToolList\ToolListRenderer
      */
-    public static function factory($type, $parent, $visible_tools = array())
+    public static function factory($type, $parent, $visible_tools = [])
     {
         $type = StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
         $type .= 'ToolListRenderer';

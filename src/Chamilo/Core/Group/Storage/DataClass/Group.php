@@ -142,7 +142,7 @@ class Group extends NestedSet
                 );
                 $joins = new Joins(array($join));
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable($this->get_left_value())
@@ -175,7 +175,7 @@ class Group extends NestedSet
                 );
                 $joins = new Joins(array($join));
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
                     new StaticConditionVariable($this->get_id())
@@ -265,7 +265,7 @@ class Group extends NestedSet
         {
             if ($recursive)
             {
-                $childrenCondition = array();
+                $childrenCondition = [];
                 $childrenCondition[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
@@ -335,7 +335,7 @@ class Group extends NestedSet
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -378,7 +378,7 @@ class Group extends NestedSet
     public function get_fully_qualified_name($include_self = true)
     {
         $parents = $this->get_parents($include_self);
-        $names = array();
+        $names = [];
 
         foreach ($parents as $node)
         {
@@ -434,7 +434,7 @@ class Group extends NestedSet
         {
             if ($recursive)
             {
-                $children_conditions = array();
+                $children_conditions = [];
                 $children_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
                     ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_left_value())
@@ -455,7 +455,7 @@ class Group extends NestedSet
 
             $groups = DataManager::retrieves(Group::class, $children_condition);
 
-            $subgroups = array();
+            $subgroups = [];
 
             foreach ($groups as $group)
             {
@@ -492,12 +492,12 @@ class Group extends NestedSet
 
             if (!is_array($groups))
             {
-                $groups = array();
+                $groups = [];
             }
         }
         else
         {
-            $groups = array();
+            $groups = [];
         }
 
         $groups[] = $this->get_id();

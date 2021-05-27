@@ -38,9 +38,9 @@ class Loader implements LoaderInterface
      *
      * @return string[]
      */
-    public function loadConfiguration($packageNamespaces = array())
+    public function loadConfiguration($packageNamespaces = [])
     {
-        $configurationDirectories = array();
+        $configurationDirectories = [];
         
         foreach ($packageNamespaces as $packageNamespace)
         {
@@ -56,10 +56,10 @@ class Loader implements LoaderInterface
         }
         catch (Exception $ex)
         {
-            $configurationFiles = array();
+            $configurationFiles = [];
         }
         
-        $configuration = array();
+        $configuration = [];
         
         foreach ($configurationFiles as $configurationFile)
         {

@@ -14,5 +14,5 @@ interface PublicationHandlerInterface
      * 
      * @param ContentObject[] $selectedContentObjects
      */
-    public function publish($selectedContentObjects = array());
+    public function publish($selectedContentObjects = []);
 }

@@ -121,7 +121,7 @@ class LogViewerComponent extends Manager
         $form->addElement('select', 'lines', '', $lines);
 
         $form->addElement(
-            'submit', 'submit', Translation::get('Ok', array(), Utilities::COMMON_LIBRARIES),
+            'submit', 'submit', Translation::get('Ok', [], Utilities::COMMON_LIBRARIES),
             array('class' => 'positive finish')
         );
         $form->addElement(

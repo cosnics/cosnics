@@ -89,7 +89,7 @@ class ConfigurablePathBuilder
      */
     public function __construct($configuredPaths)
     {
-        $this->cache = array();
+        $this->cache = [];
         $this->configuredPaths = $configuredPaths;
     }
 

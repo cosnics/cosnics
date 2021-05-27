@@ -40,7 +40,7 @@ class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewerComponent'), new FontAwesomeGlyph('desktop', array(), null, 'fas'),
+                    Translation::get('ViewerComponent'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
@@ -81,7 +81,7 @@ class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get($variable), new FontAwesomeGlyph('times', array(), null, 'fas'),
+                    Translation::get($variable), new FontAwesomeGlyph('times', [], null, 'fas'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE_COMPLEX_CONTENT_OBJECT_ITEM,

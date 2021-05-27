@@ -63,7 +63,7 @@ class UserImportForm extends FormValidator
         $this->initializeContainer();
         $this->form_user = $form_user;
         $this->form_type = $form_type;
-        $this->failedcsv = array();
+        $this->failedcsv = [];
         if ($this->form_type == self::TYPE_IMPORT)
         {
             $this->build_importing_form();
@@ -76,7 +76,7 @@ class UserImportForm extends FormValidator
         $allowed_upload_types = array('xml', 'csv');
         $this->addRule('file', Translation::get('OnlyCSVAllowed'), 'filetype', $allowed_upload_types);
 
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
         );
@@ -165,7 +165,7 @@ class UserImportForm extends FormValidator
         switch ($data)
         {
             case 'Contact' :
-                $this->user = array();
+                $this->user = [];
                 break;
             default :
                 $this->current_tag = $data;
@@ -210,7 +210,7 @@ class UserImportForm extends FormValidator
         $values = $this->exportValues();
 
         $csvusers = $this->parse_file($_FILES['file']['tmp_name'], $_FILES['file']['type']);
-        $validusers = array();
+        $validusers = [];
 
         $failures = 0;
         foreach ($csvusers as $csvuser)
@@ -405,7 +405,7 @@ class UserImportForm extends FormValidator
 
     public function parse_file($file_name, $file_type)
     {
-        $this->users = array();
+        $this->users = [];
         if ($file_type == 'text/x-csv' || $file_type == 'text/csv' || $file_type == 'application/vnd.ms-excel' ||
             $file_type == 'application/octet-stream' || $file_type == 'application/force-download' ||
             $file_type = 'text/comma-separated-values')
@@ -438,7 +438,7 @@ class UserImportForm extends FormValidator
      */
     public function send_email($user, $unencrypted_password)
     {
-        $options = array();
+        $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
@@ -467,7 +467,7 @@ class UserImportForm extends FormValidator
         }
 
         $mail = new Mail(
-            $subject, $body, $user->get_email(), true, array(), array(),
+            $subject, $body, $user->get_email(), true, [], [],
             $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
         );
 

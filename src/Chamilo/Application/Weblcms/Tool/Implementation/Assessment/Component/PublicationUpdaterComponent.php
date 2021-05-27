@@ -80,7 +80,7 @@ class PublicationUpdaterComponent extends Manager
                 $show_details = Request::get('details');
                 $tool = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_TOOL);
 
-                $params = array();
+                $params = [];
                 if ($show_details == 1)
                 {
                     $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID] = $pid;
@@ -110,7 +110,7 @@ class PublicationUpdaterComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $publication_form->toHtml();
@@ -124,7 +124,7 @@ class PublicationUpdaterComponent extends Manager
             $this->redirect(
                 Translation::get("NotAllowed"),
                 true,
-                array(),
+                [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID

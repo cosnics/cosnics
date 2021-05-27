@@ -30,20 +30,20 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
             case User::PROPERTY_STATUS :
                 if ($user->get_platformadmin() == '1')
                 {
-                    return Translation::get('PlatformAdministrator', array(), Manager::context());
+                    return Translation::get('PlatformAdministrator', [], Manager::context());
                 }
                 if ($user->get_status() == '1')
                 {
-                    return Translation::get('CourseAdmin', array(), Manager::context());
+                    return Translation::get('CourseAdmin', [], Manager::context());
                 }
                 else
                 {
-                    return Translation::get('Student', array(), Manager::context());
+                    return Translation::get('Student', [], Manager::context());
                 }
             case User::PROPERTY_PLATFORMADMIN :
                 if ($user->get_platformadmin() == '1')
                 {
-                    return Translation::get('PlatformAdministrator', array(), Manager::context());
+                    return Translation::get('PlatformAdministrator', [], Manager::context());
                 }
                 else
                 {
@@ -60,7 +60,7 @@ class WhoisOnlineTableCellRenderer extends DataClassTableCellRenderer
 
                     return '<a href="' . $this->get_component()->get_url(array('uid' => $user->get_id())) . '">' .
                          '<img style="max-width: 100px; max-height: 100px;" src="' . $profilePhotoUrl->getUrl() .
-                         '" alt="' . Translation::get('UserPicture', array(), Manager::context()) .
+                         '" alt="' . Translation::get('UserPicture', [], Manager::context()) .
                          '" /></a>';
                 }
                 return '';

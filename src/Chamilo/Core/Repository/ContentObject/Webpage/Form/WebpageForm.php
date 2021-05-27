@@ -30,7 +30,7 @@ class WebpageForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        $description_options = array();
+        $description_options = [];
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_creation_form($description_options);
@@ -59,7 +59,7 @@ class WebpageForm extends ContentObjectForm
 
     protected function build_editing_form()
     {
-        $description_options = array();
+        $description_options = [];
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_editing_form($description_options);
@@ -92,7 +92,7 @@ class WebpageForm extends ContentObjectForm
     protected function check_document_form($fields)
     {
         // TODO: Do the errors need htmlentities()?
-        $errors = array();
+        $errors = [];
 
         $owner = DataManager::retrieve_by_id(
             User::class, (int) $this->get_owner_id()
@@ -152,7 +152,7 @@ class WebpageForm extends ContentObjectForm
         return Path::getInstance()->getRepositoryPath();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         $defaults['html_content'] = file_get_contents($this->get_upload_path() . $object->get_path());

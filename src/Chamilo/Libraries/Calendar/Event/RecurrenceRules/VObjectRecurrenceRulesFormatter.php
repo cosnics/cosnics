@@ -21,7 +21,7 @@ class VObjectRecurrenceRulesFormatter extends IcalRecurrenceRulesFormatter
 
         if (isset($iCalRules['BYDAY']))
         {
-            $byDays = array();
+            $byDays = [];
 
             foreach ($iCalRules['BYDAY'] as $byDay)
             {

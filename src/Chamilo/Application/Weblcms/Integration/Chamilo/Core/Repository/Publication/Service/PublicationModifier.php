@@ -181,7 +181,7 @@ class PublicationModifier implements PublicationModifierInterface
      * @see PublicationModifierInterface::publishContentObject()
      */
     public function publishContentObject(
-        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = array()
+        ContentObject $contentObject, PublicationTarget $publicationTarget, $options = []
     )
     {
         $course = $this->getCourseService()->getCourseById($publicationTarget->getCourseIdentifier());
@@ -272,7 +272,7 @@ class PublicationModifier implements PublicationModifierInterface
         ], 'Chamilo\Application\Weblcms\Integration\Chamilo\Core\Repository'
         );
 
-        $parameters = array();
+        $parameters = [];
         $parameters[Application::PARAM_CONTEXT] = WeblcmsManager::context();
         $parameters[WeblcmsManager::PARAM_ACTION] = WeblcmsManager::ACTION_VIEW_COURSE;
         $parameters[WeblcmsManager::PARAM_COURSE] = $publicationTarget->getCourseIdentifier();

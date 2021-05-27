@@ -224,7 +224,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService impl
      */
     public function getAvailableEntities()
     {
-        $entities = array();
+        $entities = [];
 
         $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
         $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();

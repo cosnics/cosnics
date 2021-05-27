@@ -33,7 +33,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_active_users($condition = null)
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -56,7 +56,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_approval_users($condition = null)
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -79,7 +79,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_approved_users($condition = null)
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -181,7 +181,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieveUserByUsernameOrEmail($userIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
@@ -205,9 +205,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_active_users($condition = null, $count = null, $offset = null, $order_by = array())
+    public static function retrieve_active_users($condition = null, $count = null, $offset = null, $order_by = [])
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -248,10 +248,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = array()
+    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = []
     )
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -277,10 +277,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = array()
+    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = []
     )
     {
-        $conditions = array();
+        $conditions = [];
         if ($condition)
         {
             $conditions[] = $condition;
@@ -326,9 +326,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $firstname = $name[0];
         $lastname = $name[1];
 
-        $conditions = array();
-        $conditions1 = array();
-        $conditions2 = array();
+        $conditions = [];
+        $conditions1 = [];
+        $conditions2 = [];
 
         $conditions1[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
@@ -465,7 +465,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function userExists($userName, $userIdentifier = null)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), new StaticConditionVariable($userName)
         );
@@ -493,7 +493,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function usernameOrEmailExists($userIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),

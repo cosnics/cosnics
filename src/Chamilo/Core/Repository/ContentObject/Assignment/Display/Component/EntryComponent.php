@@ -410,7 +410,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
                     new SubButton(
                         $this->getDataProvider()->renderEntityNameByEntityTypeAndEntity(
                             $this->getEntityType(), $entity
-                        ), null, $url, SubButton::DISPLAY_LABEL, false, array(), null, $isActive
+                        ), null, $url, SubButton::DISPLAY_LABEL, false, [], null, $isActive
                     )
                 );
             }

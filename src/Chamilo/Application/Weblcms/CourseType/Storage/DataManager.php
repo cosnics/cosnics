@@ -104,7 +104,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
          */
         $subcondition = $user_condition;
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ACTIVE),
@@ -145,7 +145,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable(1)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new NotCondition(
             new SubselectCondition(
@@ -279,7 +279,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new StaticConditionVariable(1)
         );
 
-        $join_conditions = array();
+        $join_conditions = [];
 
         $join_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_USER_ID),
@@ -295,7 +295,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $course_type_user_order_alias = self::getInstance()->get_alias(CourseTypeUserOrder::get_table_name());
 
-        $order = array();
+        $order = [];
 
         $order[] = new OrderBy(
             new PropertyConditionVariable(CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER),
@@ -351,7 +351,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $join_condition = null, $condition = null, $offset = null, $max_objects = null, $order_by = null
     )
     {
-        $join_conditions = array();
+        $join_conditions = [];
 
         if ($join_condition)
         {
@@ -388,7 +388,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     public static function retrieve_user_order_for_course_type($course_type_id, $user_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

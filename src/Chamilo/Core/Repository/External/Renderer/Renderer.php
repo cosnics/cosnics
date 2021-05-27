@@ -73,7 +73,7 @@ abstract class Renderer
         return $this->get_external_repository_browser()->get_parent()->is_stand_alone();
     }
 
-    public function get_url($parameters = array (), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = array (), $filter = [], $encode_entities = false)
     {
         return $this->get_external_repository_browser()->get_url($parameters, $filter, $encode_entities);
     }

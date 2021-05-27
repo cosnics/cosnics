@@ -26,7 +26,7 @@ class ComplexHotspotQuestionForm extends ComplexContentObjectItemForm
      */
     public function get_elements()
     {
-        $elements = array();
+        $elements = [];
         $elements[] = $this->createElement(
             'checkbox', 
             self::PROPERTY_RECALCULATE_WEIGHT, 

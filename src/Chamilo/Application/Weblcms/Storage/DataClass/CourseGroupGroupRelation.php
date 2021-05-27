@@ -32,7 +32,7 @@ class CourseGroupGroupRelation extends DataClass
      * @param $defaultProperties array The default properties of the course_goup group relation object. Associative
      *        array.
      */
-    function __construct($defaultProperties = array())
+    function __construct($defaultProperties = [])
     {
         $this->defaultProperties = $defaultProperties;
     }
@@ -56,7 +56,7 @@ class CourseGroupGroupRelation extends DataClass
         );
         $condition = new AndCondition($conditions);
 
-        $data_set = array();
+        $data_set = [];
         $data_set = DataManager::retrieve_content_object_publication_categories($condition, null, null, null);
 
         foreach ($data_set as $course_groups)
@@ -196,7 +196,7 @@ class CourseGroupGroupRelation extends DataClass
         );
         $condition = new AndCondition($conditions);
 
-        $data_set = array();
+        $data_set = [];
         $data_set = DataManager::retrieve_course_groups($condition, null, null, null);
 
         return $data_set;

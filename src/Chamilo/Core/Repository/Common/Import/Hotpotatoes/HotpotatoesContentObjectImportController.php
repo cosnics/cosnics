@@ -21,7 +21,7 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 {
     const FORMAT = 'Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes';
 
-    private $created_objects = array();
+    private $created_objects = [];
 
     private $failures = 0;
 
@@ -146,8 +146,8 @@ class HotpotatoesContentObjectImportController extends ContentObjectImportContro
 
     public function process_archive($archive_path)
     {
-        $htm_files = array();
-        $extra_files = array();
+        $htm_files = [];
+        $extra_files = [];
 
         $zip = Filecompression::factory();
         $extracted_files_dir = $zip->extract_file($archive_path, false);

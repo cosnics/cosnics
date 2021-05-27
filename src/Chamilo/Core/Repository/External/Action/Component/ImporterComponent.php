@@ -16,7 +16,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         $object = $this->retrieve_external_repository_object($id);
         $succes = $this->import_external_repository_object($object);
         
-        $params = array();
+        $params = [];
         $params[\Chamilo\Core\Repository\External\Manager::PARAM_ACTION] = '';
         
         if ($succes)

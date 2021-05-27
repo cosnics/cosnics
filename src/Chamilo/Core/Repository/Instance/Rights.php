@@ -62,7 +62,7 @@ class Rights extends RightsUtil
 
     public function is_allowed_in_external_instances_subtree($right, $external_instance_id)
     {
-        $entities = array();
+        $entities = [];
         $entities[] = new UserEntity();
         $entities[] = new PlatformGroupEntity();
 

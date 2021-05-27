@@ -60,7 +60,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static $helper_types;
 
-    private static $applications = array();
+    private static $applications = [];
 
     private static $number_of_categories;
 
@@ -70,7 +70,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function activate_content_object_type($type)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
             new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($type))
@@ -81,7 +81,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $properties = array();
+        $properties = [];
         $properties[new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE)] =
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
@@ -93,7 +93,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function check_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME),
             new StaticConditionVariable($category_name)
@@ -123,7 +123,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function complex_content_object_item_exists_for_ref_and_parent($ref_id, $parent_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -152,11 +152,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // // Home block content object display
-        // $formats = array();
+        // $formats = [];
         // $formats[] = 's:10:"use_object";i:' . (int) $object->get_id() . ';';
         // $formats[] = 's:10:"use_object";s:' . strlen((string) $object->get_id()) . ':"' . $object->get_id() . '";';
         //
-        // $conditions = array();
+        // $conditions = [];
         //
         // foreach ($formats as $format)
         // {
@@ -182,7 +182,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 return false;
             }
-            $forbidden = array();
+            $forbidden = [];
             $forbidden[] = $object->get_id();
         }
         else
@@ -191,9 +191,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 return false;
             }
-            $children = array();
+            $children = [];
             // $children = self::getInstance()->get_children_ids($object);
-            $versions = array();
+            $versions = [];
             $versions = Datamanager::get_version_ids($object);
             $forbidden = array_merge($children, $versions);
         }
@@ -213,7 +213,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
@@ -289,7 +289,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function content_object_title_exists($title, $parent_id = null, $content_object_id = null)
     {
-        $conditions = array();
+        $conditions = [];
         if (!is_null($parent_id))
         {
             $conditions[] = new EqualityCondition(
@@ -396,7 +396,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function count_doubles_in_repository(
-        $condition = null, $count = null, $offset = null, $order_property = array()
+        $condition = null, $count = null, $offset = null, $order_property = []
     )
     {
         return count(self::determine_doubles_in_repository($condition));
@@ -424,7 +424,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function deactivate_content_object_type($type)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
             new StaticConditionVariable(ClassnameUtilities::getInstance()->getPackageNameFromNamespace($type))
@@ -435,7 +435,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $properties = array();
+        $properties = [];
         $properties[new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE)] =
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
@@ -624,7 +624,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), ComparisonCondition::GREATER_THAN, new StaticConditionVariable(1)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
@@ -653,7 +653,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     private static function fix_category_display_order($category)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER),
             ComparisonCondition::GREATER_THAN, new StaticConditionVariable($category->get_display_order())
@@ -741,7 +741,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $registrations = Configuration::registrations_by_type(
                 Manager::package() . '\\ContentObject'
             );
-            $types = array();
+            $types = [];
 
             foreach ($registrations as $registration)
             {
@@ -767,7 +767,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $user_id, $title, $parent_id = 0, $create_in_batch = false
     )
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_NAME),
             new StaticConditionVariable($title)
@@ -818,7 +818,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $properties = array($properties);
             }
 
-            $sum = array();
+            $sum = [];
             if (count($properties) == 1)
             {
                 $property = new FunctionConditionVariable(
@@ -973,7 +973,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function is_object_attached_to($attachment_id, $content_object_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectAttachment::class, ContentObjectAttachment::PROPERTY_ATTACHMENT_ID
@@ -1103,7 +1103,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_best_candidate_for_most_recent_content_object_version($objectNumber)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($objectNumber)
@@ -1194,12 +1194,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function retrieve_doubles_in_repository(
-        $condition = null, $count = null, $offset = null, $order_property = array()
+        $condition = null, $count = null, $offset = null, $order_property = []
     )
     {
         $double_counts = self::determine_doubles_in_repository($condition);
 
-        $content_objects = array();
+        $content_objects = [];
 
         foreach ($double_counts as $hash => $double_count)
         {
@@ -1217,7 +1217,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $order_column = $order_property[0]->get_property();
             $order_direction = $order_property[0]->get_direction();
-            $ordering_values = array();
+            $ordering_values = [];
 
             foreach ($content_objects as $key => $content_object)
             {
@@ -1241,7 +1241,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     break;
             }
 
-            $ordered_content_objects = array();
+            $ordered_content_objects = [];
 
             foreach ($ordering_values as $key => $value)
             {
@@ -1272,7 +1272,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = array()
+    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = []
     )
     {
         $join = new Join(
@@ -1291,7 +1291,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_most_recent_content_object_version($object)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
             new StaticConditionVariable($object->get_object_number())
@@ -1319,7 +1319,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_recycled_content_objects_from_category($category_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
             new StaticConditionVariable($category_id)
@@ -1364,7 +1364,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (!is_null($complex_type))
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -1386,7 +1386,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             self::$workspace_has_categories[$workspaceImplemention->getWorkspaceType()][$workspaceImplemention->getId()]
         ))
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),

@@ -302,7 +302,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
 
     public static function get_flash_video_types()
     {
-        $flash_types = array();
+        $flash_types = [];
         $flash_types[] = 'flv';
 
         return $flash_types;
@@ -403,7 +403,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
 
     public static function get_showable_types()
     {
-        $showable_types = array();
+        $showable_types = [];
         $showable_types[] = 'html';
         $showable_types[] = 'htm';
         $showable_types[] = 'txt';

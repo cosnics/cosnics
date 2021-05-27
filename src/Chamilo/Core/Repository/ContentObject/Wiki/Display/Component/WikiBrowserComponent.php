@@ -31,7 +31,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
 
         if ($this->get_root_content_object() != null)
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $table = new WikiPageTable($this);
@@ -60,7 +60,7 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         );
         if ($condition)
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $condition;
             $conditions[] = $owner_condition;
             $condition = new AndCondition($conditions);

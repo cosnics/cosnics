@@ -32,7 +32,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
      */
     public function getAvailableTabs()
     {
-        $tabs = array();
+        $tabs = [];
 
         $tabs[] = new DynamicVisualTab(
             self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
@@ -58,7 +58,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             (self::ACTION_USER_SETTINGS == $this->get_action() ? true : false)
         );
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable(self::context())
@@ -93,7 +93,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
      */
     public function renderPage()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->render_footer();
@@ -109,7 +109,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
     {
         $availableTabs = $this->getAvailableTabs();
 
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

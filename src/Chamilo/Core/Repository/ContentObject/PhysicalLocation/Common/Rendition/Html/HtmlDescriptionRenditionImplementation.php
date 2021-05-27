@@ -17,7 +17,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function get_description()
     {
         $object = $this->get_content_object();
-        $replace = array();
+        $replace = [];
         
         $replace[] = '<div class="panel panel-default">';
         
@@ -38,7 +38,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function get_javascript($object)
     {
-        $html = array();
+        $html = [];
         
         $html[] = '<script src="https://maps.google.com/maps/api/js?sensor=false"></script>';
         $html[] = ResourceManager::getInstance()->getResourceHtml(

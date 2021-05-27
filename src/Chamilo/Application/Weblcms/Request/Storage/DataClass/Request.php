@@ -65,7 +65,7 @@ class Request extends DataClass
                 break;
         }
 
-        $glyph = new FontAwesomeGlyph($glyphName, array(), Translation::get(self::decision_string($decision)), 'fas');
+        $glyph = new FontAwesomeGlyph($glyphName, [], Translation::get(self::decision_string($decision)), 'fas');
 
         return $glyph->render();
     }
@@ -181,7 +181,7 @@ class Request extends DataClass
      */
     static function get_decision_types($types_only = false)
     {
-        $types = array();
+        $types = [];
 
         $types[self::DECISION_PENDING] = self::decision_string(self::DECISION_PENDING);
         $types[self::DECISION_GRANTED] = self::decision_string(self::DECISION_GRANTED);
@@ -197,7 +197,7 @@ class Request extends DataClass
      *
      * @return string[] The property names.
      */
-    static function get_default_property_names($extended_property_names = array())
+    static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_USER_ID;
         $extended_property_names[] = self::PROPERTY_NAME;

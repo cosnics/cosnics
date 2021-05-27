@@ -16,7 +16,7 @@ class SimpleTemplate
 
     private static $instance = null;
 
-    private $template_callback_context = array();
+    private $template_callback_context = [];
 
     private $glue;
 
@@ -73,7 +73,7 @@ class SimpleTemplate
 
     public function process_all($template, $items, $glue = null)
     {
-        $result = array();
+        $result = [];
         foreach ($items as $item)
         {
             $result[] = $this->process_one($template, $item);
@@ -93,7 +93,7 @@ class SimpleTemplate
         $pattern = '/\{\$[a-zA-Z_][a-zA-Z0-9_]*\}/';
         $this->template_callback_context = $vars;
         $result = preg_replace_callback($pattern, array($this, 'process_template_callback'), $template);
-        $this->template_callback_context = array();
+        $this->template_callback_context = [];
 
         return $result;
     }

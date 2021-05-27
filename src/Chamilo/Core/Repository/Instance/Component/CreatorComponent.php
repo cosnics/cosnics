@@ -52,7 +52,7 @@ class CreatorComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -66,7 +66,7 @@ class CreatorComponent extends Manager
             $instance_types = $this->get_types();
             if (count($instance_types['sections']) == 0)
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $this->display_warning_message(Translation::get('NoExternalInstancesAvailable'));
@@ -77,7 +77,7 @@ class CreatorComponent extends Manager
 
             foreach ($instance_types['sections'] as $category => $category_name)
             {
-                $types_html = array();
+                $types_html = [];
 
                 $types_html[] = '<div class="content-object-options">';
                 $types_html[] = '<div id="' . $category . '" class="content-object-options-type">';
@@ -88,7 +88,7 @@ class CreatorComponent extends Manager
                 {
                     $glyph = new NamespaceIdentGlyph(
                         $registration->get_context(), true, false, false,
-                        IdentGlyph::SIZE_MEDIUM, array()
+                        IdentGlyph::SIZE_MEDIUM, []
                     );
 
                     $title = Translation::get('TypeName', null, $registration->get_context());
@@ -118,7 +118,7 @@ class CreatorComponent extends Manager
                 $types_html[] = '</div>';
             }
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             //$html[] = $tabs->render();
@@ -137,8 +137,8 @@ class CreatorComponent extends Manager
     public function get_types()
     {
         $active_managers = self::get_registered_types();
-        $types = array();
-        $sections = array();
+        $types = [];
+        $sections = [];
 
         foreach($active_managers as $active_manager)
         {
@@ -184,7 +184,7 @@ class CreatorComponent extends Manager
 
             if (!isset($types[$section]))
             {
-                $types[$section] = array();
+                $types[$section] = [];
             }
 
             $types[$section][$active_manager->get_name()] = $active_manager;

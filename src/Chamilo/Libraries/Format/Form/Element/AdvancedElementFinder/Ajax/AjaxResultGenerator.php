@@ -117,7 +117,7 @@ class AjaxResultGenerator
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
-    public function getSearchCondition($searchProperties = array())
+    public function getSearchCondition($searchProperties = [])
     {
         $condition = null;
 

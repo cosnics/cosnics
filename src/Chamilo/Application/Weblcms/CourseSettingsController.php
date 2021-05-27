@@ -79,7 +79,7 @@ class CourseSettingsController
      */
     public function __construct()
     {
-        $this->course_settings = array();
+        $this->course_settings = [];
     }
 
     /**
@@ -124,7 +124,7 @@ class CourseSettingsController
      */
     public function convert_course_settings_to_values_array(Dataclass $base_object)
     {
-        $course_settings = array();
+        $course_settings = [];
 
         $available_settings = $this->get_course_settings();
 
@@ -692,7 +692,7 @@ class CourseSettingsController
 
             if (!isset($this->course_settings_values_cache[$setting_type_caching_hash]))
             {
-                $this->course_settings_values_cache[$setting_type_caching_hash] = array();
+                $this->course_settings_values_cache[$setting_type_caching_hash] = [];
             }
 
             $setting_caching_hash = $this->get_setting_caching_hash(

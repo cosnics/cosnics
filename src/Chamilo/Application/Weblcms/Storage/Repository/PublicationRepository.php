@@ -74,7 +74,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     public function findPublicationCategoriesByParentCategoryId(Course $course, $tool, $categoryId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getPublicationCategoryConditionForCourseAndTool($course, $tool);
 
@@ -122,7 +122,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     public function findPublicationsByCategoryId(Course $course, $tool, $categoryId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getPublicationConditionForCourseAndTool($course, $tool);
 
@@ -234,9 +234,9 @@ class PublicationRepository implements PublicationRepositoryInterface
      *
      * @return mixed
      */
-    public function findVisiblePublicationsByIds(array $publicationIds = array())
+    public function findVisiblePublicationsByIds(array $publicationIds = [])
     {
-        $conditions = array();
+        $conditions = [];
 
         $from_date_variables = new PropertyConditionVariable(
             ContentObjectPublication::class, ContentObjectPublication::PROPERTY_FROM_DATE
@@ -246,7 +246,7 @@ class PublicationRepository implements PublicationRepositoryInterface
             ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TO_DATE
         );
 
-        $time_conditions = array();
+        $time_conditions = [];
 
         $time_conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
@@ -254,7 +254,7 @@ class PublicationRepository implements PublicationRepositoryInterface
             ), ComparisonCondition::EQUAL, new StaticConditionVariable(0)
         );
 
-        $forever_conditions = array();
+        $forever_conditions = [];
 
         $forever_conditions[] = new ComparisonCondition(
             $from_date_variables, ComparisonCondition::EQUAL, new StaticConditionVariable(0)
@@ -266,7 +266,7 @@ class PublicationRepository implements PublicationRepositoryInterface
 
         $forever_condition = new AndCondition($forever_conditions);
 
-        $between_conditions = array();
+        $between_conditions = [];
 
         $between_conditions[] = new ComparisonCondition(
             $from_date_variables, ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
@@ -303,7 +303,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function getPublicationCategoryConditionForCourseAndTool(Course $course, $tool)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(
@@ -330,7 +330,7 @@ class PublicationRepository implements PublicationRepositoryInterface
      */
     protected function getPublicationConditionForCourseAndTool(Course $course, $tool)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(

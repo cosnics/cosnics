@@ -54,7 +54,7 @@ class CourseTypeFeedComponent extends Manager
         $excludedCourseTypeIdentifiers = $this->getExcludedCourseTypeIdentifiers();
         $searchQuery = $this->getSearchQuery();
 
-        $conditions = array();
+        $conditions = [];
 
         if (!empty($searchQuery))
         {
@@ -89,9 +89,9 @@ class CourseTypeFeedComponent extends Manager
     public function getElements()
     {
         $elements = new AdvancedElementFinderElements();
-        $folderGlyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
-        $courseTypeGlyph = new FontAwesomeGlyph('layer-group', array(), null, 'fas');
-        $courseTypesTitle = $this->getTranslator()->trans('Coursetypes', array(), 'Chamilo\Application\Weblcms');
+        $folderGlyph = new FontAwesomeGlyph('folder', [], null, 'fas');
+        $courseTypeGlyph = new FontAwesomeGlyph('layer-group', [], null, 'fas');
+        $courseTypesTitle = $this->getTranslator()->trans('Coursetypes', [], 'Chamilo\Application\Weblcms');
         $parentElement = new AdvancedElementFinderElement(
             'course_types', $folderGlyph->getClassNamesString(), $courseTypesTitle, $courseTypesTitle,
             AdvancedElementFinderElement::TYPE_VISUAL

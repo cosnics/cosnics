@@ -85,7 +85,7 @@ abstract class Publication extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
 

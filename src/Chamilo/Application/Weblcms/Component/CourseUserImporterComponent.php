@@ -37,14 +37,14 @@ class CourseUserImporterComponent extends Manager
 
         $form = new CourseEntityImportForm($this->get_url());
 
-        $html = array();
+        $html = [];
         $html[] = $this->render_header();
 
         if ($form->validate())
         {
             try
             {
-                $importers = array();
+                $importers = [];
 
                 $importers[] = new Csv(new Import());
 

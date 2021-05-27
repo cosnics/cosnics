@@ -47,7 +47,7 @@ class Google_Service_Drive extends \Google_Service_Drive
          * 'httpMethod' => 'DELETE',
          * 'parameters' => array(
          * 'fileId' => array('location' => 'path', 'type' => 'string', 'required' => true))),
-         * 'emptyTrash' => array('path' => 'files/trash', 'httpMethod' => 'DELETE', 'parameters' => array()),
+         * 'emptyTrash' => array('path' => 'files/trash', 'httpMethod' => 'DELETE', 'parameters' => []),
          * 'get' => array(
          * 'path' => 'files/{fileId}',
          * 'httpMethod' => 'GET',

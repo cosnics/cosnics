@@ -91,7 +91,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $output = $this->get_content_objects_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -198,7 +198,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, Utilities::COMMON_LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
+                            ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                         )
                     );
                 }
@@ -243,7 +243,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new StaticConditionVariable(ContentObject::STATE_NORMAL)

@@ -96,7 +96,7 @@ class MappingDriverFactory
      *
      * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain
      */
-    public function createMappingDriver(array $mappingConfiguration = array())
+    public function createMappingDriver(array $mappingConfiguration = [])
     {
         $mappingConfiguration = $this->processConfiguration($mappingConfiguration);
 
@@ -156,7 +156,7 @@ class MappingDriverFactory
      *
      * @return string[][][]
      */
-    protected function processConfiguration(array $mappingConfiguration = array())
+    protected function processConfiguration(array $mappingConfiguration = [])
     {
         $doctrineORMMappingsConfiguration = new DoctrineORMMappingsConfiguration();
         $treeNode = $doctrineORMMappingsConfiguration->getConfigTreeBuilder()->buildTree();

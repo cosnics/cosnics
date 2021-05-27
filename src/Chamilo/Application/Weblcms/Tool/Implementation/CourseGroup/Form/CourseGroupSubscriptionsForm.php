@@ -55,7 +55,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
     public function build_basic_form()
     {
-        $legend_items = array();
+        $legend_items = [];
 
         $legend_items[] = new ToolbarItem(
             Translation::get('CourseUser'), new FontAwesomeGlyph('user'), null, ToolbarItem::DISPLAY_ICON_AND_LABEL,
@@ -101,7 +101,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $this->build_basic_form();
     }
 
-    function setDefaults($defaultValues = array(), $filter = null)
+    function setDefaults($defaultValues = [], $filter = null)
     {
         $courseGroupUsers = DataManager::retrieve_course_group_users($this->course_group->get_id());
 
@@ -115,7 +115,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
         foreach ($courseGroupUsers as $courseGroupUser)
         {
-            $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+            $userGlyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
             $defaultUsers->add_element(
                 new AdvancedElementFinderElement(
@@ -136,13 +136,13 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $values = $this->exportValues();
 
         $current_members_set = $this->course_group->get_members(false, false, true);
-        $current_members = array();
+        $current_members = [];
 
         foreach ($current_members_set as $current_member)
         {
             $current_members[] = $current_member->get_id();
         }
-        $updated_members = array();
+        $updated_members = [];
 
         foreach ($values['users']['user'] as $value)
         {
@@ -166,8 +166,8 @@ class CourseGroupSubscriptionsForm extends FormValidator
         $course_groups = $parent_course_group->get_children(false);
 
         $max_group_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
-        $user_number_of_subscriptions = array();
-        $not_subscribed_users = array();
+        $user_number_of_subscriptions = [];
+        $not_subscribed_users = [];
 
         if ($max_group_subscriptions > 0)
         {

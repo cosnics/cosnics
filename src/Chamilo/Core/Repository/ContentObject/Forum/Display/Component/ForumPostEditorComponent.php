@@ -99,7 +99,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
             {
                 $this->add_common_breadcrumbtrails();
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -139,7 +139,7 @@ class ForumPostEditorComponent extends ForumPostFormAction
                 Utilities::COMMON_LIBRARIES
             )
         );
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_TOPIC;
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
         $this->redirect($message, ($success ? false : true), $params);

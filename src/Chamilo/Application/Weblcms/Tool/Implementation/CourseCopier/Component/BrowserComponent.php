@@ -126,7 +126,7 @@ class BrowserComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = Display::error_message(Translation::get('SelectAItem'));
@@ -138,12 +138,12 @@ class BrowserComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
 
             $html[] = '<div class="alert alert-warning">' .
-                Translation::getInstance()->getTranslation('CopyNotification', array(), Manager::context()) . '</div>';
+                Translation::getInstance()->getTranslation('CopyNotification', [], Manager::context()) . '</div>';
 
             $html[] = $this->course_copier_form->toHtml();
             $html[] = $this->render_footer();

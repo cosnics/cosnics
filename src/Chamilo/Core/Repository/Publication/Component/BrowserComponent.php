@@ -26,7 +26,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $output = $this->get_publications_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $output;

@@ -124,7 +124,7 @@ class DisplayOrderHandler
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
         );
 
-        $displayOrderContext = array();
+        $displayOrderContext = [];
 
         foreach ($displayOrderContextProperties as $displayOrderContextProperty => $displayOrderContextPropertyValue)
         {

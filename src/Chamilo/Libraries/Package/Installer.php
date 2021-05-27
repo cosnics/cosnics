@@ -15,7 +15,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public static function get_additional_packages()
     {
-        $packages = array();
+        $packages = [];
         $packages[] = 'Chamilo\Libraries\Calendar';
         $packages[] = 'Chamilo\Libraries\Rights';
         return $packages;

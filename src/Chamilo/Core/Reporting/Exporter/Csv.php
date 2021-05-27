@@ -31,11 +31,11 @@ class Csv extends ReportingExporter
         $block = $template->get_current_block();
         $data = $block->retrieve_data();
         
-        $csv_data = array();
+        $csv_data = [];
         
         foreach ($data->get_categories() as $category_id => $category_name)
         {
-            $category_array = array();
+            $category_array = [];
             if ($data->is_categories_visible())
             {
                 $category_array[Translation::get('Category', null, Utilities::COMMON_LIBRARIES)] = $category_name;

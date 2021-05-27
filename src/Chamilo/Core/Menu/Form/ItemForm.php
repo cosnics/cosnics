@@ -235,7 +235,7 @@ class ItemForm extends FormValidator
      *
      * @throws \Exception
      */
-    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
+    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = [])
     {
         $defaults[Item::PROPERTY_ID] = $item->getId();
         $defaults[Item::PROPERTY_PARENT] = $item->getParentId();

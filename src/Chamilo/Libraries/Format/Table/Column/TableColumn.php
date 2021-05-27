@@ -76,7 +76,7 @@ abstract class TableColumn
             while ($context == __NAMESPACE__);
 
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), array(), $context
+                (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), [], $context
             );
         }
 

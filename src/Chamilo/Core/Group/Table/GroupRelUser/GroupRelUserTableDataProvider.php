@@ -17,7 +17,7 @@ class GroupRelUserTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        $order_property = array();
+        $order_property = [];
         $order_property[] = new OrderBy(
             new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
         );

@@ -58,7 +58,7 @@ class FileForm extends ContentObjectForm
 
     protected function build_creation_form()
     {
-        $description_options = array();
+        $description_options = [];
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_creation_form($description_options);
@@ -94,7 +94,7 @@ class FileForm extends ContentObjectForm
 
     protected function build_editing_form()
     {
-        $description_options = array();
+        $description_options = [];
         $description_options['height'] = '100';
         $description_options['collapse_toolbar'] = true;
         parent::build_editing_form($description_options);
@@ -126,7 +126,7 @@ class FileForm extends ContentObjectForm
             )
         );
 
-        $javascriptHtml = array();
+        $javascriptHtml = [];
 
         $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
@@ -153,7 +153,7 @@ class FileForm extends ContentObjectForm
     protected function check_document_form($fields)
     {
         // TODO: Do the errors need htmlentities()?
-        $errors = array();
+        $errors = [];
 
         $owner_id = $this->get_owner_id();
 
@@ -275,7 +275,7 @@ class FileForm extends ContentObjectForm
         return Path::getInstance()->getRepositoryPath();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         parent::setDefaults($defaults);

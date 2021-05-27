@@ -96,7 +96,7 @@ class SimpleTable extends HTML_Table
         {
             foreach ($this->dataArray as $data)
             {
-                $contents = array();
+                $contents = [];
 
                 foreach ($this->defaultProperties as $index => $defaultproperty)
                 {
@@ -115,7 +115,7 @@ class SimpleTable extends HTML_Table
         }
         else
         {
-            $contents = array();
+            $contents = [];
             $contents[] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
             $row = $this->addRow($contents);
             $this->setCellAttributes(

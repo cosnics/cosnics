@@ -36,11 +36,11 @@ class MonthCalendar extends Calendar
      * @param string $dayUrlTemplate
      * @param string[] $classes
      */
-    public function __construct($displayTime, $dayUrlTemplate = null, $classes = array())
+    public function __construct($displayTime, $dayUrlTemplate = null, $classes = [])
     {
         parent::__construct($displayTime, $classes);
 
-        $this->cellMapping = array();
+        $this->cellMapping = [];
         $this->dayUrlTemplate = $dayUrlTemplate;
 
         $this->buildTable();
@@ -135,7 +135,7 @@ class MonthCalendar extends Calendar
      */
     protected function determineCellClasses($tableDate)
     {
-        $classes = array();
+        $classes = [];
 
         // Is current table date today?
         if (date('Ymd', $tableDate) == date('Ymd'))

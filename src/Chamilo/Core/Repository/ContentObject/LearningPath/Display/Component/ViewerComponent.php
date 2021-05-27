@@ -133,7 +133,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             $allowedTypes = $this->learningPath->get_allowed_types();
 
             $actionSelector = new \Chamilo\Core\Repository\ContentObject\LearningPath\Display\ActionSelector(
-                $this, $this->getUser()->getId(), $allowedTypes, $parameters, array(), 'btn-primary'
+                $this, $this->getUser()->getId(), $allowedTypes, $parameters, [], 'btn-primary'
             );
 
             $firstItemContext = $this->getClassnameUtilities()->getNamespaceParent(array_shift($allowedTypes), 3);
@@ -388,7 +388,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
                 $learning_path, $this->getUser(), $this->getCurrentTreeNode()
             ))
         {
-            $html = array();
+            $html = [];
 
             $html[] = parent::render_header();
             $html[] = '<div class="alert alert-danger">';
@@ -515,7 +515,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
             ), $this->getTree(), $this->getCurrentTreeNode(), $this->getAutomaticNumberingService()
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default" id="mover" style="display: none;">';
         $html[] = '<div class="panel-heading">';
@@ -523,7 +523,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="#" id="mover-close" style="color: black; opacity: 0.5">';
 
-        $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('times', [], null, 'fas');
         $html[] = $glyph->render();
 
         $html[] = '</a>';
@@ -556,7 +556,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
         $translator = Translation::getInstance();
 
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $buttonToolbarRenderer->render();

@@ -77,7 +77,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
      */
     public function getSourceEntities()
     {
-        $entities = array();
+        $entities = [];
         $entities[] = $this->getDataClassEntityFactory()->getEntity(Schema::class);
 
         return $entities;
@@ -93,7 +93,7 @@ class SchemaLinkerComponent extends Manager implements ApplicationSupport
             'Chamilo\Core\Repository\ContentObject'
         );
 
-        $entities = array();
+        $entities = [];
 
         foreach ($registrations as $registration)
         {

@@ -20,7 +20,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $min = $question->get_low();
         $max = $question->get_high();
         
-        $html = array();
+        $html = [];
         $html[] = '<div class="question">';
         $html[] = '<div class="answer">';
         $html[] = '<select class="rating_slider">';

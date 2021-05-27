@@ -24,7 +24,7 @@ class BrowserComponent extends TabComponent implements TableSupport
 
         $table = new WorkspaceTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

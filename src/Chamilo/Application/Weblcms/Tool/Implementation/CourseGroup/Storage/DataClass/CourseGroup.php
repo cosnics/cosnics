@@ -120,7 +120,7 @@ class CourseGroup extends NestedTreeNode
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -138,7 +138,7 @@ class CourseGroup extends NestedTreeNode
      *
      * @return bool
      */
-    protected function get_dependencies($dependencies = array())
+    protected function get_dependencies($dependencies = [])
     {
         return array(
             CourseGroupUserRelation::class => new EqualityCondition(
@@ -222,7 +222,7 @@ class CourseGroup extends NestedTreeNode
                 CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition)
             );
 
-            $users = array();
+            $users = [];
 
             foreach($course_group_user_relations as $relation)
             {
@@ -258,7 +258,7 @@ class CourseGroup extends NestedTreeNode
      */
     private function get_members_condition($include_subgroups = false, $recursive_subgroups = false)
     {
-        $groups = array();
+        $groups = [];
         $groups[] = $this->get_id();
 
         if ($include_subgroups)

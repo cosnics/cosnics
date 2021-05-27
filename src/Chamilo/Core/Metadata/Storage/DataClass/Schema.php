@@ -46,7 +46,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_NAMESPACE;
         $extended_property_names[] = self::PROPERTY_NAME;
@@ -64,7 +64,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     protected function get_dependencies()
     {
-        $dependencies = array();
+        $dependencies = [];
 
         $dependencies[EntityTranslation::class] = new AndCondition(
             array(

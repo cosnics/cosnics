@@ -52,7 +52,7 @@ class PackagesClassFinder extends PackagesContentFinder
      */
     function handlePackage($package)
     {
-        $classes = array();
+        $classes = [];
 
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
         if (file_exists($path))

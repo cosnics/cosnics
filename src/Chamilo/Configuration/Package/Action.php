@@ -20,7 +20,7 @@ abstract class Action
 
     public function __construct()
     {
-        $this->message = array();
+        $this->message = [];
     }
 
     public function add_message($type = self::TYPE_NORMAL, $message)

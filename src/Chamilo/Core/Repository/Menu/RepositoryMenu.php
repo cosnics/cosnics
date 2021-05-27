@@ -61,7 +61,7 @@ class RepositoryMenu
 
         if ($canAddContentObjects)
         {
-            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
 
             $buttonGroup->addButton(
                 new Button(
@@ -84,7 +84,7 @@ class RepositoryMenu
             {
                 $buttonGroup->addButton(
                     new Button(
-                        Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', array(), null, 'far'),
+                        Translation::get('AddExisting'), new FontAwesomeGlyph('hdd', [], null, 'far'),
                         $repositoryManager->get_url(
                             array(
 
@@ -102,7 +102,7 @@ class RepositoryMenu
             $buttonToolBar->addButtonGroup($buttonGroup);
         }
 
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
 
         if ($repositoryManager->getWorkspace() instanceof PersonalWorkspace)
         {
@@ -152,7 +152,7 @@ class RepositoryMenu
 
         $buttonToolBar->addButtonGroup($buttonGroup);
 
-        $extensionsButtonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $extensionsButtonGroup = new ButtonGroup([], array('btn-group-vertical'));
         $buttonToolBar->addButtonGroup($extensionsButtonGroup);
 
         $this->getRepositoryManager()->getWorkspaceExtensionManager()->getWorkspaceActions(
@@ -175,7 +175,7 @@ class RepositoryMenu
             'Chamilo\Core\Repository\ContentObject'
         );
 
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {

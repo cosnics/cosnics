@@ -86,7 +86,7 @@ class PublicationTargetForm extends FormValidator
             $this->contentObjectIdentifiers = array($this->contentObjectIdentifiers);
         }
 
-        $this->content_objects = array();
+        $this->content_objects = [];
         $this->type = null;
 
         // Check whether the selected objects exist and perform the necessary rights checks
@@ -150,7 +150,7 @@ class PublicationTargetForm extends FormValidator
         }
         );
 
-        $table_data = array();
+        $table_data = [];
 
         foreach ($this->content_objects as $content_object)
         {
@@ -160,16 +160,16 @@ class PublicationTargetForm extends FormValidator
             );
         }
 
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
-        $header = array();
+        $header = [];
         $header[] = new StaticTableColumn('category', $glyph->render(), 'cell-stat-x2');
         $header[] = new StaticTableColumn(
             Translation::get('Title', null, Manager::context())
         );
 
         $table = new SortableTableFromArray(
-            $table_data, $header, array(), 1, count($table_data), SORT_ASC, 'selected-content-objects'
+            $table_data, $header, [], 1, count($table_data), SORT_ASC, 'selected-content-objects'
         );
         $this->addElement('html', $table->render());
     }
@@ -184,7 +184,7 @@ class PublicationTargetForm extends FormValidator
             $this, $this->content_objects[0], $this->getApplication()->getUser()
         );
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="padding: 5px 0px;">';
         $html[] = '<a href="#" class="select-all-checkboxes">';
         $html[] = Translation::get('SelectAll', null, Utilities::COMMON_LIBRARIES);

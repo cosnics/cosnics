@@ -24,7 +24,7 @@ class XmlGroupMenuFeedComponent extends Manager
 
     public function run()
     {
-        $groups_tree = array();
+        $groups_tree = [];
 
         $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
@@ -56,7 +56,7 @@ class XmlGroupMenuFeedComponent extends Manager
 
     public function dump_groups_tree($groups)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         foreach ($groups as $group)
         {
@@ -71,7 +71,7 @@ class XmlGroupMenuFeedComponent extends Manager
 
     public function dump_tree($groups)
     {
-        $html = array();
+        $html = [];
 
         if ($this->contains_results($groups))
         {

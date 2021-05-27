@@ -46,7 +46,7 @@ class AssessmentsBlock extends AssessmentBlock
         $count = 1;
         $glyph = new FontAwesomeGlyph('chart-pie');
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
@@ -100,7 +100,7 @@ class AssessmentsBlock extends AssessmentBlock
      */
     protected function get_assessment_reporting_info($assessment_publication)
     {
-        $reporting_info = array();
+        $reporting_info = [];
 
         $target_users = WeblcmsDataManager::get_publication_target_users($assessment_publication);
         $assessment_attempts = $this->get_assessment_attempts($assessment_publication->get_id());
@@ -108,7 +108,7 @@ class AssessmentsBlock extends AssessmentBlock
         $score_count = 0;
         $min_score = $max_score = $last_attempt = $first_attempt = $score = null;
 
-        $user_ids = array();
+        $user_ids = [];
 
         foreach($assessment_attempts as $assessment_attempt)
         {

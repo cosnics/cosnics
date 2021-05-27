@@ -68,7 +68,7 @@ abstract class TabComponent extends Manager
         $this->introduction_text = $this->get_introduction_text();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

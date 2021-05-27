@@ -37,7 +37,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function render($parameters)
     {
-        $html = array();
+        $html = [];
 
         if ($this->canBeDisplayed())
         {
@@ -46,9 +46,9 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $html[] = '<div class="office-viewer-content">';
             $html[] = '<div class="alert alert-info office-viewer-sidebar center-block">';
 
-            $alertText = array();
+            $alertText = [];
 
-            $glyph = new FontAwesomeGlyph('lock', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('lock', [], null, 'fas');
 
             $alertText[] = $glyph->render();
             $alertText[] =
@@ -135,7 +135,7 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
      */
     public function getErrorMessage()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="alert alert-info">';
         $html[] = '<h4>' . Translation::get('LiveViewNotSupportedTitle') . '</h4>';

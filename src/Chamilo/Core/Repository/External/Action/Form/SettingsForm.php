@@ -231,7 +231,7 @@ class SettingsForm extends FormValidator
                             $setting['field'] == 'toggle'
                         )
                         {
-                            $group = array();
+                            $group = [];
                             foreach ($options as $option_value => $option_name)
                             {
                                 if ($setting['field'] == 'checkbox' || $setting['field'] == 'toggle')
@@ -292,7 +292,7 @@ class SettingsForm extends FormValidator
                 }
             }
 
-            $buttons = array();
+            $buttons = [];
             $buttons[] = $this->createElement(
                 'style_submit_button',
                 'submit',
@@ -317,7 +317,7 @@ class SettingsForm extends FormValidator
 
         $file = Path::getInstance()->namespaceToFullPath($external_repository->get_implementation()) .
             'Resources/Settings/Settings.xml';
-        $result = array();
+        $result = [];
 
         if (file_exists($file))
         {
@@ -328,12 +328,12 @@ class SettingsForm extends FormValidator
 
             // Get categories
             $categories = $doc->getElementsByTagname('category');
-            $settings = array();
+            $settings = [];
 
             foreach ($categories as $index => $category)
             {
                 $category_name = $category->getAttribute('name');
-                $category_properties = array();
+                $category_properties = [];
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
@@ -341,7 +341,7 @@ class SettingsForm extends FormValidator
 
                 foreach ($properties as $index => $property)
                 {
-                    $property_info = array();
+                    $property_info = [];
 
                     foreach ($attributes as $index => $attribute)
                     {
@@ -374,7 +374,7 @@ class SettingsForm extends FormValidator
                             )
                             {
                                 $options = $property_options->getElementsByTagname('option');
-                                $options_info = array();
+                                $options_info = [];
                                 foreach ($options as $option)
                                 {
                                     $options_info[$option->getAttribute('value')] = $option->getAttribute('name');
@@ -390,7 +390,7 @@ class SettingsForm extends FormValidator
                             if ($property_validations->hasChildNodes())
                             {
                                 $validations = $property_validations->getElementsByTagname('validation');
-                                $validation_info = array();
+                                $validation_info = [];
                                 foreach ($validations as $validation)
                                 {
                                     $validation_info[] = array(
@@ -420,7 +420,7 @@ class SettingsForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $has_settings = $this->external_repository->has_settings();
         $is_platform = $this->configurer->get_user()->is_platform_admin();

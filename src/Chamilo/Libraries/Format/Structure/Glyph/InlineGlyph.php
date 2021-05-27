@@ -35,7 +35,7 @@ abstract class InlineGlyph
      * @param string[] $extraClasses
      * @param string $title
      */
-    public function __construct($type, $extraClasses = array(), $title = null)
+    public function __construct($type, $extraClasses = [], $title = null)
     {
         $this->type = $type;
         $this->extraClasses = $extraClasses;

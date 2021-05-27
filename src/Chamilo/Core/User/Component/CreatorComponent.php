@@ -56,7 +56,7 @@ class CreatorComponent extends Manager
             {
                 Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -67,7 +67,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

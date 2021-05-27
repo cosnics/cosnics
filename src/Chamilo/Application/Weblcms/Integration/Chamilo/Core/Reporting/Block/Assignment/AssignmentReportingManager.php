@@ -169,7 +169,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function getAssignmentUrl($course_id, $publicationId)
     {
-        $params = array();
+        $params = [];
 
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
@@ -270,7 +270,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function getEntityUrl($courseId, $publicationId, $entityType, $entityId)
     {
-        $params = array();
+        $params = [];
 
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseId;
@@ -307,7 +307,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function getEntryUrl($courseId, $publicationId, $entityType, $entityId, $entryId)
     {
-        $params = array();
+        $params = [];
 
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $courseId;
@@ -360,7 +360,7 @@ abstract class AssignmentReportingManager extends ToolBlock
      */
     protected function retrieveAssignmentPublicationsForCourse($course_id, $entityType = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

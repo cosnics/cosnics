@@ -38,7 +38,7 @@ class ExportTable extends SortableTableFromArray
         
         if ($totalValue && $totalColumn)
         {
-            $dataRow = array();
+            $dataRow = [];
             $dataRow[$totalColumn] = $totalValue;
             $dataRow[0] = Translation::get('Total');
             

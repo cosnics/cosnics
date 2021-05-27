@@ -50,7 +50,7 @@ abstract class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject
             new StaticConditionVariable($treeNodeDataIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

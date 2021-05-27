@@ -23,7 +23,7 @@ set_time_limit(0);
 class PackageInstaller extends Action
 {
 
-    private $additional_packages = array();
+    private $additional_packages = [];
 
     /**
      * Runs the package installer
@@ -143,7 +143,7 @@ class PackageInstaller extends Action
             $context, true, false, false, IdentGlyph::SIZE_BIG
         );
 
-        $installer = Installer::factory($context, array());
+        $installer = Installer::factory($context, []);
 
         if (!$installer->run())
         {
@@ -186,7 +186,7 @@ class PackageInstaller extends Action
         $image = new FontAwesomeGlyph('box', array('fa-lg'), null, 'fas');
 
         $installer = Installer::factory(
-            $this->get_package()->get_context(), array()
+            $this->get_package()->get_context(), []
         );
         if (!$installer->run())
         {

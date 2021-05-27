@@ -58,7 +58,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     const PARAM_USER_ASSESSMENT = 'uaid';
 
-    private static $checked_publications = array();
+    private static $checked_publications = [];
 
     public function addContentObjectPublicationButtons(
         $publication, ButtonGroup $buttonGroup, DropdownButton $dropdownButton
@@ -75,7 +75,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $dropdownButton->prependSubButton(
             new SubButton(
-                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', array(), 'fas'),
+                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
@@ -109,7 +109,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', array(), 'fas'),
+                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'),
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
@@ -127,7 +127,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_available_browser_types()
     {
-        $browser_types = array();
+        $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
 

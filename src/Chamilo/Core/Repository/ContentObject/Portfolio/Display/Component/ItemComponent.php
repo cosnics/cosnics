@@ -71,7 +71,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
      */
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '<div class="clearfix"></div>';
@@ -86,7 +86,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3">';
@@ -99,7 +99,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
             if ($virtual_user instanceof User)
             {
                 $revert_url = $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER));
-                $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
                 $html[] = '<div class="alert alert-warning">';
                 $html[] = Translation::get(

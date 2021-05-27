@@ -21,7 +21,7 @@ class Translation
      *
      * @deprecated Use getTranslation() now
      */
-    public static function get($variable, $parameters = array(), $context = null, $isocode = null)
+    public static function get($variable, $parameters = [], $context = null, $isocode = null)
     {
         return \Chamilo\Libraries\Translation\Translation::getInstance()::get(
             $variable, $parameters, $context, $isocode

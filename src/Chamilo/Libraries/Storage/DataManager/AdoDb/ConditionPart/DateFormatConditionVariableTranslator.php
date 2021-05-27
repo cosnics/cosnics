@@ -28,7 +28,7 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $strings = array();
+        $strings = [];
 
         $strings[] = 'FROM_UNIXTIME';
 

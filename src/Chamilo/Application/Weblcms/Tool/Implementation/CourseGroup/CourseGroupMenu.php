@@ -84,7 +84,7 @@ class CourseGroupMenu extends HtmlMenu
             {
                 throw new ObjectNotExistException(
                     Translation::get(
-                        'TypeNameSingle', array(), 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
+                        'TypeNameSingle', [], 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
                     ), $current_group
                 );
             }
@@ -130,9 +130,9 @@ class CourseGroupMenu extends HtmlMenu
     {
         $course_group = DataManager::retrieve_course_group_root($this->course->getId());
 
-        $menu = array();
+        $menu = [];
 
-        $menu_item = array();
+        $menu_item = [];
         $menu_item['title'] = $course_group->get_name();
         $menu_item['url'] = $this->get_home_url();
 
@@ -142,7 +142,7 @@ class CourseGroupMenu extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
 
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $menu_item['class'] = $glyph->getClassNamesString();
         $menu_item[OptionsMenuRenderer::KEY_ID] = $course_group->get_id();
         $menu[$course_group->get_id()] = $menu_item;
@@ -170,7 +170,7 @@ class CourseGroupMenu extends HtmlMenu
 
         foreach($groups as $group)
         {
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['title'] = $group->get_name();
             $menu_item['url'] = $this->get_url($group->get_id());
 
@@ -179,7 +179,7 @@ class CourseGroupMenu extends HtmlMenu
                 $menu_item['sub'] = $this->get_menu_items($group->get_id());
             }
 
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
             $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();

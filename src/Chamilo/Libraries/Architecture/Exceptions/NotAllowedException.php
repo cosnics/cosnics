@@ -26,7 +26,7 @@ class NotAllowedException extends UserException
     {
         Session::register('request_uri', $_SERVER['REQUEST_URI']);
 
-        $html = array();
+        $html = [];
 
         $html[] = Translation::get('NotAllowed', null, Utilities::COMMON_LIBRARIES);
 

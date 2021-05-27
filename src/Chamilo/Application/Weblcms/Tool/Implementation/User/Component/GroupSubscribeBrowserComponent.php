@@ -90,7 +90,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $this->subscribedGroups = $this->get_subscribed_platformgroup_ids($this->get_course_id());
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -236,7 +236,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return $this->translator->getTranslation($variable, $parameters, Manager::context());
     }
@@ -297,7 +297,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
      */
     protected function renderCurrentGroup()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="col-sm-10">';
         $html[] = $this->renderGroupDetails();
@@ -315,7 +315,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     {
         $group = $this->getCurrentGroup();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
@@ -352,7 +352,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     {
         $tree = new PlatformgroupMenuRenderer($this, array($this->getRootGroup()->get_id()));
 
-        $html = array();
+        $html = [];
         $html[] = '<div class="col-sm-2">';
         $html[] = $tree->render_as_tree();
         $html[] = '</div>';
@@ -367,7 +367,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
     {
         $table = new UnsubscribedGroupTable($this, $this->get_parameters(), $this->get_table_condition(''));
 
-        $html = array();
+        $html = [];
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">' . $this->getTranslation('Subgroups') . '</h3>';
@@ -382,7 +382,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
 
     protected function renderInformationMessage()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';

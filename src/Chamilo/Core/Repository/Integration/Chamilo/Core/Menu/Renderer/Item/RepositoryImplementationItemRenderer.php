@@ -34,7 +34,7 @@ class RepositoryImplementationItemRenderer extends ItemRenderer
             )
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<li' . ($selected ? ' class="active"' : '') . '>';
         $html[] = '<a href="' . $redirect->getUrl() . '">';

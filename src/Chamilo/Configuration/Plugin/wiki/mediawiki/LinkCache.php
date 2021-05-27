@@ -31,9 +31,9 @@ class MediawikiLinkCache
     function __construct()
     {
         $this->mForUpdate = false;
-        $this->mGoodLinks = array();
-        $this->mGoodLinkFields = array();
-        $this->mBadLinks = array();
+        $this->mGoodLinks = [];
+        $this->mGoodLinkFields = [];
+        $this->mBadLinks = [];
     }
 
     /**
@@ -197,13 +197,13 @@ class MediawikiLinkCache
         // }
         // else
         // {
-        // $options = array();
+        // $options = [];
         // }
         // }
         // else
         // {
         // $db = wfGetDB(DB_SLAVE);
-        // $options = array();
+        // $options = [];
         // }
         
         // $s = $db->selectRow('page', array('page_id', 'page_len', 'page_is_redirect'), array('page_namespace' =>
@@ -241,8 +241,8 @@ class MediawikiLinkCache
      */
     public function clear()
     {
-        $this->mGoodLinks = array();
-        $this->mGoodLinkFields = array();
-        $this->mBadLinks = array();
+        $this->mGoodLinks = [];
+        $this->mGoodLinkFields = [];
+        $this->mBadLinks = [];
     }
 }

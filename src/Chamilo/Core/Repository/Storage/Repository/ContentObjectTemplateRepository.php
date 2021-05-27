@@ -25,7 +25,7 @@ class ContentObjectTemplateRepository
      */
     public function getTemplateRegistrationByContentObjectTypeAndTemplateName($contentObjectType, $templateName)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

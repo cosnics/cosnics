@@ -67,7 +67,7 @@ class DocumentSaverComponent extends Manager
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        $assessment_attempt_tracker_ids = array();
+        $assessment_attempt_tracker_ids = [];
         foreach ($assessment_attempt_trackers as $assessment_attempt_tracker)
         {
             $assessment_attempt_tracker_ids[] = $assessment_attempt_tracker->get_id();
@@ -93,7 +93,7 @@ class DocumentSaverComponent extends Manager
         {
             $this->redirect_to_previous('NoOpenDocumentQuestions');
         }
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 QuestionAttempt::class,
@@ -110,7 +110,7 @@ class DocumentSaverComponent extends Manager
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition));
 
-        $document_ids = array();
+        $document_ids = [];
         foreach ($question_attempt_trackers as $question_attempt_tracker)
         {
             $answer = unserialize($question_attempt_tracker->get_answer());
@@ -130,7 +130,7 @@ class DocumentSaverComponent extends Manager
             $this->get_user_id(),
             ContentObjectExport::FORMAT_ZIP,
             $document_ids,
-            array(),
+            [],
             ZipContentObjectExport::TYPE_FLAT);
 
         $exporter = ContentObjectExportController::factory($parameters);
@@ -179,7 +179,7 @@ class DocumentSaverComponent extends Manager
             $condition);
         // Array of open question ids in the publication that permit documents
         // to be submitted.
-        $open_document_question_ids = array();
+        $open_document_question_ids = [];
         foreach ($complex_questions as $complex_question)
         {
             if ($complex_question->get_ref_object()->get_type() == AssessmentOpenQuestion::class &&
@@ -206,7 +206,7 @@ class DocumentSaverComponent extends Manager
 
     private function redirect_to_previous($message)
     {
-        $params = array();
+        $params = [];
         $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_VIEW_RESULTS;
         $params[self::PARAM_ASSESSMENT] = Request::get(self::PARAM_ASSESSMENT);
         $params[self::PARAM_USER_ASSESSMENT] = Request::get(self::PARAM_USER_ASSESSMENT);

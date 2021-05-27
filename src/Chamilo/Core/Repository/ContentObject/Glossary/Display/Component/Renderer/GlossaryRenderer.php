@@ -146,7 +146,7 @@ abstract class GlossaryRenderer
             $objects = array($objects);
         }
         
-        $co_conditions = array();
+        $co_conditions = [];
         
         foreach ($objects as $object)
         {

@@ -32,7 +32,7 @@ class ComplexTableColumnModel extends DataClassTableColumnModel implements Table
      */
     protected function addBasicColumns()
     {
-        $typeGlyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
         $this->add_column(

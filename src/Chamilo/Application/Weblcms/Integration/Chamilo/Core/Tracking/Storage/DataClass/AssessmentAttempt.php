@@ -40,7 +40,7 @@ class AssessmentAttempt extends AbstractAttempt
 
         if ($user_id)
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),
@@ -79,7 +79,7 @@ class AssessmentAttempt extends AbstractAttempt
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_COURSE_ID;
         $extended_property_names[] = self::PROPERTY_ASSESSMENT_ID;
@@ -107,7 +107,7 @@ class AssessmentAttempt extends AbstractAttempt
 
         if ($user_id)
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $condition;
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(self::class, self::PROPERTY_USER_ID),

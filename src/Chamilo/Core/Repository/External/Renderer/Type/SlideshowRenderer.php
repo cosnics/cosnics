@@ -143,7 +143,7 @@ class SlideshowRenderer extends Renderer
             );
         }
 
-        $table = array();
+        $table = [];
         $table[] = '<table id="slideshow" class="table table-striped table-bordered table-hover table-data">';
         $table[] = '<thead>';
         $table[] = '<tr>';

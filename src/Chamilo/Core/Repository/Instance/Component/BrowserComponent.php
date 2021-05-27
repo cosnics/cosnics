@@ -66,7 +66,7 @@ class BrowserComponent extends Manager implements TableSupport
             );
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -126,7 +126,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($table_class_name)
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_TYPE),

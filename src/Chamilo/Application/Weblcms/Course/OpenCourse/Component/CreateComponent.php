@@ -48,7 +48,7 @@ class CreateComponent extends Manager
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $form->toHtml();

@@ -25,7 +25,7 @@ class PlatformGroupEntityHelper
 
     public static function get_table_columns()
     {
-        $columns = array();
+        $columns = [];
         $columns[] = new DataClassPropertyTableColumn(
             Group::class,
             Group::PROPERTY_NAME);
@@ -138,7 +138,7 @@ class PlatformGroupEntityHelper
 
     public static function expand($entity_id)
     {
-        $entities = array();
+        $entities = [];
 
         $group = DataManager::retrieve_by_id(
             Group::class,

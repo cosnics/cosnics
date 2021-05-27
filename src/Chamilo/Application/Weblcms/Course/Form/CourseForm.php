@@ -69,7 +69,7 @@ class CourseForm extends CommonCourseForm
      */
     public function build_general_tab_form_elements()
     {
-        $course_type_options = array();
+        $course_type_options = [];
         
         $course_type_options[- 1] = '-- ' . Translation::get('SelectCourseType') . ' --';
         
@@ -136,7 +136,7 @@ class CourseForm extends CommonCourseForm
      */
     public function get_base_object_default_values(DataClass $base_object)
     {
-        $default_values = array();
+        $default_values = [];
         
         $default_values[Course::PROPERTY_TITLE] = $base_object->get_title();
         $default_values[Course::PROPERTY_VISUAL_CODE] = $base_object->get_visual_code();

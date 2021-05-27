@@ -166,7 +166,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
      */
     protected function get_answers_count_from_attempts()
     {
-        $answers = array();
+        $answers = [];
 
         foreach ($this->question_attempts as $question_attempt)
         {

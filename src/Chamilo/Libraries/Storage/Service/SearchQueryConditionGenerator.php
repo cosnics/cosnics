@@ -33,11 +33,11 @@ class SearchQueryConditionGenerator
             return null;
         }
 
-        $conditions = array();
+        $conditions = [];
 
         foreach ($searchQueryParts as $searchQueryPart)
         {
-            $patternMatchConditions = array();
+            $patternMatchConditions = [];
 
             foreach ($properties as $property)
             {
@@ -68,9 +68,9 @@ class SearchQueryConditionGenerator
      */
     public function splitSearchQuery($pattern)
     {
-        $matches = array();
+        $matches = [];
         preg_match_all('/(?:"([^"]+)"|""|(\S+))/', $pattern, $matches);
-        $parts = array();
+        $parts = [];
 
         for ($i = 1; $i <= 2; $i ++)
         {

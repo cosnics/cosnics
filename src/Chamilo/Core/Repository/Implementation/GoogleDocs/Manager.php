@@ -38,7 +38,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_content_object_type_conditions()
     {
-        $document_conditions = array();
+        $document_conditions = [];
         $document_conditions[] = new PatternMatchCondition(
             new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.doc', File::get_type_name()
         );
@@ -128,7 +128,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_object_viewing_url($object)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
@@ -161,14 +161,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
 
-            $menu_items = array();
+            $menu_items = [];
 
             // Basic list of all documents
-            $all_items = array();
+            $all_items = [];
             $all_items['title'] = Translation::get('AllItems');
             $all_items['url'] = $this->get_url(array(self::PARAM_FOLDER => null));
 
-            $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
             $all_items['class'] = $glyph->getClassNamesString();
 
             $menu_items[] = $all_items;

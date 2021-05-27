@@ -13,7 +13,7 @@ class LpiAttemptObjective extends SimpleTracker
     const PROPERTY_STATUS = 'status';
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_lpi_view_id($parameters[self::PROPERTY_LPI_VIEW_ID]);
         $this->set_objective_id($parameters[self::PROPERTY_OBJECTIVE_ID]);
@@ -24,7 +24,7 @@ class LpiAttemptObjective extends SimpleTracker
         $this->set_display_order($parameters[self::PROPERTY_DISPLAY_ORDER]);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

@@ -25,7 +25,7 @@ class ForumTopicDeleterComponent extends Manager
         {
             $topic = $this->get_selected_complex_content_object_item();
 
-            $params = array();
+            $params = [];
 
             // dump($topic->get_parent_object());dump($this->get_root_content_object());exit;
             if ($topic->get_parent_object()->get_id() == $this->get_root_content_object()->get_id())

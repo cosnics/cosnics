@@ -20,7 +20,7 @@ class LanguageCategoryItem extends Item
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = null)
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);
@@ -39,6 +39,6 @@ class LanguageCategoryItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('language', array(), null, 'fas');
+        return new FontAwesomeGlyph('language', [], null, 'fas');
     }
 }

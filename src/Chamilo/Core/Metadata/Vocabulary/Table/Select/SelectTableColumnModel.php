@@ -24,7 +24,7 @@ class SelectTableColumnModel extends DataClassTableColumnModel implements TableC
     public function initialize_columns()
     {
         $glyph = new FontAwesomeGlyph(
-            'folder', array(), Translation::get('Type', null, $this->get_component()->package()), 'fas'
+            'folder', [], Translation::get('Type', null, $this->get_component()->package()), 'fas'
         );
 
         $this->add_column(

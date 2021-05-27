@@ -301,7 +301,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     protected function renderRepoDragPanel(): string
     {
-        $html = array();
+        $html = [];
 
         $javascriptFiles = array(
             'Repository/app.js',

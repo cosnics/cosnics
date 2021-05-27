@@ -126,7 +126,7 @@ class RepositoryCategory extends PlatformCategory
             );
         }
 
-        $conditions = array();
+        $conditions = [];
 
         if ($this->get_id())
         {
@@ -265,7 +265,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return array(
             self::PROPERTY_TYPE_ID, self::PROPERTY_TYPE, self::PROPERTY_ID, self::PROPERTY_NAME, self::PROPERTY_PARENT,
@@ -350,7 +350,7 @@ class RepositoryCategory extends PlatformCategory
         }
         else
         {
-            $children_ids = array();
+            $children_ids = [];
             $children = DataManager::retrieve_categories($condition);
 
             foreach($children as $child)
@@ -373,7 +373,7 @@ class RepositoryCategory extends PlatformCategory
         {
             $parent = DataManager::retrieve_by_id(RepositoryCategory::class, $this->get_parent());
 
-            $parent_ids = array();
+            $parent_ids = [];
             $parent_ids[] = $parent->get_id();
             $parent_ids = array_merge($parent->get_parent_ids(), $parent_ids);
 

@@ -149,7 +149,7 @@ class PlatformAuthentication extends Authentication
      */
     public function logout(User $user)
     {
-        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+        $redirect = new Redirect([], array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
     }

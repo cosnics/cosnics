@@ -62,7 +62,7 @@ class AccessorComponent extends Manager
             $this->redirect($message, !$success, $urlParameters);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_tabs(self::ACTION_ACCESS, $rightsForm->render())->render();

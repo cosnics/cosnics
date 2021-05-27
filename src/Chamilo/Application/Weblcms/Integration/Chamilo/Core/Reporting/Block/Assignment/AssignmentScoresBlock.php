@@ -118,7 +118,7 @@ abstract class AssignmentScoresBlock extends AssignmentReportingManager
         $publicationTitlesById = [];
 
         // set the table headers
-        $headings = array();
+        $headings = [];
         $headings[] = Translation::get('Name');
 
         foreach ($publications as $publication)

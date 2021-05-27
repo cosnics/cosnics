@@ -74,7 +74,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
      */
     public function __construct(
         WorkspaceInterface $currentWorkspace, $current_category = null, $url_format = '?category=%s',
-        $extra_items = array(), $filter_count_on_types = array(), $exclude_types = array()
+        $extra_items = [], $filter_count_on_types = [], $exclude_types = []
     )
     {
         $this->currentWorkspace = $currentWorkspace;
@@ -98,7 +98,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
     {
         if (!isset($this->categories))
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
                 new StaticConditionVariable($this->currentWorkspace->getId())
@@ -111,7 +111,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
 
             $contentObjectCategories = DataManager::retrieve_categories($condition);
 
-            $this->categories = array();
+            $this->categories = [];
 
             foreach($contentObjectCategories as $contentObjectCategory)
             {
@@ -169,8 +169,8 @@ class ContentObjectCategoryMenu extends HtmlMenu
      */
     private function get_menu_items($extra_items)
     {
-        $menu = array();
-        $menu_item = array();
+        $menu = [];
+        $menu_item = [];
 
         $menu_item['title'] = $this->currentWorkspace->getTitle();
         $menu_item['url'] = $this->get_category_url(0);
@@ -184,7 +184,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
             }
         }
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         $menu_item['class'] = $glyph->getClassNamesString();
         $menu_item[OptionsMenuRenderer::KEY_ID] = 0;
@@ -206,11 +206,11 @@ class ContentObjectCategoryMenu extends HtmlMenu
     private function get_sub_menu_items($parent = 0)
     {
         $objects = $this->getCategories($parent);
-        $categories = array();
+        $categories = [];
 
         foreach ($objects as $category)
         {
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['title'] = $category->get_name();
             $menu_item['url'] = $this->get_category_url($category->get_id());
 
@@ -221,7 +221,7 @@ class ContentObjectCategoryMenu extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
 
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
             $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item[OptionsMenuRenderer::KEY_ID] = $category->get_id();

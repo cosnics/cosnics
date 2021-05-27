@@ -42,7 +42,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
     /**
      * @param int[] $excludedContentObjectIds
      */
-    public function setExcludedContentObjectIds($excludedContentObjectIds = array())
+    public function setExcludedContentObjectIds($excludedContentObjectIds = [])
     {
         if(!is_array($excludedContentObjectIds))
         {

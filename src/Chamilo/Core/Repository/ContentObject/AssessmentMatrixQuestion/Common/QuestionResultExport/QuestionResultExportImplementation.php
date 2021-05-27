@@ -23,7 +23,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         
         if (! is_null($answer))
         {
-            $options = array();
+            $options = [];
             foreach ($question->get_options() as $option_id => $option)
             {
                 $options[$option_id] = $option->get_value();
@@ -35,7 +35,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
                 case AssessmentMatrixQuestion::MATRIX_TYPE_CHECKBOX :
                     foreach ($answer as $answer_part_id => &$answer_part_match_ids)
                     {
-                        $answer_part_matches = array();
+                        $answer_part_matches = [];
                         foreach ($answer_part_match_ids as $answer_part_match_id => $answer_part_match)
                         {
                             $answer_part_matches[] = $matches[$answer_part_match_id];

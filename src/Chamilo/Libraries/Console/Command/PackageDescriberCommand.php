@@ -49,10 +49,10 @@ class PackageDescriberCommand extends ChamiloCommand
     protected function configure()
     {
         $this->setName('chamilo:process_package_description')->setDescription(
-            $this->translator->trans('ProcessResourcesCommandDescription', array(), 'Chamilo\Libraries'))->addArgument(
+            $this->translator->trans('ProcessResourcesCommandDescription', [], 'Chamilo\Libraries'))->addArgument(
             self::ARG_CONTEXT,
             InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('ProcessResourcesContextDescription', array(), 'Chamilo\Libraries'));
+            $this->translator->trans('ProcessResourcesContextDescription', [], 'Chamilo\Libraries'));
     }
 
     /**

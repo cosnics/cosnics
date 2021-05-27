@@ -94,7 +94,7 @@ class FilteredCourseList extends Block implements ConfigurableInterface, StaticB
      */
     public function renderContentFooter()
     {
-        $html = array();
+        $html = [];
         
         $html[] = '</div>';
         

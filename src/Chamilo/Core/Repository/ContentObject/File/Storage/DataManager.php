@@ -31,7 +31,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function is_only_file_occurence($storage_path, $path)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(File::class, File::PROPERTY_STORAGE_PATH),
             new StaticConditionVariable($storage_path)

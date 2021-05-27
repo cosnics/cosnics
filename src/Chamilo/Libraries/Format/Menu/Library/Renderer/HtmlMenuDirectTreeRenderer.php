@@ -29,13 +29,13 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
      *
      * @var string
      */
-    public $_levelHtml = array();
+    public $_levelHtml = [];
 
     /**
      *
      * @var string
      */
-    public $_itemHtml = array();
+    public $_itemHtml = [];
 
     /**
      *
@@ -97,7 +97,7 @@ class HtmlMenuDirectTreeRenderer extends HtmlMenuRenderer
             $this->_levelHtml[$level] .= $this->_itemTemplate[0] . $this->_itemHtml[$level] . $this->_itemTemplate[1];
         }
 
-        $keys = $values = array();
+        $keys = $values = [];
 
         foreach ($node as $k => $v)
         {

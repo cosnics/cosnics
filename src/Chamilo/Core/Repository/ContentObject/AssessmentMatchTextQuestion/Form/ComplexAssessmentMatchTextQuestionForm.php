@@ -26,7 +26,7 @@ class ComplexAssessmentMatchTextQuestionForm extends ComplexContentObjectItemFor
      */
     public function get_elements()
     {
-        $elements = array();
+        $elements = [];
         
         $elements[] = $this->createElement(
             'checkbox', 

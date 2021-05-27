@@ -71,7 +71,7 @@ class RelationInstance extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_SOURCE_TYPE;
         $extended_property_names[] = self::PROPERTY_SOURCE_ID;

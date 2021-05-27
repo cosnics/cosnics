@@ -72,7 +72,7 @@ abstract class EventParser
         
         if (! class_exists($class))
         {
-            $message = array();
+            $message = [];
             $message[] = Translation::get('ComponentFailedToLoad') . '<br /><br />';
             $message[] = '<b>' . Translation::get('File') . ':</b><br />';
             $message[] = $class . '<br /><br />';

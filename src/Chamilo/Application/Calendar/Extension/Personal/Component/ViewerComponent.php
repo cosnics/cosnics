@@ -49,7 +49,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer()->render() . '<br />';
@@ -198,7 +198,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             new Breadcrumb(null, $content_object->get_title())
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default panel-publication panel-publication-">';
         $html[] = '	<div class="panel-body">';
@@ -221,14 +221,14 @@ class ViewerComponent extends Manager implements DelegateComponent
         $html[] = '		<div class="row panel-publication-footer">';
         $html[] = '			<div class="col-xs-12 col-sm-3 panel-publication-footer-date">';
 
-        $glyph = new FontAwesomeGlyph('clock', array(), null, 'far');
+        $glyph = new FontAwesomeGlyph('clock', [], null, 'far');
 
         $html[] = '				' . $glyph->render() . ' ' . $this->render_publication_date();
         $html[] = '			</div>';
         $html[] = '			<div class="col-xs-12 col-sm-6 panel-publication-footer-visibility"></div>';
         $html[] = '			<div class="col-xs-12 col-sm-3 panel-publication-footer-targets">';
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         $html[] = $glyph->render() . ' ' . $this->render_publication_targets();
         $html[] = '			</div>';
@@ -285,7 +285,7 @@ class ViewerComponent extends Manager implements DelegateComponent
                 }
             }
 
-            $target_list = array();
+            $target_list = [];
             $target_list[] = '<select>';
 
             foreach ($users as $user)

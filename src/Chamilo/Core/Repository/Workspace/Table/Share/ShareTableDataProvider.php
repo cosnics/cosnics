@@ -98,7 +98,7 @@ class ShareTableDataProvider extends DataClassTableDataProvider
             $contentObjectIdentifiers = array($contentObjectIdentifiers);
         }
         
-        $contentObjects = array();
+        $contentObjects = [];
         
         foreach ($contentObjectIdentifiers as $contentObjectIdentifier)
         {

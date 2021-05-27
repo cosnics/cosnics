@@ -81,7 +81,7 @@ class PagerRenderer
      */
     public function renderCurrentRange()
     {
-        $variables = array();
+        $variables = [];
         $variables['START'] = $this->getPager()->getCurrentRangeStart();
         $variables['END'] = $this->getPager()->getCurrentRangeEnd();
         $variables['TOTAL'] = $this->getPager()->getNumberOfItems();
@@ -104,7 +104,7 @@ class PagerRenderer
         $queryParameters, $pageNumberParameterName, $isDisabled, $symbol, $translation, $targetPage = null
     )
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li' . ($isDisabled ? ' class="disabled"' : '') . '>';
         $symbolHtml = '<span aria-hidden="true">' . $symbol . '</span>';
@@ -133,7 +133,7 @@ class PagerRenderer
      * @return string
      */
     public function renderItemsPerPageSelector(
-        $queryParameters, $itemsPerPageParameterName, $translationVariables = array()
+        $queryParameters, $itemsPerPageParameterName, $translationVariables = []
     )
 
     {
@@ -184,7 +184,7 @@ class PagerRenderer
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_ROW], array('NUMBER' => $nr),
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, $nrOfRows),
-                    SubButton::DISPLAY_LABEL, false, array(), null, $nrOfRows == $currentNumberOfRowsPerPage
+                    SubButton::DISPLAY_LABEL, false, [], null, $nrOfRows == $currentNumberOfRowsPerPage
                 )
             );
         }
@@ -197,7 +197,7 @@ class PagerRenderer
                         $translationVariables[self::PAGE_SELECTOR_TRANSLATION_TITLE_ALL], null,
                         $translationVariables[Application::PARAM_CONTEXT]
                     ), null, $this->getUrl($queryParameters, $itemsPerPageParameterName, Pager::DISPLAY_ALL),
-                    SubButton::DISPLAY_LABEL, false, array(), null,
+                    SubButton::DISPLAY_LABEL, false, [], null,
                     $pager->getNumberOfItemsPerPage() == $pager->getNumberOfItems()
                 )
             );
@@ -205,7 +205,7 @@ class PagerRenderer
 
         $buttonToolBarRenderer = new ButtonToolBarRenderer($buttonToolBar);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="pull-right">';
         $html[] = $buttonToolBarRenderer->render();
@@ -223,7 +223,7 @@ class PagerRenderer
      * @return string
      */
     public function renderPagination(
-        $queryParameters = array(), $pageNumberParameterName = 'page_nr', $includeRange = true
+        $queryParameters = [], $pageNumberParameterName = 'page_nr', $includeRange = true
     )
     {
         return $this->renderPaginationBetweenStartAndEnd(
@@ -247,7 +247,7 @@ class PagerRenderer
     {
         $pager = $this->getPager();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<nav class="pull-right">';
         $html[] = '<ul class="pagination">';
@@ -310,7 +310,7 @@ class PagerRenderer
      * @return string
      */
     public function renderPaginationWithPageLimit(
-        $queryParameters = array(), $pageNumberParameterName = 'page_nr', $pageLimit = 7, $includeRange = true
+        $queryParameters = [], $pageNumberParameterName = 'page_nr', $pageLimit = 7, $includeRange = true
     )
     {
         $pager = $this->getPager();

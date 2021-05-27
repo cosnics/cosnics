@@ -69,8 +69,8 @@ class DirectMoverForm extends FormValidator
         $nodes = $this->tree->getTreeNodes();
         $descendants = $this->treeNode->getDescendantNodes();
 
-        $parents = array();
-        $positionsPerParent = array();
+        $parents = [];
+        $positionsPerParent = [];
 
         foreach ($nodes as $node)
         {
@@ -128,7 +128,7 @@ class DirectMoverForm extends FormValidator
             'select',
             Manager::PARAM_DISPLAY_ORDER,
             $this->getTranslation('NewPosition'),
-            array(),
+            [],
             array('id' => 'mover-display-order', 'class' => 'form-control')
         );
         $this->addElement(
@@ -161,7 +161,7 @@ class DirectMoverForm extends FormValidator
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }

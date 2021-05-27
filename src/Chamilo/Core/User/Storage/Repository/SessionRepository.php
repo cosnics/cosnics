@@ -105,7 +105,7 @@ class SessionRepository
      */
     protected function getSessionCondition($sessionIdentifier, $name, $savePath)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Session::class, Session::PROPERTY_SESSION_ID),
             new StaticConditionVariable($sessionIdentifier));

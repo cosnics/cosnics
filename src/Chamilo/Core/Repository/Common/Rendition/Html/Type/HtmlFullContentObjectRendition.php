@@ -12,7 +12,7 @@ class HtmlFullContentObjectRendition extends HtmlContentObjectRendition
     {
         $object = $this->get_content_object();
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="panel panel-default">';
         

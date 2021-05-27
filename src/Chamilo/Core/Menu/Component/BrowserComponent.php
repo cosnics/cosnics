@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $this->getItemRendererFactory(), $this->getParentIdentifier()
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -95,7 +95,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddApplicationItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('desktop', array(), null, 'fas'), $this->get_url(
+                    new FontAwesomeGlyph('desktop', [], null, 'fas'), $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => ApplicationItem::class
                     )
@@ -106,7 +106,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddCategoryItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('folder', array(), null, 'fas'), $this->get_url(
+                    new FontAwesomeGlyph('folder', [], null, 'fas'), $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => CategoryItem::class
                     )
@@ -117,7 +117,7 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
             $commonActions->addButton(
                 new Button(
                     $translator->trans('AddLinkItem', [], 'Chamilo\Core\Menu'),
-                    new FontAwesomeGlyph('link', array(), null, 'fas'), $this->get_url(
+                    new FontAwesomeGlyph('link', [], null, 'fas'), $this->get_url(
                     array(self::PARAM_ACTION => self::ACTION_CREATE, self::PARAM_TYPE => LinkItem::class)
                 ), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )

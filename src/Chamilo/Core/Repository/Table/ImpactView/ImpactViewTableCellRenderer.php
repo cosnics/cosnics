@@ -99,7 +99,7 @@ class ImpactViewTableCellRenderer extends DataClassTableCellRenderer implements 
             $glyph = new FontAwesomeGlyph('exclamation-circle', array('text-warning'), null, 'fas');
 
             return $glyph->render() . ' ' .
-                Translation::getInstance()->getTranslation('PublicationsFound', array(), Manager::context());
+                Translation::getInstance()->getTranslation('PublicationsFound', [], Manager::context());
         }
         else
         {

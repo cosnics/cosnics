@@ -71,7 +71,7 @@ class EntityTranslationFormService
             throw new Exception(Translation::get('NoFormValidatorSet'));
         }
 
-        $defaults = array();
+        $defaults = [];
 
         foreach ($entityTranslationImplementation->getTranslations() as $isocode => $translation)
         {

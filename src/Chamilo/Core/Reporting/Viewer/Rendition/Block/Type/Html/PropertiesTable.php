@@ -26,11 +26,11 @@ class PropertiesTable extends Html
 
     public function convert_reporting_data(ReportingData $data)
     {
-        $properties = array();
+        $properties = [];
         
         foreach ($data->get_rows() as $row_id => $row)
         {
-            $properties[$row] = array();
+            $properties[$row] = [];
             
             foreach ($data->get_categories() as $category_id => $category_name)
             {

@@ -68,7 +68,7 @@ class ThemePathBuilder
      */
     public function getAvailableThemes()
     {
-        $availableThemes = array();
+        $availableThemes = [];
 
         $path = $this->getCssPath('Chamilo\Configuration', false, false);
         $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);

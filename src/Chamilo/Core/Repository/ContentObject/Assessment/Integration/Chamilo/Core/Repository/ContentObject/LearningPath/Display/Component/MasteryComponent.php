@@ -32,7 +32,7 @@ class MasteryComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -48,7 +48,7 @@ class MasteryComponent extends Manager
     {
         $form = new FormValidator('mastery_score', FormValidator::FORM_METHOD_POST, $url);
 
-        $values = array();
+        $values = [];
         for ($i = 0; $i <= 100; $i ++)
         {
             $value = $i == 0 ? Translation::getInstance()->getTranslation('NoMasteryScore') : $i . '%';
@@ -78,7 +78,7 @@ class MasteryComponent extends Manager
      *
      * @return string
      */
-    protected function renderTemplate($context, $template, $parameters = array())
+    protected function renderTemplate($context, $template, $parameters = [])
     {
         $templatePath = $this->getPathBuilder()->getTemplatesPath($context) . $template;
 

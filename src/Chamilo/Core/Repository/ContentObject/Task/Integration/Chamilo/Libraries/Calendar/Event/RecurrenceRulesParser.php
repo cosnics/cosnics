@@ -51,9 +51,9 @@ class RecurrenceRulesParser
     {
         $task = $this->getTask();
         
-        $byDay = $task->get_byday() ? explode(',', $task->get_byday()) : array();
-        $byMonthDay = $task->get_bymonthday() ? explode(',', $task->get_bymonthday()) : array();
-        $byMonth = $task->get_bymonth() ? explode(',', $task->get_bymonth()) : array();
+        $byDay = $task->get_byday() ? explode(',', $task->get_byday()) : [];
+        $byMonthDay = $task->get_bymonthday() ? explode(',', $task->get_bymonthday()) : [];
+        $byMonth = $task->get_bymonth() ? explode(',', $task->get_bymonth()) : [];
         
         return new RecurrenceRules(
             $task->get_frequency(), 

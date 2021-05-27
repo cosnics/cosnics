@@ -115,7 +115,7 @@ class PublicationCategoriesTree extends GenericTree
             }
             else
             {
-                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 return $glyph->getClassNamesString();
             }
@@ -164,7 +164,7 @@ class PublicationCategoriesTree extends GenericTree
 
     public function get_root_node_class()
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }

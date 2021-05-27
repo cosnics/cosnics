@@ -55,8 +55,8 @@ class RecurrenceCalculator
 
         $events = $this->getEvents();
 
-        $expandedEvents = array();
-        $recurringEvents = array();
+        $expandedEvents = [];
+        $recurringEvents = [];
 
         foreach ($events as $key => $event)
         {

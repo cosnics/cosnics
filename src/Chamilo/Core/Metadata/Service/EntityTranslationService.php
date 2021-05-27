@@ -56,8 +56,8 @@ class EntityTranslationService
      */
     public function getEntityTranslationsIndexedByIsocode(DataClassEntity $entity)
     {
-        $conditions = array();
-        $translationsIndexedByIsocode = array();
+        $conditions = [];
+        $translationsIndexedByIsocode = [];
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(EntityTranslation::class, EntityTranslation::PROPERTY_ENTITY_TYPE),

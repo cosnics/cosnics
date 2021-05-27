@@ -78,9 +78,9 @@ class CoursesFeatureSubContext implements Context
         $course->set_course_type_id(0);
         
         $course->create();
-        $setting_values = array();
+        $setting_values = [];
         
-        $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS] = array();
+        $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS] = [];
         
         $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] = $course->get_category_id();
         $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] = $course->get_language();
@@ -88,7 +88,7 @@ class CoursesFeatureSubContext implements Context
         
         $course->create_course_settings_from_values($setting_values, true);
         
-        CourseManagementRights::getInstance()->create_rights_from_values($course, array());
+        CourseManagementRights::getInstance()->create_rights_from_values($course, []);
         
         return $course;
     }

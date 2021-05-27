@@ -27,6 +27,6 @@ interface NotificationMessageStorageInterface
      *
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function store($notificationMessages = array());
+    public function store($notificationMessages = []);
 }
 

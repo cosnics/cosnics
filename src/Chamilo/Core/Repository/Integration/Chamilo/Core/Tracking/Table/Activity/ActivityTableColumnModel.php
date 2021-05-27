@@ -26,7 +26,7 @@ class ActivityTableColumnModel extends DataClassTableColumnModel
      */
     public function initialize_columns()
     {
-        $glyph = new FontAwesomeGlyph('mouse', array(), Translation::get('ActivityType'), 'fas');
+        $glyph = new FontAwesomeGlyph('mouse', [], Translation::get('ActivityType'), 'fas');
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE_ICON, $glyph->render()));
         $this->add_column(new DataClassPropertyTableColumn(Activity::class, Activity::PROPERTY_TYPE));

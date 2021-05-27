@@ -6,11 +6,11 @@ class Actions
 
     private $context;
 
-    private $links = array();
+    private $links = [];
 
     private $search;
 
-    public function __construct($context, $links = array(), $search = null)
+    public function __construct($context, $links = [], $search = null)
     {
         $this->context = $context;
         $this->links = $links;

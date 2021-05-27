@@ -268,7 +268,7 @@ class PackageDescriber
      */
     protected function processAuthors($composerJsonInstance, $authors)
     {
-        $composerAuthors = array();
+        $composerAuthors = [];
 
         if (isset($composerJsonInstance->authors))
         {
@@ -279,7 +279,7 @@ class PackageDescriber
         }
         else
         {
-            $composerJsonInstance->authors = array();
+            $composerJsonInstance->authors = [];
         }
 
         foreach ($authors as $author)
@@ -322,12 +322,12 @@ class PackageDescriber
      */
     protected function processDependency($composerJsonInstance, Dependency $dependency)
     {
-        $existingDependencies = array();
+        $existingDependencies = [];
 
         if (!isset($composerTemplateInstance->extra->cosnics->dependencies) ||
             $composerJsonInstance->extra->cosnics->dependencies instanceof stdClass)
         {
-            $composerJsonInstance->extra->cosnics->dependencies = array();
+            $composerJsonInstance->extra->cosnics->dependencies = [];
         }
         else
         {
@@ -353,7 +353,7 @@ class PackageDescriber
      * @param string[] $packageNamespaces
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function processPackages($packageNamespaces = array(), OutputInterface $output)
+    public function processPackages($packageNamespaces = [], OutputInterface $output)
     {
         if (empty($packageNamespaces))
         {

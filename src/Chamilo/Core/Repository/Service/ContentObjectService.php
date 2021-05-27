@@ -69,7 +69,7 @@ class ContentObjectService
     {
         $contentObjectRegistrations =
             $this->getRegistrationConsulter()->getContentObjectRegistrations($alsoReturnInactiveTypes);
-        $contentObjectTypes = array();
+        $contentObjectTypes = [];
 
         foreach ($contentObjectRegistrations as $contentObjectRegistration)
         {

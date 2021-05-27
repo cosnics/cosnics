@@ -69,7 +69,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
             Manager::PARAM_USERS,
             \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::PARAM_QUESTION);
         
-        $params = array();
+        $params = [];
         $params[Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         
@@ -81,7 +81,7 @@ class AssessmentQuestionAttemptsUserTemplate extends ReportingTemplate
         
         $filters = array(Manager::PARAM_USERS);
         
-        $params = array();
+        $params = [];
         $params[Manager::PARAM_TEMPLATE_ID] = AssessmentQuestionUsersTemplate::class;
         $params[Manager::PARAM_PUBLICATION] = $this->publication_id;
         

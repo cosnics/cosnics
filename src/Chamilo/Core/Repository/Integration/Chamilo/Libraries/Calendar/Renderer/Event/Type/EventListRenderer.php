@@ -29,7 +29,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
      */
     public function getContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->getEvent()->getContent();
         $html[] = $this->renderAttachments();
@@ -61,7 +61,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                     }
                     );
 
-                    $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('paperclip', [], null, 'fas');
 
                     $html[] = '<div class="panel panel-default panel-attachments">';
                     $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' . htmlentities(
@@ -73,7 +73,7 @@ abstract class EventListRenderer extends \Chamilo\Libraries\Calendar\Renderer\Ev
                     {
                         $url = $this->getAttachmentLink($this->getEvent(), $attachment);
 
-                        $render = array();
+                        $render = [];
 
                         $render[] = '<li class="list-group-item">';
 

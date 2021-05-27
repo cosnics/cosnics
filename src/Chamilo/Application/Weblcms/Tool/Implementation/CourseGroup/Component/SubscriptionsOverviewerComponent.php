@@ -65,7 +65,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $this->current_tab = Request::get(self::PARAM_TAB);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -101,7 +101,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     {
         if (!isset($this->buttonToolbarRenderer))
         {
-            $parameters = array();
+            $parameters = [];
 
             $buttonToolbar = new ButtonToolBar($this->get_url($parameters));
             $commonActions = new ButtonGroup();
@@ -137,7 +137,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
         $search_condition = $this->get_search_condition();
         if ($search_condition)
         {
@@ -184,7 +184,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         {
             if ($this->current_tab == self::TAB_USERS)
             {
-                $conditions = array();
+                $conditions = [];
 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), '*' . $query . '*'
@@ -294,7 +294,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
      */
     protected function handle_course_groups(DataClassIterator $course_groups)
     {
-        $html = array();
+        $html = [];
 
         foreach($course_groups as $course_group)
         {

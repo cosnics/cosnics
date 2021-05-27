@@ -68,7 +68,7 @@ abstract class Manager extends Application
      *
      * @return string
      */
-    public static function get_links($types = array(), $auto_open = false)
+    public static function get_links($types = [], $auto_open = false)
     {
         $instances = Storage\DataManager::retrieve_active_instances($types);
 
@@ -79,7 +79,7 @@ abstract class Manager extends Application
                 $types = array($types);
             }
 
-            $type_names = array();
+            $type_names = [];
             foreach ($types as $type)
             {
                 $type_names[] = Translation::get('TypeName', null, Manager::get_namespace($type));
@@ -105,8 +105,8 @@ abstract class Manager extends Application
         }
         else
         {
-            $html = array();
-            $buttons = array();
+            $html = [];
+            $buttons = [];
 
             $available_instances = 0;
 
@@ -120,7 +120,7 @@ abstract class Manager extends Application
                     'BrowseObject', array('OBJECT' => $instance->get_title()), Utilities::COMMON_LIBRARIES
                 );
 
-                $glyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
                 $buttons[] =
                     '<a class="btn btn-default" onclick="javascript:openPopup(\'' . htmlspecialchars($link) . '\');">';
@@ -185,7 +185,7 @@ abstract class Manager extends Application
 
     public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
             new StaticConditionVariable('Chamilo\Core\Repository\Implementation')

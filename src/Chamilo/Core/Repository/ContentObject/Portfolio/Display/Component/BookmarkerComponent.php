@@ -28,7 +28,7 @@ class BookmarkerComponent extends ItemComponent
         {
             $message = Display::error_message(Translation::get('BookmarksNotSupported'), true);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $message;
@@ -66,7 +66,7 @@ class BookmarkerComponent extends ItemComponent
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

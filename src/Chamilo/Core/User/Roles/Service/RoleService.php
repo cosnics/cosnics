@@ -145,7 +145,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return Role[]
      */
-    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
+    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = [])
     {
         return $this->roleRepository->findRoles($condition, $count, $offset, $orderBy);
     }

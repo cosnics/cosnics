@@ -43,10 +43,10 @@ if (! $in)
     exit(- 1);
 }
 print "Initializing normalization quick check tables...\n";
-$checkNFC = array();
+$checkNFC = [];
 while (false !== ($line = fgets($in)))
 {
-    $matches = array();
+    $matches = [];
     if (preg_match('/^([0-9A-F]+)(?:..([0-9A-F]+))?\s*;\s*(NFC_QC)\s*;\s*([MN])/', $line, $matches))
     {
         list($junk, $first, $last, $prop, $value) = $matches;
@@ -70,7 +70,7 @@ if (! $in)
     print "http://www.unicode.org/Public/UNIDATA/CompositionExclusions.txt\n";
     exit(- 1);
 }
-$exclude = array();
+$exclude = [];
 while (false !== ($line = fgets($in)))
 {
     if (preg_match('/^([0-9A-F]+)/i', $line, $matches))
@@ -91,10 +91,10 @@ if (! $in)
     exit(- 1);
 }
 
-$compatibilityDecomp = array();
-$canonicalDecomp = array();
-$canonicalComp = array();
-$combiningClass = array();
+$compatibilityDecomp = [];
+$canonicalDecomp = [];
+$canonicalComp = [];
+$combiningClass = [];
 $total = 0;
 $compat = 0;
 $canon = 0;

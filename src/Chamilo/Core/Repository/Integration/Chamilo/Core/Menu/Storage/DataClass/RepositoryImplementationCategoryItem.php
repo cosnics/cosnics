@@ -23,7 +23,7 @@ class RepositoryImplementationCategoryItem extends Item
 
     private $children;
 
-    public function __construct($default_properties = array(), $additional_properties = null)
+    public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
@@ -52,7 +52,7 @@ class RepositoryImplementationCategoryItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('globe', array(), null, 'fas');
+        return new FontAwesomeGlyph('globe', [], null, 'fas');
     }
 
     public function get_children()

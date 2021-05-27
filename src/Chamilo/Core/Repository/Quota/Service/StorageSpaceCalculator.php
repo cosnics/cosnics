@@ -60,12 +60,12 @@ class StorageSpaceCalculator
     /**
      * @var integer[]
      */
-    private $allowedStorageSpaceForUserCache = array();
+    private $allowedStorageSpaceForUserCache = [];
 
     /**
      * @var integer[]
      */
-    private $usedStorageSpaceForUserCache = array();
+    private $usedStorageSpaceForUserCache = [];
 
     /**
      * @var integer

@@ -55,7 +55,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
      * @return \Chamilo\Application\Calendar\Extension\Personal\Form\PublicationForm
      * @throws \Exception
      */
-    public function getPublicationForm($selectedContentObjects = array())
+    public function getPublicationForm($selectedContentObjects = [])
     {
         if (!isset($this->publicationForm))
         {
@@ -94,7 +94,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             Manager::package(), \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
         );
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {

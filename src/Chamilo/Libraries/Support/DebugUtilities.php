@@ -20,7 +20,7 @@ class DebugUtilities
      */
     public static function show($object, $title = null, $backtrace_index = 0)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-info">';
 

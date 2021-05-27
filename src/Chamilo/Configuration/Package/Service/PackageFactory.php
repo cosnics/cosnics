@@ -160,7 +160,7 @@ class PackageFactory
 
         if (!isset($cosnicsProperties->extra))
         {
-            $extra = array();
+            $extra = [];
         }
         else
         {

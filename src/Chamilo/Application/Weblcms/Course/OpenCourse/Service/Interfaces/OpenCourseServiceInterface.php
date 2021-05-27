@@ -25,7 +25,7 @@ interface OpenCourseServiceInterface
      *
      * @return DataClassIterator
      */
-    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array());
+    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = []);
 
     /**
      * Returns the closed courses
@@ -37,7 +37,7 @@ interface OpenCourseServiceInterface
      *
      * @return DataClassIterator
      */
-    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
+    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
 
     /**
      * Counts the open courses for the given user
@@ -78,7 +78,7 @@ interface OpenCourseServiceInterface
      * @return
      *
      */
-    public function attachRolesToCoursesByIds(User $user, $courseIds = array(), $roleIds = array());
+    public function attachRolesToCoursesByIds(User $user, $courseIds = [], $roleIds = []);
 
     /**
      * Updates the roles for the courses
@@ -91,7 +91,7 @@ interface OpenCourseServiceInterface
      * @return
      *
      */
-    public function updateRolesForCourses(User $user, $courseIds = array(), $roleIds = array());
+    public function updateRolesForCourses(User $user, $courseIds = [], $roleIds = []);
 
     /**
      * Removes a course as open course

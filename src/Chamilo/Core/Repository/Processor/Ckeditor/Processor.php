@@ -60,7 +60,7 @@ class Processor extends HtmlEditorProcessor
             $rendition = array('url' => null);
         }
 
-        $html = array();
+        $html = [];
         $html[] = '<script>';
         $html[] = 'window.opener.CKEDITOR.tools.callFunction(' . $this->get_parameter('CKEditorFuncNum') . ', "' .
             $rendition['url'] . '"' . ', ' . $object->getId() . ', "' . $object->calculate_security_code() . '"' .

@@ -92,10 +92,10 @@ class RedirectTest extends PHPUnit_Framework_TestCase
     {
         $params = array('test' => "un script nécessitant d'être encodé & including <different> entities");
         
-        $redirect = new Redirect($params, array(), false);
+        $redirect = new Redirect($params, [], false);
         $unencoded_return_value = $redirect->getUrl();
         
-        $redirect = new Redirect($params, array(), true);
+        $redirect = new Redirect($params, [], true);
         $encoded_return_value = $redirect->getUrl();
         
         $this->assertEquals($url, $unencoded_return_value);
@@ -109,7 +109,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         
         $not_found = array_diff($expected, $parsed_return_query);
         
-        $this->assertEquals(array(), $not_found);
+        $this->assertEquals([], $not_found);
     }
 
     private function assertURLQueryContainsExactly(array $expected, $url)

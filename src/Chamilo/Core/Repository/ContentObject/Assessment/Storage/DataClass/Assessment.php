@@ -76,7 +76,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             self::package(), Manager::package() . '\ContentObject'
         );
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {

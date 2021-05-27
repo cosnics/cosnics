@@ -22,7 +22,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
     const PROPERTY_SORT = 'sort';
     const PROPERTY_USER_ID = 'user_id';
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -43,7 +43,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return array(
             self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID,

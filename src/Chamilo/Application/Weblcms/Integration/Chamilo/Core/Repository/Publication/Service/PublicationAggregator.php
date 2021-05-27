@@ -126,7 +126,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             $user, $condition
         );
 
-        $possible_courses = array();
+        $possible_courses = [];
 
         foreach($courses as $course)
         {
@@ -141,7 +141,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters());
 
-        $tool_names = array();
+        $tool_names = [];
 
         foreach($tools as $tool)
         {

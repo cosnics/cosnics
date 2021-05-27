@@ -54,7 +54,7 @@ class AssignmentPlatformGroupScoresBlock extends AssignmentScoresBlock
      */
     protected function retrieveEntitiesForCourse($course_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)

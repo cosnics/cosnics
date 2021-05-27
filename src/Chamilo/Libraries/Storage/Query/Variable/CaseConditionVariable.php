@@ -33,7 +33,7 @@ class CaseConditionVariable extends ConditionVariable
      * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElements
      * @param string $alias
      */
-    public function __construct($caseElements = array(), $alias = null)
+    public function __construct($caseElements = [], $alias = null)
     {
         $this->caseElements = $caseElements;
         $this->alias = $alias;

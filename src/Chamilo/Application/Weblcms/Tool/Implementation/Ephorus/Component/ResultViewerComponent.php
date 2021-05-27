@@ -30,7 +30,7 @@ class ResultViewerComponent extends Manager
         $this->validateAccess();
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -59,7 +59,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'PrintReport', array(),
+                        'PrintReport', [],
                         ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'print_button'
                 )
@@ -68,7 +68,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'ExportReport', array(),
+                        'ExportReport', [],
                         ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),

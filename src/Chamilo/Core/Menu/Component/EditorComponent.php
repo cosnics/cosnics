@@ -67,7 +67,7 @@ class EditorComponent extends Manager implements DelegateComponent
             );
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $itemForm->render();

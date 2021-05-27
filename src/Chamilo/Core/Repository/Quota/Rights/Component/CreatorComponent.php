@@ -54,7 +54,7 @@ class CreatorComponent extends Manager
             $postBackUrl->toUrl();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_tabs(self::ACTION_CREATE, $rightsForm->render())->render();

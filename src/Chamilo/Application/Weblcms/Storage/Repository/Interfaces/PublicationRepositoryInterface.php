@@ -52,7 +52,7 @@ interface PublicationRepositoryInterface
      *
      * @return mixed
      */
-    public function findVisiblePublicationsByIds(array $publicationIds = array());
+    public function findVisiblePublicationsByIds(array $publicationIds = []);
 
     /**
      * Finds one publication by a given id

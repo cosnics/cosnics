@@ -440,7 +440,7 @@ class LearningPathAssignmentRepository extends
             new StaticConditionVariable($contentObjectPublication->getId())
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

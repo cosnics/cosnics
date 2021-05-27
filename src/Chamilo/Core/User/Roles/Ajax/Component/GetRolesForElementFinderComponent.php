@@ -50,7 +50,7 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
     public function generateElements(AdvancedElementFinderElements $advancedElementFinderElements)
     {
         $roles = $this->getRoles();
-        $glyph = new FontAwesomeGlyph('mask', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('mask', [], null, 'fas');
 
         foreach ($roles as $role)
         {

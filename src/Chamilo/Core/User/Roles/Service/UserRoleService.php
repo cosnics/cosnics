@@ -71,12 +71,12 @@ class UserRoleService implements UserRoleServiceInterface
      *
      * @return bool
      */
-    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = array())
+    public function doesUserHasAtLeastOneRole(User $user, $rolesToMatch = [])
     {
 
         $userRoles = $this->getRolesForUser($user);
         //        var_dump($user, $rolesToMatch, $userRoles);
-        $userRoleIds = array();
+        $userRoleIds = [];
 
         foreach ($userRoles as $userRole)
         {

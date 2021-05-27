@@ -20,7 +20,7 @@ class AdvancedElementFinderElements
      *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement[] $elements
      */
-    public function __construct($elements = array())
+    public function __construct($elements = [])
     {
         $this->set_elements($elements);
     }
@@ -65,7 +65,7 @@ class AdvancedElementFinderElements
      */
     public function as_array()
     {
-        $array = array();
+        $array = [];
 
         $elements = $this->get_elements();
 

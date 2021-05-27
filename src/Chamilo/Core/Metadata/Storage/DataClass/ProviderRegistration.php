@@ -41,7 +41,7 @@ class ProviderRegistration extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
         $extended_property_names[] = self::PROPERTY_PROVIDER_CLASS;
@@ -117,7 +117,7 @@ class ProviderRegistration extends DataClass
      */
     protected function get_dependencies()
     {
-        $dependencies = array();
+        $dependencies = [];
         
         $dependencies[ProviderLink::class] = new EqualityCondition(
             new PropertyConditionVariable(ProviderLink::class, ProviderLink::PROPERTY_PROVIDER_REGISTRATION_ID),

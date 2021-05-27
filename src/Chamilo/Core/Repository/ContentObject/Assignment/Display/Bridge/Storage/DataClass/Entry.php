@@ -32,7 +32,7 @@ abstract class Entry extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
         $extendedPropertyNames[] = self::PROPERTY_SUBMITTED;

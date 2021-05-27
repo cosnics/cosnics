@@ -14,7 +14,7 @@ class BrowserComponent extends Manager
     {
         $renderer = new Renderer($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $renderer->as_html();

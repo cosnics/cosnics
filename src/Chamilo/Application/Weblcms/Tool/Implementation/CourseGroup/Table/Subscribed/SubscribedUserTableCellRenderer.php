@@ -29,7 +29,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         $browser = $this->get_component();
         if ($browser->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_UNSUBSCRIBE;
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user->getId();
             $parameters[Manager::PARAM_COURSE_GROUP] = $browser->get_course_group()->getId();
@@ -48,7 +48,7 @@ class SubscribedUserTableCellRenderer extends RecordTableCellRenderer implements
         if (!$browser->is_allowed(WeblcmsRights::EDIT_RIGHT) && $course_group->is_self_unregistration_allowed() &&
             $course_group->is_member($user) && $browser->get_user()->get_id() == $user->getId())
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->getId();
             $parameters[Manager::PARAM_COURSE_GROUP_ACTION] = Manager::ACTION_USER_SELF_UNSUBSCRIBE;
             $unsubscribe_url = $browser->get_url($parameters);

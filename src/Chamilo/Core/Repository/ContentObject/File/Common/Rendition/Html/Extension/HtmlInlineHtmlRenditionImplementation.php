@@ -24,7 +24,7 @@ class HtmlInlineHtmlRenditionImplementation extends HtmlInlineRenditionImplement
             $object->get_id(), 
             $object->calculate_security_code()) . '&display=1';
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="text-container">';
         $html[] = '<iframe class="text-frame" src="' . $url .

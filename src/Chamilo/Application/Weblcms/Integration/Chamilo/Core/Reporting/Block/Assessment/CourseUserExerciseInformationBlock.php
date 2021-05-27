@@ -66,7 +66,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
         );
 
-        $exercises = array();
+        $exercises = [];
         // $score_count = 0;
         foreach($trackerdata as $value)
         {
@@ -85,7 +85,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
             }
         }
 
-        $params = array();
+        $params = [];
         $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
         $params[Application::PARAM_CONTEXT] = Manager::context();
         $params[Manager::PARAM_COURSE] = $course_id;
@@ -99,7 +99,7 @@ class CourseUserExerciseInformationBlock extends ToolBlock
         $params_detail[Manager::PARAM_TEMPLATE_ID] =
             AssessmentAttemptsUserTemplate::class;
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL

@@ -45,7 +45,7 @@ class OrderingQuestionForm extends ContentObjectForm
         }
         if (!isset($_SESSION['ordering_skip_options']))
         {
-            $_SESSION['ordering_skip_options'] = array();
+            $_SESSION['ordering_skip_options'] = [];
         }
         if (isset($_POST['add']))
         {
@@ -68,7 +68,7 @@ class OrderingQuestionForm extends ContentObjectForm
             array('id' => 'ordering_number_of_options')
         );
 
-        $buttons = array();
+        $buttons = [];
         // Notice: The [] are added to this element name so we don't have to deal with the _x and _y suffixes added when
         // clicking an image button
         $buttons[] = $this->createElement(
@@ -77,12 +77,12 @@ class OrderingQuestionForm extends ContentObjectForm
         );
         $this->addGroup($buttons, 'question_buttons', null, '', false);
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -96,7 +96,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
 
-        $select_options = array();
+        $select_options = [];
         for ($i = 1; $i <= $number_of_options; $i ++)
         {
             $select_options[$i] = $i;
@@ -106,7 +106,7 @@ class OrderingQuestionForm extends ContentObjectForm
         {
             if (!in_array($option_number, $_SESSION['ordering_skip_options']))
             {
-                $group = array();
+                $group = [];
 
                 $group[] = $this->create_html_editor(
                     OrderingQuestionOption::PROPERTY_VALUE . '[' . $option_number . ']', Translation::get('Item'),
@@ -130,7 +130,7 @@ class OrderingQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'style_button', 'remove[' . $option_number . ']', null,
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -180,7 +180,7 @@ class OrderingQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $options = array();
+        $options = [];
         foreach ($values[OrderingQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
             $order = $values[OrderingQuestionOption::PROPERTY_ORDER][$option_id];
@@ -194,7 +194,7 @@ class OrderingQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -202,7 +202,7 @@ class OrderingQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             OrderingQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), false,
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), false,
             $htmlEditorOptions
         );
     }
@@ -251,7 +251,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         if (!$this->isSubmitted())
         {

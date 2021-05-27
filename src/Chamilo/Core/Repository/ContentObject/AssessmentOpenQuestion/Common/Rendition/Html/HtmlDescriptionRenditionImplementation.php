@@ -35,7 +35,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
                 break;
         }
         
-        $html = array();
+        $html = [];
         $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';
         $html[] = '<tr><th>&nbsp;</th><th>&nbsp;</th></tr>';

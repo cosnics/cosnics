@@ -50,7 +50,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_content_object_type_conditions()
     {
         $video_types = File::get_video_types();
-        $video_conditions = array();
+        $video_conditions = [];
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new PatternMatchCondition(
@@ -92,7 +92,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_object_viewing_url($object)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
@@ -105,7 +105,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_menu_items()
     {
-        return array();
+        return [];
     }
 
     /*

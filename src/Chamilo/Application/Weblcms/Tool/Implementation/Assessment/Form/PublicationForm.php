@@ -35,7 +35,7 @@ class PublicationForm extends ContentObjectPublicationForm
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     public function __construct(
-        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = array()
+        User $user, $form_type, $publications, $course, $action, $is_course_admin, $selectedContentObjects = []
     )
     {
         parent::__construct(

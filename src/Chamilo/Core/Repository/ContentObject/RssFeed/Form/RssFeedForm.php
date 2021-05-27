@@ -23,7 +23,7 @@ class RssFeedForm extends ContentObjectForm
 
         $this->add_textfield(
             RssFeed::PROPERTY_NUMBER_OF_ENTRIES, Translation::getInstance()->getTranslation(
-            'NumberOfEntries', array(), 'Chamilo\Core\Repository\ContentObject\RssFeed'
+            'NumberOfEntries', [], 'Chamilo\Core\Repository\ContentObject\RssFeed'
         ), true, ' size="100" style="width: 100%;"'
         );
     }
@@ -61,7 +61,7 @@ class RssFeedForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $lo = $this->get_content_object();
         $default_url = null;

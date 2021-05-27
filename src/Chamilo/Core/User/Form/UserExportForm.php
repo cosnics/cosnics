@@ -34,7 +34,7 @@ class UserExportForm extends FormValidator
         parent::__construct('user_export', self::FORM_METHOD_POST, $action, '_blank');
 
         $this->form_type = $form_type;
-        $this->failedcsv = array();
+        $this->failedcsv = [];
         if ($this->form_type == self::TYPE_EXPORT)
         {
             $this->build_exporting_form();

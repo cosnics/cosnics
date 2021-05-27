@@ -58,7 +58,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $this->addElement('html', '<div class="row">');
         $this->addElement('html', '<div class="col-sm-12 col-md-6">');
 
-        $glyph = new FontAwesomeGlyph('long-arrow-alt-down', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('long-arrow-alt-down', [], null, 'fas');
 
         $this->addElement('html', '<div class="input-group">');
         $this->addElement('html', '<div class="input-group-addon">' . $glyph->render() . '</div>');
@@ -73,7 +73,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $this->addElement('html', '<div class="col-sm-12 col-md-6">');
 
-        $glyph = new FontAwesomeGlyph('long-arrow-alt-up', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('long-arrow-alt-up', [], null, 'fas');
 
         $this->addElement('html', '<div class="input-group">');
         $this->addElement('html', '<div class="input-group-addon">' . $glyph->render() . '</div>');
@@ -97,7 +97,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $this->add_textfield(AssessmentRatingQuestion::PROPERTY_CORRECT, Translation::get('CorrectValue'), false);
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '595';
         $html_editor_options['height'] = '100';
         $html_editor_options['collapse_toolbar'] = true;
@@ -149,7 +149,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -157,7 +157,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentRatingQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), false,
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)), false,
             $htmlEditorOptions
         );
     }
@@ -183,7 +183,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -200,7 +200,7 @@ class AssessmentRatingQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
 

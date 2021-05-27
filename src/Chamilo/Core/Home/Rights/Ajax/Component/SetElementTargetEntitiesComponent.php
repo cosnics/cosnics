@@ -83,7 +83,7 @@ class SetElementTargetEntitiesComponent extends Manager
      */
     protected function getTargetEntitiesFromRequest()
     {
-        $results = array();
+        $results = [];
         $values = json_decode($this->getRequest()->get(self::PARAM_TARGET_ENTITIES));
         
         foreach ($values as $value)

@@ -38,7 +38,7 @@ class PackagesTranslationResourcesFinder implements TranslationResourcesFinderIn
      */
     public function findTranslationResources()
     {
-        $resources = array();
+        $resources = [];
 
         $translationFiles = $this->packagesFilesFinder->findFiles('Resources/I18n/', '/.*(\.i18n|\.xliff)$/');
 

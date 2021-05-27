@@ -57,7 +57,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_content_object_type_conditions()
     {
         $image_types = File::get_image_types();
-        $image_conditions = array();
+        $image_conditions = [];
         foreach ($image_types as $image_type)
         {
             $image_conditions[] = new PatternMatchCondition(
@@ -110,7 +110,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_object_viewing_url($object)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
@@ -123,54 +123,54 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_menu_items()
     {
-        $menu_items = array();
+        $menu_items = [];
 
         if ($this->get_external_repository()->get_setting('session_token'))
         {
-            $my_photos = array();
+            $my_photos = [];
             $my_photos['title'] = Translation::get('MyPhotos');
             $my_photos['url'] = $this->get_url(
                 array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MY_PHOTOS),
                 array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
             );
 
-            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
             $my_photos['class'] = $glyph->getClassNamesString();
 
             $menu_items[] = $my_photos;
         }
 
-        $general = array();
+        $general = [];
         $general['title'] = Translation::get('Public');
         $general['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL), array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $general['class'] = $glyph->getClassNamesString();
 
         $menu_items[] = $general;
 
-        $most_recent = array();
+        $most_recent = [];
         $most_recent['title'] = Translation::get('MostRecent');
         $most_recent['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MOST_RECENT),
             array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
-        $glyph = new FontAwesomeGlyph('history', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('history', [], null, 'fas');
         $most_recent['class'] = $glyph->getClassNamesString();
 
         $menu_items[] = $most_recent;
 
-        $most_interesting = array();
+        $most_interesting = [];
         $most_interesting['title'] = Translation::get('MostInteresting');
         $most_interesting['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MOST_INTERESTING),
             array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY)
         );
 
-        $glyph = new FontAwesomeGlyph('star', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('star', [], null, 'fas');
         $most_interesting['class'] = $glyph->getClassNamesString();
 
         $menu_items[] = $most_interesting;

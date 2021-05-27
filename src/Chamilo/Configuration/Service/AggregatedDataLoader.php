@@ -51,7 +51,7 @@ class AggregatedDataLoader implements DataLoaderInterface
      */
     public function getData()
     {
-        $data = array();
+        $data = [];
 
         foreach ($this->getDataLoaders() as $dataLoader)
         {

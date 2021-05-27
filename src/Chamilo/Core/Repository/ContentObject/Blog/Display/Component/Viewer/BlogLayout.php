@@ -59,7 +59,7 @@ abstract class BlogLayout
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $complexBlogItems = $this->retrieve_complex_blog_items();
         foreach($complexBlogItems as $complexBlogItem)

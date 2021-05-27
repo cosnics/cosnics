@@ -50,7 +50,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      * @param string[] $default_properties
      * @param string[] $optional_properties
      */
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -104,7 +104,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      *
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

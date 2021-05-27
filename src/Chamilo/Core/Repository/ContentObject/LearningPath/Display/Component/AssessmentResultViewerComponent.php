@@ -159,7 +159,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      */
     public function get_assessment_parameters()
     {
-        return array();
+        return [];
     }
 
     public function get_additional_parameters()

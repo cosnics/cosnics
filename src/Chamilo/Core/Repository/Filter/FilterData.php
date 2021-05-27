@@ -127,7 +127,7 @@ class FilterData
      */
     public function clear($updateSession = true)
     {
-        $this->set_storage(array());
+        $this->set_storage([]);
 
         if ($updateSession)
         {
@@ -298,7 +298,7 @@ class FilterData
      *
      * @return string[]
      */
-    public function get_filter_properties($filter_properties = array())
+    public function get_filter_properties($filter_properties = [])
     {
         $filter_properties[] = self::FILTER_TEXT;
         $filter_properties[] = self::FILTER_CATEGORY;

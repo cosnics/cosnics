@@ -134,7 +134,7 @@ class ProviderFormService
      */
     public function getDefaultsForSchema(DataClassEntity $entity, Schema $schema)
     {
-        $defaults = array();
+        $defaults = [];
         $elements = $this->getElementsForSchema($schema);
 
         foreach ($elements as $element)
@@ -170,7 +170,7 @@ class ProviderFormService
      */
     private function getElementOptions(DataClassEntity $entity)
     {
-        $elementOptions = array();
+        $elementOptions = [];
 
         $elementOptions[0] = Translation::get('NoProvidedValue', null, 'Chamilo\Core\Metadata\Provider');
 
@@ -244,7 +244,7 @@ class ProviderFormService
      */
     private function getEntityProviderLinks(DataClassEntity $entity)
     {
-        $entityProviderLinks = array();
+        $entityProviderLinks = [];
 
         $entityProviderLinksResultSet = $this->getPropertyProviderService()->getProviderLinksForEntity($entity);
 
@@ -317,7 +317,7 @@ class ProviderFormService
      */
     public function setDefaults(DataClassEntity $entity, FormValidator $formValidator)
     {
-        $defaults = array();
+        $defaults = [];
         $availableSchemas = $this->getAvailableSchemas($entity);
 
         foreach ($availableSchemas as $availableSchema)

@@ -60,13 +60,13 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
         $form = $this->get_form();
 
         $select = $form->addElement(
-            'select', TypeSelector::PARAM_SELECTION, Translation::get('CreateANew'), array(),
+            'select', TypeSelector::PARAM_SELECTION, Translation::get('CreateANew'), [],
             array('class' => 'postback')
         );
 
         foreach ($this->get_type_selector()->as_tree() as $key => $type)
         {
-            $attributes = !is_integer($key) ? array('disabled') : array();
+            $attributes = !is_integer($key) ? array('disabled') : [];
             $select->addOption($type, $key, $attributes);
         }
 
@@ -74,13 +74,13 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
             'style_button', 'submit', Translation::get('Select'), null, null, new FontAwesomeGlyph('hand-up')
         );
 
-        $html = array();
+        $html = [];
 
         $renderer = clone $form->defaultRenderer();
         $renderer->setElementTemplate('{label}&nbsp;&nbsp;{element}&nbsp;');
         $form->accept($renderer);
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="margin-bottom: 20px;">';
         $html[] = $renderer->toHTML();
         $html[] = ResourceManager::getInstance()->getResourceHtml(

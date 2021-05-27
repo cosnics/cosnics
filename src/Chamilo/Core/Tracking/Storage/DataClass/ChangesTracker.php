@@ -17,7 +17,7 @@ abstract class ChangesTracker extends SimpleTracker
      * 
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_USER_ID, self::PROPERTY_REFERENCE_ID, self::PROPERTY_ACTION, self::PROPERTY_DATE));
@@ -100,7 +100,7 @@ abstract class ChangesTracker extends SimpleTracker
      * 
      * @param array $parameters
      */
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
         $this->set_reference_id($parameters[self::PROPERTY_REFERENCE_ID]);

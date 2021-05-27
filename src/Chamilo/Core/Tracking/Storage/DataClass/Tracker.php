@@ -47,19 +47,19 @@ abstract class Tracker extends DataClass
      *
      * @deprecated Use run() instead
      */
-    public function track(array $parameters = array())
+    public function track(array $parameters = [])
     {
         return $this->run($parameters);
     }
 
-    abstract public function validate_parameters(array $parameters = array());
+    abstract public function validate_parameters(array $parameters = []);
 
     /**
      * Write the values of the properties from the tracker to the database
      *
      * @return boolean
      */
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $this->validate_parameters($parameters);
         return $this->create();
@@ -99,7 +99,7 @@ abstract class Tracker extends DataClass
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator The tracker data resultset
      */
     public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null,
-        $order_by = array())
+        $order_by = [])
     {
         return DataManager::retrieves(
             $class_name,
@@ -114,7 +114,7 @@ abstract class Tracker extends DataClass
      * @param $order_by ObjectTableOrder
      * @return Tracker The tracker
      */
-    public static function get_singular_data($class_name, $application, $condition, $order_by = array())
+    public static function get_singular_data($class_name, $application, $condition, $order_by = [])
     {
         return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
     }

@@ -68,7 +68,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         if ($displayAction != self::ACTION_CREATE_PAGE && $complex_wiki_page)
         {
-            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes = ($displayAction == self::ACTION_VIEW_WIKI_PAGE ? 'btn-primary disabled' : '');
@@ -81,7 +81,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('WikiArticle'), new FontAwesomeGlyph('desktop', array(), null, 'fas'), $read_url,
+                    Translation::get('WikiArticle'), new FontAwesomeGlyph('desktop', [], null, 'fas'), $read_url,
                     Button::DISPLAY_ICON_AND_LABEL, false, $classes
                 )
             );
@@ -97,7 +97,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $buttonGroup->addButton(
                 new Button(
-                    Translation::get('WikiDiscuss'), new FontAwesomeGlyph('comment', array(), null, 'fas'),
+                    Translation::get('WikiDiscuss'), new FontAwesomeGlyph('comment', [], null, 'fas'),
                     $discuss_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
                 )
             );
@@ -113,12 +113,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiStatistics'), new FontAwesomeGlyph(
-                    'chart-bar', array(), null, 'fas'
+                    'chart-bar', [], null, 'fas'
                 ), $statistics_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
                 )
             );
 
-            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $classes =
@@ -133,7 +133,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiEdit'), new FontAwesomeGlyph(
-                    'edit', array(), null, 'fas'
+                    'edit', [], null, 'fas'
                 ), $edit_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
                 )
             );
@@ -151,7 +151,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiHistory'), new FontAwesomeGlyph(
-                    'history', array(), null, 'fas'
+                    'history', [], null, 'fas'
                 ), $history_url, Button::DISPLAY_ICON_AND_LABEL, false, $classes
                 )
             );
@@ -168,7 +168,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonGroup->addButton(
                 new Button(
                     Translation::get('WikiDelete'), new FontAwesomeGlyph(
-                    'times', array(), null, 'fas'
+                    'times', [], null, 'fas'
                 ), $delete_url, Button::DISPLAY_ICON_AND_LABEL, true, $classes
                 )
             );
@@ -182,7 +182,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $buttonToolBar = new ButtonToolBar($this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_WIKI)));
             $buttonToolBar->addClass('btn-action-toolbar-vertical');
 
-            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $buttonGroup->addButton(
@@ -195,7 +195,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
             $this->addDisplayActions($buttonToolBar, $complexWikiPage);
 
-            $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+            $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
             $buttonToolBar->addButtonGroup($buttonGroup);
 
             $buttonGroup->addButton(
@@ -394,7 +394,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function renderMenu(ComplexWikiPage $complexWikiPage = null)
     {
-        $html = array();
+        $html = [];
 
         $wikiGlyph = $this->get_root_content_object()->getGlyph(
             IdentGlyph::SIZE_BIG, true, array('fa-6x')
@@ -433,7 +433,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -450,7 +450,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function render_header(ComplexWikiPage $complex_wiki_page = null)
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header(null, false);
 

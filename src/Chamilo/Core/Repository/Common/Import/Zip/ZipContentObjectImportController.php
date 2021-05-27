@@ -33,8 +33,8 @@ class ZipContentObjectImportController extends ContentObjectImportController
     public function __construct($parameters)
     {
         parent::__construct($parameters);
-        $this->created_categories = array();
-        $this->created_content_object_ids = array();
+        $this->created_categories = [];
+        $this->created_content_object_ids = [];
     }
 
     public function tryout($file)
@@ -80,7 +80,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
                 if (! $this->calculate_user_quota($files_info))
                 {
                     $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
                 
                 if (count($files_info) == 0)
@@ -152,7 +152,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
      */
     protected function get_files_info(ZipArchive $zip_archive)
     {
-        $files_info = array();
+        $files_info = [];
         
         for ($i = 0; $i < $zip_archive->numFiles; $i ++)
         {

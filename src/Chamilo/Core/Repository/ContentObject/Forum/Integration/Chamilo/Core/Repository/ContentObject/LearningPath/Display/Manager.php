@@ -59,7 +59,7 @@ abstract class Manager extends Application
         {
             $secondaryActions->addButton(
                 new Button(
-                    $translator->getTranslation('UnSubscribe'), new FontAwesomeGlyph('envelope', array(), null, 'far'),
+                    $translator->getTranslation('UnSubscribe'), new FontAwesomeGlyph('envelope', [], null, 'far'),
                     $this->get_url(
                         array(
                             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::ACTION_TYPE_SPECIFIC,

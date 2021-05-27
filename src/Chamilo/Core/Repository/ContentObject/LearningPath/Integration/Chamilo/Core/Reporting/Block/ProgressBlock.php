@@ -88,7 +88,7 @@ class ProgressBlock extends ReportingBlock
                 $category, Translation::get('Time'), DatetimeUtilities::format_seconds_to_hours($totalTimeSpent)
             );
 
-            $actions = array();
+            $actions = [];
 
             if ($trackingService->hasTreeNodeAttempts(
                 $learningPath, $user, $treeNode
@@ -101,7 +101,7 @@ class ProgressBlock extends ReportingBlock
                     )
                 );
 
-                $glyph = new FontAwesomeGlyph('chart-bar', array(), Translation::get('Details'));
+                $glyph = new FontAwesomeGlyph('chart-bar', [], Translation::get('Details'));
                 $actions[] = '<a href="' . $reporting_url . '">' . $glyph->render() . '</a>';
 
                 if ($this->get_parent()->get_parent()->is_allowed_to_edit_attempt_data())
@@ -113,7 +113,7 @@ class ProgressBlock extends ReportingBlock
                         )
                     );
 
-                    $glyph = new FontAwesomeGlyph('times', array(), Translation::get('DeleteAttempt'));
+                    $glyph = new FontAwesomeGlyph('times', [], Translation::get('DeleteAttempt'));
                     $actions[] = '<a href="' . $delete_url . '">' . $glyph->render() . '</a>';
                 }
             }
@@ -149,7 +149,7 @@ class ProgressBlock extends ReportingBlock
                 )
             );
 
-            $glyph = new FontAwesomeGlyph('times', array(), Translation::get('DeleteAllAttempts'));
+            $glyph = new FontAwesomeGlyph('times', [], Translation::get('DeleteAllAttempts'));
             $action = '<a href="' . $delete_url . '">' . $glyph->render() . '</a>';
 
             $reporting_data->add_data_category_row($category_name, Translation::get('Action'), $action);

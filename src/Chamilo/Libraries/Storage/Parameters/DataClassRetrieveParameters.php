@@ -20,7 +20,7 @@ class DataClassRetrieveParameters extends DataClassParameters
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      */
-    public function __construct(Condition $condition = null, $orderBy = array(), Joins $joins = null)
+    public function __construct(Condition $condition = null, $orderBy = [], Joins $joins = null)
     {
         DataClassParameters::__construct($condition, $joins, null, $orderBy);
     }
@@ -41,7 +41,7 @@ class DataClassRetrieveParameters extends DataClassParameters
      *
      * @deprecated Use setOrderBy() now
      */
-    public function set_order_by($orderBy = array())
+    public function set_order_by($orderBy = [])
     {
         $this->setOrderBy($orderBy);
     }

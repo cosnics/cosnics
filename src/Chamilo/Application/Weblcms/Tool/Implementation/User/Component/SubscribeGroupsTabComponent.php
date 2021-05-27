@@ -96,7 +96,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
         $this->rootButtonToolbarRenderer = $this->getRootButtonToolbarRenderer();
         $this->tabButtonToolbarRenderer = $this->getTabButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->renderInformationMessage();
@@ -232,7 +232,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return $this->translator->getTranslation($variable, $parameters, Manager::context());
     }
@@ -261,7 +261,7 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
 
     protected function renderInformationMessage()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-sm-12">';

@@ -109,7 +109,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
      *
      * @param array $parameters
      */
-    public function renderInline($parameters = array())
+    public function renderInline($parameters = [])
     {
         /** @var File $object */
         $object = $this->get_content_object();

@@ -64,7 +64,7 @@ abstract class ExternalObject
      *
      * @param $default_properties array
      */
-    public function __construct($default_properties = array())
+    public function __construct($default_properties = [])
     {
         $this->default_properties = $default_properties;
     }
@@ -132,7 +132,7 @@ abstract class ExternalObject
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_ID;
         $extended_property_names[] = self::PROPERTY_EXTERNAL_REPOSITORY_ID;
@@ -175,7 +175,7 @@ abstract class ExternalObject
      */
     public function get_icon_image(
         $size = IdentGlyph::SIZE_SMALL, $isAvailable = true,
-        $extraClasses = array()
+        $extraClasses = []
     )
     {
 
@@ -267,7 +267,7 @@ abstract class ExternalObject
     {
         if (!isset($this->synchronization_data))
         {
-            $sync_conditions = array();
+            $sync_conditions = [];
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     SynchronizationData::class, SynchronizationData::PROPERTY_EXTERNAL_OBJECT_ID

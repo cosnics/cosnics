@@ -89,7 +89,7 @@ class CourseCategoryFeedComponent extends AjaxManager
      */
     public function get_course_category_element($course_category)
     {
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             CourseCategoryEntity::ENTITY_TYPE . '_' . $course_category->get_id(), $glyph->getClassNamesString(),
@@ -107,7 +107,7 @@ class CourseCategoryFeedComponent extends AjaxManager
      */
     public function get_course_element($course)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             CourseEntity::ENTITY_TYPE . '_' . $course->get_id(), $glyph->getClassNamesString(), $course->get_title(),
@@ -128,7 +128,7 @@ class CourseCategoryFeedComponent extends AjaxManager
         $course_categories = $this->retrieve_course_categories();
         if ($course_categories && $course_categories->count() > 0)
         {
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
             // Add course category category
             $course_category_category = new AdvancedElementFinderElement(
@@ -147,7 +147,7 @@ class CourseCategoryFeedComponent extends AjaxManager
         $courses = $this->retrieve_courses();
         if ($courses && $courses->count() > 0)
         {
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
             // Add user category
             $course_category = new AdvancedElementFinderElement(
@@ -187,7 +187,7 @@ class CourseCategoryFeedComponent extends AjaxManager
 
     public function required_parameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -256,7 +256,7 @@ class CourseCategoryFeedComponent extends AjaxManager
      */
     private function retrieve_courses()
     {
-        $conditions = array();
+        $conditions = [];
 
         $filter_id = $this->get_filter();
 

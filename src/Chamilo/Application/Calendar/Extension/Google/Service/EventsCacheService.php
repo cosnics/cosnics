@@ -95,7 +95,7 @@ class EventsCacheService extends DoctrineFilesystemCacheService implements UserB
      */
     public function getIdentifiers()
     {
-        return array();
+        return [];
     }
 
     /**

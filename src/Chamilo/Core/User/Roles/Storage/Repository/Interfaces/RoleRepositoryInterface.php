@@ -32,7 +32,7 @@ interface RoleRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return Role[]
      */
-    public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = array());
+    public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = []);
 
     /**
      * Counts the roles

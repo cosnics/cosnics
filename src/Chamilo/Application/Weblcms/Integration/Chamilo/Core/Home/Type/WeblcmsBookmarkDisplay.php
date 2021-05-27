@@ -86,7 +86,7 @@ class WeblcmsBookmarkDisplay extends Block implements
 
     public function getBookmarks()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Bookmark::class, Bookmark::PROPERTY_APPLICATION),
             new StaticConditionVariable(Manager::package()));

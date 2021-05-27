@@ -71,7 +71,7 @@ class ExternalLinkTableCellRenderer extends DataClassTableCellRenderer implement
         {
             case Instance::PROPERTY_IMPLEMENTATION :
                 $glyph = new NamespaceIdentGlyph(
-                    $external_instance->get_implementation(), true, false, false, IdentGlyph::SIZE_MINI, array(),
+                    $external_instance->get_implementation(), true, false, false, IdentGlyph::SIZE_MINI, [],
                     Translation::get('TypeName', null, $external_instance->get_implementation())
                 );
 

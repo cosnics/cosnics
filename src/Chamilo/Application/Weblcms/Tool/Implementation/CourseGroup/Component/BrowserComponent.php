@@ -22,7 +22,7 @@ class BrowserComponent extends TabComponent implements TableSupport
      */
     public function renderTabContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->getTableHtml();
 
@@ -50,9 +50,9 @@ class BrowserComponent extends TabComponent implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
-        $properties = array();
+        $properties = [];
         $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME);
         $properties[] = new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_DESCRIPTION);
         $query_condition = $this->buttonToolbarRenderer->getConditions($properties);

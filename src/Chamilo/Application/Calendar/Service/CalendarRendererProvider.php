@@ -73,7 +73,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function aggregateEvents($requestedSourceType, $startTime, $endTime)
     {
-        $events = array();
+        $events = [];
 
         foreach ($this->getSources($requestedSourceType) as $context => $implementor)
         {
@@ -118,7 +118,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function getEventActions($event)
     {
-        $actions = array();
+        $actions = [];
 
         if ($event->getContext() == \Chamilo\Application\Calendar\Extension\Personal\Manager::context())
         {
@@ -216,11 +216,11 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
 
     public function getSourceNames($requestedSourceType)
     {
-        $sourceNames = array();
+        $sourceNames = [];
 
         foreach ($this->getSources($requestedSourceType) as $sourceContext => $sourceImplementor)
         {
-            $sourceNames[] = Translation::get('TypeName', array(), $sourceContext);
+            $sourceNames[] = Translation::get('TypeName', [], $sourceContext);
         }
 
         sort($sourceNames);
@@ -241,7 +241,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             Manager::package()
         );
 
-        $sources = array();
+        $sources = [];
 
         foreach ($registrations as $registration)
         {
@@ -280,7 +280,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
                 $userIdentifier
             );
 
-            $this->visibilities = array();
+            $this->visibilities = [];
 
             foreach ($visibilities as $visibility)
             {
@@ -315,7 +315,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function getVisibilityData()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -40,7 +40,7 @@ class CourseGroupUserExportExtender implements UserExportExtender
      */
     public function export_headers()
     {
-        $headers = array();
+        $headers = [];
         
         $headers[self::EXPORT_COLUMN_COURSE_GROUPS] = Translation::get('CourseGroups');
         
@@ -56,11 +56,11 @@ class CourseGroupUserExportExtender implements UserExportExtender
      */
     public function export_user(User $user)
     {
-        $data = array();
+        $data = [];
         
         $course_groups = DataManager::retrieve_course_groups_from_user($user->get_id(), $this->course_id);
         
-        $course_groups_subscribed = array();
+        $course_groups_subscribed = [];
         foreach($course_groups as $course_group)
         {
             $course_groups_subscribed[] = $course_group->get_name();

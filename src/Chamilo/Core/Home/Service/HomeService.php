@@ -108,9 +108,9 @@ class HomeService
     public function createDefaultHomeByUserIdentifier(User $user)
     {
         $defaultElementResultSet = $this->getElementsByUserIdentifier(0);
-        $defaultElements = array();
+        $defaultElements = [];
         
-        $elementIdentifierMap = array();
+        $elementIdentifierMap = [];
         
         foreach($defaultElementResultSet as $defaultElement)
         {
@@ -226,7 +226,7 @@ class HomeService
         }
         else
         {
-            return array();
+            return [];
         }
     }
 

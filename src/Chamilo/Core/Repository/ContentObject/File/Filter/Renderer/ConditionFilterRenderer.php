@@ -29,7 +29,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         $filter_data = $this->get_filter_data();
         $general_condition = parent::render();
         
-        $conditions = array();
+        $conditions = [];
         
         if ($general_condition instanceof Condition)
         {
@@ -45,7 +45,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             
             if ($compare == ComparisonCondition::EQUAL)
             {
-                $equality_conditions = array();
+                $equality_conditions = [];
                 $equality_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(File::class, File::PROPERTY_FILESIZE),
                     ComparisonCondition::GREATER_THAN_OR_EQUAL,
@@ -75,7 +75,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         {
             $extension_type = $filter_data->get_filter_property(FilterData::FILTER_EXTENSION_TYPE);
             $extensions = FileType::get_type_extensions($extension_type);
-            $extension_conditions = array();
+            $extension_conditions = [];
             
             foreach ($extensions as $extension)
             {

@@ -18,7 +18,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $object = $this->get_content_object();
         $options = $object->get_options();
         
-        $html = array();
+        $html = [];
         
         $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $html[] = '<thead>';

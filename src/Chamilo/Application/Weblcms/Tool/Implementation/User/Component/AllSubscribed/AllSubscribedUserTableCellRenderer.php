@@ -48,7 +48,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
     public function __construct($table)
     {
         parent::__construct($table);
-        $this->unknown_status_cache = array();
+        $this->unknown_status_cache = [];
     }
 
     /**
@@ -108,7 +108,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
         // construct the toolbar
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
-        $parameters = array();
+        $parameters = [];
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_USER_DETAILS;
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
@@ -141,7 +141,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
                     ))
 
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_UNSUBSCRIBE;
                     $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
                     $parameters[Manager::PARAM_OBJECTS] = $user_id;
@@ -150,7 +150,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
                     $toolbar->add_item(
                         new ToolbarItem(
                             Translation::get('DirectUnsubscribe'),
-                            new FontAwesomeGlyph('minus-square', array(), null, 'fas'), $unsubscribe_url,
+                            new FontAwesomeGlyph('minus-square', [], null, 'fas'), $unsubscribe_url,
                             ToolbarItem::DISPLAY_ICON
                         )
                     );
@@ -178,7 +178,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
                         $toolbar->add_item(
                             new ToolbarItem(
                                 Translation::get('MakeStudent'),
-                                new FontAwesomeGlyph('user-graduate', array(), null, 'fas'), $status_change_url,
+                                new FontAwesomeGlyph('user-graduate', [], null, 'fas'), $status_change_url,
                                 ToolbarItem::DISPLAY_ICON
                             )
                         );
@@ -190,7 +190,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                         $toolbar->add_item(
                             new ToolbarItem(
-                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', array(), null, 'fas'),
+                                Translation::get('MakeTeacher'), new FontAwesomeGlyph('user-tie', [], null, 'fas'),
                                 $status_change_url, ToolbarItem::DISPLAY_ICON
                             )
                         );
@@ -209,7 +209,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
             }
 
             // if we have editing rights, display the reporting action
-            $params = array();
+            $params = [];
             $params[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
             $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_REPORTING;
             $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
@@ -241,7 +241,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                     // if ($course_access != CourseSettingsConnector::COURSE_ACCESS_CLOSED)
                     {
-                        $parameters = array();
+                        $parameters = [];
                         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_AS;
                         $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_USERS] = $user_id;
                         $view_as_url = $this->get_component()->get_url($parameters);
@@ -316,7 +316,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
 
                 if ($activeOnlineEmailEditor)
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_EMAIL;
                     $parameters[Manager::PARAM_OBJECTS] = $user_with_subscription_status_and_type[User::PROPERTY_ID];
                     $email_url = $this->get_component()->get_url($parameters);

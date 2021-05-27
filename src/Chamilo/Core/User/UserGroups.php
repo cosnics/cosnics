@@ -67,7 +67,7 @@ class UserGroups
         $html[] = '<div class="panel-heading">';
         $html[] = '<h3 class="panel-title">';
 
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
         $html[] = $glyph->render() . '&nbsp;' . Translation::get('PlatformGroups', null, Utilities::COMMON_LIBRARIES);
 
         $html[] = '</h3>';
@@ -79,7 +79,7 @@ class UserGroups
 
         if ($group_relations->count() > 0)
         {
-            $groupElements = array();
+            $groupElements = [];
 
             foreach($group_relations as $group)
             {

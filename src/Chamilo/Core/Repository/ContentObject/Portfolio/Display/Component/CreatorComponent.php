@@ -206,7 +206,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
      */
     private function detemine_excluded_content_object_ids()
     {
-        $excluded_items = array();
+        $excluded_items = [];
 
         $current_node = $this->get_current_node();
 

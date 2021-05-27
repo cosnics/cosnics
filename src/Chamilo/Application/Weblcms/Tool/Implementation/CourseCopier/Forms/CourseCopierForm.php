@@ -47,8 +47,8 @@ class CourseCopierForm extends FormValidator
      */
     public function buildForm()
     {
-        $defaults = array();
-        $translations = array();
+        $defaults = [];
+        $translations = [];
 
         $this->addElement('category', $this->getTranslation('Publications'));
 
@@ -116,7 +116,7 @@ class CourseCopierForm extends FormValidator
         $this->addElement('category', $this->getTranslation('SelectCourse'));
 
         $current_code = $this->parent->get_course_id();
-        $options = array();
+        $options = [];
 
         foreach ($this->courses as $course)
         {
@@ -149,7 +149,7 @@ class CourseCopierForm extends FormValidator
             $this->getTranslation('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES),
             'required'
         );
-        $prevnext = array();
+        $prevnext = [];
 
         $prevnext[] = $this->createElement('style_submit_button', self::PARAM_SUBMIT, $this->getTranslation('Copy'));
 
@@ -166,7 +166,7 @@ class CourseCopierForm extends FormValidator
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array(), $context = null)
+    protected function getTranslation($variable, $parameters = [], $context = null)
     {
         if (is_null($context))
         {

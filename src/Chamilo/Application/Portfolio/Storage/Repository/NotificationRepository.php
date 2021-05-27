@@ -42,7 +42,7 @@ class NotificationRepository
     public function findPortfolioNotificationForPublicationIdentifierUserIdentifierAndComplexContentObjectIdentifier(
         $publicationIdentifier, $userIdentifier, $complexContentObjectIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class, Notification::PROPERTY_PUBLICATION_ID),
@@ -72,7 +72,7 @@ class NotificationRepository
     public function findPortfolioNotificationsForPublicationIdentifierAndComplexContentObjectIdentifier(
         $publicationIdentifier, $complexContentObjectIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Notification::class, Notification::PROPERTY_PUBLICATION_ID),

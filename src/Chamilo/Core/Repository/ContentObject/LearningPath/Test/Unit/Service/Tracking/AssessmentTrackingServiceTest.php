@@ -575,7 +575,7 @@ class AssessmentTrackingServiceTest extends ChamiloTestCase
      *
      * @param TreeNode[] $treeNodes
      */
-    protected function mockGetTreeNodeAttemptsForTreeNodes($treeNodes = array())
+    protected function mockGetTreeNodeAttemptsForTreeNodes($treeNodes = [])
     {
         foreach ($treeNodes as $index => $treeNode)
         {
@@ -603,7 +603,7 @@ class AssessmentTrackingServiceTest extends ChamiloTestCase
             48)->will($this->returnValue($this->treeNodeAttempts[12][1]));
     }
 
-    protected function mockGetTreeNodeQuestionAttempts($questionAttempts = array())
+    protected function mockGetTreeNodeQuestionAttempts($questionAttempts = [])
     {
         $this->attemptServiceMock->expects($this->once())->method('getTreeNodeQuestionAttempts')->with(
             $this->treeNodeAttempts[12][1])->will($this->returnValue($questionAttempts));

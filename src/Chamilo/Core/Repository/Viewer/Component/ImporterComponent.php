@@ -174,7 +174,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $importForm->toHtml();
@@ -191,7 +191,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
             $importTypeSelector = new ImportTypeSelector($this->get_parameters(), $this->get_types());
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $importTypeSelector->renderTypeSelector();
@@ -226,7 +226,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
     public function filter_content_object_ids($content_object_ids)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
@@ -256,7 +256,7 @@ class ImporterComponent extends Manager implements DelegateComponent
 
     public function get_import_types()
     {
-        $import_types = array();
+        $import_types = [];
 
         foreach ($this->get_types() as $type)
         {

@@ -37,7 +37,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -156,7 +156,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         $values = $this->exportValues();
         $answerType = Session::retrieve('select_answer_type');
 
-        $options = array();
+        $options = [];
 
         foreach ($values[AssessmentSelectQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
@@ -189,7 +189,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
         }
 
         Session::registerIfNotSet('select_number_of_options', 3);
-        Session::registerIfNotSet('select_skip_options', array());
+        Session::registerIfNotSet('select_skip_options', []);
         Session::registerIfNotSet('select_answer_type', AssessmentSelectQuestion::ANSWER_TYPE_RADIO);
 
         $extraOptionRequested = Request::post('add');
@@ -256,7 +256,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
             $number_of_options,
             array('id' => 'select_number_of_options'));
 
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -337,7 +337,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
                 $this->addElement('html', '<td class="table-cell-action cell-stat text-right">');
 
-                $actionButtons = array();
+                $actionButtons = [];
 
                 if ($number_of_options - count($skippedOptions) > 2)
                 {
@@ -424,7 +424,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -432,7 +432,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentSelectQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
     }

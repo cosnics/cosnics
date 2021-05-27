@@ -50,7 +50,7 @@ abstract class DoctrineInstaller extends Installer
 
         $schema_tool = new SchemaTool($entityManager);
 
-        $classesMetadata = array();
+        $classesMetadata = [];
 
         try
         {
@@ -96,6 +96,6 @@ abstract class DoctrineInstaller extends Installer
      */
     protected function getExcludedEntityClasses()
     {
-        return array();
+        return [];
     }
 }

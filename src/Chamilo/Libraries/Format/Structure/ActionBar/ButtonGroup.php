@@ -22,7 +22,7 @@ class ButtonGroup extends AbstractButtonToolBarItem
      * @param \Chamilo\Libraries\Format\Structure\ActionBar\AbstractButton[] $buttons
      * @param string[] $classes
      */
-    public function __construct($buttons = array(), $classes = array())
+    public function __construct($buttons = [], $classes = [])
     {
         parent::__construct($classes);
 

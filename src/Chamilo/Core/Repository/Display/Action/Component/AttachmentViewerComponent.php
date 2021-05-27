@@ -75,7 +75,7 @@ class AttachmentViewerComponent extends Manager
         
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = '<a href="javascript:history.go(-1)">' .

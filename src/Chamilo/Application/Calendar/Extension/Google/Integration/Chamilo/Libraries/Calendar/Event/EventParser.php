@@ -144,7 +144,7 @@ class EventParser
         if (is_null($googleCalendarEvent) || is_null($googleCalendarEvent->getStart()) ||
              is_null($googleCalendarEvent->getEnd()))
         {
-            return array();
+            return [];
         }
         
         $url = null;

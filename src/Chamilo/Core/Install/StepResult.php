@@ -35,7 +35,7 @@ class StepResult
     {
         if (is_null($messages))
         {
-            $messages = array();
+            $messages = [];
         }
         if (! is_array($messages))
         {

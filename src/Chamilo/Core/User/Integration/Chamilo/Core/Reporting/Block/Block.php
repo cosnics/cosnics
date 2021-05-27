@@ -16,7 +16,7 @@ abstract class Block extends ReportingBlock
 
     public static function getDateArray($data, $format)
     {
-        $login_dates = array();
+        $login_dates = [];
         
         foreach($data as $login_date)
         {
@@ -45,7 +45,7 @@ abstract class Block extends ReportingBlock
     public static function array_from_tracker($tracker, $condition = null, $description = null)
     {
         $c = 0;
-        $array = array();
+        $array = [];
         
         $trackerdata = DataManager::retrieves($tracker::class_name(), new DataClassRetrievesParameters($condition));
         

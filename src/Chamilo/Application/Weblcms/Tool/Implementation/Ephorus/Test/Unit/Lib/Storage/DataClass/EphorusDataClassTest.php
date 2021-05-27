@@ -36,7 +36,7 @@ class EphorusDataClassTest extends Test
     public function test_constructor_with_dependency_container()
     {
         $dependency_container = new DependencyContainer();
-        $ephorus_data_class = $this->get_ephorus_data_class(array(array(), array(), $dependency_container));
+        $ephorus_data_class = $this->get_ephorus_data_class(array([], [], $dependency_container));
         
         $this->assertEquals($dependency_container, $ephorus_data_class->get_dependency_container());
     }
@@ -69,7 +69,7 @@ class EphorusDataClassTest extends Test
      * @param $parameters - [OPTIONAL] default array
      * @return EphorusDataClass
      */
-    protected function get_ephorus_data_class($parameters = array())
+    protected function get_ephorus_data_class($parameters = [])
     {
         return $this->getMockForAbstractClass('application\weblcms\tool\ephorus\EphorusDataClass', $parameters);
     }

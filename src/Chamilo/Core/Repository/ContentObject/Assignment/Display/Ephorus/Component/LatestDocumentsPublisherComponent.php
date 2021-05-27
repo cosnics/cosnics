@@ -17,7 +17,7 @@ class LatestDocumentsPublisherComponent extends Manager
     {
         $trackers = $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests();
 
-        $ids = array();
+        $ids = [];
         foreach($trackers as $tracker)
         {
             if (!$tracker->get_optional_property(Request::PROPERTY_REQUEST_TIME))

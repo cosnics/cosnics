@@ -13,6 +13,6 @@ class Basic extends Json
 
     public function render()
     {
-        return json_encode(array());
+        return json_encode([]);
     }
 }

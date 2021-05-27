@@ -21,7 +21,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
      */
     public function render()
     {
-        $conditions = array();
+        $conditions = [];
 
         $parentCondition = parent::render();
         if ($parentCondition instanceof Condition)

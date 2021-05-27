@@ -471,7 +471,7 @@ class RightsService
 
             if (is_null($this->entities_condition_cache[$user_id][$entitiesHash]))
             {
-                $or_conditions = array();
+                $or_conditions = [];
                 foreach ($entities as $entity)
                 {
                     $entity_type_condition = new EqualityCondition(
@@ -482,7 +482,7 @@ class RightsService
 
                     foreach ($entity->retrieve_entity_item_ids_linked_to_user($user_id) as $entity_item_id)
                     {
-                        $and_conditions = array();
+                        $and_conditions = [];
                         $and_conditions[] = $entity_type_condition;
 
                         $and_conditions[] = new EqualityCondition(
@@ -497,7 +497,7 @@ class RightsService
 
                 // add everyone 'entity'
 
-                $and_conditions = array();
+                $and_conditions = [];
 
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
@@ -844,7 +844,7 @@ class RightsService
             return false;
         }
 
-        $entities = array();
+        $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 
@@ -885,7 +885,7 @@ class RightsService
         {
             $records = $this->findRightsLocationEntityRightsRecordsForLocation($location, $entities_condition);
 
-            $granted_rights = array();
+            $granted_rights = [];
 
             foreach ($records as $record)
             {

@@ -32,7 +32,7 @@ class HtmlInlinePdfRenditionImplementation extends HtmlInlineRenditionImplementa
         
         $url = $viewerPath . '?file=' . urlencode($url);
         
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="pull-right">';
         $html[] = '<a href="' . $url . '" target="_blank">';

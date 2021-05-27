@@ -146,7 +146,7 @@ class MiniWeekCalendar extends Calendar
             for ($day = 0; $day < 7; $day ++)
             {
                 $weekDay = strtotime('+' . $day . ' days', $firstDay);
-                $class = array();
+                $class = [];
 
                 // If day of week number is 0 (Sunday) or 6 (Saturday) -> it's a weekend
                 if (date('w', $weekDay) % 6 == 0)

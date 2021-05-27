@@ -41,7 +41,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
             ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, $this->buttonToolbarRenderer->getSearchForm()->getQuery()
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -77,7 +77,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_ACTIVE), new StaticConditionVariable(1)
@@ -108,7 +108,7 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
     {
         $table = new UnsubscribedUserTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);

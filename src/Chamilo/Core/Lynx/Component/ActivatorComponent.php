@@ -40,7 +40,7 @@ class ActivatorComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $activator->get_result(true);

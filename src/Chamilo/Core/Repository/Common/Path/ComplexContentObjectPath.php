@@ -31,7 +31,7 @@ abstract class ComplexContentObjectPath
      *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
-    private $nodes = array();
+    private $nodes = [];
 
     /**
      *
@@ -350,7 +350,7 @@ abstract class ComplexContentObjectPath
      */
     public function get_properties($parent_id, $complex_content_object_item, $content_object)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -401,9 +401,9 @@ abstract class ComplexContentObjectPath
     {
         $root = $this->get_root()->get_content_object();
 
-        $this->nodes = array();
-        $this->children = array();
-        $this->parents = array();
+        $this->nodes = [];
+        $this->children = [];
+        $this->parents = [];
 
         $this->getDataClassRepositoryCache()->truncate(ComplexContentObjectItem::class);
 

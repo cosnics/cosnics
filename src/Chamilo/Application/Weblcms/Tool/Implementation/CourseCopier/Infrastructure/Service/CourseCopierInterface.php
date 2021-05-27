@@ -26,7 +26,7 @@ interface CourseCopierInterface
      * @return
      *
      */
-    public function copyCourse(User $user, Course $currentCourse, $targetCourseIds = array(), 
-        $selectedContentObjectPublicationIds = array(), $selectedPublicationCategoryIds = array(), $ignoreCategories = false, 
+    public function copyCourse(User $user, Course $currentCourse, $targetCourseIds = [],
+        $selectedContentObjectPublicationIds = [], $selectedPublicationCategoryIds = [], $ignoreCategories = false,
         $copyCourseGroups = true);
 }

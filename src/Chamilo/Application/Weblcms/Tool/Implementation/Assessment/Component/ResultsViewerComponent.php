@@ -68,7 +68,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -217,7 +217,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
@@ -236,7 +236,7 @@ class ResultsViewerComponent extends Manager implements TableSupport
 
         if ($this->buttonToolbarRenderer)
         {
-            $search_properties = array();
+            $search_properties = [];
 
             $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
             $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);

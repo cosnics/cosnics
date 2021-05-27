@@ -37,7 +37,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -136,7 +136,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
 
-        $options = array();
+        $options = [];
 
         foreach ($values[AssessmentMatchTextQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
@@ -171,7 +171,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
         }
 
         Session::registerIfNotSet('match_number_of_options', 1);
-        Session::registerIfNotSet('match_skip_options', array());
+        Session::registerIfNotSet('match_skip_options', []);
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
@@ -216,7 +216,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
             $number_of_options,
             array('id' => 'match_number_of_options'));
 
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -279,7 +279,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
                 $this->addElement('html', '<td class="table-cell-action cell-stat-x3 text-right">');
 
-                $actionButtons = array();
+                $actionButtons = [];
 
                 if ($number_of_options - count($skippedOptions) > 1)
                 {
@@ -347,7 +347,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -355,7 +355,7 @@ class AssessmentMatchTextQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentMatchTextQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
     }

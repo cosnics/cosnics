@@ -40,7 +40,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
 
     public function get_portfolio_additional_actions()
     {
-        return array();
+        return [];
     }
 
     /**

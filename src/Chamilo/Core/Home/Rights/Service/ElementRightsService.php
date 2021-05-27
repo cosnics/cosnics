@@ -44,7 +44,7 @@ class ElementRightsService
      * @param Element $element
      * @param array $targetEntities
      */
-    public function setTargetEntitiesForElement(Element $element, $targetEntities = array())
+    public function setTargetEntitiesForElement(Element $element, $targetEntities = [])
     {
         if (! $this->rightsRepository->clearTargetEntitiesForElement($element))
         {

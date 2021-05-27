@@ -44,7 +44,7 @@ class DisplayOrderRepository
      */
     public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass)
     {
-        $conditions = array();
+        $conditions = [];
 
         $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
 
@@ -73,7 +73,7 @@ class DisplayOrderRepository
      */
     public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
     {
-        $conditions = array();
+        $conditions = [];
 
         $displayOrderCondition = $this->getDisplayOrderCondition($dataClass);
 
@@ -119,7 +119,7 @@ class DisplayOrderRepository
         DataClassDisplayOrderSupport $dataClass, array $contextProperties, int $displayOrder
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $displayOrderCondition = $this->getDisplayOrderConditionForContextProperties($dataClass, $contextProperties);
 
@@ -236,7 +236,7 @@ class DisplayOrderRepository
         DataClassDisplayOrderSupport $dataClass, array $contextProperties
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         foreach ($contextProperties as $propertyName => $propertyValue)
         {

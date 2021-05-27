@@ -20,7 +20,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $format = Request::get(self::PARAM_FORMAT) ? Request::get(self::PARAM_FORMAT) : TemplateRendition::FORMAT_HTML;
         $view = Request::get(self::PARAM_VIEW) ? Request::get(self::PARAM_VIEW) : TemplateRendition::VIEW_BASIC;
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = TemplateRenditionImplementation::launch($this, $this->get_template(), $format, $view);

@@ -15,7 +15,7 @@ class MiniListRenderer extends ListRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<h4>';
         $html[] = $this->renderTitle();

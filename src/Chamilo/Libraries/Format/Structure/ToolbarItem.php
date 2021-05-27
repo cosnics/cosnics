@@ -116,7 +116,7 @@ class ToolbarItem
         $label = ($this->get_label() ? htmlspecialchars($this->get_label()) : null);
         $display = !$this->get_display() ? self::DISPLAY_ICON : $this->get_display();
 
-        $elementClasses = !empty($this->class) ? explode(' ', $this->class) : array();
+        $elementClasses = !empty($this->class) ? explode(' ', $this->class) : [];
         array_unshift($elementClasses, 'btn-link');
 
         $button = new Button(

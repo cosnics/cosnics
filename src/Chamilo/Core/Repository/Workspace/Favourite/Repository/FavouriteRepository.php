@@ -38,7 +38,7 @@ class FavouriteRepository
      */
     public function findWorkspaceUserFavouriteByUserAndWorkspaceIdentifier(User $user, $workspaceIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

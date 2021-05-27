@@ -199,7 +199,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
 
     function get_assessment_parameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -232,7 +232,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     function get_tree_menu_url()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Core\Repository\Preview\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Core\Repository\Preview\Manager::ACTION_DISPLAY;
         $parameters[\Chamilo\Core\Repository\Preview\Manager::PARAM_CONTENT_OBJECT_ID] = $this->get_root_content_object()->get_id();
@@ -269,7 +269,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\LearningPat
      */
     public function get_registered_question_ids()
     {
-        $question_ids = array();
+        $question_ids = [];
         $attempts = $this->get_assessment_question_attempts();
 
         foreach ($attempts as $attempt)

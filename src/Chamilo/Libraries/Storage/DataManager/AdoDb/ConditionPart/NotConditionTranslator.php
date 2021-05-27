@@ -27,7 +27,7 @@ class NotConditionTranslator extends ConditionTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $string = array();
+        $string = [];
 
         $string[] = 'NOT (';
         $string[] = $this->getConditionPartTranslatorService()->translate(

@@ -60,7 +60,7 @@ class EphorusWebserviceRepository
     {
         $indexType = $showDocument ? 1 : 2;
 
-        $parameters = array();
+        $parameters = [];
         $parameters['documentGuid'] = $documentGuid;
         $parameters['indexType'] = $indexType;
 
@@ -79,7 +79,7 @@ class EphorusWebserviceRepository
      */
     public function handInDocument(File $file, User $author)
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters['code'] = $this->handInCode;
         $parameters['firstName'] = $author->get_firstname();
@@ -144,7 +144,7 @@ class EphorusWebserviceRepository
      */
     protected function storeDebugInfo(nusoap_client $client)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
         $html[] = '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';

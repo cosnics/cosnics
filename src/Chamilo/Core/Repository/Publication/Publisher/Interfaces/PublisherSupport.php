@@ -18,7 +18,7 @@ interface PublisherSupport
      *
      * @return FormValidator
      */
-    public function getPublicationForm($selectedContentObjects = array());
+    public function getPublicationForm($selectedContentObjects = []);
 
     /**
      * Returns the publication handler

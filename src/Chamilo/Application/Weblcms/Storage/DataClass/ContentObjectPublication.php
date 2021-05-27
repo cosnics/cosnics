@@ -74,7 +74,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     private $publisher;
 
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -231,7 +231,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     private function get_course_viewer_link()
     {
-        $params = array();
+        $params = [];
 
         $params[Manager::PARAM_CONTEXT] = Manager::package();
         $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
@@ -246,7 +246,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $redirect->getUrl();
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -554,7 +554,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
             Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
-        $target_email = array();
+        $target_email = [];
 
         // Add the publisher to the email address
         $target_email[] = $user->get_email();
@@ -578,7 +578,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagname('resource');
 
-        $mailFiles = array();
+        $mailFiles = [];
         $index = 0;
 
         // replace image document resource tags with a html img tag with base64
@@ -635,7 +635,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         );
 
         $mail = new Mail(
-            $subject, $body, $unique_email, true, array(), array(), $user->get_fullname(), $user->get_email(), null,
+            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null,
             null, $mailFiles
         );
 

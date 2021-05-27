@@ -34,7 +34,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_setting_from_variable_name($variable, $external_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($external_id));
@@ -62,7 +62,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_synchronization_data_set($condition = null, $count = null, $offset = null, $order_by = array())
+    public static function retrieve_synchronization_data_set($condition = null, $count = null, $offset = null, $order_by = [])
     {
         $join = new Join(
             ContentObject::class, 
@@ -77,7 +77,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieves(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_active_instances($types = array())
+    public static function retrieve_active_instances($types = [])
     {
         $configuration = Configuration::getInstance();
         $stringUtilities = StringUtilities::getInstance();
@@ -85,7 +85,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $packages = $configuration->get_registrations_by_type(
             Manager::context() . '\Implementation');
         
-        $namespaces = array();
+        $namespaces = [];
         
         foreach ($types as $type)
         {
@@ -100,7 +100,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
         }
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_ENABLED), 
             new StaticConditionVariable(1));
@@ -119,7 +119,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function deactivate_instance_objects($external_instance_id, $user_id, $external_user_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(SynchronizationData::class, SynchronizationData::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($external_instance_id));
@@ -139,7 +139,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
         $condition = new AndCondition($conditions);
         
-        $properties = array();
+        $properties = [];
         $properties[new PropertyConditionVariable(
             SynchronizationData::class, 
             SynchronizationData::PROPERTY_STATE)] = new StaticConditionVariable(SynchronizationData::STATE_INACTIVE);
@@ -149,7 +149,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function activate_instance_objects($external_instance_id, $user_id, $external_user_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(SynchronizationData::class, SynchronizationData::PROPERTY_EXTERNAL_ID), 
             new StaticConditionVariable($external_instance_id));
@@ -169,7 +169,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
         $condition = new AndCondition($conditions);
         
-        $properties = array();
+        $properties = [];
         $properties[new PropertyConditionVariable(
             SynchronizationData::class, 
             SynchronizationData::PROPERTY_STATE)] = new StaticConditionVariable(SynchronizationData::STATE_ACTIVE);
@@ -188,7 +188,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieveUserSetting($externalInstanceId, $userId, $variable)
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_EXTERNAL_ID), 

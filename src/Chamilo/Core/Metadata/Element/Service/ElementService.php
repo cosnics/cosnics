@@ -39,7 +39,7 @@ class ElementService
      */
     public function getElementBySchemaIdAndName($schemaId, $elementName)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_SCHEMA_ID), ComparisonCondition::EQUAL,
@@ -67,7 +67,7 @@ class ElementService
         SchemaInstance $schemaInstance, Element $element
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(ElementInstance::class, ElementInstance::PROPERTY_SCHEMA_INSTANCE_ID),
@@ -126,7 +126,7 @@ class ElementService
         return DataManager::retrieves(
             Vocabulary::class, new DataClassRetrievesParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, null,
-                array(), $join
+                [], $join
             )
         );
     }
@@ -158,7 +158,7 @@ class ElementService
 
         return DataManager::retrieve(
             Vocabulary::class, new DataClassRetrieveParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), array(), $join
+                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), [], $join
             )
         );
     }

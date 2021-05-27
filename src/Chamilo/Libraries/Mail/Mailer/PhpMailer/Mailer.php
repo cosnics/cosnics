@@ -179,7 +179,7 @@ class Mailer extends AbstractMailer
      */
     protected function sendIndividually(Mail $mail)
     {
-        $recipientsFailed = array();
+        $recipientsFailed = [];
 
         foreach ($mail->getTo() as $recipient)
         {

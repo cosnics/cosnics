@@ -50,7 +50,7 @@ class DoctrineEntityManagerFactory
     {
         $this->doctrineConnection = $doctrineConnection;
         $this->mappingDriver = $mappingDriver;
-        $this->eventListeners = array();
+        $this->eventListeners = [];
     }
 
     /**

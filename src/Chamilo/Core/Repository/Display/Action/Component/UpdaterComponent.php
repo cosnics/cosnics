@@ -96,7 +96,7 @@ class UpdaterComponent extends Manager
                     )
                 );
 
-                $params = array();
+                $params = [];
                 $params[\Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =
                     $this->get_complex_content_object_item_id();
                 $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] =
@@ -120,7 +120,7 @@ class UpdaterComponent extends Manager
                     )
                 );
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

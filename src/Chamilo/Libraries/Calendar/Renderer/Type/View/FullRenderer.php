@@ -20,7 +20,7 @@ abstract class FullRenderer extends ViewRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="col-xs-12 col-lg-9 table-calendar-main">';
 

@@ -104,7 +104,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
     {
         $currentTreeNode = $this->getCurrentTreeNode();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="navbar-learning-path">';
 
@@ -198,7 +198,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
      */
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -229,7 +229,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 
@@ -298,7 +298,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
         $commonTranslationVariables = array('Remove', 'Confirm', 'Create', 'Import');
 
         $translator = Translation::getInstance();
-        $translations = array();
+        $translations = [];
 
         foreach ($translationVariables as $translationVariable)
         {

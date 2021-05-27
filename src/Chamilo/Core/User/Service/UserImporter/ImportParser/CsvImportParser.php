@@ -39,7 +39,7 @@ class CsvImportParser implements ImportParserInterface
      */
     public function parse(UploadedFile $file, UserImporterResult $userImporterResult)
     {
-        $importUsersData = array();
+        $importUsersData = [];
         $handle = fopen($file->getPathname(), "r");
         $keys = fgetcsv($handle, 1000, ";");
 
@@ -52,7 +52,7 @@ class CsvImportParser implements ImportParserInterface
 
         while (($row_tmp = fgetcsv($handle, 1000, ";")) !== false)
         {
-            $rowData = array();
+            $rowData = [];
 
             foreach ($row_tmp as $index => $value)
             {

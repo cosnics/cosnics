@@ -208,7 +208,7 @@ class DynamicVisualTab extends DynamicTab
      */
     public function header()
     {
-        $classes = array();
+        $classes = [];
 
         if ($this->get_selected() == true)
         {
@@ -217,10 +217,10 @@ class DynamicVisualTab extends DynamicTab
 
         $classes[] = 'pull-' . $this->get_position();
 
-        $html = array();
+        $html = [];
         $html[] = '<li class="' . implode(' ', $classes) . '">';
 
-        $link = array();
+        $link = [];
         $link[] = '<a';
 
         if ($this->get_link() && $this->get_target() == self::TARGET_WINDOW)

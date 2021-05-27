@@ -18,7 +18,7 @@ class BrowserComponent extends Manager implements TableSupport
         
         $table = new EntityTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $this->get_tabs(self::ACTION_BROWSE, $table->as_html())->render();

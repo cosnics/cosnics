@@ -141,7 +141,7 @@ class EventParser
      */
     public function getEvents()
     {
-        $events = array();
+        $events = [];
 
         $publisher = $this->getPublication()->get_publisher();
         $publishingUser = $this->getUserService()->findUserByIdentifier($this->getPublication()->get_publisher());
@@ -162,7 +162,7 @@ class EventParser
             $parsedEvent->setId($this->getPublication()->get_id());
             $parsedEvent->setContext(Manager::context());
 
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_CONTEXT] =
                 Manager::context();
             $parameters[Manager::PARAM_ACTION] =

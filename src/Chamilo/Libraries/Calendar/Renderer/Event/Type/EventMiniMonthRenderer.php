@@ -17,7 +17,7 @@ class EventMiniMonthRenderer extends EventMonthRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $event = $this->getEvent();
         $legend = $this->getRenderer()->getLegend();

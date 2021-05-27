@@ -25,7 +25,7 @@ class GetWorkspacesWithCopyRightComponent extends Manager
         try
         {
             $workspaceService = new WorkspaceService(new WorkspaceRepository());
-            $workspacesDataArray = array();
+            $workspacesDataArray = [];
 
             $workspaces = $workspaceService->getWorkspacesForUser($this->getUser(), RightsService::RIGHT_VIEW);
             $this->processWorkspaces($workspacesDataArray, $workspaces);

@@ -38,7 +38,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
     {
         HTML_QuickForm_element::__construct($elementName, null, $attributes);
 
-        $defaultAttributes = array();
+        $defaultAttributes = [];
         $defaultAttributes[] = 'btn';
         $defaultAttributes[] = 'btn-default';
         $defaultAttributes[] = $this->getAttribute('class');
@@ -207,7 +207,7 @@ class HTML_QuickForm_stylebutton extends HTML_QuickForm_element
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->_getTabs() . '<button' . $this->_getAttrString($this->_attributes) . ' >';
 

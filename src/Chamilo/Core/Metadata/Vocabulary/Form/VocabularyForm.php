@@ -106,7 +106,7 @@ class VocabularyForm extends FormValidator
      */
     protected function setFormDefaults()
     {
-        $defaults = array();
+        $defaults = [];
 
         $defaults[Vocabulary::PROPERTY_VALUE] = $this->vocabulary->get_value();
         $defaults[Vocabulary::PROPERTY_DEFAULT_VALUE] = $this->vocabulary->get_default_value();

@@ -41,7 +41,7 @@ class CourseTypeSelectForm extends FormValidator
 
         $course_type_objects =
             DataManager::retrieve_active_course_types();
-        $course_types = array();
+        $course_types = [];
         $this->size = $course_type_objects->count();
         if ($this->size == 1)
         {

@@ -20,7 +20,7 @@ class CategoryItem extends Item
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = null)
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);
@@ -36,6 +36,6 @@ class CategoryItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('folder', array(), null, 'fas');
+        return new FontAwesomeGlyph('folder', [], null, 'fas');
     }
 }

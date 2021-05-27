@@ -58,7 +58,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
     public function aggregateEvents($sourceType, $startTime, $endTime)
     {
         $publications = $this->getRenderer()->get_publications();
-        $events = array();
+        $events = [];
 
         foreach ($publications as $publication)
         {
@@ -95,7 +95,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      */
     public function getEventActions($event)
     {
-        $actions = array();
+        $actions = [];
 
         if ($event->getContext() == \Chamilo\Application\Weblcms\Manager::package())
         {
@@ -145,7 +145,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
-    public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
+    public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
     {
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
 

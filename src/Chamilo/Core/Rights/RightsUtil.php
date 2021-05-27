@@ -57,7 +57,7 @@ class RightsUtil
      */
 
     public function count_location_overview_with_rights_granted(
-        $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
+        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null,
         $tree_identifier = null
     )
     {
@@ -237,7 +237,7 @@ class RightsUtil
             $context, $right, $entities_condition, $all_location_ids
         );
 
-        $identifiers_with_granted_right = array();
+        $identifiers_with_granted_right = [];
 
         foreach ($identifiers as $identifier)
         {
@@ -294,11 +294,11 @@ class RightsUtil
             {
                 $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
-                $or_conditions = array();
+                $or_conditions = [];
 
                 foreach ($entities as $entity)
                 {
-                    $and_conditions = array();
+                    $and_conditions = [];
 
                     $and_conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
@@ -315,7 +315,7 @@ class RightsUtil
 
                 // add everyone 'entity'
 
-                $and_conditions = array();
+                $and_conditions = [];
 
                 $and_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable($context_entity_right, $context_entity_right::PROPERTY_ENTITY_TYPE),
@@ -350,7 +350,7 @@ class RightsUtil
 
         if (is_null($this->entity_item_condition_cache[$context][$location_id][$id][$type]))
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($type)
@@ -469,7 +469,7 @@ class RightsUtil
      */
 
     public function get_location_overview_with_rights_granted(
-        $context, $user_id, $entities, $right_ids = array(), $retrieve_types = array(), $tree_type = null,
+        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null,
         $tree_identifier = null
     )
     {
@@ -518,7 +518,7 @@ class RightsUtil
             $context, $condition, $entities_condition
         );
 
-        $overview = array();
+        $overview = [];
         foreach ($locations as $location)
         {
             $overview[$location[$context_location::PROPERTY_TYPE]][] =
@@ -549,7 +549,7 @@ class RightsUtil
      */
     public function get_location_parent_ids_recursive($context, $location_ids)
     {
-        $all_location_parent_ids = array();
+        $all_location_parent_ids = [];
 
         $location_parent_ids = $location_ids;
 
@@ -557,7 +557,7 @@ class RightsUtil
 
         while (true)
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new InCondition(
                 new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID),
                 array_unique($location_parent_ids)
@@ -624,7 +624,7 @@ class RightsUtil
 
     public function get_rights_for_location_and_entity($context, $location_id, $entity_id, $entity_type)
     {
-        $conditions = array();
+        $conditions = [];
 
         $class_name = $context . '\Storage\DataClass\RightsLocationEntityRight';
 
@@ -643,7 +643,7 @@ class RightsUtil
 
         $condition = new AndCondition($conditions);
 
-        $right_ids = array();
+        $right_ids = [];
 
         $location_entity_rights = DataManager::retrieve_rights_location_rights($context, $condition);
         foreach ($location_entity_rights as $location_entity_right)
@@ -681,7 +681,7 @@ class RightsUtil
     {
         $class = $context . '\Storage\DataClass\RightsLocation';
 
-        $root_conditions = array();
+        $root_conditions = [];
         $root_conditions[] = new EqualityCondition(
             new PropertyConditionVariable($class, RightsLocation::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
         );
@@ -904,7 +904,7 @@ class RightsUtil
         $context, $entity_type, $entity_id, $right_id, $location_id
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $class_name = $context . '\Storage\DataClass\RightsLocationEntityRight';
         $conditions[] = new EqualityCondition(

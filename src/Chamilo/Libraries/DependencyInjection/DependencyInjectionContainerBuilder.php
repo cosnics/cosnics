@@ -433,7 +433,7 @@ class DependencyInjectionContainerBuilder
     protected function loadContainerExtensions(ContainerBuilder $container)
     {
         $extensionClasses = $this->getContainerExtensionFinder()->findContainerExtensions();
-        $extensions = array();
+        $extensions = [];
 
         foreach ($extensionClasses as $extensionClass)
         {

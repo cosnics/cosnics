@@ -31,7 +31,7 @@ class AssessmentMatrixQuestionOption
      * @param int $match The index of the match corresponding to this option
      * @param int $score The score of this answer in the question
      */
-    public function __construct($value = '', $matches = array(), $score = 1, $feedback = '')
+    public function __construct($value = '', $matches = [], $score = 1, $feedback = '')
     {
         $this->value = $value;
         $this->score = $score;

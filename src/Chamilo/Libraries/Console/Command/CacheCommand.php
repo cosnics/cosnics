@@ -52,11 +52,11 @@ abstract class CacheCommand extends ChamiloCommand
             self::OPT_LIST,
             self::OPT_LIST_SHORT,
             InputOption::VALUE_NONE,
-            $this->translator->trans('ListCacheServices', array(), 'Chamilo\Libraries')
+            $this->translator->trans('ListCacheServices', [], 'Chamilo\Libraries')
         )->addArgument(
             self::ARG_CACHE_SERVICES,
             InputArgument::IS_ARRAY | InputArgument::OPTIONAL,
-            $this->translator->trans('CacheServices', array(), 'Chamilo\Libraries')
+            $this->translator->trans('CacheServices', [], 'Chamilo\Libraries')
         );
     }
 
@@ -103,7 +103,7 @@ abstract class CacheCommand extends ChamiloCommand
         if ($input->getOption(self::OPT_LIST))
         {
             $output->writeln(
-                '<comment>' . $this->translator->trans('AvailableCacheServices', array(), 'Chamilo\Libraries') .
+                '<comment>' . $this->translator->trans('AvailableCacheServices', [], 'Chamilo\Libraries') .
                 '</comment>'
             );
             $output->writeln('');
@@ -128,7 +128,7 @@ abstract class CacheCommand extends ChamiloCommand
     protected function clearCache(InputInterface $input, OutputInterface $output)
     {
         $this->cacheManager->clear($this->getSelectedCacheServices($input));
-        $output->writeln($this->translator->trans('CacheCleared', array(), 'Chamilo\Libraries'));
+        $output->writeln($this->translator->trans('CacheCleared', [], 'Chamilo\Libraries'));
 
         $cachePath = Configuration::getInstance()->get(
             'Chamilo\Configuration',
@@ -148,7 +148,7 @@ abstract class CacheCommand extends ChamiloCommand
     protected function warmUpCache(InputInterface $input, OutputInterface $output)
     {
         $this->cacheManager->warmUp($this->getSelectedCacheServices($input));
-        $output->writeln($this->translator->trans('CacheWarmedUp', array(), 'Chamilo\Libraries'));
+        $output->writeln($this->translator->trans('CacheWarmedUp', [], 'Chamilo\Libraries'));
     }
 
     /**

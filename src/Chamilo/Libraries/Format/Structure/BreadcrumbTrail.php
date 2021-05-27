@@ -60,8 +60,8 @@ class BreadcrumbTrail
      */
     public function __construct($includeMainIndex = true, $containerMode = 'container-fluid')
     {
-        $this->breadcrumbtrail = array();
-        $this->extra_items = array();
+        $this->breadcrumbtrail = [];
+        $this->extra_items = [];
         $this->containerMode = $containerMode;
 
         if ($includeMainIndex)
@@ -90,7 +90,7 @@ class BreadcrumbTrail
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="container-breadcrumb">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
@@ -315,7 +315,7 @@ class BreadcrumbTrail
      */
     public function render_breadcrumbs()
     {
-        $html = array();
+        $html = [];
         $html[] = '<ol class="breadcrumb">';
 
         $breadcrumbtrail = $this->breadcrumbtrail;
@@ -323,7 +323,7 @@ class BreadcrumbTrail
         {
             foreach ($breadcrumbtrail as $breadcrumb)
             {
-                $breadCrumbHtml = array();
+                $breadCrumbHtml = [];
 
                 $breadCrumbHtml[] = '<li>';
                 $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
@@ -361,7 +361,7 @@ class BreadcrumbTrail
      */
     public function render_extra()
     {
-        $html = array();
+        $html = [];
         $extra_items = $this->extra_items;
 
         $html[] = '<div id="extra_item">';
@@ -385,7 +385,7 @@ class BreadcrumbTrail
      */
     public function render_help()
     {
-        $html = array();
+        $html = [];
         $help_item = $this->help_item;
 
         if (is_array($help_item) && count($help_item) == 2)
@@ -439,7 +439,7 @@ class BreadcrumbTrail
      */
     public function truncate($keepMainIndex = false)
     {
-        $this->breadcrumbtrail = array();
+        $this->breadcrumbtrail = [];
         if ($keepMainIndex)
         {
             $this->add(

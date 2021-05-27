@@ -25,7 +25,7 @@ class Display extends QuestionDisplay
         if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
             $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
@@ -41,7 +41,7 @@ class Display extends QuestionDisplay
 
     public function add_question_form()
     {
-        $defaults = array();
+        $defaults = [];
         $formvalidator = $this->get_formvalidator();
         $clo_question = $this->get_complex_content_object_question();
         $question = $this->get_question();
@@ -58,7 +58,7 @@ class Display extends QuestionDisplay
         $type = $question->get_answer_type();
         $renderer = $this->get_renderer();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table take_assessment">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -73,7 +73,7 @@ class Display extends QuestionDisplay
 
         foreach ($answers as $i => $answer)
         {
-            $group = array();
+            $group = [];
 
             $object_renderer = new ContentObjectResourceRenderer(
                 $this->get_formvalidator()->get_assessment_viewer(), $answer->get_value()

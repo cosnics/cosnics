@@ -30,7 +30,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
      *
      * @var array
      */
-    private $feedback_answer = array();
+    private $feedback_answer = [];
 
     public function get_question_result()
     {
@@ -44,7 +44,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $html[] = '<div class="fill-in-the-blanks-result">';
         $html[] = array_shift($this->parts);
 
-        $text = array();
+        $text = [];
         $index = 0;
         foreach ($this->parts as $i => $part)
         {

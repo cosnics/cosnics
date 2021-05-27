@@ -127,7 +127,7 @@ class SettingsForm extends FormValidator
 
         $this->addElement('category', Translation::get('Security'));
 
-        $selfRegistration = array();
+        $selfRegistration = [];
         $selfRegistration[] = $this->createElement(
             'radio', 'self_reg', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
         );
@@ -155,7 +155,7 @@ class SettingsForm extends FormValidator
 
     protected function addPackageSelectionToggle()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '&nbsp;';
         $html[] = '<small>';
@@ -173,7 +173,7 @@ class SettingsForm extends FormValidator
 
     public function addPackageSettings()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="package-selection">';
         $html[] = '<div class="row">';
@@ -189,7 +189,7 @@ class SettingsForm extends FormValidator
 
         $this->renderPackages(PlatformPackageBundles::getInstance()->get_package_list());
 
-        $html = array();
+        $html = [];
 
         $html[] = '<script src="' .
             Path::getInstance()->getJavascriptPath('Chamilo\Core\Install', true) . 'Install.js"></script>';
@@ -212,9 +212,9 @@ class SettingsForm extends FormValidator
 
         $this->getTabsGenerator()->render();
 
-        $buttons = array();
+        $buttons = [];
 
-        $glyph = new FontAwesomeGlyph('chevron-left', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chevron-left', [], null, 'fas');
 
         $buttons[] = $this->createElement(
             'static', null, null,
@@ -238,7 +238,7 @@ class SettingsForm extends FormValidator
      */
     public function determinePackages(PackageList $packageList)
     {
-        $packages = array();
+        $packages = [];
 
         foreach ($packageList->get_packages() as $namespace => $package)
         {
@@ -328,7 +328,7 @@ class SettingsForm extends FormValidator
 
             if (is_null($sessionSettings))
             {
-                $sessionSettings = array();
+                $sessionSettings = [];
             }
             else
             {
@@ -357,7 +357,7 @@ class SettingsForm extends FormValidator
 
     protected function get_database_drivers()
     {
-        $drivers = array();
+        $drivers = [];
         $drivers['mysqli'] = 'MySQL >= 4.1.3';
 
         return $drivers;
@@ -404,7 +404,7 @@ class SettingsForm extends FormValidator
      */
     public function renderPackages(PackageList $packageList)
     {
-        $html = array();
+        $html = [];
 
         $renderer = $this->defaultRenderer();
         $packages = $this->determinePackages($packageList);
@@ -414,7 +414,7 @@ class SettingsForm extends FormValidator
             $firstPackage = current($packages);
             $packageType = Translation::get('TypeCategory', null, $firstPackage->get_context());
 
-            $html = array();
+            $html = [];
 
             $html[] = '<div class="package-list">';
 
@@ -452,7 +452,7 @@ class SettingsForm extends FormValidator
                     $disabled = '';
                 }
 
-                $html = array();
+                $html = [];
                 $html[] = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
                 $html[] = '<a class="' . $packageClasses . '"' . $disabled . '>' . $glyph->render() . ' ';
                 $this->addElement('html', implode(PHP_EOL, $html));
@@ -462,7 +462,7 @@ class SettingsForm extends FormValidator
                 $this->addElement('checkbox', 'install[' . $package->get_context() . ']');
                 $renderer->setElementTemplate('{element}', 'install[' . $package->get_context() . ']');
 
-                $html = array();
+                $html = [];
                 $html[] = $title;
                 $html[] = '</a>';
                 $html[] = '</div>';
@@ -478,7 +478,7 @@ class SettingsForm extends FormValidator
 
             $this->setDefaults($defaults);
 
-            $html = array();
+            $html = [];
             $html[] = '<div class="clearfix"></div>';
             $html[] = '</div>';
             $html[] = '</div>';
@@ -491,7 +491,7 @@ class SettingsForm extends FormValidator
         }
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $sessionSettings = $this->getSessionSettings();
 

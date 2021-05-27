@@ -50,7 +50,7 @@ class UserComponent extends ItemComponent implements TableSupport
         {
             $message = Display::warning_message(Translation::get('ComplexRightsNotSupported'));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $message;
@@ -98,13 +98,13 @@ class UserComponent extends ItemComponent implements TableSupport
         // Default table of users which can be emulated (as determined by the context)
         $table = new UserTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
 
         $axtionBar = implode(PHP_EOL, $html);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $axtionBar;
@@ -148,7 +148,7 @@ class UserComponent extends ItemComponent implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $properties = array();
+        $properties = [];
         $properties[] = new PropertyConditionVariable(
             User::class, User::PROPERTY_FIRSTNAME
         );
@@ -161,7 +161,7 @@ class UserComponent extends ItemComponent implements TableSupport
 
         $searchConditions = $this->buttonToolbarRenderer->getConditions($properties);
 
-        $conditions = array();
+        $conditions = [];
 
         if ($searchConditions instanceof Condition)
         {

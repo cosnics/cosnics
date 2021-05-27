@@ -31,7 +31,7 @@ class CopierComponent extends Manager
         }
 
         $target_user_id = $this->get_user_id();
-        $messages = array();
+        $messages = [];
 
         foreach ($selected_content_object_ids as $selected_content_object_id)
         {

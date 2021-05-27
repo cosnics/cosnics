@@ -34,7 +34,7 @@ class CourseGroupTableColumnModel extends DataClassTableColumnModel implements T
         $this->add_column(
             new StaticTableColumn(
                 self::COLUMN_NUMBER_OF_MEMBERS,
-                Translation::getInstance()->getTranslation('NumberOfMembers', array(), Manager::context())));
+                Translation::getInstance()->getTranslation('NumberOfMembers', [], Manager::context())));
 
         $this->add_column(
             new DataClassPropertyTableColumn(CourseGroup::class, CourseGroup::PROPERTY_MAX_NUMBER_OF_MEMBERS));

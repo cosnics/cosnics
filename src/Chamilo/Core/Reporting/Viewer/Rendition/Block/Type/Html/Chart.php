@@ -52,13 +52,13 @@ abstract class Chart extends Html
         }
         else
         {
-            $chart = array();
-            $chart_description = array();
-            $chart_data = array();
+            $chart = [];
+            $chart_description = [];
+            $chart_data = [];
 
             $chart_description['Position'] = 'Name';
-            $chart_description['Values'] = array();
-            $chart_description['Description'] = array();
+            $chart_description['Values'] = [];
+            $chart_description['Description'] = [];
             foreach ($reporting_data->get_rows() as $row_id => $row_name)
             {
                 $chart_description['Values'][$row_id] = 'Serie' . $row_id;
@@ -71,7 +71,7 @@ abstract class Chart extends Html
 
             foreach ($reporting_data->get_categories() as $category_id => $category_name)
             {
-                $category_array = array();
+                $category_array = [];
                 $category_array['Name'] = trim(
                     trim(html_entity_decode(strip_tags($category_name), ENT_COMPAT, 'utf-8')), "\xC2\xA0"
                 );

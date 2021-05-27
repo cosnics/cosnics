@@ -29,9 +29,9 @@ class PublicationSelectorDataMapper
      *
      * @return array
      */
-    public static function getContentObjectPublicationCategoriesForPublicationSelector($course_id, $tools = array())
+    public static function getContentObjectPublicationCategoriesForPublicationSelector($course_id, $tools = [])
     {
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
@@ -42,7 +42,7 @@ class PublicationSelectorDataMapper
             $course_id, $tools, $order_by
         );
 
-        $categories = array();
+        $categories = [];
 
         foreach($publication_categories_set as $category)
         {
@@ -70,13 +70,13 @@ class PublicationSelectorDataMapper
      */
     public function getContentObjectPublicationsForPublicationSelector($course_id)
     {
-        $propertyNames = array();
+        $propertyNames = [];
         $propertyNames[] = ContentObjectPublication::PROPERTY_ID;
         $propertyNames[] = ContentObjectPublication::PROPERTY_CATEGORY_ID;
         $propertyNames[] = ContentObject::PROPERTY_TITLE;
         $propertyNames[] = ContentObjectPublication::PROPERTY_TOOL;
 
-        $order_by = array();
+        $order_by = [];
 
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
@@ -88,7 +88,7 @@ class PublicationSelectorDataMapper
             $course_id, $order_by
         );
 
-        $publications = array();
+        $publications = [];
 
         if (count($propertyNames) == 0)
         {
@@ -97,7 +97,7 @@ class PublicationSelectorDataMapper
 
         foreach($publications_set as $publication)
         {
-            $publicationProperties = array();
+            $publicationProperties = [];
 
             foreach ($propertyNames as $property)
             {

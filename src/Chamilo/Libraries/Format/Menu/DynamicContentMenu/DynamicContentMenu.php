@@ -32,7 +32,7 @@ class DynamicContentMenu
      * @param string $name
      * @param \Chamilo\Libraries\Format\Menu\DynamicContentMenu\DynamicContentMenuItem[] $menuItems
      */
-    public function __construct($name, $menuItems = array())
+    public function __construct($name, $menuItems = [])
     {
         $this->set_name($name);
         $this->set_menu_items($menuItems);
@@ -45,7 +45,7 @@ class DynamicContentMenu
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->render_content();
@@ -160,7 +160,7 @@ class DynamicContentMenu
      */
     protected function render_content()
     {
-        $html = array();
+        $html = [];
 
         foreach ($this->get_menu_items() as $menu_item)
         {
@@ -195,6 +195,6 @@ class DynamicContentMenu
      */
     public function truncate_menu_items()
     {
-        $this->menu_items = array();
+        $this->menu_items = [];
     }
 }

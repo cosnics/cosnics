@@ -61,7 +61,7 @@ class TopicEmailNotificator extends EmailNotificator
      */
     public function send_emails()
     {
-        $targetUsers = array();
+        $targetUsers = [];
         foreach ($this->users as $user)
         {
             $targetUsers[] = $user->get_email();
@@ -86,7 +86,7 @@ class TopicEmailNotificator extends EmailNotificator
              $this->action_user->get_lastname();
         
         $mail = new Mail(
-            $subject, $message, $targetUsers, true, array(), array(), $this->action_user->get_fullname(),
+            $subject, $message, $targetUsers, true, [], [], $this->action_user->get_fullname(),
             $this->action_user->get_email()
         );
         

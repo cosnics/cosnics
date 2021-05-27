@@ -82,7 +82,7 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      */
     public function get_elements()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -91,6 +91,6 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      */
     public function get_default_values()
     {
-        return array();
+        return [];
     }
 }

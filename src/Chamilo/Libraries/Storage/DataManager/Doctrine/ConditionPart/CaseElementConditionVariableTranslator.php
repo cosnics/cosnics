@@ -30,7 +30,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $strings = array();
+        $strings = [];
 
         $conditionVariable = $this->getConditionVariable();
 

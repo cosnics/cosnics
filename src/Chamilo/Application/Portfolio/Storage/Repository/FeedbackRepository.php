@@ -113,7 +113,7 @@ class FeedbackRepository
     private function getFeedbackConditions(int $publicationIdentifier, int $complexContentObjectIdentifier = null,
         int $userIdentifier = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),

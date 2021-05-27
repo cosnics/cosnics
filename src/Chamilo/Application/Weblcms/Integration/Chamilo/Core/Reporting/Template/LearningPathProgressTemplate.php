@@ -36,12 +36,12 @@ class LearningPathProgressTemplate extends ReportingTemplate
         $this->course_id = Request::get(Manager::PARAM_COURSE);
         $this->set_parameter(Manager::PARAM_COURSE, $this->course_id);
 
-        $custom_breadcrumbs = array();
+        $custom_breadcrumbs = [];
         $custom_breadcrumbs[] = new Breadcrumb($this->get_url(), Translation::get('LearningPathProgress'));
         $this->set_custom_breadcrumb_trail($custom_breadcrumbs);
 
         // learning path titles for tooltips
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID

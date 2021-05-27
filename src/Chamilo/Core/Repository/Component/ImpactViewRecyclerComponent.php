@@ -178,7 +178,7 @@ class ImpactViewRecyclerComponent extends Manager
             $message = $count == 1 ? $succes_message_single : $succes_message_multiple;
         }
         
-        return Translation::getInstance()->getTranslation($message, array(), Manager::context());
+        return Translation::getInstance()->getTranslation($message, [], Manager::context());
     }
 
     protected function get_selected_co_ids()
@@ -199,7 +199,7 @@ class ImpactViewRecyclerComponent extends Manager
      *
      * @return bool
      */
-    public function has_impact(array $selected_ids = array())
+    public function has_impact(array $selected_ids = [])
     {
         $condition = new InCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObjectPublication::PROPERTY_ID),
@@ -238,7 +238,7 @@ class ImpactViewRecyclerComponent extends Manager
      */
     public function get_content_objects_condition(array $selected_ids)
     {
-        $conditions = array();
+        $conditions = [];
         foreach ($selected_ids as $selected_co_id)
         {
             $conditions[] = new EqualityCondition(

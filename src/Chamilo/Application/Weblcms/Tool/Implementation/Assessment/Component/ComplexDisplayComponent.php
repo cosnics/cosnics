@@ -78,7 +78,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
                 $this->redirect(
                     Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
                     true,
-                    array(),
+                    [],
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
@@ -133,7 +133,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         if ($this->assessment->get_type() == Hotpotatoes::class)
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
 
@@ -162,7 +162,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
                 $this->redirect(
                     Translation::get("EmptyAssessment"),
                     true,
-                    array(),
+                    [],
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
@@ -280,7 +280,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
      */
     protected function retrieve_question_attempts()
     {
-        $question_attempts = array();
+        $question_attempts = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
@@ -329,7 +329,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
      */
     public function get_registered_question_ids()
     {
-        $question_ids = array();
+        $question_ids = [];
 
         $question_attempts = $this->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)
@@ -377,7 +377,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
     public function get_assessment_parameters()
     {
-        return array();
+        return [];
     }
 
     public function get_assessment_current_url()

@@ -25,5 +25,5 @@ interface MailerInterface
      *
      * @param \Chamilo\Libraries\Mail\ValueObject\Mail[] $mails
      */
-    public function sendMails($mails = array());
+    public function sendMails($mails = []);
 }

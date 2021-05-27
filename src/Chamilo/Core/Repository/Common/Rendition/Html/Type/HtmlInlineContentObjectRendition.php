@@ -13,7 +13,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
     public function render()
     {
         $object = $this->get_content_object();
-        $html = array();
+        $html = [];
         $html[] = '<div class="panel panel-default">';
 
         $html[] = '<div class="panel-heading">';
@@ -30,7 +30,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
     {
         $object = $this->get_content_object();
 
-        $html = array();
+        $html = [];
 
         if ($object instanceof AttachmentSupport)
         {
@@ -39,7 +39,7 @@ class HtmlInlineContentObjectRendition extends HtmlContentObjectRendition
             if (count($attachments))
             {
                 $html[] = '<div class="panel panel-default panel-attachments">';
-                $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('paperclip', [], null, 'fas');
                 $html[] = '<div class="panel-heading">' . $glyph->render() . ' ' .
                     htmlentities(Translation::get('Attachments')) . '</div>';
 

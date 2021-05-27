@@ -43,7 +43,7 @@ class BrowserComponent extends Manager implements TableSupport
             throw new NoObjectSelectedException(Translation::get('Schema', null, 'Chamilo\Core\Metadata\Schema'));
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -60,7 +60,7 @@ class BrowserComponent extends Manager implements TableSupport
         $table = new ElementTable($this);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
@@ -109,7 +109,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $searchCondition = $this->getButtonToolbarRenderer()->getConditions(
             array(new PropertyConditionVariable(Element::class, Element::PROPERTY_NAME))

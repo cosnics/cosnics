@@ -31,7 +31,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_webpage_from_hash($user_id, $hash)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_HASH),
             new StaticConditionVariable($hash));
@@ -58,7 +58,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function is_only_webpage_occurence($storage_path, $path)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Webpage::class, Webpage::PROPERTY_STORAGE_PATH),
             new StaticConditionVariable($storage_path));

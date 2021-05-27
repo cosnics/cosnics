@@ -86,7 +86,7 @@ class LocalSetting
 
         if ($setting && $setting->get_user_setting() == 1)
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),
                 new StaticConditionVariable($userIdentifier)

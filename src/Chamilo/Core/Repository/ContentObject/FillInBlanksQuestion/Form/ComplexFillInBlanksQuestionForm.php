@@ -26,7 +26,7 @@ class ComplexFillInBlanksQuestionForm extends ComplexContentObjectItemForm
      */
     public function get_elements()
     {
-        $elements = array();
+        $elements = [];
         
         $elements[] = $this->createElement(
             'checkbox', 

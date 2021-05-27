@@ -54,7 +54,7 @@ class ApplicationItemForm extends ItemForm
     {
         $applications = $this->getRegistrationConsulter()->getRegistrationsByType(Registration::TYPE_APPLICATION);
 
-        $activeApplications = array();
+        $activeApplications = [];
 
         foreach ($applications as $application)
         {
@@ -80,7 +80,7 @@ class ApplicationItemForm extends ItemForm
      *
      * @throws \Exception
      */
-    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
+    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = [])
     {
         $defaults[ApplicationItem::PROPERTY_APPLICATION] = $item->getApplication();
         $defaults[ApplicationItem::PROPERTY_COMPONENT] = $item->getComponent();

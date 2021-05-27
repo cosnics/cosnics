@@ -62,7 +62,7 @@ class SearcherComponent extends Manager
     // Inherited
     public function run()
     {
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         
@@ -78,7 +78,7 @@ class SearcherComponent extends Manager
         {
             $course_groups = $this->get_course_groups();
             
-            $course_group_ids = array();
+            $course_group_ids = [];
             
             foreach ($course_groups as $course_group)
             {
@@ -89,7 +89,7 @@ class SearcherComponent extends Manager
                 ContentObjectPublication::class, 
                 new DataClassRetrievesParameters($this->get_retrieve_publications_condition()));
             
-            $tools = array();
+            $tools = [];
             
             foreach($publications as $publication)
             {
@@ -106,14 +106,14 @@ class SearcherComponent extends Manager
             
             foreach ($tools as $tool => $publications)
             {
-                $resultsHtml = array();
+                $resultsHtml = [];
                 
                 if (strpos($tool, 'feedback') !== false)
                 {
                     continue;
                 }
                 
-                $objects = array();
+                $objects = [];
                 
                 foreach ($publications as $publication)
                 {
@@ -234,7 +234,7 @@ class SearcherComponent extends Manager
      */
     protected function get_retrieve_publications_condition()
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -258,7 +258,7 @@ class SearcherComponent extends Manager
                 ContentObjectPublication::class, 
                 ContentObjectPublication::PROPERTY_TO_DATE);
             
-            $time_conditions = array();
+            $time_conditions = [];
             
             $time_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -266,7 +266,7 @@ class SearcherComponent extends Manager
                     ContentObjectPublication::PROPERTY_HIDDEN), 
                 new StaticConditionVariable(0));
             
-            $forever_conditions = array();
+            $forever_conditions = [];
             
             $forever_conditions[] = new EqualityCondition($from_date_variables, new StaticConditionVariable(0));
             
@@ -274,7 +274,7 @@ class SearcherComponent extends Manager
             
             $forever_condition = new AndCondition($forever_conditions);
             
-            $between_conditions = array();
+            $between_conditions = [];
             
             $between_conditions[] = new ComparisonCondition(
                 $from_date_variables, 

@@ -74,7 +74,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->render();

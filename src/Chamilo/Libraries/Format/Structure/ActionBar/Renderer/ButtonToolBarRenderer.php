@@ -46,7 +46,7 @@ class ButtonToolBarRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="' . $this->getClasses() . '">';
 
@@ -115,7 +115,7 @@ class ButtonToolBarRenderer
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @throws \Exception
      */
-    public function getConditions($properties = array())
+    public function getConditions($properties = [])
     {
         // check input parameter
         if (!is_array($properties))

@@ -48,7 +48,7 @@ class PageTokenGenerator
     public function __construct()
     {
         self::$characterMap = array_merge(range("A", "Z", 4), range("c", "z", 4), range(0, 9, 4));
-        $this->pageTokenCache = array();
+        $this->pageTokenCache = [];
     }
 
     /**
@@ -68,7 +68,7 @@ class PageTokenGenerator
             }
             else
             {
-                $tokenParts = array();
+                $tokenParts = [];
                 
                 // The first character of the token is always the same
                 $tokenParts[] = self::PREFIX;

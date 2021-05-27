@@ -79,7 +79,7 @@ class ResourceGenerator
 
         $packages = $this->getPlatformPackageBundles()->get_packages();
 
-        $resourceFiles = array();
+        $resourceFiles = [];
 
         foreach ($orderedPackageContexts as $orderedPackageContext)
         {
@@ -216,7 +216,7 @@ class ResourceGenerator
         }
         else
         {
-            $resourceContent = array();
+            $resourceContent = [];
 
             foreach ($inputPaths as $inputPath)
             {

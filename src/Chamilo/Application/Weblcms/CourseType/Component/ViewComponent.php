@@ -38,7 +38,7 @@ class ViewComponent extends Manager
      */
     public function run()
     {
-        $html = array();
+        $html = [];
         $html[] = $this->render_header();
         $html[] = $this->get_html();
         $html[] = $this->render_footer();
@@ -143,7 +143,7 @@ class ViewComponent extends Manager
      */
     private function get_html()
     {
-        $html = array();
+        $html = [];
 
         $course_type = $this->get_selected_course_type();
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($course_type);

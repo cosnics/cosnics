@@ -35,7 +35,7 @@ class RightsGroupForm extends FormValidator
 
     function build_form()
     {
-        $element_template = array();
+        $element_template = [];
         $element_template[] = '<div class="form-row">';
         $element_template[] =
             '<div class="element"><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}</div>';
@@ -79,7 +79,7 @@ class RightsGroupForm extends FormValidator
          * $default_elements->add_element($group_entity->get_element_finder_element($entity)); } $this->getElement(self
          *::PROPERTY_ACCESS)->setDefaultValues($default_elements);
          */
-        parent::setDefaults(array());
+        parent::setDefaults([]);
     }
 
     function set_rights()
@@ -114,7 +114,7 @@ class RightsGroupForm extends FormValidator
 
                 foreach ($values[self::PROPERTY_TARGETS][PlatformGroupEntity::ENTITY_TYPE] as $group_id)
                 {
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
                             RightsLocationEntityRightGroup::class,

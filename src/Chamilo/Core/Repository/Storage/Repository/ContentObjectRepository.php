@@ -59,7 +59,7 @@ class ContentObjectRepository
         ContentObject $contentObject, int $attachmentIdentifier = null, string $type = ContentObject::ATTACHMENT_NORMAL
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         if (!is_null($attachmentIdentifier))
         {
@@ -148,7 +148,7 @@ class ContentObjectRepository
         string $contentObjectType, User $user = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
@@ -226,7 +226,7 @@ class ContentObjectRepository
         }
 
         $usedStorageSpaceRecord = $this->getDataClassRepository()->record(
-            $contentObjectType, new RecordRetrieveParameters($dataClassProperties, $condition, array(), $joins)
+            $contentObjectType, new RecordRetrieveParameters($dataClassProperties, $condition, [], $joins)
         );
 
         return $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];
@@ -254,7 +254,7 @@ class ContentObjectRepository
      */
     public static function prepareContentObjectParameters(DataClassParameters $parameters)
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($parameters->getCondition() instanceof Condition)
         {
@@ -283,7 +283,7 @@ class ContentObjectRepository
         ContentObject $contentObject, int $attachmentIdentifier, string $type = ContentObject::ATTACHMENT_NORMAL
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -317,7 +317,7 @@ class ContentObjectRepository
      * @throws \Exception
      */
     public function retrieveContentObjectAttachments(
-        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = array(), $offset = null,
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = [], $offset = null,
         $count = null
     )
     {
@@ -369,7 +369,7 @@ class ContentObjectRepository
         ContentObject $contentObject, bool $includeLast = true, bool $includeSelf = true
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),

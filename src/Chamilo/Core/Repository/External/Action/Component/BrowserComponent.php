@@ -32,7 +32,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $html = array();
+        $html = [];
 
         if (isset($query) && $query != '')
         {
@@ -50,7 +50,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $menu = array();
+            $menu = [];
             $menu[] = '<div class="col-md-2">';
             $menu[] = $this->get_menu()->render_as_tree();
             $menu[] = '</div>';
@@ -128,7 +128,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                             Translation::get(
                                 (string) StringUtilities::getInstance()->createString($renderer)->upperCamelize() .
                                 'View', null, Utilities::COMMON_LIBRARIES
-                            ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
+                            ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                         )
                     );
                 }
@@ -166,13 +166,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         if ($this->buttonToolbarRenderer->getSearchForm()->getQuery() && count($extra) > 0)
         {
             $search_url = '#';
-            $search = array();
+            $search = [];
 
             $search['title'] = Translation::get('SearchResults');
 
             $search['url'] = $search_url;
 
-            $glyph = new FontAwesomeGlyph('search', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('search', [], null, 'fas');
             $search['class'] = $glyph->getClassNamesString();
 
             $extra[] = $search;
@@ -192,7 +192,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $menu->forceCurrentUrl($search_url);
         }
 
-        $html = array();
+        $html = [];
         if ($menu->count_menu_items() > 0)
         {
             $html[] = '<div class="col-md-2">';

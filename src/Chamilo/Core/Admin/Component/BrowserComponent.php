@@ -29,7 +29,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_tabs();
@@ -73,13 +73,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $packages = PlatformPackageBundles::getInstance(PackageList::MODE_INSTALLED)->get_type_packages();
 
-        $packageNames = array();
+        $packageNames = [];
 
         $tabNamespace = ClassnameUtilities::getInstance()->getNamespaceFromId($this->getCurrentTab());
 
         foreach ($packages[$tabNamespace] as $namespace => $package)
         {
-            $packageNames[$this->getTranslator()->trans('TypeName', array(), $namespace)] = $package;
+            $packageNames[$this->getTranslator()->trans('TypeName', [], $namespace)] = $package;
         }
 
         ksort($packageNames);
@@ -97,7 +97,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $index ++;
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
-                    $this->getTranslator()->trans('TypeName', array(), $package->get_context()),
+                    $this->getTranslator()->trans('TypeName', [], $package->get_context()),
                     new NamespaceIdentGlyph(
                         $package->get_context(), true, false, false,
                         IdentGlyph::SIZE_SMALL

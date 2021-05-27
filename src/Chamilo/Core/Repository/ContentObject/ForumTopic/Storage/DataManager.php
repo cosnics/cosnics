@@ -74,7 +74,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
             $creation_date_order);
@@ -115,7 +115,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_forum_posts($forum_topic_id, $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
@@ -162,7 +162,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins(array($join));
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
@@ -204,7 +204,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_forum_post_of_topic($topic_id, $post_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
@@ -236,7 +236,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function detach_content_object($object, $attachment_id, $type = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
@@ -271,7 +271,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_attached_object($forum_post_id, $attachment_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumPostAttachment::class, ForumPostAttachment::PROPERTY_FORUM_POST_ID),
@@ -342,7 +342,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_subscribe($forum_topic_id, $user_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -390,7 +390,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_subscribed_forum_topic_users($forum_topic_id)
     {
         $subscribeds = DataManager::retrieve_subscribes($forum_topic_id);
-        $users = array();
+        $users = [];
         foreach ($subscribeds as $subscribe)
         {
             $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(

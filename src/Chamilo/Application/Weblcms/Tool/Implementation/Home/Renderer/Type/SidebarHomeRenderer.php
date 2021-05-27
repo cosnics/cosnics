@@ -28,7 +28,7 @@ class SidebarHomeRenderer extends HomeRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row course-home">';
 
@@ -55,7 +55,7 @@ class SidebarHomeRenderer extends HomeRenderer
     {
         $introduction = $this->getIntroduction();
 
-        $html = array();
+        $html = [];
 
         if ($introduction)
         {

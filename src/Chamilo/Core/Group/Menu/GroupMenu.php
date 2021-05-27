@@ -155,9 +155,9 @@ class GroupMenu extends HtmlMenu
         }
         else
         {
-            $menu = array();
+            $menu = [];
 
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['title'] = $group->get_name();
             // $menu_item['url'] = $this->get_url($group->get_id());
             $menu_item['url'] = $this->get_home_url();
@@ -168,7 +168,7 @@ class GroupMenu extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
 
-            $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
             $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();
             $menu[$group->get_id()] = $menu_item;
@@ -209,7 +209,7 @@ class GroupMenu extends HtmlMenu
 
             if (!($group_id == $current_category->get_id() && $hide_current_category))
             {
-                $menu_item = array();
+                $menu_item = [];
                 $menu_item['title'] = $group->get_name();
                 $menu_item['url'] = $this->get_url($group->get_id());
 
@@ -229,7 +229,7 @@ class GroupMenu extends HtmlMenu
                     }
                 }
 
-                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 $menu_item['class'] = $glyph->getClassNamesString();
                 $menu_item[OptionsMenuRenderer::KEY_ID] = $group->get_id();

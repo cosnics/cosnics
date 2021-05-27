@@ -45,7 +45,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
     {
         if (!isset($this->ldapSettings))
         {
-            $ldap = array();
+            $ldap = [];
             $ldap['host'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_host'));
             $ldap['port'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_port'));
             $ldap['rdn'] = $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'ldap_remote_dn'));
@@ -184,7 +184,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
      */
     public function logout(User $user)
     {
-        $redirect = new Redirect(array(), array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
+        $redirect = new Redirect([], array(Application::PARAM_ACTION, Application::PARAM_CONTEXT));
         $redirect->toUrl();
         exit();
     }

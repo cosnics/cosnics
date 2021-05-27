@@ -30,5 +30,5 @@ abstract class TableDataProvider extends TableComponent
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    abstract public function retrieve_data($condition, $offset, $count, $orderProperties = array());
+    abstract public function retrieve_data($condition, $offset, $count, $orderProperties = []);
 }

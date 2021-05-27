@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
     const PREFIX = 'group_';
 
-    public static $allSubscribedGroupsCache = array();
+    public static $allSubscribedGroupsCache = [];
 
     /**
      * Cache for the direct subscribed groups
@@ -63,7 +63,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function is_group_member($group_id, $user_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id)
@@ -134,7 +134,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID));
             $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID));
 
-            $join_conditions = array();
+            $join_conditions = [];
 
             $join_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -155,9 +155,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             // Second: retrieve the (ids of) directly subscribed groups and their ancestors
             if (count($directly_subscribed_group_nesting_values) > 0)
             {
-                $treeConditions = array();
-                $alreadyIncludedParents = array();
-                $directGroupIds = array();
+                $treeConditions = [];
+                $alreadyIncludedParents = [];
+                $directGroupIds = [];
 
                 foreach ($directly_subscribed_group_nesting_values as $descendent)
                 {
@@ -213,12 +213,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 if ($only_retrieve_ids)
                 {
-                    self::$allSubscribedGroupsCache[$cacheId] = array();
+                    self::$allSubscribedGroupsCache[$cacheId] = [];
                 }
                 else
                 {
                     // If the user is not a member of any group
-                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassIterator(Group::class, array());
+                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassIterator(Group::class, []);
                 }
             }
         }
@@ -247,7 +247,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($user_id)
         );
 
-        $joins = array();
+        $joins = [];
         $joins[] = new Join(
             GroupRelUser::class, new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
@@ -309,7 +309,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function retrieve_group_by_code_and_parent_id($code, $parent_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($code)
         );
@@ -326,7 +326,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_property = null
     )
     {
-        $joins = array();
+        $joins = [];
         $joins[] = new Join(
             User::class, new EqualityCondition(
                 new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -341,7 +341,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function retrieve_groups_and_subgroups(
-        $group_ids, $additional_condition = null, $count = null, $offset = null, $order_by = array()
+        $group_ids, $additional_condition = null, $count = null, $offset = null, $order_by = []
     )
     {
         if (count($group_ids) == 0)
@@ -364,14 +364,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         // Second: retrieve the indicated groups and their descendents
         if (count($group_nesting_values) > 0)
         {
-            $conditions = array();
+            $conditions = [];
 
             if ($additional_condition instanceof Condition)
             {
                 $conditions[] = $additional_condition;
             }
 
-            $or_conditions = array();
+            $or_conditions = [];
 
             foreach ($group_nesting_values as $ancestor)
             {
@@ -400,7 +400,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // If the provided group_ids do not exist or were empty
-        return new DataClassIterator(Group::class, array());
+        return new DataClassIterator(Group::class, []);
     }
 
     public static function retrieve_user_groups($user_id)

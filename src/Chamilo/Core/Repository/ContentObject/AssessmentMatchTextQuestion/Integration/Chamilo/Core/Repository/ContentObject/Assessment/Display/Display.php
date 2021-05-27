@@ -23,7 +23,7 @@ class Display extends QuestionDisplay
         if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
             $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
@@ -51,7 +51,7 @@ class Display extends QuestionDisplay
         $textarea_height = '50px';
         $textarea_style = 'width: ' . $textarea_width . '; height: ' . $textarea_height . ';';
 
-        $element_template = array();
+        $element_template = [];
         $element_template[] =
             '<div><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clearfix"></div>';
@@ -75,7 +75,7 @@ class Display extends QuestionDisplay
 
     public function get_instruction()
     {
-        $instruction = array();
+        $instruction = [];
         $question = $this->get_question();
 
         if ($question->has_description())
@@ -88,7 +88,7 @@ class Display extends QuestionDisplay
         }
         else
         {
-            $instruction = array();
+            $instruction = [];
         }
 
         return implode(PHP_EOL, $instruction);

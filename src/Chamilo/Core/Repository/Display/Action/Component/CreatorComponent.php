@@ -85,7 +85,7 @@ class CreatorComponent extends Manager implements ViewerInterface
                 array('OBJECT' => Translation::get('ContentObject')),
                 Utilities::COMMON_LIBRARIES));
 
-        $params = array();
+        $params = [];
         $params['cid'] = $complex_content_object_item_id;
         $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = \Chamilo\Core\Repository\Display\Manager::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 

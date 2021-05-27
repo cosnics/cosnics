@@ -74,7 +74,7 @@ class Manager implements PublicationInterface
         $order_properties = null
     )
     {
-        $publicationAttributes = array();
+        $publicationAttributes = [];
 
         switch ($type)
         {
@@ -91,7 +91,7 @@ class Manager implements PublicationInterface
                     );
                 break;
             default :
-                return array();
+                return [];
         }
 
         foreach ($publications as $publication)
@@ -205,7 +205,7 @@ class Manager implements PublicationInterface
      */
     public static function get_allowed_content_object_types()
     {
-        return array();
+        return [];
     }
 
     /*

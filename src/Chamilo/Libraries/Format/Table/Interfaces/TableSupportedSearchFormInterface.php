@@ -23,5 +23,5 @@ interface TableSupportedSearchFormInterface
      *
      * @param string[] $tableParameters
      */
-    public function registerTableParametersInSearchForm(array $tableParameters = array());
+    public function registerTableParametersInSearchForm(array $tableParameters = []);
 }

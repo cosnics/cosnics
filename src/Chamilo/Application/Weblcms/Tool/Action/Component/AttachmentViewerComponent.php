@@ -97,7 +97,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
                 ContentObject::class,
                 $object_id);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = ContentObjectRenditionImplementation::launch(
@@ -111,7 +111,7 @@ class AttachmentViewerComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_error_message($error_message);

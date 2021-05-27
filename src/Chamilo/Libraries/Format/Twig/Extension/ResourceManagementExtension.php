@@ -146,7 +146,7 @@ class ResourceManagementExtension extends Twig_Extension
     {
         $imagePath = $this->getImagePath($image, $context, $extension);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<img border="0" src="' . $imagePath . '"';
 

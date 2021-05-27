@@ -50,7 +50,7 @@ interface UserRepositoryInterface
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = array());
+    public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = []);
 
     /**
      *

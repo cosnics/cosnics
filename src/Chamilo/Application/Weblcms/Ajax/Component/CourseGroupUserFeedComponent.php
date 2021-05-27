@@ -106,7 +106,7 @@ class CourseGroupUserFeedComponent extends Manager
     {
         if (!isset($this->coursePlatformGroupUserIdentifiers))
         {
-            $this->coursePlatformGroupUserIdentifiers = array();
+            $this->coursePlatformGroupUserIdentifiers = [];
 
             $groupRelations = $this->getCourse()->get_subscribed_groups();
 
@@ -138,7 +138,7 @@ class CourseGroupUserFeedComponent extends Manager
     {
         if (!isset($this->courseUserIdentifiers))
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -175,9 +175,9 @@ class CourseGroupUserFeedComponent extends Manager
     {
         $elements = new AdvancedElementFinderElements();
 
-        $folderGlyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
-        $courseUserGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
-        $platformGroupUserGlyph = new FontAwesomeGlyph('link', array(), null, 'fas');
+        $folderGlyph = new FontAwesomeGlyph('folder', [], null, 'fas');
+        $courseUserGlyph = new FontAwesomeGlyph('user', [], null, 'fas');
+        $platformGroupUserGlyph = new FontAwesomeGlyph('link', [], null, 'fas');
 
         $course = $this->getCourse();
 
@@ -251,7 +251,7 @@ class CourseGroupUserFeedComponent extends Manager
     {
         $searchQuery = $this->getSearchQuery();
 
-        $conditions = array();
+        $conditions = [];
 
         if (!empty($searchQuery))
         {

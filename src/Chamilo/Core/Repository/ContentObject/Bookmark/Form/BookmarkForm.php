@@ -42,7 +42,7 @@ class BookmarkForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $lo = $this->get_content_object();
         if (isset($lo))

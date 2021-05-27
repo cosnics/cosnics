@@ -32,7 +32,7 @@ class DeleterComponent extends Manager
         
         $path = $this->get_root_content_object()->get_complex_content_object_path();
         
-        $available_nodes = array();
+        $available_nodes = [];
 
         $failures = 0;
 
@@ -96,7 +96,7 @@ class DeleterComponent extends Manager
                         Activity::PROPERTY_CONTENT => $available_node->get_parent()->get_content_object()->get_title() .
                              ' > ' . $available_node->get_content_object()->get_title()));
                 
-                $hashes = array();
+                $hashes = [];
                 $hashes[] = $available_node->get_hash();
                 
                 $descendants = $available_node->get_descendants();
@@ -120,7 +120,7 @@ class DeleterComponent extends Manager
                 $current_parents_content_object_ids);
         }
         
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
         
         if ($failures > 0)

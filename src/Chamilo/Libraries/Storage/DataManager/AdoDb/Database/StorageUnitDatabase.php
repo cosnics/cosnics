@@ -67,7 +67,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      *
      * @return boolean
      */
-    public function alter($type, $storageUnitName, $property, $attributes = array())
+    public function alter($type, $storageUnitName, $property, $attributes = [])
     {
         try
         {
@@ -85,8 +85,8 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
                 // altering tables (yet)
-                $columns = array();
-                $columnData = array();
+                $columns = [];
+                $columnData = [];
 
                 if (isset($attributes['name']) && $type == StorageUnitRepository::ALTER_STORAGE_UNIT_CHANGE)
                 {
@@ -175,7 +175,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @return boolean
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function alterIndex($type, $storageUnitName, $name = null, $columns = array())
+    public function alterIndex($type, $storageUnitName, $name = null, $columns = [])
     {
         $query = 'ALTER TABLE ' . $storageUnitName . ' ';
 
@@ -440,7 +440,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      */
     public static function parseAttributes($attributes)
     {
-        $options = array();
+        $options = [];
 
         foreach ($attributes as $attribute => $value)
         {

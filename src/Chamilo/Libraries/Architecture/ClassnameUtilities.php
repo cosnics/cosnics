@@ -30,49 +30,49 @@ class ClassnameUtilities
      *
      * @var string[]
      */
-    private $namespaceIdMap = array();
+    private $namespaceIdMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $namespaceFromIdMap = array();
+    private $namespaceFromIdMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $namespaceMap = array();
+    private $namespaceMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $classnameMap = array();
+    private $classnameMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $packageNamespaceMap = array();
+    private $packageNamespaceMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $namespaceParentMap = array();
+    private $namespaceParentMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $namespaceChildMap = array();
+    private $namespaceChildMap = [];
 
     /**
      *
      * @var string[]
      */
-    private $namespacePathMap = array();
+    private $namespacePathMap = [];
 
     /**
      * Constructor
@@ -246,7 +246,7 @@ class ClassnameUtilities
      */
     public function getNamespacePath($namespace, $includeSelf = false, $reverseOrder = false)
     {
-        $namespacePath = array();
+        $namespacePath = [];
         $namespaceParts = explode('\\', $namespace);
 
         if ($includeSelf)

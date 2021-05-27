@@ -39,7 +39,7 @@ class AssessmentUserScoresBlock extends ToolBlock
         
         $users = CourseDataManager::retrieve_all_course_users($course_id);
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class,
@@ -63,8 +63,8 @@ class AssessmentUserScoresBlock extends ToolBlock
             ContentObjectPublication::class,
             new DataClassRetrievesParameters($condition, null, null, $order_by));
         
-        $publications = array();
-        $headings = array();
+        $publications = [];
+        $headings = [];
         $headings[] = Translation::get('Name');
         $headings[] = Translation::get('OfficialCode', null, Manager::context());
         foreach($publication_resultset as $publication)
@@ -116,7 +116,7 @@ class AssessmentUserScoresBlock extends ToolBlock
                     $title = $content_object->get_title();
                 }
                 
-                $conditions = array();
+                $conditions = [];
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(

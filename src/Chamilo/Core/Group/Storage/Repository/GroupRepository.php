@@ -116,7 +116,7 @@ class GroupRepository
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID));
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID));
 
-        $joinConditions = array();
+        $joinConditions = [];
 
         $joinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -164,7 +164,7 @@ class GroupRepository
      */
     public function findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), new StaticConditionVariable($groupCode)
         );
@@ -216,7 +216,7 @@ class GroupRepository
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroups(
-        Condition $condition = null, int $count = null, int $offset = null, array $orderBy = array()
+        Condition $condition = null, int $count = null, int $offset = null, array $orderBy = []
     )
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
@@ -231,7 +231,7 @@ class GroupRepository
      */
     public function findGroupsByIdentifiersOrderedByName($groupIdentifiers)
     {
-        $orderProperties = array();
+        $orderProperties = [];
         $orderProperties[] = new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
         $condition =
@@ -248,7 +248,7 @@ class GroupRepository
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsForDirectlySubscribedGroupNestingValues(
-        array $directlySubscribedGroupNestingValues = array()
+        array $directlySubscribedGroupNestingValues = []
     )
     {
         $parameters = new DataClassRetrievesParameters(
@@ -266,7 +266,7 @@ class GroupRepository
      */
     public function findGroupsForSearchQueryAndParentIdentifier(string $searchQuery = null, int $parentIdentifier = 0)
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($searchQuery && $searchQuery != '')
         {
@@ -328,7 +328,7 @@ class GroupRepository
     {
         if ($recursiveSubgroups)
         {
-            $childrenCondition = array();
+            $childrenCondition = [];
 
             $childrenCondition[] = new ComparisonCondition(
                 new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
@@ -378,9 +378,9 @@ class GroupRepository
         DataClassIterator $directlySubscribedGroupNestingValues
     )
     {
-        $treeConditions = array();
-        $alreadyIncludedParents = array();
-        $directGroupIds = array();
+        $treeConditions = [];
+        $alreadyIncludedParents = [];
+        $directGroupIds = [];
 
         foreach ($directlySubscribedGroupNestingValues as $descendent)
         {

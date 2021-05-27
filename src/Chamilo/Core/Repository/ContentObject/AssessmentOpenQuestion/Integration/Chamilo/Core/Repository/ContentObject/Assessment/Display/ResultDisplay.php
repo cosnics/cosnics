@@ -29,7 +29,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $answers = $this->get_answers();
         $configuration = $this->getViewerApplication()->get_configuration();
 
-        $html = array();
+        $html = [];
 
         switch ($type)
         {
@@ -79,7 +79,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
     public function display_open($answer)
     {
-        $html = array();
+        $html = [];
         $html[] = '<div style="padding: 0 10px 10px 10px;">';
         $html[] = '<h5>' . Translation::get('Answer') . '</h5>';
 
@@ -100,7 +100,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
     public function display_document_box($answer, $with_open = false)
     {
-        $html = array();
+        $html = [];
         if ($with_open)
         {
             $html[] = '<div style="padding: 0 10px 10px 10px;">';

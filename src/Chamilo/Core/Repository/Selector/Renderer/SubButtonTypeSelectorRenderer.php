@@ -31,7 +31,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
      * @param string[] $parameters
      */
     public function __construct(
-        Application $parent, TypeSelector $typeSelector, $parameters = array()
+        Application $parent, TypeSelector $typeSelector, $parameters = []
     )
     {
         parent::__construct($parent, $typeSelector);
@@ -45,7 +45,7 @@ class SubButtonTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render()
     {
-        $subButtons = array();
+        $subButtons = [];
 
         $firstItemExcluded = false;
 

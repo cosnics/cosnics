@@ -15,7 +15,7 @@ class ExternalSyncerComponent extends Manager
         $synchronization_data = $external_object->get_synchronization_data();
         $content_object = $synchronization_data->get_content_object();
         
-        $values = array();
+        $values = [];
         $values[ExternalObject::PROPERTY_ID] = $external_object->get_id();
         $values[ExternalObject::PROPERTY_TITLE] = trim(html_entity_decode(strip_tags($content_object->get_title())));
         $values[ExternalObject::PROPERTY_DESCRIPTION] = trim(

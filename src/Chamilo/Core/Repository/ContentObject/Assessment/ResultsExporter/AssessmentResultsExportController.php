@@ -109,14 +109,14 @@ class AssessmentResultsExportController
      * @param AssessmentResult[] $assessment_results
      * @param string[] $additional_column_headers
      */
-    public function __construct($assessments, $assessment_results, $additional_column_headers = array())
+    public function __construct($assessments, $assessment_results, $additional_column_headers = [])
     {
         $this->assessments = $assessments;
         $this->assessment_results = $assessment_results;
         $this->additional_column_headers = $additional_column_headers;
 
-        $this->data_row = array();
-        $this->export_data = array();
+        $this->data_row = [];
+        $this->export_data = [];
     }
 
     /**
@@ -159,7 +159,7 @@ class AssessmentResultsExportController
             $this->export_data[] = $this->data_row;
         }
 
-        $this->data_row = array();
+        $this->data_row = [];
     }
 
     /**

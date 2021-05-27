@@ -16,7 +16,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
 
     public function getEvents()
     {
-        $events = array();
+        $events = [];
         
         $object = $this->getContentObject();
         

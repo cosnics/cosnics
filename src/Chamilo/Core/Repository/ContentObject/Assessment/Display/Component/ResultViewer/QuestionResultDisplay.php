@@ -66,7 +66,7 @@ class QuestionResultDisplay
 
         if ($this->add_borders())
         {
-            $header = array();
+            $header = [];
             $header[] = '<div class="with_borders">';
 
             $this->form->addElement('html', implode(PHP_EOL, $header));
@@ -76,7 +76,7 @@ class QuestionResultDisplay
 
         if ($this->add_borders())
         {
-            $footer = array();
+            $footer = [];
             $footer[] = '<div class="clearfix"></div>';
             $footer[] = '</div>';
             $this->form->addElement('html', implode(PHP_EOL, $footer));
@@ -99,7 +99,7 @@ class QuestionResultDisplay
 
     public function display_feedback()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="before_feedback"></div>';
 
@@ -114,7 +114,7 @@ class QuestionResultDisplay
                 $html[] = '<div class="warning-message">' . Translation::get('NotYetRatedWarning') . '</div>';
             }
             $this->form->addElement('html', implode(PHP_EOL, $html));
-            $html = array();
+            $html = [];
             if ($this->feedback)
             {
                 $html[] = $this->feedback;
@@ -135,7 +135,7 @@ class QuestionResultDisplay
             }
 
             $this->form->addElement('html', implode(PHP_EOL, $html));
-            $html = array();
+            $html = [];
 
             $this->form->add_html_editor($this->complex_content_object_question->get_id() . '_feedback', '', false);
             $defaults[$this->complex_content_object_question->get_id() . '_feedback'] = $this->get_feedback();
@@ -158,7 +158,7 @@ class QuestionResultDisplay
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
 
         if ($this->question->has_description())
         {
@@ -215,7 +215,7 @@ class QuestionResultDisplay
 
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
 
@@ -226,14 +226,14 @@ class QuestionResultDisplay
         $html[] = '<div class="pull-right">';
 
         $this->form->addElement('html', implode(PHP_EOL, $html));
-        $html = array();
+        $html = [];
 
         if ($this->hints > 0)
         {
             $variable = $this->hints == 1 ? 'HintUsed' : 'HintsUsed';
             $label = Translation::get($variable, array('COUNT' => $this->hints));
 
-            $glyph = new FontAwesomeGlyph('magic', array(), $label, 'fas');
+            $glyph = new FontAwesomeGlyph('magic', [], $label, 'fas');
 
             $html[] = $glyph->render() . '&nbsp;&nbsp;';
         }

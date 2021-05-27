@@ -35,7 +35,7 @@ class ButtonGroupRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="' . $this->getClasses() . '">';
 

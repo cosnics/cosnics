@@ -96,7 +96,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 $includedCalendars =
                     implode(', ', $this->getCalendarRendererProvider($this->getUser())->getInternalSourceNames());
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
 
@@ -141,7 +141,7 @@ class ICalComponent extends Manager implements NoAuthenticationSupport
                 new CalendarRendererProviderRepository(),
                 $user,
                 $user,
-                array(),
+                [],
                 \Chamilo\Application\Calendar\Ajax\Manager::context()
             );
         }

@@ -31,7 +31,7 @@ class ManagerComponent extends ItemComponent implements TableSupport
         
         $table = new ItemTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

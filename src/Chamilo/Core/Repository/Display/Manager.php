@@ -86,7 +86,7 @@ abstract class Manager extends Application
             }
             else
             {
-                $this->selected_complex_content_object_item = array();
+                $this->selected_complex_content_object_item = [];
                 
                 foreach ($selected_complex_content_object_item_id as $id)
                 {

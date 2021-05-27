@@ -59,7 +59,7 @@ class ImporterComponent extends Manager
             );
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $rendition;

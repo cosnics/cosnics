@@ -9,7 +9,7 @@ namespace Chamilo\Configuration\Category\Interfaces;
 interface ImpactViewSupport
 {
 
-    public function render_impact_view($selected_category_ids = array());
+    public function render_impact_view($selected_category_ids = []);
 
-    public function has_impact($selected_category_ids = array());
+    public function has_impact($selected_category_ids = []);
 }

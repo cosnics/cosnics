@@ -15,7 +15,7 @@ class Change extends ChangesTracker
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_TARGET_USER_ID));
     }
@@ -51,7 +51,7 @@ class Change extends ChangesTracker
         $this->set_default_property(self::PROPERTY_TARGET_USER_ID, $target_user_id);
     }
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         parent::validate_parameters($parameters);
 

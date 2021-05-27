@@ -39,7 +39,7 @@ class ImporterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -52,7 +52,7 @@ class ImporterComponent extends Manager
 
     public function display_extra_information()
     {
-        $html = array();
+        $html = [];
         $html[] = '<p>' . Translation::get('XMLMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';

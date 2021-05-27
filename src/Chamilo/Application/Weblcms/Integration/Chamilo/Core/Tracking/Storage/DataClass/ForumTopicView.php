@@ -10,7 +10,7 @@ class ForumTopicView extends SimpleTracker
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_FORUM_TOPIC_ID = 'forum_topic_id';
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_user_id($parameters[self::PROPERTY_USER_ID]);
         $this->set_publication_id($parameters[self::PROPERTY_PUBLICATION_ID]);
@@ -18,7 +18,7 @@ class ForumTopicView extends SimpleTracker
         $this->set_date(time());
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

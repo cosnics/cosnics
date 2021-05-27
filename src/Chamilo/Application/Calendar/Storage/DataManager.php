@@ -24,7 +24,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function getEvents(Renderer $renderer, $from_date, $to_date)
     {
-        $events = array();
+        $events = [];
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(Manager::package());
         
         foreach ($registrations as $registration)

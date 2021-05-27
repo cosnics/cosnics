@@ -63,7 +63,7 @@ class UsersFeedComponent extends Manager
     {
         $searchQuery = Request::post(self::PARAM_SEARCH_QUERY);
 
-        $conditions = array();
+        $conditions = [];
 
         // Set the conditions for the search query
         if ($searchQuery && $searchQuery != '')
@@ -95,7 +95,7 @@ class UsersFeedComponent extends Manager
      */
     protected function getElementForUser(User $user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             'user_' . $user->get_id(), $glyph->getClassNamesString(), $user->get_fullname(), $user->get_official_code()
@@ -111,7 +111,7 @@ class UsersFeedComponent extends Manager
     {
         $elements = new AdvancedElementFinderElements();
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
         $user_category = new AdvancedElementFinderElement(

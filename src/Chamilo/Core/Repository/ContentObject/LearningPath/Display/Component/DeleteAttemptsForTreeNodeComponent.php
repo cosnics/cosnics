@@ -27,7 +27,7 @@ class DeleteAttemptsForTreeNodeComponent extends BaseReportingComponent
             throw new NotAllowedException();
         }
 
-        $parameters = $filters = array();
+        $parameters = $filters = [];
 
         $trackingService = $this->getTrackingService();
         $learningPath = $this->learningPath;

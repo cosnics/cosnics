@@ -59,7 +59,7 @@ class PropertyMapper
      */
     public function groupClassByProperty($dataClasses, $propertyName)
     {
-        $mappedDataClasses = array();
+        $mappedDataClasses = [];
 
         foreach ($dataClasses as $dataClass)
         {
@@ -71,7 +71,7 @@ class PropertyMapper
                 {
                     if (!array_key_exists($dataClass->$propertyName, $mappedDataClasses))
                     {
-                        $mappedDataClasses[$dataClass->$propertyName] = array();
+                        $mappedDataClasses[$dataClass->$propertyName] = [];
                     }
 
                     $mappedDataClasses[$dataClass->$propertyName][] = $dataClass;
@@ -91,7 +91,7 @@ class PropertyMapper
      */
     public function groupDataClassByMethod($dataClasses, $methodName)
     {
-        $mappedDataClasses = array();
+        $mappedDataClasses = [];
 
         foreach ($dataClasses as $dataClass)
         {
@@ -115,7 +115,7 @@ class PropertyMapper
      */
     public function groupDataClassByProperty($dataClasses, $propertyName)
     {
-        $mappedDataClasses = array();
+        $mappedDataClasses = [];
 
         foreach ($dataClasses as $dataClass)
         {
@@ -127,7 +127,7 @@ class PropertyMapper
                 {
                     if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
                     {
-                        $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = array();
+                        $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)] = [];
                     }
 
                     $mappedDataClasses[$dataClass->getDefaultProperty($propertyName)][] = $dataClass;
@@ -147,7 +147,7 @@ class PropertyMapper
      */
     public function groupRecordsByProperty($records, $propertyName)
     {
-        $mappedRecords = array();
+        $mappedRecords = [];
 
         foreach ($records as $record)
         {
@@ -157,7 +157,7 @@ class PropertyMapper
                 {
                     if (!array_key_exists($record[$propertyName], $mappedRecords))
                     {
-                        $mappedRecords[$record[$propertyName]] = array();
+                        $mappedRecords[$record[$propertyName]] = [];
                     }
 
                     $mappedRecords[$record[$propertyName]][] = $record;
@@ -177,7 +177,7 @@ class PropertyMapper
      */
     public function mapClassByProperties(array $classes, array $propertyNames)
     {
-        $mappedClasses = array();
+        $mappedClasses = [];
 
         foreach ($classes as $class)
         {
@@ -201,7 +201,7 @@ class PropertyMapper
      */
     public function mapDataClassByMethod($dataClasses, $methodName)
     {
-        $mappedDataClasses = array();
+        $mappedDataClasses = [];
 
         foreach ($dataClasses as $dataClass)
         {
@@ -225,7 +225,7 @@ class PropertyMapper
      */
     public function mapDataClassByProperty($dataClasses, $propertyName)
     {
-        $mappedDataClasses = array();
+        $mappedDataClasses = [];
 
         foreach ($dataClasses as $dataClass)
         {
@@ -249,7 +249,7 @@ class PropertyMapper
      */
     public function mapRecordsByProperty($records, $propertyName)
     {
-        $mappedRecords = array();
+        $mappedRecords = [];
 
         foreach ($records as $record)
         {

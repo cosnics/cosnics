@@ -23,7 +23,7 @@ class DependencyContainer
      * 
      * @param mixed[] $dependencies
      */
-    public function __construct($dependencies = array())
+    public function __construct($dependencies = [])
     {
         $this->set_dependencies($dependencies);
     }
@@ -158,7 +158,7 @@ class DependencyContainer
      * 
      * @param mixed[] $dependencies
      */
-    public function set_dependencies($dependencies = array())
+    public function set_dependencies($dependencies = [])
     {
         $this->dependencies = $dependencies;
     }

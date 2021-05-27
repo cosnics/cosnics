@@ -46,8 +46,8 @@ class RarContentObjectImportController extends ContentObjectImportController
     public function __construct($parameters)
     {
         parent::__construct($parameters);
-        $this->created_categories = array();
-        $this->created_content_object_ids = array();
+        $this->created_categories = [];
+        $this->created_content_object_ids = [];
         $this->temporary_path = Path::getInstance()->getTemporaryPath() . uniqid();
         Filesystem::create_dir($this->temporary_path);
     }
@@ -82,7 +82,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                     if (! $calculator->canUpload($total_filesize))
                     {
                         $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                        return array();
+                        return [];
                     }
 
                     if ($this->get_parameters()->get_category() == 0)
@@ -104,7 +104,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                         $this->created_categories[md5('/')] = $category;
                         $failures = 0;
                         // Create categories
-                        $folders = array();
+                        $folders = [];
 
                         foreach ($entries as $entry)
                         {

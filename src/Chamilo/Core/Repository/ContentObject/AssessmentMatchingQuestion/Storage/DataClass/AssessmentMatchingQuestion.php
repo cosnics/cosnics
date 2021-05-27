@@ -56,7 +56,7 @@ class AssessmentMatchingQuestion extends ContentObject implements Versionable
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -94,7 +94,7 @@ class AssessmentMatchingQuestion extends ContentObject implements Versionable
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**

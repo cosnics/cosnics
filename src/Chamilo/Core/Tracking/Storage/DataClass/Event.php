@@ -25,7 +25,7 @@ abstract class Event extends DataClass
     public function run($parameters)
     {
         $parameters['event'] = $this->get_name();
-        $data = array();
+        $data = [];
 
         $trackers = $this->get_trackers();
         foreach ($trackers as $tracker)
@@ -64,7 +64,7 @@ abstract class Event extends DataClass
      */
     public function getTrackerClasses()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class Event extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_NAME, self::PROPERTY_ACTIVE, self::PROPERTY_CONTEXT)
@@ -129,7 +129,7 @@ abstract class Event extends DataClass
     {
         if (!$this->trackers)
         {
-            $trackers = array();
+            $trackers = [];
 
             foreach ($this->getTrackerClasses() as $trackerClass)
             {

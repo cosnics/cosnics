@@ -71,7 +71,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $this->renderContentObjects($contentObjectIdentifiers);
@@ -109,10 +109,10 @@ class CreatorComponent extends Manager implements ViewerInterface
      */
     private function renderContentObjects(array $contentObjectIdentifiers)
     {
-        $html = array();
+        $html = [];
 
         $items_to_publish = count($contentObjectIdentifiers);
-        $publications = array();
+        $publications = [];
 
         if ($items_to_publish > 0)
         {

@@ -83,13 +83,13 @@ class CourseUsersFeedComponent extends Manager
     {
         $elements = new AdvancedElementFinderElements();
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
         $user_category = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), 'Users', 'Users');
         $elements->add_element($user_category);
 
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         $users = $this->retrieve_users();
         if ($users)
@@ -129,7 +129,7 @@ class CourseUsersFeedComponent extends Manager
         $course_id = $this->getPostDataValue(self::PARAM_COURSE_ID);
 
         // Retrieve the users directly subscribed to the course
-        $userConditions = array();
+        $userConditions = [];
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
@@ -153,7 +153,7 @@ class CourseUsersFeedComponent extends Manager
         );
 
         // Retrieve the users subscribed through platform groups
-        $groupConditions = array();
+        $groupConditions = [];
         $groupConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)
@@ -166,7 +166,7 @@ class CourseUsersFeedComponent extends Manager
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
-                new AndCondition($groupConditions), null, null, array(), new Joins(
+                new AndCondition($groupConditions), null, null, [], new Joins(
                     new Join(
                         CourseEntityRelation::class, new EqualityCondition(
                             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),
@@ -187,7 +187,7 @@ class CourseUsersFeedComponent extends Manager
             )
         );
 
-        $group_users = array();
+        $group_users = [];
 
         foreach($groups as $group)
         {

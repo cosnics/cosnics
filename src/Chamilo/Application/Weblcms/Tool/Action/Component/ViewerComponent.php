@@ -102,7 +102,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
             $result = '';
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $result;
@@ -113,7 +113,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $this->getButtonToolbarRenderer()->render();
@@ -130,7 +130,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         if ($this->feedback_allowed)
         {
@@ -274,7 +274,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
     private function get_feedback_conditions()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

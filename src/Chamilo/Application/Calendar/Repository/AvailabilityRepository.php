@@ -62,7 +62,7 @@ class AvailabilityRepository
      */
     public function findAvailabilitiesForUser(User $user, $isAvailable = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
@@ -91,7 +91,7 @@ class AvailabilityRepository
      */
     public function findAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
@@ -125,7 +125,7 @@ class AvailabilityRepository
     public function findAvailabilityByUserAndCalendarTypeAndCalendarIdentifier(User $user, $calendarType,
         $calendarIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Availability::class, Availability::PROPERTY_USER_ID),
             new StaticConditionVariable($user->getId()));

@@ -55,7 +55,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_content_object_type_conditions()
     {
         $video_types = File::get_video_types();
-        $video_conditions = array();
+        $video_conditions = [];
         foreach ($video_types as $video_type)
         {
             $video_conditions[] = new PatternMatchCondition(
@@ -107,7 +107,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
      */
     public function get_external_repository_object_viewing_url($object)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_EXTERNAL_REPOSITORY;
         $parameters[self::PARAM_EXTERNAL_REPOSITORY_ID] = $object->get_id();
 
@@ -120,31 +120,31 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
 
     public function get_menu_items()
     {
-        $menu_items = array();
+        $menu_items = [];
 
         if ($this->get_external_repository()->get_user_setting($this->get_user_id(), 'session_token'))
         {
-            $my_videos = array();
+            $my_videos = [];
             $my_videos['title'] = Translation::get('MyChannel');
             $my_videos['url'] = $this->get_url(
                 array(self::PARAM_FEED_TYPE => self::FEED_TYPE_MYVIDEOS),
                 array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER)
             );
 
-            $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
             $my_videos['class'] = $glyph->getClassNamesString();
 
             $menu_items[] = $my_videos;
         }
 
-        $browser = array();
+        $browser = [];
         $browser['title'] = Translation::get('Public');
         $browser['url'] = $this->get_url(
             array(self::PARAM_FEED_TYPE => self::FEED_TYPE_GENERAL),
             array(ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY, self::PARAM_FEED_IDENTIFIER)
         );
 
-        $glyph = new FontAwesomeGlyph('home', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], null, 'fas');
         $browser['class'] = $glyph->getClassNamesString();
 
         $menu_items[] = $browser;

@@ -65,7 +65,7 @@ abstract class CourseSettingRelation extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function get_default_property_names($extended_property_names = array())
+    static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_COURSE_SETTING_ID;
         $extended_property_names[] = self::PROPERTY_VALUE;

@@ -34,7 +34,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
      */
     public function renderContentHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
 
@@ -77,7 +77,7 @@ class Month extends BlockRenderer implements StaticBlockTitleInterface
             $calendarLegend = new Legend($dataProvider);
 
             $time = Request::get('time') ? intval(Request::get('time')) : time();
-            return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, array(), $this->getLinkTarget());
+            return new MiniMonthRenderer($dataProvider, $calendarLegend, $time, [], $this->getLinkTarget());
         }
 
         return $this->calendarRenderer;

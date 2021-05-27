@@ -55,7 +55,7 @@ abstract class BootstrapTreeMenu
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div id="' . $this->getMenuName() . '">';
         $html[] = '</div>';

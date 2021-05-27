@@ -66,7 +66,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      *
      * @throws \Exception
      */
-    public function attachRolesToCoursesByIds(User $user, $courseIds = array(), $roleIds = array())
+    public function attachRolesToCoursesByIds(User $user, $courseIds = [], $roleIds = [])
     {
         $this->authorizationChecker->checkAuthorization($user, Manager::context(), 'ManageOpenCourses');
 
@@ -136,7 +136,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      *
      * @return DataClassIterator
      */
-    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
     {
         return $this->openCourseRepository->findClosedCourses($condition, $offset, $count, $orderBy);
     }
@@ -153,7 +153,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @return DataClassIterator
      */
     public function getOpenCourses(
-        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = array()
+        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = []
     )
     {
         if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))
@@ -221,7 +221,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      *
      * @throws \Exception
      */
-    public function updateRolesForCourses(User $user, $courseIds = array(), $roleIds = array())
+    public function updateRolesForCourses(User $user, $courseIds = [], $roleIds = [])
     {
         $this->removeCoursesAsOpenCourse($user, $courseIds);
         $this->attachRolesToCoursesByIds($user, $courseIds, $roleIds);

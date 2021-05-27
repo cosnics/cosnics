@@ -63,7 +63,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_subscribe_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
@@ -131,7 +131,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
 
         $users = $this->retrieve_group_rel_users($condition);
 
-        $conditions = array();
+        $conditions = [];
         foreach($users as $user)
         {
             $conditions[] = new NotCondition(
@@ -173,7 +173,7 @@ class SubscribeUserBrowserComponent extends Manager implements TableSupport
         $table = new SubscribeUserTable($this);
         $table->setSearchForm($this->buttonToolbarRenderer->getSearchForm());
 
-        $html = array();
+        $html = [];
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);

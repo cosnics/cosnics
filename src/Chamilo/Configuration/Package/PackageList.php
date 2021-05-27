@@ -76,7 +76,7 @@ class PackageList
      * @param \Chamilo\Configuration\Package\PackageList[] $children
      */
     public function __construct(
-        $type, $type_name, $type_icon = null, array $packages = array(), array $children = array()
+        $type, $type_name, $type_icon = null, array $packages = [], array $children = []
     )
     {
         $this->type = $type;
@@ -110,7 +110,7 @@ class PackageList
     {
         if (!isset($this->all_packages[$recursive]))
         {
-            $this->all_packages[$recursive] = array();
+            $this->all_packages[$recursive] = [];
 
             if (count($this->get_packages()) > 0)
             {
@@ -171,7 +171,7 @@ class PackageList
     {
         if (!isset($this->list[$recursive]))
         {
-            $this->list[$recursive] = array();
+            $this->list[$recursive] = [];
 
             if (count($this->get_packages()) > 0)
             {
@@ -292,7 +292,7 @@ class PackageList
     {
         if (!isset($this->types[$recursive]))
         {
-            $this->types[$recursive] = array();
+            $this->types[$recursive] = [];
 
             if (count($this->get_packages()) > 0)
             {

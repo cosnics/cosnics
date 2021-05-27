@@ -63,7 +63,7 @@ class FormValidator extends HTML_QuickForm
      *        (default = true)
      */
     public function __construct(
-        $formName = '', $method = self::FORM_METHOD_POST, $action = '', $target = '', $attributes = array(),
+        $formName = '', $method = self::FORM_METHOD_POST, $action = '', $target = '', $attributes = [],
         $trackSubmit = true
     )
     {
@@ -108,7 +108,7 @@ class FormValidator extends HTML_QuickForm
             }
         }
 
-        $html = array();
+        $html = [];
 
         if ($this->no_errors)
         {
@@ -147,7 +147,7 @@ EOT;
      * @internal param string $uploadType
      */
     public function addFileDropzone(
-        $elementName, $dropzoneOptions = array(), $includeLabel = true, $markRequired = false
+        $elementName, $dropzoneOptions = [], $includeLabel = true, $markRequired = false
     )
     {
         $autoProcess = true;
@@ -166,7 +166,7 @@ EOT;
         $this->addElement('file', $elementName, sprintf($this->getTranslation('FileName')));
         $this->addElement('html', '</div>');
 
-        $dropzoneHtml = array();
+        $dropzoneHtml = [];
 
         $dropzoneHtml[] = '<div id="' . $elementName . '-upload" class="file-upload">';
 
@@ -175,7 +175,7 @@ EOT;
         $dropzoneHtml[] = '<div class="preview">';
         $dropzoneHtml[] = '<div class="file-upload-no-preview">';
 
-        $glyph = new FontAwesomeGlyph('file', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('file', [], null, 'fas');
         $dropzoneHtml[] = $glyph->render();
 
         $dropzoneHtml[] = '</div>';
@@ -198,7 +198,7 @@ EOT;
         $dropzoneHtml[] = '<div class="file-upload-buttons-group btn-group btn-group-vertical">';
         $dropzoneHtml[] = '<a data-dz-remove class="btn btn-danger delete">';
 
-        $glyph = new FontAwesomeGlyph('trash-alt', array(), $this->getTranslation('Delete'), 'fas');
+        $glyph = new FontAwesomeGlyph('trash-alt', [], $this->getTranslation('Delete'), 'fas');
         $dropzoneHtml[] = $glyph->render() . ' <span>' . $this->getTranslation('Delete') . '</span>';
 
         $dropzoneHtml[] = '</a>';
@@ -256,7 +256,7 @@ EOT;
         $this->addElement('static', $elementName . '_static_data', $label, implode(PHP_EOL, $dropzoneHtml));
         $this->addElement('hidden', $elementName . '_upload_data');
 
-        $dropzoneOptionsString = array();
+        $dropzoneOptionsString = [];
 
         foreach ($dropzoneOptions as $optionKey => $optionValue)
         {
@@ -269,7 +269,7 @@ EOT;
         )
         );
 
-        $javascriptHtml = array();
+        $javascriptHtml = [];
 
         $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
@@ -355,7 +355,7 @@ EOT;
      */
     protected function addMessage($type, $name, $label, $message, $noMargin = false)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div id="' . $name . '" class="form-row row">';
 
@@ -388,15 +388,15 @@ EOT;
 
     public function addSaveResetButtons()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Save', array(), Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'submit', $this->getTranslation('Save', [], Utilities::COMMON_LIBRARIES),
             array('class' => 'positive')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset', array(), Utilities::COMMON_LIBRARIES),
+            'style_reset_button', 'reset', $this->getTranslation('Reset', [], Utilities::COMMON_LIBRARIES),
             array('class' => 'normal empty')
         );
 
@@ -409,7 +409,7 @@ EOT;
      * @param string[] $dropzoneOptions
      * @param boolean $includeLabel
      */
-    public function addSingleFileDropzone($elementName, $dropzoneOptions = array(), $includeLabel = true)
+    public function addSingleFileDropzone($elementName, $dropzoneOptions = [], $includeLabel = true)
     {
         $dropzoneOptions['maxFiles'] = 1;
         $dropzoneOptions['successCallbackFunction'] = 'chamilo.libraries.single.processUploadedFile';
@@ -446,7 +446,7 @@ EOT;
             $toElementName = $elementNamePrefix . '[' . $toElementName . ']';
         }
 
-        $choices = array();
+        $choices = [];
 
         $choices[] = $this->createElement(
             'radio', $foreverElementName, '', $this->getTranslation('Forever'), 1
@@ -526,7 +526,7 @@ EOT;
      * @param string[] $options
      * @param string[] $attributes
      */
-    public function add_html_editor($name, $label, $required = true, $options = array(), $attributes = array())
+    public function add_html_editor($name, $label, $required = true, $options = [], $attributes = [])
     {
         $html_editor = new FormValidatorHtmlEditor($name, $label, $required, $options, $attributes);
         $html_editor->set_form($this);
@@ -556,7 +556,7 @@ EOT;
      *
      * @return \HTML_QuickForm_password
      */
-    public function add_password($name, $label, $required = true, $attributes = array())
+    public function add_password($name, $label, $required = true, $attributes = [])
     {
         /**
          * @var \HTML_QuickForm_password $element
@@ -566,7 +566,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -584,7 +584,7 @@ EOT;
      *
      * @return \HTML_QuickForm_select The element.
      */
-    public function add_select($name, $label, $values, $required = true, $attributes = array())
+    public function add_select($name, $label, $values, $required = true, $attributes = [])
     {
         /**
          * @var \HTML_QuickForm_select $element
@@ -594,7 +594,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -613,7 +613,7 @@ EOT;
      * @return \HTML_QuickForm_text The element.
      * @throws \Exception
      */
-    public function add_textfield($name, $label, $required = true, $attributes = array())
+    public function add_textfield($name, $label, $required = true, $attributes = [])
     {
         /**
          * @var \HTML_QuickForm_text $element
@@ -625,7 +625,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
             );
         }
 
@@ -647,7 +647,7 @@ EOT;
      */
     public function add_timewindow($firstName, $secondName, $firstLabel, $secondLabel, $includeTimePicker = true)
     {
-        $elements = array();
+        $elements = [];
 
         $elements[] = $this->add_datepicker($firstName, $firstLabel, $includeTimePicker);
         $elements[] = $this->add_datepicker($secondName, $secondLabel, $includeTimePicker);
@@ -705,7 +705,7 @@ EOT;
      *
      * @return \HTML_QuickForm_textarea
      */
-    public function create_html_editor($name, $label, $options = array(), $attributes = array())
+    public function create_html_editor($name, $label, $options = [], $attributes = [])
     {
         $html_editor = new FormValidatorHtmlEditor($name, $label, false, $options, $attributes);
         $html_editor->set_form($this);
@@ -722,14 +722,14 @@ EOT;
      *
      * @return \HTML_QuickForm_password
      */
-    public function create_password($name, $label, $attributes = array())
+    public function create_password($name, $label, $attributes = [])
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
         return $this->createElement('password', $name, $label, $attributes);
     }
 
-    public function create_select($name, $label, $values, $attributes = array())
+    public function create_select($name, $label, $values, $attributes = [])
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
@@ -744,7 +744,7 @@ EOT;
      *
      * @return \HTML_QuickForm_text
      */
-    public function create_textfield($name, $label, $attributes = array())
+    public function create_textfield($name, $label, $attributes = [])
     {
         $attributes = $this->addFormControlToElementAttributes($attributes);
 
@@ -756,7 +756,7 @@ EOT;
      */
     protected function disableSubmitButton()
     {
-        $javascriptHtml = array();
+        $javascriptHtml = [];
 
         $javascriptHtml[] = '<script>';
         $javascriptHtml[] = '$(document).ready(function() {';
@@ -788,7 +788,7 @@ EOT;
      */
     public function getElementTemplate($extraClasses = null)
     {
-        $html = array();
+        $html = [];
         $glyph = new FontAwesomeGlyph('star', array('text-danger', 'fa-xs'), null, 'fas');
 
         $html[] = '<div class="form-row row ' . $extraClasses . '">';
@@ -811,7 +811,7 @@ EOT;
      */
     public function getFormTemplate()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<form {attributes}>';
         $html[] = '{content}';
@@ -823,7 +823,7 @@ EOT;
 
     public function getRequiredNoteTemplate()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="form-row row">';
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 form-label"></div>';
@@ -842,7 +842,7 @@ EOT;
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array(), $context = Utilities::COMMON_LIBRARIES)
+    protected function getTranslation($variable, $parameters = [], $context = Utilities::COMMON_LIBRARIES)
     {
         return $this->getTranslator()->trans($variable, $parameters, $context);
     }
@@ -887,7 +887,7 @@ EOT;
      */
     protected function multi_dimensional_array_to_single_dimensional_array($array, $level = 0)
     {
-        $single_dimension_array = array();
+        $single_dimension_array = [];
 
         foreach ($array as $key => $element)
         {
@@ -1018,7 +1018,7 @@ EOT;
 
         HTML_QuickForm::setRequiredNote(
             '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
-            $this->getTranslation('ThisFieldIsRequired', array(), Utilities::COMMON_LIBRARIES) . '</small></span>'
+            $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES) . '</small></span>'
         );
 
         $this->renderer = $this->defaultRenderer();

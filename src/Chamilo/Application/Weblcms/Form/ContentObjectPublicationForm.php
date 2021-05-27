@@ -136,7 +136,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function __construct(
         $toolContext, User $user, $form_type, $publications, $course, $action, $is_course_admin,
-        $selectedContentObjects = array()
+        $selectedContentObjects = []
     )
     {
         parent::__construct('content_object_publication_form', self::FORM_METHOD_POST, $action);
@@ -175,7 +175,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $this->is_course_admin = $is_course_admin;
         $this->setSelectedContentObjects($selectedContentObjects);
 
-        $this->entities = array();
+        $this->entities = [];
         $this->entities[CourseUserEntity::ENTITY_TYPE] = new CourseUserEntity($course->get_id());
         $this->entities[CourseGroupEntity::ENTITY_TYPE] = new CourseGroupEntity($course->get_id());
         $this->entities[CoursePlatformGroupEntity::ENTITY_TYPE] = new CoursePlatformGroupEntity($course->get_id());
@@ -376,14 +376,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $translator = Translation::getInstance();
 
         // Add the inheritance option
-        $group = array();
+        $group = [];
 
         $group[] = $this->createElement(
             'radio', null, null, Translation::get('InheritRights'), self::RIGHTS_INHERIT,
             array('class' => 'rights_selector inherit_rights_selector')
         );
 
-        $html = array();
+        $html = [];
         $html[] = '<div class="target-entities-container clearfix" data-course-id="' . $this->get_course_id() .
             '" data-tool="' . $this->get_tool() . '">';
 
@@ -523,7 +523,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }
@@ -584,7 +584,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
     private function get_course_viewer_link($publication)
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Manager::PARAM_CONTEXT] = Manager::package();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
@@ -703,7 +703,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
             ' - ' . Translation::get('TypeName', null, 'Chamilo\Application\Weblcms\Tool\Implementation\\' . $tool);
 
         // get targets
-        $target_email = array();
+        $target_email = [];
 
         // Add the publisher to the email address
         $target_email[] = $user->get_email();
@@ -725,7 +725,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $body);
         $elements = $doc->getElementsByTagname('resource');
 
-        $mailFiles = array();
+        $mailFiles = [];
         $index = 0;
 
         // replace image document resource tags with a html img tag with base64
@@ -786,7 +786,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $mail = new Mail(
-            $subject, $body, $unique_email, true, array(), array(), $user->get_fullname(), $user->get_email(), null,
+            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null,
             null, $mailFiles
         );
 
@@ -830,7 +830,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $publications = $this->publications;
 
@@ -1027,7 +1027,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function set_right_defaults(ContentObjectPublication $publication)
     {
-        $right_defaults = array();
+        $right_defaults = [];
 
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_PUBLICATION, $publication->get_id(), $publication->get_course_id()
@@ -1090,7 +1090,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
      */
     public function validate_rights_settings($values)
     {
-        $errors = array();
+        $errors = [];
 
         if ($values[self::PROPERTY_RIGHTS_SELECTOR] == self::RIGHTS_SELECT_SPECIFIC &&
             empty($values['active_hidden_' . self::PROPERTY_TARGETS]))

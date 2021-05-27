@@ -38,7 +38,7 @@ class PublicationForm extends BasePublicationForm
      *
      * @throws \Exception
      */
-    public function __construct(User $formUser, $action, $selectedContentObjects = array())
+    public function __construct(User $formUser, $action, $selectedContentObjects = [])
     {
         parent::__construct('publish', self::FORM_METHOD_POST, $action);
 
@@ -126,10 +126,10 @@ class PublicationForm extends BasePublicationForm
      */
     public function setPublicationDefaults(Publication $publication, $targetUsers, $targetGroups)
     {
-        $defaults[self::PARAM_SHARE_ELEMENTS] = array();
+        $defaults[self::PARAM_SHARE_ELEMENTS] = [];
 
-        $groupGlyph = new FontAwesomeGlyph('users', array(), null, 'fas');
-        $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $groupGlyph = new FontAwesomeGlyph('users', [], null, 'fas');
+        $userGlyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         $userEntityProvider = $this->getUserEntityProvider();
         $groupEntityProvider = $this->getGroupEntityProvider();
@@ -151,7 +151,7 @@ class PublicationForm extends BasePublicationForm
         //
         //        foreach ($targetGroups as $targetGroup)
         //        {
-        //            $selectedGroup = array();
+        //            $selectedGroup = [];
         //            $selectedGroup['id'] = 'group_' . $targetGroup->getId();
         //            $selectedGroup['classes'] = $groupGlyph->getClassNamesString();
         //            $selectedGroup['title'] = $targetGroup->get_name();
@@ -162,7 +162,7 @@ class PublicationForm extends BasePublicationForm
         //
         //        foreach ($targetUsers as $targetUser)
         //        {
-        //            $selectedUser = array();
+        //            $selectedUser = [];
         //            $selectedUser['id'] = 'user_' . $targetUser->getId();
         //            $selectedUser['classes'] = $userGlyph->getClassNamesString();
         //            $selectedUser['title'] = $targetUser->get_fullname();

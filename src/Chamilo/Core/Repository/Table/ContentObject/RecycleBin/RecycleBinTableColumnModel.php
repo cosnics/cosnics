@@ -17,7 +17,7 @@ class RecycleBinTableColumnModel extends DataClassTableColumnModel implements Ta
 
     public function initialize_columns()
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
         $this->add_column(
             new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
         );

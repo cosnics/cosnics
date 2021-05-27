@@ -33,16 +33,16 @@ class PackageTypeMenu extends HtmlMenu
 
     private function get_items(PackageList $package_list)
     {
-        $item = array();
+        $item = [];
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         $item['class'] = $glyph->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
         
-        $sub_items = array();
+        $sub_items = [];
         
         foreach ($package_list->get_children() as $child)
         {

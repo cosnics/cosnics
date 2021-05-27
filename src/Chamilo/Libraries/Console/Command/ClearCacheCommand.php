@@ -26,8 +26,8 @@ class ClearCacheCommand extends CacheCommand
             self::OPT_WARMUP,
             self::OPT_WARMUP_SHORT,
             InputOption::VALUE_NONE,
-            $this->translator->trans('WarmupCache', array(), 'Chamilo\Libraries'))->setDescription(
-            $this->translator->trans('ClearCacheDescription', array(), 'Chamilo\Libraries'));
+            $this->translator->trans('WarmupCache', [], 'Chamilo\Libraries'))->setDescription(
+            $this->translator->trans('ClearCacheDescription', [], 'Chamilo\Libraries'));
 
         parent::configure();
     }

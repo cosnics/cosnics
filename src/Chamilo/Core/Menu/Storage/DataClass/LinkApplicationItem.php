@@ -27,7 +27,7 @@ class LinkApplicationItem extends Item
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = null)
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);
@@ -196,7 +196,7 @@ class LinkApplicationItem extends Item
      */
     public function getTargetTypes($typesOnly = false)
     {
-        $types = array();
+        $types = [];
 
         $types[self::TARGET_BLANK] = self::targetString(self::TARGET_BLANK);
         $types[self::TARGET_SELF] = self::targetString(self::TARGET_SELF);
@@ -211,7 +211,7 @@ class LinkApplicationItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('link', array(), null, 'fas');
+        return new FontAwesomeGlyph('link', [], null, 'fas');
     }
 
     /**

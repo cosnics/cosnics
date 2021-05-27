@@ -43,7 +43,7 @@ class PublicationRepository
     {
         $this->checkPublicationClassName($publicationClassName);
 
-        $propertiesArray = array();
+        $propertiesArray = [];
 
         $propertiesArray[] = new PropertiesConditionVariable($publicationClassName);
 
@@ -211,7 +211,7 @@ class PublicationRepository
 
         $defaultProperties[ContentObject::PROPERTY_ID] = $publication->get_content_object_id();
 
-        $additionalProperties = array();
+        $additionalProperties = [];
 
         if ($contentObjectTypeClassName)
         {
@@ -255,7 +255,7 @@ class PublicationRepository
      */
     protected function hydratePublications($records, $publicationClassName, $contentObjectTypeClassName = null)
     {
-        $publications = array();
+        $publications = [];
 
         foreach($records as $record)
         {

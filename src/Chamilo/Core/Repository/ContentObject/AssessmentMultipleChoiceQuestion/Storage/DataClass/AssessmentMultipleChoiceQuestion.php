@@ -52,7 +52,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_HINT));
     }
@@ -105,7 +105,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**

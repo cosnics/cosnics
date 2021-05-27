@@ -42,7 +42,7 @@ class VersionTableColumnModel extends DataClassTableColumnModel implements Table
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_COMMENT)
         );
 
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
         $this->add_column(
             new StaticTableColumn(self::PROPERTY_TYPE, $glyph->render())
         );

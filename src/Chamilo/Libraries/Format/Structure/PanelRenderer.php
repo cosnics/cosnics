@@ -29,7 +29,7 @@ class PanelRenderer
      */
     public function render($title, $content, $mode = self::MODE_DEFAULT)
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderPanelHeader($title, $mode);
         $html[] = '<div class="panel-body">';
@@ -64,7 +64,7 @@ class PanelRenderer
      */
     protected function renderPanelFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
 
@@ -85,7 +85,7 @@ class PanelRenderer
 
         $contextualClass = 'panel-' . $mode;
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel ' . $contextualClass . '">';
 
@@ -108,9 +108,9 @@ class PanelRenderer
      *
      * @return string
      */
-    public function renderTablePanel($title, $tableValues = array(), $mode = self::MODE_DEFAULT)
+    public function renderTablePanel($title, $tableValues = [], $mode = self::MODE_DEFAULT)
     {
-        $html = array();
+        $html = [];
         $html[] = $this->renderPanelHeader($title, $mode);
 
         $html[] = '<table class="table table-bordered">';

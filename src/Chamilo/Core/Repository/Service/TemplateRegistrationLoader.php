@@ -137,7 +137,7 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
     public function loadData()
     {
         $templateRegistrations = $this->getTemplateRegistrationRepository()->findTemplateRegistrations();
-        $groupedRegistrations = array();
+        $groupedRegistrations = [];
 
         foreach ($templateRegistrations as $templateRegistration)
         {

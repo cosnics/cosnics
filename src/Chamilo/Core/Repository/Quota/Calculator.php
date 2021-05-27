@@ -278,7 +278,7 @@ class Calculator
      */
     public static function getBar($percent, $status)
     {
-        $html = array();
+        $html = [];
 
         if ($percent >= 100)
         {
@@ -336,7 +336,7 @@ class Calculator
     {
         $userGroupIds = $this->user->get_groups(true);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );
@@ -364,7 +364,7 @@ class Calculator
     {
         $userGroupIds = $this->user->get_groups(true);
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $userGroupIds
         );

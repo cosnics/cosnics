@@ -172,7 +172,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      */
     public function deleteTreeNodeDataForLearningPath(LearningPath $learningPath)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getConditionForLearningPath($learningPath);
 

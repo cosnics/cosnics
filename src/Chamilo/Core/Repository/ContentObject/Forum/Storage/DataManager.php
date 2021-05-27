@@ -41,7 +41,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_subscribe($forum_id, $user_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
@@ -73,7 +73,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ForumSubscribe::class,
             new DataClassRetrievesParameters($condition));
 
-        $users = array();
+        $users = [];
 
         foreach($subscriptions as $subscription)
         {
@@ -161,7 +161,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $forum_post_alias = self::get_alias(ForumPost::get_table_name());
 
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
             SORT_DESC,
@@ -198,7 +198,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $forum_post_alias = self::get_alias(ForumPost::get_table_name());
 
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
             SORT_DESC,

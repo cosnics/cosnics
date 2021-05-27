@@ -48,7 +48,7 @@ class PublicationForm extends ContentObjectPublicationForm
      */
     public function __construct(
         User $user, $form_type, $publications, $course, $action, $is_course_admin,
-        $selectedContentObjects = array(), Translator $translator, PublicationRepository $publicationRepository
+        $selectedContentObjects = [], Translator $translator, PublicationRepository $publicationRepository
     )
     {
         $this->translator = $translator;

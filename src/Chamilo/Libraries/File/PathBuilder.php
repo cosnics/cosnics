@@ -51,7 +51,7 @@ class PathBuilder
      *
      * @var string[]
      */
-    private $cache = array();
+    private $cache = [];
 
     /**
      * Constructor

@@ -65,7 +65,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
                 }
             }
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $output;
@@ -85,7 +85,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
 
         $table = new WhoisOnlineTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);
@@ -125,11 +125,11 @@ class WhoisOnlineComponent extends Manager implements TableSupport
             (int) $user_id);
 
         $html[] = '<br /><div style="float: left; width: 150px;">';
-        $html[] = Translation::get('Username', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
-        $html[] = Translation::get('Fullname', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
-        $html[] = Translation::get('OfficialCode', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
-        $html[] = Translation::get('Email', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
-        $html[] = Translation::get('Status', array(), \Chamilo\Core\User\Manager::context()) . ':<br />';
+        $html[] = Translation::get('Username', [], \Chamilo\Core\User\Manager::context()) . ':<br />';
+        $html[] = Translation::get('Fullname', [], \Chamilo\Core\User\Manager::context()) . ':<br />';
+        $html[] = Translation::get('OfficialCode', [], \Chamilo\Core\User\Manager::context()) . ':<br />';
+        $html[] = Translation::get('Email', [], \Chamilo\Core\User\Manager::context()) . ':<br />';
+        $html[] = Translation::get('Status', [], \Chamilo\Core\User\Manager::context()) . ':<br />';
         $html[] = '</div><div style="float: left; width: 250px;">';
         $html[] = $user->get_username() . '<br />';
         $html[] = $user->get_fullname() . '<br />';

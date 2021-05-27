@@ -89,7 +89,7 @@ class ViewerComponent extends Manager implements TableSupport
                             new Button(
                                 Translation::get('EphorusComponent'), new NamespaceIdentGlyph(
                                 'Chamilo\Application\Weblcms\Tool\Implementation\Ephorus', true, false, false,
-                                IdentGlyph::SIZE_MINI, array()
+                                IdentGlyph::SIZE_MINI, []
                             ), $this->get_url([self::PARAM_ACTION => self::ACTION_EPHORUS])
                             )
                         )

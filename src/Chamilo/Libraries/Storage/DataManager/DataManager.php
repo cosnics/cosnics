@@ -42,7 +42,7 @@ class DataManager
      * @return boolean
      * @throws \Exception
      */
-    public static function alter_storage_unit($type, $table_name, $property, $attributes = array())
+    public static function alter_storage_unit($type, $table_name, $property, $attributes = [])
     {
         return self::getStorageUnitRepository()->alter($type, $table_name, $property, $attributes);
     }
@@ -57,7 +57,7 @@ class DataManager
      * @return boolean
      * @throws \Exception
      */
-    public static function alter_storage_unit_index($type, $table_name, $name = null, $columns = array())
+    public static function alter_storage_unit_index($type, $table_name, $name = null, $columns = [])
     {
         return self::getStorageUnitRepository()->alterIndex($type, $table_name, $name, $columns);
     }
@@ -76,7 +76,7 @@ class DataManager
      * @example $display_order_mapping[$old_display_order] = $new_display_order;
      */
     public static function change_display_orders_by_mapping_array(
-        $class_name, $display_order_property, $display_order_mapping = array(), $display_order_condition = null
+        $class_name, $display_order_property, $display_order_mapping = [], $display_order_condition = null
     )
     {
         return self::getDataClassRepository()->changeDisplayOrdersByMappingArray(
@@ -525,7 +525,7 @@ class DataManager
      * @throws \Exception
      */
     public static function updates(
-        $class, $properties, Condition $condition, $offset = null, $count = null, $order_by = array()
+        $class, $properties, Condition $condition, $offset = null, $count = null, $order_by = []
     )
     {
         return self::getDataClassRepository()->updates($class, $properties, $condition, $offset, $count, $order_by);

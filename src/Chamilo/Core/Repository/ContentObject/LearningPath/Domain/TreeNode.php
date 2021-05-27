@@ -84,9 +84,9 @@ class TreeNode
         $this->contentObject = $contentObject;
         $this->treeNodeData = $treeNodeData;
 
-        $this->parentNodes = array();
-        $this->childNodes = array();
-        $this->descendantNodes = array();
+        $this->parentNodes = [];
+        $this->childNodes = [];
+        $this->descendantNodes = [];
 
         $tree->addTreeNode($this);
     }
@@ -411,7 +411,7 @@ class TreeNode
      */
     public function getTreeNodeDataIdsFromSelfAndDescendants()
     {
-        $treeNodeDataIds = array();
+        $treeNodeDataIds = [];
 
         $treeNodeDataIds[] = $this->getId();
 

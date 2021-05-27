@@ -143,7 +143,7 @@ class ExecuteForm extends FormValidator
     {
         $options = $element->get_options();
         
-        $group = array();
+        $group = [];
         
         foreach ($options as $index => $option)
         {
@@ -195,7 +195,7 @@ class ExecuteForm extends FormValidator
         return $return;
     }
 
-    public function setDefaults($parameters = array())
+    public function setDefaults($parameters = [])
     {
         $subcondition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, Element::PROPERTY_DYNAMIC_FORM_ID),

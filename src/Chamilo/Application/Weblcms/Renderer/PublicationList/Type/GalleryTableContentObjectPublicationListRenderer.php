@@ -18,7 +18,7 @@ class GalleryTableContentObjectPublicationListRenderer extends ContentObjectPubl
     TableSupport
 {
 
-    public function __construct($tool_browser, $parameters = array())
+    public function __construct($tool_browser, $parameters = [])
     {
         parent::__construct($tool_browser, $parameters);
         $this->addWarning();

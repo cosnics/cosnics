@@ -202,7 +202,7 @@ class Manager implements PublicationInterface
                     new StaticConditionVariable($object_id));
                 break;
             default :
-                return array();
+                return [];
         }
 
         if ($condition instanceof Condition)
@@ -216,7 +216,7 @@ class Manager implements PublicationInterface
 
         $result = self::retrieve_content_object_publications($condition, $order_properties, $offset, $count);
 
-        $publication_attributes = array();
+        $publication_attributes = [];
 
         foreach($result as $record)
         {
@@ -233,7 +233,7 @@ class Manager implements PublicationInterface
      */
     protected static function get_content_object_publication_joins()
     {
-        $joins = array();
+        $joins = [];
 
         $joins[] = new Join(
             ContentObject::class,
@@ -263,10 +263,10 @@ class Manager implements PublicationInterface
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_content_object_publications($condition = null, $order_by = array(), $offset = 0,
+    public static function retrieve_content_object_publications($condition = null, $order_by = [], $offset = 0,
         $max_objects = -1)
     {
-        $data_class_properties = array();
+        $data_class_properties = [];
 
         $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
 

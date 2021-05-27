@@ -52,7 +52,7 @@ abstract class Manager extends Application
 
     public function get_entity_types()
     {
-        $types = array();
+        $types = [];
 
         $types[] = UserEntity::class;
         $types[] = PlatformGroupEntity::class;
@@ -139,7 +139,7 @@ abstract class Manager extends Application
     {
         $selected_type = Request::get(self::PARAM_TARGET_TYPE, CourseEntity::ENTITY_TYPE);
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -211,7 +211,7 @@ abstract class Manager extends Application
 
     public function get_target_types()
     {
-        $types = array();
+        $types = [];
 
         $types[] = CourseEntity::class;
         $types[] = CourseCategoryEntity::class;

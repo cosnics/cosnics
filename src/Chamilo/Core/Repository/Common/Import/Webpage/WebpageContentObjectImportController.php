@@ -43,7 +43,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 if (! $calculator->canUpload($file->get_size()))
                 {
                     $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
             else
@@ -67,7 +67,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                         if (file_exists($temp_path))
                         {
                             $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
-                            return array();
+                            return [];
                         }
                         else
                         {
@@ -81,7 +81,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                                 else
                                 {
                                     $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
-                                    return array();
+                                    return [];
                                 }
                             }
                         }
@@ -89,13 +89,13 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                     else
                     {
                         $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                        return array();
+                        return [];
                     }
                 }
                 else
                 {
                     $this->add_message(Translation::get('InvalidWebpageLink'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
             
@@ -107,7 +107,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
             $document->set_filename($file->get_name_extension());
             
             $hash = md5_file($file->get_path());
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parameters()->get_user()));

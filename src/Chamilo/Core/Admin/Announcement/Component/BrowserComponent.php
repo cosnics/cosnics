@@ -58,7 +58,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $publicationsTable = $this->get_publications_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();
@@ -103,7 +103,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowToday', [], Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('calendar-day', array(), null, 'fas'),
+                    new FontAwesomeGlyph('calendar-day', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_TODAY)), ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
             );
@@ -111,7 +111,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisWeek', [], Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('calendar-week', array(), null, 'fas'),
+                    new FontAwesomeGlyph('calendar-week', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_WEEK)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -120,7 +120,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
             $toolActions->addButton(
                 new Button(
                     $translator->trans('ShowThisMonth', [], Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('calendar-alt', array(), null, 'fas'),
+                    new FontAwesomeGlyph('calendar-alt', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_FILTER => self::FILTER_THIS_MONTH)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL
                 )
@@ -153,7 +153,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         {
             $tabs->add_tab(
                 new DynamicVisualTab(
-                    self::TYPE_ALL, $translator->trans('AllPublications', array(), self::package()),
+                    self::TYPE_ALL, $translator->trans('AllPublications', [], self::package()),
                     new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_ALL)), $type == self::TYPE_ALL
                 )
@@ -162,7 +162,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('PublishedForMe', array(), self::package()),
+                self::TYPE_FROM_ME, $translator->trans('PublishedForMe', [], self::package()),
                 new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FOR_ME)), $type == self::TYPE_FOR_ME
             )
@@ -170,7 +170,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
         $tabs->add_tab(
             new DynamicVisualTab(
-                self::TYPE_FROM_ME, $translator->trans('MyPublications', array(), self::package()),
+                self::TYPE_FROM_ME, $translator->trans('MyPublications', [], self::package()),
                 new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_PUBLICATION_TYPE => self::TYPE_FROM_ME)), $type == self::TYPE_FROM_ME
             )
@@ -208,7 +208,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
 
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($this->get_type() != self::TYPE_ALL)
         {

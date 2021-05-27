@@ -22,7 +22,7 @@ class Legend
      *
      * @var \Chamilo\Libraries\Calendar\Renderer\Legend[]
      */
-    protected static $instance = array();
+    protected static $instance = [];
 
     /**
      *
@@ -43,7 +43,7 @@ class Legend
     public function __construct(CalendarRendererProviderInterface $dataProvider)
     {
         $this->dataProvider = $dataProvider;
-        $this->sources = array();
+        $this->sources = [];
     }
 
     /**
@@ -53,7 +53,7 @@ class Legend
      */
     public function render()
     {
-        $result = array();
+        $result = [];
 
         if ($this->hasSources())
         {

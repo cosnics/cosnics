@@ -54,7 +54,7 @@ class MoverComponent extends ItemComponent
 
         $path = $this->get_root_content_object()->get_complex_content_object_path();
 
-        $available_nodes = array();
+        $available_nodes = [];
 
         foreach ($selected_steps as $selected_step)
         {
@@ -129,7 +129,7 @@ class MoverComponent extends ItemComponent
                 $old_parent_id = $complex_content_object_item->get_parent();
 
                 $parent_node_content_object_ids_path = $parent_node->get_parents_content_object_ids(true, true);
-                $current_node_ids = array();
+                $current_node_ids = [];
                 $current_node_ids[] = $available_node->get_hash();
 
                 foreach ($available_node->get_descendants() as $descendant)
@@ -154,7 +154,7 @@ class MoverComponent extends ItemComponent
                                 $new_content_object_ids_path
                             );
 
-                        $new_node_ids = array();
+                        $new_node_ids = [];
                         $new_node_ids[] = $new_node->get_hash();
 
                         foreach ($new_node->get_descendants() as $descendant)
@@ -190,7 +190,7 @@ class MoverComponent extends ItemComponent
                 }
             }
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
             if ($failures > 0)
@@ -216,7 +216,7 @@ class MoverComponent extends ItemComponent
             $trail = BreadcrumbTrail::getInstance();
             $trail->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -246,7 +246,7 @@ class MoverComponent extends ItemComponent
     {
         if (count($available_nodes) > 1)
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<ul>';
 

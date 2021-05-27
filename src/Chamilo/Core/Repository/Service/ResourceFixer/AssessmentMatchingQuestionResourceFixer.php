@@ -73,7 +73,7 @@ class AssessmentMatchingQuestionResourceFixer extends ResourceFixer
 
                 $this->logger->debug(sprintf('Found %s matches', count($matches)));
 
-                $newMatches = array();
+                $newMatches = [];
 
                 foreach ($matches as $index => $match)
                 {

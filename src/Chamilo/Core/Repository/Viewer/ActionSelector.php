@@ -80,8 +80,8 @@ class ActionSelector
      * @param string $classes
      */
     public function __construct(
-        Application $application, $userIdentifier, $allowedContentObjectTypes = array(), $parameters = array(),
-        $extraActions = array(), $classes = null
+        Application $application, $userIdentifier, $allowedContentObjectTypes = [], $parameters = [],
+        $extraActions = [], $classes = null
     )
     {
         $this->application = $application;
@@ -149,7 +149,7 @@ class ActionSelector
      *
      * @param string[] $allowedContentObjectTypes
      */
-    public function setAllowedContentObjectTypes($allowedContentObjectTypes = array())
+    public function setAllowedContentObjectTypes($allowedContentObjectTypes = [])
     {
         $this->allowedContentObjectTypes = $allowedContentObjectTypes;
     }
@@ -246,12 +246,12 @@ class ActionSelector
      */
     public function getExistingOptions()
     {
-        $subButtons = array();
+        $subButtons = [];
 
         $subButtons[] = new SubButtonHeader(Translation::get('SelectFrom'));
 
         $subButtons[] = new SubButton(
-            Translation::get('SelectFromRepository'), new FontAwesomeGlyph('folder', array(), null, 'fas'),
+            Translation::get('SelectFromRepository'), new FontAwesomeGlyph('folder', [], null, 'fas'),
             $this->getExistingLink(Manager::ACTION_BROWSER, false), SubButton::DISPLAY_ICON_AND_LABEL
         );
 
@@ -263,7 +263,7 @@ class ActionSelector
         if ($validWorkspaces > 0)
         {
             $subButtons[] = new SubButton(
-                Translation::get('SelectFromWorkspaces'), new FontAwesomeGlyph('users', array(), null, 'fas'),
+                Translation::get('SelectFromWorkspaces'), new FontAwesomeGlyph('users', [], null, 'fas'),
                 $this->getExistingLink(Manager::ACTION_BROWSER, true)
             );
         }

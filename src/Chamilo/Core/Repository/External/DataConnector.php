@@ -14,7 +14,7 @@ abstract class DataConnector
      *
      * @var array
      */
-    private static $instances = array();
+    private static $instances = [];
 
     /**
      *
@@ -133,6 +133,6 @@ abstract class DataConnector
      */
     public static function get_sort_properties()
     {
-        return array();
+        return [];
     }
 }

@@ -276,7 +276,7 @@ class UserImporter
     {
         $user = $importUserData->getUser();
 
-        $options = array();
+        $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
@@ -309,8 +309,8 @@ class UserImporter
             $body,
             $user->get_email(),
             true,
-            array(),
-            array(),
+            [],
+            [],
             $options['admin_firstname'] . ' ' . $options['admin_surname'],
             $options['admin_email']);
 

@@ -12,7 +12,7 @@ class BrowserComponent extends Manager
 
     function run()
     {
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $this->get_table();
@@ -35,7 +35,7 @@ class BrowserComponent extends Manager
 
     private function get_table_data()
     {
-        $data = array();
+        $data = [];
         $data[] = $this->get_data(LoginTemplate::class);
         $data[] = $this->get_data(UserTemplate::class);
         return $data;

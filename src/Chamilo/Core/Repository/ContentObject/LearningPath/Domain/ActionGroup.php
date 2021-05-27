@@ -26,7 +26,7 @@ class ActionGroup implements ActionInterface
      *
      * @param ActionInterface[] $actions
      */
-    public function __construct($name, array $actions = array())
+    public function __construct($name, array $actions = [])
     {
         $this->actions = $actions;
         $this->name = $name;

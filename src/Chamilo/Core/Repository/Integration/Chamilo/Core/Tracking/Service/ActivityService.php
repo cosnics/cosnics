@@ -70,7 +70,7 @@ class ActivityService
     public function retrieveActivitiesForContentObject(ContentObject $contentObject, $offset, $count,
         OrderBy $orderBy = null)
     {
-        $activities = array();
+        $activities = [];
 
         if ($contentObject instanceof ComplexContentObjectSupport)
         {

@@ -228,7 +228,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function renderResult($title, $result, $message, $image)
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderResultHeader($title, $result, $image);
         $html[] = $message;
@@ -243,7 +243,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function renderResultFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -263,7 +263,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
     {
         $result_class = ($result ? 'installation-step-successful' : 'installation-step-failed');
 
-        $html = array();
+        $html = [];
 
         if ($image instanceof InlineGlyph)
         {
@@ -288,7 +288,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

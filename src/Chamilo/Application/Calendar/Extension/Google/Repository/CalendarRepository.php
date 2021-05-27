@@ -149,7 +149,7 @@ class CalendarRepository
             return [];
         }
 
-        $availableCalendars = array();
+        $availableCalendars = [];
 
         foreach ($calendarItems as $calendarItem)
         {
@@ -184,9 +184,9 @@ class CalendarRepository
         $this->accessToken = $accessToken;
     }
 
-    public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = array())
+    public function getCacheIdentifier($userToken, $method, $additionalIdentifiers = [])
     {
-        $identifiers = array();
+        $identifiers = [];
 
         $identifiers[] = $userToken;
         $identifiers[] = $method;

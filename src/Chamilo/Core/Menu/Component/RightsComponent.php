@@ -80,7 +80,7 @@ class RightsComponent extends Manager implements DelegateComponent
             );
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $rightsForm->render();

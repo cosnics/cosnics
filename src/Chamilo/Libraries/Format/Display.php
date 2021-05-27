@@ -40,7 +40,7 @@ class Display
      */
     public static function message($type = self::MESSAGE_TYPE_NORMAL, $message)
     {
-        $html = array();
+        $html = [];
 
         switch ($type)
         {

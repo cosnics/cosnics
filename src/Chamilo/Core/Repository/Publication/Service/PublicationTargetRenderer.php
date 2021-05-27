@@ -32,7 +32,7 @@ class PublicationTargetRenderer
      */
     public function addFooterToForm(FormValidator $form)
     {
-        $tableFooter = array();
+        $tableFooter = [];
 
         $tableFooter[] = '</tbody>';
         $tableFooter[] = '</table>';
@@ -48,7 +48,7 @@ class PublicationTargetRenderer
      */
     public function addHeaderToForm(FormValidator $form, string $title, array $columnNames, $hasOnlyOneLocation = false)
     {
-        $tableHeader = array();
+        $tableHeader = [];
 
         $tableHeader[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
         $tableHeader[] = '<thead>';
@@ -93,7 +93,7 @@ class PublicationTargetRenderer
     {
         $renderer = $form->defaultRenderer();
 
-        $group = array();
+        $group = [];
 
         $group[] = $form->createElement('checkbox', $this->getCheckboxName($publicationContext, $targetKey));
 

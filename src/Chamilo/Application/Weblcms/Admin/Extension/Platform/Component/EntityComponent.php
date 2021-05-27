@@ -32,7 +32,7 @@ class EntityComponent extends Manager implements TableSupport
 
         $this->set_parameter(self::PARAM_ENTITY_TYPE, $this->get_selected_entity_type());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_tabs(self::ACTION_ENTITY, $this->get_entity_tabs())->render();
@@ -63,10 +63,10 @@ class EntityComponent extends Manager implements TableSupport
                 switch ($entity_type::ENTITY_TYPE)
                 {
                     case UserEntity::ENTITY_TYPE:
-                        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+                        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
                         break;
                     case PlatformGroupEntity::ENTITY_TYPE:
-                        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+                        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
                         break;
                     default:
                         $glyph = '';

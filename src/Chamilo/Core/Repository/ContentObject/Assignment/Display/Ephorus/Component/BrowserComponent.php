@@ -36,7 +36,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      */
     public function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -81,7 +81,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      */
     protected function as_html()
     {
-        $html = array();
+        $html = [];
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html[] = $this->buttonToolbarRenderer->render();

@@ -18,7 +18,7 @@ class SharedBrowserComponent extends TabComponent implements TableSupport
     {
         $table = new SharedWorkspaceTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

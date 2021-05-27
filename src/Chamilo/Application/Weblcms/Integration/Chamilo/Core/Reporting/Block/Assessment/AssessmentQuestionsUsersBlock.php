@@ -82,8 +82,8 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
          *
          * @var $questions Defines column headers against the question id.
          */
-        $question_headers = array();
-        $question_weights = array();
+        $question_headers = [];
+        $question_weights = [];
         // Defines the column headers in the reporting block.
         $question_headers[- 1] = self::$COLUMN_NAME;
         $question_headers[- 2] = Translation::get('OfficialCode');
@@ -118,7 +118,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
         $condition = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id()));
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID));
         
@@ -126,10 +126,10 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
         
-        $user_question_statistics = array();
+        $user_question_statistics = [];
         if (count($assessment_attempts_trackers) > 0)
         {
-            $assessment_attempts_tracker_ids = array();
+            $assessment_attempts_tracker_ids = [];
             $current_user_id = reset($assessment_attempts_trackers)->get_user_id();
             
             // Aggregate all the assessment attempts trackers for a single user to retrieve the user's
@@ -147,7 +147,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                     $user_question_statistics[$current_user_id] = $this->collate_question_attempts_trackers(
                         $assessment_attempts_tracker_ids);
                     
-                    $assessment_attempts_tracker_ids = array();
+                    $assessment_attempts_tracker_ids = [];
                     $current_user_id = $assessment_attempts_tracker->get_user_id();
                 }
                 $assessment_attempts_tracker_ids[] = $assessment_attempts_tracker->get_id();
@@ -202,7 +202,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                 QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
             $assessment_attempts_tracker_ids);
         
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(
                 QuestionAttempt::class,
@@ -212,10 +212,10 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             QuestionAttempt::class,
             new DataClassRetrievesParameters($condition, null, null, $order_by));
         
-        $user_question_statistics = array();
+        $user_question_statistics = [];
         if (count($question_attempts_trackers) > 0)
         {
-            $current_question_attempts_trackers = array();
+            $current_question_attempts_trackers = [];
             $current_question_id = reset($question_attempts_trackers)->get_question_complex_id();
             
             // Aggregate all the question attempts trackers for a single question to calculate the score to
@@ -228,7 +228,7 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
                 {
                     $user_question_statistics[$current_question_id] = $this->get_score(
                         $current_question_attempts_trackers);
-                    $current_question_attempts_trackers = array();
+                    $current_question_attempts_trackers = [];
                     $current_question_id = $question_attempts_tracker->get_question_complex_id();
                 }
                 $current_question_attempts_trackers[] = $question_attempts_tracker;

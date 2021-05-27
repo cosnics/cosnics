@@ -53,7 +53,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             throw new NotAllowedException();
         }
 
-        $content = array();
+        $content = [];
         $content[] = ContentObjectRenditionImplementation::launch(
             $this->get_current_content_object(), ContentObjectRendition::FORMAT_HTML, ContentObjectRendition::VIEW_FULL,
             $this
@@ -72,7 +72,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $content[] = $this->render_statistics($this->get_current_content_object());
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = implode(PHP_EOL, $content);
@@ -125,7 +125,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     $contentItems->addButton(
                         $this->getPublicationButton(
                             Translation::get('CreatorComponent'), new FontAwesomeGlyph('plus'),
-                            $this->get_root_content_object()->get_allowed_types(), $parameters, array(), 'btn-primary'
+                            $this->get_root_content_object()->get_allowed_types(), $parameters, [], 'btn-primary'
                         )
                     );
                 }
@@ -494,7 +494,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = array(), $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
     )
     {
         $actionSelector = new ActionSelector(
@@ -589,7 +589,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     {
         $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getButtonToolBar());
 
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $buttonToolBarRenderer->render();
@@ -604,7 +604,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      */
     public function render_last_actions()
     {
-        $html = array();
+        $html = [];
 
         $last_activities = DataManager::retrieve_activities(
             $this->get_current_content_object(), null, 0, 1,
@@ -648,7 +648,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      */
     public function render_statistics($content_object)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="portfolio-statistics">';
 

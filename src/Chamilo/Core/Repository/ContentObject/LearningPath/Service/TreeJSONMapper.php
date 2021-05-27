@@ -139,7 +139,7 @@ class TreeJSONMapper
     {
         $number = $this->automaticNumberingService->getAutomaticNumberingForTreeNode($node);
 
-        $nodeData = array();
+        $nodeData = [];
 
         $nodeData['key'] = $node->getId();
         $nodeData['title'] = $node->getContentObject()->get_title();
@@ -182,7 +182,7 @@ class TreeJSONMapper
                 $nodeData['expanded'] = true;
             }
 
-            $nodeData['children'] = array();
+            $nodeData['children'] = [];
 
             $children = $node->getChildNodes();
             foreach ($children as $child)
@@ -216,7 +216,7 @@ class TreeJSONMapper
      */
     public function getNodes()
     {
-        $nodeData = array();
+        $nodeData = [];
 
         $nodeData[] = $this->getNodeDataForTreeNode($this->tree->getRoot());
 

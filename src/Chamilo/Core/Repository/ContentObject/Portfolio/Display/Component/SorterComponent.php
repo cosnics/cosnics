@@ -70,7 +70,7 @@ class SorterComponent extends Manager implements DelegateComponent
                     array('OBJECT' => Translation::get('ContentObject')), 
                     Utilities::COMMON_LIBRARIES));
             
-            $parameters = array();
+            $parameters = [];
             
             if ($succes)
             {

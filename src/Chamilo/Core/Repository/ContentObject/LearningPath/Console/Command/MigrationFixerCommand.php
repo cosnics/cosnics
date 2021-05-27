@@ -41,7 +41,7 @@ class MigrationFixerCommand extends ChamiloCommand
         $this->setName('chamilo:repository:learning_path:migration_fixer')->setDescription(
             $this->translator->trans(
                 'LearningPathMigrationFixerDescription',
-                array(),
+                [],
                 'Chamilo\Core\Repository\ContentObject\LearningPath'));
     }
 

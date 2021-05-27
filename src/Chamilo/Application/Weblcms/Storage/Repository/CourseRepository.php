@@ -45,7 +45,7 @@ class CourseRepository implements CourseRepositoryInterface
      * @return int
      */
     public function countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(
-        Course $course, int $entityType, array $entityIdentifiers = array()
+        Course $course, int $entityType, array $entityIdentifiers = []
     )
     {
         $conditions = [];
@@ -116,7 +116,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCourseGroupSubscriptionsByCourseAndGroups($courseId, $groupIds)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
@@ -170,7 +170,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCourseUserSubscriptionByCourseAndUser($courseId, $userId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
@@ -301,7 +301,7 @@ class CourseRepository implements CourseRepositoryInterface
      *
      * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
      */
-    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array())
+    public function findCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = [])
     {
         $conditions = [];
 
@@ -328,7 +328,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, array(), $joins)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
         );
     }
 
@@ -417,13 +417,13 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         $recordRetrievesParameters =
-            new RecordRetrievesParameters($properties, $condition, null, null, array(), $joins);
+            new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 
         $courseRecords = DataManager::records(
             Course::class, $recordRetrievesParameters
         );
 
-        $courses = array();
+        $courses = [];
 
         foreach ($courseRecords as $record)
         {

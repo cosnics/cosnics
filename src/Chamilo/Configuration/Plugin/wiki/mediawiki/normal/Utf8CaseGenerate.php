@@ -42,8 +42,8 @@ if (! $in)
     print "http://www.unicode.org/Public/UNIDATA/UnicodeData.txt\n";
     exit(- 1);
 }
-$wikiUpperChars = array();
-$wikiLowerChars = array();
+$wikiUpperChars = [];
+$wikiLowerChars = [];
 
 print "Reading character definitions...\n";
 while (false !== ($line = fgets($in)))

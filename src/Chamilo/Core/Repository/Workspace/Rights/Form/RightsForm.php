@@ -160,7 +160,7 @@ class RightsForm extends FormValidator
 
     public function addSaveResetButtons()
     {
-        $buttons = array();
+        $buttons = [];
         
         if ($this->mode == self::MODE_CREATE)
         {
@@ -186,7 +186,7 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         if ($this->entityRelation instanceof WorkspaceEntityRelation)
         {

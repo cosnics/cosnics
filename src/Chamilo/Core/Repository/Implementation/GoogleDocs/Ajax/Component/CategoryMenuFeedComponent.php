@@ -16,7 +16,7 @@ class CategoryMenuFeedComponent extends Manager
 
     function run()
     {
-        $groups_tree = array();
+        $groups_tree = [];
 
         $parent_id = Request::get('parent_id');
         $condition = new EqualityCondition(
@@ -35,7 +35,7 @@ class CategoryMenuFeedComponent extends Manager
 
     public function dump_tree($categories)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         foreach ($categories as $category)
         {

@@ -48,7 +48,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $this->verifySetup();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -63,7 +63,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function as_html()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
 
@@ -115,13 +115,13 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $relations = $this->getRelations();
 
         if (count($relations) > 0)
         {
-            $relationIdentifiers = array();
+            $relationIdentifiers = [];
 
             foreach ($relations as $relation)
             {

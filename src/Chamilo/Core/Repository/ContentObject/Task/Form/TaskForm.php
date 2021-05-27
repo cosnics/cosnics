@@ -21,28 +21,28 @@ class TaskForm extends RecurringContentObjectForm
         $translator = $this->getTranslator();
 
         $this->addElement(
-            'category', $translator->trans('Properties', array(), 'Chamilo\Core\Repository\ContentObject\Task')
+            'category', $translator->trans('Properties', [], 'Chamilo\Core\Repository\ContentObject\Task')
         );
 
         $this->addElement(
             'select', Task::PROPERTY_PRIORITY,
-            $translator->trans('Priority', array(), 'Chamilo\Core\Repository\ContentObject\Task'),
+            $translator->trans('Priority', [], 'Chamilo\Core\Repository\ContentObject\Task'),
             Task::get_priority_options(), array('class' => 'form-control')
         );
 
         $this->addElement(
             'select', Task::PROPERTY_CATEGORY,
-            $translator->trans('TaskType', array(), 'Chamilo\Core\Repository\ContentObject\Task'),
+            $translator->trans('TaskType', [], 'Chamilo\Core\Repository\ContentObject\Task'),
             Task::get_types_options(), array('class' => 'form-control')
         );
 
         $this->add_datepicker(
             Task::PROPERTY_START_DATE,
-            $translator->trans('StartDate', array(), 'Chamilo\Core\Repository\ContentObject\Task'), true
+            $translator->trans('StartDate', [], 'Chamilo\Core\Repository\ContentObject\Task'), true
         );
         $this->add_datepicker(
             Task::PROPERTY_DUE_DATE,
-            $translator->trans('EndDate', array(), 'Chamilo\Core\Repository\ContentObject\Task'), true
+            $translator->trans('EndDate', [], 'Chamilo\Core\Repository\ContentObject\Task'), true
         );
 
         $this->addFrequencyPropertiesToForm();
@@ -54,7 +54,7 @@ class TaskForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    protected function build_creation_form($htmleditorOptions = array(), $inTab = false)
+    protected function build_creation_form($htmleditorOptions = [], $inTab = false)
     {
         parent::build_creation_form($htmleditorOptions, $inTab);
         $this->addTaskPropertiesToForm();
@@ -66,7 +66,7 @@ class TaskForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    protected function build_editing_form($htmleditorOptions = array(), $inTab = false)
+    protected function build_editing_form($htmleditorOptions = [], $inTab = false)
     {
         parent::build_editing_form($htmleditorOptions, $inTab);
         $this->addTaskPropertiesToForm();
@@ -93,7 +93,7 @@ class TaskForm extends RecurringContentObjectForm
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         /**
          * @var \Chamilo\Core\Repository\ContentObject\Task\Storage\DataClass\Task $task

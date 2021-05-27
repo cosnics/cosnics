@@ -74,7 +74,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
             return $complex_content_objects;
         }
 
-        $wiki_pages = array();
+        $wiki_pages = [];
 
         foreach($complex_content_objects as $complex_content_object)
         {
@@ -94,7 +94,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($this->get_id()));
 
-        $content_object_conditions = array();
+        $content_object_conditions = [];
         $content_object_conditions[] = $title_condition;
         $content_object_conditions[] = new SubselectCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
@@ -116,7 +116,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_LINKS));
     }

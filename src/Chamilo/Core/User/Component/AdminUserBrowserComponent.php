@@ -52,7 +52,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
 
         $this->firstletter = Request::get(self::PARAM_FIRSTLETTER);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
@@ -88,7 +88,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation::get('Reporting', null, Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('chart-pie', array(), null, 'fas'), $this->get_reporting_url(),
+                        new FontAwesomeGlyph('chart-pie', [], null, 'fas'), $this->get_reporting_url(),
                         ToolbarItem::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -128,7 +128,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
     public function get_table_condition($class_name)
     {
         // construct search properties
-        $search_properties = array();
+        $search_properties = [];
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
         $search_properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME);
@@ -143,7 +143,7 @@ class AdminUserBrowserComponent extends Manager implements TableSupport
     {
         $table = new AdminUserTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';

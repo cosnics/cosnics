@@ -18,13 +18,13 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
      *
      * @var string[][]
      */
-    public $_ary = array();
+    public $_ary = [];
 
     /**
      *
      * @var string[]
      */
-    public $_menuAry = array();
+    public $_menuAry = [];
 
     /**
      * Finish the menu
@@ -41,7 +41,7 @@ class HtmlMenuArrayRenderer extends HtmlMenuRenderer
         {
             $this->_ary = $this->_menuAry;
         }
-        $this->_menuAry = array();
+        $this->_menuAry = [];
     }
 
     /**

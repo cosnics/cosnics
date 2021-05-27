@@ -59,7 +59,7 @@ class WeekCalendar extends Calendar
      */
     public function __construct(
         $displayTime, $dayUrlTemplate = null, $hourStep = 2, $startHour = 0, $endHour = 24, $hideOtherHours = false,
-        $classes = array()
+        $classes = []
     )
     {
         $this->dayUrlTemplate = $dayUrlTemplate;
@@ -165,7 +165,7 @@ class WeekCalendar extends Calendar
             $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
             $this->setCellContents($rowId, 0, $cellContent);
 
-            $classes = array();
+            $classes = [];
 
             $classes[] = 'table-calendar-week-hours';
 
@@ -213,7 +213,7 @@ class WeekCalendar extends Calendar
      */
     protected function determineCellClasses($today, $weekDay, $hour, $workingStart, $workingEnd)
     {
-        $classes = array();
+        $classes = [];
 
         if ($today == date('Y-m-d', $weekDay))
         {

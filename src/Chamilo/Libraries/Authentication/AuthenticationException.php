@@ -40,7 +40,7 @@ class AuthenticationException extends NotAllowedException
         $redirect = new Redirect();
         $currentUrl = $redirect->getCurrentUrl();
 
-        $html = array();
+        $html = [];
         $html[] = $message;
         $html[] = '<p style="margin-top: 10px;"><a href="' . $currentUrl . '" class="btn btn-success">';
         $html[] = Translation::getInstance()->getTranslation('LoginTryAgain', null, Utilities::COMMON_LIBRARIES);

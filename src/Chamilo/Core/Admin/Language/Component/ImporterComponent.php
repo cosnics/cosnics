@@ -207,7 +207,7 @@ class ImporterComponent extends Manager
 
         if ($form->validate())
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->process();
@@ -217,7 +217,7 @@ class ImporterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -252,7 +252,7 @@ class ImporterComponent extends Manager
 
         $languages = array_slice($languages_row, 4);
 
-        $translations = array();
+        $translations = [];
 
         while (($csv_data = $this->read_csv($file_handle)) !== false)
         {
@@ -270,7 +270,7 @@ class ImporterComponent extends Manager
         $translations = $this->parse_file();
         $convert_package_names = $this->is_repository_based(array_keys($translations));
 
-        $data = array();
+        $data = [];
 
         foreach ($translations as $package => $languages)
         {
@@ -295,7 +295,7 @@ class ImporterComponent extends Manager
                 }
                 else
                 {
-                    $existing_translations = array();
+                    $existing_translations = [];
                 }
 
                 $differences = array_diff(array_keys($existing_translations), array_keys($variables));
@@ -316,7 +316,7 @@ class ImporterComponent extends Manager
                     }
                 }
 
-                $row = array();
+                $row = [];
                 $row[] = $package;
                 $row[] = $language;
                 $row[] = count($existing_translations);
@@ -326,7 +326,7 @@ class ImporterComponent extends Manager
 
                 $data[] = $row;
 
-                $translation_content = array();
+                $translation_content = [];
 
                 $translation_content[] =
                     ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;';
@@ -345,22 +345,22 @@ class ImporterComponent extends Manager
             }
         }
 
-        $headers = array();
+        $headers = [];
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
 
-        $glyph = new FontAwesomeGlyph('language', array(), Translation::get('Language'), 'fas');
+        $glyph = new FontAwesomeGlyph('language', [], Translation::get('Language'), 'fas');
         $headers[] = new SortableStaticTableColumn('language', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('home', array(), Translation::get('LocalVariableCount'), 'fas');
+        $glyph = new FontAwesomeGlyph('home', [], Translation::get('LocalVariableCount'), 'fas');
         $headers[] = new SortableStaticTableColumn('local', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('upload', array(), Translation::get('ImportVariableCount'), 'fas');
+        $glyph = new FontAwesomeGlyph('upload', [], Translation::get('ImportVariableCount'), 'fas');
         $headers[] = new SortableStaticTableColumn('upload', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('exclamation-circle', array(), Translation::get('LocalExtraCount'), 'fas');
+        $glyph = new FontAwesomeGlyph('exclamation-circle', [], Translation::get('LocalExtraCount'), 'fas');
         $headers[] = new SortableStaticTableColumn('extra', $glyph->render());
 
-        $glyph = new FontAwesomeGlyph('circle', array(), Translation::get('LocalNonEmptyCount'), 'far');
+        $glyph = new FontAwesomeGlyph('circle', [], Translation::get('LocalNonEmptyCount'), 'far');
         $headers[] = new SortableStaticTableColumn('empty', $glyph->render());
 
         $table = new SortableTableFromArray(

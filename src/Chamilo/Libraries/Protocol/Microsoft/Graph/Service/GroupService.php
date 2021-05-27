@@ -462,7 +462,7 @@ class GroupService
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function syncUsersToGroup($groupId, $users = array(), $excludedUsersForRemoval = [])
+    public function syncUsersToGroup($groupId, $users = [], $excludedUsersForRemoval = [])
     {
         $group = $this->groupRepository->getGroup($groupId);
         if (!$group instanceof Group)

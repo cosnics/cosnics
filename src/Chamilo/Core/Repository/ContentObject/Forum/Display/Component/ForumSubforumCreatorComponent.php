@@ -52,7 +52,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
                 if ($this->get_complex_content_object_item())
                 {
 
-                    $forums_with_key_cloi = array();
+                    $forums_with_key_cloi = [];
                     $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
                         $this->get_root_content_object()->get_id(),
                         $this->get_complex_content_object_item()->get_id());
@@ -124,7 +124,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
 
     private function retrieve_used_items($object)
     {
-        $items = array();
+        $items = [];
         $items = array_merge($items, $this->retrieve_used_items_parents($object));
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
@@ -149,7 +149,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
 
     private function retrieve_used_items_parents($object_id)
     {
-        $items = array();
+        $items = [];
         $items[] = $object_id;
         $complex_content_object_items_parent = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
@@ -179,7 +179,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
                 array('OBJECT' => Translation::get('Subforum')),
                 Utilities::COMMON_LIBRARIES));
 
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
 

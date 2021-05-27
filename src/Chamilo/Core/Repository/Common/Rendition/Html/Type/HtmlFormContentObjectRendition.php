@@ -13,7 +13,7 @@ class HtmlFormContentObjectRendition extends HtmlContentObjectRendition
     public function render()
     {
         $object = $this->get_content_object();
-        $html = array();
+        $html = [];
         $html[] = '<div class="panel panel-default">';
         
         $html[] = '<div class="panel-heading">';

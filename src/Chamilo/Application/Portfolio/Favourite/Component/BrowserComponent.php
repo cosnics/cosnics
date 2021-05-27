@@ -19,7 +19,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->renderTable();

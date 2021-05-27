@@ -116,7 +116,7 @@ abstract class ComplexContentObjectPathNode
      * @param $properties
      */
     public function __construct($tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id, 
-        ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = array())
+        ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = [])
     {
         $this->tree = $tree;
         $this->id = $id;
@@ -455,7 +455,7 @@ abstract class ComplexContentObjectPathNode
         if (! isset($this->parents_content_object_ids[$include_self][$reverse]))
         {
             $parent_nodes = $this->get_parents($include_self, $reverse);
-            $parents_content_object_ids = array();
+            $parents_content_object_ids = [];
             
             foreach ($parent_nodes as $parent_node)
             {
@@ -500,7 +500,7 @@ abstract class ComplexContentObjectPathNode
     {
         if (! isset($this->descendants_content_object_ids))
         {
-            $descendants_content_object_ids = array();
+            $descendants_content_object_ids = [];
             
             foreach ($this->get_descendants() as $descendant_node)
             {
@@ -531,7 +531,7 @@ abstract class ComplexContentObjectPathNode
         if (! isset($this->siblings))
         {
             $children = $this->get_parent()->get_children();
-            $this->siblings = array();
+            $this->siblings = [];
             
             foreach ($children as $child)
             {
@@ -595,7 +595,7 @@ abstract class ComplexContentObjectPathNode
      */
     public static function get_node_parents(ComplexContentObjectPathNode $node, $include_self = false, $reverse = false)
     {
-        $parents = array();
+        $parents = [];
         
         if ($include_self)
         {
@@ -623,7 +623,7 @@ abstract class ComplexContentObjectPathNode
      */
     public static function get_node_children(ComplexContentObjectPathNode $parent)
     {
-        $children = array();
+        $children = [];
         
         foreach ($parent->get_tree()->get_nodes() as $node)
         {
@@ -643,7 +643,7 @@ abstract class ComplexContentObjectPathNode
      */
     public static function get_node_descendants(ComplexContentObjectPathNode $parent)
     {
-        $descendants = array();
+        $descendants = [];
         
         foreach ($parent->get_children() as $child_node)
         {
@@ -692,7 +692,7 @@ abstract class ComplexContentObjectPathNode
     {
         $parent_nodes = $this->get_parents($include_self, $reverse);
         
-        $node_names = array();
+        $node_names = [];
         
         foreach ($parent_nodes as $parent_node)
         {
@@ -737,7 +737,7 @@ abstract class ComplexContentObjectPathNode
      * @return ComplexContentObjectPathNode
      */
     public static function factory($type, $tree, $id, $parent_id, $previous_sibling_id, $next_sibling_id, 
-        ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = array())
+        ComplexContentObjectItem $complex_content_object_item, ContentObject $content_object, $properties = [])
     {
         $class = $type . '\ComplexContentObjectPathNode';
         return new $class(

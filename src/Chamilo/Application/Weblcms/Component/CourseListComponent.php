@@ -35,7 +35,7 @@ class CourseListComponent extends Manager implements DelegateComponent
     {
         $this->checkAuthorization(Manager::context(), 'ViewPersonalCourses');
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -99,7 +99,7 @@ class CourseListComponent extends Manager implements DelegateComponent
      */
     protected function buildAdminCourseManagementButtonGroup()
     {
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
 
         $buttonGroup->addButton(
             new Button(
@@ -176,7 +176,7 @@ class CourseListComponent extends Manager implements DelegateComponent
      */
     protected function buildTeacherManagementButtonGroup()
     {
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
 
         $courseManagementRights = CourseManagementRights::getInstance();
 
@@ -267,7 +267,7 @@ class CourseListComponent extends Manager implements DelegateComponent
      */
     protected function buildUserManagementButtonGroup()
     {
-        $buttonGroup = new ButtonGroup(array(), array('btn-group-vertical'));
+        $buttonGroup = new ButtonGroup([], array('btn-group-vertical'));
 
         $buttonGroup->addButton(
             new Button(

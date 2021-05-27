@@ -625,7 +625,7 @@ class AssignmentRepository
             new StaticConditionVariable($contentObjectPublicationIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -652,7 +652,7 @@ class AssignmentRepository
             $contentObjectPublicationIdentifiers
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

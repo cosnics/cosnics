@@ -17,7 +17,7 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
      */
     public function getConnectionString()
     {
-        $string = array();
+        $string = [];
 
         $string[] = $this->getDriver(true);
         $string[] = ':';

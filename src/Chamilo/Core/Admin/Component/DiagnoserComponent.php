@@ -24,7 +24,7 @@ class DiagnoserComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ManageChamilo');
 
-        $html = array();
+        $html = [];
         $diagnoser = new Diagnoser($this);
 
         $html[] = $this->render_header();

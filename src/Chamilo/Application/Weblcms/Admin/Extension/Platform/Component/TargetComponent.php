@@ -31,7 +31,7 @@ class TargetComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_tabs(self::ACTION_TARGET, $this->get_target_tabs())->render();
@@ -42,7 +42,7 @@ class TargetComponent extends Manager implements TableSupport
 
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -74,7 +74,7 @@ class TargetComponent extends Manager implements TableSupport
 
         foreach ($this->get_target_types() as $target_type)
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE),
@@ -96,10 +96,10 @@ class TargetComponent extends Manager implements TableSupport
             switch ($target_type::ENTITY_TYPE)
             {
                 case CourseEntity::ENTITY_TYPE:
-                    $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
                     break;
                 case CourseCategoryEntity::ENTITY_TYPE:
-                    $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
                     break;
                 default:
                     $glyph = '';

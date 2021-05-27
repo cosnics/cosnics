@@ -30,7 +30,7 @@ class AssignmentSubmissions extends Block
         $user_id = $this->getUserId();
 
         // Retrieve the assignments of the user
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class,
@@ -58,7 +58,7 @@ class AssignmentSubmissions extends Block
             return Translation::get('YouDoNotOwnAnyAssignments');
         }
 
-        $items = array();
+        $items = [];
 
         /** @var ContentObjectPublication[] $publicationsById */
         $publicationsById = [];
@@ -92,7 +92,7 @@ class AssignmentSubmissions extends Block
                 $publication->get_id()
             );
 
-            $item = array();
+            $item = [];
 
             $assignmentPublication = $assignmentPublicationsById[$publication->getId()];
             $entityType = ($assignmentPublication instanceof Publication) ? $assignmentPublication->getEntityType() : Entry::ENTITY_TYPE_USER;
@@ -137,7 +137,7 @@ class AssignmentSubmissions extends Block
 
     public function displayNewItems($items)
     {
-        $html = array();
+        $html = [];
 
         foreach ($items as $item)
         {

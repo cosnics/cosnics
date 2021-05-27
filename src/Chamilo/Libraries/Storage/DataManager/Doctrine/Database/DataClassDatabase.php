@@ -221,7 +221,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if (!$statement instanceof PDOException)
         {
-            $counts = array();
+            $counts = [];
 
             while ($record = $statement->fetch(PDO::FETCH_NUM))
             {
@@ -372,7 +372,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         if (!$statement instanceof PDOException)
         {
-            $distinctElements = array();
+            $distinctElements = [];
 
             while ($record = $statement->fetch(PDO::FETCH_ASSOC))
             {
@@ -491,7 +491,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     protected function fetchRecords(Statement $statement)
     {
-        $records = array();
+        $records = [];
 
         while ($record = $statement->fetch(PDO::FETCH_ASSOC))
         {

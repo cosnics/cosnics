@@ -208,7 +208,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
         );
 
-        $publicationAttributes = array();
+        $publicationAttributes = [];
 
         foreach ($publicationRecords as $publicationRecord)
         {

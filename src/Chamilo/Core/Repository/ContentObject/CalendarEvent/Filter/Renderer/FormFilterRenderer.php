@@ -26,7 +26,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         
         // Start date
         $form_validator->addElement('category', Translation::get('StartDate'));
-        $start_date = array();
+        $start_date = [];
         $start_date[] = $form_validator->createElement(
             'static', 
             '', 
@@ -55,7 +55,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         
         // End date
         $form_validator->addElement('category', Translation::get('EndDate'));
-        $end_date = array();
+        $end_date = [];
         $end_date[] = $form_validator->createElement(
             'static', 
             '', 
@@ -85,7 +85,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         // Frequency
         $form_validator->addElement('category', Translation::get('RepeatType'));
         
-        $options = array();
+        $options = [];
         $options[0] = '-- ' . Translation::get('SelectRepeatType') . ' --';
         $options[- 1] = Translation::get('NoRepeat');
         
@@ -102,7 +102,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
         

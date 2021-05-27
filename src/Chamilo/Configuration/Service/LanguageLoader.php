@@ -53,7 +53,7 @@ class LanguageLoader implements CacheableDataLoaderInterface
      */
     public function getData()
     {
-        $languages = array();
+        $languages = [];
         $languageRecords = $this->getLanguageRepository()->findLanguagesAsRecords();
 
         foreach ($languageRecords as $languageRecord)

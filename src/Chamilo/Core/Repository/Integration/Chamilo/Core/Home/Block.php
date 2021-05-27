@@ -62,7 +62,7 @@ class Block extends BlockRenderer
      */
     public function getConfigurationVariables()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -146,7 +146,7 @@ class Block extends BlockRenderer
             return '';
         }
         
-        $html = array();
+        $html = [];
         $html[] = $this->renderHeader();
         $html[] = $this->isConfigured() ? $this->displayContent() : $this->displayEmpty();
         $html[] = $this->renderFooter();
@@ -198,7 +198,7 @@ class Block extends BlockRenderer
     
     // @TODO: remove that when we move to a templating system
     // @NOTE: could be more efficient to do an include or eval
-    private $template_callback_context = array();
+    private $template_callback_context = [];
 
     protected function process_template($template, $vars)
     {

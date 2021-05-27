@@ -22,7 +22,7 @@ class ExternalObjectDisplay extends \Chamilo\Core\Repository\External\ExternalOb
     {
         if ($this->get_object()->get_content())
         {
-            $html = array();
+            $html = [];
             $html[] = '<iframe class="preview" src="' . $this->get_object()->get_content() . '"></iframe>';
             return implode(PHP_EOL, $html);
         }

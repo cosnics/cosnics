@@ -33,6 +33,6 @@ class TranslationComponent extends Manager
             $namespace = Utilities::COMMON_LIBRARIES;
         }
 
-        echo $this->getTranslator()->trans($string, array(), $namespace);
+        echo $this->getTranslator()->trans($string, [], $namespace);
     }
 }

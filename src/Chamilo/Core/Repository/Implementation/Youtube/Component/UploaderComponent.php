@@ -43,7 +43,7 @@ class UploaderComponent extends Manager implements DelegateComponent
                 {
                     Request::set_get(Application::PARAM_ERROR_MESSAGE, Translation::get('YoutubeUploadProblem'));
                     
-                    $html = array();
+                    $html = [];
                     
                     $html[] = $this->render_header();
                     $html[] = $form->toHtml();
@@ -54,7 +54,7 @@ class UploaderComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $html = array();
+                $html = [];
                 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

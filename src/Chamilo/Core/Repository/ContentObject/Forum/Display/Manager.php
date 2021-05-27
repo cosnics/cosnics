@@ -105,8 +105,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      */
     public function retrieve_children_from_root_to_cloi($root_complex_content_ref, $complex_content_item_id)
     {
-        $copy_children = array();
-        $wrappers = array();
+        $copy_children = [];
+        $wrappers = [];
 
         $children = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
@@ -137,7 +137,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
         foreach ($copy_children as $key => $value)
         {
-            $wrap_child = array();
+            $wrap_child = [];
             $wrap_child = $this->retrieve_children_from_root_to_cloi($value, $complex_content_item_id);
 
             if ($wrap_child)

@@ -221,7 +221,7 @@ class AuthenticationValidator
         if (($accountHasExpired || $accountNotActivated || !$user->get_active()) && !$user->is_platform_admin())
         {
             throw new AuthenticationException(
-                $this->translator->trans('AccountNotActive', array(), Utilities::COMMON_LIBRARIES)
+                $this->translator->trans('AccountNotActive', [], Utilities::COMMON_LIBRARIES)
             );
         }
     }

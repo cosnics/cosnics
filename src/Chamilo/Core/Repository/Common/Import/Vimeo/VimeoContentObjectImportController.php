@@ -50,7 +50,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
             
             if (! $this->has_messages(self::TYPE_ERROR))
             {
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         Instance::class,
@@ -105,7 +105,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
     {
         $vimeo_object_available = in_array(self::FORMAT, DataManager::get_registered_types(true));
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 Instance::class,

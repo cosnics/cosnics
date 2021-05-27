@@ -107,9 +107,9 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
         $this->maximum_select = self::SELECT_MULTIPLE;
-        $this->default_content_objects = array();
-        $this->parameters = array();
-        $this->excluded_objects = array();
+        $this->default_content_objects = [];
+        $this->parameters = [];
+        $this->excluded_objects = [];
 
         $this->set_parameter(
             self::PARAM_ACTION,
@@ -152,7 +152,7 @@ abstract class Manager extends Application
      */
     protected function getTabs()
     {
-        $tabs = array();
+        $tabs = [];
 
         $tabs[self::TAB_CREATOR] = array(
             'url' => $this->get_url(
@@ -317,7 +317,7 @@ abstract class Manager extends Application
             return parent::render_footer();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
@@ -338,7 +338,7 @@ abstract class Manager extends Application
             return parent::render_header();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

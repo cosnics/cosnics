@@ -43,7 +43,7 @@ class EntityConditionService
      */
     public function expandEntities($entities)
     {
-        $expandedEntities = array();
+        $expandedEntities = [];
 
         foreach ($entities as $entity)
         {
@@ -63,7 +63,7 @@ class EntityConditionService
      */
     public function expandEntity($entity)
     {
-        $expandedEntities = array();
+        $expandedEntities = [];
 
         if (!$entity->isDataClassType())
         {
@@ -112,7 +112,7 @@ class EntityConditionService
      */
     public function getEntitiesCondition($entities, $dataClass, $typeProperty, $identifierProperty = null)
     {
-        $entityConditions = array();
+        $entityConditions = [];
 
         foreach ($entities as $entity)
         {
@@ -134,7 +134,7 @@ class EntityConditionService
      */
     public function getEntityCondition($entity, $dataClass, $typeProperty, $identifierProperty = null)
     {
-        $entityConditions = array();
+        $entityConditions = [];
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable($dataClass, $typeProperty),

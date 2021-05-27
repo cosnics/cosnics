@@ -34,7 +34,7 @@ class Text
      *
      * @return string
      */
-    public function create_link($url, $text, $new_page = false, $class = null, $styles = array())
+    public function create_link($url, $text, $new_page = false, $class = null, $styles = [])
     {
         $link = '<a href="' . $url . '" ';
 
@@ -102,8 +102,8 @@ class Text
             return $haystack;
         }
 
-        $matches = array();
-        $matches_done = array();
+        $matches = [];
+        $matches_done = [];
 
         preg_match_all("/$needle+/i", $haystack, $matches);
 
@@ -166,7 +166,7 @@ class Text
      */
     public static function parse_query_string($query = '')
     {
-        $queries = array();
+        $queries = [];
         $variables = explode('&', $query);
 
         foreach ($variables as $variable)

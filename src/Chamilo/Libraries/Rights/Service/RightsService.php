@@ -82,7 +82,7 @@ abstract class RightsService
      * @see RightsUtil::count_location_overview_with_rights_granted()
      */
     protected function countLocationOverviewWithGrantedRights(
-        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
         $treeIdentifier = null
     )
     {
@@ -478,7 +478,7 @@ abstract class RightsService
         $allLocationIdentifiersWithGrantedRight =
             $this->getLocationIdentifiersByGrantedRight($user->getId(), $entities, $right, $allLocationIdentifiers);
 
-        $identifiersWithGrantedRight = array();
+        $identifiersWithGrantedRight = [];
 
         foreach ($identifiers as $identifier)
         {
@@ -623,7 +623,7 @@ abstract class RightsService
      * @throws \Exception
      */
     protected function findLocationsWithGrantedRights(
-        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
         $treeIdentifier = null
     )
     {
@@ -696,7 +696,7 @@ abstract class RightsService
     {
         $locations = $this->findRightsLocationRecordsByIdentifiersAndType($identifiers, $type);
 
-        $locationIdentifiers = array();
+        $locationIdentifiers = [];
 
         foreach ($locations as $location)
         {
@@ -795,7 +795,7 @@ abstract class RightsService
             $userIdentifier, $entities, $right, $locationIdentifiers
         );
 
-        $locationIdentifiers = array();
+        $locationIdentifiers = [];
 
         foreach ($locationEntityRights as $locationEntityRight)
         {
@@ -818,7 +818,7 @@ abstract class RightsService
      * @see RightsUtil::get_location_overview_with_rights_granted()
      */
     protected function getLocationOverviewWithGrantedRights(
-        int $userIdentifier, array $entities, array $rights = array(), array $types = array(), $treeType = null,
+        int $userIdentifier, array $entities, array $rights = [], array $types = [], $treeType = null,
         $treeIdentifier = null
     )
     {
@@ -826,7 +826,7 @@ abstract class RightsService
             $userIdentifier, $entities, $rights, $types, $treeType, $treeIdentifier
         );
 
-        $overview = array();
+        $overview = [];
         foreach ($locations as $location)
         {
             $overview[$location[RightsLocation::PROPERTY_TYPE]][] = $location[RightsLocation::PROPERTY_IDENTIFIER];
@@ -845,7 +845,7 @@ abstract class RightsService
     {
         $locations = $this->findLocationParentIdentifierRecordsForLocationIdentifiers($locationIdentifiers);
 
-        $locationParentIdentifiers = array();
+        $locationParentIdentifiers = [];
 
         foreach ($locations as $location)
         {
@@ -875,7 +875,7 @@ abstract class RightsService
      */
     protected function getLocationParentIdentifiersRecursive(array $locationIdentifiers)
     {
-        $allLocationParentIdentifiers = array();
+        $allLocationParentIdentifiers = [];
 
         $locationParentIdentifiers = $locationIdentifiers;
 
@@ -1066,7 +1066,7 @@ abstract class RightsService
     {
         $entityRecords = $this->getRightsRepository()->findRightsEntityRecordsForRightAndLocation($right, $location);
 
-        $targetEntities = array();
+        $targetEntities = [];
 
         foreach ($entityRecords as $entityRecord)
         {
@@ -1104,7 +1104,7 @@ abstract class RightsService
      */
     protected function getTargetEntitiesForRightsAndLocation(array $rights, RightsLocation $location)
     {
-        $rightsTargetEntities = array();
+        $rightsTargetEntities = [];
 
         foreach ($rights as $right)
         {

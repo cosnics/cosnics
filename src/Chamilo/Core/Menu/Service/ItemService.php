@@ -459,7 +459,7 @@ class ItemService
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = array()
+        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = []
     )
     {
         return $this->getItemRepository()->findItemsByParentIdentifier(

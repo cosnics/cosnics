@@ -24,7 +24,7 @@ class Column extends Element
      *
      * @return string[]
      */
-    public static function getConfigurationVariables($configurationVariables = array())
+    public static function getConfigurationVariables($configurationVariables = [])
     {
         return parent::getConfigurationVariables(array(self::CONFIGURATION_WIDTH));
     }

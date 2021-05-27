@@ -29,7 +29,7 @@ interface CourseCopierRepositoryInterface
      *
      * @return ContentObjectPublicationCategory[]
      */
-    public function findPublicationCategoriesByIds($categoryIds = array());
+    public function findPublicationCategoriesByIds($categoryIds = []);
 
     /**
      * Finds a content object publication by a given id

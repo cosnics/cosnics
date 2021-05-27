@@ -21,7 +21,7 @@ class GeolocationDetailsRenderer extends ContentObjectPublicationDetailsRenderer
     {
         $lo = $publication->get_content_object();
 
-        $html = array();
+        $html = [];
 
         $html[] = $lo->get_description();
 

@@ -72,7 +72,7 @@ abstract class ContentObjectImportController
     {
         if (! isset($this->messages[$type]))
         {
-            $this->messages[$type] = array();
+            $this->messages[$type] = [];
         }
         
         $this->messages[$type][] = $message;
@@ -97,7 +97,7 @@ abstract class ContentObjectImportController
     {
         if ($type)
         {
-            return isset($this->messages[$type]) ? $this->messages[$type] : array();
+            return isset($this->messages[$type]) ? $this->messages[$type] : [];
         }
         else
         {
@@ -115,8 +115,8 @@ abstract class ContentObjectImportController
 
     public function get_messages_for_url()
     {
-        $messages = array();
-        $message_types = array();
+        $messages = [];
+        $message_types = [];
         
         foreach ($this->get_messages() as $type => $type_messages)
         {
@@ -132,6 +132,6 @@ abstract class ContentObjectImportController
 
     public static function get_allowed_extensions()
     {
-        return array();
+        return [];
     }
 }

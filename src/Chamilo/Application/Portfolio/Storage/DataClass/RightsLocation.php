@@ -36,9 +36,9 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
-        $default_property_names = array();
+        $default_property_names = [];
         $default_property_names[] = self::PROPERTY_ID;
         $default_property_names[] = self::PROPERTY_PUBLICATION_ID;
         $default_property_names[] = self::PROPERTY_NODE_ID;
@@ -136,7 +136,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
     {
         if ($this->inherits())
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_PUBLICATION_ID),
                 new StaticConditionVariable($this->get_publication_id()));

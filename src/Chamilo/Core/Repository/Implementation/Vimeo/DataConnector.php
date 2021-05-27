@@ -152,7 +152,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function delete_external_repository_object($id)
     {
-        return $this->vimeo->request('/videos/' . $id, array(), 'DELETE');
+        return $this->vimeo->request('/videos/' . $id, [], 'DELETE');
     }
 
     /**
@@ -164,7 +164,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function determine_rights($video_entry)
     {
-        $rights = array();
+        $rights = [];
 
         if (ContentObject::is_available(
             \Chamilo\Core\Repository\ContentObject\Vimeo\Storage\DataClass\Vimeo::class
@@ -238,7 +238,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         // }
         // else
         // {
-        return array();
+        return [];
         // }
     }
 
@@ -287,7 +287,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $videos = $this->retrieve_videos($condition, $order_property, $offset, $count);
 
-        $videos_id = array();
+        $videos_id = [];
         foreach ($videos['body']['data'] as $video)
         {
             $object = new ExternalObject();
@@ -329,7 +329,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         $feed_type = Request::get(Manager::PARAM_FEED_TYPE);
 
         $offset = (($offset - ($offset % $count)) / $count) + 1;
-        $search_parameters = array();
+        $search_parameters = [];
         $search_parameters['per_page'] = $count;
         $search_parameters['page'] = $offset;
 

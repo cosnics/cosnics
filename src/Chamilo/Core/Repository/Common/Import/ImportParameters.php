@@ -102,7 +102,7 @@ abstract class ImportParameters
     }
 
     public static function factory($type, $user, WorkspaceInterface $workspace, $category = 0, $file = null, 
-        $form_values = array())
+        $form_values = [])
     {
         $class = __NAMESPACE__ . '\\' . StringUtilities::getInstance()->createString($type)->upperCamelize() . '\\' .
              (string) StringUtilities::getInstance()->createString($type)->upperCamelize() . 'ImportParameters';

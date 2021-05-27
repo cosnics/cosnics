@@ -127,7 +127,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
      */
     public function get_tool_publications_condition($tool_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = parent::get_tool_publications_condition($tool_name);
 

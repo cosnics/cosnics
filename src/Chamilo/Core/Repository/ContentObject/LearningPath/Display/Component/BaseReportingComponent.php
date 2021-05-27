@@ -24,7 +24,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
     {
         $translator = Translation::getInstance();
 
-        $html = array();
+        $html = [];
 
         $buttonToolbarRenderer = $this->getButtonToolbarRenderer($translator);
         $html[] = $buttonToolbarRenderer->render();
@@ -85,7 +85,7 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
 
         $returnToUserListTranslation = $translator->getTranslation('ReturnToUserList');
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="alert alert-info">';
         $html[] = '<div class="pull-left" style="margin-top: 6px;">';

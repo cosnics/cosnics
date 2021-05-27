@@ -170,7 +170,7 @@ class ReportingTemplateStyle
             throw new Exception('Invalid font: "' . implode(', ', $font) . '".');
         }
 
-        $result = array();
+        $result = [];
 
         $result[] = trim($font[0]);
         $result[] = trim($font[1]);

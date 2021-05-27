@@ -13,11 +13,11 @@ class ReportingData
 
     private $description;
 
-    private $data = array();
+    private $data = [];
 
-    private $rows = array();
+    private $rows = [];
 
-    private $categories = array();
+    private $categories = [];
 
     private $show_categories = true;
 
@@ -27,7 +27,7 @@ class ReportingData
      *
      * @var array mapping row ID's onto ReportingDataStyle objects.
      */
-    private $row_style = array();
+    private $row_style = [];
 
     /**
      *
@@ -52,7 +52,7 @@ class ReportingData
         $row_id = array_search($row, $this->rows);
         if (!is_array($this->data[$category_id]))
         {
-            $this->data[$category_id] = array();
+            $this->data[$category_id] = [];
         }
         $this->data[$category_id][$row_id] = $value;
     }
@@ -64,7 +64,7 @@ class ReportingData
         {
             if (!is_array($this->data[$category_id]))
             {
-                $this->data[$category_id] = array();
+                $this->data[$category_id] = [];
             }
             $this->data[$category_id][$row_id] = $value[$category_id];
         }
@@ -198,7 +198,7 @@ class ReportingData
     {
         if ($this->get_row($row_id))
         {
-            $data = array();
+            $data = [];
             foreach ($this->get_categories() as $category_id => $category_name)
             {
                 $data[] = $this->get_data_category_row($category_id, $row_id);

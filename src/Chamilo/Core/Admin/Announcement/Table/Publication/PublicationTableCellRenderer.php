@@ -119,7 +119,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
         {
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                    Translation::get('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_EDIT,
@@ -131,7 +131,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                    Translation::get('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_DELETE,
@@ -157,7 +157,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES), $glyph,
+                    Translation::get('Hide', [], Utilities::COMMON_LIBRARIES), $glyph,
                     $this->get_component()->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_HIDE,
@@ -225,7 +225,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
 
                 if ($publication[Publication::PROPERTY_EMAIL_SENT])
                 {
-                    $glyph = new FontAwesomeGlyph('envelope', array(), Translation::get('SentByEmail'));
+                    $glyph = new FontAwesomeGlyph('envelope', [], Translation::get('SentByEmail'));
                     $email_icon = ' - ' . $glyph->render();
 
                     $data .= $email_icon;
@@ -264,7 +264,7 @@ class PublicationTableCellRenderer extends RecordTableCellRenderer implements Ta
             $publication[Publication::PROPERTY_ID]
         );
 
-        $target_list = array();
+        $target_list = [];
 
         if (array_key_exists(0, $targetEntities[0]))
         {

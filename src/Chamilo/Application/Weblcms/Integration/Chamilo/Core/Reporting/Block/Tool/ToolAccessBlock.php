@@ -52,7 +52,7 @@ abstract class ToolAccessBlock extends ToolBlock
                 null, 
                 \Chamilo\Application\Weblcms\Tool\Manager::get_tool_type_namespace($tool_name));
             
-            $params = array();
+            $params = [];
             
             $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
             $params[Application::PARAM_CONTEXT] = Manager::context();

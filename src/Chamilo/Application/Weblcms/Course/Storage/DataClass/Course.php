@@ -519,7 +519,7 @@ class Course extends DataClass
      *
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_properties = array())
+    public static function get_default_property_names($extended_properties = [])
     {
         $extended_properties[] = self::PROPERTY_COURSE_TYPE_ID;
         $extended_properties[] = self::PROPERTY_TITULAR_ID;
@@ -542,7 +542,7 @@ class Course extends DataClass
      * @return string[string]
      *
      */
-    protected function get_dependencies($dependencies = array())
+    protected function get_dependencies($dependencies = [])
     {
         $id = $this->get_id();
 
@@ -610,7 +610,7 @@ class Course extends DataClass
 
     public function get_fully_qualified_name($include_self = true)
     {
-        $names = array();
+        $names = [];
 
         if ($include_self)
         {
@@ -702,7 +702,7 @@ class Course extends DataClass
      */
     public function get_subscribed_groups()
     {
-        $relationConditions = array();
+        $relationConditions = [];
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id())
@@ -725,7 +725,7 @@ class Course extends DataClass
      */
     public function get_subscribed_users()
     {
-        $relationConditions = array();
+        $relationConditions = [];
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id())
@@ -802,7 +802,7 @@ class Course extends DataClass
      */
     public function has_subscribed_groups()
     {
-        $relationConditions = array();
+        $relationConditions = [];
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id())
@@ -825,7 +825,7 @@ class Course extends DataClass
      */
     public function has_subscribed_users()
     {
-        $relationConditions = array();
+        $relationConditions = [];
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($this->get_id())
@@ -848,7 +848,7 @@ class Course extends DataClass
      */
     private function initialize_course_sections()
     {
-        $sections = array();
+        $sections = [];
         // translationm::get will be called on display, depending on the course language setting
         // these strings go to the database
         $sections[] = array('name' => 'SectionTools', 'type' => 1, 'order' => 1);
@@ -988,7 +988,7 @@ class Course extends DataClass
      */
     public function retrieve_course_setting_relation($course_setting)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

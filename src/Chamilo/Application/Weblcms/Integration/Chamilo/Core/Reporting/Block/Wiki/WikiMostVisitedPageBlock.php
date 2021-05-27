@@ -50,7 +50,7 @@ class WikiMostVisitedPageBlock extends ToolBlock
             
             foreach ($complex_content_object_items as $complex_content_object_item)
             {
-                $conditions = array();
+                $conditions = [];
                 
                 $conditions[] = new PatternMatchCondition(
                     new PropertyConditionVariable(

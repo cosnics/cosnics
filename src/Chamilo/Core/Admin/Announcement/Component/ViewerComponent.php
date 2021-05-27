@@ -39,7 +39,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             $publication = $this->getPublicationService()->findPublicationByIdentifier((int) $id);
             $object = $publication->get_content_object();
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->getButtonToolbarRenderer($publication)->render();
@@ -75,7 +75,7 @@ class ViewerComponent extends Manager implements NoContextComponent
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Edit', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
+                        Translation::get('Edit', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('pencil-alt'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_EDIT,
@@ -87,7 +87,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Delete', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
+                        Translation::get('Delete', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('times'),
                         $this->get_url(
                             array(
                                 self::PARAM_ACTION => self::ACTION_DELETE,
@@ -112,7 +112,7 @@ class ViewerComponent extends Manager implements NoContextComponent
 
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('Hide', array(), Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
+                        Translation::get('Hide', [], Utilities::COMMON_LIBRARIES), $glyph, $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_HIDE,
                             self::PARAM_SYSTEM_ANNOUNCEMENT_ID => $publication->get_id()

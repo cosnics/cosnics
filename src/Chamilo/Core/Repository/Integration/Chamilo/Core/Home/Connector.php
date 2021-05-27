@@ -33,14 +33,14 @@ class Connector
      */
     public static function get_objects($types)
     {
-        $result = array();
+        $result = [];
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));
 
-        $types_condition = array();
+        $types_condition = [];
         foreach ($types as $type)
         {
             $types_condition[] = new EqualityCondition(
@@ -71,7 +71,7 @@ class Connector
 
     public function getDisplayerObjects()
     {
-        $objectTypes = array();
+        $objectTypes = [];
 
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement';
         $objectTypes[] = 'Chamilo\Core\Repository\ContentObject\Description\Storage\DataClass\Description';

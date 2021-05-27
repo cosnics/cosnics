@@ -29,7 +29,7 @@ class Block extends Element
      *
      * @return string[]
      */
-    public static function getConfigurationVariables($configurationVariables = array())
+    public static function getConfigurationVariables($configurationVariables = [])
     {
         return parent::getConfigurationVariables(
             array(self::CONFIGURATION_VISIBILITY, self::CONFIGURATION_CONTEXT, self::CONFIGURATION_BLOCK_TYPE)

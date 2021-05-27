@@ -56,7 +56,7 @@ class ItemTitle extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_ITEM_ID, self::PROPERTY_TITLE, self::PROPERTY_SORT, self::PROPERTY_ISOCODE)

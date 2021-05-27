@@ -274,7 +274,7 @@ class PublicationService implements PublicationServiceInterface
         
         if (! $this->rightsService->canUserViewTool($user, $tool, $course))
         {
-            return array();
+            return [];
         }
         
         $contentObjectPublicationIds = $this->rightsService->getPublicationIdsWithViewRightInTool($user, $tool, $course);
@@ -318,7 +318,7 @@ class PublicationService implements PublicationServiceInterface
         {
             if (! $this->rightsService->canUserViewTool($user, $tool, $course))
             {
-                return array();
+                return [];
             }
             
             $publicationIds = $this->rightsService->getPublicationIdsWithViewRightInTool($user, $tool, $course);
@@ -327,7 +327,7 @@ class PublicationService implements PublicationServiceInterface
         {
             if (! $this->rightsService->canUserViewPublicationCategory($user, $category, $course))
             {
-                return array();
+                return [];
             }
             
             $publicationIds = $this->rightsService->getPublicationIdsWithViewRightInCategory($user, $category, $course);
@@ -429,7 +429,7 @@ class PublicationService implements PublicationServiceInterface
         User $user, Course $course,
         array $contentObjectPublicationCategories)
     {
-        $categoriesForUser = array();
+        $categoriesForUser = [];
         
         foreach ($contentObjectPublicationCategories as $contentObjectPublicationCategory)
         {

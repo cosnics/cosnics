@@ -36,7 +36,7 @@ class ForumPost extends DataClass implements AttachmentSupport
     /**
      * Learning objects attached to this learning object.
      */
-    private $attachments = array();
+    private $attachments = [];
 
     /**
      * Attaches the learning object with the given ID to this learning object.
@@ -61,7 +61,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return boolean
      */
-    public function attach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
+    public function attach_content_objects($ids = [], $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {
@@ -237,7 +237,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

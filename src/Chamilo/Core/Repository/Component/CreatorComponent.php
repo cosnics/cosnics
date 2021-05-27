@@ -131,7 +131,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
 
                     if ($selectedTab)
                     {
-                        $parameters = array();
+                        $parameters = [];
                         $parameters[Application::PARAM_ACTION] = self::ACTION_EDIT_CONTENT_OBJECTS;
                         $parameters[self::PARAM_CONTENT_OBJECT_ID] = $contentObject->get_id();
                         $parameters[DynamicTabsRenderer::PARAM_SELECTED_TAB] = array(
@@ -153,7 +153,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
                     $typeContext = $contentObject->package();
                 }
 
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[self::PARAM_CATEGORY_ID] = $parent;
 
@@ -166,7 +166,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $content_object_form->toHtml();
@@ -177,7 +177,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $type_selector_renderer->render();

@@ -19,7 +19,7 @@ class ForumTopicForm extends ContentObjectForm
      * @param array $htmleditor_options
      * @param bool $in_tab
      */
-    protected function build_creation_form($htmleditor_options = array(), $in_tab = false)
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
     }
@@ -32,7 +32,7 @@ class ForumTopicForm extends ContentObjectForm
      *
      * @throws \HTML_QuickForm_Error
      */
-    protected function build_editing_form($htmleditor_options = array(), $in_tab = false)
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form($htmleditor_options, $in_tab);
         $this->addElement('category', Translation::get('Properties', null, Utilities::COMMON_LIBRARIES));
@@ -55,7 +55,7 @@ class ForumTopicForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         if ($object != null)

@@ -28,7 +28,7 @@ class BlogForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $blog = $this->get_content_object();
         if (isset($blog))

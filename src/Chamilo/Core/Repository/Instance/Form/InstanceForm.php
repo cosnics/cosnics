@@ -249,7 +249,7 @@ class InstanceForm extends FormValidator
 
                     if ($setting['field'] == 'radio' || $setting['field'] == 'checkbox')
                     {
-                        $group = array();
+                        $group = [];
                         foreach ($options as $option_value => $option_name)
                         {
                             if ($setting['field'] == 'checkbox')
@@ -344,7 +344,7 @@ class InstanceForm extends FormValidator
         $file = Path::getInstance()->namespaceToFullPath($this->application->get_implementation()) . 'Resources' .
             DIRECTORY_SEPARATOR . 'Settings' . DIRECTORY_SEPARATOR . 'Settings.xml';
 
-        $result = array();
+        $result = [];
 
         if (file_exists($file))
         {
@@ -355,12 +355,12 @@ class InstanceForm extends FormValidator
 
             // Get categories
             $categories = $doc->getElementsByTagname('category');
-            $settings = array();
+            $settings = [];
 
             foreach ($categories as $index => $category)
             {
                 $category_name = $category->getAttribute('name');
-                $category_properties = array();
+                $category_properties = [];
 
                 // Get settings in category
                 $properties = $category->getElementsByTagname('setting');
@@ -368,7 +368,7 @@ class InstanceForm extends FormValidator
 
                 foreach ($properties as $index => $property)
                 {
-                    $property_info = array();
+                    $property_info = [];
 
                     foreach ($attributes as $index => $attribute)
                     {
@@ -400,7 +400,7 @@ class InstanceForm extends FormValidator
                                 $property_options->hasChildNodes())
                             {
                                 $options = $property_options->getElementsByTagname('option');
-                                $options_info = array();
+                                $options_info = [];
                                 foreach ($options as $option)
                                 {
                                     $options_info[$option->getAttribute('value')] = $option->getAttribute('name');
@@ -416,7 +416,7 @@ class InstanceForm extends FormValidator
                             if ($property_validations->hasChildNodes())
                             {
                                 $validations = $property_validations->getElementsByTagname('validation');
-                                $validation_info = array();
+                                $validation_info = [];
                                 foreach ($validations as $validation)
                                 {
                                     $validation_info[] = array(
@@ -449,7 +449,7 @@ class InstanceForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $external_instance = $this->external_instance;
 

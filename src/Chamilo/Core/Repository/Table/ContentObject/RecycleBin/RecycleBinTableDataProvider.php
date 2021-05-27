@@ -14,7 +14,7 @@ class RecycleBinTableDataProvider extends DataClassTableDataProvider
     {
         if (is_null($order_property))
         {
-            $order_property = array();
+            $order_property = [];
         }
         elseif (! is_array($order_property))
         {

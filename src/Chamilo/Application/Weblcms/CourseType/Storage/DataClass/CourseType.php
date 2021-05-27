@@ -40,7 +40,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      * @param mixed[string] $default_properties
      * @param mixed[string] $optional_properties
      */
-    public function __construct($default_properties = array(), $optional_properties = array())
+    public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -265,7 +265,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -304,7 +304,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function get_display_order_context_properties()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -407,7 +407,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      */
     public function retrieve_course_setting_relation($course_setting)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

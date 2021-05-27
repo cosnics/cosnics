@@ -154,7 +154,7 @@ class PackageContextSequencer
     {
         $this->expandPackageContexts($packageContexts);
 
-        $sequence = array();
+        $sequence = [];
 
         while ($unprocessed_package_context = array_shift($packageContexts))
         {

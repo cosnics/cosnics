@@ -49,7 +49,7 @@ class DayCalendar extends Calendar
      * @param string[] $classes
      */
     public function __construct(
-        $displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false, $classes = array()
+        $displayTime, $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false, $classes = []
     )
     {
         $this->hourStep = $hourStep;
@@ -143,7 +143,7 @@ class DayCalendar extends Calendar
             $cellContent = str_pad($hour, 2, '0', STR_PAD_LEFT);
             $this->setCellContents($rowId, 0, $cellContent);
 
-            $classes = array();
+            $classes = [];
 
             $classes[] = 'table-calendar-day-hours';
 
@@ -178,7 +178,7 @@ class DayCalendar extends Calendar
      */
     protected function determineCellClasses($hour)
     {
-        $classes = array();
+        $classes = [];
 
         // Highlight current hour
         if (date('Y-m-d') == date('Y-m-d', $this->getDisplayTime()))

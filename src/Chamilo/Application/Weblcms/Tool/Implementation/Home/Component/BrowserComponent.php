@@ -21,7 +21,7 @@ class BrowserComponent extends Manager
         
         $homeRenderer = new $type($this, $courseTools, $introductionAllowed, $this->get_introduction_text());
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header($courseTools, $introductionAllowed);
         $html[] = $homeRenderer->render();

@@ -16,7 +16,7 @@ class Manager implements UserInterface
      */
     public static function get_additional_user_information(User $user)
     {
-        $html = array();
+        $html = [];
         
         $table = new HTML_Table(array('class' => 'table table-striped table-bordered table-hover table-responsive'));
         

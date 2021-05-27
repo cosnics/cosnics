@@ -121,7 +121,7 @@ abstract class AssignmentRepository
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
         );
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = $this->getEntityTypeCondition($entityType, $condition);
 
         $conditions[] = new ComparisonCondition(
@@ -294,7 +294,7 @@ abstract class AssignmentRepository
         Assignment $assignment, $entityType, $entityId, Condition $condition = null
     )
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition);
 
         $conditions[] = new ComparisonCondition(
@@ -453,7 +453,7 @@ abstract class AssignmentRepository
         $entityType, $entityIdentifiers, Condition $condition
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -481,7 +481,7 @@ abstract class AssignmentRepository
      */
     public function findEntryAttachmentByEntryAndAttachmentId(Entry $entry, $attachmentId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($this->getEntryAttachmentClassName(), EntryAttachment::PROPERTY_ENTRY_ID),
@@ -728,7 +728,7 @@ abstract class AssignmentRepository
 
         $joins = new Joins();
 
-        $joinConditions = array();
+        $joinConditions = [];
 
         $joinConditions[] = new EqualityCondition(
             $baseVariable, new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
@@ -783,7 +783,7 @@ abstract class AssignmentRepository
             ), ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(1)
         );
 
-        $joinConditions = array();
+        $joinConditions = [];
 
         $joinConditions[] = new EqualityCondition(
             $baseVariable, new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
@@ -822,7 +822,7 @@ abstract class AssignmentRepository
      */
     protected function getEntityTypeAndIdCondition($entityType, $entityId, Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -847,7 +847,7 @@ abstract class AssignmentRepository
      */
     protected function getEntityTypeCondition($entityType, Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 
@@ -893,9 +893,9 @@ abstract class AssignmentRepository
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    protected function getTargetEntitiesCondition($entityClass, $entityIds = array(), Condition $condition = null)
+    protected function getTargetEntitiesCondition($entityClass, $entityIds = [], Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         !is_null($condition) ? $conditions[] = $condition : null;
 
@@ -937,7 +937,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new RecordRetrieveParameters(
-            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), array(), $joins
+            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), [], $joins
         );
 
         $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);

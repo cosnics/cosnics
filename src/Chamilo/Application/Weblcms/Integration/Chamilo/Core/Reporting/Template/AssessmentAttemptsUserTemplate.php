@@ -91,7 +91,7 @@ class AssessmentAttemptsUserTemplate extends ReportingTemplate
 
         $filters = array(\Chamilo\Application\Weblcms\Manager::PARAM_USERS);
 
-        $params = array();
+        $params = [];
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID] = AssessmentAttemptsTemplate::class;
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION] = $this->publication_id;
 

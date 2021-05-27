@@ -49,7 +49,7 @@ class BrowserComponent extends Manager
 
     public function getFilterActions()
     {
-        $showActions = array();
+        $showActions = [];
         $filter = $this->getFilter();
 
         $showActions[] = new SubButtonHeader(Translation::get('ViewPeriodHeader'));
@@ -57,7 +57,7 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButton(
             Translation::get('PeriodAll', null, Utilities::COMMON_LIBRARIES), null,
             $this->get_url(array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null)),
-            Button::DISPLAY_LABEL, false, array(), null, ($filter == '' ? true : false)
+            Button::DISPLAY_LABEL, false, [], null, ($filter == '' ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -66,7 +66,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_TODAY
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_TODAY ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_TODAY ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -75,7 +75,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_WEEK
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_WEEK ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_THIS_WEEK ? true : false)
         );
 
         $showActions[] = new SubButton(
@@ -84,7 +84,7 @@ class BrowserComponent extends Manager
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => null,
                 self::PARAM_FILTER => self::FILTER_THIS_MONTH
             )
-        ), Button::DISPLAY_LABEL, false, array(), null, ($filter == self::FILTER_THIS_MONTH ? true : false)
+        ), Button::DISPLAY_LABEL, false, [], null, ($filter == self::FILTER_THIS_MONTH ? true : false)
         );
 
         $showActions[] = new SubButtonDivider();
@@ -112,7 +112,7 @@ class BrowserComponent extends Manager
 
     public function get_tool_actions()
     {
-        $toolActions = array();
+        $toolActions = [];
 
         $toolActions[] = new Button(
             Translation::get('Download'), new FontAwesomeGlyph('download'),
@@ -124,7 +124,7 @@ class BrowserComponent extends Manager
 
     public function get_tool_conditions()
     {
-        $conditions = array();
+        $conditions = [];
         $filter = $this->getFilter();
 
         switch ($filter)
@@ -153,19 +153,19 @@ class BrowserComponent extends Manager
         if ($browser_type == ContentObjectPublicationListRenderer::TYPE_GALLERY ||
             $browser_type == ContentObjectPublicationListRenderer::TYPE_SLIDESHOW)
         {
-            $classes = array();
+            $classes = [];
 
             if (ContentObject::is_available('Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File'))
             {
                 $classes[] = File::class;
             }
 
-            $image_subselect_conditions = array();
+            $image_subselect_conditions = [];
 
             foreach ($classes as $class)
             {
                 $image_types = $class::get_image_types();
-                $image_conditions = array();
+                $image_conditions = [];
                 foreach ($image_types as $image_type)
                 {
                     $image_conditions[] = new PatternMatchCondition(

@@ -23,7 +23,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $table = new EntityRelationTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

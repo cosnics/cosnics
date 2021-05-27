@@ -42,7 +42,7 @@ class EndingAssignments extends Block
             $course_ids[$course->get_id()] = $course->get_id();
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class,
@@ -91,7 +91,7 @@ class EndingAssignments extends Block
             )
         );
 
-        $ending_assignments = array();
+        $ending_assignments = [];
         foreach ($publications as $publication)
         {
             $assignment = $publication->get_content_object();
@@ -130,7 +130,7 @@ class EndingAssignments extends Block
 
     public function displayNewItems($items)
     {
-        $html = array();
+        $html = [];
         foreach ($items as $item)
         {
             $end_date = DatetimeUtilities::format_locale_date(

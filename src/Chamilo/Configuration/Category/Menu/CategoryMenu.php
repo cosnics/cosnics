@@ -81,9 +81,9 @@ class CategoryMenu extends HtmlMenu
 
     public function get_menu()
     {
-        $menu = array();
+        $menu = [];
 
-        $menu_item = array();
+        $menu_item = [];
         $menu_item['title'] = Translation::get('Categories');
         $menu_item['url'] = $this->get_url();
 
@@ -93,7 +93,7 @@ class CategoryMenu extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         $menu_item['class'] = $glyph->getClassNamesString();
 
@@ -132,7 +132,7 @@ class CategoryMenu extends HtmlMenu
         {
             if ($object)
             {
-                $menu_item = array();
+                $menu_item = [];
                 $menu_item['title'] = $object->get_name();
                 $menu_item['url'] = $this->get_url($object->get_id());
 
@@ -143,7 +143,7 @@ class CategoryMenu extends HtmlMenu
                     $menu_item['sub'] = $sub_menu_items;
                 }
 
-                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 $menu_item['class'] = $glyph->getClassNamesString();
                 $menu_item[OptionsMenuRenderer::KEY_ID] = $object->get_id();

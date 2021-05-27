@@ -56,10 +56,10 @@ class DoctrineExtension
 
             $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
 
-            $direct_group_conditions = array();
+            $direct_group_conditions = [];
             foreach ($direct_groups_with_tree_values as $group)
             {
-                $and_conditions = array();
+                $and_conditions = [];
 
                 $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
@@ -97,7 +97,7 @@ class DoctrineExtension
                 )
             );
 
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new OrCondition($direct_group_conditions);
 
@@ -140,7 +140,7 @@ class DoctrineExtension
             )
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
@@ -220,12 +220,12 @@ class DoctrineExtension
         {
             $properties = $this->get_user_properties_for_select();
 
-            $case_condition_variable = new CaseConditionVariable(array(), self::PARAM_SUBSCRIPTION_STATUS);
+            $case_condition_variable = new CaseConditionVariable([], self::PARAM_SUBSCRIPTION_STATUS);
 
-            $direct_group_conditions = array();
+            $direct_group_conditions = [];
             foreach ($direct_groups_with_tree_values as $group)
             {
-                $and_conditions = array();
+                $and_conditions = [];
 
                 $and_conditions[] = new ComparisonCondition(
                     new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE),
@@ -272,7 +272,7 @@ class DoctrineExtension
                 )
             );
 
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new OrCondition($direct_group_conditions);
 
@@ -321,7 +321,7 @@ class DoctrineExtension
             )
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
@@ -384,7 +384,7 @@ class DoctrineExtension
         $subscribedUsers = $this->getSubscribedUsers($course_id, $condition);
         $subscribedGroupUsers = $this->getSubscribedGroupUsers($course_id, $condition);
 
-        $users = array();
+        $users = [];
 
         foreach ($subscribedUsers as $subscribedUser)
         {
@@ -453,7 +453,7 @@ class DoctrineExtension
             )
         );
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
             new StaticConditionVariable($course_id)

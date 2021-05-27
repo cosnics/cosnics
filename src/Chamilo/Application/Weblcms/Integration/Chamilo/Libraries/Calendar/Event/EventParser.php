@@ -123,7 +123,7 @@ class EventParser
         $events = $parser->getEvents();
         foreach ($events as &$parsedEvent)
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = Manager::context();
             $parameters[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
             $parameters[Manager::PARAM_TOOL_ACTION] = \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW;

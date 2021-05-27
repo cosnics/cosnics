@@ -35,14 +35,14 @@ class PackageTypeSettingsMenu extends HtmlMenu
 
     private function get_items(PackageList $package_list)
     {
-        $item = array();
+        $item = [];
 
         $item['class'] = $package_list->get_type_icon()->getClassNamesString();
         $item['title'] = $package_list->get_type_name();
         $item['url'] = $this->get_url($package_list->get_type());
         $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
 
-        $sub_items = array();
+        $sub_items = [];
 
         foreach ($package_list->get_children() as $child)
         {

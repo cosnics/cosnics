@@ -75,7 +75,7 @@ abstract class Renderer
      */
     abstract public function render();
 
-    public function get_url($parameters = array (), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = array (), $filter = [], $encode_entities = false)
     {
         $redirect = new Redirect($parameters, $filter, $encode_entities);
         return $redirect->getUrl();
@@ -87,7 +87,7 @@ abstract class Renderer
      * @param array $parameters
      * @param boolean $encode
      */
-    public function get_link($parameters = array (), $filter = array(), $encode_entities = false)
+    public function get_link($parameters = array (), $filter = [], $encode_entities = false)
     {
         $redirect = new Redirect($parameters, $filter, $encode_entities);
         return $redirect->getUrl();

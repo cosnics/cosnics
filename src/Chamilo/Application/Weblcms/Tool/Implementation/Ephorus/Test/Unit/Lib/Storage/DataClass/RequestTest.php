@@ -376,7 +376,7 @@ class RequestTest extends DataClassTest
      * 
      * @param string[] $mocked_functions - [OPTIONAL]
      */
-    protected function get_request_mock($mocked_functions = array())
+    protected function get_request_mock($mocked_functions = [])
     {
         return $mock_object = $this->createMock('\application\weblcms\tool\ephorus\Request', $mocked_functions);
     }

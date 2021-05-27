@@ -99,7 +99,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
             }
             else
             {
-                $this->selected_complex_content_object_item = array();
+                $this->selected_complex_content_object_item = [];
                 
                 foreach ($selected_complex_content_object_item_id as $id)
                 {
@@ -350,7 +350,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
      */
     public function get_additional_links()
     {
-        return array();
+        return [];
     }
 
     public function get_content_object_type_creation_url($template_registration_id)
@@ -372,7 +372,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         return $this->get_url(array(self::PARAM_ACTION => self::ACTION_PREVIEW));
     }
 
-    public function get_creation_links($content_object, $content_object_types = array())
+    public function get_creation_links($content_object, $content_object_types = [])
     {
         if (count($content_object_types) == 0)
         {

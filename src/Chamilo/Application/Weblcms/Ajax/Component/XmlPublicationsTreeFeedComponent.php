@@ -20,7 +20,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
     public function run()
     {
-        $publications_tree = array();
+        $publications_tree = [];
         $course = null;
         $user = null;
 
@@ -108,7 +108,7 @@ class XmlPublicationsTreeFeedComponent extends Manager
             }
             else
             {
-                $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 return $glyph->getClassNamesString();
             }

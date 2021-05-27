@@ -43,7 +43,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                 if (! $calculator->canUpload($file->get_size()))
                 {
                     $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
             else
@@ -65,7 +65,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                         if (file_exists($temp_path))
                         {
                             $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
-                            return array();
+                            return [];
                         }
                         else
                         {
@@ -79,7 +79,7 @@ class FileContentObjectImportController extends ContentObjectImportController
                                 else
                                 {
                                     $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
-                                    return array();
+                                    return [];
                                 }
                             }
                         }
@@ -87,13 +87,13 @@ class FileContentObjectImportController extends ContentObjectImportController
                     else
                     {
                         $this->add_message(Translation::get('InsufficientDiskQuota'), self::TYPE_ERROR);
-                        return array();
+                        return [];
                     }
                 }
                 else
                 {
                     $this->add_message(Translation::get('InvalidDocumentLink'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
             
@@ -105,7 +105,7 @@ class FileContentObjectImportController extends ContentObjectImportController
             $document->set_filename($file->get_name_extension());
             
             $hash = md5_file($file->get_path());
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
                 new StaticConditionVariable($this->get_parameters()->get_user()));
@@ -132,12 +132,12 @@ class FileContentObjectImportController extends ContentObjectImportController
                     $this->add_message(
                         Translation::get('ObjectAlreadyExists', array('LINK' => $redirect->getUrl())), 
                         self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
                 else
                 {
                     $this->add_message(Translation::get('ObjectAlreadyExistsMultipleTimes'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
             else
@@ -154,14 +154,14 @@ class FileContentObjectImportController extends ContentObjectImportController
                 else
                 {
                     $this->add_message(Translation::get('ObjectNotImported'), self::TYPE_ERROR);
-                    return array();
+                    return [];
                 }
             }
         }
         else
         {
             $this->add_message(Translation::get('DocumentObjectNotAvailable'), self::TYPE_WARNING);
-            return array();
+            return [];
         }
     }
 

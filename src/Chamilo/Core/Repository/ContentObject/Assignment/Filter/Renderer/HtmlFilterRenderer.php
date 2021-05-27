@@ -19,7 +19,7 @@ class HtmlFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\HtmlFi
     public function add_properties()
     {
         $filter_data = $this->get_filter_data();
-        $html = array();
+        $html = [];
 
         $html[] = parent::add_properties();
 

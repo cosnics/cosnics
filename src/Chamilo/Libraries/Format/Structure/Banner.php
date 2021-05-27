@@ -64,7 +64,7 @@ class Banner
         $configurationConsulter = $this->getConfigurationConsulter();
         $translator = $this->getTranslator();
 
-        $html = array();
+        $html = [];
 
         if ($this->getApplication() instanceof Application && $this->getApplication()->getUser() instanceof User)
         {
@@ -105,12 +105,12 @@ class Banner
             $link = $redirect->getUrl();
 
             $html[] = '<div class="warning-banner bg-warning text-warning">';
-            $html[] = $translator->trans('LoggedInAsUser', array(), 'Chamilo\Core\User');
+            $html[] = $translator->trans('LoggedInAsUser', [], 'Chamilo\Core\User');
             $html[] = ' ';
             $html[] = $userFullName;
             $html[] = ' ';
             $html[] =
-                '<a href="' . $link . '">' . $translator->trans('Back', array(), Utilities::COMMON_LIBRARIES) . '</a>';
+                '<a href="' . $link . '">' . $translator->trans('Back', [], Utilities::COMMON_LIBRARIES) . '</a>';
             $html[] = '</div>';
         }
 

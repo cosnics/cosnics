@@ -85,7 +85,7 @@ class UserRepository implements UserRepositoryInterface
      * @return integer
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = array()
+        string $searchQuery = null, array $userIdentifiers = []
     )
     {
         return $this->getDataClassRepository()->count(
@@ -156,7 +156,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findActiveUsersByStatus($status)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new ComparisonCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_STATUS), ComparisonCondition::EQUAL,
             new StaticConditionVariable($status)
@@ -177,7 +177,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findPlatformAdministrators()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_PLATFORMADMIN), new StaticConditionVariable(1)
@@ -267,7 +267,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUserByUsernameOrEmail($usernameOrEmail)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL),
@@ -329,7 +329,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers(Condition $condition = null, $count = null, $offset = null, $orderBy = array())
+    public function findUsers(Condition $condition = null, $count = null, $offset = null, $orderBy = [])
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
@@ -343,7 +343,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUsersByIdentifiersOrderedByName($userIdentifiers)
     {
-        $orderProperties = array();
+        $orderProperties = [];
         $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
 
@@ -386,7 +386,7 @@ class UserRepository implements UserRepositoryInterface
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = array(), int $offset = null, int $count = null
+        string $searchQuery = null, array $userIdentifiers = [], int $offset = null, int $count = null
     )
     {
         $orderProperties = array(
@@ -438,7 +438,7 @@ class UserRepository implements UserRepositoryInterface
 
     protected function getUserConditionForSearchQuery(string $searchQuery = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         // Set the conditions for the search query
         if ($searchQuery && $searchQuery != '')
@@ -467,10 +467,10 @@ class UserRepository implements UserRepositoryInterface
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
     protected function getUserConditionForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = array()
+        string $searchQuery = null, array $userIdentifiers = []
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $this->getUserConditionForSearchQuery($searchQuery);
         $conditions[] =
@@ -487,7 +487,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserSettingForSettingAndUser(Setting $setting, User $user)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(UserSetting::class, UserSetting::PROPERTY_USER_ID),

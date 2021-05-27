@@ -87,10 +87,10 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $previewLink = \Chamilo\Core\Repository\Preview\Manager::get_content_object_default_action_link($document);
             $onclick = 'onclick="javascript:openPopup(\'' . $previewLink . '\'); return false;';
 
-            $viewButton = array();
+            $viewButton = [];
             $viewButton[] = '<a class="btn btn-primary view" target="_blank" ' . $onclick . ' ">';
 
-            $glyph = new FontAwesomeGlyph('desktop', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('desktop', [], null, 'fas');
 
             $viewButton[] = $glyph->render() . ' <span>';
 
@@ -101,7 +101,7 @@ class ImportFileComponent extends \Chamilo\Core\Repository\Ajax\Manager
             $viewButton[] = '</span>';
             $viewButton[] = '</a>';
 
-            $uploadedMessage = array();
+            $uploadedMessage = [];
             $uploadedMessage[] = '<div class="alert alert-success alert-import-success">';
             $uploadedMessage[] = Translation::getInstance()->getTranslation(
                 'FileImported', array('CATEGORY' => $this->getCategoryTitle($categoryId)), Manager::context()

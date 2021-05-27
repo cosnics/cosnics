@@ -49,7 +49,7 @@ if (! $in)
 $columns = 0;
 while (false !== ($line = fgets($in)))
 {
-    $matches = array();
+    $matches = [];
     if (preg_match('/^(Here come the tests:\s*)\|$/', $line, $matches))
     {
         $columns = strpos($line, '|');
@@ -90,7 +90,7 @@ $success = 0;
 $total = 0;
 while (false !== ($line = fgets($in)))
 {
-    $matches = array();
+    $matches = [];
     if (preg_match('/^(\d+)\s+(.*?)\s*\|/', $line, $matches))
     {
         $section = $matches[1];

@@ -61,7 +61,7 @@ class ResetComponent extends Manager
             $is_error = true;
         }
 
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_DISPLAY;
 
         $this->redirect($message, $is_error, $parameters);

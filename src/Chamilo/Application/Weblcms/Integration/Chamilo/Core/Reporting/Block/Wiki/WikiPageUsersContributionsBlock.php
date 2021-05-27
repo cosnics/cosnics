@@ -33,7 +33,7 @@ class WikiPageUsersContributionsBlock extends ToolBlock
             $complex_content_object_item->get_ref());
         $versions = \Chamilo\Core\Repository\Storage\DataManager::retrieve_content_object_versions($wiki_page);
         
-        $users = array();
+        $users = [];
         
         foreach($versions as $version)
         {

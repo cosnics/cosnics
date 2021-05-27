@@ -113,8 +113,8 @@ class Mail
      * @param \Chamilo\Libraries\Mail\ValueObject\MailFile[] $attachments
      */
     public function __construct(
-        $subject, $message, $to = array(), $sendIndividually = true, $cc = array(), $bcc = array(), $fromName = null,
-        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = array(), $attachments = array()
+        $subject, $message, $to = [], $sendIndividually = true, $cc = [], $bcc = [], $fromName = null,
+        $fromEmail = null, $replyName = null, $replyEmail = null, $embeddedImages = [], $attachments = []
     )
     {
         $this->subject = $subject;
@@ -246,7 +246,7 @@ class Mail
      * @param string[] $cc
      * @param string[] $bcc
      */
-    protected function setRecipients($sendIndividually = false, $to = array(), $cc = array(), $bcc = array())
+    protected function setRecipients($sendIndividually = false, $to = [], $cc = [], $bcc = [])
     {
         if ($sendIndividually && (!empty($cc) || !empty($bcc)))
         {

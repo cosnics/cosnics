@@ -42,7 +42,7 @@ class UrlGenerator
      *
      * @return string
      */
-    public function generateContextURL($context, $component, $parameters = array(), $filters = array())
+    public function generateContextURL($context, $component, $parameters = [], $filters = [])
     {
         if ($context)
         {
@@ -65,7 +65,7 @@ class UrlGenerator
      *
      * @return string
      */
-    public function generateURL($parameters = array(), $filters = array())
+    public function generateURL($parameters = [], $filters = [])
     {
         $baseParameters = $this->urlParameterBag->all();
         $this->urlParameterBag->add($parameters);

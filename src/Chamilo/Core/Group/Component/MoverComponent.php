@@ -54,7 +54,7 @@ class MoverComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = Translation::get('Group') . ': ' . $group->get_name();

@@ -89,7 +89,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
     public function display_block_footer($section)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="clearfix"></div>';
 
@@ -103,7 +103,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
     public function display_block_header($section, $block_name)
     {
-        $html = array();
+        $html = [];
 
         if ($section->get_type() == CourseSection::TYPE_TOOL)
         {
@@ -150,7 +150,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             return $section_types_map[$tool->get_section_type()];
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_TOOL_ID
@@ -182,7 +182,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
         {
             $parent = $this->get_parent();
 
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
@@ -220,7 +220,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $count = 0;
 
-        $html = array();
+        $html = [];
 
         if ($count % $this->number_of_columns == 0)
         {
@@ -241,7 +241,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $lcms_action = \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_HIDE_PUBLICATION;
                 $visibleClass = 'eye-open';
-                $glyph = new FontAwesomeGlyph('eye', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('eye', [], null, 'fas');
                 $isDisabled = false;
                 $link_class = '';
             }
@@ -306,7 +306,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                             Manager::PARAM_TOOL => $publication->get_tool(),
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $class::ACTION_VIEW,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
-                        ), array(), true
+                        ), [], true
                     );
                     $target = '';
                 }
@@ -349,7 +349,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $count = 0;
 
-        $html = array();
+        $html = [];
 
         $course_settings_controller = CourseSettingsController::getInstance();
 
@@ -372,7 +372,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             {
                 $lcms_action =
                     \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_MAKE_TOOL_INVISIBLE;
-                $glyph = new FontAwesomeGlyph('eye', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('eye', [], null, 'fas');
 
                 if ($parent->tool_has_new_publications($tool->get_name(), $this->course))
                 {
@@ -457,8 +457,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
     public function toHtml()
     {
-        $tools = array();
-        $html = array();
+        $tools = [];
+        $html = [];
 
         $course_settings_controller = CourseSettingsController::getInstance();
         $course_tool_layout = $course_settings_controller->get_course_setting(
@@ -467,7 +467,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $visible_tools = $this->get_visible_tools();
 
-        $section_types_map = array();
+        $section_types_map = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
@@ -486,7 +486,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $section_types_map[$section->get_type()] = $section->get_id();
         }
 
-        $sorted_tools = array();
+        $sorted_tools = [];
 
         foreach ($visible_tools as $tool)
         {

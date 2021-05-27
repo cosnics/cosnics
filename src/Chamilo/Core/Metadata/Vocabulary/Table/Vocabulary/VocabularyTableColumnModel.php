@@ -34,7 +34,7 @@ class VocabularyTableColumnModel extends DataClassTableColumnModel implements Ta
         );
 
         $glyph = new FontAwesomeGlyph(
-            'check-circle', array(), Translation::get('Default', null, $this->get_component()->package()), 'fas'
+            'check-circle', [], Translation::get('Default', null, $this->get_component()->package()), 'fas'
         );
 
         $this->add_column(

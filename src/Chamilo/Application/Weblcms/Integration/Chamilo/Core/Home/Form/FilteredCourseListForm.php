@@ -38,7 +38,7 @@ class FilteredCourseListForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
 
         $defaults[FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS] = $this->getBlock()->getSetting(
             FilteredCourseList::CONFIGURATION_SHOW_NEW_ICONS,

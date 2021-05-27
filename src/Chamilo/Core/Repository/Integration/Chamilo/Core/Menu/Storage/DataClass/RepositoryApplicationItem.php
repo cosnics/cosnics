@@ -19,7 +19,7 @@ class RepositoryApplicationItem extends ApplicationItem
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('hdd', array(), null, 'fas');
+        return new FontAwesomeGlyph('hdd', [], null, 'fas');
     }
 
     public static function get_table_name()

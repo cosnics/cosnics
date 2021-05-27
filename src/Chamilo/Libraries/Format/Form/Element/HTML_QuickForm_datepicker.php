@@ -183,7 +183,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
     {
         if (empty($value))
         {
-            $value = array();
+            $value = [];
         }
         elseif (is_scalar($value))
         {
@@ -236,7 +236,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
         $pathBuilder = Path::getInstance();
         $resourceManager = ResourceManager::getInstance();
 
-        $html = array();
+        $html = [];
 
         $html[] = $resourceManager->getResourceHtml(
             $pathBuilder->getJavascriptPath('Chamilo\Libraries\Format', true) . 'TblChange.js'

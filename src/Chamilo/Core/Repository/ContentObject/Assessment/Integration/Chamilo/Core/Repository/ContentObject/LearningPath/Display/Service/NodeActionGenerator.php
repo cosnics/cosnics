@@ -27,7 +27,7 @@ class NodeActionGenerator
         TreeNode $learningPathTreeNode, $canEditTreeNode = false
     ): array
     {
-        $actions = array();
+        $actions = [];
 
         if ($canEditTreeNode)
         {

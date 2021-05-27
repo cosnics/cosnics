@@ -43,7 +43,7 @@ class PropertiesTable extends HTML_Table
         {
             foreach ($this->properties as $property => $values)
             {
-                $contents = array();
+                $contents = [];
                 $contents[] = $property;
 
                 if (!is_array($values))
@@ -66,7 +66,7 @@ class PropertiesTable extends HTML_Table
         }
         else
         {
-            $contents = array();
+            $contents = [];
             $contents[] = Translation::get('NoResults', null, Utilities::COMMON_LIBRARIES);
             $row = $this->addRow($contents);
             $this->setCellAttributes($row, 0, 'style="font-style: italic;text-align:center;" colspan=2');

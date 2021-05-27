@@ -29,7 +29,7 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $strings = array();
+        $strings = [];
 
         $strings[] = 'CASE ';
 

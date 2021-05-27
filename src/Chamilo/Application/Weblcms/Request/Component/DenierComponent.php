@@ -90,7 +90,7 @@ class DenierComponent extends Manager
                 Request::PROPERTY_SUBJECT, 
                 Request::PROPERTY_MOTIVATION));
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $form->toHtml();
@@ -226,7 +226,7 @@ class DenierComponent extends Manager
         }
         
         $this->redirect(
-            Translation::get($message, array(), Manager::context()), 
+            Translation::get($message, [], Manager::context()),
             ($failureCount ? true : false), 
             array(self::PARAM_ACTION => self::ACTION_BROWSE));
     }

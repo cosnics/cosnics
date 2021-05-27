@@ -45,7 +45,7 @@ class GalleryTableProperty
             $context = ClassnameUtilities::getInstance()->getNamespaceFromClassname($called_class);
 
             $title = Translation::get(
-                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(), array(), $context
+                (string) StringUtilities::getInstance()->createString($property)->upperCamelize(), [], $context
             );
         }
 

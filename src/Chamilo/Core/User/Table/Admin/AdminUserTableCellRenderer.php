@@ -40,7 +40,7 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
                 )
             );
 
-            $params = array();
+            $params = [];
             $params[Manager::PARAM_USER_USER_ID] = $user->get_id();
             $toolbar->add_item(
                 new ToolBarItem(

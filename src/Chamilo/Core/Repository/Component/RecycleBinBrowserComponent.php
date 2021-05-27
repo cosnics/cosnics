@@ -43,7 +43,7 @@ class RecycleBinBrowserComponent extends Manager implements TableSupport
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

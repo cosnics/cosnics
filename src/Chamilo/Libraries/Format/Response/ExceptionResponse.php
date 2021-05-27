@@ -25,7 +25,7 @@ class ExceptionResponse extends Response
         $page = Page::getInstance();
         $page->setApplication($application);
 
-        $html = array();
+        $html = [];
         $html[] = $page->getHeader()->render();
         $html[] = Display::error_message($exception->getMessage());
         $html[] = $page->getFooter()->render();

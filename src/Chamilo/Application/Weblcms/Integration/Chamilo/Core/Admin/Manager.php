@@ -15,7 +15,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
 
     public static function get_actions()
     {
-        $links = array();
+        $links = [];
 
         $redirect = new Redirect(
             array(
@@ -108,7 +108,7 @@ class Manager implements ActionsSupportInterface, ImportActionsInterface
 
     public static function get_import_actions()
     {
-        $links = array();
+        $links = [];
 
         $redirect = new Redirect(
             array(

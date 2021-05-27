@@ -56,7 +56,7 @@ class AnonymousAccessComponent extends Manager implements NoAuthenticationSuppor
 
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header(' ');
 

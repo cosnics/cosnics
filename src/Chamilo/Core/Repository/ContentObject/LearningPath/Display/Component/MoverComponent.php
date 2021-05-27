@@ -52,7 +52,7 @@ class MoverComponent extends BaseHtmlTreeComponent
         $path = $this->getTree();
 
         /** @var TreeNode[] $available_nodes */
-        $available_nodes = array();
+        $available_nodes = [];
 
         foreach ($selected_steps as $selected_step)
         {
@@ -141,7 +141,7 @@ class MoverComponent extends BaseHtmlTreeComponent
                 }
             }
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
             if ($failures > 0)
@@ -167,7 +167,7 @@ class MoverComponent extends BaseHtmlTreeComponent
             $trail = BreadcrumbTrail::getInstance();
             $trail->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -197,7 +197,7 @@ class MoverComponent extends BaseHtmlTreeComponent
     {
         if (count($available_nodes) > 1)
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<ul>';
 
@@ -269,7 +269,7 @@ class MoverComponent extends BaseHtmlTreeComponent
      *
      * @return \string[]
      */
-    private function get_possible_parents($selectedNodes = array())
+    private function get_possible_parents($selectedNodes = [])
     {
         $path = $this->getTree();
         $root = $path->getRoot();

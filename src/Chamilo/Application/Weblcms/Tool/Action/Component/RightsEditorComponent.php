@@ -78,7 +78,7 @@ class RightsEditorComponent extends Manager
             $type = self::LOCATION_TYPE_LOCATIONS;
         }
 
-        $info = array();
+        $info = [];
 
         $translation_context = \Chamilo\Core\Rights\Manager::context();
 
@@ -160,7 +160,7 @@ class RightsEditorComponent extends Manager
                             while ($category)
                             {
                                 // construct the single link
-                                $category_link = array();
+                                $category_link = [];
                                 $category_link[] = '<a href="' .
                                      $this->get_category_rights_editor_url($category->get_id()) . '">';
                                 $category_link[] = $category->get_name();
@@ -208,7 +208,7 @@ class RightsEditorComponent extends Manager
 
     public function get_entities()
     {
-        $entities = array();
+        $entities = [];
 
         $user_entity = new CourseUserEntity($this->get_course_id());
 

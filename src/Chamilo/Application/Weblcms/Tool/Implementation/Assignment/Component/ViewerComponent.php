@@ -29,7 +29,7 @@ class ViewerComponent extends Manager
      */
     public function get_tool_actions()
     {
-        $actions = array();
+        $actions = [];
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
 
         $actions[] = new Button(

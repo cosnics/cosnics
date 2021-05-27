@@ -53,13 +53,13 @@ class ConfigurerComponent extends Manager
      */
     public function getEntityTypeSelectionTableData()
     {
-        $tableData = array();
+        $tableData = [];
 
         foreach ($this->getExpandedEntities() as $expandedEntity)
         {
             $actionUrl = $this->get_url(array(self::PARAM_ENTITY_TYPE => $expandedEntity->getDataClassName()));
             $actionItem = new ToolbarItem(
-                Translation::get('SetProviderLinks'), new FontAwesomeGlyph('cog', array(), null, 'fas'), $actionUrl,
+                Translation::get('SetProviderLinks'), new FontAwesomeGlyph('cog', [], null, 'fas'), $actionUrl,
                 ToolbarItem::DISPLAY_ICON
             );
 
@@ -127,7 +127,7 @@ class ConfigurerComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -143,9 +143,9 @@ class ConfigurerComponent extends Manager
      */
     public function renderEntityTypeSelectionTable()
     {
-        $headers = array();
+        $headers = [];
 
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('EntityType'), 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], Translation::get('EntityType'), 'fas');
 
         $headers[] = new SortableStaticTableColumn($glyph->render());
         $headers[] = new SortableStaticTableColumn(Translation::get('EntityType'));
@@ -153,7 +153,7 @@ class ConfigurerComponent extends Manager
 
         $table = new SortableTableFromArray($this->getEntityTypeSelectionTableData(), $headers);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $table->toHtml();

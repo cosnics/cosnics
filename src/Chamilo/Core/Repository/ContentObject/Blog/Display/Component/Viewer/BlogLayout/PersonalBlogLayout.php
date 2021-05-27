@@ -25,7 +25,7 @@ class PersonalBlogLayout extends BlogLayout
      */
     public function determinePanelClasses(ComplexBlogItem $complexBlogItem)
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'panel';
         $classes[] = 'panel-default';
@@ -79,7 +79,7 @@ class PersonalBlogLayout extends BlogLayout
      */
     public function renderBlogItem(ComplexBlogItem $complexBlogItem)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="' . $this->determinePanelClasses($complexBlogItem) . '">';
         $html[] = '<div class="panel-body">';
@@ -120,7 +120,7 @@ class PersonalBlogLayout extends BlogLayout
     {
         $blogItem = $complexBlogItem->get_ref_object();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-body">';
         $html[] = '<div class="col-xs-12">';
@@ -148,7 +148,7 @@ class PersonalBlogLayout extends BlogLayout
      */
     public function renderBlogItemFooter(ComplexBlogItem $complexBlogItem)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-footer">';
 
@@ -170,7 +170,7 @@ class PersonalBlogLayout extends BlogLayout
     {
         $blogItem = $complexBlogItem->get_ref_object();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row panel-publication-header">';
 
@@ -207,9 +207,9 @@ class PersonalBlogLayout extends BlogLayout
 
         $contentObjectModified = $blogItem->get_modification_date() > $blogItem->get_creation_date();
 
-        $html = array();
+        $html = [];
 
-        $glyphClasses = $contentObjectModified ? array('text-danger') : array();
+        $glyphClasses = $contentObjectModified ? array('text-danger') : [];
         $glyph = new FontAwesomeGlyph('clock', $glyphClasses, null, 'far');
 
         $html[] = $glyph->render();

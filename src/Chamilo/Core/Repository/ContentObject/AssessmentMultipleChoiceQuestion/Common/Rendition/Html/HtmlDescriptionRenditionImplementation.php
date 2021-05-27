@@ -17,7 +17,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
         
         $lo = $this->get_content_object();
         $options = $lo->get_options();

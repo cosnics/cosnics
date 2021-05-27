@@ -32,7 +32,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      *
      * @throws \Exception
      */
-    public function __construct($default_properties = array())
+    public function __construct($default_properties = [])
     {
         parent::__construct($default_properties);
         $this->add_listener(new DisplayOrderDataClassListener($this));
@@ -72,7 +72,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      *
      * @return string[]
      */
-    public static function getConfigurationVariables($configurationVariables = array())
+    public static function getConfigurationVariables($configurationVariables = [])
     {
         return $configurationVariables;
     }
@@ -135,7 +135,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return $this->get_default_property(self::PROPERTY_USER_ID);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

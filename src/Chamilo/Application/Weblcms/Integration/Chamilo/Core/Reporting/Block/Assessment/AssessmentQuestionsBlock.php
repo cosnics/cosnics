@@ -141,10 +141,10 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $object = $complex_question->get_ref_object();
 
         $type = Translation::get(
-            'TypeName', array(), ClassnameUtilities::getInstance()->getNamespaceFromClassname($object->get_type())
+            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($object->get_type())
         );
 
-        $reporting_info = array();
+        $reporting_info = [];
 
         $reporting_info[Translation::get('QuestionTitle')] = $object->get_title();
         $reporting_info[Translation::get('QuestionType')] = $type;
@@ -191,7 +191,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
             ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition)
         );
 
-        $questions_arr = array();
+        $questions_arr = [];
         foreach($questions as $question)
         {
             $questions_arr[] = $question;

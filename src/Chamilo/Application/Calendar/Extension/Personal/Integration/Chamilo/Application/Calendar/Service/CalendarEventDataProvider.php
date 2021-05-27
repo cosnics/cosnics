@@ -63,7 +63,7 @@ class CalendarEventDataProvider extends MixedCalendar
         }
         else
         {
-            $userEvents = array();
+            $userEvents = [];
         }
 
         if ($availabilityService->isAvailableForUserAndCalendarTypeAndCalendarIdentifier(
@@ -74,7 +74,7 @@ class CalendarEventDataProvider extends MixedCalendar
         }
         else
         {
-            $sharedEvents = array();
+            $sharedEvents = [];
         }
 
         return array_merge($userEvents, $sharedEvents);
@@ -138,7 +138,7 @@ class CalendarEventDataProvider extends MixedCalendar
         RecordRetrievesParameters $recordRetrievesParameters, $fromDate, $toDate
     )
     {
-        $publications = array();
+        $publications = [];
 
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             Manager::package()
@@ -184,7 +184,7 @@ class CalendarEventDataProvider extends MixedCalendar
         $fromDate, $toDate
     )
     {
-        $events = array();
+        $events = [];
 
         foreach ($publications as $publication)
         {
@@ -205,7 +205,7 @@ class CalendarEventDataProvider extends MixedCalendar
      */
     public function getCalendars(User $user = null)
     {
-        $calendars = array();
+        $calendars = [];
 
         $personalCalendar = new AvailableCalendar();
         $personalCalendar->setType(ClassnameUtilities::getInstance()->getNamespaceParent(__NAMESPACE__, 4));

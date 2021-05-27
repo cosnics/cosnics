@@ -77,7 +77,7 @@ abstract class TabComponent extends Manager
      */
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->getTabsRenderer()->renderFooter();
         $html[] = parent::render_footer();
@@ -91,7 +91,7 @@ abstract class TabComponent extends Manager
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $this->getTabsRenderer()->renderHeader();

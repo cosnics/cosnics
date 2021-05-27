@@ -46,7 +46,7 @@ class RightsLocationEntityRightGroup extends DataClass
      *
      * @return string[] The property names.
      */
-    static function get_default_property_names($extended_property_names = array())
+    static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_LOCATION_ENTITY_RIGHT_ID;
         $extended_property_names[] = self::PROPERTY_GROUP_ID;

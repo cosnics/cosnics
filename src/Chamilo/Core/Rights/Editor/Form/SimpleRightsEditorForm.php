@@ -109,7 +109,7 @@ class SimpleRightsEditorForm extends FormValidator
      */
     private function build_form_footer()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', self::PROPERTY_SUBMIT, Translation::get('Submit', null, Utilities::COMMON_LIBRARIES),
@@ -144,7 +144,7 @@ class SimpleRightsEditorForm extends FormValidator
         }
         $this->addElement('category', Translation::get('Inheritance'));
 
-        $group = array();
+        $group = [];
 
         if (!$has_root_location)
         {
@@ -181,7 +181,7 @@ class SimpleRightsEditorForm extends FormValidator
         $this->addElement('category', $right_name);
         $this->addElement('html', '<div class="right">');
 
-        $group = array();
+        $group = [];
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Everyone'), self::RIGHT_OPTION_ALL,
@@ -303,7 +303,7 @@ class SimpleRightsEditorForm extends FormValidator
      *
      * @param array $defaults
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $locations = $this->locations;
 
@@ -328,7 +328,7 @@ class SimpleRightsEditorForm extends FormValidator
                 $this->context, $first_location->get_id(), $this->available_rights
             );
 
-            $selected_entities_per_right = array();
+            $selected_entities_per_right = [];
             foreach($selected_entities as $selected_entity)
             {
                 $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;

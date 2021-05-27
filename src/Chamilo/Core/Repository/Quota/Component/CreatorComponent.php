@@ -96,7 +96,7 @@ class CreatorComponent extends Manager
                 }
             }
 
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE;
 
             $this->redirect(
@@ -108,7 +108,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->buttonToolbarRenderer->render();
@@ -138,7 +138,7 @@ class CreatorComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
+                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -146,7 +146,7 @@ class CreatorComponent extends Manager
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', array(), null, 'fas'),
+                    Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
                 )
             );

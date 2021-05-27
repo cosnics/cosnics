@@ -40,7 +40,7 @@ class ChangeLockComponent extends Manager
             $message = Translation::get('LockNotChanged');
         }
 
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_BROWSE_FORUMS;
 
         $this->redirect($message, ! $succes, $params);

@@ -90,7 +90,7 @@ class DirectMoverComponent extends Manager
             )
         );
 
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_CHILD_ID] = $this->getCurrentTreeNode()->getId();
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 

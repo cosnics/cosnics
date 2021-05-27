@@ -29,7 +29,7 @@ class AggregateConditionTranslator extends ConditionTranslator
     {
         $string = '';
 
-        $conditionTranslations = array();
+        $conditionTranslations = [];
         $count = 0;
 
         foreach ($this->getCondition()->get_conditions() as $key => $condition)

@@ -18,7 +18,7 @@ class LoginBlock extends Block
     public function count_data()
     {
         $reporting_data = new ReportingData();
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LoginLogout::class,

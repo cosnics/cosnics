@@ -36,7 +36,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function fillLanguagesCache()
     {
-        $languages = array();
+        $languages = [];
         $languageObjects = DataManager::records(
             Language::class, new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Language::class)))
@@ -57,7 +57,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
      */
     public function fillRegistrationsCache()
     {
-        $registrations = array();
+        $registrations = [];
         $registrationsObjects = DataManager::records(
             Registration::class, new RecordRetrievesParameters(
                 new DataClassProperties(array(new PropertiesConditionVariable(Registration::class)))

@@ -42,7 +42,7 @@ class BrowserComponent extends Manager implements TableSupport
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -57,7 +57,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function as_html()
     {
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
 

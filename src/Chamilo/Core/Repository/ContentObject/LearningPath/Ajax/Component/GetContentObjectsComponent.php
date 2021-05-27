@@ -56,7 +56,7 @@ class GetContentObjectsComponent extends Manager
             $workspace, $filterConditionRenderer
         );
 
-        $contentObjectsArray = array();
+        $contentObjectsArray = [];
 
         foreach($contentObjects as $contentObject)
         {

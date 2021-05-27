@@ -73,7 +73,7 @@ class ScoreForm extends FormValidator
 
     protected function getScoreChoices()
     {
-        $choices = array();
+        $choices = [];
 
         $choices[- 1] = Translation::get('NoScore');
 
@@ -87,7 +87,7 @@ class ScoreForm extends FormValidator
 
     public function setDefaults()
     {
-        $defaultValues = array();
+        $defaultValues = [];
 
         if ($this->score instanceof Score)
         {

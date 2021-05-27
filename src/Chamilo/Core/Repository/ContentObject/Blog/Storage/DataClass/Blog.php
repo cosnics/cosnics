@@ -28,7 +28,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 
     public function get_allowed_types()
     {
-        $allowed_types = array();
+        $allowed_types = [];
         $allowed_types[] = BlogItem::class;
 
         return $allowed_types;
@@ -36,7 +36,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 
     public static function get_available_blog_layouts()
     {
-        $blog_layouts = array();
+        $blog_layouts = [];
 
         $dir = Path::getInstance()->namespaceToFullPath(self::package() . '\Display\Component\Viewer\BlogLayout');
         $files = Filesystem::get_directory_content($dir, Filesystem::LIST_FILES, false);

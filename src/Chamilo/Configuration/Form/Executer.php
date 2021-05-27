@@ -54,11 +54,11 @@ class Executer
             $this->application->redirect(
                 Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), 
                 ($success ? false : true), 
-                array());
+                []);
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->application->render_header();
             $html[] = $form->toHtml();
@@ -70,7 +70,7 @@ class Executer
 
     public function get_form()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Instance::class, Instance::PROPERTY_APPLICATION),
             new StaticConditionVariable($this->application->context()));

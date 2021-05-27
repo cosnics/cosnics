@@ -19,7 +19,7 @@ class Embedder extends ComplexContentObjectEmbedder
      */
     public function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->get_application()->render_header();
         $html[] = $this->render();

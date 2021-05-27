@@ -20,7 +20,7 @@ class FullTypeSelectorRenderer extends TypeSelectorRenderer
      * @param boolean $use_general_statistics
      * @param string $postback_url
      */
-    public function __construct(Application $parent, TypeSelector $type_selector, $additional_links = array(), 
+    public function __construct(Application $parent, TypeSelector $type_selector, $additional_links = [],
         $use_general_statistics = false, $postback_url = null)
     {
         $this->form_renderer = new FormTypeSelectorRenderer($parent, $type_selector, $postback_url);
@@ -38,7 +38,7 @@ class FullTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
         
         $html[] = $this->form_renderer->render();
         $html[] = $this->tabs_renderer->render();

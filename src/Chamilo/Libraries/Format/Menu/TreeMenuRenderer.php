@@ -57,7 +57,7 @@ class TreeMenuRenderer extends HtmlMenuDirectTreeRenderer
         $this->item_url = $itemUrl;
         $this->collapsed = $collapsed;
 
-        $entryTemplates = array();
+        $entryTemplates = [];
         $entryTemplates[self::HTML_MENU_ENTRY_INACTIVE] =
             '<div class="{children}"><a href="{url}" onclick="{onclick}" id="{id}" title="{safe_title}"><span class="{class}"></span> {title}</a></div>';
         $entryTemplates[self::HTML_MENU_ENTRY_ACTIVE] =

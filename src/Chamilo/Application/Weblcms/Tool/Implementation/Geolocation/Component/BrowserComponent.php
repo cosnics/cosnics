@@ -22,7 +22,7 @@ class BrowserComponent extends Manager
 
         if (count($publications) > 0)
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<br /><br /><h3>' . Translation::get('LocationsSummary') . '</h3>';
             $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';

@@ -18,7 +18,7 @@ class RepositoryImplementationItem extends Item
     const PROPERTY_INSTANCE_ID = 'instance_id';
     const PROPERTY_NAME = 'name';
 
-    public function __construct($default_properties = array(), $additional_properties = null)
+    public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties, $additional_properties);
         $this->set_type(__CLASS__);
@@ -29,7 +29,7 @@ class RepositoryImplementationItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('globe', array(), null, 'fas');
+        return new FontAwesomeGlyph('globe', [], null, 'fas');
     }
 
     public static function get_additional_property_names()

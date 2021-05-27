@@ -118,7 +118,7 @@ class SlideshowRenderer
             return implode(PHP_EOL, $html);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="col-xs-12">';
@@ -384,7 +384,7 @@ class SlideshowRenderer
      */
     public function renderNextNavigation()
     {
-        $html = array();
+        $html = [];
 
         if (!$this->isLast())
         {
@@ -418,7 +418,7 @@ class SlideshowRenderer
      */
     public function renderPreviousNavigation()
     {
-        $html = array();
+        $html = [];
 
         if (!$this->isFirst())
         {
@@ -452,7 +452,7 @@ class SlideshowRenderer
     {
         $slideshowAutoplay = $this->getSlideshowAutoPlay();
 
-        $html = array();
+        $html = [];
 
         if ($slideshowAutoplay)
         {

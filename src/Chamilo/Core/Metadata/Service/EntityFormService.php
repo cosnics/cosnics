@@ -70,7 +70,7 @@ class EntityFormService
         $resource_manager = ResourceManager::getInstance();
         $plugin_path = Path::getInstance()->getPluginPath('Chamilo\Core\Metadata', true) . 'Bootstrap/Tagsinput/';
 
-        $dependencies = array();
+        $dependencies = [];
 
         $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
         $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-tagsinput.js');
@@ -105,7 +105,7 @@ class EntityFormService
             try
             {
                 $providedIcon = new FontAwesomeGlyph(
-                    'lock', array(), Translation::get('ProvidedMetadataElementValue', null, 'Chamilo\Core\Metadata'),
+                    'lock', [], Translation::get('ProvidedMetadataElementValue', null, 'Chamilo\Core\Metadata'),
                     'fas'
                 );
 
@@ -119,7 +119,7 @@ class EntityFormService
                             $user, $entity, $schemaInstance, $element
                         );
 
-                    $html = array();
+                    $html = [];
 
                     $html[] = '<div class="locked-tags">';
 
@@ -140,7 +140,7 @@ class EntityFormService
                         $user, $entity, $schemaInstance, $element
                     );
 
-                    $html = array();
+                    $html = [];
 
                     $html[] = '<div class="provided-element-value locked-action">';
                     $html[] = $providedValue;
@@ -165,7 +165,7 @@ class EntityFormService
                         $class .= ' metadata-input-new';
                     }
 
-                    $tagElementGroup = array();
+                    $tagElementGroup = [];
                     $tagElementGroup[] = $formValidator->createElement(
                         'text', $elementName . '[' . EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']', null,
                         array(
@@ -284,7 +284,7 @@ class EntityFormService
         SchemaInstance $schemaInstance, DataClassEntity $entity, FormValidator $formValidator, User $user
     )
     {
-        $defaults = array();
+        $defaults = [];
 
         $elements = $this->getElementService()->getElementsForSchemaInstance($schemaInstance);
 
@@ -304,7 +304,7 @@ class EntityFormService
                         $schemaInstance->get_id() . '][' . $element->get_id() . '][' .
                         EntityService::PROPERTY_METADATA_SCHEMA_EXISTING . ']';
 
-                    $options = array();
+                    $options = [];
 
                     $elementInstanceVocabularies =
                         $this->getElementService()->getElementInstanceVocabulariesForSchemaInstanceAndElement(

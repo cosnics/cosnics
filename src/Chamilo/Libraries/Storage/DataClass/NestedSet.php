@@ -354,7 +354,7 @@ abstract class NestedSet extends DataClass
 
                 // The call_user_func_array corresponds to parent::create()
                 if (!call_user_func_array(
-                    array($nested_set, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), array()
+                    array($nested_set, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), []
                 ))
                 {
                     return false;
@@ -472,7 +472,7 @@ abstract class NestedSet extends DataClass
      * @done No longer used and this should not be here to begin with
      * @throws \ReflectionException
      */
-    private function find_values_to_fix($parent_id = 0, &$traversal_data = array('count' => 1, 'updates' => array()))
+    private function find_values_to_fix($parent_id = 0, &$traversal_data = array('count' => 1, 'updates' => []))
     {
         $groups = DataManager::retrieves(
             get_class($this), new DataClassRetrievesParameters(
@@ -525,9 +525,9 @@ abstract class NestedSet extends DataClass
     {
         $traversal_data = $this->find_values_to_fix($parent_id);
 
-        $left_updates = array();
-        $right_updates = array();
-        $where_condition = array();
+        $left_updates = [];
+        $right_updates = [];
+        $where_condition = [];
 
         foreach ($traversal_data['updates'] as $id => $leftright)
         {
@@ -580,7 +580,7 @@ abstract class NestedSet extends DataClass
      */
     public function getSubTreePropertyNames()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -625,7 +625,7 @@ abstract class NestedSet extends DataClass
      * @return string[]
      * @done Domain method
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
         $extendedPropertyNames[] = self::PROPERTY_LEFT_VALUE;
@@ -672,7 +672,7 @@ abstract class NestedSet extends DataClass
      */
     public function get_nested_set_condition_array()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -953,7 +953,7 @@ abstract class NestedSet extends DataClass
                     $nested_set->class_name(), NestedSet::PROPERTY_RIGHT_VALUE
                 );
 
-                $properties = array();
+                $properties = [];
 
                 $properties[] = new DataClassProperty(
                     $left_value_variable, new OperationConditionVariable(
@@ -1052,7 +1052,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        $properties = array();
+        $properties = [];
         $properties[] = $right_value_data_class_property;
         $properties[] = new DataClassProperty(
             $left_value_variable, new OperationConditionVariable(
@@ -1091,7 +1091,7 @@ abstract class NestedSet extends DataClass
 
         $update_condition = new AndCondition($conditions);
 
-        $properties = array();
+        $properties = [];
         $properties[] = $right_value_data_class_property;
 
         $res = DataManager::updates(
@@ -1146,7 +1146,7 @@ abstract class NestedSet extends DataClass
 
         $left_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE);
 
-        $properties = array();
+        $properties = [];
         $properties[] = new DataClassProperty(
             $left_value_variable, new OperationConditionVariable(
                 $left_value_variable, OperationConditionVariable::ADDITION,
@@ -1179,7 +1179,7 @@ abstract class NestedSet extends DataClass
 
         $right_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE);
 
-        $properties = array();
+        $properties = [];
 
         $properties[] = new DataClassProperty(
             $right_value_variable, new OperationConditionVariable(

@@ -146,14 +146,14 @@ class ActionResult
      */
     public function getMessage()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters['ACTION'] =
-            Translation::get('ActionResultAction' . $this->getActionType(), array(), $this->getContext());
+            Translation::get('ActionResultAction' . $this->getActionType(), [], $this->getContext());
 
         if ($this->isSingleAction())
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultSingleEntity' . $this->getEntityType(), array(), $this->getContext()
+                'ActionResultSingleEntity' . $this->getEntityType(), [], $this->getContext()
             );
 
             if ($this->hasFailed())
@@ -168,7 +168,7 @@ class ActionResult
         else
         {
             $parameters['OBJECT'] = Translation::get(
-                'ActionResultMultipleEntity' . $this->getEntityType(), array(), $this->getContext()
+                'ActionResultMultipleEntity' . $this->getEntityType(), [], $this->getContext()
             );
 
             if ($this->hasSucceeded())

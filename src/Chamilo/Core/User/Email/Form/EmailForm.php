@@ -81,7 +81,7 @@ class EmailForm extends FormValidator
 
     public function get_target_email_addresses()
     {
-        $email_addresses = array();
+        $email_addresses = [];
 
         foreach ($this->target_users as $target_user)
         {

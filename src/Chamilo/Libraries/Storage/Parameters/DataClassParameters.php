@@ -93,7 +93,7 @@ abstract class DataClassParameters implements Hashable
      */
     public function __construct(
         Condition $condition = null, Joins $joins = null, DataClassProperties $dataClassProperties = null,
-        $orderBy = array(), GroupBy $groupBy = null, Condition $havingCondition = null, $count = null, $offset = null,
+        $orderBy = [], GroupBy $groupBy = null, Condition $havingCondition = null, $count = null, $offset = null,
         $distinct = false
     )
     {
@@ -232,7 +232,7 @@ abstract class DataClassParameters implements Hashable
      */
     public function getHashParts(): array
     {
-        $hashParts = array();
+        $hashParts = [];
 
         $hashParts[] = static::class;
         $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
@@ -344,7 +344,7 @@ abstract class DataClassParameters implements Hashable
      *
      * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
      */
-    public function setOrderBy($orderBy = array())
+    public function setOrderBy($orderBy = [])
     {
         $this->orderBy = $orderBy;
     }
@@ -355,7 +355,7 @@ abstract class DataClassParameters implements Hashable
      */
     protected function getOrderByHashParts()
     {
-        $hashParts = array();
+        $hashParts = [];
 
         foreach ($this->getOrderBy() as $orderBy)
         {

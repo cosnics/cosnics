@@ -29,7 +29,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class RecycleBinTableCellRenderer extends DataClassTableCellRenderer implements TableCellRendererActionsColumnSupport
 {
 
-    private $parent_title_cache = array();
+    private $parent_title_cache = [];
 
     public function get_actions($content_object)
     {

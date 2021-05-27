@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $this->set_parameter(Manager::PARAM_REGISTRATION_TYPE, $this->getCurrentType());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_content();
@@ -91,14 +91,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             PlatformPackageBundles::MODE_AVAILABLE
         )->get_type_packages();
 
-        $table_data = array();
+        $table_data = [];
 
         foreach ($packages[$this->current_type] as $package_info)
         {
             $toolbar = new Toolbar();
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', array(), null, 'fas'),
+                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_url(
                         array(
                             self::PARAM_ACTION => self::ACTION_VIEW, self::PARAM_CONTEXT => $package_info->get_context()
@@ -108,7 +108,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('Install'), new FontAwesomeGlyph('box', array(), null, 'fas'), $this->get_url(
+                    Translation::get('Install'), new FontAwesomeGlyph('box', [], null, 'fas'), $this->get_url(
                     array(
                         self::PARAM_ACTION => self::ACTION_INSTALL, self::PARAM_CONTEXT => $package_info->get_context()
                     )
@@ -116,14 +116,14 @@ class BrowserComponent extends Manager implements DelegateComponent
                 )
             );
 
-            $row = array();
+            $row = [];
             $row[] = Translation::get('TypeName', null, $package_info->get_context());
             $row[] = $toolbar->as_html();
 
             $table_data[] = $row;
         }
 
-        $headers = array();
+        $headers = [];
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
         $headers[] = new StaticTableColumn('');
 
@@ -202,7 +202,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
         $registrations = DataManager::retrieves(Registration::class, $parameters);
 
-        $table_data = array();
+        $table_data = [];
 
         foreach($registrations as $registration)
         {
@@ -210,7 +210,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             $toolbar->add_item(
                 new ToolbarItem(
-                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', array(), null, 'fas'),
+                    Translation::get('ViewPackageDetails'), new FontAwesomeGlyph('desktop', [], null, 'fas'),
                     $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_VIEW,
@@ -228,8 +228,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Deactivate', array(), Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('pause-circle', array(), null, 'fas'), $this->get_url(
+                            Translation::get('Deactivate', [], Utilities::COMMON_LIBRARIES),
+                            new FontAwesomeGlyph('pause-circle', [], null, 'fas'), $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE,
                                 Manager::PARAM_CONTEXT => $registration->get_context()
@@ -247,8 +247,8 @@ class BrowserComponent extends Manager implements DelegateComponent
                 {
                     $toolbar->add_item(
                         new ToolbarItem(
-                            Translation::get('Activate', array(), Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('play-circle', array(), null, 'fas'), $this->get_url(
+                            Translation::get('Activate', [], Utilities::COMMON_LIBRARIES),
+                            new FontAwesomeGlyph('play-circle', [], null, 'fas'), $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
                                 Manager::PARAM_CONTEXT => $registration->get_context()
@@ -263,8 +263,8 @@ class BrowserComponent extends Manager implements DelegateComponent
             {
                 $toolbar->add_item(
                     new ToolbarItem(
-                        Translation::get('Remove', array(), Utilities::COMMON_LIBRARIES),
-                        new FontAwesomeGlyph('trash-alt', array(), null, 'fas'), $this->get_url(
+                        Translation::get('Remove', [], Utilities::COMMON_LIBRARIES),
+                        new FontAwesomeGlyph('trash-alt', [], null, 'fas'), $this->get_url(
                         array(
                             Manager::PARAM_ACTION => Manager::ACTION_REMOVE,
                             Manager::PARAM_CONTEXT => $registration->get_context()
@@ -274,14 +274,14 @@ class BrowserComponent extends Manager implements DelegateComponent
                 );
             }
 
-            $row = array();
+            $row = [];
             $row[] = Translation::get('TypeName', null, $registration->get_context());
             $row[] = $toolbar->as_html();
 
             $table_data[] = $row;
         }
 
-        $headers = array();
+        $headers = [];
         $headers[] = new SortableStaticTableColumn(Translation::get('Package'));
         $headers[] = new StaticTableColumn('');
 

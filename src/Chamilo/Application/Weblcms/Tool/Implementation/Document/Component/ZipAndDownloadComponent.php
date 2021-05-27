@@ -89,7 +89,7 @@ class ZipAndDownloadComponent extends Manager
 
             if ($is_course_admin)
             {
-                $conditions = array();
+                $conditions = [];
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
@@ -155,7 +155,7 @@ class ZipAndDownloadComponent extends Manager
                     $location_id,
                     $this->get_entities(),
                     null,
-                    array(),
+                    [],
                     0,
                     - 1,
                     $this->get_user_id());
@@ -214,7 +214,7 @@ class ZipAndDownloadComponent extends Manager
      * @param $path
      * @return array An array mapping the category id to the folder.
      */
-    private function create_folder_structure($parent_cat, $course_admin = false, &$category_folder_mapping = array(), $path = null)
+    private function create_folder_structure($parent_cat, $course_admin = false, &$category_folder_mapping = [], $path = null)
     {
         if (is_null($path))
         {
@@ -224,7 +224,7 @@ class ZipAndDownloadComponent extends Manager
             Filesystem::create_dir($path);
         }
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

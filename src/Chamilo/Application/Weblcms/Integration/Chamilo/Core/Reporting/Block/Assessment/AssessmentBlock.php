@@ -71,7 +71,7 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_assessment_attempts($publication_id, $user_id = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
@@ -102,7 +102,7 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_assessment_information($assessment_publication)
     {
-        $assessment_information = array();
+        $assessment_information = [];
 
         $assessment = $assessment_publication->get_content_object();
 
@@ -150,7 +150,7 @@ abstract class AssessmentBlock extends ToolBlock
     {
         $glyph = new FontAwesomeGlyph('info-circle');
 
-        $params = array();
+        $params = [];
 
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
@@ -186,7 +186,7 @@ abstract class AssessmentBlock extends ToolBlock
     {
         $assessment = $assessment_publication->get_content_object();
 
-        $params = array();
+        $params = [];
         $params[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
         $params[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $params[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE] = $assessment_publication->get_course_id();
@@ -210,9 +210,9 @@ abstract class AssessmentBlock extends ToolBlock
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt>
      */
-    protected function get_question_attempts($question_cid = null, $assessment_attempt_ids = array())
+    protected function get_question_attempts($question_cid = null, $assessment_attempt_ids = [])
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($question_cid)
         {
@@ -257,8 +257,8 @@ abstract class AssessmentBlock extends ToolBlock
         $publication_id, $question_cid, $user_id = null
     )
     {
-        $assessment_attempt_ids = array();
-        $assessment_attempts_by_id = array();
+        $assessment_attempt_ids = [];
+        $assessment_attempts_by_id = [];
 
         $assessment_attempts = $this->get_assessment_attempts($publication_id, $user_id);
         foreach ($assessment_attempts as $assessment_attempt)
@@ -269,7 +269,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         if (count($assessment_attempt_ids) == 0)
         {
-            return new DataClassIterator(AssessmentAttempt::class, array());
+            return new DataClassIterator(AssessmentAttempt::class, []);
         }
 
         $question_attempts = $this->get_question_attempts($question_cid, $assessment_attempt_ids);
@@ -306,12 +306,12 @@ abstract class AssessmentBlock extends ToolBlock
      */
     protected function get_question_information($question)
     {
-        $question_information = array();
+        $question_information = [];
 
         $question_information[Translation::get('QuestionTitle')] = $question->get_title();
         $question_information[Translation::get('QuestionDescription')] = $question->get_description();
         $question_information[Translation::get('QuestionType')] = Translation::get(
-            'TypeName', array(), ClassnameUtilities::getInstance()->getNamespaceFromClassname($question->get_type())
+            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($question->get_type())
         );
 
         return $question_information;

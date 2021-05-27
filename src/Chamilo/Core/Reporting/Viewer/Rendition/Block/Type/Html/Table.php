@@ -27,7 +27,7 @@ class Table extends Html
         $parameters[Manager::PARAM_BLOCK_ID] = $this->get_block()->get_id();
         $parameters[Manager::PARAM_VIEWS] = $this->get_view();
         
-        $headers = array();
+        $headers = [];
         
         if ($reporting_data->is_categories_visible())
         {
@@ -54,10 +54,10 @@ class Table extends Html
 
     public function convert_reporting_data($data)
     {
-        $table_data = array();
+        $table_data = [];
         foreach ($data->get_categories() as $category_id => $category_name)
         {
-            $category_array = array();
+            $category_array = [];
             if ($data->is_categories_visible())
             {
                 $category_array[] = $category_name;

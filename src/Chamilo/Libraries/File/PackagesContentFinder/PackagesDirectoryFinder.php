@@ -43,7 +43,7 @@ class PackagesDirectoryFinder extends PackagesContentFinder
      */
     function handlePackage($package)
     {
-        $directories = array();
+        $directories = [];
 
         $path = $this->getPackagePath($package) . $this->relativeFilePath;
         if (file_exists($path))

@@ -93,7 +93,7 @@ class JsonAjaxResult
      *
      * @var string[]
      */
-    public $properties = array();
+    public $properties = [];
 
     /**
      *
@@ -107,7 +107,7 @@ class JsonAjaxResult
      * @param integer $resultCode
      * @param string[] $properties
      */
-    public function __construct($resultCode = 200, $properties = array())
+    public function __construct($resultCode = 200, $properties = [])
     {
         $this->set_result_code($resultCode);
         $this->set_properties($properties);

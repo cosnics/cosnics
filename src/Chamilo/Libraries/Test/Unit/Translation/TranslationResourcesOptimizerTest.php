@@ -85,7 +85,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
      */
     public function test_create_class_without_translation_loaders()
     {
-        new TranslationResourcesOptimizer(array(), $this->translationResourcesFinderMock, $this->cache_path);
+        new TranslationResourcesOptimizer([], $this->translationResourcesFinderMock, $this->cache_path);
     }
 
     /**

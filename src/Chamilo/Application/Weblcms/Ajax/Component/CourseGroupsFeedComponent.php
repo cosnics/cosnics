@@ -47,7 +47,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      */
     public function get_group_element($group)
     {
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             CourseGroupEntity::ENTITY_TYPE . '_' . $group->getId(), $glyph->getClassNamesString(), $group->get_name(),
@@ -64,7 +64,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
      */
     public function get_user_element($user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             CourseUserEntity::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(), $user->get_fullname(),
@@ -82,7 +82,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         if (!$filter_id)
         {
-            return array();
+            return [];
         }
 
         $condition = new EqualityCondition(
@@ -94,7 +94,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
             CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition)
         );
 
-        $user_ids = array();
+        $user_ids = [];
 
         foreach($relations as $relation)
         {

@@ -86,7 +86,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         {
             $values = $form->exportValues();
 
-            $question_forms = array();
+            $question_forms = [];
             foreach ($values as $key => $value)
             {
                 $split = explode('_', $key);
@@ -149,7 +149,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
             $form->addGroup($buttons, 'buttons', null, '&nbsp;', false);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $form->toHtml();

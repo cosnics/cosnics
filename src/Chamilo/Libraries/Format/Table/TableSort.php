@@ -191,7 +191,7 @@ class TableSort
 
         if (!is_array($data) || empty($data))
         {
-            return array();
+            return [];
         }
 
         if ($this->getColumn() != strval(intval($this->getColumn())))

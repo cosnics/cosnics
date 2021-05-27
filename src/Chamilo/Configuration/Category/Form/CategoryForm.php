@@ -92,7 +92,7 @@ class CategoryForm extends FormValidator
 
         if (!isset($_SESSION[$context]['skipped_categories']))
         {
-            $_SESSION[$context]['skipped_categories'] = array();
+            $_SESSION[$context]['skipped_categories'] = [];
         }
 
         if (isset($_POST['add']))
@@ -111,13 +111,13 @@ class CategoryForm extends FormValidator
         {
             if (!in_array($category_number, $_SESSION[$context]['skipped_categories']))
             {
-                $group = array();
+                $group = [];
                 $group[] = $this->add_name_field($category_number);
                 if ($number_of_categories - count($_SESSION[$context]['skipped_categories']) > 1)
                 {
                     $group[] = $this->createElement(
-                        'style_button', 'remove[' . $category_number . ']', null, array(), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        'style_button', 'remove[' . $category_number . ']', null, [], null,
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 $this->addGroup(
@@ -132,7 +132,7 @@ class CategoryForm extends FormValidator
         }
 
         $this->addElement(
-            'style_button', 'add[]', null, array(), null, new FontAwesomeGlyph('plus', array(), null, 'fas')
+            'style_button', 'add[]', null, [], null, new FontAwesomeGlyph('plus', [], null, 'fas')
         );
 
         $this->build_footer('Create');
@@ -194,7 +194,7 @@ class CategoryForm extends FormValidator
                     $this->manager->get_parent()->get_next_category_display_order($this->category->get_parent())
                 );
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME),
                     new StaticConditionVariable($category->get_name())
@@ -225,7 +225,7 @@ class CategoryForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $category = $this->category;
         $defaults[PlatformCategory::PROPERTY_ID] = $category->get_id();
@@ -238,7 +238,7 @@ class CategoryForm extends FormValidator
         $category = $this->category;
         $category->set_name($this->exportValue(PlatformCategory::PROPERTY_NAME));
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable($category::class_name(), $category::PROPERTY_ID),

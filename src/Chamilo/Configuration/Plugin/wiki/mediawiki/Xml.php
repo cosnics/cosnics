@@ -80,7 +80,7 @@ class Xml
      * @param $contents String: NULL to make an open tag only; '' for a contentless closed tag (default)
      * @return string
      */
-    public static function elementClean($element, $attribs = array(), $contents = '')
+    public static function elementClean($element, $attribs = [], $contents = '')
     {
         if ($attribs)
         {
@@ -146,7 +146,7 @@ class Xml
     {
         global $wgContLang;
         $namespaces = $wgContLang->getFormattedNamespaces();
-        $options = array();
+        $options = [];
         
         // Godawful hack... we'll be frequently passed selected namespaces
         // as strings since PHP is such a shithole.
@@ -190,7 +190,7 @@ class Xml
     public static function monthSelector($selected = '', $allmonths = null, $id = 'month')
     {
         global $wgLang;
-        $options = array();
+        $options = [];
         if (is_null($selected))
             $selected = '';
         if (! is_null($allmonths))
@@ -287,7 +287,7 @@ class Xml
      * @param $attribs other attributes
      * @return string
      */
-    public static function span($text, $class, $attribs = array())
+    public static function span($text, $class, $attribs = [])
     {
         return self::element('span', array('class' => $class) + $attribs, $text);
     }
@@ -301,7 +301,7 @@ class Xml
      * @param $attribs other attributes
      * @return string
      */
-    public static function wrapClass($text, $class, $tag = 'span', $attribs = array())
+    public static function wrapClass($text, $class, $tag = 'span', $attribs = [])
     {
         return self::tags($tag, array('class' => $class) + $attribs, $text);
     }
@@ -315,7 +315,7 @@ class Xml
      * @param $attribs other attributes
      * @return string HTML
      */
-    public static function input($name, $size = false, $value = false, $attribs = array())
+    public static function input($name, $size = false, $value = false, $attribs = [])
     {
         return self::element('input', array('name' => $name, 'size' => $size, 'value' => $value) + $attribs);
     }
@@ -329,7 +329,7 @@ class Xml
      * @param $attribs other attributes
      * @return string HTML
      */
-    public static function password($name, $size = false, $value = false, $attribs = array())
+    public static function password($name, $size = false, $value = false, $attribs = [])
     {
         return self::input($name, $size, $value, array_merge($attribs, array('type' => 'password')));
     }
@@ -341,7 +341,7 @@ class Xml
      */
     public static function attrib($name, $present = true)
     {
-        return $present ? array($name => $name) : array();
+        return $present ? array($name => $name) : [];
     }
 
     /**
@@ -352,7 +352,7 @@ class Xml
      * @param $attribs other attributes
      * @return string HTML
      */
-    public static function check($name, $checked = false, $attribs = array())
+    public static function check($name, $checked = false, $attribs = [])
     {
         return self::element(
             'input', 
@@ -371,7 +371,7 @@ class Xml
      * @param $attribs other attributes
      * @return string HTML
      */
-    public static function radio($name, $value, $checked = false, $attribs = array())
+    public static function radio($name, $value, $checked = false, $attribs = [])
     {
         return self::element(
             'input', 
@@ -401,7 +401,7 @@ class Xml
      * @param $attribs other attributes
      * @return string HTML
      */
-    public static function inputLabel($label, $name, $id, $size = false, $value = false, $attribs = array())
+    public static function inputLabel($label, $name, $id, $size = false, $value = false, $attribs = [])
     {
         list($label, $input) = self::inputLabelSep($label, $name, $id, $size, $value, $attribs);
         return $label . '&nbsp;' . $input;
@@ -410,7 +410,7 @@ class Xml
     /**
      * Same as Xml::inputLabel() but return input and label in an array
      */
-    public static function inputLabelSep($label, $name, $id, $size = false, $value = false, $attribs = array())
+    public static function inputLabelSep($label, $name, $id, $size = false, $value = false, $attribs = [])
     {
         return array(Xml::label($label, $id), self::input($name, $size, $value, array('id' => $id) + $attribs));
     }
@@ -420,7 +420,7 @@ class Xml
      * 
      * @return string HTML
      */
-    public static function checkLabel($label, $name, $id, $checked = false, $attribs = array())
+    public static function checkLabel($label, $name, $id, $checked = false, $attribs = [])
     {
         return self::check($name, $checked, array('id' => $id) + $attribs) . '&nbsp;' . self::label($label, $id);
     }
@@ -430,7 +430,7 @@ class Xml
      * 
      * @return string HTML
      */
-    public static function radioLabel($label, $name, $value, $id, $checked = false, $attribs = array())
+    public static function radioLabel($label, $name, $value, $id, $checked = false, $attribs = [])
     {
         return self::radio($name, $value, $checked, array('id' => $id) + $attribs) . '&nbsp;' .
              self::label($label, $id);
@@ -443,7 +443,7 @@ class Xml
      * @param $attribs Array: optional custom attributes
      * @return string HTML
      */
-    public static function submitButton($value, $attribs = array())
+    public static function submitButton($value, $attribs = [])
     {
         return self::element('input', array('type' => 'submit', 'value' => $value) + $attribs);
     }
@@ -456,7 +456,7 @@ class Xml
      * @param $attribs Array: optional custom attributes
      * @return string HTML
      */
-    public static function hidden($name, $value, $attribs = array())
+    public static function hidden($name, $value, $attribs = [])
     {
         return self::element('input', array('name' => $name, 'type' => 'hidden', 'value' => $value) + $attribs);
     }
@@ -470,7 +470,7 @@ class Xml
      * @param $attribs array: optional additional HTML attributes
      * @return string HTML
      */
-    public static function option($text, $value = null, $selected = false, $attribs = array())
+    public static function option($text, $value = null, $selected = false, $attribs = [])
     {
         if (! is_null($value))
         {
@@ -535,7 +535,7 @@ class Xml
         if ($optgroup)
             $options .= self::closeElement('optgroup');
         
-        $attribs = array();
+        $attribs = [];
         if ($name)
         {
             $attribs['id'] = $name;
@@ -559,7 +559,7 @@ class Xml
      * @param $content Pre-escaped content for the fieldset. If false, only open fieldset is returned.
      * @param $attribs Any attributes to fieldset-element.
      */
-    public static function fieldset($legend = false, $content = false, $attribs = array())
+    public static function fieldset($legend = false, $content = false, $attribs = [])
     {
         $s = Xml::openElement('fieldset', $attribs) . "\n";
         if ($legend)
@@ -584,7 +584,7 @@ class Xml
      * @param $rows The number of rows for the textarea
      * @param $attribs Any other attributes for the textarea
      */
-    public static function textarea($name, $content, $cols = 40, $rows = 5, $attribs = array())
+    public static function textarea($name, $content, $cols = 40, $rows = 5, $attribs = [])
     {
         return self::element(
             'textarea', 
@@ -756,7 +756,7 @@ class Xml
         if ($submitLabel)
         {
             $form .= Xml::openElement('tr');
-            $form .= Xml::tags('td', array(), '');
+            $form .= Xml::tags('td', [], '');
             $form .= Xml::openElement('td', array('class' => 'mw-submit')) . Xml::submitButton(wfMsg($submitLabel)) .
                  Xml::closeElement('td');
             $form .= Xml::closeElement('tr');
@@ -775,14 +775,14 @@ class Xml
      * @param array $headers An array of strings to use as table headers [optional]
      * @return string
      */
-    public static function buildTable($rows, $attribs = array(), $headers = null)
+    public static function buildTable($rows, $attribs = [], $headers = null)
     {
         $s = Xml::openElement('table', $attribs);
         if (is_array($headers))
         {
             foreach ($headers as $id => $header)
             {
-                $attribs = array();
+                $attribs = [];
                 if (is_string($id))
                     $attribs['id'] = $id;
                 $s .= Xml::element('th', $attribs, $header);
@@ -790,7 +790,7 @@ class Xml
         }
         foreach ($rows as $id => $row)
         {
-            $attribs = array();
+            $attribs = [];
             if (is_string($id))
                 $attribs['id'] = $id;
             $s .= Xml::buildTableRow($attribs, $row);
@@ -810,7 +810,7 @@ class Xml
         $s = Xml::openElement('tr', $attribs);
         foreach ($cells as $id => $cell)
         {
-            $attribs = array();
+            $attribs = [];
             if (is_string($id))
                 $attribs['id'] = $id;
             $s .= Xml::element('td', $attribs, $cell);
@@ -822,11 +822,11 @@ class Xml
 class XmlSelect
 {
 
-    protected $options = array();
+    protected $options = [];
 
     protected $default = false;
 
-    protected $attributes = array();
+    protected $attributes = [];
 
     public function __construct($name = false, $id = false, $default = false)
     {

@@ -49,7 +49,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
     private $use_general_statistics;
 
     public function __construct(
-        Application $parent, TypeSelector $type_selector, $additional_links = array(), $use_general_statistics = false
+        Application $parent, TypeSelector $type_selector, $additional_links = [], $use_general_statistics = false
     )
     {
         parent::__construct($parent, $type_selector);
@@ -158,7 +158,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render_additional_links()
     {
-        $html = array();
+        $html = [];
 
         foreach ($this->get_additional_links() as $link)
         {
@@ -177,7 +177,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render_category($category)
     {
-        $html = array();
+        $html = [];
 
         foreach ($category->get_options() as $option)
         {
@@ -209,14 +209,14 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
             $statistics_condition = null;
         }
 
-        $content_object_type_counts = array();
+        $content_object_type_counts = [];
         $most_used_type_count = 0;
 
         foreach ($this->get_type_selector()->get_categories() as $category)
         {
             foreach ($category->get_options() as $option)
             {
-                $conditions = array();
+                $conditions = [];
 
                 if (!is_null($statistics_condition))
                 {
@@ -258,7 +258,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
 
         $most_used_types = array_slice($content_object_type_counts, 0, 10);
 
-        $html = array();
+        $html = [];
 
         foreach ($most_used_types as $type_option => $count)
         {
@@ -283,7 +283,7 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
      */
     public function render_option(TypeSelectorOption $option, $url)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<a href="' . $url . '">';
 

@@ -131,7 +131,7 @@ class RightsCacheService
     protected function getUserRightsForAllItems(User $user)
     {
         $items = $this->getItemService()->findItems();
-        $itemRights = array();
+        $itemRights = [];
 
         foreach ($items as $item)
         {

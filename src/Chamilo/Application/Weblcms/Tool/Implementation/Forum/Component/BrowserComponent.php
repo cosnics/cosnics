@@ -61,7 +61,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
@@ -98,7 +98,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $this->get_course(), CourseSettingsConnector::ALLOW_INTRODUCTION_TEXT
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -132,7 +132,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_allowed_types(), $publishParameters, array(), 'btn-primary'
+                        $this->get_allowed_types(), $publishParameters, [], 'btn-primary'
                     )
                 );
             }
@@ -242,7 +242,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $buttonToolBar->addItem(
                     new Button(
                         Translation::get('UnSubscribe', null, Forum::package()),
-                        new FontAwesomeGlyph('envelope', array(), null, 'far'), $this->get_url($parameters),
+                        new FontAwesomeGlyph('envelope', [], null, 'far'), $this->get_url($parameters),
                         Button::DISPLAY_ICON, true, 'btn-link'
                     )
                 );
@@ -417,7 +417,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $categoryId = 0;
         }
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -449,7 +449,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        $order = array();
+        $order = [];
         $order[] = new OrderBy(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
@@ -486,7 +486,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      * @return \Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton
      */
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = array(), $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
     )
     {
         $actionSelector = new ActionSelector(
@@ -502,7 +502,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function renderForum()
     {
-        $html = array();
+        $html = [];
 
         // Render forums published in the root
         $html[] = $this->renderTableForCategory();
@@ -525,7 +525,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $lastPost = \Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataManager::retrieve_forum_post(
             $forum->get_last_post()
         );
-        $html = array();
+        $html = [];
 
         if ($lastPost)
         {
@@ -558,7 +558,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             if ($this->is_allowed(WeblcmsRights::EDIT_RIGHT) || !$forum->get_locked())
             {
                 $fileFontAwesomeGlyph = new FontAwesomeGlyph(
-                    'file', array(), Translation::get('ViewLastPost', null, Forum::package())
+                    'file', [], Translation::get('ViewLastPost', null, Forum::package())
                 );
 
                 $html[] = '&nbsp;';
@@ -600,7 +600,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             $categoryName = '';
         }
 
-        $categoryTitle = array();
+        $categoryTitle = [];
 
         $categoryTitle[] = '<h3>';
         $categoryTitle[] = $categoryName;
@@ -628,11 +628,11 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $header->setHeaderContents(0, 1, implode(' ', $categoryTitle));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comments', array(), Translation::get("Topics", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comments', [], Translation::get("Topics", null, Forum::package()));
         $header->setHeaderContents(0, 2, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 2, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
-        $bootstrapGlyph = new FontAwesomeGlyph('comment', array(), Translation::get("Posts", null, Forum::package()));
+        $bootstrapGlyph = new FontAwesomeGlyph('comment', [], Translation::get("Posts", null, Forum::package()));
         $header->setHeaderContents(0, 3, $bootstrapGlyph->render());
         $header->setCellAttributes(0, 3, array('class' => 'cell-stat text-center hidden-xs hidden-sm'));
 
@@ -656,7 +656,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function renderTableForumTitle($publication, Forum $forum)
     {
         $canViewForum = !$forum->get_locked() || $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
-        $titleParts = array();
+        $titleParts = [];
 
         if ($canViewForum)
         {
@@ -778,7 +778,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function renderTablesForCategories()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -805,7 +805,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $order)
         );
 
-        $html = array();
+        $html = [];
 
         foreach ($categories as $category)
         {

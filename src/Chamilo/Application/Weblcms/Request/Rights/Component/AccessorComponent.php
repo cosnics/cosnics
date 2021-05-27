@@ -28,7 +28,7 @@ class AccessorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $this->get_tabs(self::ACTION_ACCESS, $form->toHtml())->render();

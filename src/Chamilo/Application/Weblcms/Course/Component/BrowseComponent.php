@@ -54,7 +54,7 @@ class BrowseComponent extends Manager implements TableSupport
     {
         $this->checkComponentAuthorization();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_html();
@@ -125,7 +125,7 @@ class BrowseComponent extends Manager implements TableSupport
      */
     protected function get_html()
     {
-        $html = array();
+        $html = [];
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
@@ -183,7 +183,7 @@ class BrowseComponent extends Manager implements TableSupport
      */
     public function get_table_condition($object_table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $category_id = Request::get(self::PARAM_CATEGORY_ID);
         if ($category_id)

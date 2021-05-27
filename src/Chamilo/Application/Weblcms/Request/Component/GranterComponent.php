@@ -66,12 +66,12 @@ class GranterComponent extends Manager
                         
                         if ($course->create())
                         {
-                            $course_settings = array();
+                            $course_settings = [];
                             $course_settings[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::TITULAR] = $course->get_titular_id();
                             
                             if ($course->create_course_settings_from_values($course_settings, true))
                             {
-                                if (CourseManagementRights::getInstance()->create_rights_from_values($course, array()))
+                                if (CourseManagementRights::getInstance()->create_rights_from_values($course, []))
                                 {
                                     if (\Chamilo\Application\Weblcms\Course\Storage\DataManager::subscribe_user_to_course(
                                         $course->get_id(), 

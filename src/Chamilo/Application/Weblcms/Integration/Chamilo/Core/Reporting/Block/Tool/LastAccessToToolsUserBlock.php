@@ -21,7 +21,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
 
         $reporting_data->add_row(Translation::get('ViewPublications'));
 
-        $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('ViewPublications'));
+        $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('ViewPublications'));
 
         $tool_names = $reporting_data->get_categories();
         foreach ($tool_names as $tool_name)
@@ -55,7 +55,7 @@ class LastAccessToToolsUserBlock extends LastAccessToToolsBlock
      */
     public function get_tool_publications_condition($tool_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = parent::get_tool_publications_condition($tool_name);
 

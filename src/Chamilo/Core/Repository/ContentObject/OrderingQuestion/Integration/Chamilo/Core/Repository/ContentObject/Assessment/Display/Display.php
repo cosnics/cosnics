@@ -24,7 +24,7 @@ class Display extends QuestionDisplay
         if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
             $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
@@ -54,7 +54,7 @@ class Display extends QuestionDisplay
             $answers = $question->get_options();
         }
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -70,7 +70,7 @@ class Display extends QuestionDisplay
 
         foreach ($answers as $i => $answer)
         {
-            $group = array();
+            $group = [];
             $answer_name = $question_id . '_' . ($i + 1);
             $group[] = $formvalidator->createElement('select', $answer_name, null, $order_options);
 
@@ -123,7 +123,7 @@ class Display extends QuestionDisplay
     {
         $answer_count = count($this->get_question()->get_options());
 
-        $options = array();
+        $options = [];
         $options[- 1] = Translation::get('MakeASelection');
         for ($i = 1; $i <= $answer_count; $i ++)
         {

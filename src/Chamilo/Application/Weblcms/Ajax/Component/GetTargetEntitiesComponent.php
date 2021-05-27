@@ -90,7 +90,7 @@ class GetTargetEntitiesComponent extends \Chamilo\Application\Weblcms\Ajax\Manag
     protected function getTargetEntityNames($targetEntities)
     {
         $translator = Translation::getInstance();
-        $targetEntityNames = array();
+        $targetEntityNames = [];
         
         if (array_key_exists(0, $targetEntities[0]))
         {

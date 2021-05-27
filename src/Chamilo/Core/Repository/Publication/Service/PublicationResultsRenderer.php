@@ -54,7 +54,7 @@ class PublicationResultsRenderer
     {
         $groupedPublicationResults = $this->groupPublicationResultsByType($publicationResults);
 
-        $html = array();
+        $html = [];
 
         $informationMessage =
             $this->getTranslator()->trans('PublishInformationMessage', [], 'Chamilo\Core\Repository\Publication');
@@ -79,7 +79,7 @@ class PublicationResultsRenderer
      */
     public function renderStatusPublicationResults(int $status, array $statusPublicationResults)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-' . $this->getStatusType($status) . '">';
         $html[] = '<div class="panel-heading">' . $this->getStatusHeading($status) . '</div>';
@@ -105,7 +105,7 @@ class PublicationResultsRenderer
      */
     public function renderStatusPublicationResult(PublicationResult $statusPublicationResult)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<li class="list-group-item">';
         $html[] = $this->renderStatusPublicationResultUrl($statusPublicationResult);
@@ -209,7 +209,7 @@ class PublicationResultsRenderer
      */
     public function groupPublicationResultsByType(array $publicationResults)
     {
-        $groupedPublicationResults = array();
+        $groupedPublicationResults = [];
 
         foreach ($publicationResults as $publicationResult)
         {
@@ -217,7 +217,7 @@ class PublicationResultsRenderer
 
             if (!array_key_exists($status, $groupedPublicationResults))
             {
-                $groupedPublicationResults[$status] = array();
+                $groupedPublicationResults[$status] = [];
             }
 
             $groupedPublicationResults[$status][] = $publicationResult;

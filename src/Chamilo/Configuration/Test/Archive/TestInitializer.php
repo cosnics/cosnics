@@ -70,7 +70,7 @@ class TestInitializer
     {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['HTTPS'] = false;
-        $_SESSION = array();
+        $_SESSION = [];
     }
 }
 

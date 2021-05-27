@@ -118,7 +118,7 @@ class XmlFormParserResult
      */
     public function clear_default_values()
     {
-        $this->set_default_values(array());
+        $this->set_default_values([]);
     }
 
     /**
@@ -126,7 +126,7 @@ class XmlFormParserResult
      */
     public function clear_elements()
     {
-        $this->set_elements(array());
+        $this->set_elements([]);
     }
 
     /**
@@ -134,7 +134,7 @@ class XmlFormParserResult
      */
     public function clear_validation_rules()
     {
-        $this->set_validation_rules(array());
+        $this->set_validation_rules([]);
     }
 
     /**

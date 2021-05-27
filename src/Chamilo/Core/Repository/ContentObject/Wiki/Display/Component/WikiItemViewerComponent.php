@@ -64,7 +64,7 @@ class WikiItemViewerComponent extends Manager implements DelegateComponent
                 $display_wiki_page = $wiki_page;
             }
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header($complex_wiki_page);
 

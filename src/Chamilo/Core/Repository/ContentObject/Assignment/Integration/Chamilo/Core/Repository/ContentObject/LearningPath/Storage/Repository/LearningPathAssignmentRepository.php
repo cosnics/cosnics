@@ -35,7 +35,7 @@ abstract class LearningPathAssignmentRepository extends AssignmentRepository
             new StaticConditionVariable($treeNodeDataIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

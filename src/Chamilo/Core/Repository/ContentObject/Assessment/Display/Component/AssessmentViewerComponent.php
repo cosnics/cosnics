@@ -89,7 +89,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
             if ($this->get_configuration()->show_feedback_summary())
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $result_processor->get_results();
@@ -109,7 +109,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         if ($this->question_form_submitted() && $this->showFeedbackAfterEveryPage())
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $result_processor->get_results();
@@ -121,7 +121,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         {
             $this->question_form = new AssessmentViewerForm($this, FormValidator::FORM_METHOD_POST, $this->get_url());
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->question_form->toHtml();
@@ -178,7 +178,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
      */
     public function get_question_answers()
     {
-        $answers = array();
+        $answers = [];
 
         $question_attempts = $this->get_parent()->get_assessment_question_attempts();
         foreach ($question_attempts as $question_attempt)
@@ -209,7 +209,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         $assessment = $this->get_root_content_object();
         $questions = $assessment->get_questions();
 
-        $question_ids = array();
+        $question_ids = [];
 
         foreach($questions as $question)
         {
@@ -229,7 +229,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $random_question_keys = array($random_question_keys);
         }
 
-        $random_question_ids = array();
+        $random_question_ids = [];
 
         foreach ($random_question_keys as $random_question_key)
         {
@@ -266,7 +266,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             return $this->questions;
         }
 
-        $page_questions = array();
+        $page_questions = [];
 
         $start = (($page_number - 1) * $questions_per_page);
         $stop = $start + $questions_per_page;
@@ -368,7 +368,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     protected function initialize_questions()
     {
         $question_ids = $this->get_parent()->get_registered_question_ids();
-        $order_by = array();
+        $order_by = [];
 
         if (!is_array($question_ids) || count($question_ids) == 0)
         {

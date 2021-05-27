@@ -260,7 +260,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_content(str_replace('=s220', '=w1000', $file->thumbnailLink));
         }
 
-        $rights = array();
+        $rights = [];
         $rights[ExternalObject::RIGHT_USE] = $file->copyable;
         $rights[ExternalObject::RIGHT_EDIT] = false;
         $rights[ExternalObject::RIGHT_DOWNLOAD] = $file->copyable;
@@ -307,7 +307,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             )
         );
         $files_items = $files['modelData']['files'];
-        $objects = array();
+        $objects = [];
 
         foreach ($files_items as $file_item)
         {
@@ -349,7 +349,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
                 $object->set_owner_id($file_item['owners'][0]['emailAddress']);
             }
 
-            $rights = array();
+            $rights = [];
             $rights[ExternalObject::RIGHT_USE] = $file_item['capabilities']['canCopy'];
             $rights[ExternalObject::RIGHT_EDIT] = false;
             $rights[ExternalObject::RIGHT_DOWNLOAD] = $file_item['capabilities']['canCopy'];
@@ -401,7 +401,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     {
         $files = $this->service->files->listFiles(array('orderBy' => 'name', 'q' => $query));
         $files_items = $files['modelData']['files'];
-        $folders = array();
+        $folders = [];
 
         foreach ($files_items as $file_item)
         {

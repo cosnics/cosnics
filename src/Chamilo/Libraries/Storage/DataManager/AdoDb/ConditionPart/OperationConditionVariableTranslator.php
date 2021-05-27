@@ -29,7 +29,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $strings = array();
+        $strings = [];
 
         $strings[] = '(';
         $strings[] = $this->getConditionPartTranslatorService()->translate(

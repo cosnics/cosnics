@@ -23,7 +23,7 @@ class ActionsGenerator extends NavigationGenerator
      */
     public function run()
     {
-        $actions = array();
+        $actions = [];
 
         $application = $this->getApplication();
         $baseParameters = $this->getBaseParameters();

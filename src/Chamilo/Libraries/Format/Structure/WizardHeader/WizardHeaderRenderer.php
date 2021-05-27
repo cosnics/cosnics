@@ -33,7 +33,7 @@ class WizardHeaderRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="nav nav-wizard publication-wizard">';
 

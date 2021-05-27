@@ -26,7 +26,7 @@ class ExternalObjectDisplay extends StreamingMediaExternalObjectDisplay
     public function get_preview($is_thumbnail = false)
     {
         $object = $this->get_object();
-        $html = array();
+        $html = [];
         if ($is_thumbnail)
         {
             $html[] = '<img style="margin-bottom: 10px;" class="" src="' . $object->get_thumbnail() . '" />';

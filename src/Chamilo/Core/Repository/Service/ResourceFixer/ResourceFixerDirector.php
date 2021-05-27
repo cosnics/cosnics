@@ -15,7 +15,7 @@ class ResourceFixerDirector
     /**
      * @var ResourceFixer[]
      */
-    protected $resourceFixers = array();
+    protected $resourceFixers = [];
 
     /**
      * @var Logger

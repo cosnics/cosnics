@@ -159,7 +159,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      */
     private function determine_excluded_content_object_ids()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -200,7 +200,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
         $html[] = parent::render_header();
         $html[] = $this->renderRepoDragPanel();
 

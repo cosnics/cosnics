@@ -108,7 +108,7 @@ class UserForm extends FormValidator
             'required'
         );
 
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement(
             'radio', User::PROPERTY_ACTIVE, null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
         );
@@ -118,7 +118,7 @@ class UserForm extends FormValidator
         $this->addGroup($group, 'active', Translation::get('Active'), '&nbsp;');
 
         // pw
-        $group = array();
+        $group = [];
 
         if ($this->form_type == self::TYPE_EDIT)
         {
@@ -195,7 +195,7 @@ class UserForm extends FormValidator
         );
 
         // Status
-        $status = array();
+        $status = [];
         $status[5] = Translation::get('Student');
         $status[1] = Translation::get('CourseAdmin');
         $this->addElement('select', User::PROPERTY_STATUS, Translation::get('Status'), $status);
@@ -205,7 +205,7 @@ class UserForm extends FormValidator
         {
             $this->add_warning_message('admin_lockout_message', null, Translation::get('LockOutWarningMessage'));
         }
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement(
             'radio', User::PROPERTY_PLATFORMADMIN, null,
             Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
@@ -217,7 +217,7 @@ class UserForm extends FormValidator
         $this->addGroup($group, 'admin', Translation::get('PlatformAdministrator'), '&nbsp;');
 
         // Send email
-        $group = array();
+        $group = [];
         $group[] = &$this->createElement(
             'radio', 'send_mail', null, Translation::get('ConfirmYes', null, Utilities::COMMON_LIBRARIES), 1
         );
@@ -406,7 +406,7 @@ class UserForm extends FormValidator
      */
     public function send_email($user)
     {
-        $options = array();
+        $options = [];
         $options['firstname'] = $user->get_firstname();
         $options['lastname'] = $user->get_lastname();
         $options['username'] = $user->get_username();
@@ -435,7 +435,7 @@ class UserForm extends FormValidator
         }
 
         $mail = new Mail(
-            $subject, $body, $user->get_email(), true, array(), array(),
+            $subject, $body, $user->get_email(), true, [], [],
             $options['admin_firstname'] . ' ' . $options['admin_surname'], $options['admin_email']
         );
 
@@ -456,7 +456,7 @@ class UserForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $user = $this->user;
 

@@ -28,7 +28,7 @@ class Filtered extends Basic
             $this->get_context()->set_parameter(Manager::PARAM_SHOW_ALL, 1);
             $this->get_context()->set_parameter(Manager::PARAM_VIEWS, $this->get_context()->get_current_view());
 
-            $html = array();
+            $html = [];
 
             foreach ($this->get_template()->get_blocks() as $key => $block)
             {
@@ -47,7 +47,7 @@ class Filtered extends Basic
                 $glyph = new NamespaceIdentGlyph(
                     $this->getBlockNamespace($block) . '\Block\\' .
                     ClassnameUtilities::getInstance()->getClassnameFromObject($block), false, false, false, null,
-                    array()
+                    []
                 );
 
                 $html[] = '<h2>';
@@ -67,7 +67,7 @@ class Filtered extends Basic
             $current_block = $this->get_template()->get_block($current_block_id);
             // $this->get_context()->set_parameter(Manager::PARAM_BLOCK_ID, $current_block_id);
 
-            $html = array();
+            $html = [];
             if ($current_block instanceof FilteredBlock)
             {
                 $parameters = $this->get_context()->get_parameters();
@@ -110,7 +110,7 @@ class Filtered extends Basic
                     $glyph = new NamespaceIdentGlyph(
                         $this->getBlockNamespace($block) . '\Block\\' .
                         ClassnameUtilities::getInstance()->getClassnameFromObject($block), true, false, false,
-                        IdentGlyph::SIZE_SMALL, array()
+                        IdentGlyph::SIZE_SMALL, []
                     );
 
                     $tabs->add_tab(

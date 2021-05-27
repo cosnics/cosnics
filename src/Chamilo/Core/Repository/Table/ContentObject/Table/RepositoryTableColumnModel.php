@@ -22,7 +22,7 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
 
     public function initialize_columns()
     {
-        $typeGlyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $typeGlyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_TYPE, $typeGlyph->render()));
 
@@ -44,7 +44,7 @@ class RepositoryTableColumnModel extends DataClassTableColumnModel implements Ta
             new DataClassPropertyTableColumn(ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE)
         );
 
-        $versionGlyph = new FontAwesomeGlyph('undo', array(), Translation::get('Versions'));
+        $versionGlyph = new FontAwesomeGlyph('undo', [], Translation::get('Versions'));
 
         $this->add_column(new StaticTableColumn(self::PROPERTY_VERSION, $versionGlyph->render()));
     }

@@ -42,7 +42,7 @@ abstract class EntityTableCellRenderer
             return null;
         }
 
-        $html = array();
+        $html = [];
         $html[] = '<select style="width:180px">';
 
         foreach ($users as $user)

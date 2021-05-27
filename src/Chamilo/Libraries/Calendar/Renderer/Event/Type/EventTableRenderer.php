@@ -19,7 +19,7 @@ abstract class EventTableRenderer extends EventRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderHeader();
         $html[] = $this->renderLink();
@@ -80,7 +80,7 @@ abstract class EventTableRenderer extends EventRenderer
      */
     public function renderFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -120,7 +120,7 @@ abstract class EventTableRenderer extends EventRenderer
      */
     public function renderHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="' . $this->determineEventClasses() . '" data-source-key="' .
             $this->getRenderer()->getLegend()->addSource($this->getEvent()->getSource()) . '">';
@@ -135,7 +135,7 @@ abstract class EventTableRenderer extends EventRenderer
      */
     public function renderLink()
     {
-        $html = array();
+        $html = [];
 
         $fullTitle = $this->renderFullTitle();
 

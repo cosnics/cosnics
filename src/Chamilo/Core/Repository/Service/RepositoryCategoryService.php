@@ -68,7 +68,7 @@ class RepositoryCategoryService
         WorkspaceInterface $workspace, int $parentIdentifier, string $categoryName
     )
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parentIdentifier)

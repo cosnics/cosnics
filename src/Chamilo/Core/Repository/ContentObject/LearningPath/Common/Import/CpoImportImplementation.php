@@ -24,13 +24,13 @@ class CpoImportImplementation extends ImportImplementation
 
         $contentObjectNode = $this->get_content_object_import_parameters()->get_content_object_node();
 
-        $treeNodesData = array();
+        $treeNodesData = [];
 
         /** @var \DOMNodeList $childNodes */
         $childNodes = $this->get_controller()->get_dom_xpath()->query('children/child', $contentObjectNode);
         foreach ($childNodes as $key => $childNode)
         {
-            $properties = array();
+            $properties = [];
 
             /** @var \DOMElement $childNode */
 
@@ -129,7 +129,7 @@ class CpoImportImplementation extends ImportImplementation
      */
     protected function orderTreeNodesDataPerParentTreeNodeDataId($treeNodesData)
     {
-        $orderedTreeNodesData = array();
+        $orderedTreeNodesData = [];
 
         foreach ($treeNodesData as $treeNodeData)
         {

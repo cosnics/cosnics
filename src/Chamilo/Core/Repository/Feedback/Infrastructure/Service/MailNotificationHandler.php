@@ -35,14 +35,14 @@ abstract class MailNotificationHandler implements NotificationHandlerInterface
      * @param Feedback $feedback
      * @param Notification[] $notifications
      */
-    public function handleNotifications(Feedback $feedback, array $notifications = array())
+    public function handleNotifications(Feedback $feedback, array $notifications = [])
     {
         if (empty($notifications))
         {
             return;
         }
         
-        $targetUsers = array();
+        $targetUsers = [];
         
         foreach ($notifications as $notification)
         {

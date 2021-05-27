@@ -154,7 +154,7 @@ class ItemCacheService
     protected function findItemTitlesGroupedByItemIdentifierAndIsocode()
     {
         $itemTitles = $this->getItemService()->findItemTitles();
-        $groupedItemTitles = array();
+        $groupedItemTitles = [];
 
         $itemTitlesGroupedByIdentifiers =
             $this->getPropertyMapper()->groupDataClassByProperty($itemTitles, ItemTitle::PROPERTY_ITEM_ID);
@@ -166,7 +166,7 @@ class ItemCacheService
             {
                 if (!array_key_exists($itemIdentifier, $groupedItemTitles))
                 {
-                    $groupedItemTitles[$itemIdentifier] = array();
+                    $groupedItemTitles[$itemIdentifier] = [];
                 }
 
                 $groupedItemTitles[$itemIdentifier][$itemTitle->getIsocode()] = $itemTitle;

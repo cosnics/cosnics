@@ -16,7 +16,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     {
         $object = $this->get_content_object();
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="link_url" style="margin-top: 1em;">';
         

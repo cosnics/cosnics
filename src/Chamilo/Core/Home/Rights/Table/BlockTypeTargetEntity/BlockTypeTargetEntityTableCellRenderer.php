@@ -40,7 +40,7 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
         $toolbar->add_item(
             new ToolbarItem(
                 $translator->getTranslation('SetBlockTypeTargetEntitiesComponent', null, Manager::context()),
-                new FontAwesomeGlyph('users', array(), null, 'fas'),
+                new FontAwesomeGlyph('users', [], null, 'fas'),
                 $this->get_component()->get_set_block_type_target_entities_url($result['block_type']),
                 ToolbarItem::DISPLAY_ICON
             )
@@ -56,7 +56,7 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
      *
      * @return string
      */
-    protected function renderTargetEntities($targetEntities = array())
+    protected function renderTargetEntities($targetEntities = [])
     {
         $translator = Translation::getInstance();
 
@@ -65,7 +65,7 @@ class BlockTypeTargetEntityTableCellRenderer extends RecordTableCellRenderer
             return $translator->getTranslation('Everybody', null, Utilities::COMMON_LIBRARIES);
         }
 
-        $targetEntitiesHtml = array();
+        $targetEntitiesHtml = [];
 
         $targetEntitiesHtml[] = '<select>';
 

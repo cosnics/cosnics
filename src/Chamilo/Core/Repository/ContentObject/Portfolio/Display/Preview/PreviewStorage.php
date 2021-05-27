@@ -31,7 +31,7 @@ class PreviewStorage
 
         if (!isset($storage))
         {
-            $this->set_storage(array());
+            $this->set_storage([]);
         }
     }
 
@@ -120,7 +120,7 @@ class PreviewStorage
 
         if (!isset($feedbacks))
         {
-            $feedbacks = array();
+            $feedbacks = [];
             $this->set_property(self::PROPERTY_FEEDBACK, $feedbacks);
         }
 
@@ -137,7 +137,7 @@ class PreviewStorage
 
         if (!isset($notifications))
         {
-            $notifications = array();
+            $notifications = [];
             $this->set_property(self::PROPERTY_NOTIFICATION, $notifications);
         }
 
@@ -173,7 +173,7 @@ class PreviewStorage
      */
     public function reset()
     {
-        return $this->set_storage(array());
+        return $this->set_storage([]);
     }
 
     /**

@@ -39,7 +39,7 @@ class DeactivatorComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $deactivator->get_result(true);

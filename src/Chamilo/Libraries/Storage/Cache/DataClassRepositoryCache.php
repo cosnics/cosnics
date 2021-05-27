@@ -39,7 +39,7 @@ class DataClassRepositoryCache
      */
     public function __construct()
     {
-        $this->cache = array();
+        $this->cache = [];
     }
 
     /**
@@ -361,7 +361,7 @@ class DataClassRepositoryCache
 
     public function reset()
     {
-        $this->cache = array();
+        $this->cache = [];
     }
 
     /**
@@ -400,7 +400,7 @@ class DataClassRepositoryCache
      *
      * @return boolean
      */
-    public function truncates($classes = array())
+    public function truncates($classes = [])
     {
         foreach ($classes as $class)
         {

@@ -103,8 +103,8 @@ class UserViewMenu extends HtmlMenu
      */
     private function get_menu_items()
     {
-        $menu = array();
-        $menu_item = array();
+        $menu = [];
+        $menu_item = [];
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(UserView::class, UserView::PROPERTY_USER_ID),
@@ -112,7 +112,7 @@ class UserViewMenu extends HtmlMenu
         );
         $userviews = DataManager::retrieves(UserView::class, new DataClassRetrievesParameters($condition));
 
-        $userview = array();
+        $userview = [];
         $userview['title'] = Translation::get('UserViews');
         $userview['url'] = $this->application->get_url(
             array(
@@ -123,13 +123,13 @@ class UserViewMenu extends HtmlMenu
             ), array(\Chamilo\Core\Repository\Manager::PARAM_CATEGORY_ID)
         );
 
-        $glyph = new FontAwesomeGlyph('search', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('search', [], null, 'fas');
         $userview['class'] = $glyph->getClassNamesString();
         $menu[] = $userview;
 
         foreach($userviews as $userview)
         {
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['title'] = $userview->get_name();
             $menu_item['url'] = $this->get_view_url($userview->get_id());
             $menu_item['class'] = '';

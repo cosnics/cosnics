@@ -35,7 +35,7 @@ class LpiAttemptInteraction extends SimpleTracker
         return $this->get_default_property(self::PROPERTY_CORRECT_RESPONSES);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -151,7 +151,7 @@ class LpiAttemptInteraction extends SimpleTracker
         $this->set_default_property(self::PROPERTY_WEIGHT, $weight);
     }
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         $this->set_lpi_view_id($parameters[self::PROPERTY_LPI_VIEW_ID]);
         $this->set_interaction_id($parameters[self::PROPERTY_INTERACTION_ID]);

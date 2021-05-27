@@ -102,7 +102,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $this->redirect(
                 Translation::getInstance()->getTranslation("NotAllowed", null, Utilities::COMMON_LIBRARIES),
                 true,
-                array(),
+                [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
@@ -122,7 +122,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             }
             catch (Exception $ex)
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = '<div class="alert alert-danger">' . $ex->getMessage() . '</div>';
@@ -292,7 +292,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_tree_menu_url()
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Application::PARAM_CONTEXT] = \Chamilo\Application\Weblcms\Manager::context();
         $parameters[Application::PARAM_ACTION] = \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE;
@@ -477,7 +477,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function forum_topic_viewed($complex_topic_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
         $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->get_publication()->getId();
         $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
@@ -538,7 +538,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
     public function get_assessment_current_url()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
             $this->getCurrentTreeNodeDataId();
 

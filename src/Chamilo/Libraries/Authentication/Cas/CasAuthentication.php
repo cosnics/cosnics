@@ -78,7 +78,7 @@ class CasAuthentication extends Authentication implements AuthenticationInterfac
     {
         if (!isset($this->settings))
         {
-            $this->settings = array();
+            $this->settings = [];
             $this->settings['host'] =
                 $this->configurationConsulter->getSetting(array('Chamilo\Core\Admin', 'cas_host'));
             $this->settings['port'] =

@@ -27,15 +27,15 @@ class QueryBuilder
      * @var array The array of SQL parts collected.
      */
     private $sqlParts = array(
-        'select' => array(),
-        'from' => array(),
-        'join' => array(),
-        'set' => array(),
+        'select' => [],
+        'from' => [],
+        'join' => [],
+        'set' => [],
         'where' => null,
-        'groupBy' => array(),
+        'groupBy' => [],
         'having' => null,
-        'orderBy' => array(),
-        'values' => array()
+        'orderBy' => [],
+        'values' => []
     );
 
     /**
@@ -286,8 +286,8 @@ class QueryBuilder
      */
     private function getFromClauses()
     {
-        $fromClauses = array();
-        $knownAliases = array();
+        $fromClauses = [];
+        $knownAliases = [];
 
         // Loop through all FROM clauses
         foreach ($this->sqlParts['from'] as $from)
@@ -660,7 +660,7 @@ class QueryBuilder
      */
     public function resetQueryPart($queryPartName)
     {
-        $this->sqlParts[$queryPartName] = is_array($this->sqlParts[$queryPartName]) ? array() : null;
+        $this->sqlParts[$queryPartName] = is_array($this->sqlParts[$queryPartName]) ? [] : null;
 
         $this->state = self::STATE_DIRTY;
 

@@ -50,7 +50,7 @@ class FeederForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $contentObjectPublication = $this->contentObjectPublicationService->getFirstContentObjectPublicationForElement(
             $this->getBlock());

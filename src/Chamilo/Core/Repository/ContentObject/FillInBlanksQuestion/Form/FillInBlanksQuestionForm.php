@@ -55,7 +55,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
 
         $style = (count($answers) == 0) ? 'style="display: none;"' : '';
 
-        $html = array();
+        $html = [];
         $html[] = '<div id="answers_table" class="' . $style . '>';
         $html[] = '<div class="label">';
         $html[] = Translation::get('Answers');
@@ -127,7 +127,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
 
         // ANSWER TYPE
         $this->addElement('category', Translation::get('AnswerType'));
-        $type_options = array();
+        $type_options = [];
         $type_options[] = $this->createElement(
             'radio', FillInBlanksQuestion::PROPERTY_QUESTION_TYPE, null, Translation::get('AutoTextField'),
             FillInBlanksQuestion::TYPE_SIZED_TEXT,
@@ -185,7 +185,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
 
         // uniform sized text field
         $this->addElement('html', '<div class="type_' . FillInBlanksQuestion::TYPE_UNIFORM_TEXT . '_options_box">');
-        $field_size_options = array();
+        $field_size_options = [];
         // $field_size_options[] = $this->createElement('radio', self::UNIFORM_INPUT_TYPE, null, Translation ::
         // get('Unlimited') . '<br />', self::UNIFORM_UNLIMITED_ANSWER);
         $field_size_options[] = $this->createElement(
@@ -234,7 +234,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         if (!$this->isSubmitted())
         {

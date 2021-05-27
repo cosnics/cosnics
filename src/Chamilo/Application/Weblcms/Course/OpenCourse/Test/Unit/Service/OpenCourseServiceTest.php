@@ -124,7 +124,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
 
         $this->openCourseRepositoryMock->expects($this->never())->method('create');
 
-        $this->openCourseService->attachRolesToCoursesByIds($user, array(), array(3, 5));
+        $this->openCourseService->attachRolesToCoursesByIds($user, [], array(3, 5));
     }
 
     public function testAttachRolesToCoursesByIdsWithEmptyRoleIds()
@@ -133,7 +133,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
 
         $this->openCourseRepositoryMock->expects($this->never())->method('create');
 
-        $this->openCourseService->attachRolesToCoursesByIds($user, array(2, 4), array());
+        $this->openCourseService->attachRolesToCoursesByIds($user, array(2, 4), []);
     }
 
     public function testCountClosedCourses()

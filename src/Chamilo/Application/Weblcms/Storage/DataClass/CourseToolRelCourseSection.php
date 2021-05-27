@@ -19,7 +19,7 @@ class CourseToolRelCourseSection extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_TOOL_ID, self::PROPERTY_SECTION_ID));
     }

@@ -367,7 +367,7 @@ class RightsService implements RightsServiceInterface
      *
      * @throws \Exception
      */
-    public function removeUsersFromRightsByIds(Course $course, array $userIds = array())
+    public function removeUsersFromRightsByIds(Course $course, array $userIds = [])
     {
         $this->rightsLocationRepository->removeEntitiesFromRightsByIds(
             $course, UserEntityProvider::ENTITY_TYPE, $userIds
@@ -380,7 +380,7 @@ class RightsService implements RightsServiceInterface
      *
      * @throws \Exception
      */
-    public function removeGroupsFromRightsByIds(Course $course, array $groupIds = array())
+    public function removeGroupsFromRightsByIds(Course $course, array $groupIds = [])
     {
         $this->rightsLocationRepository->removeEntitiesFromRightsByIds(
             $course, GroupEntityProvider::ENTITY_TYPE, $groupIds
@@ -734,7 +734,7 @@ class RightsService implements RightsServiceInterface
      *
      * @return bool
      */
-    protected function getFromCache($function, $cacheParameters = array())
+    protected function getFromCache($function, $cacheParameters = [])
     {
         $cacheKey = $this->getCacheKey($function, $cacheParameters);
         if (array_key_exists($cacheKey, $this->rightsCache))
@@ -750,7 +750,7 @@ class RightsService implements RightsServiceInterface
      * @param array $cacheParameters
      * @param string $value
      */
-    protected function saveToCache($function, $cacheParameters = array(), $value)
+    protected function saveToCache($function, $cacheParameters = [], $value)
     {
         $cacheKey = $this->getCacheKey($function, $cacheParameters);
         $this->rightsCache[$cacheKey] = $value;
@@ -764,7 +764,7 @@ class RightsService implements RightsServiceInterface
      *
      * @return string
      */
-    protected function getCacheKey($function, $cacheParameters = array())
+    protected function getCacheKey($function, $cacheParameters = [])
     {
         return sha1($function . ':' . serialize($cacheParameters));
     }

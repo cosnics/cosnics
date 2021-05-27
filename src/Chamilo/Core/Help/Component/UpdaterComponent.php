@@ -49,7 +49,7 @@ class UpdaterComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = '<h4>' . Translation::get('UpdateItem') . ': ' . $help_item->get_context() . ' - ' .

@@ -15,7 +15,7 @@ class Manager implements ActionsSupportInterface
 
     public static function get_actions()
     {
-        $links = array();
+        $links = [];
 
         $package_management = Configuration::getInstance()->get_setting(
             array('Chamilo\Core\Admin', 'enable_package_management')

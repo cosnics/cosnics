@@ -149,7 +149,7 @@ class Basic extends Renderer
         $generalMode = $this->isGeneralMode();
         $homeUserIdentifier = $this->getHomeService()->determineHomeUserIdentifier($this->get_user());
 
-        $html = array();
+        $html = [];
 
         if ($user instanceof User && ($userHomeAllowed || $user->is_platform_admin()))
         {
@@ -241,7 +241,7 @@ class Basic extends Renderer
         $modules = $angularConnectorService->getAngularModules();
         $moduleString = count($modules) > 0 ? '\'' . implode('\', \'', $modules) . '\'' : '';
 
-        $html = array();
+        $html = [];
 
         $html[] = $angularConnectorService->loadAngularModules();
 
@@ -275,13 +275,13 @@ class Basic extends Renderer
      */
     public function renderPackageContainer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<form class="form-inline package-search">';
         $html[] = '<div class="form-group">';
         $html[] = '<div class="input-group">';
 
-        $glyph = new FontAwesomeGlyph('search', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('search', [], null, 'fas');
 
         $html[] = '<div class="input-group-addon">' . $glyph->render() . '</div>';
         $html[] = '<input type="text" class="form-control" id="portal-package-name" placeholder="' .
@@ -310,7 +310,7 @@ class Basic extends Renderer
 
     public function renderPanel($rowClass, $actionClass, $title, $content)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row ' . $rowClass . ' hidden">';
 
@@ -320,7 +320,7 @@ class Basic extends Renderer
         $html[] = '<div class="panel-heading">';
         $html[] = '<div class="pull-right">';
 
-        $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('times', [], null, 'fas');
 
         $html[] = '<a href="#" class="' . $actionClass . '">' . $glyph->render() . '</a>';
         $html[] = '</div>';
@@ -340,7 +340,7 @@ class Basic extends Renderer
 
     public function renderTabTitlePanel()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<form class="form-inline portal-action-tab-form">';
         $html[] = '<div class="form-group">';
@@ -364,7 +364,7 @@ class Basic extends Renderer
      */
     public function renderTabs()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="nav nav-tabs portal-nav-tabs">';
 

@@ -53,7 +53,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
      * @param $browser PublicationBrowser The browser to associate this category tree with.
      * @param $tree_id string An id for the tree
      */
-    public function __construct($browser, $tree_id, $url_params = array())
+    public function __construct($browser, $tree_id, $url_params = [])
     {
         $this->browser = $browser;
         $this->tree_id = $tree_id;
@@ -138,8 +138,8 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
     private function get_menu_items($extra_items = null)
     {
-        $menu = array();
-        $menu_item = array();
+        $menu = [];
+        $menu_item = [];
         $menu_item['title'] = Translation::get(
                 (string) StringUtilities::getInstance()->createString($this->browser->get_tool_id()) . 'Title'
             )->upperCamelize() . $this->get_category_count(
@@ -152,7 +152,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             $menu_item['sub'] = $sub_menu_items;
         }
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         $menu_item['class'] = $glyph->getClassNamesString();
 
@@ -168,7 +168,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
     private function get_publication_count($category)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
@@ -178,7 +178,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
 
         $course_groups = $this->browser->get_course_groups();
 
-        $course_group_ids = array();
+        $course_group_ids = [];
 
         foreach ($course_groups as $course_group)
         {
@@ -225,10 +225,10 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters($condition)
         );
 
-        $categories = array();
+        $categories = [];
         foreach($objects as $category)
         {
-            $menu_item = array();
+            $menu_item = [];
             $menu_item['title'] = $category->get_name() . $this->get_category_count($category->get_id());
             $menu_item['url'] = $this->get_category_url($category->get_id());
             $sub_menu_items = $this->get_sub_menu_items($category->get_id());
@@ -237,7 +237,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
                 $menu_item['sub'] = $sub_menu_items;
             }
 
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
             $menu_item['class'] = $glyph->getClassNamesString();
 

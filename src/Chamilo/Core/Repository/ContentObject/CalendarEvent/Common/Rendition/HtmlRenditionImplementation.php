@@ -15,7 +15,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
         $object = $this->get_content_object();
         $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
         
-        $prepend = array();
+        $prepend = [];
         
         if ($object->get_location())
         {
@@ -51,7 +51,7 @@ class HtmlRenditionImplementation extends RenditionImplementation
                     }
                     break;
                 case 2 :
-                    $days = array();
+                    $days = [];
                     foreach (explode(',', $object->get_byday()) as $day)
                     {
                         $days[] = CalendarEvent::get_day_string($day);

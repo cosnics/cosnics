@@ -51,7 +51,7 @@ class AssessmentOverviewBlock extends ToolBlock
             AssessmentAttempt::class,
             new DataClassRetrievesParameters($condition));
         
-        $attempts = array();
+        $attempts = [];
         foreach($attempts_result_set as $attempt)
         {
             $attempts[$attempt->get_user_id()][$attempt->get_assessment_id()][] = $attempt;
@@ -120,7 +120,7 @@ class AssessmentOverviewBlock extends ToolBlock
     private function get_score($attempts)
     {
         $score_type = (Request::post('sel')) ? Request::post('sel') : Request::get('sel');
-        $score = array();
+        $score = [];
         
         switch ($score_type)
         {

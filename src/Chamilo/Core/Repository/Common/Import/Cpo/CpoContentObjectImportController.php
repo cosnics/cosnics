@@ -476,7 +476,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
                 {
                     
                     $external_instance_node = $external_instance_node_list->item(0);
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(Instance::class, Instance::PROPERTY_IMPLEMENTATION),
                         new StaticConditionVariable($external_instance_node->getAttribute('type')));

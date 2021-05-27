@@ -56,7 +56,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
     {
         if ($this->get_is_homepage())
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT

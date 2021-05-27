@@ -305,7 +305,7 @@ class AttemptTrackingService
     )
     {
         $treeNodeDataIds = $treeNode instanceof TreeNode ?
-            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : array();
+            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : [];
 
         return $this->trackingRepository->countLearningPathAttemptsWithUser(
             $learningPath, $treeNodeDataIds, $condition
@@ -327,11 +327,11 @@ class AttemptTrackingService
      */
     public function getLearningPathAttemptsWithUser(
         LearningPath $learningPath, TreeNode $treeNode = null, Condition $condition = null,
-        $offset = 0, $count = 0, $orderBy = array()
+        $offset = 0, $count = 0, $orderBy = []
     )
     {
         $treeNodeDataIds = $treeNode instanceof TreeNode ?
-            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : array();
+            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : [];
 
         return $this->trackingRepository->findLearningPathAttemptsWithUser(
             $learningPath, $treeNodeDataIds, $condition, $offset, $count, $orderBy
@@ -368,11 +368,11 @@ class AttemptTrackingService
      */
     public function getTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, TreeNode $treeNode = null,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
     )
     {
         $treeNodeDataIds = $treeNode instanceof TreeNode ?
-            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : array();
+            $treeNode->getTreeNodeDataIdsFromSelfAndDescendants() : [];
 
         return $this->trackingRepository->findTargetUsersWithLearningPathAttempts(
             $learningPath, $treeNodeDataIds, $condition, $offset, $count, $orderBy

@@ -186,7 +186,7 @@ class AssessmentViewerForm extends FormValidator
      */
     public function add_answers_from_question_attempts()
     {
-        $defaults = array();
+        $defaults = [];
 
         $answers = $this->get_assessment_viewer()->get_question_answers();
         foreach ($answers as $question_cid => $answer)

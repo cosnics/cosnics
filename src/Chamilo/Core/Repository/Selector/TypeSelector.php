@@ -29,7 +29,7 @@ class TypeSelector
      *
      * @param TypeSelectorCategory[] $categories
      */
-    public function __construct($categories = array())
+    public function __construct($categories = [])
     {
         $this->categories = $categories;
     }
@@ -95,7 +95,7 @@ class TypeSelector
      */
     public function getAllTypeSelectorOptions()
     {
-        $typeSelectorOptions = array();
+        $typeSelectorOptions = [];
 
         foreach($this->typeSelectorItems as $typeSelectorItem)
         {
@@ -164,7 +164,7 @@ class TypeSelector
      */
     public function as_tree()
     {
-        $type_options = array();
+        $type_options = [];
         $type_options[] = '-- ' . Translation::get('SelectAContentObjectType') . ' --';
         
         $prefix = (count($this->categories) > 1 ? '&mdash; ' : '');
@@ -219,7 +219,7 @@ class TypeSelector
      */
     public function get_unique_content_object_template_ids()
     {
-        $types = array();
+        $types = [];
 
         foreach ($this->typeSelectorItems as $typeSelectorItem)
         {

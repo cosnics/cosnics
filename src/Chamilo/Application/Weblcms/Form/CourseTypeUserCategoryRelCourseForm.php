@@ -102,7 +102,7 @@ class CourseTypeUserCategoryRelCourseForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $course_type_user_category_rel_course = $this->course_type_user_category_rel_course;
 

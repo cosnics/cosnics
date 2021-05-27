@@ -39,12 +39,12 @@ class GroupService
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    protected $userSubscribedGroups = array();
+    protected $userSubscribedGroups = [];
 
     /**
      * @var integer[][]
      */
-    protected $userSubscribedGroupIdentifiers = array();
+    protected $userSubscribedGroupIdentifiers = [];
 
     /**
      * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
@@ -54,27 +54,27 @@ class GroupService
     /**
      * @var integer[][]
      */
-    protected $groupUserIdentifiers = array();
+    protected $groupUserIdentifiers = [];
 
     /**
      * @var integer[][]
      */
-    protected $subGroupIdentifiers = array();
+    protected $subGroupIdentifiers = [];
 
     /**
      * @var integer[]
      */
-    protected $subGroupsCount = array();
+    protected $subGroupsCount = [];
 
     /**
      * @var integer[]
      */
-    protected $groupUsersCount = array();
+    protected $groupUsersCount = [];
 
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    protected $subGroups = array();
+    protected $subGroups = [];
 
     /**
      * @var \Chamilo\Core\Group\Service\GroupEventNotifier

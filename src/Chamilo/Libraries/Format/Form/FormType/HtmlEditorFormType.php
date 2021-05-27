@@ -35,7 +35,7 @@ class HtmlEditorFormType extends AbstractType
             $view->vars['full_name'], $label, false, $options['html_editor_options'], $options['html_editor_attributes']
         );
 
-        $javascript = array();
+        $javascript = [];
 
         $includes = $html_editor->get_includes();
         foreach ($includes as $include)
@@ -62,8 +62,8 @@ class HtmlEditorFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'html_editor_options' => array(),
-                'html_editor_attributes' => array(),
+                'html_editor_options' => [],
+                'html_editor_attributes' => [],
                 'compound' => false
             ]
         );

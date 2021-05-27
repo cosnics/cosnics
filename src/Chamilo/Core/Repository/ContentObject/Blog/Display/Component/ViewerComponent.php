@@ -32,7 +32,7 @@ class ViewerComponent extends Manager implements DelegateComponent
         $blog = $this->get_root_content_object();
         $blog_layout = BlogLayout::factory($this, $blog);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render();

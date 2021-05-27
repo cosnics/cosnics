@@ -73,19 +73,19 @@ class ExternalObjectForm extends FormValidator
     {
         $this->build_basic_form();
 
-        $category_group = array();
+        $category_group = [];
         $category_group[] = $this->createElement(
             'select', self::PARENT_ID, Translation::get('FolderTypeName'), $this->get_folders()
         );
 
         $category_group[] = $this->createElement(
             'style_button', 'add_folder', null, array('id' => 'add_folder', 'style' => 'display:none'), null,
-            new FontAwesomeGlyph('plus', array(), null, 'fas')
+            new FontAwesomeGlyph('plus', [], null, 'fas')
         );
 
         $this->addGroup($category_group, null, Translation::get('FolderTypeName'));
 
-        $group = array();
+        $group = [];
         $group[] = $this->createElement('static', null, null, '<div id="' . self::NEW_FOLDER . '">');
         $group[] = $this->createElement('text', self::NEW_FOLDER);
         $group[] = $this->createElement('static', null, null, '</div>');
@@ -157,7 +157,7 @@ class ExternalObjectForm extends FormValidator
     public function get_folders()
     {
         $folders = $this->application->get_external_repository_manager_connector()->retrieve_my_folders('root');
-        $new_folders = array();
+        $new_folders = [];
         foreach($folders as $folder)
         {
             $new_folders[$folder->getId()] = $folder->getTitle();

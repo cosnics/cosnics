@@ -65,7 +65,7 @@ class CourseSettingsXmlFormParserResult extends XmlFormParserResult
                 CourseSettingsController::SETTING_PARAM_LOCKED_PREFIX . $element_name, 
                 Translation::get('SettingLocked', array('SETTING' => $element_label)), 
                 '', 
-                array(), 
+                [], 
                 '1', 
                 '0');
         }

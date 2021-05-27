@@ -248,7 +248,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
     public function get_occurences($start_timestamp, $end_timestamp)
     {
-        $occurences = array();
+        $occurences = [];
 
         try
         {

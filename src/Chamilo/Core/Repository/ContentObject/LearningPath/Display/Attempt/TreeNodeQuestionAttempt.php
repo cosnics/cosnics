@@ -18,7 +18,7 @@ abstract class TreeNodeQuestionAttempt extends AbstractQuestionAttempt
      * @param string[] $extended_property_names
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_TREE_NODE_ATTEMPT_ID;
         return parent::get_default_property_names($extended_property_names);

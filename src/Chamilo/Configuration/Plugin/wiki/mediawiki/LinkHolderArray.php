@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class MediawikiLinkHolderArray
 {
 
-    var $internals = array(), $interwikis = array();
+    var $internals = [], $interwikis = [];
 
     var $size = 0;
 
@@ -74,8 +74,8 @@ class MediawikiLinkHolderArray
      */
     function clear()
     {
-        $this->internals = array();
-        $this->interwikis = array();
+        $this->internals = [];
+        $this->interwikis = [];
         $this->size = 0;
     }
 
@@ -156,7 +156,7 @@ class MediawikiLinkHolderArray
             return;
         }
 
-        $colours = array();
+        $colours = [];
         $linkCache = MediawikiLinkCache::singleton();
         $output = $this->parent->getOutput();
 
@@ -168,7 +168,7 @@ class MediawikiLinkHolderArray
         // Generate query
         $query = false;
         $current = null;
-        $title_conditions = array();
+        $title_conditions = [];
 
         foreach ($this->internals as $ns => $entries)
         {
@@ -228,7 +228,7 @@ class MediawikiLinkHolderArray
         $wiki = $this->parent->get_mediawiki_parser_context()->get_wiki();
         // $wiki = $complex_wiki_page->get_parent_object();
         $wiki_pages = $wiki->get_wiki_pages_by_title($title_condition);
-        $wiki_complex_ids = array();
+        $wiki_complex_ids = [];
 
         foreach($wiki_pages as $wiki_page)
         {
@@ -237,7 +237,7 @@ class MediawikiLinkHolderArray
             $linkCache->addGoodLinkObj($wiki_page->get_id(), $title, 1024, 0);
             $colours[$pdbk] = MediawikiLinker::getLinkColour($title, $threshold);
 
-            $complex_wiki_page_conditions = array();
+            $complex_wiki_page_conditions = [];
             $complex_wiki_page_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class,
@@ -256,7 +256,7 @@ class MediawikiLinkHolderArray
         }
 
         // Construct search and replace arrays
-        $replacePairs = array();
+        $replacePairs = [];
         foreach ($this->internals as $ns => $entries)
         {
             foreach ($entries as $index => $entry)
@@ -325,7 +325,7 @@ class MediawikiLinkHolderArray
 
         // Make interwiki link HTML
         $sk = $this->parent->getOptions()->getSkin();
-        $replacePairs = array();
+        $replacePairs = [];
         foreach ($this->interwikis as $key => $link)
         {
             $replacePairs[$key] = $sk->link($link['title'], $link['text']);

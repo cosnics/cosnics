@@ -51,7 +51,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
      */
     public function render_cell($result)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default panel-gallery">';
 

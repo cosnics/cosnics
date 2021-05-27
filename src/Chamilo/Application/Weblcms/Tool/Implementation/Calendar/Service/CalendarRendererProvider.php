@@ -120,7 +120,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             $this->getDataUser(),
             $this->getCourse(),
             $this->getTool());
-        $events = array();
+        $events = [];
 
         foreach ($publications as $publication)
         {
@@ -135,7 +135,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
      *
      * @see \Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface::getUrl()
      */
-    public function getUrl($parameters = array(), $filterParameters = array(), $encodeEntities = false)
+    public function getUrl($parameters = [], $filterParameters = [], $encodeEntities = false)
     {
         $redirect = new Redirect($parameters, $filterParameters, $encodeEntities);
         return $redirect->getUrl();

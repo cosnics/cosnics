@@ -25,7 +25,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
      */
     public function validate($username, $currentUsername = null)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME),
             new StaticConditionVariable($username));

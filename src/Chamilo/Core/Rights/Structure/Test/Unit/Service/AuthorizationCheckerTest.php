@@ -76,7 +76,7 @@ class AuthorizationCheckerTest extends ChamiloTestCase
         $context = 'Application\Weblcms';
         $action = 'ManageCourses';
 
-        $userRoles = array();
+        $userRoles = [];
         $this->mockGetRolesForLocationByContextAndAction($context, $action, $userRoles);
         $this->assertTrue($this->authorizationChecker->isAuthorized($user, $context, $action));
     }

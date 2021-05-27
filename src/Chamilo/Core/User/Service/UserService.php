@@ -89,7 +89,7 @@ class UserService
      * @return integer
      */
     public function countUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = array()
+        string $searchQuery = null, array $userIdentifiers = []
     )
     {
         return $this->getUserRepository()->countUsersForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers);
@@ -389,7 +389,7 @@ class UserService
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findUsersForSearchQueryAndUserIdentifiers(
-        string $searchQuery = null, array $userIdentifiers = array(), int $offset = null, int $count = null
+        string $searchQuery = null, array $userIdentifiers = [], int $offset = null, int $count = null
     )
     {
         return $this->getUserRepository()->findUsersForSearchQueryAndUserIdentifiers(

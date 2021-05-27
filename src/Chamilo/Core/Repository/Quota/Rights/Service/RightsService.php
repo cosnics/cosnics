@@ -48,12 +48,12 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @var integer[]
      */
-    private $targetUsersCache = array();
+    private $targetUsersCache = [];
 
     /**
      * @var \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    private $authorizedUsersCache = array();
+    private $authorizedUsersCache = [];
 
     /**
      * @var \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
@@ -205,7 +205,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      *
      * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
      */
-    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = array())
+    public function findRightsLocationEntityRightGroupByIdentifiers(array $identifiers = [])
     {
         return $this->getRightsRepository()->findRightsLocationEntityRightGroupByIdentifiers($identifiers);
     }
@@ -233,7 +233,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     public function findRightsLocationEntityRightGroupIdentifiersForUser(User $user)
     {
         $rightsLocationEntityRightGroups = $this->findRightsLocationEntityRightGroupsForUser($user);
-        $groupIdentifiers = array();
+        $groupIdentifiers = [];
 
         foreach ($rightsLocationEntityRightGroups as $rightsLocationEntityRightGroup)
         {
@@ -252,7 +252,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         DataClassIterator $locationEntityRights
     )
     {
-        $locationEntityRightIdentifiers = array();
+        $locationEntityRightIdentifiers = [];
 
         foreach ($locationEntityRights as $locationEntityRight)
         {
@@ -315,7 +315,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     public function findRightsLocationEntityRightGroupsIdentifiersForUser(User $user)
     {
         $rightsLocationEntityRightGroups = $this->findRightsLocationEntityRightGroupsForSubscribedUserGroups($user);
-        $groupIdentifiers = array();
+        $groupIdentifiers = [];
 
         foreach ($rightsLocationEntityRightGroups as $rightsLocationEntityRightGroup)
         {
@@ -366,7 +366,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         $rightsLocationEntityRights =
             $this->findRightsLocationEntityRightsForTargetGroupIdentifiers($userGroupIdentifiers);
 
-        $userIdentifiers = array();
+        $userIdentifiers = [];
 
         foreach ($rightsLocationEntityRights as $rightsLocationEntityRight)
         {
@@ -418,7 +418,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      */
     public function getAvailableEntities()
     {
-        $entities = array();
+        $entities = [];
 
         $entities[UserEntityProvider::ENTITY_TYPE] = $this->getUserEntityProvider();
         $entities[GroupEntityProvider::ENTITY_TYPE] = $this->getGroupEntityProvider();
@@ -487,7 +487,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @throws \Exception
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
-        int $offset = null, int $count = null, array $orderProperties = array()
+        int $offset = null, int $count = null, array $orderProperties = []
     )
     {
         $groupRecords = $this->getRightsRepository()->findRightsLocationEntityRightGroupsWithEntityAndGroupRecords();
@@ -607,7 +607,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             $targetGroupIdentifiers = $this->getTargetGroupIdentifiersForUser($user);
             $targetGroups = $this->getGroupService()->findGroupsByIdentifiers($targetGroupIdentifiers);
 
-            $targetUserIdentifiers = array();
+            $targetUserIdentifiers = [];
 
             foreach ($targetGroups as $targetGroup)
             {

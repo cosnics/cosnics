@@ -173,7 +173,7 @@ class DataClassRepository
     protected function __retrievesClass($dataClassName, DataClassRetrievesParameters $parameters)
     {
         $records = $this->getDataClassDatabase()->retrieves($dataClassName, $parameters);
-        $dataClasses = array();
+        $dataClasses = [];
 
         foreach ($records as $record)
         {
@@ -197,7 +197,7 @@ class DataClassRepository
      * @example $displayOrderMapping[$oldDisplayOrder] = $newDisplayOrder;
      */
     public function changeDisplayOrdersByMappingArray(
-        $dataClassName, $displayOrderProperty, $displayOrderMapping = array(), $displayOrderCondition = null
+        $dataClassName, $displayOrderProperty, $displayOrderMapping = [], $displayOrderCondition = null
     )
     {
         foreach ($displayOrderMapping as $oldDisplayOrder => $newDisplayOrder)
@@ -209,13 +209,13 @@ class DataClassRepository
 
             $displayOrderPropertyVariable = new PropertyConditionVariable($dataClassName, $displayOrderProperty);
 
-            $properties = new DataClassProperties(array());
+            $properties = new DataClassProperties([]);
 
             $properties->add(
                 new DataClassProperty($displayOrderPropertyVariable, new StaticConditionVariable($newDisplayOrder))
             );
 
-            $conditions = array();
+            $conditions = [];
 
             if ($displayOrderCondition)
             {
@@ -704,7 +704,7 @@ class DataClassRepository
 
         $displayOrderPropertyVariable = new PropertyConditionVariable($dataClassName, $displayOrderProperty);
 
-        $conditions = array();
+        $conditions = [];
 
         if (is_null($end) || $start < $end)
         {
@@ -748,7 +748,7 @@ class DataClassRepository
             $displayOrderPropertyVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($direction)
         );
 
-        $properties = new DataClassProperties(array());
+        $properties = new DataClassProperties([]);
 
         $properties->add(new DataClassProperty($displayOrderPropertyVariable, $updateVariable));
 
@@ -967,7 +967,7 @@ class DataClassRepository
     {
         if (!$compositeDataClass->is_extended())
         {
-            return array();
+            return [];
         }
 
         $parameters = new RecordRetrieveParameters(
@@ -1241,7 +1241,7 @@ class DataClassRepository
      * @return boolean
      */
     public function updates(
-        $dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = array()
+        $dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = []
     )
     {
         if ($properties instanceof DataClassProperties)

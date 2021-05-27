@@ -28,14 +28,14 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
         // Quickform forces all arguments to "null", so the defaults in the constructor are not triggered
         if (!isset($glyph))
         {
-            $glyph = new FontAwesomeGlyph('check', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('check', [], null, 'fas');
         }
 
         HTML_QuickForm_stylebutton::__construct($elementName, $elementLabel, $attributes, $value, $glyph);
 
         $this->setType('submit');
 
-        $defaultAttributes = array();
+        $defaultAttributes = [];
         $defaultAttributes[] = $this->getAttribute('class');
         $defaultAttributes[] = 'btn-success';
 

@@ -62,7 +62,7 @@ class DocumentPublisherComponent extends Manager implements ViewerInterface
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
         $html[] = $this->display_warning_message(Translation::get("EphorusMaxUploadSize"));

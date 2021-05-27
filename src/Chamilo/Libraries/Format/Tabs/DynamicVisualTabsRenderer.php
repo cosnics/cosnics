@@ -32,7 +32,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderHeader();
         $html[] = $this->content;
@@ -65,7 +65,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
      */
     public function footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -99,7 +99,7 @@ class DynamicVisualTabsRenderer extends DynamicTabsRenderer
     {
         $tabs = $this->get_tabs();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="nav nav-tabs dynamic-visual-tabs">';
 

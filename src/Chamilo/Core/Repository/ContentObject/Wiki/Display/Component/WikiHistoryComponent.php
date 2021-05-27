@@ -46,7 +46,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
             $compareObjectIdentifiers =
                 $this->getRequest()->get(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header($complex_wiki_page);
 
@@ -178,7 +178,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
     }
 
     public function retrieve_content_object_versions_resultset(
-        $condition = null, $order_by = array(), $offset = 0, $max_objects = - 1
+        $condition = null, $order_by = [], $offset = 0, $max_objects = - 1
     )
     {
         return DataManager::retrieve_content_objects(

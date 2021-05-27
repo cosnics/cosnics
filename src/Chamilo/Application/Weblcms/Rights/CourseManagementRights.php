@@ -120,7 +120,7 @@ class CourseManagementRights extends WeblcmsRights
      */
     public function is_allowed($right_id, $identifier, $type = self::TYPE_COURSE, $user_id = null)
     {
-        $entities = array();
+        $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
         
@@ -160,14 +160,14 @@ class CourseManagementRights extends WeblcmsRights
             }
             
             $groups = $base_group->get_parents(true);
-            $group_ids = array();
+            $group_ids = [];
             foreach ($groups as $group)
             {
                 $group_ids[$group->get_id()] = $group->get_id();
             }
             
-            $conditions = array();
-            $group_conditions = array();
+            $conditions = [];
+            $group_conditions = [];
             $group_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     RightsLocationEntityRight::class,
@@ -179,7 +179,7 @@ class CourseManagementRights extends WeblcmsRights
                     RightsLocationEntityRight::PROPERTY_ENTITY_ID), 
                 $group_ids);
             $conditions[] = new AndCondition($group_conditions);
-            $all_conditions = array();
+            $all_conditions = [];
             $all_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     RightsLocationEntityRight::class,
@@ -210,7 +210,7 @@ class CourseManagementRights extends WeblcmsRights
      * @param $rights int[string] - extra rights
      * @return int[string]
      */
-    public function get_base_course_management_rights($rights = array())
+    public function get_base_course_management_rights($rights = [])
     {
         $rights[Translation::get('DirectSubscribeRight')] = self::DIRECT_SUBSCRIBE_RIGHT;
         $rights[Translation::get('CodeSubscribeRight')] = self::CODE_SUBSCRIBE_RIGHT;
@@ -226,7 +226,7 @@ class CourseManagementRights extends WeblcmsRights
      *
      * @return int[string]
      */
-    public function get_specific_course_management_rights($rights = array())
+    public function get_specific_course_management_rights($rights = [])
     {
         $rights[Translation::get('CreateCourseRight')] = self::CREATE_COURSE_RIGHT;
         $rights[Translation::get('RequestCourseRight')] = self::REQUEST_COURSE_RIGHT;
@@ -421,7 +421,7 @@ class CourseManagementRights extends WeblcmsRights
      * 
      * @param $location RightsLocation
      */
-    public function retrieve_rights_location_rights_for_location(RightsLocation $location, $available_rights = array())
+    public function retrieve_rights_location_rights_for_location(RightsLocation $location, $available_rights = [])
     {
         return \Chamilo\Core\Rights\Storage\DataManager::retrieve_rights_location_rights_for_location(
             Manager::context(), 

@@ -26,7 +26,7 @@ class BasicBundles
      *
      * @var string[]
      */
-    private $packageNamespaces = array();
+    private $packageNamespaces = [];
 
     /**
      *

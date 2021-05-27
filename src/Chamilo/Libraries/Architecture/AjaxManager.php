@@ -20,7 +20,7 @@ abstract class AjaxManager extends Application
      *
      * @var string[]
      */
-    private $postDataValues = array();
+    private $postDataValues = [];
 
     /**
      *
@@ -103,7 +103,7 @@ abstract class AjaxManager extends Application
      */
     public function getRequiredPostParameters()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -68,7 +68,7 @@ class QuestionResult
      * @param int $score
      * @param string[] $additional_information
      */
-    function __construct($answer, $assessment_result, $complex_question_id, $score, $additional_information = array())
+    function __construct($answer, $assessment_result, $complex_question_id, $score, $additional_information = [])
     {
         $this->answer = $answer;
         $this->assessment_result = $assessment_result;

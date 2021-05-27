@@ -18,7 +18,7 @@ class DetailsComponent extends Manager
 
     public function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

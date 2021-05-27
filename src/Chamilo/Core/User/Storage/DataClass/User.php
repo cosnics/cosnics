@@ -172,7 +172,7 @@ class User extends DataClass
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($extended_property_names = array())
+    public static function get_cacheable_property_names($extended_property_names = [])
     {
         return parent::get_cacheable_property_names(array(self::PROPERTY_USERNAME));
     }
@@ -210,7 +210,7 @@ class User extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -304,7 +304,7 @@ class User extends DataClass
 
     public function get_fullname_format_options()
     {
-        $options = array();
+        $options = [];
         $options[self::NAME_FORMAT_FIRST] = Translation::get('FirstName') . ' ' . Translation::get('LastName');
         $options[self::NAME_FORMAT_LAST] = Translation::get('LastName') . ' ' . Translation::get('FirstName');
 

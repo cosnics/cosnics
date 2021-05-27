@@ -126,7 +126,7 @@ class ColumnAddComponent extends Manager
     {
         $currentTotal = $this->getCurrentTotalWidth();
         $columns = $this->getColumns();
-        $newWidths = array();
+        $newWidths = [];
 
         foreach ($columns as $column)
         {
@@ -216,7 +216,7 @@ class ColumnAddComponent extends Manager
             $tabId = $this->getPostDataValue(self::PARAM_TAB);
             $userId = DataManager::determine_user_id();
 
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Element::class, Element::PROPERTY_PARENT_ID),

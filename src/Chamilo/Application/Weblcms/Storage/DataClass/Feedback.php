@@ -10,7 +10,7 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_PUBLICATION_ID));
     }

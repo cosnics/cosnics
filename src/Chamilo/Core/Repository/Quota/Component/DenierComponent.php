@@ -124,7 +124,7 @@ class DenierComponent extends Manager
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
+                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -135,7 +135,7 @@ class DenierComponent extends Manager
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestUpgrade'),
-                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
+                        new FontAwesomeGlyph('question-circle', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -143,7 +143,7 @@ class DenierComponent extends Manager
 
             $toolActions->addButton(
                 new Button(
-                    Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', array(), null, 'fas'),
+                    Translation::get('BackToOverview'), new FontAwesomeGlyph('folder', [], null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE))
                 )
             );
@@ -280,7 +280,7 @@ class DenierComponent extends Manager
         {
             $form->freeze(array('quota_step', Request::PROPERTY_QUOTA, Request::PROPERTY_MOTIVATION));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->buttonToolbarRenderer->render();

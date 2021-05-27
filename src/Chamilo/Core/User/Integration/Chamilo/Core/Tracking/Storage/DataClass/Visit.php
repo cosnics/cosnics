@@ -25,7 +25,7 @@ class Visit extends SimpleTracker
     const TYPE_ENTER = 'enter';
     const TYPE_LEAVE = 'leave';
 
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $this->validate_parameters($parameters);
         $type = $this->get_event()->getType();
@@ -46,7 +46,7 @@ class Visit extends SimpleTracker
     /**
      * Inherited
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(
@@ -168,7 +168,7 @@ class Visit extends SimpleTracker
         return $this->update();
     }
 
-    public function validate_parameters(array $parameters = array())
+    public function validate_parameters(array $parameters = [])
     {
         if (isset($parameters[self::PROPERTY_USER_ID]))
         {

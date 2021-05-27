@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Manager;
 abstract class ToolBlock extends CourseBlock
 {
 
-    private $params = array();
+    private $params = [];
 
     public function get_user_id()
     {

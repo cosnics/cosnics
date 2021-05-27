@@ -130,7 +130,7 @@ abstract class DataSourceName
      */
     public function getConnectionString()
     {
-        $string = array();
+        $string = [];
 
         $string[] = $this->getDriver(true);
         $string[] = '://';

@@ -16,12 +16,12 @@ class Online extends SimpleTracker
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_USER_ID, self::PROPERTY_LAST_ACCESS_DATE));
     }
 
-    public function run(array $parameters = array())
+    public function run(array $parameters = [])
     {
         $parameters[self::PARAM_TIME] = time();
         
@@ -45,7 +45,7 @@ class Online extends SimpleTracker
         }
     }
 
-    public function validate_parameters(array $parameters = array(), Online $object = null)
+    public function validate_parameters(array $parameters = [], Online $object = null)
     {
         $object->set_user_id($parameters[self::PARAM_USER]);
         $object->set_last_access_date($parameters[self::PARAM_TIME]);

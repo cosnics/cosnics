@@ -239,7 +239,7 @@ class ContentObjectRelationService
     public function getAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user, $limit = null, $offset = null, $orderBy = null)
     {
-        $workspaceIdentifiers = array();
+        $workspaceIdentifiers = [];
         
         foreach ($contentObjects as $contentObject)
         {
@@ -269,7 +269,7 @@ class ContentObjectRelationService
     public function countAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user)
     {
-        $workspaceIdentifiers = array();
+        $workspaceIdentifiers = [];
         
         foreach ($contentObjects as $contentObject)
         {

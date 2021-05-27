@@ -188,7 +188,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             \Chamilo\Core\Repository\Manager::package() . '\ContentObject'
         );
 
-        $types = array();
+        $types = [];
 
         foreach ($registrations as $registration)
         {
@@ -238,7 +238,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
             $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
         );
 
-        $publicationAttributes = array();
+        $publicationAttributes = [];
 
         foreach ($publicationRecords as $publicationRecord)
         {

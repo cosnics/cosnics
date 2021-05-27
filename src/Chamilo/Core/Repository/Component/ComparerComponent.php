@@ -87,7 +87,7 @@ class ComparerComponent extends Manager
             $this->force_menu_url($this->get_recycle_bin_url());
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->getContentObjectDifferenceRenderer()->render($contentObject->get_difference($version_id));
@@ -151,7 +151,7 @@ class ComparerComponent extends Manager
         return $this->getService(ContentObjectDifferenceRenderer::class);
     }
 
-    public function get_additional_parameters($additionalParameters = array())
+    public function get_additional_parameters($additionalParameters = [])
     {
         return array(
             self::PARAM_BASE_CONTENT_OBJECT_ID,

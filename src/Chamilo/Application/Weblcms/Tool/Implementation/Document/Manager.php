@@ -83,7 +83,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public static function get_allowed_types()
     {
-        $allowed_types = array();
+        $allowed_types = [];
 
         $optional_types = array(File::class, Webpage::class, Page::class);
 
@@ -110,7 +110,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
     public function get_available_browser_types()
     {
-        $browser_types = array();
+        $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_GALLERY;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_SLIDESHOW;

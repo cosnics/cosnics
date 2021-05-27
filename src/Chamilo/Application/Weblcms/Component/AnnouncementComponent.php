@@ -44,7 +44,7 @@ class AnnouncementComponent extends Manager
     {
         $this->checkAuthorization(Manager::context(), 'ViewPersonalCourses');
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->renderAnnouncements();
@@ -58,10 +58,10 @@ class AnnouncementComponent extends Manager
         // All user courses
         $user_courses = CourseDataManager::retrieve_all_courses_from_user($this->get_user());
 
-        $this->courses = array();
+        $this->courses = [];
 
         $course_settings_controller = CourseSettingsController::getInstance();
-        $unique_publications = array();
+        $unique_publications = [];
         foreach ($user_courses as $course)
         {
             $this->courses[$course->get_id()] = $course;
@@ -76,7 +76,7 @@ class AnnouncementComponent extends Manager
                         WeblcmsRights::TYPE_COURSE_MODULE, $course_module_id, $course->get_id()
                     );
 
-                $entities = array();
+                $entities = [];
                 $entities[CourseGroupEntity::ENTITY_TYPE] = CourseGroupEntity::getInstance(
                     $course->get_id()
                 );
@@ -146,7 +146,7 @@ class AnnouncementComponent extends Manager
             $course->get_id(), $this->get_user_id(), $tool, 0
         );
 
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = WeblcmsDataManager::get_publications_condition($course, $this->get_user(), $tool, $type);
         $conditions[] = new ComparisonCondition(
@@ -168,7 +168,7 @@ class AnnouncementComponent extends Manager
 
         ksort($publications);
 
-        $data = array();
+        $data = [];
 
         foreach ($publications as $publication)
         {
@@ -178,7 +178,7 @@ class AnnouncementComponent extends Manager
             $title = htmlspecialchars($title);
             $link = $this->get_course_viewer_link($this->get_course_by_id($course_id), $publication);
 
-            $row = array();
+            $row = [];
 
             $row[] = DatetimeUtilities::format_locale_date(
                 null, $publication[ContentObjectPublication::PROPERTY_MODIFIED_DATE]
@@ -189,7 +189,7 @@ class AnnouncementComponent extends Manager
             $data[] = $row;
         }
 
-        $headers = array();
+        $headers = [];
         $headers[] = new SortableStaticTableColumn(Translation::get('Date'));
         $headers[] = new SortableStaticTableColumn(Translation::get('Course'));
         $headers[] = new SortableStaticTableColumn(Translation::get('Announcement'));

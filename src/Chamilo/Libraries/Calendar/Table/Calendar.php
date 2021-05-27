@@ -29,7 +29,7 @@ abstract class Calendar extends HTML_Table
      * @param integer $displayTime
      * @param string[] $classes
      */
-    public function __construct($displayTime, $classes = array())
+    public function __construct($displayTime, $classes = [])
     {
         if (is_null($displayTime))
         {
@@ -39,7 +39,7 @@ abstract class Calendar extends HTML_Table
         {
             $this->displayTime = $displayTime;
         }
-        $this->eventsToShow = array();
+        $this->eventsToShow = [];
 
         array_unshift($classes, 'table-calendar');
 

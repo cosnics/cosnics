@@ -62,7 +62,7 @@ class MailerFactory
      */
     public function getAvailableMailers()
     {
-        $mailers = array();
+        $mailers = [];
 
         $mailerPackages = $this->configuration->get_registrations_by_type(__NAMESPACE__);
 
@@ -74,7 +74,7 @@ class MailerFactory
             if (class_exists($mailerClass))
             {
                 $mailers[$mailerClass] =
-                    Translation::getInstance()->getTranslation('TypeName', array(), $package['context']);
+                    Translation::getInstance()->getTranslation('TypeName', [], $package['context']);
             }
         }
 

@@ -55,7 +55,7 @@ class ContentObjectEntity extends DataClassEntity
         else
         {
             $glyph = new NamespaceIdentGlyph(
-                $dataClassName::package(), true, false, false, $size, array()
+                $dataClassName::package(), true, false, false, $size, []
             );
 
             return $glyph->render();

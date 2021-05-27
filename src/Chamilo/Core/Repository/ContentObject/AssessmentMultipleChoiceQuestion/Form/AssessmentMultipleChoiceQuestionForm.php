@@ -39,7 +39,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -131,7 +131,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $values = $this->exportValues();
         $answerType = Session::retrieve('mc_answer_type');
 
-        $options = array();
+        $options = [];
 
         foreach ($values[AssessmentMultipleChoiceQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
@@ -164,7 +164,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         }
 
         Session::registerIfNotSet('mc_number_of_options', 3);
-        Session::registerIfNotSet('mc_skip_options', array());
+        Session::registerIfNotSet('mc_skip_options', []);
         Session::registerIfNotSet('mc_answer_type', AssessmentMultipleChoiceQuestion::ANSWER_TYPE_RADIO);
 
         $extraOptionRequested = Request::post('add');
@@ -227,7 +227,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
         $this->addElement('hidden', 'mc_answer_type', $answerType, array('id' => 'mc_answer_type'));
         $this->addElement('hidden', 'mc_number_of_options', $number_of_options, array('id' => 'mc_number_of_options'));
 
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -311,7 +311,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
                 $this->addElement('html', '<td class="table-cell-action cell-stat-x2 text-right">');
 
-                $actionButtons = array();
+                $actionButtons = [];
 
                 if ($number_of_options - count($skippedOptions) > 2)
                 {
@@ -429,7 +429,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -437,7 +437,7 @@ class AssessmentMultipleChoiceQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentMultipleChoiceQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
     }

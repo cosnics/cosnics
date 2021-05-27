@@ -30,7 +30,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
         $context = ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 2) . '\Storage\DataClass';
         $visibilityClass = $context . '\Visibility';
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($visibilityClass, Visibility::PROPERTY_USER_ID),
             new StaticConditionVariable($this->getUser()->getId())
@@ -58,7 +58,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                 $result->error(
                     500, $translator->trans(
                     'ObjectNotDeleted',
-                    array('OBJECT' => $translator->trans('Visibility', array(), 'Chamilo\Libraries\Calendar')),
+                    array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
                     Utilities::COMMON_LIBRARIES
                 )
                 );
@@ -79,7 +79,7 @@ abstract class CalendarEventVisibilityComponent extends Manager
                 $result->error(
                     500, $translator->trans(
                     'ObjectNotCreated',
-                    array('OBJECT' => $translator->trans('Visibility', array(), 'Chamilo\Libraries\Calendar')),
+                    array('OBJECT' => $translator->trans('Visibility', [], 'Chamilo\Libraries\Calendar')),
                     Utilities::COMMON_LIBRARIES
                 )
                 );

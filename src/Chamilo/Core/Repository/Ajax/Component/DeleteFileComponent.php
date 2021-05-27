@@ -34,7 +34,7 @@ class DeleteFileComponent extends Manager
         
         if (isset($contentObjectId))
         {
-            $conditions = array();
+            $conditions = [];
             
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),

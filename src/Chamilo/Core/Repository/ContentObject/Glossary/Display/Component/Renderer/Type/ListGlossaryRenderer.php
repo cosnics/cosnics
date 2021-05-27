@@ -30,7 +30,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
 
         if ($complex_content_object_items->count() == 0)
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<div class="title" style="background-color: #e6e6e6; border: 1px solid grey; padding: 5px;
                    font-weight: bold; color: #666666; text-align: center">';
@@ -58,7 +58,7 @@ class ListGlossaryRenderer extends GlossaryRenderer
      */
     public function display_content_object($content_object, $complex_content_object_item)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="title" style="background-color: #e6e6e6; border: 1px solid grey; padding: 5px;
                    font-weight: bold; color: #666666">';

@@ -27,7 +27,7 @@ class SubselectConditionTranslator extends ConditionTranslator
      */
     public function translate(bool $enableAliasing = true)
     {
-        $string = array();
+        $string = [];
 
         $string[] = $this->getConditionPartTranslatorService()->translate(
             $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing

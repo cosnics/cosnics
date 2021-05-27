@@ -28,7 +28,7 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      */
     public function __construct(
-        DataClassProperties $dataClassProperties, Condition $condition = null, $orderBy = array(), Joins $joins = null,
+        DataClassProperties $dataClassProperties, Condition $condition = null, $orderBy = [], Joins $joins = null,
         GroupBy $groupBy = null
     )
     {

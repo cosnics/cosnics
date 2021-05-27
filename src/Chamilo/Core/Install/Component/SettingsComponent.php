@@ -48,7 +48,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
             $wizardHeader = $this->getWizardHeader();
             $wizardHeader->setSelectedStepIndex(array_search(self::ACTION_OVERVIEW, $this->getWizardHeaderActions()));
 
-            $content = array();
+            $content = [];
 
             $content[] = $settingsDisplayer->render();
             $content[] = $this->getButtons();
@@ -60,7 +60,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
             $content = $form->toHtml();
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $content;
@@ -102,7 +102,7 @@ class SettingsComponent extends Manager implements NoAuthenticationSupport
 
     public function getInfo()
     {
-        $html = array();
+        $html = [];
 
         if ($this->getSettingsForm()->validate())
         {

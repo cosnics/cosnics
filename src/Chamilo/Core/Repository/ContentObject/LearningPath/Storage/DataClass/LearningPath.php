@@ -151,7 +151,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $configuration = Configuration::getInstance();
 
         $registrations = $configuration->getIntegrationRegistrations(self::package());
-        $types = array();
+        $types = [];
 
         usort(
             $registrations, function ($registrationA, $registrationB) {

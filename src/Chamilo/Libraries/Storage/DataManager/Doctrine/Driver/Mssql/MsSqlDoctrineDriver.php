@@ -69,7 +69,7 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrinePdoConnection
      * @throws \Exception
      */
-    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = array())
+    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = [])
     {
         return new MsSqlDoctrinePdoConnection(
             $this->_constructPdoDsn($parameters), $username, $password, $driverOptions

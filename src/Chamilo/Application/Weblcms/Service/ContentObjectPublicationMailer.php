@@ -108,7 +108,7 @@ class ContentObjectPublicationMailer
      */
     protected function getContentObjectPublicationUrl(ContentObjectPublication $contentObjectPublication)
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters[Manager::PARAM_CONTEXT] = Manager::package();
         $parameters[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
@@ -136,7 +136,7 @@ class ContentObjectPublicationMailer
      */
     protected function getTargetUserEmails(ContentObjectPublication $contentObjectPublication, User $publisher)
     {
-        $target_email = array();
+        $target_email = [];
 
         $target_email[] = $publisher->get_email();
         $target_users = $this->publicationRepository->findPublicationTargetUsers($contentObjectPublication);
@@ -179,7 +179,7 @@ class ContentObjectPublicationMailer
      *
      * @return string
      */
-    public function getTranslation($variable, $parameters = array(), $context = 'Chamilo\Application\Weblcms')
+    public function getTranslation($variable, $parameters = [], $context = 'Chamilo\Application\Weblcms')
     {
         return $this->translator->getTranslation($variable, $parameters, $context);
     }
@@ -265,7 +265,7 @@ class ContentObjectPublicationMailer
 
         $targetUsers = $this->getTargetUserEmails($contentObjectPublication, $user);
 
-        $mailFiles = array();
+        $mailFiles = [];
         $body = $this->parseResources($body, $mailFiles);
 
         if ($content_object->has_attachments())
@@ -286,7 +286,7 @@ class ContentObjectPublicationMailer
         );
 
         $mail = new Mail(
-            $subject, $body, $targetUsers, true, array(), array(), $user->get_fullname(), $user->get_email(), null,
+            $subject, $body, $targetUsers, true, [], [], $user->get_fullname(), $user->get_email(), null,
             null, $mailFiles
         );
 

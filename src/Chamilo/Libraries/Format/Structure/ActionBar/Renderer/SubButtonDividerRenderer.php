@@ -26,7 +26,7 @@ class SubButtonDividerRenderer extends AbstractButtonToolbarItemRenderer
      */
     public function determineClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'divider';
         $classes[] = $this->getButton()->getClasses();

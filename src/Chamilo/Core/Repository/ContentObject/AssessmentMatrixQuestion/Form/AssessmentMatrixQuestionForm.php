@@ -26,8 +26,8 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
     {
         $object = $this->get_content_object();
         $values = $this->exportValues();
-        $options = array();
-        $matches = array();
+        $options = [];
+        $matches = [];
 
         foreach ($values[AssessmentMatrixQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
@@ -56,7 +56,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $number_of_matches = intval($_SESSION['mq_number_of_matches']);
         $this->addElement('category', Translation::get('Matches'));
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'add_match[]', Translation::get('AddMatch'), array('id' => 'add_match'), null,
             new FontAwesomeGlyph('plus')
@@ -65,7 +65,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $renderer = $this->defaultRenderer();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data matches">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -77,7 +77,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
@@ -86,7 +86,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $label = 'A';
         for ($match_number = 0; $match_number < $number_of_matches; $match_number ++)
         {
-            $group = array();
+            $group = [];
 
             if (!in_array($match_number, $_SESSION['mq_skip_matches']))
             {
@@ -105,7 +105,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'style_button', 'remove_match[' . $match_number . ']', null,
                         array('class' => 'remove_match', 'id' => 'remove_match_' . $match_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -154,7 +154,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
     public function add_options()
     {
         $number_of_options = intval($_SESSION['mq_number_of_options']);
-        $matches = array();
+        $matches = [];
         $match_label = 'A';
 
         for ($match_number = 0; $match_number < $_SESSION['mq_number_of_matches']; $match_number ++)
@@ -178,7 +178,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
             $multiple = true;
         }
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'change_matrix_type[]', $switch_label, array('class' => 'change_matrix_type'), null,
             new FontAwesomeGlyph('retweet')
@@ -191,7 +191,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         $renderer = $this->defaultRenderer();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data options">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -206,7 +206,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $table_header[] = '<tbody>';
         $this->addElement('html', implode(PHP_EOL, $table_header));
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
@@ -216,7 +216,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         for ($option_number = 0; $option_number < $number_of_options; $option_number ++)
         {
-            $group = array();
+            $group = [];
             if (!in_array($option_number, $_SESSION['mq_skip_options']))
             {
                 $visual_number ++;
@@ -245,7 +245,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
                     $group[] = $this->createElement(
                         'style_button', 'remove_option[' . $option_number . ']', null,
                         array('class' => 'remove_option', 'id' => 'remove_option_' . $option_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -345,7 +345,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $object = $this->get_content_object();
         if ($object->get_number_of_options() != 0)
@@ -407,7 +407,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         if (!isset($_SESSION['mq_skip_options']))
         {
-            $_SESSION['mq_skip_options'] = array();
+            $_SESSION['mq_skip_options'] = [];
         }
 
         if (!isset($_SESSION['mq_matrix_type']))
@@ -433,7 +433,7 @@ class AssessmentMatrixQuestionForm extends ContentObjectForm
 
         if (!isset($_SESSION['mq_skip_matches']))
         {
-            $_SESSION['mq_skip_matches'] = array();
+            $_SESSION['mq_skip_matches'] = [];
         }
 
         if (isset($_POST['add_match']))

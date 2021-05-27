@@ -50,7 +50,7 @@ class Csv implements ImportFormatInterface
             throw new Exception('Could not parse the imported file, not a valid csv file.');
         }
 
-        $importedCourseEntityRelations = array();
+        $importedCourseEntityRelations = [];
 
         if(empty($importedRows))
         {

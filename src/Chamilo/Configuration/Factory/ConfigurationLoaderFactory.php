@@ -80,7 +80,7 @@ class ConfigurationLoaderFactory
      */
     public function getConfigurationLoader()
     {
-        $dataLoaders = array();
+        $dataLoaders = [];
         $dataLoaders[] = $this->getFileConfigurationLoader();
         $dataLoaders[] = $this->getStorageConfigurationLoader();
         

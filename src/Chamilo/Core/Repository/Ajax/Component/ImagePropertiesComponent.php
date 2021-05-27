@@ -26,7 +26,7 @@ class ImagePropertiesComponent extends \Chamilo\Core\Repository\Ajax\Manager
         {
             $full_path = $contentObject->get_full_path();
             
-            $properties = array();
+            $properties = [];
             
             $properties[ContentObject::PROPERTY_ID] = $contentObject->get_id();
             $properties[ContentObject::PROPERTY_TITLE] = $contentObject->get_title();

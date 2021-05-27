@@ -6,7 +6,7 @@ namespace Chamilo\Core\Install;
  * config file to the CLI installer using --config flag Example : php script/chamilo.php install
  * --configuration=my_config_file.php
  */
-$values = array();
+$values = [];
 $values['storage_type'] = 'mdb2';
 $values['database_driver'] = 'mysqli';
 $values['database_host'] = 'localhost';
@@ -32,9 +32,9 @@ $values['self_reg'] = '0';
 
 $values['hashing_algorithm'] = 'sha1';
 
-$values['external_instance'] = array();
-$values['install'] = array();
-$values['content_object'] = array();
+$values['external_instance'] = [];
+$values['install'] = [];
+$values['content_object'] = [];
 
 $values['install']['Chamilo\Core\Admin'] = true;
 $values['install']['Chamilo\Core\Group'] = true;

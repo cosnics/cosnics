@@ -59,7 +59,7 @@ class AssessmentSelectQuestion extends ContentObject
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_HINT));
     }
@@ -111,7 +111,7 @@ class AssessmentSelectQuestion extends ContentObject
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     public static function get_type_name()

@@ -34,7 +34,7 @@ class DynamicTabsRenderer
     public function __construct($name)
     {
         $this->name = $name;
-        $this->tabs = array();
+        $this->tabs = [];
     }
 
     /**
@@ -43,11 +43,11 @@ class DynamicTabsRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         if ($this->hasTabs())
         {
-            $html = array();
+            $html = [];
             $html[] = $this->header();
 
             // Tab content
@@ -80,7 +80,7 @@ class DynamicTabsRenderer
      */
     public function footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '<script>';
@@ -189,7 +189,7 @@ class DynamicTabsRenderer
     {
         $tabs = $this->get_tabs();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div id="' . $this->name . 'Tabs">';
 

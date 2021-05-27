@@ -126,7 +126,7 @@ class SectionCopierComponent extends BaseHtmlTreeComponent
             new Breadcrumb($this->get_url(), Translation::getInstance()->getTranslation('SectionCopierComponent'))
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

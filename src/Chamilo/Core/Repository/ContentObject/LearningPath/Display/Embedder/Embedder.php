@@ -110,7 +110,7 @@ abstract class Embedder
      */
     public function run()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->get_application()->render_header();
         $html[] = $this->track();

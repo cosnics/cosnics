@@ -35,7 +35,7 @@ class Database
      * @return boolean
      * @throws \Exception
      */
-    public function alter_storage_unit($type, $table_name, $property, $attributes = array())
+    public function alter_storage_unit($type, $table_name, $property, $attributes = [])
     {
         return self::getStorageUnitDatabase()->alter($type, $table_name, $property, $attributes);
     }
@@ -51,7 +51,7 @@ class Database
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
-    public function alter_storage_unit_index($type, $table_name, $name = null, $columns = array())
+    public function alter_storage_unit_index($type, $table_name, $name = null, $columns = [])
     {
         return self::getStorageUnitDatabase()->alterIndex($type, $table_name, $name, $columns);
     }

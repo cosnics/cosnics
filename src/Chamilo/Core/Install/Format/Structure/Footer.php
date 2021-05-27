@@ -20,7 +20,7 @@ class Footer extends BaseFooter
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->getHeader();
 

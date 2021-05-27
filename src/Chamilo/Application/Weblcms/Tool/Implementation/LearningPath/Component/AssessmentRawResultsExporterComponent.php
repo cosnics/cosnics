@@ -99,7 +99,7 @@ class AssessmentRawResultsExporterComponent extends Manager
     {
         $tree = $this->getLearningPathService()->getTree($learningPath);
 
-        $assessments = array();
+        $assessments = [];
 
         foreach ($tree->getTreeNodes() as $treeNode)
         {
@@ -129,7 +129,7 @@ class AssessmentRawResultsExporterComponent extends Manager
         $learningPathAttempts = $learningPathTrackingRepository
             ->findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts($learningPath);
 
-        $assessment_results = array();
+        $assessment_results = [];
 
         foreach ($learningPathAttempts as $learningPathAttempt)
         {
@@ -144,7 +144,7 @@ class AssessmentRawResultsExporterComponent extends Manager
                     $treeNodeAttemptId,
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_LEARNING_PATH_ID],
                     null,
-                    array(),
+                    [],
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_START_TIME],
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_SCORE],
                     $learningPathAttempt[LearningPathTreeNodeAttempt::PROPERTY_TOTAL_TIME],

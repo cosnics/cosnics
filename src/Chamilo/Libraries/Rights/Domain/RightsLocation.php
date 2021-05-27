@@ -38,7 +38,7 @@ abstract class RightsLocation extends NestedSet
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             array(
@@ -87,7 +87,7 @@ abstract class RightsLocation extends NestedSet
      */
     public function get_rights_entities($right_id = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $class_name = static::package() . '\Storage\DataClass\RightsLocationEntityRight';
 

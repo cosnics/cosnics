@@ -192,7 +192,7 @@ abstract class Table
      */
     protected function determineOrderProperties($orderColumns, $orderDirections)
     {
-        $orderProperties = array();
+        $orderProperties = [];
 
         foreach ($orderColumns as $index => $orderColumn)
         {
@@ -227,7 +227,7 @@ abstract class Table
             $this->get_condition(), $offset, $count, $this->determineOrderProperties($orderColumns, $orderDirections)
         );
 
-        $tableData = array();
+        $tableData = [];
 
         foreach ($resultSet as $result)
         {
@@ -436,7 +436,7 @@ abstract class Table
 
         if (empty($selectedIds))
         {
-            $selectedIds = array();
+            $selectedIds = [];
         }
         elseif (!is_array($selectedIds))
         {
@@ -456,7 +456,7 @@ abstract class Table
     {
         $columnCount = $this->get_column_model()->get_column_count();
 
-        $rowData = array();
+        $rowData = [];
 
         if ($this->has_form_actions())
         {
@@ -500,7 +500,7 @@ abstract class Table
         {
             $column = $columnModel->get_column($i);
 
-            $headerAttributes = $contentAttributes = array();
+            $headerAttributes = $contentAttributes = [];
 
             $cssClasses = $column->getCssClasses();
 

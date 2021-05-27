@@ -94,7 +94,7 @@ class BlockRenderer
 
     public function displayActions()
     {
-        $html = array();
+        $html = [];
 
         $userHomeAllowed = Configuration::getInstance()->get_setting(array(Manager::context(), 'allow_user_home'));
         $generalMode = $this->isInGeneralMode();
@@ -162,7 +162,7 @@ class BlockRenderer
 
     public function displayTitle()
     {
-        $html = array();
+        $html = [];
 
         $html[] =
             '<div class="panel-heading' . ($this->getBlock()->isVisible() ? '' : ' panel-heading-without-content') .
@@ -201,9 +201,9 @@ class BlockRenderer
         $this->homeService = $homeService;
     }
 
-    public function getLink($parameters = array(), $encode = false)
+    public function getLink($parameters = [], $encode = false)
     {
-        $redirect = new Redirect($parameters, array(), $encode);
+        $redirect = new Redirect($parameters, [], $encode);
 
         return $redirect->getUrl();
     }
@@ -256,7 +256,7 @@ class BlockRenderer
         return $this->type;
     }
 
-    public function getUrl($parameters = array(), $filter = array(), $encode_entities = false)
+    public function getUrl($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->getRenderer()->get_url($parameters, $filter, $encode_entities);
     }
@@ -283,7 +283,7 @@ class BlockRenderer
      * @return string
      * @deprecated User getLink() now
      */
-    public function get_link($parameters = array(), $encode = false)
+    public function get_link($parameters = [], $encode = false)
     {
         return $this->getLink($parameters, $encode);
     }
@@ -401,7 +401,7 @@ class BlockRenderer
      */
     public function renderContentHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         $html[] = '<div class="panel-body">';
@@ -415,7 +415,7 @@ class BlockRenderer
      */
     public function renderFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderContentFooter();
         $html[] = '</div>';
@@ -426,7 +426,7 @@ class BlockRenderer
 
     public function renderHeader()
     {
-        $html = array();
+        $html = [];
         $html[] = '<div class="panel panel-default portal-block" data-column-id="' . $this->getBlock()->getParentId() .
             '" data-element-id="' . $this->getBlock()->get_id() . '">';
         $html[] = $this->displayTitle();
@@ -478,7 +478,7 @@ class BlockRenderer
             return '';
         }
 
-        $html = array();
+        $html = [];
         $html[] = $this->renderHeader();
         $html[] = $this->displayContent();
         $html[] = $this->renderFooter();

@@ -30,7 +30,7 @@ class ExporterComponent extends Manager implements TableSupport
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $table = new ExportTable($this);
@@ -46,8 +46,8 @@ class ExporterComponent extends Manager implements TableSupport
      */
     public function get_table_condition($object_table_class_name)
     {
-        $conditions = array();
-        $type_conditions = array();
+        $conditions = [];
+        $type_conditions = [];
         $types = array(File::class);
         
         foreach ($types as $type)

@@ -25,7 +25,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function getCalendarEventConditionsBetweenFromAndToDate($fromDate, $toDate)
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = self::getNonRepeatableCondition($fromDate, $toDate);
         $conditions[] = self::getRepeatableCondition($fromDate, $toDate);
@@ -43,13 +43,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     protected static function getNonRepeatableCondition($fromDate, $toDate)
     {
-        $nonRepeatableConditions = array();
+        $nonRepeatableConditions = [];
         
         $nonRepeatableConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CalendarEvent::class, CalendarEvent::PROPERTY_FREQUENCY),
             new StaticConditionVariable(CalendarEvent::FREQUENCY_NONE));
         
-        $startConditions = array();
+        $startConditions = [];
         
         if (! empty($fromDate))
         {
@@ -69,7 +69,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         
         $startCondition = new AndCondition($startConditions);
         
-        $endConditions = array();
+        $endConditions = [];
         
         if (! empty($fromDate))
         {
@@ -104,7 +104,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     protected static function getRepeatableCondition($fromDate, $toDate)
     {
-        $repeatableConditions = array();
+        $repeatableConditions = [];
         
         $repeatableConditions[] = new NotCondition(
             new EqualityCondition(
@@ -119,7 +119,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 new StaticConditionVariable($toDate));
         }
         
-        $untilConditions = array();
+        $untilConditions = [];
         
         $untilConditions[] = new NotCondition(
             new EqualityCondition(

@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements TableSupport
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $output = $this->get_user_html();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<br />' . $this->buttonToolbarRenderer->render() . '<br />';
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $table = new HelpItemTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';

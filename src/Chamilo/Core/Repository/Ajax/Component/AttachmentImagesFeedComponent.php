@@ -36,12 +36,12 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
      */
     protected function getContentObjectConditions()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = parent:: getContentObjectConditions();
 
         $imageTypes = FileType::get_type_extensions(FileType::TYPE_IMAGE);
-        $imageTypeConditions = array();
+        $imageTypeConditions = [];
 
         foreach ($imageTypes as $type)
         {

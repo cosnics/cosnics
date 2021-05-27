@@ -71,7 +71,7 @@ class RightsComponent extends ItemComponent
                 $this->redirect($message, ! $succes);
             }
             
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
@@ -83,7 +83,7 @@ class RightsComponent extends ItemComponent
         {
             $message = Display::error_message(Translation::get('ComplexRightsNotSupported'), true);
             
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $message;
@@ -108,7 +108,7 @@ class RightsComponent extends ItemComponent
         
         $path = $this->get_root_content_object()->get_complex_content_object_path();
         
-        $available_nodes = array();
+        $available_nodes = [];
         
         foreach ($selected_steps as $selected_step)
         {

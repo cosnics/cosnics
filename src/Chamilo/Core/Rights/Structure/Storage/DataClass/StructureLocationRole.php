@@ -20,7 +20,7 @@ class StructureLocationRole extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_STRUCTURE_LOCATION_ID;
         $extended_property_names[] = self::PROPERTY_ROLE_ID;

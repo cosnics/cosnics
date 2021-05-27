@@ -77,7 +77,7 @@ class BaseHeader implements HeaderInterface
         $this->languageCode = $languageCode;
         $this->textDirection = $textDirection;
 
-        $this->htmlHeaders = array();
+        $this->htmlHeaders = [];
         $this->initializeContainer();
     }
 
@@ -89,7 +89,7 @@ class BaseHeader implements HeaderInterface
     {
         $this->addDefaultHeaders();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<!DOCTYPE html>';
         $html[] = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $this->getLanguageCode() . '" lang="' .

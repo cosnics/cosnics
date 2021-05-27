@@ -40,7 +40,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
     {
         $this->addElement('category', Translation::get('Properties'));
         $types = AssessmentOpenQuestion::get_types();
-        $choices = array();
+        $choices = [];
         foreach ($types as $type_id => $type_label)
         {
             $choices[] = $this->createElement(
@@ -52,7 +52,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
         }
         $this->addGroup($choices, null, Translation::get('OpenQuestionQuestionType'), '', false);
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '595';
         $html_editor_options['height'] = '100';
         $html_editor_options['collapse_toolbar'] = true;
@@ -80,7 +80,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -134,7 +134,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -142,7 +142,7 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentOpenQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
     }

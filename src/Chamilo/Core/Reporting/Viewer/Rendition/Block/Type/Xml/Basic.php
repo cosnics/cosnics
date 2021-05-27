@@ -17,13 +17,13 @@ class Basic extends Xml
     {
         $data = $this->get_block()->retrieve_data();
         
-        $xml_data = array();
+        $xml_data = [];
         $placeholders = array(' ', '#');
         $replace_by = array('_', 'no');
         
         foreach ($data->get_categories() as $category_id => $category_name)
         {
-            $category_array = array();
+            $category_array = [];
             
             if ($data->is_categories_visible())
             {

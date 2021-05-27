@@ -30,7 +30,7 @@ class Instance extends CompositeDataClass
      *
      * @var array
      */
-    private static $already_required_types = array();
+    private static $already_required_types = [];
 
     public function activate()
     {
@@ -111,7 +111,7 @@ class Instance extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_TITLE;
         $extended_property_names[] = self::PROPERTY_IMPLEMENTATION;
@@ -169,7 +169,7 @@ class Instance extends CompositeDataClass
 
     public function get_user_setting($user_id, $variable)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Setting::class, Setting::PROPERTY_VARIABLE),
             new StaticConditionVariable($variable)

@@ -44,7 +44,7 @@ class PreviewStorage
         
         if (! isset($storage))
         {
-            $this->set_storage(array());
+            $this->set_storage([]);
         }
     }
 
@@ -58,7 +58,7 @@ class PreviewStorage
     {
         if (is_null($content_object_id))
         {
-            return $this->set_storage(array());
+            return $this->set_storage([]);
         }
         else
         {
@@ -137,7 +137,7 @@ class PreviewStorage
         $attempts = $this->get_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
         if (! isset($attempts))
         {
-            $attempts = array();
+            $attempts = [];
             $this->set_property(self::PROPERTY_ASSESSMENT_ATTEMPT, $attempts);
         }
         return $attempts;
@@ -196,7 +196,7 @@ class PreviewStorage
         $attempts = $this->get_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT);
         if (! isset($attempts))
         {
-            $attempts = array();
+            $attempts = [];
             $this->set_property(self::PROPERTY_ASSESSMENT_QUESTION_ATTEMPT, $attempts);
         }
         return $attempts;

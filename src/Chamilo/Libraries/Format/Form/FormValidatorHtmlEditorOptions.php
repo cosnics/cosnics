@@ -100,7 +100,7 @@ class FormValidatorHtmlEditorOptions
         }
         elseif (is_array($value))
         {
-            $elements = array();
+            $elements = [];
 
             foreach ($value as $element)
             {
@@ -209,7 +209,7 @@ class FormValidatorHtmlEditorOptions
      */
     public function render_options()
     {
-        $javascript = array();
+        $javascript = [];
         $available_options = $this->get_option_names();
         $mapping = $this->get_mapping();
 

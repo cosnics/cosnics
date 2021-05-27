@@ -29,7 +29,7 @@ class SubscribeGroupsBrowseSubgroupsComponent extends SubscribeGroupsTabComponen
         $table = new UnsubscribedGroupTable($this);
         $table->setSearchForm($this->tabButtonToolbarRenderer->getSearchForm());
 
-        $html = array();
+        $html = [];
         $html[] = $this->tabButtonToolbarRenderer->render();
         $html[] = $table->as_html();
         return implode(PHP_EOL, $html);

@@ -61,7 +61,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<div style="clear: both;">&nbsp;</div>';
@@ -180,14 +180,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
             $user = $this->get_parent()->get_user();
 
-            $parameters = array();
+            $parameters = [];
             $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
 
             if (!$this->get_parent()->is_teacher())
             {
                 if ($course_group->is_self_registration_allowed() && !$course_group->is_member($user))
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
                     $parameters[self::PARAM_COURSE_GROUP_ACTION] = self::ACTION_USER_SELF_SUBSCRIBE;
                     $subscribe_url = $this->get_url($parameters);
@@ -202,7 +202,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
                 if ($course_group->is_self_unregistration_allowed() && $course_group->is_member($user))
                 {
-                    $parameters = array();
+                    $parameters = [];
                     $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
                     $parameters[self::PARAM_COURSE_GROUP_ACTION] = self::ACTION_USER_SELF_UNSUBSCRIBE;
                     $unsubscribe_url = $this->get_url($parameters);
@@ -217,7 +217,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
             }
             else
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $course_group->get_id();
                 $parameters[self::PARAM_COURSE_GROUP_ACTION] = self::ACTION_MANAGE_SUBSCRIPTIONS;
                 $subscribe_url = $this->get_url($parameters);
@@ -230,7 +230,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
                 );
 
                 // export the list to a spreadsheet
-                $parameters_export_subscriptions_overview = array();
+                $parameters_export_subscriptions_overview = [];
                 $parameters_export_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] =
                     self::ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW;
                 $parameters_export_subscriptions_overview[self::PARAM_COURSE_GROUP] = $course_group->get_id();

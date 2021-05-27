@@ -53,7 +53,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
         $courses = $this->getCourses();
         if ($courses)
         {
-            $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
 
             /** @var Course $course */
             foreach($courses as $course)

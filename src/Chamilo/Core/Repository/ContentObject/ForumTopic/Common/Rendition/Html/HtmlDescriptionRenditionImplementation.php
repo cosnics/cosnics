@@ -103,7 +103,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
         $from = $pager->getCurrentRangeOffset();
 
         $table = new HTML_Table(array('class' => 'forum', 'cellspacing' => 2));
-        $html = array();
+        $html = [];
 
         if (DataManager::count_forum_topic_posts($this->object->get_id()) > 0)
         {
@@ -124,7 +124,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     {
         $pagerRenderer = new PagerRenderer($this->get_pager());
 
-        return $pagerRenderer->renderPaginationWithPageLimit(array(), $this->param_prefix . 'page_nr');
+        return $pagerRenderer->renderPaginationWithPageLimit([], $this->param_prefix . 'page_nr');
     }
 
     /**

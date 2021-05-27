@@ -75,7 +75,7 @@ class GroupMembershipRepository
      */
     public function findGroupRelUserByGroupAndUserId($groupId, $userId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -90,7 +90,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, array())
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, [])
         );
     }
 
@@ -104,7 +104,7 @@ class GroupMembershipRepository
      */
     public function findGroupRelUserByGroupCodeAndUserId($groupCode, $userId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
@@ -129,7 +129,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, array(), $joins)
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, [], $joins)
         );
     }
 

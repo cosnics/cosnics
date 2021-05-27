@@ -33,7 +33,7 @@ class TypeSelectorCategory implements TypeSelectorItemInterface
      * @param string $name
      * @param \core\repository\ContentObjectTypeSelectorOption[] $options
      */
-    public function __construct($type, $name, $options = array())
+    public function __construct($type, $name, $options = [])
     {
         $this->type = $type;
         $this->name = $name;
@@ -131,7 +131,7 @@ class TypeSelectorCategory implements TypeSelectorItemInterface
      */
     public function get_unique_content_object_template_ids()
     {
-        $types = array();
+        $types = [];
         
         foreach ($this->get_options() as $option)
         {

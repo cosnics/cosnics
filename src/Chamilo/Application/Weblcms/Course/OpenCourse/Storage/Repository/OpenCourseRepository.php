@@ -45,7 +45,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @return DataClassIterator
      */
-    public function findOpenCoursesByRoles($roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = [])
     {
         return $this->findOpenCourses(
             $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)),
@@ -64,7 +64,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @return DataClassIterator
      */
-    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
     {
         return $this->findOpenCourses($this->getOpenCoursesCondition($condition), $offset, $count, $orderBy);
     }
@@ -79,7 +79,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @return DataClassIterator
      */
-    protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
     {
         $properties = new DataClassProperties();
         $properties->add(new PropertiesConditionVariable(Course::class));
@@ -113,7 +113,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @return DataClassIterator
      */
-    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array())
+    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
     {
         return DataManager::retrieves(
             Course::class,
@@ -128,7 +128,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @return int
      */
-    public function countOpenCoursesByRoles($roles = array(), Condition $condition = null)
+    public function countOpenCoursesByRoles($roles = [], Condition $condition = null)
     {
         return $this->countOpenCourses($this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)));
     }
@@ -206,7 +206,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         return \Chamilo\Core\User\Roles\Storage\DataManager::retrieves(
             Role::class,
-            new DataClassRetrievesParameters($condition, null, null, array(), $joins));
+            new DataClassRetrievesParameters($condition, null, null, [], $joins));
     }
 
     /**
@@ -266,7 +266,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function getOpenCoursesCondition(Condition $condition = null, Condition $courseEntityRelationCondition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
@@ -291,7 +291,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
     protected function getClosedCoursesCondition(Condition $condition = null,
         Condition $courseEntityRelationCondition = null)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new NotCondition($this->getOpenCoursesCondition($condition, $courseEntityRelationCondition));
 
         if ($condition instanceof Condition)
@@ -311,7 +311,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function getCourseIdsWithRolesAttached(Condition $condition = null)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_TYPE),
@@ -344,7 +344,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function getConditionForRoles($roles)
     {
-        $roleIds = array();
+        $roleIds = [];
         foreach ($roles as $role)
         {
             $roleIds[] = $role->getId();

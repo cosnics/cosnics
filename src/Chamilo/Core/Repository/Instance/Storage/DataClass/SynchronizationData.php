@@ -240,7 +240,7 @@ class SynchronizationData extends DataClass
      *
      * @param $property_names array
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_CREATED;
         $extended_property_names[] = self::PROPERTY_MODIFIED;
@@ -407,7 +407,7 @@ class SynchronizationData extends DataClass
      */
     public static function get_by_content_object_id_and_external_id($content_object_id, $external_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(self::class, self::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($content_object_id));
@@ -426,7 +426,7 @@ class SynchronizationData extends DataClass
      */
     public static function get_by_external_object_id_and_external_id($external_object_id, $external_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(self::class, self::PROPERTY_EXTERNAL_OBJECT_ID),
             new StaticConditionVariable($external_object_id));

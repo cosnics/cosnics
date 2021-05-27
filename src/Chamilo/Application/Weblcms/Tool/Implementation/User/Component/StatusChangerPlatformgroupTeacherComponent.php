@@ -15,7 +15,7 @@ class StatusChangerPlatformgroupTeacherComponent extends StatusChangerComponent
     // 1 = teacher, 5 = student
     public function get_relation()
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),

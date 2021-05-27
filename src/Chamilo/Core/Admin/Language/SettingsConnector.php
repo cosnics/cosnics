@@ -29,8 +29,8 @@ class SettingsConnector
     {
         $registrations = Configuration::registrations_by_type(Registration::TYPE_APPLICATION);
 
-        $options = array();
-        $options['home'] = Translation::get('Homepage', array(), 'home');
+        $options = [];
+        $options['home'] = Translation::get('Homepage', [], 'home');
 
         foreach ($registrations as $registration)
         {
@@ -61,7 +61,7 @@ class SettingsConnector
     {
         $start = 0;
         $end = 24;
-        $working_hours = array();
+        $working_hours = [];
 
         for ($i = $start; $i <= $end; $i ++)
         {

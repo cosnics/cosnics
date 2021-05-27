@@ -53,7 +53,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
 
     public function get_category_parameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -74,11 +74,11 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      * @param int[] $selected_category_ids - [OPTIONAL] default: array
      * @return string
      */
-    public function render_impact_view($selected_category_ids = array())
+    public function render_impact_view($selected_category_ids = [])
     {
         $this->impact_view_selected_categories = $selected_category_ids;
 
-        $conditions = array();
+        $conditions = [];
         foreach ($selected_category_ids as $selected_category_id)
         {
             $this->get_categories_condition($selected_category_id, $conditions);
@@ -96,9 +96,9 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         return $impact_view_table->as_html();
     }
 
-    public function has_impact($selected_category_ids = array())
+    public function has_impact($selected_category_ids = [])
     {
-        $conditions = array();
+        $conditions = [];
         foreach ($selected_category_ids as $selected_category_id)
         {
             $this->get_categories_condition($selected_category_id, $conditions);
@@ -231,7 +231,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      */
     public function count_category_objects($category_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
             new StaticConditionVariable($category_id));
@@ -276,7 +276,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      * @param int $category_id
      * @param Condition[] $conditions
      */
-    private function get_categories_condition($category_id, &$conditions = array())
+    private function get_categories_condition($category_id, &$conditions = [])
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
@@ -301,7 +301,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
 
     public function get_parameters($include_search = false)
     {
-        $extra_parameters = array();
+        $extra_parameters = [];
         if (! empty($this->impact_view_selected_categories))
         {
             $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID] = $this->impact_view_selected_categories;

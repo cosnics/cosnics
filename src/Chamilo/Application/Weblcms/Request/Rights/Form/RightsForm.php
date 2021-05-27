@@ -68,7 +68,7 @@ class RightsForm extends FormValidator
 
         $this->getElement(self::PROPERTY_ACCESS)->setDefaultValues($default_elements);
 
-        parent::setDefaults(array());
+        parent::setDefaults([]);
     }
 
     function set_rights()
@@ -84,12 +84,12 @@ class RightsForm extends FormValidator
 
         if (!isset($values[self::PROPERTY_ACCESS][UserEntity::ENTITY_TYPE]))
         {
-            $values[self::PROPERTY_ACCESS][UserEntity::ENTITY_TYPE] = array();
+            $values[self::PROPERTY_ACCESS][UserEntity::ENTITY_TYPE] = [];
         }
 
         if (!isset($values[self::PROPERTY_ACCESS][PlatformGroupEntity::ENTITY_TYPE]))
         {
-            $values[self::PROPERTY_ACCESS][PlatformGroupEntity::ENTITY_TYPE] = array();
+            $values[self::PROPERTY_ACCESS][PlatformGroupEntity::ENTITY_TYPE] = [];
         }
 
         foreach ($values[self::PROPERTY_ACCESS] as $entity_type => $target_ids)

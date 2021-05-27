@@ -23,7 +23,7 @@ class CourseGroupUserRelation extends DataClass
      * @param $id int The numeric ID of the course user relation object. May be omitted if creating a new object.
      * @param $defaultProperties array The default properties of the course user relation object. Associative array.
      */
-    public function __construct($defaultProperties = array())
+    public function __construct($defaultProperties = [])
     {
         $this->defaultProperties = $defaultProperties;
     }
@@ -81,7 +81,7 @@ class CourseGroupUserRelation extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return array(self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER);
     }

@@ -22,7 +22,7 @@ class UserViewRelContentObject extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_USER_VIEW_ID, self::PROPERTY_CONTENT_OBJECT_TEMPLATE_ID));

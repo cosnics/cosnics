@@ -113,7 +113,7 @@ class OpenCourseTableCellRenderer extends CourseTableCellRenderer implements Tab
                             $courseObject = new Course($courseRecord);
                             $roles = $this->getOpenCourseService()->getRolesForOpenCourse($courseObject);
 
-                            $rolesHtml = array();
+                            $rolesHtml = [];
 
                             $rolesHtml[] = '<select>';
                             foreach($roles as $role)

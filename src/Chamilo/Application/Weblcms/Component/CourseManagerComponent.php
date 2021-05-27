@@ -38,7 +38,7 @@ class CourseManagerComponent extends Manager implements DelegateComponent, Cours
         $this->redirect(
             $message,
             ! $succes,
-            array(),
+            [],
             array(self::PARAM_ACTION, \Chamilo\Application\Weblcms\Course\Manager::PARAM_ACTION));
     }
 

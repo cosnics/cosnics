@@ -36,7 +36,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
      */
     public function get_table_condition($object_table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
         
         $parent_condition = parent::get_table_condition($object_table_class_name);
         if ($parent_condition)
@@ -46,7 +46,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
         
         $user = $this->get_user();
         
-        $userConditions = array();
+        $userConditions = [];
         $userConditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
             new StaticConditionVariable($user->get_id()));
@@ -70,7 +70,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
         
         if ($groups)
         {
-            $groupsConditions = array();
+            $groupsConditions = [];
             $groupsConditions[] = new InCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,

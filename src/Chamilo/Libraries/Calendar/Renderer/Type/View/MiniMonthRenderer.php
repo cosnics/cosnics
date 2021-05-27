@@ -42,7 +42,7 @@ class MiniMonthRenderer extends ViewRenderer
      * @throws \Exception
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
         $linkTarget = '', $markPeriod = null
     )
     {
@@ -57,7 +57,7 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
         $html[] = $this->renderNavigation();
@@ -142,7 +142,7 @@ class MiniMonthRenderer extends ViewRenderer
 
         $calendar->addNavigationLinks($this->determineNavigationUrl());
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="table-calendar-mini-container">';
         $html[] = $calendar->render();
@@ -163,7 +163,7 @@ class MiniMonthRenderer extends ViewRenderer
      */
     public function renderNavigation()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel-heading table-calendar-mini-navigation">';
         $html[] = $this->renderPreviousMonthNavigation();

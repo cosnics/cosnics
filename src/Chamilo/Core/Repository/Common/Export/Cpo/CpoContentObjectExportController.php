@@ -705,7 +705,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         if (count($cache_category_ids) > 1)
         {
             
-            $parents = array();
+            $parents = [];
             if ($cache_category_ids == 0)
             {
                 $previous = array(0);

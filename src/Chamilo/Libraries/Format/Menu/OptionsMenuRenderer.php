@@ -24,7 +24,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
      * @param string[] $exclude Which items should be excluded (based on the $key value in the menu items). The whole
      *        submenu of which the elements of the exclude array are the root elements will be excluded.
      */
-    public function __construct($exclude = array())
+    public function __construct($exclude = [])
     {
         $exclude = is_array($exclude) ? $exclude : array($exclude);
         $this->exclude = $exclude;
@@ -67,7 +67,7 @@ class OptionsMenuRenderer extends HtmlMenuArrayRenderer
     public function toArray()
     {
         $array = parent::toArray();
-        $choices = array();
+        $choices = [];
 
         foreach ($array as $index => $item)
         {

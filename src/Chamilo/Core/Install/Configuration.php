@@ -20,11 +20,11 @@ class Configuration
 
     private $db_password = '';
 
-    private $packages = array();
+    private $packages = [];
 
-    private $content_objects = array();
+    private $content_objects = [];
 
-    private $external_instances = array();
+    private $external_instances = [];
 
     private $platform_language = 'english';
 
@@ -80,7 +80,7 @@ class Configuration
      */
     public function as_values_array()
     {
-        $values = array();
+        $values = [];
         $values['storage_type'] = $this->get_storage_type();
         $values['database_driver'] = $this->get_db_driver();
         $values['database_host'] = $this->get_db_host();
@@ -142,7 +142,7 @@ class Configuration
 
         global $values;
         unset($values);
-        $values = array();
+        $values = [];
         include $file;
         $this->load_array($values);
         unset($values);

@@ -33,7 +33,7 @@ class LineChart extends Chart
             $chart_data = new pData();
             
             /* Define the absissa serie */
-            $abscissa = array();
+            $abscissa = [];
             
             foreach ($reporting_data->get_categories() as $category_id => $category_name)
             {
@@ -47,7 +47,7 @@ class LineChart extends Chart
             
             foreach ($reporting_data->get_rows() as $row_id => $row_name)
             {
-                $data_row = array();
+                $data_row = [];
                 
                 foreach ($reporting_data->get_categories() as $category_id => $category_name)
                 {

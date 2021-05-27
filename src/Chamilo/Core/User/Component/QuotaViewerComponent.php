@@ -62,7 +62,7 @@ class QuotaViewerComponent extends Manager
         }
         $this->calculator = new Calculator($this->selected_user);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer();

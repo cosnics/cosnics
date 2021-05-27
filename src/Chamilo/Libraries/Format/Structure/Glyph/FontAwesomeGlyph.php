@@ -21,7 +21,7 @@ class FontAwesomeGlyph extends InlineGlyph
      * @param string $title
      * @param string $style
      */
-    public function __construct($type, $extraClasses = array(), $title = null, $style = 'fas')
+    public function __construct($type, $extraClasses = [], $title = null, $style = 'fas')
     {
         parent::__construct($type, $extraClasses, $title);
         $this->style = $style;

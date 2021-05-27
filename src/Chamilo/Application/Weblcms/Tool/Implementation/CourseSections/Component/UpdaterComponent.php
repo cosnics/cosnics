@@ -70,7 +70,7 @@ class UpdaterComponent extends Manager
                                 self::PARAM_COURSE_SECTION_ID => $id)),
                         Translation::get('Update', null, Utilities::COMMON_LIBRARIES)));
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

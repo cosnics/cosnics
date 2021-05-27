@@ -118,7 +118,7 @@ abstract class DataClassListener
      *
      * @return boolean
      */
-    public function on_get_dependencies(&$dependencies = array())
+    public function on_get_dependencies(&$dependencies = [])
     {
         return true;
     }

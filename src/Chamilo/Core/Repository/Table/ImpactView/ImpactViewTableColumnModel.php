@@ -30,11 +30,11 @@ class ImpactViewTableColumnModel extends DataClassTableColumnModel implements Ta
         $this->add_column(
             new StaticTableColumn(
                 self::COLUMN_CATEGORY, 
-                Translation::getInstance()->getTranslation('Category', array(), Manager::context())));
+                Translation::getInstance()->getTranslation('Category', [], Manager::context())));
         
         $this->add_column(
             new StaticTableColumn(
                 self::COLUMN_SAFE_DELETE, 
-                Translation::getInstance()->getTranslation('SafeDelete', array(), Manager::context())));
+                Translation::getInstance()->getTranslation('SafeDelete', [], Manager::context())));
     }
 }

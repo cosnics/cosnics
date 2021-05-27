@@ -42,7 +42,7 @@ class LinkItemForm extends ItemForm
      *
      * @throws \Exception
      */
-    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = array())
+    public function setItemDefaults(Item $item, array $itemTitles, array $defaults = [])
     {
         $defaults[LinkItem::PROPERTY_URL] = $item->getUrl();
         $defaults[LinkItem::PROPERTY_TARGET] = $item->getTarget();

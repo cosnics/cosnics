@@ -36,7 +36,7 @@ class FavouriteTableCellRenderer extends RecordTableCellRenderer implements Tabl
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::getInstance()->getTranslation('DeleteFavourite', null, $favouriteContext),
-                new FontAwesomeGlyph('star', array(), null, 'far'), $this->get_component()->get_url(
+                new FontAwesomeGlyph('star', [], null, 'far'), $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE_FAVOURITES,
                     \Chamilo\Application\Portfolio\Favourite\Manager::PARAM_ACTION => \Chamilo\Application\Portfolio\Favourite\Manager::ACTION_DELETE,

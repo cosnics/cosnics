@@ -41,7 +41,7 @@ class CourseDeleterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = Display::error_message(Translation::get('DeleteReDoMessage'));

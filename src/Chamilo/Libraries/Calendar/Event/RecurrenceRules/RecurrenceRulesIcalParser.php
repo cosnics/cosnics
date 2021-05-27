@@ -59,7 +59,7 @@ class RecurrenceRulesIcalParser
         // Split the different parts
         $icalRecurrenceRules = explode(';', $icalRecurrenceRules);
 
-        $parts = array();
+        $parts = [];
 
         foreach ($icalRecurrenceRules as $rulePart)
         {

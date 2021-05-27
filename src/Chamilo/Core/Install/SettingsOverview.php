@@ -35,7 +35,7 @@ class SettingsOverview
      */
     public function render()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="form-horizontal form-install-settings">';
 
@@ -57,7 +57,7 @@ class SettingsOverview
      */
     protected function getAdministratorContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderSetting(Translation::get('AdminEmail'), $this->getSettingValue('admin_email'));
         $html[] = $this->renderSetting(Translation::get('AdminLastName'), $this->getSettingValue('admin_surname'));
@@ -75,7 +75,7 @@ class SettingsOverview
      */
     protected function getDatabaseContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderSetting(Translation::get('DatabaseDriver'), $this->getSettingValue('database_driver'));
         $html[] = $this->renderSetting(Translation::get('DatabaseHost'), $this->getSettingValue('database_host'));
@@ -101,7 +101,7 @@ class SettingsOverview
      */
     protected function getGeneralPropertiesContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderSetting(Translation::get('MainLang'), $this->getSettingValue('platform_language'));
 
@@ -114,7 +114,7 @@ class SettingsOverview
      */
     protected function getPlatformContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderSetting(Translation::get('CampusName'), $this->getSettingValue('site_name'));
 
@@ -141,7 +141,7 @@ class SettingsOverview
      */
     protected function getSelectedPackages()
     {
-        $selectedPackages = array();
+        $selectedPackages = [];
         $wizardPackages = (array) $this->getSettingValue('install');
 
         foreach ($wizardPackages as $context => $value)
@@ -152,11 +152,11 @@ class SettingsOverview
             }
         }
 
-        $html = array();
+        $html = [];
 
         if (count($selectedPackages) > 0)
         {
-            $html = array();
+            $html = [];
 
             $html[] = '<div class="package-list">';
             $html[] = '<div class="package-list-items row">';
@@ -210,7 +210,7 @@ class SettingsOverview
      */
     protected function getStorageContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderSetting(Translation::get('ArchivePath'), $this->getSettingValue('archive_path'));
         $html[] = $this->renderSetting(Translation::get('CachePath'), $this->getSettingValue('cache_path'));
@@ -236,7 +236,7 @@ class SettingsOverview
      */
     protected function renderSection($label, $content)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
         $html[] = '<div class="panel-heading">';
@@ -261,7 +261,7 @@ class SettingsOverview
      */
     protected function renderSetting($label, $value)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="form-group">';
         $html[] = '<label class="col-xs-12 col-sm-4 control-label">' . $label . '</label>';

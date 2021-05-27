@@ -110,7 +110,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
                 foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
                 {
                     $resolveTargetEntityListenerDef->addMethodCall(
-                        'addResolveTargetEntity', array($name, $implementation, array())
+                        'addResolveTargetEntity', array($name, $implementation, [])
                     );
                 }
 

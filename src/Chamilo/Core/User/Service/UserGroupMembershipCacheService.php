@@ -35,7 +35,7 @@ class UserGroupMembershipCacheService extends DoctrinePhpFileCacheService implem
      */
     public function getIdentifiers()
     {
-        return array();
+        return [];
     }
 
     /**

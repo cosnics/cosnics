@@ -57,7 +57,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
     public function add_footer()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'import_button', Translation::get('Import', null, Utilities::COMMON_LIBRARIES),
@@ -87,7 +87,7 @@ abstract class ContentObjectImportForm extends FormValidator
 
         if (!$this->implementsDropZoneSupport())
         {
-            $category_group = array();
+            $category_group = [];
 
             $category_group[] = $this->createElement('static', null, null, '<div class="input-group">');
 

@@ -75,7 +75,7 @@ class PublicationService
      *
      * @return bool
      */
-    public function areContentObjectsPublished($contentObjectIds = array())
+    public function areContentObjectsPublished($contentObjectIds = [])
     {
         $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByContentObjects($contentObjectIds);
         $count = 0;
@@ -180,7 +180,7 @@ class PublicationService
         $treeNodesData =
             $this->treeNodeDataService->getTreeNodesDataByContentObjects(array($contentObjectId));
 
-        $attributes = array();
+        $attributes = [];
 
         foreach ($treeNodesData as $treeNodeData)
         {
@@ -206,7 +206,7 @@ class PublicationService
     {
         $treeNodesData = $this->treeNodeDataService->getTreeNodesDataByUserId((int) $userId);
 
-        $attributes = array();
+        $attributes = [];
 
         foreach ($treeNodesData as $treeNodeData)
         {

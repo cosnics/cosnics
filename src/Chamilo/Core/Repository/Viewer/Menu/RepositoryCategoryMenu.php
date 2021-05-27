@@ -35,7 +35,7 @@ class RepositoryCategoryMenu extends ContentObjectCategoryMenu
      *        filtered
      */
     public function __construct($parent, $owner, WorkspaceInterface $currentWorkspace, $current_category = null, 
-        $url_format = '?category=%s', $extra_items = array(), $filter_count_on_types = array(), $exclude_types = array())
+        $url_format = '?category=%s', $extra_items = [], $filter_count_on_types = [], $exclude_types = [])
     {
         $this->parent = $parent;
         parent::__construct(

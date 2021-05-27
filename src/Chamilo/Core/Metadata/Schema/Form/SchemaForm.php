@@ -89,7 +89,7 @@ class SchemaForm extends FormValidator
      */
     protected function setFormDefaults()
     {
-        $defaults = array();
+        $defaults = [];
 
         $defaults[Schema::PROPERTY_NAMESPACE] = $this->schema->get_namespace();
         $defaults[Schema::PROPERTY_NAME] = $this->schema->get_name();

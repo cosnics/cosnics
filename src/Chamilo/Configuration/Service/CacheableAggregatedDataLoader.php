@@ -45,7 +45,7 @@ class CacheableAggregatedDataLoader extends AggregatedDataLoader implements Cach
      */
     public function getIdentifier()
     {
-        $identifierParts = array();
+        $identifierParts = [];
 
         foreach ($this->getDataLoaders() as $dataLoader)
         {

@@ -16,9 +16,9 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 //    public function get_description()
 //    {
 //
-//        $html = array();
+//        $html = [];
 //
-//        $properties = array();
+//        $properties = [];
 //        $properties[Translation::get('StartTime')] =
 //            DatetimeUtilities::format_locale_date(
 //                Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES),

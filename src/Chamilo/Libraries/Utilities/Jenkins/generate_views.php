@@ -11,7 +11,7 @@ require_once realpath(__DIR__ . '/../../../../') . '/vendor/autoload.php';
 $container = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 $container->get(Bootstrap::class)->setup();
 
-$default_views = array();
+$default_views = [];
 $default_views['Applications'] = 'application';
 $default_views['Content Objects'] = 'repository_content_object';
 $default_views['Core Common'] = 'common';
@@ -42,7 +42,7 @@ $dom_document->load($jenkins_config_path);
 $dom_xpath = new DOMXPath($dom_document);
 $listViews_nodes = $dom_xpath->query('/hudson/views/listView');
 
-$existing_view_names = array();
+$existing_view_names = [];
 
 foreach ($listViews_nodes as $listViews_node)
 {

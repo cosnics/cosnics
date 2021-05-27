@@ -53,7 +53,7 @@ class TaskDifference extends ContentObjectDifference
     public function getFrequencyString(ContentObject $contentObject)
     {
         $repeats = $contentObject->has_frequency();
-        $content = array();
+        $content = [];
 
         if ($repeats)
         {
@@ -72,7 +72,7 @@ class TaskDifference extends ContentObjectDifference
                     }
                     break;
                 case 2 :
-                    $days = array();
+                    $days = [];
                     foreach (explode(',', $contentObject->get_byday()) as $day)
                     {
                         $days[] = Task::get_day_string($day);

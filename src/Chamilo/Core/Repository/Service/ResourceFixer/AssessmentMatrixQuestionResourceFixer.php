@@ -70,7 +70,7 @@ class AssessmentMatrixQuestionResourceFixer extends ResourceFixer
                 $assessmentMatrixQuestion->set_options($options);
 
                 $matches = $assessmentMatrixQuestion->get_matches();
-                $newMatches = array();
+                $newMatches = [];
 
                 $this->logger->debug(sprintf('Found %s matches', count($matches)));
 

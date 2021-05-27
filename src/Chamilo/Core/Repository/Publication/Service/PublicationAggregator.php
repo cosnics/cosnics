@@ -166,7 +166,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         array $orderProperties = null
     )
     {
-        $publicationAttributes = array();
+        $publicationAttributes = [];
 
         foreach ($this->publicationAggregators as $publicationAggregator)
         {

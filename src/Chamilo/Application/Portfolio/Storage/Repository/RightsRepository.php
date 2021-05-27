@@ -62,7 +62,7 @@ class RightsRepository
      */
     public function findRightsLocationEntityRight($right, $entityId, $entityType, $locationId, $publicationId)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -103,7 +103,7 @@ class RightsRepository
      */
     public function findRightsLocationEntityRightsForLocationAndRights(RightsLocation $location, $rights)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -141,7 +141,7 @@ class RightsRepository
     public function findRightsLocationEntityRightsRecordsForLocation(RightsLocation $location,
         Condition $entitiesCondition)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = $entitiesCondition;
         $conditions[] = new EqualityCondition(
@@ -176,7 +176,7 @@ class RightsRepository
      */
     public function findRightsLocationForPublicationIdentifierAndNodeIdentifier($publicationIdentifier, $nodeIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_PUBLICATION_ID),

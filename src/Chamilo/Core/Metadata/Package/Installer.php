@@ -30,7 +30,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
         if ($relation->create())
         {
-            $entityTranslations = array();
+            $entityTranslations = [];
             $entityTranslations[Translation::getInstance()->getLanguageIsocode()] = Translation::get('IsAvailableFor');
 
             $entity = DataClassEntityFactory::getInstance()->getEntityFromDataClass($relation);
@@ -47,7 +47,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function installDefaultSchemas()
     {
-        $schemaDefinition = array();
+        $schemaDefinition = [];
         $schemaDefinition[Schema::class] = array(
             Schema::PROPERTY_NAMESPACE => 'dc',
             Schema::PROPERTY_NAME => 'Dublin Core',
@@ -140,7 +140,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
             return false;
         }
 
-        $schemaDefinition = array();
+        $schemaDefinition = [];
         $schemaDefinition[Schema::class] = array(
             Schema::PROPERTY_NAMESPACE => 'ct',
             Schema::PROPERTY_NAME => 'Tags',

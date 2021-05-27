@@ -70,7 +70,7 @@ abstract class BaseFooter implements FooterInterface
      */
     protected function getContainerFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '&nbsp;&copy;&nbsp;' . date('Y');
 
@@ -88,7 +88,7 @@ abstract class BaseFooter implements FooterInterface
      */
     protected function getContainerHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<footer class="chamilo-footer">';
         $html[] = '<div class="' . $this->getContainerMode() . '">';
@@ -122,7 +122,7 @@ abstract class BaseFooter implements FooterInterface
      */
     protected function getFooter()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</body>';
         $html[] = '</html>';
@@ -136,7 +136,7 @@ abstract class BaseFooter implements FooterInterface
      */
     protected function getHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '</div> <!-- end of .container-fluid" -->';
 

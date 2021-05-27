@@ -55,7 +55,7 @@ class PublisherComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $publicationTargetForm->toHtml();
@@ -117,7 +117,7 @@ class PublisherComponent extends Manager implements DelegateComponent
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
 
-        $order_by = array();
+        $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
         );

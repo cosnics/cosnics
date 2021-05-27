@@ -26,7 +26,7 @@ class ComplexAssessment extends ComplexContentObjectItem
 
     public function get_allowed_types()
     {
-        $allowed_types = array();
+        $allowed_types = [];
         $allowed_types[] = AssessmentRatingQuestion::class;
         $allowed_types[] = AssessmentOpenQuestion::class;
         $allowed_types[] = HotspotQuestion::class;

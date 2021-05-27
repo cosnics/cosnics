@@ -18,13 +18,13 @@ class Toolbar
      *
      * @var \Chamilo\Libraries\Format\Structure\ToolbarItem[]
      */
-    private $items = array();
+    private $items = [];
 
     /**
      *
      * @var string[]
      */
-    private $class_names = array();
+    private $class_names = [];
 
     /**
      *
@@ -44,7 +44,7 @@ class Toolbar
      * @param string[] $class_names
      * @param string $css
      */
-    public function __construct($type = self::TYPE_HORIZONTAL, $class_names = array(), $css = null)
+    public function __construct($type = self::TYPE_HORIZONTAL, $class_names = [], $css = null)
     {
         $this->type = $type;
         $this->class_names = $class_names;
@@ -73,14 +73,14 @@ class Toolbar
         }
         $class_names[] = 'toolbar_' . $type;
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-toolbar btn-toolbar-cosnics">';
         $html[] = '<div class="btn-group ">';
 
         foreach ($toolbar_data as $index => $toolbar_item)
         {
-            $classes = array();
+            $classes = [];
 
             if ($index == 0)
             {

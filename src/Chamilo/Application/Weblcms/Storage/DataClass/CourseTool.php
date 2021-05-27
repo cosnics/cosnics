@@ -40,7 +40,7 @@ class CourseTool extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function get_default_property_names($extended_property_names = array())
+    static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_SECTION_TYPE, self::PROPERTY_NAME, self::PROPERTY_CONTEXT)

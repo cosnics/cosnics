@@ -148,7 +148,7 @@ class WeblcmsRights extends RightsUtil
         }
         $course_id = Request::get(Manager::PARAM_COURSE);
 
-        $entities = array();
+        $entities = [];
         $entities[] = CourseGroupEntity::getInstance($course_id);
         $entities[] = CourseUserEntity::getInstance();
         $entities[] = CoursePlatformGroupEntity::getInstance($course_id);
@@ -168,7 +168,7 @@ class WeblcmsRights extends RightsUtil
 
     public function render_target_entities_as_string($entities)
     {
-        $target_list = array();
+        $target_list = [];
 
         // don't display each individual user if it is published for
         // everybody...
@@ -276,7 +276,7 @@ class WeblcmsRights extends RightsUtil
     public function get_publication_identifiers_with_right_granted($right, RightsLocation $parent_location,
         Course $course, User $user)
     {
-        $entities = array();
+        $entities = [];
         $entities[] = CourseGroupEntity::getInstance($course->getId());
         $entities[] = CourseUserEntity::getInstance();
         $entities[] = CoursePlatformGroupEntity::getInstance($course->getId());

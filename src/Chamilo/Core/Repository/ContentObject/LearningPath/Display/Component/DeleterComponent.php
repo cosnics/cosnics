@@ -34,7 +34,7 @@ class DeleterComponent extends Manager
         $tree = $this->getTree();
 
         /** @var TreeNode[] $available_nodes */
-        $available_nodes = array();
+        $available_nodes = [];
 
         foreach ($selected_steps as $selected_step)
         {
@@ -101,7 +101,7 @@ class DeleterComponent extends Manager
             $new_node = $available_node->getParentNode();
         }
 
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
 
         if (! $new_node)

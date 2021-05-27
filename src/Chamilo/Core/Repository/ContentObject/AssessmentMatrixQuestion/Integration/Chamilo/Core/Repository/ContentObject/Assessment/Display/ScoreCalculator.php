@@ -38,7 +38,7 @@ class ScoreCalculator extends \Chamilo\Core\Repository\ContentObject\Assessment\
                 $answers = array_keys($user_answers[$index]);
                 $matches = $option->get_matches();
                 if ($matches == null)
-                    $matches = array();
+                    $matches = [];
 
                 $difference_answers = array_diff($answers, $matches);
                 $difference_matches = array_diff($matches, $answers);

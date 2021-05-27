@@ -21,7 +21,7 @@ abstract class Manager extends Application
     {
         parent::__construct($applicationConfiguration);
 
-        $this->target_users = array();
+        $this->target_users = [];
 
         $email_action = Request::get(self::PARAM_ACTION);
         if ($email_action)

@@ -148,7 +148,7 @@ class StructureLocationRoleServiceTest extends ChamiloTestCase
             ->with($context, $action)->will($this->throwException(new Exception()));
 
         $this->assertEquals(
-            array(), $this->structureLocationRoleService->getRolesForLocationByContextAndAction($context, $action)
+            [], $this->structureLocationRoleService->getRolesForLocationByContextAndAction($context, $action)
         );
     }
 

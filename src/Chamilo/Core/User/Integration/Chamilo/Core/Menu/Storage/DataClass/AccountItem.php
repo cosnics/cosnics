@@ -18,6 +18,6 @@ class AccountItem extends Item
      */
     public function getGlyph()
     {
-        return new FontAwesomeGlyph('user', array(), null, 'fas');
+        return new FontAwesomeGlyph('user', [], null, 'fas');
     }
 }

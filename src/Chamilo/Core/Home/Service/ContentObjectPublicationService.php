@@ -128,7 +128,7 @@ class ContentObjectPublicationService
      *
      * @return int
      */
-    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = array())
+    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = [])
     {
         return $this->contentObjectPublicationRepository->countContentObjectPublicationsByContentObjectIds(
             $contentObjectIds);

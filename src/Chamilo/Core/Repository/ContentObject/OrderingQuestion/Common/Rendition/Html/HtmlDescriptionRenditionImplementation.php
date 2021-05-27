@@ -16,7 +16,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
 
     public function get_description()
     {
-        $html = array();
+        $html = [];
         
         $lo = $this->get_content_object();
         $options = $lo->get_options();
@@ -55,7 +55,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     {
         $answer_count = count($this->get_content_object()->get_options());
         
-        $options = array();
+        $options = [];
         for ($i = 1; $i <= $answer_count; $i ++)
         {
             $options[] = '<option>' . $i . '</option>';

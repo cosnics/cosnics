@@ -37,7 +37,7 @@ class LanguageItemRenderer extends ItemRenderer
             )
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<li>';
         $html[] = '<a href="' . $redirect->getUrl() . '">';

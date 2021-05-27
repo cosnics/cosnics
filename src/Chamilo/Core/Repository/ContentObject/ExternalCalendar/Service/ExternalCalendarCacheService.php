@@ -54,7 +54,7 @@ class ExternalCalendarCacheService extends DoctrineFilesystemCacheService implem
      */
     public function getIdentifiers()
     {
-        return array();
+        return [];
     }
 
     /**

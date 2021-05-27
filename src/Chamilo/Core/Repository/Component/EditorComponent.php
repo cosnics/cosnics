@@ -70,7 +70,7 @@ class EditorComponent extends Manager implements DelegateComponent
             }
             elseif (!$object->is_latest_version())
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
 
@@ -79,7 +79,7 @@ class EditorComponent extends Manager implements DelegateComponent
 
             if (!$this->getPublicationAggregator()->canContentObjectBeEdited($object->get_id()))
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
                 $this->redirect(Translation::get('UpdateNotAllowed'), false, $parameters);
@@ -94,7 +94,7 @@ class EditorComponent extends Manager implements DelegateComponent
             {
                 $success = $form->update_content_object();
 
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
 
@@ -140,7 +140,7 @@ class EditorComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

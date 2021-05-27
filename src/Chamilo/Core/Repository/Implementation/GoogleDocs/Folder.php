@@ -10,7 +10,7 @@ class Folder
 
     private $parent;
 
-    private $children = array();
+    private $children = [];
 
     /**
      *

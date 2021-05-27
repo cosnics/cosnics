@@ -41,7 +41,7 @@ class BreadcrumbTrailRenderer
             return '';
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="container-breadcrumb">';
         $html[] = '<div class="' . $breadcrumbTrail->getContainerMode() . '">';
@@ -78,7 +78,7 @@ class BreadcrumbTrailRenderer
      */
     public function renderBreadcrumbs(BreadcrumbTrail $breadcrumbTrail)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<ol class="breadcrumb">';
 
@@ -88,7 +88,7 @@ class BreadcrumbTrailRenderer
         {
             foreach ($breadcrumbs as $breadcrumb)
             {
-                $breadCrumbHtml = array();
+                $breadCrumbHtml = [];
 
                 $breadCrumbHtml[] = '<li>';
                 $breadCrumbHtml[] = '<a href="' . htmlentities($breadcrumb->get_url()) . '" target="_self">';
@@ -128,7 +128,7 @@ class BreadcrumbTrailRenderer
      */
     public function renderExtra(BreadcrumbTrail $breadcrumbTrail)
     {
-        $html = array();
+        $html = [];
 
         $extraItems = $breadcrumbTrail->getExtraItems();
 
@@ -155,7 +155,7 @@ class BreadcrumbTrailRenderer
      */
     public function renderHelp(BreadcrumbTrail $breadcrumbTrail)
     {
-        $html = array();
+        $html = [];
         $helpItem = $breadcrumbTrail->getHelpItem();
 
         if (is_array($helpItem) && count($helpItem) == 2)

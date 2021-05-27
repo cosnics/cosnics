@@ -30,7 +30,7 @@ class TrackingRepository implements TrackingRepositoryInterface
 
         if (!isset($storage) || empty($storage))
         {
-            $this->setStorage(array());
+            $this->setStorage([]);
         }
     }
 
@@ -39,7 +39,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function resetStorage()
     {
-        $this->setStorage(array());
+        $this->setStorage([]);
     }
 
     /**
@@ -114,7 +114,7 @@ class TrackingRepository implements TrackingRepositoryInterface
     public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath)
     {
         $treeNodeAttempts = $this->getFromStorage(DummyTreeNodeAttempt::class);
-        $allTreeNodeAttempts = array();
+        $allTreeNodeAttempts = [];
 
         $treeNodeAttemptsForLearningPath = $treeNodeAttempts[$learningPath->getId()];
 
@@ -355,7 +355,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         /** @var TreeNodeQuestionAttempt[][] $questionAttempts */
         $questionAttempts = $this->getFromStorage(DummyQuestionAttempt::class);
 
-        $allData = array();
+        $allData = [];
 
         foreach ($treeNodeAttempts as $learningPathId => $learningPathTreeNodeAttempts)
         {
@@ -422,11 +422,11 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithUser(
-        LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $treeNodeDataIds = [],
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
     )
     {
-        return new DataClassIterator(DummyTreeNodeAttempt::class, array());
+        return new DataClassIterator(DummyTreeNodeAttempt::class, []);
     }
 
     /**
@@ -439,7 +439,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @return int
      */
     public function countLearningPathAttemptsWithUser(
-        LearningPath $learningPath, $treeNodeDataIds = array(), Condition $condition = null
+        LearningPath $learningPath, $treeNodeDataIds = [], Condition $condition = null
     )
     {
         return 0;
@@ -458,11 +458,11 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @return DataClassIterator
      */
     public function findTargetUsersWithLearningPathAttempts(
-        LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array()
+        LearningPath $learningPath, $treeNodeDataIds = [],
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
     )
     {
-        return new DataClassIterator(User::class, array());
+        return new DataClassIterator(User::class, []);
     }
 
     /**

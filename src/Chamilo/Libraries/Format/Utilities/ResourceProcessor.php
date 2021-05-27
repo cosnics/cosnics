@@ -113,7 +113,7 @@ class ResourceProcessor
      * @param string[] $packageNamespaces
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function processResources($packageNamespaces = array(), OutputInterface $output)
+    public function processResources($packageNamespaces = [], OutputInterface $output)
     {
         $processAll = false;
 

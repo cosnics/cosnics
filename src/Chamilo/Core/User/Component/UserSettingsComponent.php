@@ -111,14 +111,14 @@ class UserSettingsComponent extends ProfileComponent
                 $is_current_tab = ($this->context === $setting_context);
                 $tab = new DynamicVisualTab(
                     $setting_context, Translation::get('TypeName', null, $setting_context), new NamespaceIdentGlyph(
-                    $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, array()
+                    $setting_context, true, false, false, IdentGlyph::SIZE_SMALL, []
                 ), $package_url, $is_current_tab
                 );
                 $tabs->add_tab($tab);
             }
         }
 
-        $html = array();
+        $html = [];
 
         if (!$this->context)
         {

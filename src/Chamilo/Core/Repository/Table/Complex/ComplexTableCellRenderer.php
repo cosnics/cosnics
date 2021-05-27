@@ -156,7 +156,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
     public function render_cell($column, $cloi)
     {
         $content_object = $cloi->get_ref_object();
-        $glyph = new FontAwesomeGlyph('folder', array(), Translation::get('Type'));
+        $glyph = new FontAwesomeGlyph('folder', [], Translation::get('Type'));
         $renderedglyph = $glyph->render();
 
         switch ($column->get_name())

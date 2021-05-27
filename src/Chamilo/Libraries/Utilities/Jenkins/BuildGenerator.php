@@ -114,7 +114,7 @@ class BuildGenerator
         $this->write_build($package_list->get_type());
         $this->write_phpunit($package_list->get_type());
 
-        $sub_jobs = array();
+        $sub_jobs = [];
 
         if ($package_list->has_children())
         {

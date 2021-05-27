@@ -29,7 +29,7 @@ class WizardHeader
      * @param string[] $stepTitles
      * @param integer $selectedStepIndex
      */
-    public function __construct($stepTitles = array(), $selectedStepIndex = 0)
+    public function __construct($stepTitles = [], $selectedStepIndex = 0)
     {
         $this->stepTitles = $stepTitles;
         $this->selectedStepIndex;

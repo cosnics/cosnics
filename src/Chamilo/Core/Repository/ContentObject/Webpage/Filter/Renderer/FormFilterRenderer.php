@@ -24,7 +24,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
         $form_validator = $this->get_form_validitor();
         $renderer = $this->get_renderer();
         
-        $group = array();
+        $group = [];
         $group[] = $form_validator->createElement(
             'select', 
             FilterData::FILTER_COMPARE, 
@@ -59,7 +59,7 @@ class FormFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\FormFi
      *
      * @see \core\repository\filter\renderer\FormFilterRenderer::set_defaults()
      */
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
         

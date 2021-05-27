@@ -92,7 +92,7 @@ class TemplateRegistrationConsulter extends DataConsulter
     {
         $templateRegistrations = $this->getTemplateRegistrations();
 
-        $filteredTemplateRegistrations = array();
+        $filteredTemplateRegistrations = [];
 
         if (!is_array($types))
         {

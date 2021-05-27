@@ -26,7 +26,7 @@ class ComplexAssessmentMultipleChoiceQuestionForm extends ComplexContentObjectIt
      */
     public function get_elements()
     {
-        $elements = array();
+        $elements = [];
         
         $elements[] = $this->createElement(
             'checkbox', 

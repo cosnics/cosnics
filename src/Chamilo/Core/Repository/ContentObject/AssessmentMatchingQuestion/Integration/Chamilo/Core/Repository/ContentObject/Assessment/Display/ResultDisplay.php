@@ -29,7 +29,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
 
         $configuration = $this->getViewerApplication()->get_configuration();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<table class="table table-bordered table-hover table-data take_assessment"' .
             ' style="border-top: 2px solid #dddddd; border-bottom: 1px solid #dddddd;">';
@@ -75,14 +75,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $glyph = new FontAwesomeGlyph(
                         'check', array('text-success'),
-                        Translation::get('Correct', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Correct', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
                 else
                 {
                     $glyph = new FontAwesomeGlyph(
                         'times', array('text-danger'),
-                        Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Wrong', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
 

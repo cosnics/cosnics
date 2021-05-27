@@ -108,14 +108,14 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->create_tabs();
 
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', Translation::get('Save', array(), Utilities::COMMON_LIBRARIES)
+            'style_submit_button', 'submit', Translation::get('Save', [], Utilities::COMMON_LIBRARIES)
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', Translation::get('Reset', array(), Utilities::COMMON_LIBRARIES)
+            'style_reset_button', 'reset', Translation::get('Reset', [], Utilities::COMMON_LIBRARIES)
         );
 
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
@@ -172,7 +172,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $this->addElement('category', $right_name);
         $this->addElement('html', '<div class="right">');
 
-        $group = array();
+        $group = [];
 
         $group[] = &$this->createElement(
             'radio', null, null, Translation::get('Nobody'), CourseManagementRights::RIGHT_OPTION_NOBODY,
@@ -196,7 +196,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         // Add the advanced element finder
         $types = new AdvancedElementFinderElementTypes();
 
-        $entities = array();
+        $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 
@@ -212,7 +212,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
 
         $this->addElement('html', '</div></div>');
 
-        $defaults = array();
+        $defaults = [];
         $defaults[$name] = CourseManagementRights::RIGHT_OPTION_NOBODY;
 
         if ($this instanceof FormLockedSettingsSupport)
@@ -325,7 +325,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             )
         );
 
-        $settings_conditions = array();
+        $settings_conditions = [];
 
         $settings_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_GLOBAL_SETTING),
@@ -384,7 +384,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     {
         $locked_settings_supported = ($this instanceof FormLockedSettingsSupport);
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-responsive">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -442,10 +442,10 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $tool_title = Translation::get('TypeName', null, $tool_namespace);
 
             $glyph = new NamespaceIdentGlyph(
-                $tool_namespace, true, false, false, IdentGlyph::SIZE_MINI, array(), $tool_title
+                $tool_namespace, true, false, false, IdentGlyph::SIZE_MINI, [], $tool_title
             );
 
-            $table_body = array();
+            $table_body = [];
             $table_body[] = '<tr>';
             $table_body[] = '<td class="column_icon">' . $glyph->render() . '</td>';
 
@@ -473,7 +473,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             if ($locked_settings_supported)
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
-                $this->addElement('checkbox', $locked_prefix . $active_element_name, '', '', array(), '1', '0');
+                $this->addElement('checkbox', $locked_prefix . $active_element_name, '', '', [], '1', '0');
                 $this->addElement('html', '</div></td>');
             }
 
@@ -492,7 +492,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             if ($locked_settings_supported)
             {
                 $this->addElement('html', '<td class="tools_column_toggle">');
-                $this->addElement('checkbox', $locked_prefix . $visible_element_name, '', '', array(), '1', '0');
+                $this->addElement('checkbox', $locked_prefix . $visible_element_name, '', '', [], '1', '0');
                 $this->addElement('html', '</div></td>');
             }
 
@@ -502,7 +502,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $this->get_renderer()->setElementTemplate('{element}', $visible_element_name);
         }
 
-        $table_footer = array();
+        $table_footer = [];
         $table_footer[] = '</tbody>';
         $table_footer[] = '</table>';
 
@@ -686,7 +686,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
             $location, $available_rights
         );
 
-        $selected_entities_per_right = array();
+        $selected_entities_per_right = [];
         foreach($selected_entities as $selected_entity)
         {
             $selected_entities_per_right[$selected_entity->get_right_id()][] = $selected_entity;

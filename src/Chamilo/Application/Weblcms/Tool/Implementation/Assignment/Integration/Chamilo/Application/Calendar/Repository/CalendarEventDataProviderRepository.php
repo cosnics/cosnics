@@ -43,7 +43,7 @@ class CalendarEventDataProviderRepository extends \Chamilo\Application\Weblcms\I
      */
     protected function getSpecificContentObjectConditions($fromDate, $toDate)
     {
-        $conditions = array();
+        $conditions = [];
         
         if (! empty($fromDate))
         {

@@ -59,7 +59,7 @@ class OpenCourseForm extends FormValidator
      */
     protected function addButtons()
     {
-        $buttons = array();
+        $buttons = [];
 
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit',
@@ -130,11 +130,11 @@ class OpenCourseForm extends FormValidator
      *
      * @param Role[] $defaultRoles
      */
-    public function setDefaultRoles($defaultRoles = array())
+    public function setDefaultRoles($defaultRoles = [])
     {
         $defaultRoleElements = new AdvancedElementFinderElements();
 
-        $glyph = new FontAwesomeGlyph('mask', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('mask', [], null, 'fas');
 
         foreach ($defaultRoles as $defaultRole)
         {

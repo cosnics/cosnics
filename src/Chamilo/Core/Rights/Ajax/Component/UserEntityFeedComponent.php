@@ -25,7 +25,7 @@ class UserEntityFeedComponent extends UsersFeedComponent
      */
     protected function getElementForUser($user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             UserEntity::ENTITY_TYPE . '_' . $user->get_id(), $glyph->getClassNamesString(), $user->get_fullname(),

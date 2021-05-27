@@ -42,7 +42,7 @@ class GetCategoriesComponent extends Manager
         $categorymenu->render($renderer, 'sitemap');
 
         $categories = $renderer->toArray();
-        $categoriesArray = array();
+        $categoriesArray = [];
 
         foreach ($categories as $id => $name)
         {

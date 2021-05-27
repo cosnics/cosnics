@@ -43,7 +43,7 @@ class AttachmentViewerComponent extends Manager
                 ContentObject::class,
                 $attachment_id);
 
-            $html = array();
+            $html = [];
 
             if ($object->is_attached_to_or_included_in($attachment_id))
             {
@@ -67,7 +67,7 @@ class AttachmentViewerComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_error_message('NoObjectSelected', null, Utilities::COMMON_LIBRARIES);

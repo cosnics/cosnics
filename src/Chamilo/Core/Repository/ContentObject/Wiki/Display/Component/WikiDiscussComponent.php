@@ -58,7 +58,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
         );
         $this->wikiPage = $this->complexWikiPage->get_ref_object();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -155,7 +155,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header($this->complexWikiPage);
 

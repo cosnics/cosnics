@@ -101,7 +101,7 @@ class ExporterComponent extends Manager
             )
         );
 
-        $users = array();
+        $users = [];
 
         foreach($user_records as $user_record)
         {
@@ -141,7 +141,7 @@ class ExporterComponent extends Manager
             )
         );
 
-        $users = array();
+        $users = [];
         foreach ($individualUsers as $individualUserRecord)
         {
             $individualUserRecordCopy = $individualUserRecord;
@@ -242,7 +242,7 @@ class ExporterComponent extends Manager
      */
     protected function determineGroupStatus($group)
     {
-        $parentIds = array();
+        $parentIds = [];
 
         $parents = $group->get_ancestors(true);
         foreach($parents as $parent)

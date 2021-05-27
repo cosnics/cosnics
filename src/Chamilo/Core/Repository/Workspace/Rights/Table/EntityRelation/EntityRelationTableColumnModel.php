@@ -49,7 +49,7 @@ class EntityRelationTableColumnModel extends DataClassTableColumnModel implement
                 $glyphName = 'lock';
         }
 
-        $glyph = new FontAwesomeGlyph($glyphName, array(), Translation::get($translationVariable), 'fas');
+        $glyph = new FontAwesomeGlyph($glyphName, [], Translation::get($translationVariable), 'fas');
 
         return $glyph->render();
     }

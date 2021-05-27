@@ -34,7 +34,7 @@ class GroupUserImportForm extends FormValidator
     {
         parent::__construct('group_user_import', self::FORM_METHOD_POST, $action);
 
-        $this->failed_elements = array();
+        $this->failed_elements = [];
         $this->build_importing_form();
     }
 
@@ -70,7 +70,7 @@ class GroupUserImportForm extends FormValidator
         $values = $this->exportValues();
         $group_users = Import::csv_to_array($_FILES['file']['tmp_name']);
 
-        $validated_groups = array();
+        $validated_groups = [];
 
         foreach ($group_users as $group_user)
         {
@@ -135,7 +135,7 @@ class GroupUserImportForm extends FormValidator
 
     public function retrieve_group_user($group_id, $user_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_GROUP_ID),
             new StaticConditionVariable($group_id)

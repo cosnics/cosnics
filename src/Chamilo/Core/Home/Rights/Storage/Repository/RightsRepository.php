@@ -206,9 +206,9 @@ class RightsRepository
 
         if (! $user->is_platform_admin())
         {
-            $conditions = array();
+            $conditions = [];
 
-            $userConditions = array();
+            $userConditions = [];
 
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable($targetEntitiesClassName, HomeTargetEntity::PROPERTY_ENTITY_TYPE),

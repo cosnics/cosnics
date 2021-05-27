@@ -56,7 +56,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(DataClass $dataClass, $context, array $methodMapping = array())
+    public function __construct(DataClass $dataClass, $context, array $methodMapping = [])
     {
         $this->set_data_class($dataClass);
         $this->set_context($context);
@@ -78,7 +78,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT), $pattern
             );
 
-            $packages = array();
+            $packages = [];
 
             $package_registrations = DataManager::retrieves(
                 Registration::class, new DataClassRetrievesParameters($condition)
@@ -102,7 +102,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @return boolean
      */
-    protected function notify_implementation_packages($dataClassListenerMethod, array $parameters = array())
+    protected function notify_implementation_packages($dataClassListenerMethod, array $parameters = [])
     {
         if (!array_key_exists($dataClassListenerMethod, $this->method_mapping))
         {
@@ -232,7 +232,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @return boolean
      */
-    public function on_get_dependencies(&$dependencies = array())
+    public function on_get_dependencies(&$dependencies = [])
     {
         return $this->notify_implementation_packages(__FUNCTION__, array(&$dependencies));
     }

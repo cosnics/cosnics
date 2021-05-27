@@ -109,7 +109,7 @@ class ElementForm extends FormValidator
      */
     protected function set_defaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[Element::PROPERTY_SCHEMA_ID] = $this->element->get_schema_id();
         $defaults[Element::PROPERTY_NAME] = $this->element->get_name();

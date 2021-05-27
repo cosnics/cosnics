@@ -79,7 +79,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
         switch ($column->get_name())
         {
             case ObjectPublicationTableColumnModel::COLUMN_STATUS :
-                $extraClasses = array();
+                $extraClasses = [];
                 $titleExtra = '';
 
                 if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
@@ -154,7 +154,7 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
             case 'published_for' :
                 if ($publication[ContentObjectPublication::PROPERTY_EMAIL_SENT])
                 {
-                    $glyph = new FontAwesomeGlyph('envelope', array(), Translation::get('SentByEmail'));
+                    $glyph = new FontAwesomeGlyph('envelope', [], Translation::get('SentByEmail'));
                     $email_icon = ' - ' . $glyph->render();
                 }
                 $data = '<div style="float: left;">' . $this->render_publication_targets($publication) . '</div>' .
@@ -206,12 +206,12 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
         catch (Exception $exception)
         {
             error_log($exception->getMessage());
-            $target_entities = array();
+            $target_entities = [];
         }
 
         $rdm = \Chamilo\Core\Rights\Storage\DataManager::getInstance();
 
-        $target_list = array();
+        $target_list = [];
 
         if (array_key_exists(0, $target_entities[0]))
         {

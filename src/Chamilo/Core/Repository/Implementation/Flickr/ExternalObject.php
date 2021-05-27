@@ -60,7 +60,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
     public function get_available_sizes_string()
     {
         $available_sizes = $this->get_available_sizes();
-        $html = array();
+        $html = [];
 
         foreach ($available_sizes as $available_size)
         {
@@ -72,7 +72,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return implode('<br />' . PHP_EOL, $html);
     }
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_URLS, self::PROPERTY_LICENSE, self::PROPERTY_TAGS)
@@ -94,80 +94,80 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_license_icon()
     {
-        $html = array();
+        $html = [];
 
         switch ($this->get_license_id())
         {
             case 0:
-                $glyph = new FontAwesomeGlyph('copyright', array(), $this->get_license_name(), 'far');
+                $glyph = new FontAwesomeGlyph('copyright', [], $this->get_license_name(), 'far');
                 $html[] = $glyph->render();
                 break;
             case 1:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-nc', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-nc', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-sa', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-sa', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 2:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-nc', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-nc', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 3:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-nc', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-nc', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-nd', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-nd', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 4:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 5:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-sa', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-sa', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 6:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-by', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-by', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-nd', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-nd', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 7:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 8:
-                $glyph = new FontAwesomeGlyph('landmark', array(), $this->get_license_name(), 'fas');
+                $glyph = new FontAwesomeGlyph('landmark', [], $this->get_license_name(), 'fas');
                 $html[] = $glyph->render();
                 break;
             case 9:
-                $glyph = new FontAwesomeGlyph('creative-commons', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
-                $glyph = new FontAwesomeGlyph('creative-commons-zero', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-zero', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             case 10:
-                $glyph = new FontAwesomeGlyph('creative-commons-pd', array(), $this->get_license_name(), 'fab');
+                $glyph = new FontAwesomeGlyph('creative-commons-pd', [], $this->get_license_name(), 'fab');
                 $html[] = $glyph->render();
                 break;
             default:
@@ -217,7 +217,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public static function get_possible_licenses()
     {
-        $licenses = array();
+        $licenses = [];
         $licenses[0] = array('id' => 0, 'name' => 'All Rights Reserved', 'url' => '');
         $licenses[1] = array(
             'id' => 1, 'name' => 'Attribution-NonCommercial-ShareAlike License',
@@ -267,7 +267,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_tags_string($include_links = true)
     {
-        $tags = array();
+        $tags = [];
         foreach ($this->get_tags() as $tag)
         {
             if ($include_links)

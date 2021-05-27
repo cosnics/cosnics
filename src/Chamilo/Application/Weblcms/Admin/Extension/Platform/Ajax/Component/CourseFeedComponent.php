@@ -73,7 +73,7 @@ class CourseFeedComponent extends AjaxManager
      */
     protected function get_element_for_course($course)
     {
-        $glyph = new FontAwesomeGlyph('chalkboard', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             CourseEntity::ENTITY_TYPE . '_' . $course->get_id(), $glyph->getClassNamesString(), $course->get_title(),
@@ -90,7 +90,7 @@ class CourseFeedComponent extends AjaxManager
     {
         $elements = new AdvancedElementFinderElements();
 
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
         $course_category = new AdvancedElementFinderElement(
@@ -133,7 +133,7 @@ class CourseFeedComponent extends AjaxManager
      */
     public function required_parameters()
     {
-        return array();
+        return [];
     }
 
     /**

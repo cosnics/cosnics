@@ -59,7 +59,7 @@ class FavouriteService
      * @param User $sourceUser
      * @param int[] $favouriteUserIds
      */
-    public function createUserFavouritesByUserIds(User $sourceUser, $favouriteUserIds = array())
+    public function createUserFavouritesByUserIds(User $sourceUser, $favouriteUserIds = [])
     {
         if (! is_array($favouriteUserIds))
         {
@@ -122,7 +122,7 @@ class FavouriteService
      *
      * @throws ObjectNotExistException
      */
-    public function deleteUserFavouritesById($userFavouriteIds = array())
+    public function deleteUserFavouritesById($userFavouriteIds = [])
     {
         if (! is_array($userFavouriteIds))
         {

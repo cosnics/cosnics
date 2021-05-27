@@ -32,7 +32,7 @@ abstract class DataClass
      *
      * @var string[]
      */
-    protected static $tableNames = array();
+    protected static $tableNames = [];
 
     /**
      * Properties of the data class object, stored in an associative array.
@@ -64,11 +64,11 @@ abstract class DataClass
      * @param string[] $defaultProperties The default properties of the data class object. Associative array.
      * @param string[] $optionalProperties The optional properties of the data class object. Associative array.
      */
-    public function __construct($defaultProperties = array(), $optionalProperties = array())
+    public function __construct($defaultProperties = [], $optionalProperties = [])
     {
         $this->set_default_properties($defaultProperties);
         $this->set_optional_properties($optionalProperties);
-        $this->set_listeners(array());
+        $this->set_listeners([]);
     }
 
     /**
@@ -90,7 +90,7 @@ abstract class DataClass
     {
         if (!isset($this->errors))
         {
-            $this->errors = array();
+            $this->errors = [];
         }
 
         $this->errors[] = $errorMsg;
@@ -270,7 +270,7 @@ abstract class DataClass
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($cacheablePropertyNames = array())
+    public static function get_cacheable_property_names($cacheablePropertyNames = [])
     {
         $cacheablePropertyNames[] = static::PROPERTY_ID;
 
@@ -308,7 +308,7 @@ abstract class DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         $extendedPropertyNames[] = static::PROPERTY_ID;
 
@@ -323,7 +323,7 @@ abstract class DataClass
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      * @throws \Exception
      */
-    protected function get_dependencies($dependencies = array())
+    protected function get_dependencies($dependencies = [])
     {
         $this->notify(DataClassListener::GET_DEPENDENCIES, array(&$dependencies));
 
@@ -337,7 +337,7 @@ abstract class DataClass
      */
     public function get_errors()
     {
-        return isset($this->errors) ? $this->errors : array();
+        return isset($this->errors) ? $this->errors : [];
     }
 
     /**
@@ -557,7 +557,7 @@ abstract class DataClass
      * @return boolean
      * @throws \Exception
      */
-    public function notify($event, $parameters = array())
+    public function notify($event, $parameters = [])
     {
         foreach ($this->listeners as $listener)
         {

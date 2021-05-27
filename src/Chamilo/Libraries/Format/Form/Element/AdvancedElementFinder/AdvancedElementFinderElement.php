@@ -68,7 +68,7 @@ class AdvancedElementFinderElement
     public function as_array()
     {
         $array = $this->properties;
-        $array[self::PROPERTY_CHILDREN] = array();
+        $array[self::PROPERTY_CHILDREN] = [];
 
         $children = $this->get_children();
 

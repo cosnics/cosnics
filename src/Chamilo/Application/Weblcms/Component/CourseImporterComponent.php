@@ -41,7 +41,7 @@ class CourseImporterComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = '<div class="clearfix"></div><br />';
@@ -55,7 +55,7 @@ class CourseImporterComponent extends Manager
 
     public function display_extra_information()
     {
-        $html = array();
+        $html = [];
         $html[] = '<p>' . Translation::get('CSVMustLookLike') . ' (' . Translation::get('MandatoryFields') . ')</p>';
         $html[] = '<blockquote>';
         $html[] = '<pre>';

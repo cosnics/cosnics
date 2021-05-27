@@ -75,7 +75,7 @@ class UserPictureProviderFactory
      */
     public function getAvailablePictureProviders()
     {
-        $pictureProviders = array();
+        $pictureProviders = [];
 
         $pictureProvidersPackages =
             $this->getRegistrationConsulter()->getRegistrationsByType(__NAMESPACE__ . '\\Provider');
@@ -88,7 +88,7 @@ class UserPictureProviderFactory
             if (class_exists($pictureProviderClass))
             {
                 $pictureProviders[$pictureProviderClass] = $this->getTranslator()->trans(
-                    'TypeName', array(), $package['context']
+                    'TypeName', [], $package['context']
                 );
             }
         }

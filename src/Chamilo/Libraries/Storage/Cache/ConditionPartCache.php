@@ -23,7 +23,7 @@ class ConditionPartCache
      */
     public function __construct()
     {
-        $this->cache = array();
+        $this->cache = [];
     }
 
     /**

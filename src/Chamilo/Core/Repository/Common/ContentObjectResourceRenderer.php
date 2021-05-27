@@ -124,7 +124,7 @@ class ContentObjectResourceRenderer
             $source = $resource->getAttribute('source');
 
             $parameters_list = $this->dom_xpath->query('@*', $resource);
-            $parameters = array();
+            $parameters = [];
             foreach ($parameters_list as $parameter)
             {
                 $parameters[$parameter->name] = $parameter->value;

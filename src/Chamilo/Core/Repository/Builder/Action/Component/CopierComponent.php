@@ -38,7 +38,7 @@ class CopierComponent extends Manager
         }
         
         $failedActions = 0;
-        $copiedComplexContentObjectItemIdentifiers = array();
+        $copiedComplexContentObjectItemIdentifiers = [];
         
         foreach ($complexContentObjectItemIdentifiers as $complexContentObjectItemIdentifier)
         {

@@ -113,7 +113,7 @@ class Publisher
      */
     public function initialize($content_object_ids)
     {
-        $html = array();
+        $html = [];
 
         if (!is_array($content_object_ids))
         {
@@ -121,7 +121,7 @@ class Publisher
         }
 
         $items_to_publish = count($content_object_ids);
-        $publications = array();
+        $publications = [];
 
         if ($items_to_publish > 0)
         {

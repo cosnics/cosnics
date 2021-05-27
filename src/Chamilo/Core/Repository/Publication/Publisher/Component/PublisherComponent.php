@@ -70,7 +70,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -110,7 +110,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
             );
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -120,7 +120,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
         $html[] = parent::render_header();
 
         $wizardHeader = new WizardHeader();
@@ -167,7 +167,7 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      *
      * @return string
      */
-    protected function getTranslation($variable, $parameters = array())
+    protected function getTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->get($variable, $parameters, Manager::context());
     }

@@ -53,7 +53,7 @@ class ContentObjectUpdaterComponent extends Manager
                     )
                 );
 
-                $params = array();
+                $params = [];
                 $params['pid'] = Request::get('pid');
                 $params['tool_action'] = Request::get('tool_action');
                 $params[\Chamilo\Core\Repository\Display\Manager::PARAM_ACTION] = Manager::ACTION_VIEW_CLO;
@@ -62,7 +62,7 @@ class ContentObjectUpdaterComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();

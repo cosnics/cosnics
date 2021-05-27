@@ -61,7 +61,7 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
             return '';
         }
 
-        $html = array();
+        $html = [];
 
         $selected = $this->isSelected($item);
 
@@ -151,7 +151,7 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
      */
     public function renderInstances(Item $item, User $user)
     {
-        $html = array();
+        $html = [];
         $instances = $this->findInstances();
 
         if ($instances->count())

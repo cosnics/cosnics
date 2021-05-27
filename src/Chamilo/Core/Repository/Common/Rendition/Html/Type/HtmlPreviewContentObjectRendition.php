@@ -15,7 +15,7 @@ class HtmlPreviewContentObjectRendition extends HtmlContentObjectRendition
     public function render()
     {
         $glyph = new FontAwesomeGlyph('image', array('fa-5x'), null, 'fas');
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="no-preview">';
         $html[] = $glyph->render();

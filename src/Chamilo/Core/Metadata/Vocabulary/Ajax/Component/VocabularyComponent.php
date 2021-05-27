@@ -34,7 +34,7 @@ class VocabularyComponent extends Manager
 
         $element = DataManager::retrieve_by_id(Element::class, $elementId);
 
-        $options = array();
+        $options = [];
         $vocabularyItems = $this->getEntityService()->getVocabularyByElementIdAndUserId($element, $this->getUser());
 
         foreach($vocabularyItems as $vocabularyItem)

@@ -36,7 +36,7 @@ class DynamicContentTab extends DynamicTab
      */
     public function body($isOnlyTab = false)
     {
-        $html = array();
+        $html = [];
         $html[] = $this->body_header();
         $html[] = $this->content;
         $html[] = $this->body_footer();

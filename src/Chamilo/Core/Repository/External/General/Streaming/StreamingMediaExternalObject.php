@@ -13,7 +13,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
     const STATUS_AVAILABLE = 1;
     const STATUS_UNAVAILABLE = 2;
 
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_URL;
         $extended_property_names[] = self::PROPERTY_DURATION;

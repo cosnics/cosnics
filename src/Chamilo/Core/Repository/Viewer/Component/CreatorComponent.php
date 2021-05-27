@@ -22,7 +22,7 @@ use Chamilo\Libraries\Translation\Translation;
 class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSelectorSupport
 {
 
-    public function run($params = array())
+    public function run($params = [])
     {
         $content_object_id = Request::get(self::PARAM_EDIT_ID);
 
@@ -70,7 +70,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
                 {
                     $type_selector_renderer = new BasicTypeSelectorRenderer($this, $type_selector);
 
-                    $html = array();
+                    $html = [];
 
                     $html[] = $this->render_header();
                     $html[] = $type_selector_renderer->render();
@@ -208,7 +208,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
 
             if (is_array($content_object))
             {
-                $content_object_ids = array();
+                $content_object_ids = [];
                 foreach ($content_object as $object)
                 {
                     $content_object_ids[] = $object->get_id();
@@ -225,7 +225,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

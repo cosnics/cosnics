@@ -56,7 +56,7 @@ class BrowserComponent extends Manager
         }
         else
         {
-            $course_sections = array();
+            $course_sections = [];
         }
         
         $this->course_truncater_form = new CourseTruncaterForm($this, $publications, $categories, $course_sections);
@@ -107,7 +107,7 @@ class BrowserComponent extends Manager
             }
             else
             {
-                $html = array();
+                $html = [];
                 
                 $html[] = $this->render_header();
                 $html[] = Display::error_message(Translation::get('SelectAItem'));
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $this->course_truncater_form->toHtml();

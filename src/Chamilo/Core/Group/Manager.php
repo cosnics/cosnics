@@ -281,7 +281,7 @@ abstract class Manager extends Application
 
     public static function retrieve_group_rel_user($user_id, $group_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),
             new StaticConditionVariable($user_id)

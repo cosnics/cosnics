@@ -44,7 +44,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             $success = $form->create_user();
             if ($success == 1)
             {
-                $parameters = array();
+                $parameters = [];
 
                 if (Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration')) == 2)
                 {
@@ -60,7 +60,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
             {
                 Request::set_get('error_message', Translation::get('UsernameNotAvailable'));
 
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -71,7 +71,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

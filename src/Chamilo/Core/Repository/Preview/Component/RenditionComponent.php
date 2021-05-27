@@ -18,7 +18,7 @@ class RenditionComponent extends Manager
             $this->getCurrentView(), 
             $this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $display->render();

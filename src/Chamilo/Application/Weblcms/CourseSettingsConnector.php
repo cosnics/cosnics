@@ -130,7 +130,7 @@ class CourseSettingsConnector
      */
     public static function get_categories()
     {
-        $categories = array();
+        $categories = [];
 
         $categories_result_set = DataManager::retrieve_course_categories_ordered_by_name();
         foreach($categories_result_set as $category)
@@ -214,7 +214,7 @@ class CourseSettingsConnector
      */
     public static function get_titulars()
     {
-        $users = array();
+        $users = [];
         $users[0] = Translation::get('TitularUnknown', null, 'Chamilo\Application\Weblcms\Course');
 
         $condition = new EqualityCondition(

@@ -46,7 +46,7 @@ class DoublesTableCellRenderer extends DataClassTableCellRenderer implements Tab
         switch ($column->get_name())
         {
             case 'Duplicates' :
-                $conditions = array();
+                $conditions = [];
 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH),

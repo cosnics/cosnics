@@ -35,7 +35,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $rights = array($rights);
         }
 
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 RightsLocationEntityRight::class,
@@ -78,7 +78,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_rights_location_entity_right($right, $entity_id, $entity_type, $location_id,
         $publication_id)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 RightsLocationEntityRight::class,
@@ -126,7 +126,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 RightsLocationEntityRight::PROPERTY_LOCATION_ID),
             new StaticConditionVariable($location->get_node_id()));
 
-        $additional_conditions = array();
+        $additional_conditions = [];
         if ($entity_type != null)
         {
             $additional_conditions[] = new EqualityCondition(

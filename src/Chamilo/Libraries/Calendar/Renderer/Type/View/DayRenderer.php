@@ -55,7 +55,7 @@ class DayRenderer extends FullTableRenderer
      * @throws \Exception
      */
     public function __construct(
-        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = array(),
+        CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime, $viewActions = [],
         $linkTarget = '', $hourStep = 1, $startHour = 0, $endHour = 24, $hideOtherHours = false
     )
     {

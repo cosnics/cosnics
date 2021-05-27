@@ -110,7 +110,7 @@ class ContentObjectService
      */
     public function getContentObjectsByTypeForWorkspace(
         $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer,
-        $offset = null, $count = null, $orderProperty = array()
+        $offset = null, $count = null, $orderProperty = []
     )
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;

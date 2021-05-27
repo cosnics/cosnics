@@ -67,7 +67,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
             return;
         }
 
-        $html = array();
+        $html = [];
 
         $selected = $this->isSelected($item);
 
@@ -180,7 +180,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
         $itemRendererFactory = $this->getItemRendererFactory();
         $workspaces = $this->findWorkspaces($user);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<ul class="dropdown-menu">';
 

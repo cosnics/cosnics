@@ -76,7 +76,7 @@ abstract class ContentObjectPublicationListRenderer
      * @param $tool_browser
      * @param $parameters
      */
-    public function __construct($tool_browser, $parameters = array())
+    public function __construct($tool_browser, $parameters = [])
     {
         $this->parameters = $parameters;
         $this->tool_browser = $tool_browser;
@@ -305,7 +305,7 @@ abstract class ContentObjectPublicationListRenderer
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('EditPublicationDetails', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('edit', array(), null, 'fas'), $this->get_url(
+                    new FontAwesomeGlyph('edit', [], null, 'fas'), $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_UPDATE_PUBLICATION,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
@@ -408,7 +408,7 @@ abstract class ContentObjectPublicationListRenderer
                 if (time() < $publication[ContentObjectPublication::PROPERTY_FROM_DATE])
                 {
                     $variable = 'PeriodBefore';
-                    $glyph = new FontAwesomeGlyph('history', array(), null, 'fas');
+                    $glyph = new FontAwesomeGlyph('history', [], null, 'fas');
                 }
                 elseif (time() > $publication[ContentObjectPublication::PROPERTY_TO_DATE])
                 {
@@ -568,7 +568,7 @@ abstract class ContentObjectPublicationListRenderer
      *
      * @see ContentObjectPublicationBrowser::get_url()
      */
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->tool_browser->get_url($parameters, $filter, $encode_entities);
     }
@@ -751,7 +751,7 @@ abstract class ContentObjectPublicationListRenderer
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_MOVE_TO_CATEGORY,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-                    ), array(), true
+                    ), [], true
                 );
 
                 $glyph = new FontAwesomeGlyph('window-restore', array('fa-flip-horizontal'), null, 'fas');
@@ -784,7 +784,7 @@ abstract class ContentObjectPublicationListRenderer
      */
     public function render_publication_actions($publication, $first, $last)
     {
-        $html = array();
+        $html = [];
         $html[] = $this->get_publication_actions($publication)->as_html();
 
         return implode($html);
@@ -846,7 +846,7 @@ abstract class ContentObjectPublicationListRenderer
         catch (Exception $exception)
         {
             error_log($exception->getMessage());
-            $target_entities = array();
+            $target_entities = [];
         }
 
         return WeblcmsRights::getInstance()->render_target_entities_as_string($target_entities);
@@ -900,7 +900,7 @@ abstract class ContentObjectPublicationListRenderer
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_TOGGLE_VISIBILITY,
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication[ContentObjectPublication::PROPERTY_ID]
-            ), array(), true
+            ), [], true
         );
         if ($publication[ContentObjectPublication::PROPERTY_HIDDEN])
         {

@@ -73,7 +73,7 @@ class MigrationCommand extends ChamiloCommand
         $this->setName('chamilo:repository:learning_path:migrate')
             ->setDescription(
                 $this->translator->trans(
-                    'LearningPathMigrationDescription', array(), 'Chamilo\Core\Repository\ContentObject\LearningPath'
+                    'LearningPathMigrationDescription', [], 'Chamilo\Core\Repository\ContentObject\LearningPath'
                 )
             );
     }

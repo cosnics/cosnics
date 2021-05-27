@@ -23,9 +23,9 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
         }
         else
         {
-            $glyph = new FontAwesomeGlyph('upload', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('upload', [], null, 'fas');
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->_getTabs();
 
@@ -36,7 +36,7 @@ class HTML_QuickForm_stylefile extends HTML_QuickForm_file
             $html[] = $glyph->render();
             $html[] = ' ';
             $html[] = Chamilo\Libraries\Translation\Translation::getInstance()->getTranslation(
-                'ChooseFileInputLabel', array(), Utilities::COMMON_LIBRARIES
+                'ChooseFileInputLabel', [], Utilities::COMMON_LIBRARIES
             );
             $html[] = ' ';
 

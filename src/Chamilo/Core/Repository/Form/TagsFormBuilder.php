@@ -39,7 +39,7 @@ class TagsFormBuilder
      * @param array $available_tags
      * @param array $default_tags
      */
-    public function build_form($available_tags, $default_tags = array())
+    public function build_form($available_tags, $default_tags = [])
     {
         $this->add_dependencies();
         
@@ -62,7 +62,7 @@ class TagsFormBuilder
         $plugin_path = Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository', true) .
              'Plugin/Bootstrap/Tagsinput/';
         
-        $dependencies = array();
+        $dependencies = [];
         
         $dependencies[] = $resource_manager->getResourceHtml($plugin_path . 'bootstrap-typeahead.js');
         
@@ -78,11 +78,11 @@ class TagsFormBuilder
      * 
      * @param array $available_tags
      */
-    protected function add_javascript($available_tags = array())
+    protected function add_javascript($available_tags = [])
     {
         $json = json_encode($available_tags);
         
-        $html = array();
+        $html = [];
         
         $html[] = '<script>';
         $html[] = '$(\'#tagsinput\').tagsinput({';
@@ -102,9 +102,9 @@ class TagsFormBuilder
      * 
      * @param array $default_tags
      */
-    protected function set_defaults($default_tags = array())
+    protected function set_defaults($default_tags = [])
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[self::PROPERTY_TAGS] = implode(',', $default_tags);
         

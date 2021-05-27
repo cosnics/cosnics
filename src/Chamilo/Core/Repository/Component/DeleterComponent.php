@@ -196,7 +196,7 @@ class DeleterComponent extends Manager
                 }
             }
 
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_ACTION] = ($permanent ? self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS : self::ACTION_BROWSE_CONTENT_OBJECTS);
 
             $this->redirect(

@@ -29,7 +29,7 @@ class AdvancedElementFinderElementType
      * @param string $method
      * @param string[] $parameters
      */
-    public function __construct($id, $name, $context, $method, $parameters = array())
+    public function __construct($id, $name, $context, $method, $parameters = [])
     {
         $this->set_id($id);
         $this->set_name($name);

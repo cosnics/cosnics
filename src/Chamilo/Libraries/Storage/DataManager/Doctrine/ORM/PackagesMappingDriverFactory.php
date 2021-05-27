@@ -66,14 +66,14 @@ class PackagesMappingDriverFactory
      *          'application/weblcms/resources/configuration/config.yml'
      *          )
      */
-    public function createMappingDriverForPackages($packages = array())
+    public function createMappingDriverForPackages($packages = [])
     {
         if (empty($packages))
         {
             throw new InvalidArgumentException('The given list of packages can not be empty');
         }
 
-        $configurations = array();
+        $configurations = [];
 
         foreach ($packages as $package => $packageConfigFile)
         {

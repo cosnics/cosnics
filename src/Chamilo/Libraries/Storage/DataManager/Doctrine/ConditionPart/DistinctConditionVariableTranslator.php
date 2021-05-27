@@ -36,11 +36,11 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
             throw new Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
         }
 
-        $strings = array();
+        $strings = [];
 
         $strings[] = 'DISTINCT';
 
-        $distinctStrings = array();
+        $distinctStrings = [];
 
         foreach ($distinctConditionVariable->getConditionVariables() as $conditionVariable)
         {

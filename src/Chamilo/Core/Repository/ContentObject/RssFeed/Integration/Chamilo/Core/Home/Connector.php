@@ -15,7 +15,7 @@ class Connector
 
     public function get_rss_feed_objects()
     {
-        $options = array();
+        $options = [];
         
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),

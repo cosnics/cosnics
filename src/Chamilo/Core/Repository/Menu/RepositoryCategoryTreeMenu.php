@@ -49,7 +49,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
      * @param $parent - the parent component
      * @param array $additional_items An array of extra tree items, added to the root.
      */
-    public function __construct(WorkspaceInterface $workspaceImplementation, $parent, $additional_items = array())
+    public function __construct(WorkspaceInterface $workspaceImplementation, $parent, $additional_items = [])
     {
         $this->workspaceImplementation = $workspaceImplementation;
         $this->parent = $parent;
@@ -109,7 +109,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_node_class($node)
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }
@@ -165,7 +165,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
      */
     protected function get_retrieve_condition($parent_node_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
@@ -185,7 +185,7 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     public function get_root_node_class()
     {
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         return $glyph->getClassNamesString();
     }

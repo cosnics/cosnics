@@ -59,7 +59,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
      *
      * @return FormValidator
      */
-    public function getPublicationForm($selectedContentObjects = array())
+    public function getPublicationForm($selectedContentObjects = [])
     {
         $mode = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLISH_MODE);
 
@@ -78,7 +78,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
 
         $course = $this->get_course();
 
-        $publications = array();
+        $publications = [];
 
         foreach ($selectedContentObjects as $contentObject)
         {

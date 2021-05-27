@@ -145,9 +145,9 @@ class CourseUserCategoryForm extends FormValidator
 
     public function get_course_type_array($course_type_id)
     {
-        $glyph = new FontAwesomeGlyph('layer-group', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('layer-group', [], null, 'fas');
 
-        $selected_course_type = array();
+        $selected_course_type = [];
         $selected_course_type['classes'] = $glyph->getClassNamesString();
 
         if ($course_type_id != 0)
@@ -174,7 +174,7 @@ class CourseUserCategoryForm extends FormValidator
     {
         $values = $this->exportValues();
         $course_type_user_category_id = $this->course_user_category->get_id();
-        $selected_course_types_array = array();
+        $selected_course_types_array = [];
 
         foreach ($values[self::COURSE_TYPE_TARGET_ELEMENTS]['course_type'] as $value)
         {
@@ -195,7 +195,7 @@ class CourseUserCategoryForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $course_user_category = $this->course_user_category;
         $defaults[CourseUserCategory::PROPERTY_TITLE] = $course_user_category->get_title();
@@ -213,7 +213,7 @@ class CourseUserCategoryForm extends FormValidator
             );
 
             $defaultCourseTypes = new AdvancedElementFinderElements();
-            $courseTypeGlyph = new FontAwesomeGlyph('layer-group', array(), null, 'fas');
+            $courseTypeGlyph = new FontAwesomeGlyph('layer-group', [], null, 'fas');
 
             foreach($courseTypeUserCategories as $type)
             {
@@ -264,20 +264,20 @@ class CourseUserCategoryForm extends FormValidator
         }
         else
         {
-            $existing_types = array();
+            $existing_types = [];
         }
 
         // get the selected course types
         $selected_types = $this->get_selected_course_types();
 
-        $existingCourseTypeIds = array();
+        $existingCourseTypeIds = [];
 
         foreach ($existing_types as $existing_type)
         {
             $existingCourseTypeIds[] = $existing_type->get_course_type_id();
         }
 
-        $selectedCourseTypeIds = array();
+        $selectedCourseTypeIds = [];
 
         foreach ($selected_types as $selected_type)
         {

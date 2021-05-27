@@ -257,7 +257,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      */
     public function get_available_browser_types()
     {
-        $browser_types = array();
+        $browser_types = [];
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_TABLE;
         $browser_types[] = ContentObjectPublicationListRenderer::TYPE_LIST;
 

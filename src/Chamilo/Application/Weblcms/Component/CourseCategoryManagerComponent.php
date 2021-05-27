@@ -59,7 +59,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
 
     public function get_category_parameters()
     {
-        return array();
+        return [];
     }
 
     public function get_category()

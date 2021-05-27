@@ -87,7 +87,7 @@ class SchemaInstance extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
         $extended_property_names[] = self::PROPERTY_ENTITY_ID;
@@ -105,7 +105,7 @@ class SchemaInstance extends DataClass
      */
     protected function get_dependencies()
     {
-        $dependencies = array();
+        $dependencies = [];
 
         $sourceConditions = new AndCondition(
             array(

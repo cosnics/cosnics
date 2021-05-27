@@ -70,7 +70,7 @@ class AttachmentViewerComponent extends Manager
             $error_message = Translation::get('WrongObjectSelected');
         }
         
-        $html = array();
+        $html = [];
         
         Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         

@@ -46,7 +46,7 @@ class Basic extends Pdf
         if ($this->show_all())
         {
             $views = $this->get_context()->get_current_view();
-            $specific_views = array();
+            $specific_views = [];
 
             foreach ($views as $key => $view)
             {
@@ -73,7 +73,7 @@ class Basic extends Pdf
                 }
                 else
                 {
-                    $data = array();
+                    $data = [];
 
                     foreach ($specific_views as $specific_view)
                     {
@@ -87,9 +87,9 @@ class Basic extends Pdf
                                 ClassnameUtilities::getInstance()->getNamespaceFromObject($block)
                             )
                         );
-                        $data[] = array();
+                        $data[] = [];
                         $data = array_merge($data, $rendered_block);
-                        $data[] = array();
+                        $data[] = [];
                     }
 
                     $file_name = Translation::get(
@@ -101,7 +101,7 @@ class Basic extends Pdf
             // No specific view was set and we are rendering everything, so render everything
             else
             {
-                $data = array();
+                $data = [];
 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {
@@ -114,9 +114,9 @@ class Basic extends Pdf
                             ClassnameUtilities::getInstance()->getClassnameFromObject($block)
                         )
                     );
-                    $data[] = array();
+                    $data[] = [];
                     $data = array_merge($data, $rendered_block);
-                    $data[] = array();
+                    $data[] = [];
                 }
 
                 $file_name = Translation::get(

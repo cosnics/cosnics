@@ -69,7 +69,7 @@ abstract class TableColumnModel extends TableComponent
         $this->set_default_order_column(static::DEFAULT_ORDER_COLUMN_INDEX);
         $this->set_default_order_direction(static::DEFAULT_ORDER_COLUMN_DIRECTION);
 
-        $this->currentOrderedColumns = array();
+        $this->currentOrderedColumns = [];
     }
 
     /**
@@ -153,7 +153,7 @@ abstract class TableColumnModel extends TableComponent
      *
      * @param integer[][] $currentOrderedColumns
      */
-    public function setCurrentOrderedColumns($currentOrderedColumns = array())
+    public function setCurrentOrderedColumns($currentOrderedColumns = [])
     {
         $this->currentOrderedColumns = $currentOrderedColumns;
     }

@@ -30,7 +30,7 @@ class Display extends QuestionDisplay
     {
         $formvalidator = $this->get_formvalidator();
 
-        $group = array();
+        $group = [];
         if ($multiple_answers)
         {
             $group[] = $formvalidator->createElement('static', null, null, ($index + 1) . '.');
@@ -48,14 +48,14 @@ class Display extends QuestionDisplay
             $group[] = $this->add_text($name, $size);
         }
 
-        $html = array();
+        $html = [];
 
         if ($this->get_configuration()->allow_hints())
         {
             if ($question_type != FillInBlanksQuestion::TYPE_SELECT)
             {
                 $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id() . '_' . $index;
-                $glyph = new FontAwesomeGlyph('magic', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('magic', [], null, 'fas');
 
                 if ($this->get_question()->get_show_inline())
                 {
@@ -77,7 +77,7 @@ class Display extends QuestionDisplay
             {
 
                 $hint_name = 'answer_hint_' . $this->get_complex_content_object_question()->get_id() . '_' . $index;
-                $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
                 if ($this->get_question()->get_show_inline())
                 {
@@ -189,7 +189,7 @@ class Display extends QuestionDisplay
             $parts = preg_split(FillInBlanksQuestionAnswer::QUESTIONS_REGEX, $answer_text);
             array_shift($parts);
 
-            $table_header = array();
+            $table_header = [];
             $table_header[] =
                 '<table class="table table-striped table-bordered table-hover table-data take_assessment">';
             $table_header[] = '<thead>';
@@ -223,14 +223,14 @@ class Display extends QuestionDisplay
                 $index ++;
             }
 
-            $table_footer = array();
+            $table_footer = [];
             $table_footer[] = '</tbody>';
             $table_footer[] = '</table>';
             $this->add_html($table_footer);
         }
         else
         {
-            $hint_table = array();
+            $hint_table = [];
             $hint_table[] =
                 '<table class="table table-striped table-bordered table-hover table-data take_assessment" id="hint_table_' .
                 $id . '" style="display:none;">';
@@ -282,7 +282,7 @@ class Display extends QuestionDisplay
 
     public function get_question_options($index, $answers)
     {
-        $result = array();
+        $result = [];
 
         foreach ($answers as $answer)
         {

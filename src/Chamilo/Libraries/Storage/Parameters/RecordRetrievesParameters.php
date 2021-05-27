@@ -32,7 +32,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      */
     public function __construct(
         DataClassProperties $dataClassProperties = null, Condition $condition = null, $count = null, $offset = null,
-        $orderBy = array(), Joins $joins = null, GroupBy $groupBy = null, Condition $havingCondition = null
+        $orderBy = [], Joins $joins = null, GroupBy $groupBy = null, Condition $havingCondition = null
     )
     {
         DataClassParameters::__construct(

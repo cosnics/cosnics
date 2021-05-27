@@ -56,11 +56,11 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
      * @param boolean $includeFakeRoot
      * @param integer[] $rootIds
      */
-    public function __construct($includeFakeRoot = true, $rootIds = array())
+    public function __construct($includeFakeRoot = true, $rootIds = [])
     {
         $this->root_ids = $rootIds;
         $this->current_node_id = $this->get_current_node_id();
-        $this->tree = array();
+        $this->tree = [];
         $this->include_fake_root = $includeFakeRoot;
 
         $this->build_tree();
@@ -113,7 +113,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
      */
     public function create_tree_fake_root_node()
     {
-        $tree_item = array();
+        $tree_item = [];
         $tree_item['title'] = $this->get_root_node_title();
         $tree_item['url'] = $this->get_node_url($this->get_root_node_id());
 
@@ -145,7 +145,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
             return $this->active_tree_node;
         }
 
-        $tree_item = array();
+        $tree_item = [];
         $tree_item['title'] = $this->get_node_title($node);
         $tree_item['safe_title'] = $this->get_node_safe_title($node);
         $tree_item['url'] = $this->get_node_url($id);
@@ -267,7 +267,7 @@ abstract class GenericTree extends HtmlMenu implements GenericTreeInterface
     public function retrieve_child_tree_items($parent_node_id)
     {
         $child_nodes = $this->get_node_children($parent_node_id);
-        $sub_tree = array();
+        $sub_tree = [];
 
         foreach($child_nodes as $child_node)
         {

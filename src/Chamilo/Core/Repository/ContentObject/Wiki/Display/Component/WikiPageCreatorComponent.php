@@ -66,7 +66,7 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
 
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

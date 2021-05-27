@@ -45,7 +45,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
 
         $this->addBreadcrumbs($translator);
 
-        $html = array();
+        $html = [];
         $html[] = $this->render_header();
         $html[] = $this->renderCommonFunctionality();
 
@@ -105,7 +105,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
     protected function renderInformationPanel(TreeNode $currentTreeNode,
         AutomaticNumberingService $automaticNumberingService, Translation $translator, PanelRenderer $panelRenderer)
     {
-        $parentTitles = array();
+        $parentTitles = [];
         foreach ($currentTreeNode->getParentNodes() as $parentNode)
         {
             $url = $this->get_url(array(self::PARAM_CHILD_ID => $parentNode->getId()));
@@ -154,7 +154,7 @@ class UserProgressComponent extends BaseReportingComponent implements TableSuppo
                 $this->learningPath,
                 $this->getCurrentTreeNode())];
 
-        $panelHtml = array();
+        $panelHtml = [];
         $panelHtml[] = '<canvas id="myChart" height="135" width="270" style="margin: auto;"></canvas>';
         $panelHtml[] = '<script>';
         $panelHtml[] = 'var ctx = document.getElementById("myChart");';

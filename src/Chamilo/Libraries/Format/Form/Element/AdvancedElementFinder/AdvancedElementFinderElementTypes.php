@@ -20,7 +20,7 @@ class AdvancedElementFinderElementTypes
      *
      * @param \Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElementType[] $types
      */
-    public function __construct($types = array())
+    public function __construct($types = [])
     {
         $this->set_types($types);
     }
@@ -65,7 +65,7 @@ class AdvancedElementFinderElementTypes
      */
     public function as_array()
     {
-        $array = array();
+        $array = [];
 
         $types = $this->get_types();
 

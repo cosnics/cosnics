@@ -201,7 +201,7 @@ class PublicationRepository
         Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
-        $data_class_properties = array();
+        $data_class_properties = [];
 
         $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
 
@@ -264,7 +264,7 @@ class PublicationRepository
                 );
                 break;
             default :
-                return array();
+                return [];
         }
 
         if ($condition instanceof Condition)
@@ -317,7 +317,7 @@ class PublicationRepository
      */
     protected function getContentObjectPublicationJoins()
     {
-        $joins = array();
+        $joins = [];
 
         $joins[] = new Join(
             ContentObject::class, new EqualityCondition(

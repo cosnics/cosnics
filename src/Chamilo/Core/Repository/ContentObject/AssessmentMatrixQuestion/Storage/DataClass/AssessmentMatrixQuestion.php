@@ -51,7 +51,7 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     public function get_matrix_type()
@@ -94,7 +94,7 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     /**

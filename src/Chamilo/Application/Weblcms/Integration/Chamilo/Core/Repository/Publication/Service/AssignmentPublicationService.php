@@ -61,7 +61,7 @@ class AssignmentPublicationService
      *
      * @return bool
      */
-    public function areContentObjectsPublished($contentObjectIds = array())
+    public function areContentObjectsPublished($contentObjectIds = [])
     {
         return $this->assignmentService->countEntryAttachmentsByAttachmentIds($contentObjectIds) > 0;
     }

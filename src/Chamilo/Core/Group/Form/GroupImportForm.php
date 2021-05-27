@@ -32,7 +32,7 @@ class GroupImportForm extends FormValidator
     {
         parent::__construct('group_import', self::FORM_METHOD_POST, $action);
 
-        $this->failed_elements = array();
+        $this->failed_elements = [];
         $this->build_importing_form();
     }
 
@@ -95,7 +95,7 @@ class GroupImportForm extends FormValidator
 
     public function parse_group($group)
     {
-        $group_array = array();
+        $group_array = [];
 
         if ($group->hasChildNodes())
         {

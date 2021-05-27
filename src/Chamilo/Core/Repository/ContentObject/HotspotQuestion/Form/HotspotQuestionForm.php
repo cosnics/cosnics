@@ -101,7 +101,7 @@ class HotspotQuestionForm extends ContentObjectForm
 
     protected function addImagePreview()
     {
-        $html = array();
+        $html = [];
 
         $contentObject = $this->get_content_object();
 
@@ -115,7 +115,7 @@ class HotspotQuestionForm extends ContentObjectForm
 
             $scaledDimensions = ImageManipulation::rescale($dimensions[0], $dimensions[1], 600, 450);
 
-            $styleProperties = array();
+            $styleProperties = [];
             $styleProperties['width'] = $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px';
             $styleProperties['height'] = $scaledDimensions[ImageManipulation::DIMENSION_HEIGHT] . 'px';
             $styleProperties['background-size'] = $scaledDimensions[ImageManipulation::DIMENSION_WIDTH] . 'px ' .
@@ -123,7 +123,7 @@ class HotspotQuestionForm extends ContentObjectForm
             $styleProperties['background-image'] =
                 'url(' . Manager::get_document_downloader_url($imageObject->get_id()) . ')';
 
-            $styleValues = array();
+            $styleValues = [];
 
             foreach ($styleProperties as $styleKey => $styleValue)
             {
@@ -159,7 +159,7 @@ class HotspotQuestionForm extends ContentObjectForm
         }
         if (!isset($_SESSION['mc_skip_options']))
         {
-            $_SESSION['mc_skip_options'] = array();
+            $_SESSION['mc_skip_options'] = [];
         }
         if (isset($_POST['add']))
         {
@@ -181,7 +181,7 @@ class HotspotQuestionForm extends ContentObjectForm
             'hidden', 'mc_number_of_options', $_SESSION['mc_number_of_options'], array('id' => 'mc_number_of_options')
         );
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_button', 'add[]', Translation::get('AddHotspotOption'), array('class' => 'add_option'), null,
             new FontAwesomeGlyph('plus')
@@ -190,12 +190,12 @@ class HotspotQuestionForm extends ContentObjectForm
 
         $renderer = $this->defaultRenderer();
 
-        $html_editor_options = array();
+        $html_editor_options = [];
         $html_editor_options['width'] = '100%';
         $html_editor_options['height'] = '65';
         $html_editor_options['collapse_toolbar'] = true;
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table table-striped table-bordered table-hover table-data">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -215,7 +215,7 @@ class HotspotQuestionForm extends ContentObjectForm
         {
             if (!in_array($option_number, $_SESSION['mc_skip_options']))
             {
-                $group = array();
+                $group = [];
                 $group[] = $this->createElement(
                     'static', null, null,
                     '<div class="colour_box" style="background-color: ' . $colours[$option_number] . ';"></div>'
@@ -233,18 +233,18 @@ class HotspotQuestionForm extends ContentObjectForm
                     'size="2"  class="input_numeric"'
                 );
 
-                $hotspot_actions = array();
+                $hotspot_actions = [];
 
                 $hotspot_actions[] = $this->createElement(
                     'style_button', 'edit[' . $option_number . ']', null,
                     array('class' => 'edit_option', 'id' => 'edit_' . $option_number), null,
-                    new FontAwesomeGlyph('pencil-alt', array(), null, 'fas')
+                    new FontAwesomeGlyph('pencil-alt', [], null, 'fas')
                 );
 
                 $hotspot_actions[] = $this->createElement(
                     'style_button', 'reset[' . $option_number . ']', null,
                     array('class' => 'reset_option', 'id' => 'reset_' . $option_number), null,
-                    new FontAwesomeGlyph('undo', array(), null, 'fas')
+                    new FontAwesomeGlyph('undo', [], null, 'fas')
                 );
 
                 if ($number_of_options - count($_SESSION['mc_skip_options']) > 1)
@@ -252,7 +252,7 @@ class HotspotQuestionForm extends ContentObjectForm
                     $hotspot_actions[] = $this->createElement(
                         'style_button', 'remove[' . $option_number . ']', null,
                         array('class' => 'remove_option', 'id' => 'remove_' . $option_number), null,
-                        new FontAwesomeGlyph('times', array(), null, 'fas')
+                        new FontAwesomeGlyph('times', [], null, 'fas')
                     );
                 }
                 else
@@ -349,7 +349,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addElement('html', '<div id="hotspot_select">');
         $this->addElement('category', Translation::get('Image'));
 
-        $html = array();
+        $html = [];
         $html[] = '<div id="hotspot_marking" style="display: none;"><div class="colour_box_label">' . Translation::get(
                 'CurrentlyMarking'
             ) . '</div><div class="colour_box"></div></div>';
@@ -393,7 +393,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->add_options();
         $this->addElement('html', '</div>');
 
-        $html = array();
+        $html = [];
         $html[] = '<div id="hotspot_marking"><div class="colour_box_label">' . Translation::get('CurrentlyMarking') .
             '</div><div class="colour_box"></div></div>';
         $html[] = '<div class="clearfix"></div>';
@@ -447,7 +447,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         if (!$this->isSubmitted())
         {
@@ -485,7 +485,7 @@ class HotspotQuestionForm extends ContentObjectForm
         parent::setDefaults($defaults);
     }
 
-    public function set_session_answers($defaults = array())
+    public function set_session_answers($defaults = [])
     {
         if (count($defaults) == 0)
         {

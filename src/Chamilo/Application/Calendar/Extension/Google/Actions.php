@@ -26,7 +26,7 @@ class Actions implements ActionsInterface
      */
     public function getPrimary(Application $application)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -36,7 +36,7 @@ class Actions implements ActionsInterface
     public function getAdditional(Application $application)
     {
         $dropdownButton = new DropdownButton(
-            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', array(), null, 'fab')
+            Translation::get('TypeName', null, __NAMESPACE__), new FontAwesomeGlyph('google', [], null, 'fab')
         );
         $dropdownButton->setDropdownClasses('dropdown-menu-right');
 
@@ -45,7 +45,7 @@ class Actions implements ActionsInterface
 
         if (!$accessToken)
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGIN;
 
@@ -58,7 +58,7 @@ class Actions implements ActionsInterface
         }
         else
         {
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = __NAMESPACE__;
             $parameters[Manager::PARAM_ACTION] = Manager::ACTION_LOGOUT;
 

@@ -22,7 +22,7 @@ class Mailer extends AbstractMailer
      * @param string $recipients
      * @param string[] $headers
      */
-    protected function send(Mail $mail, $recipients, $headers = array())
+    protected function send(Mail $mail, $recipients, $headers = [])
     {
         if (!mail($recipients, $mail->getSubject(), $mail->getMessage(), $headers))
         {
@@ -42,7 +42,7 @@ class Mailer extends AbstractMailer
      */
     public function sendMail(Mail $mail)
     {
-        $headers = array();
+        $headers = [];
 
         $cc = $mail->getCc();
         if (!empty($cc))

@@ -56,7 +56,7 @@ class ColumnRenderer
     public function render()
     {
         $column = $this->getColumn();
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="col-xs-12 col-md-' . $column->getWidth() . ' portal-column" data-tab-id="' .
             $column->getParentId() . '" data-element-id="' . $column->getId() . '" data-element-width="' .
@@ -151,7 +151,7 @@ class ColumnRenderer
      */
     public function renderEmptyColumn($columnId, $isEmpty = false, $isOnlyColumn = false)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-warning portal-column-empty ' . ($isEmpty ? 'hidden' : 'show') . '">';
         $html[] = '<div class="panel-heading">';
@@ -160,7 +160,7 @@ class ColumnRenderer
             '<a href="#" class="portal-action portal-action-column-delete ' . ($isOnlyColumn ? 'hidden' : 'show') .
             '" data-column-id="' . $columnId . '" title="' . Translation::get('Delete') . '">';
 
-        $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('times', [], null, 'fas');
 
         $html[] = $glyph->render() . '</a>';
         $html[] = '</div>';

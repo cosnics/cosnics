@@ -108,7 +108,7 @@ class ExporterComponent extends Manager
             )
         );
 
-        $users = array();
+        $users = [];
 
         foreach($user_records as $user_record)
         {
@@ -160,7 +160,7 @@ class ExporterComponent extends Manager
      */
     public function get_condition()
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($this->current_tab == SubscriptionsOverviewerComponent::TAB_COURSE_GROUPS)
         {
@@ -193,7 +193,7 @@ class ExporterComponent extends Manager
      */
     private function get_users_table($data)
     {
-        $table = array();
+        $table = [];
         $table[0][User::PROPERTY_OFFICIAL_CODE] = Translation::get(
             'OfficialCode',
             null,
@@ -227,7 +227,7 @@ class ExporterComponent extends Manager
                 $block_data[User::PROPERTY_ID],
                 $this->get_course_id()
             );
-            $course_groups_subscribed = array();
+            $course_groups_subscribed = [];
             foreach($course_groups as $course_group)
             {
                 $course_groups_subscribed[] = $course_group->get_name();

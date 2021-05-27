@@ -52,7 +52,7 @@ class ProgressCalculator
     )
     {
         /** @var TreeNode[] $nodes */
-        $nodes = array();
+        $nodes = [];
         $nodes[] = $treeNode;
         $nodes = array_merge($nodes, $treeNode->getDescendantNodes());
 
@@ -136,7 +136,7 @@ class ProgressCalculator
     {
         $previousNodes = $treeNode->getPreviousNodes();
 
-        $blockedNodes = array();
+        $blockedNodes = [];
 
         foreach ($previousNodes as $previousNode)
         {

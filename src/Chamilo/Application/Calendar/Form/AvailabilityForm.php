@@ -67,7 +67,7 @@ class AvailabilityForm extends FormValidator
 
                 foreach ($ownedCalendars as $ownedCalendar)
                 {
-                    $calendarElements = array();
+                    $calendarElements = [];
 
                     $calendarElements[] = $this->createElement(
                         'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
@@ -99,7 +99,7 @@ class AvailabilityForm extends FormValidator
             {
                 foreach ($ownedCalendars as $ownedCalendar)
                 {
-                    $calendarElements = array();
+                    $calendarElements = [];
 
                     $calendarElements[] = $this->createElement(
                         'checkbox', AvailabilityService::PROPERTY_CALENDAR . '[' . $ownedCalendar->getType() . '][' .
@@ -165,7 +165,7 @@ class AvailabilityForm extends FormValidator
 
     private function setValues()
     {
-        $defaultValues = array();
+        $defaultValues = [];
         $calendarAvailabilities = $this->getAvailabilityService()->getAvailabilitiesForUser($this->getUser());
 
         foreach ($calendarAvailabilities as $calendarAvailability)

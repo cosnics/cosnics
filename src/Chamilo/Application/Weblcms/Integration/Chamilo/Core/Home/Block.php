@@ -31,7 +31,7 @@ class Block extends BlockRenderer
                 LoginLogout::class,
                 LoginLogout::PROPERTY_DATE));
         
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 LoginLogout::class,

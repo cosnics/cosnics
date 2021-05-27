@@ -39,7 +39,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
     protected function getDescriptionHtmlEditorOptions()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = false;
@@ -54,7 +54,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
         $this->addElement('category', Translation::get('Configuration'));
 
-        $selectOptions = array();
+        $selectOptions = [];
         $selectOptions[AssessmentMatchNumericQuestion::TOLERANCE_TYPE_ABSOLUTE] = Translation::get('Absolute');
         $selectOptions[AssessmentMatchNumericQuestion::TOLERANCE_TYPE_RELATIVE] = Translation::get('Relative');
 
@@ -139,7 +139,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         $object = $this->get_content_object();
         $values = $this->exportValues();
 
-        $options = array();
+        $options = [];
 
         foreach ($values[AssessmentMatchNumericQuestionOption::PROPERTY_VALUE] as $option_id => $value)
         {
@@ -175,7 +175,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
         }
 
         Session::registerIfNotSet('match_number_of_options', 1);
-        Session::registerIfNotSet('match_skip_options', array());
+        Session::registerIfNotSet('match_skip_options', []);
 
         $extraOptionRequested = Request::post('add');
         $removedOptions = Request::post('remove');
@@ -220,7 +220,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
             $number_of_options,
             array('id' => 'match_number_of_options'));
 
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '65';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -297,7 +297,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
                 $this->addElement('html', '<td class="table-cell-action cell-stat text-right">');
 
-                $actionButtons = array();
+                $actionButtons = [];
 
                 if ($number_of_options - count($skippedOptions) > 1)
                 {
@@ -367,7 +367,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
     public function buildHintForm()
     {
-        $htmlEditorOptions = array();
+        $htmlEditorOptions = [];
         $htmlEditorOptions['width'] = '100%';
         $htmlEditorOptions['height'] = '100';
         $htmlEditorOptions['collapse_toolbar'] = true;
@@ -375,7 +375,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 
         $this->add_html_editor(
             AssessmentMatchNumericQuestion::PROPERTY_HINT,
-            Translation::get('Hint', array(), ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
+            Translation::get('Hint', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this)),
             false,
             $htmlEditorOptions);
     }

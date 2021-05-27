@@ -145,7 +145,7 @@ class ForumPostForm extends FormValidator
         }
 
         // Defining the button:
-        $buttons = array();
+        $buttons = [];
 
         switch ($this->form_type)
         {
@@ -208,7 +208,7 @@ class ForumPostForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $forump = $this->forumpost;
         if ($this->form_type == self::TYPE_EDIT)

@@ -33,7 +33,7 @@ class Display extends QuestionDisplay
 
         $type = $question->get_matrix_type();
 
-        $table_header = array();
+        $table_header = [];
         $table_header[] = '<table class="table take_assessment take_assessment_matrix_question">';
         $table_header[] = '<thead>';
         $table_header[] = '<tr>';
@@ -53,7 +53,7 @@ class Display extends QuestionDisplay
 
         foreach ($options as $i => $option)
         {
-            $group = array();
+            $group = [];
 
             $object_renderer = new ContentObjectResourceRenderer(
                 $this->get_formvalidator()->get_assessment_viewer(), $option->get_value()

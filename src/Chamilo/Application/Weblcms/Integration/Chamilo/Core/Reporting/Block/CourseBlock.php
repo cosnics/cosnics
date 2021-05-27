@@ -37,7 +37,7 @@ abstract class CourseBlock extends ReportingBlock
         
         $type = ($score >= $passingPercentage) ? 'progress-bar-success' : '';
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="progress" style="width: 150px; margin-bottom: 0;">';
         $html[] = '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
@@ -53,7 +53,7 @@ abstract class CourseBlock extends ReportingBlock
     {
         $type = $progress == 100 ? 'progress-bar-success' : '';
         
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="progress" style="width: 150px; margin-bottom: 0;">';
         $html[] = '<div class="progress-bar ' . $type . ' progress-bar-striped" role="progressbar" aria-valuenow="' .
@@ -104,7 +104,7 @@ abstract class CourseBlock extends ReportingBlock
      */
     public function count_publications_from_user_in_course($user_id, $course_id)
     {
-        $publication_conditions = array();
+        $publication_conditions = [];
         
         $publication_conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

@@ -179,7 +179,7 @@ abstract class HtmlTable extends HTML_Table
         parent::__construct(array('class' => $this->getTableClasses(), 'id' => $tableName), 0, true);
 
         $this->tableName = $tableName;
-        $this->additionalParameters = array();
+        $this->additionalParameters = [];
 
         $this->defaultOrderColumn = $defaultOrderColumn;
         $this->defaultOrderDirection = $defaultOrderDirection;
@@ -200,8 +200,8 @@ abstract class HtmlTable extends HTML_Table
         $this->sourceDataCount = null;
 
         $this->tableFormActions = null;
-        $this->contentCellAttributes = array();
-        $this->headerAttributes = array();
+        $this->contentCellAttributes = [];
+        $this->headerAttributes = [];
     }
 
     /**
@@ -218,7 +218,7 @@ abstract class HtmlTable extends HTML_Table
             return $this->getEmptyTable();
         }
 
-        $html = array();
+        $html = [];
 
         if (!$empty_table)
         {
@@ -287,7 +287,7 @@ abstract class HtmlTable extends HTML_Table
     protected function determineOrderColumn()
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_COLUMN);
-        $requestedOrderColumn = Request::get($variableName, array());
+        $requestedOrderColumn = Request::get($variableName, []);
 
         if (!is_array($requestedOrderColumn))
         {
@@ -358,7 +358,7 @@ abstract class HtmlTable extends HTML_Table
     protected function determineOrderDirection()
     {
         $variableName = $this->getParameterName(self::PARAM_ORDER_DIRECTION);
-        $requestedOrderDirection = Request::get($variableName, array());
+        $requestedOrderDirection = Request::get($variableName, []);
 
         if (!is_array($requestedOrderDirection))
         {
@@ -464,7 +464,7 @@ abstract class HtmlTable extends HTML_Table
      */
     public function getCheckboxHtml($value)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="checkbox checkbox-primary">';
         $html[] = '<input class="styled styled-primary" type="checkbox" name="' .
@@ -526,7 +526,7 @@ abstract class HtmlTable extends HTML_Table
         $this->setCellAttributes(0, 0, 'style="font-style: italic;text-align:center;" colspan=' . $cols);
         $this->setCellContents(0, 0, Translation::get('NoSearchResults', null, Utilities::COMMON_LIBRARIES));
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="table-responsive">';
         $html[] = parent::toHTML();
@@ -645,7 +645,7 @@ abstract class HtmlTable extends HTML_Table
         $pageNumber = null, $numberOfItemsPerPage = null, $orderColumn = null, $orderDirection = null
     )
     {
-        $queryParameters = array();
+        $queryParameters = [];
 
         if (!is_null($pageNumber))
         {
@@ -703,7 +703,7 @@ abstract class HtmlTable extends HTML_Table
             return $this->sourceData;
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -833,7 +833,7 @@ abstract class HtmlTable extends HTML_Table
     {
         $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getActionsButtonToolbar());
 
-        $html = array();
+        $html = [];
 
         $html[] = $buttonToolBarRenderer->render();
         $html[] = '<input type="hidden" name="' . $this->tableName . '_namespace" value="' .
@@ -924,7 +924,7 @@ abstract class HtmlTable extends HTML_Table
             $this->getTableFormActions()->has_form_actions();
         $allowNavigation = $this->allowPageSelection || $this->allowPageNavigation;
 
-        $html = array();
+        $html = [];
 
         if ($hasFormActions || $allowNavigation)
         {
@@ -980,7 +980,7 @@ abstract class HtmlTable extends HTML_Table
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
             $this->getTableFormActions()->has_form_actions();
 
-        $html = array();
+        $html = [];
 
         if ($hasFormActions)
         {

@@ -52,7 +52,7 @@ class HotspotQuestion extends ContentObject implements Versionable
         {
             return $result;
         }
-        return array();
+        return [];
     }
 
     public function get_number_of_answers()

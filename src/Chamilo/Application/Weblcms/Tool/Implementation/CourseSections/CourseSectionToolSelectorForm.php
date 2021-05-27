@@ -76,7 +76,7 @@ class CourseSectionToolSelectorForm extends FormValidator
 
         $tools = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($condition));
 
-        $active_tools = array();
+        $active_tools = [];
 
         foreach($tools as $tool)
         {
@@ -127,7 +127,7 @@ class CourseSectionToolSelectorForm extends FormValidator
             CourseSection::class,
             new DataClassRetrievesParameters($condition));
 
-        $course_section_ids = array();
+        $course_section_ids = [];
         foreach($course_sections as $course_section)
         {
             $course_section_ids[] = $course_section->get_id();
@@ -155,7 +155,7 @@ class CourseSectionToolSelectorForm extends FormValidator
         {
             // retrieve the relation if it exists for this tool (in another
             // section), so we can update it to the new tool
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseToolRelCourseSection::class,
@@ -201,10 +201,10 @@ class CourseSectionToolSelectorForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $registered_tools = $this->get_registered_tools();
-        $registered_tools_array = array();
+        $registered_tools_array = [];
         foreach($registered_tools as $registered_tool)
         {
             $registered_tools_array[] = $registered_tool->get_tool_id();

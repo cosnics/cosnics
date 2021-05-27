@@ -114,7 +114,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     private function get_delete_link_url($type, $object_id, $link_id)
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[Manager::PARAM_ACTION] =
             Manager::ACTION_DELETE_LINK;
         $parameters[Manager::PARAM_LINK_TYPE] = $type;

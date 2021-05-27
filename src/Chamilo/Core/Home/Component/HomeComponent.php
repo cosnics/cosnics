@@ -31,7 +31,7 @@ class HomeComponent extends Manager implements NoAuthenticationSupport
         $type = $this->getRequest()->query->get(self::PARAM_RENDERER_TYPE, Renderer::TYPE_BASIC);
         $rendererFactory = new Factory($type, $this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $rendererFactory->getRenderer()->render();

@@ -77,7 +77,7 @@ class ContentObjectRepository
     protected function getPersonalWorkspaceConditions(WorkspaceInterface $personalWorkspace,
         ConditionFilterRenderer $filterConditionRenderer)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
@@ -139,7 +139,7 @@ class ContentObjectRepository
     protected function getWorkspaceConditions(WorkspaceInterface $workspace,
         ConditionFilterRenderer $filterConditionRenderer)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 WorkspaceContentObjectRelation::class,
@@ -252,7 +252,7 @@ class ContentObjectRepository
 
     protected function getActiveContentObjectConditions(ConditionFilterRenderer $filterConditionRenderer)
     {
-        $conditions = array();
+        $conditions = [];
 
         $filterCondition = $filterConditionRenderer->render();
 
@@ -278,7 +278,7 @@ class ContentObjectRepository
      */
     protected function getActiveHelperTypeConditions()
     {
-        $conditions = array();
+        $conditions = [];
         $types = DataManager::get_active_helper_types();
 
         foreach ($types as $type)

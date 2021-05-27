@@ -22,7 +22,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         $question = $this->get_complex_question()->get_ref_object();
         
         $options = $question->get_options();
-        $new_answer = array();
+        $new_answer = [];
         switch ($question->get_answer_type())
         {
             case AssessmentSelectQuestion::ANSWER_TYPE_CHECKBOX :

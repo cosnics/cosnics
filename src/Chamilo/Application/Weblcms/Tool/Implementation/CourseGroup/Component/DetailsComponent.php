@@ -46,7 +46,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('SubscribeToGroup', array(), Manager::context()), '',
+                    $translator->getTranslation('SubscribeToGroup', [], Manager::context()), '',
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_SUBSCRIBE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-success'
                 )
@@ -57,7 +57,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         {
             $buttonToolbar->addItem(
                 new Button(
-                    $translator->getTranslation('UnSubscribeFromGroup', array(), Manager::context()), '',
+                    $translator->getTranslation('UnSubscribeFromGroup', [], Manager::context()), '',
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SELF_UNSUBSCRIBE)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'btn-danger'
                 )
@@ -77,7 +77,7 @@ class DetailsComponent extends TabComponent implements TableSupport
 
             $managementButtonGroup->addButton(
                 new Button(
-                    $translator->getTranslation('Delete', array(), Utilities::COMMON_LIBRARIES),
+                    $translator->getTranslation('Delete', [], Utilities::COMMON_LIBRARIES),
                     new FontAwesomeGlyph('times'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_DELETE_COURSE_GROUP)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, $translator->getTranslation(
@@ -92,7 +92,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         if ($courseGroup->is_member($this->getUser()) || $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             $navigateToOptions = new DropdownButton(
-                $translator->getTranslation('NavigateTo', array(), Manager::context())
+                $translator->getTranslation('NavigateTo', [], Manager::context())
             );
 
             if ($navigateToOptions->hasButtons())
@@ -179,7 +179,7 @@ class DetailsComponent extends TabComponent implements TableSupport
      */
     protected function renderDetails($currentCourseGroup)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="container-fluid">';
 
@@ -233,7 +233,7 @@ class DetailsComponent extends TabComponent implements TableSupport
      */
     protected function renderIntegrations(CourseGroup $courseGroup)
     {
-        $html = array();
+        $html = [];
 
         $integrationLinksButtonToolbar = new ButtonToolBar();
         $renderer = new ButtonToolBarRenderer($integrationLinksButtonToolbar);
@@ -271,7 +271,7 @@ class DetailsComponent extends TabComponent implements TableSupport
         $currentCourseGroup = $this->getCurrentCourseGroup();
         $this->handleUnsubscribeAction($currentCourseGroup);
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderDetails($currentCourseGroup);
         $html[] = $this->renderIntegrations($currentCourseGroup);
@@ -295,7 +295,7 @@ class DetailsComponent extends TabComponent implements TableSupport
 
         $table = new SubscribedUserTable($this);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="tab-content-header">';
         $html[] = '<h5>' . Translation::getInstance()->getTranslation('Users', null, Manager::context()) . '</h5>';

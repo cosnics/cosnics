@@ -29,7 +29,7 @@ class CalendarRendererProviderRepository
      */
     public function findVisibilitiesByUserIdentifier($userIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Visibility::class, Visibility::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier)
@@ -49,7 +49,7 @@ class CalendarRendererProviderRepository
      */
     public function findVisibilityBySourceAndUserIdentifier($source, $userIdentifier)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Visibility::class, Visibility::PROPERTY_USER_ID),
             new StaticConditionVariable($userIdentifier)

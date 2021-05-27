@@ -29,7 +29,7 @@ class GroupBy implements Hashable
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function __construct($conditionVariables = array())
+    public function __construct($conditionVariables = [])
     {
         $this->conditionVariables = (is_array($conditionVariables) ? $conditionVariables : func_get_args());
     }
@@ -59,7 +59,7 @@ class GroupBy implements Hashable
      */
     public function getHashParts(): array
     {
-        $hashes = array();
+        $hashes = [];
 
         foreach ($this->get() as $conditionVariable)
         {

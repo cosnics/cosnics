@@ -15,7 +15,7 @@ class TemplateConfiguration
 
     private $storage;
 
-    public function __construct($storage = array())
+    public function __construct($storage = [])
     {
         $this->storage = $storage;
     }

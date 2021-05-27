@@ -43,7 +43,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             $publication_id, $course_id
         );
 
-        $user_question_attempts = array();
+        $user_question_attempts = [];
 
         $question_attempts = $this->get_question_attempts_from_publication_and_question($publication_id, $question_id);
         foreach($question_attempts as $question_attempt)
@@ -140,7 +140,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
             $max = $this->get_score_bar($max / $weight * 100);
         }
 
-        $reporting_info = array();
+        $reporting_info = [];
 
         $reporting_info[Translation::get('Name')] = $user->get_fullname();
         $reporting_info[Translation::get('OfficialCode')] = $user->get_official_code();

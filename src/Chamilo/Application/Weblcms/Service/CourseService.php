@@ -194,7 +194,7 @@ class CourseService implements CourseServiceInterface
         $coursesWhereUserIsTeacher = $this->getCoursesWhereUserIsTeacher($user);
         $coursesWhereUserIsStudent = $this->getCoursesWhereUserIsStudent($user);
 
-        $visibleCoursesWhereUserIsStudent = array();
+        $visibleCoursesWhereUserIsStudent = [];
 
         foreach ($coursesWhereUserIsStudent as $courseWhereUserIsStudent)
         {
@@ -251,7 +251,7 @@ class CourseService implements CourseServiceInterface
      *
      * @return \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course[]
      */
-    public function getCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = array())
+    public function getCoursesWhereAtLeastOneGroupIsDirectlySubscribed(array $groupIdentifiers = [])
     {
         return $this->courseRepository->findCoursesWhereAtLeastOneGroupIsDirectlySubscribed($groupIdentifiers);
     }
@@ -262,7 +262,7 @@ class CourseService implements CourseServiceInterface
      *
      * @return bool
      */
-    public function isAtLeastOneGroupDirectlySubscribed(Course $course, array $groupIdentifiers = array())
+    public function isAtLeastOneGroupDirectlySubscribed(Course $course, array $groupIdentifiers = [])
     {
         return $this->courseRepository->countCourseEntityRelationsByCourseAndEntityTypeAndIdentifiers(
                 $course, CourseEntityRelation::ENTITY_TYPE_GROUP, $groupIdentifiers
@@ -426,7 +426,7 @@ class CourseService implements CourseServiceInterface
      */
     public function getToolsFromCourseForUser(User $user, Course $course)
     {
-        $userTools = array();
+        $userTools = [];
 
         $toolRegistrations = $this->courseRepository->findToolRegistrations();
         foreach ($toolRegistrations as $toolRegistration)
@@ -495,7 +495,7 @@ class CourseService implements CourseServiceInterface
      */
     protected function getUsersFromCourseByStatus(Course $course, $status = CourseEntityRelation::STATUS_STUDENT)
     {
-        $userIds = array();
+        $userIds = [];
 
         $directlySubscribedUsers = $this->courseRepository->findUsersByStatus($course->getId(), $status);
         foreach($directlySubscribedUsers as $directlySubscribedUser)
@@ -517,7 +517,7 @@ class CourseService implements CourseServiceInterface
 
         if (count($userIds) == 0)
         {
-            return array();
+            return [];
         }
 
         return $this->getUserService()->findUsers(

@@ -10,7 +10,7 @@ class PersonalInstance extends Instance
 {
     const PROPERTY_USER_ID = 'user_id';
 
-    public static function get_additional_property_names($extended_property_names = array())
+    public static function get_additional_property_names($extended_property_names = [])
     {
         return array(self::PROPERTY_USER_ID);
     }

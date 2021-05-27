@@ -161,7 +161,7 @@ class AvailabilityService
      */
     public function getAvailableCalendars(User $user)
     {
-        $availableCalendars = array();
+        $availableCalendars = [];
 
         $registrations = Configuration::getInstance()->getIntegrationRegistrations(
             Manager::package()
@@ -227,7 +227,7 @@ class AvailabilityService
      *
      * @return \Chamilo\Libraries\Architecture\ActionResult
      */
-    public function setAvailabilities(User $user, $calendarAvailabilityTypes = array())
+    public function setAvailabilities(User $user, $calendarAvailabilityTypes = [])
     {
         $failedActions = 0;
 

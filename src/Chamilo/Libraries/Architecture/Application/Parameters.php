@@ -29,7 +29,7 @@ class Parameters
      */
     private function &determine_level(Application $application)
     {
-        $application_hashes = array();
+        $application_hashes = [];
         $application_hashes[] = spl_object_hash($application);
 
         while ($application->get_application() instanceof Application)
@@ -47,8 +47,8 @@ class Parameters
             if (!isset($parameters[$application_hash]) || !isset($parameters[$application_hash]['parameters']))
             {
 
-                $parameters[$application_hash] = array();
-                $parameters[$application_hash]['parameters'] = array();
+                $parameters[$application_hash] = [];
+                $parameters[$application_hash]['parameters'] = [];
             }
             $parameters = &$parameters[$application_hash];
         }
@@ -97,7 +97,7 @@ class Parameters
      */
     public function get_parameters(Application $application)
     {
-        $application_hashes = array();
+        $application_hashes = [];
         $application_hashes[] = spl_object_hash($application);
 
         while ($application->get_application() instanceof Application)
@@ -108,7 +108,7 @@ class Parameters
 
         $application_hashes = array_reverse($application_hashes);
 
-        $heap = array();
+        $heap = [];
         $parameters = &$this->parameters;
 
         foreach ($application_hashes as $application_hash)

@@ -34,7 +34,7 @@ class UtilitiesComponent extends Manager
         $type = $this->getPostDataValue(self::PARAM_TYPE);
         $request = $this->getRequest();
 
-        $properties = array();
+        $properties = [];
 
         switch ($type)
         {

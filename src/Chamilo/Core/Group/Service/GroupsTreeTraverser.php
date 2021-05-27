@@ -33,42 +33,42 @@ class GroupsTreeTraverser
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    protected $userSubscribedGroups = array();
+    protected $userSubscribedGroups = [];
 
     /**
      * @var integer[][]
      */
-    protected $userSubscribedGroupIdentifiers = array();
+    protected $userSubscribedGroupIdentifiers = [];
 
     /**
      * @var integer[]
      */
-    protected $subGroupsCount = array();
+    protected $subGroupsCount = [];
 
     /**
      * @var integer[][]
      */
-    protected $groupUserIdentifiers = array();
+    protected $groupUserIdentifiers = [];
 
     /**
      * @var integer[][]
      */
-    protected $subGroupIdentifiers = array();
+    protected $subGroupIdentifiers = [];
 
     /**
      * @var integer[][]
      */
-    protected $parentGroupIdentifiers = array();
+    protected $parentGroupIdentifiers = [];
 
     /**
      * @var integer[]
      */
-    protected $groupUsersCount = array();
+    protected $groupUsersCount = [];
 
     /**
      * @var \Chamilo\Core\Group\Storage\DataClass\Group[][]
      */
-    protected $subGroups = array();
+    protected $subGroups = [];
 
     /**
      * @param \Chamilo\Core\Group\Storage\Repository\GroupRepository $groupRepository
@@ -141,7 +141,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $groupIdentifiers = array();
+                $groupIdentifiers = [];
             }
 
             $groupIdentifiers[] = $group->getId();
@@ -175,7 +175,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $this->userSubscribedGroupIdentifiers[$userIdentifier] = array();
+                $this->userSubscribedGroupIdentifiers[$userIdentifier] = [];
             }
         }
 
@@ -239,7 +239,7 @@ class GroupsTreeTraverser
 
             if (!is_array($parentGroupIdentifiers))
             {
-                $parentGroupIdentifiers = array();
+                $parentGroupIdentifiers = [];
             }
 
             $this->parentGroupIdentifiers[$cacheKey] = $parentGroupIdentifiers;
@@ -276,7 +276,7 @@ class GroupsTreeTraverser
 
             if (!is_array($subGroupIdentifiers))
             {
-                $subGroupIdentifiers = array();
+                $subGroupIdentifiers = [];
             }
 
             $this->subGroupIdentifiers[$cacheKey] = $subGroupIdentifiers;
@@ -327,7 +327,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $groupIdentifiers = array();
+                $groupIdentifiers = [];
             }
 
             $groupIdentifiers[] = $group->getId();
@@ -349,7 +349,7 @@ class GroupsTreeTraverser
     {
         $parentGroups = $this->findParentGroupsForGroup($group, $includeSelf);
 
-        $names = array();
+        $names = [];
 
         foreach ($parentGroups as $parentGroup)
         {

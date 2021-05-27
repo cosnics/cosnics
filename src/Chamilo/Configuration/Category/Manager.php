@@ -107,7 +107,7 @@ abstract class Manager extends Application
 
     public function get_additional_parameters()
     {
-        $parameters = array();
+        $parameters = [];
         if (! is_null(Request::get(Manager::PARAM_CATEGORY_ID)))
         {
             $parameters[] = Manager::PARAM_CATEGORY_ID;

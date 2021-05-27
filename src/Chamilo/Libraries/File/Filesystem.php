@@ -135,7 +135,7 @@ class Filesystem
         }
         else
         {
-            $uncreated_directories = array();
+            $uncreated_directories = [];
         }
 
         foreach ($uncreated_directories as $path)
@@ -401,7 +401,7 @@ class Filesystem
         $path, $type = Filesystem::LIST_FILES_AND_DIRECTORIES, $recursive = true
     )
     {
-        $result = array();
+        $result = [];
 
         if (!file_exists($path))
         {
@@ -485,7 +485,7 @@ class Filesystem
      */
     protected static function get_uncreated_directories($path)
     {
-        $uncreatedDirectories = array();
+        $uncreatedDirectories = [];
 
         while (!is_dir($path))
         {

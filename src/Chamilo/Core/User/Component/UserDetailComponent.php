@@ -59,7 +59,7 @@ class UserDetailComponent extends Manager
             );
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($user);
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->buttonToolbarRenderer->render() . '<br />';

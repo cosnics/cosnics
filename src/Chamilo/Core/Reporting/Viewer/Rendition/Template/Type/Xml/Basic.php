@@ -21,7 +21,7 @@ class Basic extends Xml
         if ($this->show_all())
         {
             $views = $this->get_context()->get_current_view();
-            $specific_views = array();
+            $specific_views = [];
             
             foreach ($views as $key => $view)
             {
@@ -51,7 +51,7 @@ class Basic extends Xml
                 }
                 else
                 {
-                    $data = array();
+                    $data = [];
                     
                     foreach ($specific_views as $specific_view)
                     {
@@ -73,7 +73,7 @@ class Basic extends Xml
             // No specific view was set and we are rendering everything, so render everything
             else
             {
-                $data = array();
+                $data = [];
                 
                 foreach ($this->get_template()->get_blocks() as $key => $block)
                 {

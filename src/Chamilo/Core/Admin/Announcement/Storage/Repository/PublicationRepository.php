@@ -76,7 +76,7 @@ class PublicationRepository
         $condition, array $publicationIdentifiers
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($condition instanceof Condition)
         {
@@ -107,18 +107,18 @@ class PublicationRepository
             Publication::class, Publication::PROPERTY_TO_DATE
         );
 
-        $timeConditions = array();
+        $timeConditions = [];
         $timeConditions[] = new EqualityCondition(
             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_HIDDEN),
             new StaticConditionVariable(0)
         );
 
-        $foreverConditions = array();
+        $foreverConditions = [];
         $foreverConditions[] = new EqualityCondition($fromDateVariables, new StaticConditionVariable(0));
         $foreverConditions[] = new EqualityCondition($toDateVariable, new StaticConditionVariable(0));
         $foreverCondition = new AndCondition($foreverConditions);
 
-        $betweenConditions = array();
+        $betweenConditions = [];
         $betweenConditions[] = new ComparisonCondition(
             $fromDateVariables, ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
         );
@@ -236,7 +236,7 @@ class PublicationRepository
         Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
-        $data_class_properties = array();
+        $data_class_properties = [];
 
         $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
 
@@ -284,7 +284,7 @@ class PublicationRepository
         array $orderProperties = null
     )
     {
-        $conditions = array();
+        $conditions = [];
 
         if ($condition instanceof Condition)
         {
@@ -330,7 +330,7 @@ class PublicationRepository
                 );
                 break;
             default :
-                return array();
+                return [];
         }
 
         if ($condition instanceof Condition)
@@ -383,7 +383,7 @@ class PublicationRepository
      */
     protected function getContentObjectPublicationJoins()
     {
-        $joins = array();
+        $joins = [];
 
         $joins[] = new Join(
             ContentObject::class, new EqualityCondition(

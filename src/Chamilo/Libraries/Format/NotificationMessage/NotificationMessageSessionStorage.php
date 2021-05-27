@@ -31,9 +31,9 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
      */
     public function retrieve()
     {
-        $notificationMessagesAsArray = Session::get(self::PARAM_NOTIFICATION_MESSAGES, array());
+        $notificationMessagesAsArray = Session::get(self::PARAM_NOTIFICATION_MESSAGES, []);
 
-        $notificationMessages = array();
+        $notificationMessages = [];
 
         foreach ($notificationMessagesAsArray as $notificationMessageArray)
         {
@@ -51,9 +51,9 @@ class NotificationMessageSessionStorage implements NotificationMessageStorageInt
      *
      * @param \Chamilo\Libraries\Format\NotificationMessage\NotificationMessage[] $notificationMessages
      */
-    public function store($notificationMessages = array())
+    public function store($notificationMessages = [])
     {
-        $notificationMessagesAsArray = array();
+        $notificationMessagesAsArray = [];
 
         foreach ($notificationMessages as $notificationMessage)
         {

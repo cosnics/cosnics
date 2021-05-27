@@ -29,7 +29,7 @@ class Dependencies
      *
      * @param \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[] $dependencies
      */
-    public function __construct($dependencies = array())
+    public function __construct($dependencies = [])
     {
         $this->set_dependencies($dependencies);
 
@@ -78,7 +78,7 @@ class Dependencies
      */
     public function as_html()
     {
-        $html = array();
+        $html = [];
 
         foreach ($this->get_dependencies() as $dependency)
         {
@@ -95,7 +95,7 @@ class Dependencies
     public function check()
     {
         $success = 0;
-        $messages = array();
+        $messages = [];
 
         foreach ($this->get_dependencies() as $dependency)
         {

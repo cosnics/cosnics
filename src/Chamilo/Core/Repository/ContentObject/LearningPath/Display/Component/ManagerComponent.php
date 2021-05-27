@@ -32,7 +32,7 @@ class ManagerComponent extends BaseHtmlTreeComponent implements TableSupport
         
         $table = new TreeNodeTable($this);
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->render_header();
         $html[] = $table->as_html();

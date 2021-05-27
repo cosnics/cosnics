@@ -30,7 +30,7 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
         $question_id = $this->get_complex_content_object_question()->get_id();
         $answers = $question->get_answers();
         $configuration = $this->getViewerApplication()->get_configuration();
-        $html = array();
+        $html = [];
 
         $image_object = $question->get_image_object();
         $dimensions = getimagesize($image_object->get_full_path());
@@ -106,14 +106,14 @@ class ResultDisplay extends AssessmentQuestionResultDisplay
                 {
                     $glyph = new FontAwesomeGlyph(
                         'check', array('text-success'),
-                        Translation::get('Correct', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Correct', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
                 else
                 {
                     $glyph = new FontAwesomeGlyph(
                         'times', array('text-danger'),
-                        Translation::get('Wrong', array(), 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
+                        Translation::get('Wrong', [], 'Chamilo\Core\Repository\ContentObject\Assessment'), 'fas'
                     );
                 }
 

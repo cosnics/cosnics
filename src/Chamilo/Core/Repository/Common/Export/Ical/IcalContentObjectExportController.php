@@ -78,7 +78,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
 //        timezoneHandler::createTimezone(
 //            $this->get_calendar(),
 //            date_default_timezone_get(),
-//            array(),
+//            [],
 //            1,
 //            2145916799);
     }

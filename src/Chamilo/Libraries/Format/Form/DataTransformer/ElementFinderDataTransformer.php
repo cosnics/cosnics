@@ -40,7 +40,7 @@ class ElementFinderDataTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value)
     {
-        $results = array();
+        $results = [];
 
         if (is_null($value))
         {

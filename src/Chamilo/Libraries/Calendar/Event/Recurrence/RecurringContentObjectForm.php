@@ -37,7 +37,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         ), false, array('style' => 'display: none;')
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group btn-group-justified frequency-' . $type . '-option">';
         $html[] = '<a class="btn btn-default" data-option="frequency-' . $type .
@@ -62,7 +62,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     {
         $this->addElement('html', '<div class="form-row col-md-12 col-lg-8">');
 
-        $attributes = array();
+        $attributes = [];
         $attributes['style'] = 'display: none;';
 
         if ($multiple)
@@ -71,7 +71,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         }
 
         $frequencyClass = 'frequency-' . $type . '-byday';
-        $elementNameParts = array();
+        $elementNameParts = [];
 
         $elementNameParts[] = $type;
         $elementNameParts[] = '[' . RecurringContentObject::PROPERTY_BYDAY . ']';
@@ -86,7 +86,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             implode('', $elementNameParts), null, RecurringContentObject::get_byday_options(), false, $attributes
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group btn-group-justified ' . $frequencyClass . '">';
 
@@ -142,7 +142,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addByMonthDayPropertiesToForm(string $type)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row frequency-' . $type . '-bymonthday">';
 
@@ -156,7 +156,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             array('multiple' => 'multiple', 'style' => 'display: none;')
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group btn-group-justified">';
         $html[] = '<a class="btn btn-default" data-value="1">1</a>';
@@ -214,7 +214,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addDailyFrequencyPropertiesToForm()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row frequency-option frequency-daily">';
         $html[] = '<div class="form-row col-sm-12">';
@@ -228,7 +228,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         );
         $html[] = '<input name="daily[frequency_interval]" type="text" class="form-control">';
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="input-group-addon">dagen</div>';
         $html[] = '</div>';
@@ -246,7 +246,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addFrequencyIntervalPropertiesToForm(string $type, string $addonLabel)
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="form-row col-md-12 col-lg-4">';
         $html[] = '<div class="input-group">';
@@ -256,7 +256,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->add_textfield($type . '[' . RecurringContentObject::PROPERTY_FREQUENCY_INTERVAL . ']', null, false);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="input-group-addon">' . $addonLabel . '</div>';
         $html[] = '</div>';
@@ -270,7 +270,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addFrequencyPropertiesToForm()
     {
-        $html = array();
+        $html = [];
 
         // Container START
         $html[] = '<div class="form-row row">';
@@ -290,7 +290,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             RecurringContentObject::PROPERTY_FREQUENCY, null, RecurringContentObject::get_frequency_options(), false
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -304,7 +304,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addFrequencyRangePropertiesToForm();
 
         // Container END
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
 
@@ -341,7 +341,7 @@ class RecurringContentObjectForm extends ContentObjectForm
     {
         $translator = $this->getTranslator();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
 
@@ -351,20 +351,20 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->add_select(
             self::PARAM_RANGE, null, array(
-            1 => $translator->trans('RecurrenceRangeNoEndDate', array(), 'Chamilo\Libraries\Calendar'),
-            2 => $translator->trans('RecurrenceRangeCreate', array(), 'Chamilo\Libraries\Calendar'),
-            3 => $translator->trans('RecurrenceRangeUntil', array(), 'Chamilo\Libraries\Calendar')
+            1 => $translator->trans('RecurrenceRangeNoEndDate', [], 'Chamilo\Libraries\Calendar'),
+            2 => $translator->trans('RecurrenceRangeCreate', [], 'Chamilo\Libraries\Calendar'),
+            3 => $translator->trans('RecurrenceRangeUntil', [], 'Chamilo\Libraries\Calendar')
         ), false, array('style' => 'display: none;')
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="btn-group btn-group-justified frequency-range">';
         $html[] = '<a class="btn btn-default" data-value="1" data-range="frequency-range-none">' .
-            $translator->trans('RecurrenceRangeNoEndDate', array(), 'Chamilo\Libraries\Calendar') . '</a>';
+            $translator->trans('RecurrenceRangeNoEndDate', [], 'Chamilo\Libraries\Calendar') . '</a>';
         $html[] = '<a class="btn btn-default" data-value="2" data-range="frequency-range-count">Beperkt aantal</a>';
         $html[] = '<a class="btn btn-default" data-value="3" data-range="frequency-range-until">' .
-            $translator->trans('RecurrenceRangeUntil', array(), 'Chamilo\Libraries\Calendar') . '</a>';
+            $translator->trans('RecurrenceRangeUntil', [], 'Chamilo\Libraries\Calendar') . '</a>';
         $html[] = '</div>';
         $html[] = '</div>';
 
@@ -380,7 +380,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->add_textfield(RecurringContentObject::PROPERTY_FREQUENCY_COUNT, null, false);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="input-group-addon">afspraken</div>';
         $html[] = '</div>';
@@ -399,7 +399,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             array('class' => RecurringContentObject::PROPERTY_UNTIL), true
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
 
@@ -433,7 +433,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      */
     protected function addWeeklyFrequencyPropertiesToForm()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="frequency-option frequency-weekly">';
         $html[] = '<div class="row">';
@@ -444,7 +444,7 @@ class RecurringContentObjectForm extends ContentObjectForm
 
         $this->addByDayPropertiesToForm(self::PARAM_WEEKLY, '', 'Op', true);
 
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -469,7 +469,7 @@ class RecurringContentObjectForm extends ContentObjectForm
         $this->addByDayRankAndByDayPropertiesToForm(self::PARAM_YEARLY);
         $this->addByMonthDayPropertiesToForm(self::PARAM_YEARLY);
 
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="row">';
         $html[] = '<div class="form-group col-md-12 col-lg-12">';
@@ -483,7 +483,7 @@ class RecurringContentObjectForm extends ContentObjectForm
             RecurringContentObject::get_bymonth_options()
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = '</div>';
         $html[] = '</div>';
@@ -500,7 +500,7 @@ class RecurringContentObjectForm extends ContentObjectForm
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = array(), $filter = null)
+    public function setDefaults($defaults = [], $filter = null)
     {
         /**
          * @var \Chamilo\Libraries\Calendar\Event\Recurrence\RecurringContentObject $recurringContentObject
@@ -727,7 +727,7 @@ class RecurringContentObjectForm extends ContentObjectForm
                     break;
                 case 2 :
                     $frequencyName = self::PARAM_WEEKLY;
-                    $bydays = array();
+                    $bydays = [];
                     foreach ($values[$frequencyName][RecurringContentObject::PROPERTY_BYDAY] as $byday)
                     {
                         $bydays[] = RecurringContentObject::get_day_ical_format($byday);

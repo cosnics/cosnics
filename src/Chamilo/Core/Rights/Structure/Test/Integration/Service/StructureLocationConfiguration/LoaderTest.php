@@ -38,6 +38,6 @@ class LoaderTest extends ChamiloTestCase
     public function testLoadConfigurationWithoutValidConfiguration()
     {
         $config = $this->configurationLoader->loadConfiguration(array('Chamilo\Core\NotExistingPackage'));
-        $this->assertEquals(array(), $config);
+        $this->assertEquals([], $config);
     }
 }

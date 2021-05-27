@@ -47,7 +47,7 @@ class Redirect
      * @param string $anchor
      */
     public function __construct(
-        $parameters = array(), $filterParameters = array(), $encodeEntities = false, $anchor = null
+        $parameters = [], $filterParameters = [], $encodeEntities = false, $anchor = null
     )
     {
         $this->parameters = $parameters;
@@ -95,7 +95,7 @@ class Redirect
         }
         $host = $_SERVER['HTTP_HOST'];
 
-        $parts = array();
+        $parts = [];
 
         $parts[] = $protocol;
         $parts[] = $host;
@@ -169,7 +169,7 @@ class Redirect
         }
 
         $filterParameters = is_array($filterParameters) ? $filterParameters : array($filterParameters);
-        $filteredParameters = array();
+        $filteredParameters = [];
 
         foreach ($parameters as $key => $value)
         {

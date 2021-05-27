@@ -76,7 +76,7 @@ class CreatorComponent extends Manager
                 }
             }
             
-            $parameters = array();
+            $parameters = [];
             $parameters[self::PARAM_ACTION] = self::ACTION_BROWSE;
             
             $this->redirect(
@@ -89,7 +89,7 @@ class CreatorComponent extends Manager
         }
         else
         {
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $form->toHtml();

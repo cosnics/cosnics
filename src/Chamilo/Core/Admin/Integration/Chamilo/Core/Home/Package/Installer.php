@@ -18,7 +18,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
 
     public function extra()
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 Element::class,

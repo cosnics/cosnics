@@ -56,7 +56,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         $content = $this->getContent();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $content;
@@ -118,7 +118,7 @@ class BrowserComponent extends Manager implements TableSupport
             new Breadcrumb($this->get_url(array(Manager::PARAM_USER_ID => $userId)), $breadcrumbTitle)
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = $table->as_html();
@@ -135,7 +135,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     public function get_table_condition($table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         $searchCondition = $this->buttonToolbarRenderer->getConditions(
             array(new PropertyConditionVariable(Vocabulary::class, Vocabulary::PROPERTY_VALUE))

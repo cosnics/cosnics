@@ -62,7 +62,7 @@ class Rights extends RightsUtil
     {
         if (!isset(self::$authorized_users[$user->get_id()]))
         {
-            $location_entity_right_ids = array();
+            $location_entity_right_ids = [];
             $user_group_ids = $user->get_groups(true);
 
             foreach ($user_group_ids as $user_group_id)
@@ -85,7 +85,7 @@ class Rights extends RightsUtil
                 }
             }
 
-            $user_ids = array();
+            $user_ids = [];
 
             if (count($location_entity_right_ids) > 0)
             {
@@ -208,7 +208,7 @@ class Rights extends RightsUtil
     {
         if (!isset(self::$target_users[$user->get_id()]))
         {
-            $allowed_groups = array();
+            $allowed_groups = [];
 
             $location_entity_right = $this->get_request_location_entity_right(
                 $user->get_id(), UserEntity::ENTITY_TYPE
@@ -263,7 +263,7 @@ class Rights extends RightsUtil
                 }
             }
 
-            self::$target_users[$user->get_id()] = array();
+            self::$target_users[$user->get_id()] = [];
 
             $this->getDataClassRepositoryCache()->truncate(Group::class);
 
@@ -311,7 +311,7 @@ class Rights extends RightsUtil
 
     function request_is_allowed()
     {
-        $entities = array();
+        $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
         $entities[PlatformGroupEntity::ENTITY_TYPE] = new PlatformGroupEntity();
 

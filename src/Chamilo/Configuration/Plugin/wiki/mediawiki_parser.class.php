@@ -28,7 +28,7 @@ function wfUrlProtocols()
     // with LocalSettings files from 1.5
     if (is_array($wgUrlProtocols))
     {
-        $protocols = array();
+        $protocols = [];
         foreach ($wgUrlProtocols as $protocol)
             $protocols[] = preg_quote($protocol, '/');
         
@@ -69,7 +69,7 @@ function wfCgiToArray($query)
         $query = substr($query, 1);
     }
     $bits = explode('&', $query);
-    $ret = array();
+    $ret = [];
     foreach ($bits as $bit)
     {
         if ($bit === '')
@@ -282,11 +282,11 @@ class MediawikiParser
     {
         $lines = MediawikiStringUtils::explode("\n", $text);
         $out = '';
-        $td_history = array(); // Is currently a td tag open?
-        $last_tag_history = array(); // Save history of last lag activated (td, th or caption)
-        $tr_history = array(); // Is currently a tr tag open?
-        $tr_attributes = array(); // history of tr attributes
-        $has_opened_tr = array(); // Did this table open a <tr> element?
+        $td_history = []; // Is currently a td tag open?
+        $last_tag_history = []; // Save history of last lag activated (td, th or caption)
+        $tr_history = []; // Is currently a tr tag open?
+        $tr_attributes = []; // history of tr attributes
+        $has_opened_tr = []; // Did this table open a <tr> element?
         $indent_level = 0; // indent level of the table
         
         foreach ($lines as $outLine)
@@ -299,7 +299,7 @@ class MediawikiParser
                 continue;
             }
             $first_character = $line[0];
-            $matches = array();
+            $matches = [];
             
             if (preg_match('/^(:*)\{\|(.*)$/', $line, $matches))
             {
@@ -1342,7 +1342,7 @@ class MediawikiParser
         
         // Get all headlines for numbering them and adding funky stuff like [edit]
         // links - this is for later, but we need the number of headlines right now
-        $matches = array();
+        $matches = [];
         $numMatches = preg_match_all(
             '/<H(?P<level>[1-6])(?P<attrib>.*?' . '>)(?P<header>.*?)<\/H[1-6] *>/i', 
             $text, 
@@ -1359,9 +1359,9 @@ class MediawikiParser
         // passed to the skin functions. These are determined here
         $toc = '';
         $full = '';
-        $head = array();
-        $sublevelCount = array();
-        $levelCount = array();
+        $head = [];
+        $sublevelCount = [];
+        $levelCount = [];
         $toclevel = 0;
         $level = 0;
         $prevlevel = 0;
@@ -1369,7 +1369,7 @@ class MediawikiParser
         $prevtoclevel = 0;
         $markerRegex = "{$this->mUniqPrefix}-h-(\d+)-" . self::MARKER_SUFFIX;
         // $baseTitleText = $this->mTitle->getPrefixedDBkey();
-        $tocraw = array();
+        $tocraw = [];
         
         foreach ($matches[3] as $headline)
         {
@@ -1377,7 +1377,7 @@ class MediawikiParser
             $titleText = false;
             $sectionIndex = false;
             $numbering = '';
-            $markerMatches = array();
+            $markerMatches = [];
             // if (preg_match("/^$markerRegex/", $headline, $markerMatches))
             // {
             // $serial = $markerMatches[1];
@@ -1898,7 +1898,7 @@ class MediawikiParser
             // batch file existence checks for NS_FILE and NS_MEDIA
             if ($iw == '' && $nt->isAlwaysKnown())
             {
-                $s .= $this->makeKnownLinkHolder($nt, $text, array(), $trail, $prefix);
+                $s .= $this->makeKnownLinkHolder($nt, $text, [], $trail, $prefix);
             }
             else
             {
@@ -1928,7 +1928,7 @@ class MediawikiParser
      * @param string $prefix
      * @return string HTML-wikitext mix oh yuck
      */
-    function makeKnownLinkHolder($nt, $text = '', $query = array(), $trail = '', $prefix = '')
+    function makeKnownLinkHolder($nt, $text = '', $query = [], $trail = '', $prefix = '')
     {
         list($inside, $trail) = MediawikiLinker::splitTrail($trail);
         $link = MediawikiLinker::makeKnownLinkObj($nt, $text, $query, $inside, $prefix);

@@ -72,7 +72,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        $content = array();
+        $content = [];
 
         $content[] = $this->renderToolHeader();
         $content[] = '<div class="publication_container row">';
@@ -94,7 +94,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $content[] = '</div>';
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = implode(PHP_EOL, $content);
@@ -119,7 +119,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function count_tool_categories()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -160,7 +160,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $publishActions->addButton(
                     $this->getPublicationButton(
                         Translation::get('Publish', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('plus'),
-                        $this->get_allowed_content_object_types(), $parameters, array(), 'btn-primary'
+                        $this->get_allowed_content_object_types(), $parameters, [], 'btn-primary'
                     )
                 );
 
@@ -235,7 +235,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if (count($browser_types) > 1)
             {
-                $filterActions = array();
+                $filterActions = [];
 
                 $filterActions[] = new SubButtonHeader(Translation::get('ViewTypesHeader'));
 
@@ -258,7 +258,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                         Translation::get(
                             (string) StringUtilities::getInstance()->createString($browser_type)->upperCamelize() .
                             'View', null, Utilities::COMMON_LIBRARIES
-                        ), null, $action, Button::DISPLAY_LABEL, false, array(), null, $isActive
+                        ), null, $action, Button::DISPLAY_LABEL, false, [], null, $isActive
                     );
                 }
 
@@ -272,7 +272,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $filterAction->addSubButtons($this->get_parent()->getFilteractions());
             }
 
-            $filterActions = array();
+            $filterActions = [];
 
             $filterActions[] = new SubButtonHeader(Translation::get('ViewPublicationsHeader'));
 
@@ -289,7 +289,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL
                     )
-                ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
+                ), Button::DISPLAY_LABEL, false, [], null, $isSelected
                 );
             }
 
@@ -301,7 +301,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME
                 )
-            ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
+            ), Button::DISPLAY_LABEL, false, [], null, $isSelected
             );
 
             $isSelected =
@@ -313,7 +313,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSE_PUBLICATION_TYPE => \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME
                 )
-            ), Button::DISPLAY_LABEL, false, array(), null, $isSelected
+            ), Button::DISPLAY_LABEL, false, [], null, $isSelected
             );
 
             $filterAction->addSubButtons($filterActions);
@@ -340,7 +340,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     }
 
     public function getPublicationButton(
-        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = array(), $classes = null
+        $label, $glyph, $allowedContentObjectTypes, $parameters, $extraActions = [], $classes = null
     )
     {
         $actionSelector = new ActionSelector(
@@ -374,7 +374,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function get_publication_conditions()
     {
-        $conditions = array();
+        $conditions = [];
 
         $type = $this->get_publication_type();
         switch ($type)
@@ -435,7 +435,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TO_DATE
                 );
 
-                $time_conditions = array();
+                $time_conditions = [];
 
                 $time_conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
@@ -443,7 +443,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                     ), new StaticConditionVariable(0)
                 );
 
-                $forever_conditions = array();
+                $forever_conditions = [];
 
                 $forever_conditions[] = new EqualityCondition($from_date_variables, new StaticConditionVariable(0));
 
@@ -451,7 +451,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $forever_condition = new AndCondition($forever_conditions);
 
-                $between_conditions = array();
+                $between_conditions = [];
 
                 $between_conditions[] = new ComparisonCondition(
                     $from_date_variables, ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
@@ -555,7 +555,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @return array An array of ContentObjectPublication objects
      */
-    public function get_publications($offset = 0, $max_objects = 0, $object_table_order = array())
+    public function get_publications($offset = 0, $max_objects = 0, $object_table_order = [])
     {
         if (empty($this->publications))
         {
@@ -623,7 +623,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      */
     public function hasCategories()
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -661,7 +661,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     {
         $publicationCategoryTree = new PublicationCategoriesTree($this);
 
-        $html = array();
+        $html = [];
 
         if ($this->hasCategories())
         {
@@ -796,7 +796,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     public function renderToolHeader()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->renderIntroduction();
         $html[] = $this->getButtonToolbarRenderer()->render();

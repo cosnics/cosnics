@@ -151,7 +151,7 @@ class RelationInstanceForm extends FormValidator
     {
         $expandedEntities = $this->getEntityConditionService()->expandEntities($entities);
 
-        $options = array();
+        $options = [];
 
         foreach ($expandedEntities as $expandedEntity)
         {
@@ -168,7 +168,7 @@ class RelationInstanceForm extends FormValidator
      */
     private function getRelationOptions()
     {
-        $relationOptions = array();
+        $relationOptions = [];
 
         foreach ($this->relations as $relation)
         {

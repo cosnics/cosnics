@@ -48,7 +48,7 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
@@ -112,7 +112,7 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
 
         $table = new UserApprovalTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = '<div style="float: right; width: 100%;">';
         $html[] = $table->as_html();
         $html[] = '</div>';

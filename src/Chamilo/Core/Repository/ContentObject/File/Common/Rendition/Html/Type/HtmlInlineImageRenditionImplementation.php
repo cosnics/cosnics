@@ -19,7 +19,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
      */
     public function render($parameters)
     {
-        $html = array();
+        $html = [];
         $object = $this->get_content_object();
 
         if (! in_array($object->get_extension(), array('jpg', 'jpeg', 'gif', 'png', 'svg', 'bmp')))
@@ -42,7 +42,7 @@ class HtmlInlineImageRenditionImplementation extends HtmlInlineRenditionImplemen
             $parameters[self::PARAM_MARGIN_VERTICAL] = (int) $parameters[self::PARAM_MARGIN_VERTICAL];
             $parameters[self::PARAM_BORDER] = (int) $parameters[self::PARAM_BORDER];
 
-            $styles = array();
+            $styles = [];
             $styles['border'] = $parameters[self::PARAM_BORDER] . 'px solid black;';
             $styles['margin'] = $parameters[self::PARAM_MARGIN_VERTICAL] . 'px ' .
                  $parameters[self::PARAM_MARGIN_HORIZONTAL] . 'px;';

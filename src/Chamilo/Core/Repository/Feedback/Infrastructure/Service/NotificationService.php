@@ -21,7 +21,7 @@ class NotificationService implements NotificationServiceInterface
      *
      * @param NotificationHandlerInterface[] $notificationHandlers
      */
-    public function __construct(array $notificationHandlers = array())
+    public function __construct(array $notificationHandlers = [])
     {
         $this->notificationHandlers = $notificationHandlers;
     }
@@ -42,7 +42,7 @@ class NotificationService implements NotificationServiceInterface
      * @param Feedback $feedback
      * @param Notification[] $notifications
      */
-    public function notify(Feedback $feedback, array $notifications = array())
+    public function notify(Feedback $feedback, array $notifications = [])
     {
         if (empty($notifications))
         {

@@ -59,7 +59,7 @@ class DistinctConditionVariable extends ConditionVariable
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $variableParts = array();
+        $variableParts = [];
 
         foreach ($this->getConditionVariables() as $conditionVariable)
         {

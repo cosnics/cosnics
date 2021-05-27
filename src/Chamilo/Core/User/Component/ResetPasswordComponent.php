@@ -59,7 +59,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             return $this->display_error_page(Translation::get('AlreadyRegistered'));
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 

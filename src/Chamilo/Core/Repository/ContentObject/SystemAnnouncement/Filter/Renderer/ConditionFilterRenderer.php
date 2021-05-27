@@ -25,7 +25,7 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         $filter_data = $this->get_filter_data();
         $general_condition = parent::render();
         
-        $conditions = array();
+        $conditions = [];
         
         if ($general_condition instanceof Condition)
         {

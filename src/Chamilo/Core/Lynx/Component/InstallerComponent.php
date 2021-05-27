@@ -32,7 +32,7 @@ class InstallerComponent extends Manager implements DelegateComponent
             )
         );
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $installer->get_result(true);

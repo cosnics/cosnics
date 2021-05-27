@@ -75,7 +75,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     );
                 }
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_PENDING)
@@ -98,7 +98,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     );
                 }
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_GRANTED)
@@ -122,7 +122,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                     );
                 }
 
-                $conditions = array();
+                $conditions = [];
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                     new StaticConditionVariable(Request::DECISION_DENIED)
@@ -151,7 +151,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         if ($user_requests > 0 || (Rights::getInstance()->request_is_allowed() && $tabs->size() > 0) ||
             $this->get_user()->is_platform_admin())
         {
-            $html = array();
+            $html = [];
 
             $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
             $html[] = $this->render_header();
@@ -181,7 +181,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestCourse'),
-                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
+                        new FontAwesomeGlyph('question-circle', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -192,7 +192,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
                 $toolActions->addButton(
                     new Button(
                         Translation::get('ConfigureManagementRights'),
-                        new FontAwesomeGlyph('lock', array(), null, 'fas'),
+                        new FontAwesomeGlyph('lock', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
                     )
                 );
@@ -213,7 +213,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
      */
     public function get_table_condition($object_table_class_name)
     {
-        $conditions = array();
+        $conditions = [];
 
         switch ($this->table_type)
         {

@@ -83,7 +83,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                 array('OBJECT' => Translation::get('GlossaryItem')),
                 Utilities::COMMON_LIBRARIES));
 
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_ACTION] = self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT;
         $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
 

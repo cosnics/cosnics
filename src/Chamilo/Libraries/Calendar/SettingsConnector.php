@@ -21,7 +21,7 @@ class SettingsConnector
      */
     public static function get_time_zones()
     {
-        $timezones = array();
+        $timezones = [];
         $timezoneIdentifiers = DateTimeZone::listIdentifiers();
 
         foreach ($timezoneIdentifiers as $timezoneIdentifier)

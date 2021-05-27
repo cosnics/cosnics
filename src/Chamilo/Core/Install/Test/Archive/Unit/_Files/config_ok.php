@@ -1,5 +1,5 @@
 <?php
-$values = array();
+$values = [];
 $values['storage_type'] = 'mdb2';
 $values['database_driver'] = 'mysqli';
 $values['database_host'] = 'hostname';

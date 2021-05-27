@@ -54,7 +54,7 @@ class DeleterComponent extends Manager
                         $selected_entity_id = array($selected_entity_id);
                     }
                     
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN), 
                         new StaticConditionVariable(Admin::ORIGIN_INTERNAL));
@@ -133,7 +133,7 @@ class DeleterComponent extends Manager
                 
                 // Let's try and determine where we want to redirect
                 // 1. Admin-instances with the same entity id, entity type and target type
-                $conditions = array();
+                $conditions = [];
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 
@@ -159,7 +159,7 @@ class DeleterComponent extends Manager
                 }
                 
                 // 2. Admin-instance for the same entity type and entity id
-                $conditions = array();
+                $conditions = [];
                 
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_TYPE), 

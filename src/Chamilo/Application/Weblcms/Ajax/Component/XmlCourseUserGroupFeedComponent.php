@@ -50,14 +50,14 @@ class XmlCourseUserGroupFeedComponent extends Manager
             $query = Request::get('query');
             $exclude = Request::get('exclude');
 
-            $user_conditions = array();
-            $group_conditions = array();
+            $user_conditions = [];
+            $group_conditions = [];
 
             if ($query)
             {
                 $q = '*' . $query . '*';
 
-                $userCondition = array();
+                $userCondition = [];
                 $userCondition[] = new PatternMatchCondition(
                     new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $q
                 );
@@ -81,9 +81,9 @@ class XmlCourseUserGroupFeedComponent extends Manager
                     $exclude = array($exclude);
                 }
 
-                $exclude_conditions = array();
-                $exclude_conditions['user'] = array();
-                $exclude_conditions['group'] = array();
+                $exclude_conditions = [];
+                $exclude_conditions['user'] = [];
+                $exclude_conditions['group'] = [];
 
                 foreach ($exclude as $id)
                 {
@@ -136,7 +136,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 );
             }
 
-            $userConditions = array();
+            $userConditions = [];
             $userConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
@@ -165,7 +165,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
             if (count($group_relations) > 0)
             {
-                $this->group_users = array();
+                $this->group_users = [];
 
                 foreach ($group_relations as $group_relation)
                 {
@@ -223,7 +223,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 User::class, new DataClassRetrievesParameters($user_condition, null, null, $order)
             );
 
-            $users = array();
+            $users = [];
             foreach($user_result_set as $user)
             {
                 $users[] = $user;
@@ -231,7 +231,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
             if ($this->show_groups)
             {
-                $groups = array();
+                $groups = [];
 
                 $group_result_set = DataManager::retrieves(
                     CourseGroup::class, new DataClassRetrievesParameters(
@@ -250,7 +250,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                     if (!is_array($groups[$group_parent_id]))
                     {
-                        $groups[$group_parent_id] = array();
+                        $groups[$group_parent_id] = [];
                     }
 
                     if (!isset($groups[$group_parent_id][$group->get_id()]))
@@ -268,7 +268,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                             if (!is_array($groups[$tree_parent_parent_id]))
                             {
-                                $groups[$tree_parent_parent_id] = array();
+                                $groups[$tree_parent_parent_id] = [];
                             }
 
                             if (!isset($groups[$tree_parent_parent_id][$tree_parent->get_id()]))
@@ -287,13 +287,13 @@ class XmlCourseUserGroupFeedComponent extends Manager
             }
             else
             {
-                $groups_tree = array();
+                $groups_tree = [];
             }
         }
         else
         {
-            $users = array();
-            $groups_tree = array();
+            $users = [];
+            $groups_tree = [];
         }
 
         header('Content-Type: text/xml');
@@ -316,7 +316,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
     function dump_groups_tree($groups)
     {
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         foreach ($groups as $group)
         {
@@ -342,7 +342,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
     function dump_platform_group($group)
     {
         $children = $group->get_children(false);
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         if ($children && count($children) > 0)
         {
@@ -401,8 +401,8 @@ class XmlCourseUserGroupFeedComponent extends Manager
                 echo '<node id="user" classes="' . $glyph->getClassNamesString() . '" title="';
                 echo Translation::get('Users', null, 'user') . '">', PHP_EOL;
 
-                $userGlyph = new FontAwesomeGlyph('user', array(), null, 'fas');
-                $platformUserGlyph = new FontAwesomeGlyph('user-tie', array(), null, 'fas');
+                $userGlyph = new FontAwesomeGlyph('user', [], null, 'fas');
+                $platformUserGlyph = new FontAwesomeGlyph('user-tie', [], null, 'fas');
 
                 foreach ($users as $user)
                 {
@@ -436,7 +436,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
     function get_group_tree($index, $groups)
     {
-        $tree = array();
+        $tree = [];
         foreach ($groups[$index] as $child)
         {
             $tree[] = array('group' => $child, 'children' => $this->get_group_tree($child->get_id(), $groups));

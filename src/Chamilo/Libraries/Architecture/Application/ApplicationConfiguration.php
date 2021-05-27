@@ -46,7 +46,7 @@ class ApplicationConfiguration implements ApplicationConfigurationInterface
      * @param string[] $configurationParameters
      */
     public function __construct(
-        ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = array()
+        ChamiloRequest $request, $user = null, $parentApplication = null, $configurationParameters = []
     )
     {
         $this->request = $request;

@@ -40,7 +40,7 @@ class ContentObjectDifferenceRenderer
         $renderer = new InlineDifferenceRenderer();
         $translator = $this->getTranslator();
 
-        $html = array();
+        $html = [];
 
         $display = ContentObjectRenditionImplementation::factory(
             $contentObjectDifference->getContentObject(), ContentObjectRendition::FORMAT_HTML,
@@ -58,7 +58,7 @@ class ContentObjectDifferenceRenderer
                 $propertyVariable =
                     StringUtilities::getInstance()->createString($propertyName)->upperCamelize()->__toString();
                 $propertyLabel = $translator->trans(
-                    $propertyVariable, array(), $contentObjectDifference->getContentObject()->package()
+                    $propertyVariable, [], $contentObjectDifference->getContentObject()->package()
                 );
 
                 $html[] = '<div class="panel panel-default">';

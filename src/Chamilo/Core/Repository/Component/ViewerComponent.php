@@ -98,12 +98,12 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         if ($contentObject->get_state() == ContentObject::STATE_RECYCLED)
         {
             $trail->add(
-                new Breadcrumb($this->get_recycle_bin_url(), $translator->trans('RecycleBin', array(), self::package()))
+                new Breadcrumb($this->get_recycle_bin_url(), $translator->trans('RecycleBin', [], self::package()))
             );
             $this->force_menu_url($this->get_recycle_bin_url());
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->getButtonToolbarRenderer()->render();
@@ -136,7 +136,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new ExternalLinkTable($this);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    'external_instances', $translator->trans('ExternalInstances', array(), self::package()),
+                    'external_instances', $translator->trans('ExternalInstances', [], self::package()),
                     new FontAwesomeGlyph('globe', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -149,7 +149,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_PUBLICATIONS);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', array(), self::package()),
+                    LinkTable::TYPE_PUBLICATIONS, $translator->trans('Publications', [], self::package()),
                     new FontAwesomeGlyph('share-square', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -170,7 +170,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                 $dynamicTabsRenderer->add_tab(
                     new DynamicContentTab(
-                        $tabName, $translator->trans('SharedIn', array(), self::package()),
+                        $tabName, $translator->trans('SharedIn', [], self::package()),
                         new FontAwesomeGlyph('lock', array('fa-lg'), null, 'fas'), $browser->render()
                     )
                 );
@@ -184,7 +184,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_PARENTS);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', array(), self::package()),
+                    LinkTable::TYPE_PARENTS, $translator->trans('UsedIn', [], self::package()),
                     new FontAwesomeGlyph('arrow-up', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -197,7 +197,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_CHILDREN);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_CHILDREN, $translator->trans('Uses', array(), self::package()),
+                    LinkTable::TYPE_CHILDREN, $translator->trans('Uses', [], self::package()),
                     new FontAwesomeGlyph('arrow-down', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -210,7 +210,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHED_TO);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', array(), self::package()),
+                    LinkTable::TYPE_ATTACHED_TO, $translator->trans('AttachedTo', [], self::package()),
                     new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -223,7 +223,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_ATTACHES);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', array(), self::package()),
+                    LinkTable::TYPE_ATTACHES, $translator->trans('Attaches', [], self::package()),
                     new FontAwesomeGlyph('paperclip', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -236,7 +236,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDED_IN);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', array(), self::package()),
+                    LinkTable::TYPE_INCLUDED_IN, $translator->trans('IncludedIn', [], self::package()),
                     new FontAwesomeGlyph('expand-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -249,7 +249,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             $browser = new LinkTable($this, LinkTable::TYPE_INCLUDES);
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    LinkTable::TYPE_INCLUDES, $translator->trans('Includes', array(), self::package()),
+                    LinkTable::TYPE_INCLUDES, $translator->trans('Includes', [], self::package()),
                     new FontAwesomeGlyph('compress-arrows-alt', array('fa-lg'), null, 'fas'), $browser->render()
                 )
             );
@@ -303,7 +303,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $recycle_url = $this->get_content_object_recycling_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Remove', array(), Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Remove', [], Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('trash-alt'), $recycle_url, Button::DISPLAY_ICON_AND_LABEL
                         )
                     );
@@ -315,9 +315,9 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $delete_url = $this->get_content_object_deletion_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Delete', array(), Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('times'), $delete_url, Button::DISPLAY_ICON_AND_LABEL,
-                            $translator->trans('ConfirmDelete', array(), Utilities::COMMON_LIBRARIES)
+                            $translator->trans('ConfirmDelete', [], Utilities::COMMON_LIBRARIES)
                         )
                     );
                 }
@@ -334,8 +334,8 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Unlink', array(), Utilities::COMMON_LIBRARIES),
-                            new FontAwesomeGlyph('unlink', array(), null, 'fas'), $unlink_url,
+                            $translator->trans('Unlink', [], Utilities::COMMON_LIBRARIES),
+                            new FontAwesomeGlyph('unlink', [], null, 'fas'), $unlink_url,
                             Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
@@ -347,7 +347,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     $restore_url = $this->get_content_object_restoring_url($contentObject);
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Restore', array(), Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Restore', [], Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('undo'), $restore_url, Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
@@ -364,7 +364,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $edit_url = $this->get_content_object_editing_url($contentObject);
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Edit', array(), Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Edit', [], Utilities::COMMON_LIBRARIES),
                                 new FontAwesomeGlyph('pencil-alt'), $edit_url, Button::DISPLAY_ICON_AND_LABEL
                             )
                         );
@@ -376,7 +376,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                         $move_url = $this->get_content_object_moving_url($contentObject);
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Move', array(), Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Move', [], Utilities::COMMON_LIBRARIES),
                                 new FontAwesomeGlyph('folder-open'), $move_url, Button::DISPLAY_ICON_AND_LABEL
                             )
                         );
@@ -386,7 +386,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                     {
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('BuildComplexObject', array(), Utilities::COMMON_LIBRARIES),
+                                $translator->trans('BuildComplexObject', [], Utilities::COMMON_LIBRARIES),
                                 new FontAwesomeGlyph('cubes'),
                                 $this->get_browse_complex_content_object_url($contentObject),
                                 Button::DISPLAY_ICON_AND_LABEL
@@ -398,7 +398,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans('Preview', array(), Utilities::COMMON_LIBRARIES),
+                                $translator->trans('Preview', [], Utilities::COMMON_LIBRARIES),
                                 new FontAwesomeGlyph('desktop'), $preview_url, Button::DISPLAY_ICON_AND_LABEL, false,
                                 $onclick, '_blank'
                             )
@@ -421,7 +421,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                         $baseActions->addButton(
                             new Button(
-                                $translator->trans($variable, array(), Utilities::COMMON_LIBRARIES), $image,
+                                $translator->trans($variable, [], Utilities::COMMON_LIBRARIES), $image,
                                 $preview_url, Button::DISPLAY_ICON_AND_LABEL, false, $onclick, '_blank'
                             )
                         );
@@ -434,7 +434,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $baseActions->addButton(
                     new Button(
-                        $translator->trans('Duplicate', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Duplicate', [], Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('copy'), $this->get_copy_content_object_url($contentObject->getId())
                     )
                 );
@@ -445,7 +445,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $publishActions->addButton(
                     new Button(
-                        $translator->trans('Publish', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Publish', [], Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('share-square'), $this->get_publish_content_object_url($contentObject)
                     )
                 );
@@ -456,7 +456,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
             {
                 $publishActions->addButton(
                     new Button(
-                        $translator->trans('Share', array(), Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
+                        $translator->trans('Share', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('lock'),
                         $this->get_url(
                             array(
                                 Manager::PARAM_ACTION => Manager::ACTION_WORKSPACE,
@@ -481,7 +481,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
                     $stateActions->addButton(
                         new Button(
-                            $translator->trans('Unshare', array(), Utilities::COMMON_LIBRARIES),
+                            $translator->trans('Unshare', [], Utilities::COMMON_LIBRARIES),
                             new FontAwesomeGlyph('unlock'), $url, Button::DISPLAY_ICON_AND_LABEL, true
                         )
                     );
@@ -496,7 +496,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $revert_url = $this->get_content_object_revert_url($contentObject);
                 $stateActions->addButton(
                     new Button(
-                        $translator->trans('Revert', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Revert', [], Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('undo'), $revert_url, Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -508,7 +508,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
                 $deleteUrl = $this->get_content_object_deletion_url($contentObject, 'version');
                 $stateActions->addButton(
                     new Button(
-                        $translator->trans('Delete', array(), Utilities::COMMON_LIBRARIES),
+                        $translator->trans('Delete', [], Utilities::COMMON_LIBRARIES),
                         new FontAwesomeGlyph('times'), $deleteUrl, Button::DISPLAY_ICON_AND_LABEL
                     )
                 );
@@ -548,7 +548,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         {
             throw new InvalidArgumentException(
                 $this->getTranslator()->trans(
-                    'NoObjectSelected', array(), Utilities::COMMON_LIBRARIES
+                    'NoObjectSelected', [], Utilities::COMMON_LIBRARIES
                 )
             );
         }
@@ -571,7 +571,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         {
             $versionTable = new VersionTable($this);
 
-            $versionTabContent = array();
+            $versionTabContent = [];
 
             $versionTabContent[] = $versionTable->render();
             $versionTabContent[] = ResourceManager::getInstance()->getResourceHtml(
@@ -580,7 +580,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
             $dynamicTabsRenderer->add_tab(
                 new DynamicContentTab(
-                    'versions', $this->getTranslator()->trans('Versions', array(), self::package()),
+                    'versions', $this->getTranslator()->trans('Versions', [], self::package()),
                     new FontAwesomeGlyph('undo', array('fa-lg'), null, 'fas'), implode(PHP_EOL, $versionTabContent)
                 )
             );
@@ -602,7 +602,7 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
         if (count($types) > 1)
         {
             $dropdownButton = new DropdownButton(
-                $this->getTranslator()->trans('Export', array(), Utilities::COMMON_LIBRARIES),
+                $this->getTranslator()->trans('Export', [], Utilities::COMMON_LIBRARIES),
                 new FontAwesomeGlyph('download')
             );
 
@@ -641,11 +641,11 @@ class ViewerComponent extends Manager implements DelegateComponent, TableSupport
 
         $translationVariable =
             'ExportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()->__toString();
-        $translation = $translator->trans($translationVariable, array(), $this->getContentObject()->package());
+        $translation = $translator->trans($translationVariable, [], $this->getContentObject()->package());
 
         if ($translation == $translationVariable)
         {
-            $translation = $translator->trans($translationVariable, array(), 'Chamilo\Core\Repository');
+            $translation = $translator->trans($translationVariable, [], 'Chamilo\Core\Repository');
         }
 
         return $translation;

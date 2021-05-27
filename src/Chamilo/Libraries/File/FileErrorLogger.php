@@ -219,7 +219,7 @@ class FileErrorLogger
      */
     protected function prepareActionMessage(string $action, string $message = null, bool $includeTimestamp = true)
     {
-        $messageParts = array();
+        $messageParts = [];
 
         $messageParts[] = $this->prepareAction($action);
 

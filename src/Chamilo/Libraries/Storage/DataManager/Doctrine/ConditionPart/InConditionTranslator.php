@@ -38,7 +38,7 @@ class InConditionTranslator extends ConditionTranslator
             }
             elseif (is_null($values))
             {
-                $values = array();
+                $values = [];
             }
             else
             {
@@ -50,13 +50,13 @@ class InConditionTranslator extends ConditionTranslator
 
         if (count($values) > 0)
         {
-            $where_clause = array();
+            $where_clause = [];
 
             $where_clause[] = $this->getConditionPartTranslatorService()->translate(
                     $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
                 ) . ' IN (';
 
-            $placeholders = array();
+            $placeholders = [];
 
             foreach ($values as $value)
             {

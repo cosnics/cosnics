@@ -105,17 +105,17 @@ class Dependency
      */
     public function check()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters['REQUIREMENT'] = $this->as_html();
 
         $message = Translation::get('DependencyCheckRegistration') . ': ' . $this->as_html() . ' ' . Translation::get(
-                'Found', array(), Utilities::COMMON_LIBRARIES
+                'Found', [], Utilities::COMMON_LIBRARIES
             ) . ': ';
         $registration = Configuration::registration($this->get_id());
 
         if (empty($registration))
         {
-            $parameters['CURRENT'] = '--' . Translation::get('Nothing', array(), Utilities::COMMON_LIBRARIES) . '--';
+            $parameters['CURRENT'] = '--' . Translation::get('Nothing', [], Utilities::COMMON_LIBRARIES) . '--';
             $this->logger->add_message(Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR);
 
             return false;
@@ -129,7 +129,7 @@ class Dependency
             if (!$target_version)
             {
                 $parameters['CURRENT'] =
-                    '--' . Translation::get('WrongVersion', array(), Utilities::COMMON_LIBRARIES) . '--';
+                    '--' . Translation::get('WrongVersion', [], Utilities::COMMON_LIBRARIES) . '--';
                 $this->logger->add_message(
                     Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
                 );
@@ -141,7 +141,7 @@ class Dependency
                 if (!$registration[Registration::PROPERTY_STATUS])
                 {
                     $parameters['CURRENT'] =
-                        '--' . Translation::get('InactiveObject', array(), Utilities::COMMON_LIBRARIES) . '--';
+                        '--' . Translation::get('InactiveObject', [], Utilities::COMMON_LIBRARIES) . '--';
                     $this->logger->add_message(
                         Translation::get('CurrentDependency', $parameters), MessageLogger::TYPE_ERROR
                     );
@@ -165,7 +165,7 @@ class Dependency
      */
     public function as_html()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters['ID'] = $this->get_id();
         $parameters['VERSION'] = $this->get_version();
 

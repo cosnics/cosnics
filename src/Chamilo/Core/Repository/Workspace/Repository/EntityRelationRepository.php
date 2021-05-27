@@ -30,7 +30,7 @@ class EntityRelationRepository
      *
      * @var \Chamilo\Libraries\Storage\Query\Condition\OrCondition[]
      */
-    private static $entitiesConditions = array();
+    private static $entitiesConditions = [];
 
     /**
      *
@@ -42,7 +42,7 @@ class EntityRelationRepository
      */
     public function findEntitiesWithRight($entities, $right, WorkspaceInterface $workspaceImplementation)
     {
-        $entityRelationConditions = array();
+        $entityRelationConditions = [];
 
         $entityRelationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -86,14 +86,14 @@ class EntityRelationRepository
 
         if (!isset(self::$entitiesConditions[$entitiesHash]))
         {
-            $entityTypeConditions = array();
+            $entityTypeConditions = [];
 
             foreach ($entities as $entityType => $entityIdentifiers)
             {
                 foreach ($entityIdentifiers as $entityIdentifier)
                 {
 
-                    $entityConditions = array();
+                    $entityConditions = [];
 
                     $entityConditions[] = new EqualityCondition(
                         new PropertyConditionVariable(
@@ -133,7 +133,7 @@ class EntityRelationRepository
         $entityIdentifier
     )
     {
-        $entityConditions = array();
+        $entityConditions = [];
 
         $entityConditions[] = new EqualityCondition(
             new PropertyConditionVariable(

@@ -35,7 +35,7 @@ class CourseUserExportExtender implements UserExportExtender
         $course_platform_groups = DataManager::retrieve_all_subscribed_platform_groups(
             array($course_id));
         
-        $this->course_platform_groups = array();
+        $this->course_platform_groups = [];
         
         foreach($course_platform_groups as $course_platform_group)
         {
@@ -50,7 +50,7 @@ class CourseUserExportExtender implements UserExportExtender
      */
     public function export_headers()
     {
-        $headers = array();
+        $headers = [];
         
         $headers[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = Translation::get('SubscriptionStatus');
         $headers[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = Translation::get('SubscriptionType');
@@ -72,7 +72,7 @@ class CourseUserExportExtender implements UserExportExtender
      */
     public function export_user(User $user)
     {
-        $data = array();
+        $data = [];
         
         $data[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = $user->get_optional_property(
             self::EXPORT_COLUMN_SUBSCRIPTION_STATUS) == 1 ? Translation::get('Teacher') : Translation::get('Student');
@@ -100,7 +100,7 @@ class CourseUserExportExtender implements UserExportExtender
      */
     protected function get_platform_group_names_for_user_in_course(User $user)
     {
-        $user_platform_groups_in_course = array();
+        $user_platform_groups_in_course = [];
         
         $user_subscribed_group_ids = $user->get_groups(true);
         foreach ($user_subscribed_group_ids as $user_subscribed_group_id)

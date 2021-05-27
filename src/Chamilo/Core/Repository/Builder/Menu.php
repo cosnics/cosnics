@@ -137,9 +137,9 @@ class Menu extends HtmlMenu
 
     public function get_menu($root)
     {
-        $menu = array();
+        $menu = [];
         $lo = $root;
-        $menu_item = array();
+        $menu_item = [];
         $menu_item['title'] = $lo->get_title();
 
         if ($this->show_url)
@@ -199,7 +199,7 @@ class Menu extends HtmlMenu
 
             if ($lo instanceof ComplexContentObjectSupport || $this->view_entire_structure)
             {
-                $menu_item = array();
+                $menu_item = [];
                 $menu_item['title'] = $lo->get_title();
 
                 if ($this->show_url)

@@ -77,7 +77,7 @@ class PanelToolListRenderer extends ToolListRenderer
     {
         if (!isset($this->publicationLinks))
         {
-            $conditions = array();
+            $conditions = [];
 
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
@@ -157,7 +157,7 @@ class PanelToolListRenderer extends ToolListRenderer
     {
         if (!isset($this->sectionTypes))
         {
-            $this->sectionTypes = array();
+            $this->sectionTypes = [];
 
             $sections = $this->getSections();
 
@@ -178,7 +178,7 @@ class PanelToolListRenderer extends ToolListRenderer
     {
         if (!isset($this->sections))
         {
-            $this->sections = array();
+            $this->sections = [];
 
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
@@ -255,7 +255,7 @@ class PanelToolListRenderer extends ToolListRenderer
         $parent = $this->get_parent();
         $publications = $this->getPublicationLinks();
 
-        $html = array();
+        $html = [];
 
         $html[] = '<h4>' . $section->getDisplayName() . '</h4>';
 
@@ -297,7 +297,7 @@ class PanelToolListRenderer extends ToolListRenderer
                             Manager::PARAM_TOOL => $publication->get_tool(),
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $class::ACTION_VIEW,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
-                        ), array(), true
+                        ), [], true
                     );
                     $target = '';
                 }
@@ -334,7 +334,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
         $count = 0;
 
-        $html = array();
+        $html = [];
 
         // $html[] = '<div class="panel panel-default panel-course-tool-list">';
         // $html[] = '<div class="panel-heading">';
@@ -370,7 +370,7 @@ class PanelToolListRenderer extends ToolListRenderer
                 $html[] = '<div class="pull-right">';
                 $html[] = '<a href="' . $visibilityUrl . '">';
 
-                $glyph = new FontAwesomeGlyph('times', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('times', [], null, 'fas');
                 $html[] = $glyph->render();
 
                 $html[] = '</a>';
@@ -434,7 +434,7 @@ class PanelToolListRenderer extends ToolListRenderer
      */
     public function toHtml()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="well">';
 

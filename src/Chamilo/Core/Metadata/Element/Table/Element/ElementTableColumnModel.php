@@ -55,7 +55,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
         );
 
         $glyph = new FontAwesomeGlyph(
-            'pen-nib', array(), Translation::get('FreeValues', null, $this->get_component()->package()), 'fas'
+            'pen-nib', [], Translation::get('FreeValues', null, $this->get_component()->package()), 'fas'
         );
 
         $this->add_column(
@@ -65,7 +65,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
         );
 
         $glyph = new FontAwesomeGlyph(
-            'globe', array(), Translation::get('PredefinedValues', null, $this->get_component()->package()), 'fas'
+            'globe', [], Translation::get('PredefinedValues', null, $this->get_component()->package()), 'fas'
         );
 
         $this->add_column(
@@ -75,7 +75,7 @@ class ElementTableColumnModel extends DataClassTableColumnModel implements Table
         );
 
         $glyph = new FontAwesomeGlyph(
-            'users', array(), Translation::get('UserValues', null, $this->get_component()->package()), 'fas'
+            'users', [], Translation::get('UserValues', null, $this->get_component()->package()), 'fas'
         );
 
         $this->add_column(

@@ -18,7 +18,7 @@ class Login extends BlockRenderer
 
     public function displayContent()
     {
-        $html = array();
+        $html = [];
 
         if (!$this->getUser() || ($this->getUser() instanceof User && $this->getUser()->is_anonymous_user()))
         {
@@ -96,7 +96,7 @@ class Login extends BlockRenderer
             'password', Translation::get('ThisFieldIsRequired', null, Utilities::COMMON_LIBRARIES), 'required'
         );
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $form->createElement(
             'style_submit_button', 'submitAuth', Translation::get('Login'), null, null,
             new FontAwesomeGlyph('sign-in-alt')
@@ -120,7 +120,7 @@ class Login extends BlockRenderer
                 );
                 $link = $redirect->getUrl();
 
-                $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
                 $buttons[] = $form->createElement(
                     'static', null, null,
@@ -142,7 +142,7 @@ class Login extends BlockRenderer
                 );
                 $link = $redirect->getUrl();
 
-                $glyph = new FontAwesomeGlyph('question-circle', array(), null, 'fas');
+                $glyph = new FontAwesomeGlyph('question-circle', [], null, 'fas');
 
                 $buttons[] = $form->createElement(
                     'static', null, null,

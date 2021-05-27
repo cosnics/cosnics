@@ -86,7 +86,7 @@ class DeleterComponent extends Manager
             $this->set_parameter(self::PARAM_CATEGORY_ID, Request::get(self::PARAM_CATEGORY_ID));
             $trail->add(new Breadcrumb($this->get_url(), Translation::get('DeleterComponent')));
 
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = Translation::get("NoObjectSelected");

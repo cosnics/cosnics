@@ -27,7 +27,7 @@ class DeleterComponent extends Manager implements DelegateComponent
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
                     'ContentObjectPublication',
-                    array(),
+                    [],
                     'Chamilo\Application\Weblcms'));
         }
 
@@ -49,7 +49,7 @@ class DeleterComponent extends Manager implements DelegateComponent
                 throw new ObjectNotExistException(
                     Translation::getInstance()->getTranslation(
                         'ContentObjectPublication',
-                        array(),
+                        [],
                         'Chamilo\Application\Weblcms'),
                     $pid);
             }

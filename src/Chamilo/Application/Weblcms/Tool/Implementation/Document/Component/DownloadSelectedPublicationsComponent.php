@@ -34,11 +34,11 @@ class DownloadSelectedPublicationsComponent extends Manager
             throw new NoObjectSelectedException(
                 Translation::getInstance()->getTranslation(
                     'ContentObjectPublication', 
-                    array(), 
+                    [], 
                     'Chamilo\Application\Weblcms'));
         }
         
-        $content_object_ids = array();
+        $content_object_ids = [];
         
         foreach ($publications_ids as $publication_id)
         {
@@ -57,7 +57,7 @@ class DownloadSelectedPublicationsComponent extends Manager
             $this->redirect(
                 Translation::get("NoFileSelected"), 
                 true, 
-                array(), 
+                [], 
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION, 
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
@@ -68,7 +68,7 @@ class DownloadSelectedPublicationsComponent extends Manager
             $this->get_user_id(), 
             ContentObjectExport::FORMAT_ZIP, 
             $content_object_ids, 
-            array(), 
+            [], 
             ZipContentObjectExport::TYPE_FLAT);
         
         $exporter = ContentObjectExportController::factory($parameters);

@@ -78,11 +78,11 @@ class ImpactViewRenderer implements TableSupport
         }
         else
         {
-            $view = '<div class="normal-message">' . Translation::get('NoImpact', array(), 'Chamilo\Core\Repository') .
+            $view = '<div class="normal-message">' . Translation::get('NoImpact', [], 'Chamilo\Core\Repository') .
                  '</div>';
         }
         
-        $html = array();
+        $html = [];
         
         $html[] = $this->parent->render_header();
         $html[] = $view;
@@ -97,7 +97,7 @@ class ImpactViewRenderer implements TableSupport
         return $this->parent->get_parameters();
     }
 
-    public function get_url($parameters = array(), $filter = array(), $encode_entities = false)
+    public function get_url($parameters = [], $filter = [], $encode_entities = false)
     {
         return $this->parent->get_url($parameters, $filter, $encode_entities);
     }

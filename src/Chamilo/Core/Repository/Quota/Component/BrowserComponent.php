@@ -53,7 +53,7 @@ class BrowserComponent extends Manager implements TableSupport
         $this->calculator = new Calculator($this->get_user(), $reset_cache);
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
 
@@ -98,7 +98,7 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 if ($this->getUser()->is_platform_admin())
                 {
-                    $platform_quota = array();
+                    $platform_quota = [];
                     $platform_quota[] = '<h3>' . htmlentities(Translation::get('AggregatedUserDiskQuotas')) . '</h3>';
                     $platform_quota[] = Calculator::getBar(
                         $this->calculator->getAggregatedUserDiskQuotaPercentage(),
@@ -157,7 +157,7 @@ class BrowserComponent extends Manager implements TableSupport
                         );
                     }
 
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                         new StaticConditionVariable(Request::DECISION_PENDING)
@@ -182,7 +182,7 @@ class BrowserComponent extends Manager implements TableSupport
                         );
                     }
 
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                         new StaticConditionVariable(Request::DECISION_GRANTED)
@@ -207,7 +207,7 @@ class BrowserComponent extends Manager implements TableSupport
                         );
                     }
 
-                    $conditions = array();
+                    $conditions = [];
                     $conditions[] = new EqualityCondition(
                         new PropertyConditionVariable(Request::class, Request::PROPERTY_DECISION),
                         new StaticConditionVariable(Request::DECISION_DENIED)
@@ -258,7 +258,7 @@ class BrowserComponent extends Manager implements TableSupport
             {
                 $commonActions->addButton(
                     new Button(
-                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', array(), null, 'fas'),
+                        Translation::get('UpgradeQuota'), new FontAwesomeGlyph('angle-double-up', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_UPGRADE))
                     )
                 );
@@ -269,7 +269,7 @@ class BrowserComponent extends Manager implements TableSupport
                 $commonActions->addButton(
                     new Button(
                         Translation::get('RequestUpgrade'),
-                        new FontAwesomeGlyph('question-circle', array(), null, 'fas'),
+                        new FontAwesomeGlyph('question-circle', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE))
                     )
                 );
@@ -282,7 +282,7 @@ class BrowserComponent extends Manager implements TableSupport
                     $toolActions->addButton(
                         new Button(
                             Translation::get('ConfigureManagementRights'),
-                            new FontAwesomeGlyph('lock', array(), null, 'fas'),
+                            new FontAwesomeGlyph('lock', [], null, 'fas'),
                             $this->get_url(array(self::PARAM_ACTION => self::ACTION_RIGHTS))
                         )
                     );
@@ -290,7 +290,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 $toolActions->addButton(
                     new Button(
-                        Translation::get('ResetTotal'), new FontAwesomeGlyph('undo', array(), null, 'fas'),
+                        Translation::get('ResetTotal'), new FontAwesomeGlyph('undo', [], null, 'fas'),
                         $this->get_url(array(self::PARAM_RESET_CACHE => 1))
                     )
                 );
@@ -307,7 +307,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function getUserQuota()
     {
-        $user_quota = array();
+        $user_quota = [];
 
         if ($this->calculator->isEnabled())
         {
@@ -330,14 +330,14 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_statistics()
     {
-        $html = array();
+        $html = [];
         $html[] = '<h3>' . htmlentities(Translation::get('RepositoryStatistics')) . '</h3>';
 
-        $properties = array();
+        $properties = [];
         //TODO: Make this a normal count
         $properties[Translation::get('NumberOfContentObjects')] = $this->calculator->getUsedDatabaseQuota();
 
-        $type_counts = array();
+        $type_counts = [];
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable($this->get_user_id())
@@ -368,7 +368,7 @@ class BrowserComponent extends Manager implements TableSupport
 
         unset($type_counts[$most_used]);
 
-        $frequent = array();
+        $frequent = [];
 
         foreach ($type_counts as $type => $count)
         {
@@ -417,7 +417,7 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_table_condition($object_table_class_name)
     {
         $rightsService = $this->getRightsService();
-        $conditions = array();
+        $conditions = [];
 
         switch ($this->table_type)
         {

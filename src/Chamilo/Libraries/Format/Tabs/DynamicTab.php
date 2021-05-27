@@ -67,7 +67,7 @@ abstract class DynamicTab
      */
     public function body_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="clearfix"></div>';
 
@@ -83,7 +83,7 @@ abstract class DynamicTab
      */
     public function body_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<div role="tabpanel" class="tab-pane" id="' . $this->get_id() . '">';
         $html[] = '<div class="list-group-item">';
@@ -175,7 +175,7 @@ abstract class DynamicTab
      */
     public function header()
     {
-        $html = array();
+        $html = [];
         $html[] = '<li>';
         $html[] = '<a title="' . htmlentities(strip_tags($this->name)) . '" href="' . $this->get_link() . '">';
         $html[] = '<span class="category">';

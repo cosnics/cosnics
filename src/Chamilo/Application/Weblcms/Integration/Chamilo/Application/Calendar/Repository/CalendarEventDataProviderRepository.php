@@ -44,7 +44,7 @@ abstract class CalendarEventDataProviderRepository
      *
      * @return ContentObjectPublication[]
      */
-    function getPublications($fromDate, $toDate, $courses = array())
+    function getPublications($fromDate, $toDate, $courses = [])
     {
         $parameters = new RecordRetrievesParameters(null, $this->getPublicationsCondition($fromDate, $toDate, $courses));
         
@@ -63,15 +63,15 @@ abstract class CalendarEventDataProviderRepository
      *
      * @return Condition
      */
-    protected function getPublicationsCondition($fromDate, $toDate, $courses = array())
+    protected function getPublicationsCondition($fromDate, $toDate, $courses = [])
     {
-        $courseIds = array();
+        $courseIds = [];
         foreach ($courses as $course)
         {
             $courseIds[] = $course->getId();
         }
         
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new InCondition(
             new PropertyConditionVariable(

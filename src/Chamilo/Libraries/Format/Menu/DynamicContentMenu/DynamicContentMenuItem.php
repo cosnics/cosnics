@@ -176,7 +176,7 @@ class DynamicContentMenuItem
      */
     public function render_content()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_content_header();
         $html[] = call_user_func($this->get_content_function(), $this);

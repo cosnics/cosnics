@@ -78,7 +78,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
 
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->get_request_html();
@@ -147,12 +147,12 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
     {
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $conditions = array();
+        $conditions = [];
         $search_conditions = null;
 
         if (isset($query) && $query != '')
         {
-            $conditions = array();
+            $conditions = [];
             $conditions[] = new PatternMatchCondition(
                 new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION),
                 '*' . $query . '*'
@@ -210,7 +210,7 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
 
     public function get_request_html()
     {
-        $html = array();
+        $html = [];
         $menu = new RequestsTreeRenderer($this);
         $html[] = '<div style="clear: both;"></div>';
         $html[] = $this->buttonToolbarRenderer->render() . '<br />';
@@ -246,14 +246,14 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
 
     public function get_table_html()
     {
-        $parameters = array();
+        $parameters = [];
         $parameters[self::PARAM_CONTEXT] = self::context();
         $parameters[self::PARAM_ACTION] = self::ACTION_ADMIN_REQUEST_BROWSER;
         $parameters[self::PARAM_REQUEST_TYPE] = $this->request_type;
 
         $table = new AdminRequestTable($this);
 
-        $html = array();
+        $html = [];
         $html[] = $table->as_html();
 
         return implode(PHP_EOL, $html);

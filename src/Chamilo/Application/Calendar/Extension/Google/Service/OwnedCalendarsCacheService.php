@@ -68,7 +68,7 @@ class OwnedCalendarsCacheService extends DoctrineFilesystemCacheService implemen
      */
     public function getIdentifiers()
     {
-        return array();
+        return [];
     }
 
     /**

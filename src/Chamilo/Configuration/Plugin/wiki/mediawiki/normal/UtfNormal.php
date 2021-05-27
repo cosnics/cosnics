@@ -286,7 +286,7 @@ class UtfNormal
             
             // Each UTF-8 head byte is followed by a certain
             // number of tail bytes.
-            $tailBytes = array();
+            $tailBytes = [];
             for ($n = 0; $n < 256; $n ++)
             {
                 if ($n < 0xc0)
@@ -325,12 +325,12 @@ class UtfNormal
         // large ASCII parts can be handled much more quickly.
         // Don't chop up Unicode areas for punctuation, though,
         // that wastes energy.
-        $matches = array();
+        $matches = [];
         preg_match_all('/([\x00-\x7f]+|[\x80-\xff][\x00-\x40\x5b-\x5f\x7b-\xff]*)/', $string, $matches);
         
         $looksNormal = true;
         $base = 0;
-        $replace = array();
+        $replace = [];
         foreach ($matches[1] as $str)
         {
             $chunk = strlen($str);
@@ -655,7 +655,7 @@ class UtfNormal
         global $utfCombiningClass;
         $len = strlen($string);
         $out = '';
-        $combiners = array();
+        $combiners = [];
         $lastClass = - 1;
         for ($i = 0; $i < $len; $i ++)
         {
@@ -696,7 +696,7 @@ class UtfNormal
             {
                 ksort($combiners);
                 $out .= implode('', $combiners);
-                $combiners = array();
+                $combiners = [];
             }
             $out .= $c;
             $lastClass = 0;

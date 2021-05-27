@@ -59,7 +59,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             if ($this->get_complex_content_object_item())
             {
 
-                $forums_with_key_cloi = array();
+                $forums_with_key_cloi = [];
                 $forums_with_key_cloi = $this->retrieve_children_from_root_to_cloi(
                     $this->get_root_content_object()->get_id(), $this->get_complex_content_object_item()->get_id()
                 );
@@ -126,7 +126,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             }
             else
             {
-                $html = array();
+                $html = [];
 
                 $html[] = $this->render_header();
                 $html[] = $form->toHtml();
@@ -150,7 +150,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
             )
         );
 
-        $params = array();
+        $params = [];
         $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         $params[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] = $this->get_complex_content_object_item_id();
 

@@ -36,7 +36,7 @@ class Display extends QuestionDisplay
         $formvalidator = $this->get_formvalidator();
         $renderer = $this->get_renderer();
 
-        $table_header = array();
+        $table_header = [];
 
         $table_header[] = '<table class="table take_assessment" style="border-top: 2px solid #dddddd;">';
         $table_header[] = '<thead style="background-color: #f5f5f5;">';
@@ -54,7 +54,7 @@ class Display extends QuestionDisplay
 
         $this->add_options();
 
-        $table_header = array();
+        $table_header = [];
 
         $table_header[] = '</tbody>';
         $table_header[] = '</table>';
@@ -98,7 +98,7 @@ class Display extends QuestionDisplay
         $matches = $this->matches;
         $answers = $this->answers;
 
-        $options = array();
+        $options = [];
 
         $options[- 1] = '-- ' . Translation::get('SelectAnswer') . ' --';
         $match_label = 'A';

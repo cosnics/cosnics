@@ -47,8 +47,8 @@ class CourseCopier implements CourseCopierInterface
      * @param bool $copyCourseGroups
      */
     public function copyCourse(
-        User $user, Course $currentCourse, $targetCourseIds = array(),
-        $selectedContentObjectPublicationIds = array(), $selectedPublicationCategoryIds = array(),
+        User $user, Course $currentCourse, $targetCourseIds = [],
+        $selectedContentObjectPublicationIds = [], $selectedPublicationCategoryIds = [],
         $ignoreCategories = false,
         $copyCourseGroups = true
     )
@@ -80,8 +80,8 @@ class CourseCopier implements CourseCopierInterface
      * @param array $categoryIdMapping
      */
     protected function copyContentObjectPublications(
-        $targetCourseIds = array(), $selectedContentObjectPublicationIds = array(),
-        $categoryIdMapping = array()
+        $targetCourseIds = [], $selectedContentObjectPublicationIds = [],
+        $categoryIdMapping = []
     )
     {
         foreach ($selectedContentObjectPublicationIds as $publicationId)
@@ -128,8 +128,8 @@ class CourseCopier implements CourseCopierInterface
      * @param int[] $selectedPublicationCategoryIds
      */
     protected function copyContentObjectPublicationsAndCategories(
-        $targetCourseIds = array(),
-        $selectedContentObjectPublicationIds = array(), $selectedPublicationCategoryIds = array()
+        $targetCourseIds = [],
+        $selectedContentObjectPublicationIds = [], $selectedPublicationCategoryIds = []
     )
     {
         $categoryIdMapping = $this->copyPublicationCategories($targetCourseIds, $selectedPublicationCategoryIds);
@@ -153,7 +153,7 @@ class CourseCopier implements CourseCopierInterface
      */
     protected function copyContentObjectPublicationToCourse(
         ContentObjectPublication $contentObjectPublication,
-        $courseId, $parentId, $oldId, DataClass $publicationExtension = null, $categoryIdMapping = array()
+        $courseId, $parentId, $oldId, DataClass $publicationExtension = null, $categoryIdMapping = []
     )
     {
         $contentObjectPublication->setId(null);
@@ -194,7 +194,7 @@ class CourseCopier implements CourseCopierInterface
      */
     protected function copyPublicationCategories($targetCourseIds, $categoryIds)
     {
-        $categoryIdMapping = array();
+        $categoryIdMapping = [];
         // Retrieve all publication categories and copy them using recursive method
         /** @var ContentObjectPublicationCategory[] $publicationCategories */
         $publicationCategories = $this->courseCopierRepository->findPublicationCategoriesByIds($categoryIds);
@@ -271,7 +271,7 @@ class CourseCopier implements CourseCopierInterface
      *
      * @throws \Exception
      */
-    protected function copyCourseGroups(Course $currentCourse, $targetCourseIds = array(), User $user)
+    protected function copyCourseGroups(Course $currentCourse, $targetCourseIds = [], User $user)
     {
         $currentRootCourseGroup = $this->courseCopierRepository->findRootCourseGroupForCourse($currentCourse->getId());
 

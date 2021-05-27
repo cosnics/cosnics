@@ -21,7 +21,7 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
      */
     public function determineDropdownActionClasses()
     {
-        $classes = array();
+        $classes = [];
 
         $classes[] = 'btn';
         $classes[] = 'btn-default';
@@ -37,9 +37,9 @@ class SplitDropdownButtonRenderer extends AbstractButtonRenderer
      */
     public function renderDropdown()
     {
-        $html = array();
+        $html = [];
 
-        $linkHtml = array();
+        $linkHtml = [];
 
         $linkHtml[] = '<a';
         $linkHtml[] = 'class="' . implode(' ', $this->determineDropdownActionClasses()) . '"';

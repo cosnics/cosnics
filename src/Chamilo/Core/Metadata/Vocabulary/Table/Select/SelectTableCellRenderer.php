@@ -72,7 +72,7 @@ class SelectTableCellRenderer extends DataClassTableCellRenderer implements Tabl
                 }
 
                 $glyph = new FontAwesomeGlyph(
-                    $image, array(), Translation::get($translationVariable, null, $this->get_component()->package()),
+                    $image, [], Translation::get($translationVariable, null, $this->get_component()->package()),
                     'fas'
                 );
 

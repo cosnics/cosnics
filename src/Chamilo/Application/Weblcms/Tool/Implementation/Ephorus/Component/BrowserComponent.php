@@ -49,7 +49,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $this->validateAccess();
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->as_html();
@@ -85,7 +85,7 @@ class BrowserComponent extends Manager implements TableSupport
      */
     protected function as_html()
     {
-        $html = array();
+        $html = [];
         $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer();
         $html[] = $this->buttonToolbarRenderer->render();
 
@@ -110,7 +110,7 @@ class BrowserComponent extends Manager implements TableSupport
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'AddDocument', array(),
+                        'AddDocument', [],
                         ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ), new FontAwesomeGlyph('plus'), $this->get_url(
                     array(

@@ -17,7 +17,7 @@ class Cookie
         {
             setcookie($key, "", time() - 3600);
         }
-        $_COOKIE = array();
+        $_COOKIE = [];
     }
 
     /**

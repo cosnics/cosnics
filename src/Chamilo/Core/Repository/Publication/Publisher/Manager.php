@@ -26,7 +26,7 @@ abstract class Manager extends Application
      *
      * @return \Chamilo\Libraries\Format\Form\FormValidator
      */
-    public function getPublicationForm($selectedContentObjects = array())
+    public function getPublicationForm($selectedContentObjects = [])
     {
         return $this->getParentApplication()->getPublicationForm($selectedContentObjects);
     }

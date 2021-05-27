@@ -33,12 +33,12 @@ class InlineDifferenceRenderer extends Diff_Renderer_Html_Array
         $html .= '<table class="table table-difference">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th class="col-sm-1">' . $translator->getTranslation('Old', array(), 'Chamilo\Core\Repository') .
+        $html .= '<th class="col-sm-1">' . $translator->getTranslation('Old', [], 'Chamilo\Core\Repository') .
             '</th>';
-        $html .= '<th class="col-sm-1">' . $translator->getTranslation('New', array(), 'Chamilo\Core\Repository') .
+        $html .= '<th class="col-sm-1">' . $translator->getTranslation('New', [], 'Chamilo\Core\Repository') .
             '</th>';
         $html .= '<th class="col-sm-10">' .
-            $translator->getTranslation('Differences', array(), 'Chamilo\Core\Repository') . '</th>';
+            $translator->getTranslation('Differences', [], 'Chamilo\Core\Repository') . '</th>';
         $html .= '</tr>';
         $html .= '</thead>';
 

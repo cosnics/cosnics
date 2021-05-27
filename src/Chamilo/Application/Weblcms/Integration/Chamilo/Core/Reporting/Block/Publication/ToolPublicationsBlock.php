@@ -41,7 +41,7 @@ class ToolPublicationsBlock extends ToolBlock
             $reporting_data->add_row(Translation::get('AccessDetails'));
         }
 
-        $conditions = array();
+        $conditions = [];
 
         if ($user_id)
         {
@@ -70,12 +70,12 @@ class ToolPublicationsBlock extends ToolBlock
             ContentObjectPublication::class, new DataClassRetrievesParameters($condition)
         );
 
-        $glyph = new FontAwesomeGlyph('chart-pie', array(), Translation::get('Details'));
+        $glyph = new FontAwesomeGlyph('chart-pie', [], Translation::get('Details'));
 
         $index = 1;
         foreach($content_object_publications as $content_object_publication)
         {
-            $params = array();
+            $params = [];
 
             $params[Application::PARAM_ACTION] = Manager::ACTION_VIEW_COURSE;
             $params[Application::PARAM_CONTEXT] = Manager::context();

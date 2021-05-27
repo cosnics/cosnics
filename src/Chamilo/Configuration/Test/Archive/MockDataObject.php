@@ -72,9 +72,9 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
     // ////////////////////////////////////////
     private function make_table_for_create_and_drop_tests()
     {
-        $props = array();
+        $props = [];
         $props['mycolumn'] = array('type' => 'integer');
-        $this->db->create_storage_unit('created_properly', $props, array());
+        $this->db->create_storage_unit('created_properly', $props, []);
     }
     
     // ///////////////////////////////////////////
@@ -82,7 +82,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
     // ///////////////////////////////////////////
     private function make_table_for_mockdata()
     {
-        $props = array();
+        $props = [];
         $props['id'] = array('type' => 'integer', 'autoincrement' => true);
         $props['inta'] = array('type' => 'integer', 'notnull' => true);
         $props['intb'] = array('type' => 'integer', 'notnull' => true);
@@ -90,9 +90,9 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $props['textb'] = array('type' => 'text', 'notnull' => true);
         $props['bool'] = array('type' => 'boolean', 'notnull' => true);
         
-        $indexes = array(); // more like "constraints", but ok
-        $indexes[] = array('type' => 'unique', 'fields' => array('inta' => array()));
-        $indexes[] = array('type' => 'unique', 'fields' => array('texta' => array()));
+        $indexes = []; // more like "constraints", but ok
+        $indexes[] = array('type' => 'unique', 'fields' => array('inta' => []));
+        $indexes[] = array('type' => 'unique', 'fields' => array('texta' => []));
         $this->db->create_storage_unit('mockdata', $props, $indexes);
     }
 
@@ -103,7 +103,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
      */
     private function get_mockdata_objects($how_many)
     {
-        $objects = array();
+        $objects = [];
         for ($i = 0, $odd = false; $i < $how_many; ++ $i, $odd = ! $odd)
         {
             $obj = new MockDataObject();
@@ -146,7 +146,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_stored[0], $obj_retrieved);
     }
 
@@ -157,7 +157,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $row_retrieved = $this->db->retrieve_record('mockdata', $condition, array());
+        $row_retrieved = $this->db->retrieve_record('mockdata', $condition, []);
         $this->assertEquals($obj_stored[0]->props, $row_retrieved);
     }
 
@@ -183,7 +183,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
         $query = 'SELECT * FROM ' . $this->db->escape_table_name('mockdata') . ' AS ' . $this->db->get_alias('mockdata');
-        $row_retrieved = $this->db->retrieve_row($query, 'mockdata', $condition, array());
+        $row_retrieved = $this->db->retrieve_row($query, 'mockdata', $condition, []);
         $this->assertEquals($obj_stored[0]->props, $row_retrieved);
     }
 
@@ -201,7 +201,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $condition, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_stored[0], $set_retrieved->next_result());
         $this->assertNull($set_retrieved->next_result());
@@ -219,7 +219,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $condition, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_stored[0], $set_retrieved->next_result());
         $this->assertNull($set_retrieved->next_result());
@@ -232,7 +232,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertInternalType('integer', $obj_retrieved->props['id']);
         $this->assertInternalType('integer', $obj_retrieved->props['inta']);
         $this->assertInternalType('integer', $obj_retrieved->props['intb']);
@@ -255,7 +255,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $condition, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         $obj_retrieved = $set_retrieved->next_result();
         $this->assertInternalType('integer', $obj_retrieved->props['id']);
@@ -273,7 +273,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $record_retrieved = $this->db->retrieve_record('mockdata', $condition, array());
+        $record_retrieved = $this->db->retrieve_record('mockdata', $condition, []);
         $this->assertInternalType('integer', $record_retrieved['id']);
         $this->assertInternalType('integer', $record_retrieved['inta']);
         $this->assertInternalType('integer', $record_retrieved['intb']);
@@ -297,7 +297,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             $condition, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         $record_retrieved = $set_retrieved->next_result();
         $this->assertInternalType('integer', $record_retrieved['id']);
@@ -316,7 +316,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
         $query = 'SELECT * FROM ' . $this->db->escape_table_name('mockdata') . ' AS ' . $this->db->get_alias('mockdata');
-        $record_retrieved = $this->db->retrieve_row($query, 'mockdata', $condition, array());
+        $record_retrieved = $this->db->retrieve_row($query, 'mockdata', $condition, []);
         $this->assertInternalType('integer', $record_retrieved['id']);
         $this->assertInternalType('integer', $record_retrieved['inta']);
         $this->assertInternalType('integer', $record_retrieved['intb']);
@@ -339,7 +339,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertSame($obj_stored[0]->props['texta'], $obj_retrieved->props['texta']);
         $this->assertSame($obj_stored[0]->props['textb'], $obj_retrieved->props['textb']);
     }
@@ -355,7 +355,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertSame($obj_stored[0]->props['texta'], $obj_retrieved->props['texta']);
         $this->assertSame($obj_stored[0]->props['textb'], $obj_retrieved->props['textb']);
     }
@@ -373,7 +373,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         $this->db->update($obj_updated, $condition);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_updated, $obj_retrieved);
     }
 
@@ -391,11 +391,11 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
         $this->db->update($obj_updated, $condition);
         
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_updated, $obj_retrieved);
         
         $condition = new EqualityCondition('id', $obj_stored[1]->props['id']);
-        $obj_retrieved2 = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved2 = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $this->assertEquals($obj_stored[1], $obj_retrieved2);
     }
 
@@ -435,7 +435,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         foreach($objectset as $res)
         {
@@ -459,7 +459,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             null, 
             null, 
-            array(), 
+            [], 
             '\\common\\libraries\\MockDataObject');
         foreach($objectset as $res)
         {
@@ -538,7 +538,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             $order, 
             '\\common\\libraries\\MockDataObject');
-        $obj_retrieved = array();
+        $obj_retrieved = [];
         foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
@@ -553,7 +553,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             null, 
             $order, 
             '\\common\\libraries\\MockDataObject');
-        $obj_retrieved = array();
+        $obj_retrieved = [];
         foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
@@ -588,7 +588,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
             1, 
             $order, 
             '\\common\\libraries\\MockDataObject');
-        $obj_retrieved = array();
+        $obj_retrieved = [];
         foreach($objectset as $res)
         {
             $obj_retrieved[] = $res;
@@ -606,7 +606,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         
         $order = array(new ObjectTableOrder('inta', SORT_ASC));
         $objectset = $this->db->retrieve_objects('mockdata', null, 1, 1, $order, '\\common\\libraries\\MockDataObject');
-        $objects = array();
+        $objects = [];
         foreach($objectset as $res)
         {
             $objects[] = $res;
@@ -621,7 +621,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->create($obj_stored[0]);
         $this->db->create($obj_stored[1]);
         
-        $updated_props = array();
+        $updated_props = [];
         $updated_props['intb'] = 42;
         $updated_props['textb'] = 'updated';
         foreach ($updated_props as &$value)
@@ -632,13 +632,13 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->update_objects('mockdata', $updated_props, null);
         
         $condition = new EqualityCondition('id', $obj_stored[0]->props['id']);
-        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $obj_stored[0]->props['intb'] = 42;
         $obj_stored[0]->props['textb'] = 'updated';
         $this->assertEquals($obj_stored[0], $obj_retrieved);
         
         $condition = new EqualityCondition('id', $obj_stored[1]->props['id']);
-        $obj_retrieved2 = $this->db->retrieve_object('mockdata', $condition, array(), '\\common\\libraries\\MockDataObject');
+        $obj_retrieved2 = $this->db->retrieve_object('mockdata', $condition, [], '\\common\\libraries\\MockDataObject');
         $obj_stored[1]->props['intb'] = 42;
         $obj_stored[1]->props['textb'] = 'updated';
         $this->assertEquals($obj_stored[1], $obj_retrieved2);

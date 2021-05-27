@@ -32,7 +32,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function retrieve_custom_course_sections_as_array($course_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
@@ -46,7 +46,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $course_sections_set = self::retrieves(CourseSection::class, $condition);
 
-        $course_sections = array();
+        $course_sections = [];
         foreach($course_sections_set as $course_section)
         {
             $course_sections[] = $course_section->get_default_properties();
@@ -64,7 +64,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function count_custom_course_sections_from_course($course_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_COURSE_ID),
@@ -199,7 +199,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     private static function allowed_to_delete_category($category_id)
     {
-        $conditions = array();
+        $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(

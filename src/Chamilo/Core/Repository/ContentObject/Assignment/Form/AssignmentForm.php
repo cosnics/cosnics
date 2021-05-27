@@ -70,7 +70,7 @@ class AssignmentForm extends ContentObjectForm
         );
 
         // Visibilty submissions
-        $choices = array();
+        $choices = [];
         $choices[] = $this->createElement(
             'radio', Assignment::PROPERTY_VISIBILITY_SUBMISSIONS, null, Translation::get('VisibleOthers'), 1
         );
@@ -80,7 +80,7 @@ class AssignmentForm extends ContentObjectForm
         $this->addGroup($choices, null, Translation::get('VisibilitySubmissions'), '', false);
 
         // Allow late submissions
-        $choices = array();
+        $choices = [];
         $choices[] = $this->createElement(
             'radio', Assignment::PROPERTY_ALLOW_LATE_SUBMISSIONS, null, Translation::get('AllowLateYes'), 1
         );
@@ -159,7 +159,7 @@ class AssignmentForm extends ContentObjectForm
 
         $this->add_html_editor(Assignment::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, Translation::get('Text'), false);
 
-        $choices = array();
+        $choices = [];
         $choices[] = $this->createElement(
             'radio', Assignment::PROPERTY_VISIBILTY_FEEDBACK, null, Translation::get('AfterEndDate'), 0
         );
@@ -269,7 +269,7 @@ class AssignmentForm extends ContentObjectForm
 
             if (in_array($typeClass, $allowedTypeClasses))
             {
-                $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', array(), $basePackage);
+                $allowedTypeTranslation = Translation::getInstance()->getTranslation('TypeName', [], $basePackage);
 
                 $glyph = new NamespaceIdentGlyph(
                     $basePackage, true, false, false, IdentGlyph::SIZE_MINI, array('fa-fw')
@@ -288,7 +288,7 @@ class AssignmentForm extends ContentObjectForm
         $element->setDefaultValues($defaultElements);
     }
 
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         /** @var Assignment $object */
         $object = $this->get_content_object();

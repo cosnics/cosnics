@@ -215,7 +215,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function get_external_repository_actions()
     {
-        $actions = array();
+        $actions = [];
         $actions[] = self::ACTION_BROWSE_EXTERNAL_REPOSITORY;
         $actions[] = self::ACTION_UPLOAD_EXTERNAL_REPOSITORY;
 
@@ -248,7 +248,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function get_external_repository_object_actions(ExternalObject $object)
     {
-        $toolbar_items = array();
+        $toolbar_items = [];
 
         if ($object->is_editable())
         {
@@ -323,7 +323,7 @@ abstract class Manager extends Application implements NoContextComponent
                             if ($object->is_editable())
                             {
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, array()
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, []
                                 );
 
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
@@ -353,7 +353,7 @@ abstract class Manager extends Application implements NoContextComponent
                             {
 
                                 $glyph = new NamespaceIdentGlyph(
-                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, array()
+                                    $object::context(), true, false, false, IdentGlyph::SIZE_MINI, []
                                 );
                                 $toolbar_items[self::ACTION_SYNCHRONIZE_EXTERNAL_REPOSITORY] = new ToolbarItem(
                                     Translation::get(
@@ -390,7 +390,7 @@ abstract class Manager extends Application implements NoContextComponent
      */
     public function get_instance_identifier()
     {
-        return array();
+        return [];
     }
 
     public function get_menu()
@@ -429,7 +429,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     public static function get_packages_from_filesystem()
     {
-        $external_repository_managers = array();
+        $external_repository_managers = [];
 
         $path = Path::getInstance()->namespaceToFullPath('Chamilo\Core\Repository\Implementation');
         $directories = Filesystem::get_directory_content($path, Filesystem::LIST_DIRECTORIES, false);
@@ -449,7 +449,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
-        $conditions = array();
+        $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Registration::class, Registration::PROPERTY_TYPE),
             new StaticConditionVariable('Chamilo\Core\Repository\Implementation')
@@ -510,7 +510,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     public function render_footer()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->tabs->body_footer();
         $html[] = $this->tabs->footer();
@@ -523,7 +523,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
         $action = $this->get_action();
 
-        $html = array();
+        $html = [];
 
         if (!$this->is_stand_alone())
         {

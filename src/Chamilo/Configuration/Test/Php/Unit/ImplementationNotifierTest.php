@@ -60,7 +60,7 @@ class ImplementationNotifierTest extends Test
     {
         $data_class_mock = $this->createMock(DataClass::class);
         
-        new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, array());
+        new ImplementationNotifierDataClassListener($data_class_mock, __NAMESPACE__, []);
         
         $this->assertTrue(true);
     }

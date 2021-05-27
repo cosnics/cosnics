@@ -40,7 +40,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     public function run()
     {
         BreadcrumbTrail::getInstance()->add(new Breadcrumb(null, $this->get_root_content_object()->get_title()));
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->to_html();
@@ -164,7 +164,7 @@ class ViewerComponent extends Manager implements DelegateComponent
             $trail->add(new Breadcrumb($this->get_url(), $object->get_title()));
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->buttonToolbarRenderer->render();
         $html[] = GlossaryRendererFactory::launch($this->get_view(), $this, $object, $query);

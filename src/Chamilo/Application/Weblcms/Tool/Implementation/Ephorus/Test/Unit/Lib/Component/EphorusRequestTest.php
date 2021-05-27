@@ -78,7 +78,7 @@ class EphorusRequestTest extends Test
         $mock_component = $this->createMock(
             'application\weblcms\tool\implementation\ephorus\EphorusRequestComponent', 
             array('get_course_id', 'get_user_id'), 
-            array(), 
+            [], 
             'EphorusRequestComponent_test_get_base_request_' . $valid_id . '_' . $valid_object, 
             false);
         

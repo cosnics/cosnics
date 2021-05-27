@@ -35,7 +35,7 @@ class CourseImportForm extends FormValidator
         parent::__construct('course_import', self::FORM_METHOD_POST, $action);
 
         $this->form_type = $form_type;
-        $this->failedcsv = array();
+        $this->failedcsv = [];
         if ($this->form_type == self::TYPE_IMPORT)
         {
             $this->build_importing_form();
@@ -125,7 +125,7 @@ class CourseImportForm extends FormValidator
                 if ($course->create())
                 {
                     // create settings
-                    $setting_values = array();
+                    $setting_values = [];
                     $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] =
                         $catid;
                     $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] =
@@ -134,7 +134,7 @@ class CourseImportForm extends FormValidator
                         $course->get_titular_id();
 
                     $course->create_course_settings_from_values($setting_values);
-                    CourseManagementRights::getInstance()->create_rights_from_values($course, array());
+                    CourseManagementRights::getInstance()->create_rights_from_values($course, []);
 
                     if (!CourseDataManager::subscribe_user_to_course(
                         $course->get_id(), '1', $teacher_info->get_id()
@@ -178,7 +178,7 @@ class CourseImportForm extends FormValidator
 
                 if ($course->update())
                 {
-                    $setting_values = array();
+                    $setting_values = [];
                     $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::CATEGORY] =
                         $catid;
                     $setting_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS][CourseSettingsConnector::LANGUAGE] =

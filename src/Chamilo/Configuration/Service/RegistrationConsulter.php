@@ -145,7 +145,7 @@ class RegistrationConsulter extends DataConsulter
 
         if ($root)
         {
-            $rootIntegrationRegistrations = array();
+            $rootIntegrationRegistrations = [];
 
             foreach ($integrationRegistrations as $rootContext => $registration)
             {
@@ -173,7 +173,7 @@ class RegistrationConsulter extends DataConsulter
     public function getContentObjectRegistrations(bool $alsoReturnInactiveTypes = true)
     {
         $registrations = $this->getRegistrationsByType('Chamilo\Core\Repository\ContentObject');
-        $contentObjectTypes = array();
+        $contentObjectTypes = [];
 
         foreach ($registrations as $registration)
         {

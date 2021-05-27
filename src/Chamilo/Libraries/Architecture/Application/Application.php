@@ -55,7 +55,7 @@ abstract class Application
      *
      * @var string[]
      */
-    public static $application_path_cache = array();
+    public static $application_path_cache = [];
 
     /**
      *
@@ -201,7 +201,7 @@ abstract class Application
             return $this->get_application()->display_error_page($message);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->display_error_message($message);
@@ -235,7 +235,7 @@ abstract class Application
     public function display_messages($messages, $types)
     {
         $notificationMessageRenderer = new NotificationMessageRenderer();
-        $notificationMessages = array();
+        $notificationMessages = [];
 
         foreach ($types as $key => $type)
         {
@@ -274,7 +274,7 @@ abstract class Application
             return $this->get_application()->display_warning_page($message);
         }
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = $this->display_warning_message($message);
@@ -356,7 +356,7 @@ abstract class Application
     {
         $applications = Configuration::registrations_by_type($type);
 
-        $active_applications = array();
+        $active_applications = [];
 
         foreach ($applications as $application)
         {
@@ -377,7 +377,7 @@ abstract class Application
      */
     public function get_additional_parameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -510,7 +510,7 @@ abstract class Application
      *
      * @return string
      */
-    public function get_link($parameters = array(), $filter = array(), $encodeEntities = false)
+    public function get_link($parameters = [], $filter = [], $encodeEntities = false)
     {
         $redirect = new Redirect($parameters, $filter, $encodeEntities);
 
@@ -537,7 +537,7 @@ abstract class Application
      */
     public static function get_packages_from_filesystem($type = null)
     {
-        $applications = array();
+        $applications = [];
 
         if (!$type || $type == Registration::TYPE_CORE)
         {
@@ -663,7 +663,7 @@ abstract class Application
      *
      * @return string
      */
-    public function get_url($parameters = array(), $filter = array(), $encodeEntities = false)
+    public function get_url($parameters = [], $filter = [], $encodeEntities = false)
     {
         $parameters =
             (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());
@@ -811,7 +811,7 @@ abstract class Application
      * @param string $anchor
      */
     public function redirect(
-        $message = '', $errorMessage = false, $parameters = array(), $filter = array(), $encodeEntities = false,
+        $message = '', $errorMessage = false, $parameters = [], $filter = [], $encodeEntities = false,
         $anchor = null
     )
     {
@@ -861,7 +861,7 @@ abstract class Application
 
         $page = Page::getInstance();
 
-        $html = array();
+        $html = [];
 
         if ($page->isFullPage())
         {
@@ -902,7 +902,7 @@ abstract class Application
         $page->setApplication($this);
         $page->setTitle($this->getPageTitle());
 
-        $html = array();
+        $html = [];
 
         $html[] = $page->getHeader()->render();
 
@@ -994,7 +994,7 @@ abstract class Application
      * @param boolean $encodeEntities Whether or not to encode HTML entities. Defaults to false.
      * @param string $anchor
      */
-    public function simple_redirect($parameters = array(), $filter = array(), $encodeEntities = false, $anchor = null)
+    public function simple_redirect($parameters = [], $filter = [], $encodeEntities = false, $anchor = null)
     {
         $parameters =
             (count($parameters) ? array_merge($this->get_parameters(), $parameters) : $this->get_parameters());

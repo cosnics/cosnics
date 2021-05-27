@@ -44,22 +44,22 @@ abstract class RecurringContentObject extends ContentObject
         switch ($frequency)
         {
             case self::FREQUENCY_DAILY :
-                $string = $translator->getTranslation('Daily', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Daily', [], 'Chamilo\Libraries\Calendar');
                 break;
             case self::FREQUENCY_WEEKLY :
-                $string = $translator->getTranslation('Weekly', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Weekly', [], 'Chamilo\Libraries\Calendar');
                 break;
             case self::FREQUENCY_MONTHLY :
-                $string = $translator->getTranslation('Monthly', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Monthly', [], 'Chamilo\Libraries\Calendar');
                 break;
             case self::FREQUENCY_YEARLY :
-                $string = $translator->getTranslation('Yearly', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Yearly', [], 'Chamilo\Libraries\Calendar');
                 break;
             case self::FREQUENCY_WEEKDAYS :
-                $string = $translator->getTranslation('Weekdays', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Weekdays', [], 'Chamilo\Libraries\Calendar');
                 break;
             case self::FREQUENCY_BIWEEKLY :
-                $string = $translator->getTranslation('Biweekly', array(), 'Chamilo\Libraries\Calendar');
+                $string = $translator->getTranslation('Biweekly', [], 'Chamilo\Libraries\Calendar');
                 break;
             default:
                 throw new Exception();
@@ -94,7 +94,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public static function get_byday_ical_format($rank, $day)
     {
-        $format = array();
+        $format = [];
         if ($rank != 0)
         {
             $format[] = $rank;
@@ -113,13 +113,13 @@ abstract class RecurringContentObject extends ContentObject
         $translator = Translation::getInstance();
 
         return $result = array(
-            1 => $translator->getTranslation("Monday", array(), 'Chamilo\Libraries\Calendar'),
-            2 => $translator->getTranslation("Tuesday", array(), 'Chamilo\Libraries\Calendar'),
-            3 => $translator->getTranslation("Wednesday", array(), 'Chamilo\Libraries\Calendar'),
-            4 => $translator->getTranslation("Thursday", array(), 'Chamilo\Libraries\Calendar'),
-            5 => $translator->getTranslation("Friday", array(), 'Chamilo\Libraries\Calendar'),
-            6 => $translator->getTranslation("Saturday", array(), 'Chamilo\Libraries\Calendar'),
-            7 => $translator->getTranslation("Sunday", array(), 'Chamilo\Libraries\Calendar')
+            1 => $translator->getTranslation("Monday", [], 'Chamilo\Libraries\Calendar'),
+            2 => $translator->getTranslation("Tuesday", [], 'Chamilo\Libraries\Calendar'),
+            3 => $translator->getTranslation("Wednesday", [], 'Chamilo\Libraries\Calendar'),
+            4 => $translator->getTranslation("Thursday", [], 'Chamilo\Libraries\Calendar'),
+            5 => $translator->getTranslation("Friday", [], 'Chamilo\Libraries\Calendar'),
+            6 => $translator->getTranslation("Saturday", [], 'Chamilo\Libraries\Calendar'),
+            7 => $translator->getTranslation("Sunday", [], 'Chamilo\Libraries\Calendar')
         );
     }
 
@@ -131,7 +131,7 @@ abstract class RecurringContentObject extends ContentObject
     public static function get_byday_parts($bydays)
     {
         $bydays = explode(',', $bydays);
-        $parts = array();
+        $parts = [];
 
         foreach ($bydays as $byday)
         {
@@ -160,18 +160,18 @@ abstract class RecurringContentObject extends ContentObject
         $translator = Translation::getInstance();
 
         return array(
-            1 => $translator->getTranslation("January", array(), 'Chamilo\Libraries\Calendar'),
-            2 => $translator->getTranslation("February", array(), 'Chamilo\Libraries\Calendar'),
-            3 => $translator->getTranslation("March", array(), 'Chamilo\Libraries\Calendar'),
-            4 => $translator->getTranslation("April", array(), 'Chamilo\Libraries\Calendar'),
-            5 => $translator->getTranslation("May", array(), 'Chamilo\Libraries\Calendar'),
-            6 => $translator->getTranslation("June", array(), 'Chamilo\Libraries\Calendar'),
-            7 => $translator->getTranslation("Juli", array(), 'Chamilo\Libraries\Calendar'),
-            8 => $translator->getTranslation("August", array(), 'Chamilo\Libraries\Calendar'),
-            9 => $translator->getTranslation("September", array(), 'Chamilo\Libraries\Calendar'),
-            10 => $translator->getTranslation("October", array(), 'Chamilo\Libraries\Calendar'),
-            11 => $translator->getTranslation("November", array(), 'Chamilo\Libraries\Calendar'),
-            12 => $translator->getTranslation("December", array(), 'Chamilo\Libraries\Calendar')
+            1 => $translator->getTranslation("January", [], 'Chamilo\Libraries\Calendar'),
+            2 => $translator->getTranslation("February", [], 'Chamilo\Libraries\Calendar'),
+            3 => $translator->getTranslation("March", [], 'Chamilo\Libraries\Calendar'),
+            4 => $translator->getTranslation("April", [], 'Chamilo\Libraries\Calendar'),
+            5 => $translator->getTranslation("May", [], 'Chamilo\Libraries\Calendar'),
+            6 => $translator->getTranslation("June", [], 'Chamilo\Libraries\Calendar'),
+            7 => $translator->getTranslation("Juli", [], 'Chamilo\Libraries\Calendar'),
+            8 => $translator->getTranslation("August", [], 'Chamilo\Libraries\Calendar'),
+            9 => $translator->getTranslation("September", [], 'Chamilo\Libraries\Calendar'),
+            10 => $translator->getTranslation("October", [], 'Chamilo\Libraries\Calendar'),
+            11 => $translator->getTranslation("November", [], 'Chamilo\Libraries\Calendar'),
+            12 => $translator->getTranslation("December", [], 'Chamilo\Libraries\Calendar')
         );
     }
 
@@ -280,17 +280,17 @@ abstract class RecurringContentObject extends ContentObject
     public static function get_frequency_options()
     {
         $translator = Translation::getInstance();
-        $options = array();
+        $options = [];
 
-        $options[self::FREQUENCY_DAILY] = $translator->getTranslation('Daily', array(), 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_DAILY] = $translator->getTranslation('Daily', [], 'Chamilo\Libraries\Calendar');
         $options[self::FREQUENCY_WEEKDAYS] =
-            $translator->getTranslation('Weekdays', array(), 'Chamilo\Libraries\Calendar');
-        $options[self::FREQUENCY_WEEKLY] = $translator->getTranslation('Weekly', array(), 'Chamilo\Libraries\Calendar');
+            $translator->getTranslation('Weekdays', [], 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_WEEKLY] = $translator->getTranslation('Weekly', [], 'Chamilo\Libraries\Calendar');
         $options[self::FREQUENCY_BIWEEKLY] =
-            $translator->getTranslation('BiWeekly', array(), 'Chamilo\Libraries\Calendar');
+            $translator->getTranslation('BiWeekly', [], 'Chamilo\Libraries\Calendar');
         $options[self::FREQUENCY_MONTHLY] =
-            $translator->getTranslation('Monthly', array(), 'Chamilo\Libraries\Calendar');
-        $options[self::FREQUENCY_YEARLY] = $translator->getTranslation('Yearly', array(), 'Chamilo\Libraries\Calendar');
+            $translator->getTranslation('Monthly', [], 'Chamilo\Libraries\Calendar');
+        $options[self::FREQUENCY_YEARLY] = $translator->getTranslation('Yearly', [], 'Chamilo\Libraries\Calendar');
 
         return $options;
     }
@@ -301,15 +301,15 @@ abstract class RecurringContentObject extends ContentObject
     public static function get_rank_options()
     {
         $translator = Translation::getInstance();
-        $ranks = array();
+        $ranks = [];
 
-        $ranks[0] = $translator->getTranslation('Every', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[1] = $translator->getTranslation('First', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[2] = $translator->getTranslation('Second', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[3] = $translator->getTranslation('Third', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[4] = $translator->getTranslation('Fourth', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[5] = $translator->getTranslation('Fifth', array(), 'Chamilo\Libraries\Calendar');
-        $ranks[- 1] = $translator->getTranslation('Last', array(), 'Chamilo\Libraries\Calendar');
+        $ranks[0] = $translator->getTranslation('Every', [], 'Chamilo\Libraries\Calendar');
+        $ranks[1] = $translator->getTranslation('First', [], 'Chamilo\Libraries\Calendar');
+        $ranks[2] = $translator->getTranslation('Second', [], 'Chamilo\Libraries\Calendar');
+        $ranks[3] = $translator->getTranslation('Third', [], 'Chamilo\Libraries\Calendar');
+        $ranks[4] = $translator->getTranslation('Fourth', [], 'Chamilo\Libraries\Calendar');
+        $ranks[5] = $translator->getTranslation('Fifth', [], 'Chamilo\Libraries\Calendar');
+        $ranks[- 1] = $translator->getTranslation('Last', [], 'Chamilo\Libraries\Calendar');
 
         return $ranks;
     }
@@ -343,7 +343,7 @@ abstract class RecurringContentObject extends ContentObject
         if ($this->has_frequency())
         {
             return Translation::getInstance()->getTranslation(
-                'RepeatingCalendarEvent', array(), 'Chamilo\Libraries\Calendar'
+                'RepeatingCalendarEvent', [], 'Chamilo\Libraries\Calendar'
             );
         }
         else

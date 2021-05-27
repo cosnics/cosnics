@@ -112,7 +112,7 @@ class ContentObjectPublicationRepository
      *
      * @return int
      */
-    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = array())
+    public function countContentObjectPublicationsByContentObjectIds($contentObjectIds = [])
     {
         return DataManager::count(
             ContentObjectPublication::class,
@@ -212,7 +212,7 @@ class ContentObjectPublicationRepository
      *
      * @return EqualityCondition
      */
-    protected function getConditionByContentObjectIds($contentObjectIds = array())
+    protected function getConditionByContentObjectIds($contentObjectIds = [])
     {
         return new InCondition(
             new PropertyConditionVariable(

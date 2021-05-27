@@ -56,7 +56,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $this->set_parameter(ViewRenderer::PARAM_TYPE, $this->getCurrentRendererType());
         $this->set_parameter(ViewRenderer::PARAM_TIME, $this->getCurrentRendererTime());
 
-        $html = array();
+        $html = [];
 
         $html[] = $this->render_header();
         $html[] = '<div class="row">';
@@ -176,14 +176,14 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     protected function getViewActions()
     {
-        $actions = array();
+        $actions = [];
 
         $extensionRegistrations = Configuration::registrations_by_type(
             Manager::package() . '\Extension'
         );
 
-        $primaryExtensionActions = array();
-        $additionalExtensionActions = array();
+        $primaryExtensionActions = [];
+        $additionalExtensionActions = [];
 
         foreach ($extensionRegistrations as $extensionRegistration)
         {

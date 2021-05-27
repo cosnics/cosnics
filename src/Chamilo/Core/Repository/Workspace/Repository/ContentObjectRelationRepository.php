@@ -37,7 +37,7 @@ class ContentObjectRelationRepository
     public function findContentObjectInWorkspace(ContentObject $contentObject,
         WorkspaceInterface $workspaceImplementation)
     {
-        $relationConditions = array();
+        $relationConditions = [];
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -66,7 +66,7 @@ class ContentObjectRelationRepository
     public function findContentObjectRelationForWorkspaceAndContentObject(Workspace $workspace,
         ContentObject $contentObject)
     {
-        $relationConditions = array();
+        $relationConditions = [];
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -111,7 +111,7 @@ class ContentObjectRelationRepository
             throw new InvalidArgumentException('The given content object id can not be empty');
         }
 
-        $relationConditions = array();
+        $relationConditions = [];
 
         $relationConditions[] = new EqualityCondition(
             new PropertyConditionVariable(

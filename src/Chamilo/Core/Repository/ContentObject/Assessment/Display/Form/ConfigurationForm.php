@@ -39,7 +39,7 @@ class ConfigurationForm extends FormValidator
     {
         self::build($this);
 
-        $buttons = array();
+        $buttons = [];
         $buttons[] = $this->createElement(
             'style_submit_button', 'submit', Translation::get('Save', null, Utilities::COMMON_LIBRARIES), null, null,
             new FontAwesomeGlyph('arrow-right')
@@ -89,7 +89,7 @@ class ConfigurationForm extends FormValidator
             )
         );
 
-        $feedback_locations = array();
+        $feedback_locations = [];
         $feedback_locations[Configuration::FEEDBACK_LOCATION_TYPE_PAGE] = self::getContextTranslation(
             'FeedbackAfterEveryPage'
         );
@@ -122,13 +122,13 @@ class ConfigurationForm extends FormValidator
      *
      * @return HTML_QuickForm_Element[]
      */
-    static function build_answer_feedback(FormValidator $form, $answer_feedback_types = array())
+    static function build_answer_feedback(FormValidator $form, $answer_feedback_types = [])
     {
-        $answer_feedback_fields = array();
+        $answer_feedback_fields = [];
 
         $answer_feedback_fields[] = $form->createElement('checkbox', self::PROPERTY_ANSWER_FEEDBACK_OPTION);
 
-        $answer_feedback_options = array();
+        $answer_feedback_options = [];
 
         foreach ($answer_feedback_types as $answer_feedback_type)
         {
@@ -183,7 +183,7 @@ class ConfigurationForm extends FormValidator
         $form->setDefaults($defaults);
     }
 
-    static function getContextTranslation($variable, $parameters = array())
+    static function getContextTranslation($variable, $parameters = [])
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
     }

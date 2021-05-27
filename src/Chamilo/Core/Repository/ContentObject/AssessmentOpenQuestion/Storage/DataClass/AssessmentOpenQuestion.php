@@ -50,7 +50,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
      *
      * @return string[]
      */
-    public static function get_html_editors($html_editors = array())
+    public static function get_html_editors($html_editors = [])
     {
         return parent::get_html_editors(array(self::PROPERTY_HINT, self::PROPERTY_FEEDBACK));
     }
@@ -75,7 +75,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     public function get_types()
     {
-        $types = array();
+        $types = [];
         $types[self::TYPE_OPEN] = Translation::get('OpenQuestion');
         $types[self::TYPE_OPEN_WITH_DOCUMENT] = Translation::get('OpenQuestionWithDocument');
         $types[self::TYPE_DOCUMENT] = Translation::get('DocumentQuestion');

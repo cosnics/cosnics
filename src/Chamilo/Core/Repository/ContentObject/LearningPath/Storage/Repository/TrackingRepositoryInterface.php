@@ -111,8 +111,8 @@ interface TrackingRepositoryInterface
      *
      * @return DataClassIterator
      */
-    public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
+    public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = [],
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []);
 
     /**
      * Counts the learning path attempts joined with users for searching
@@ -123,7 +123,7 @@ interface TrackingRepositoryInterface
      *
      * @return int
      */
-    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = array(),
+    public function countLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = [],
         Condition $condition = null);
 
     /**
@@ -138,8 +138,8 @@ interface TrackingRepositoryInterface
      *
      * @return DataClassIterator
      */
-    public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = array(),
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = array());
+    public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = [],
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []);
 
     /**
      * Counts the targeted users for the given learning path (with a condition)

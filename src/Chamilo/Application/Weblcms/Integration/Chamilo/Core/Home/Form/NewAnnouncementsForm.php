@@ -19,7 +19,7 @@ class NewAnnouncementsForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[NewAnnouncements::CONFIGURATION_SHOW_CONTENT] = $this->getBlock()->getSetting(
             NewAnnouncements::CONFIGURATION_SHOW_CONTENT, 

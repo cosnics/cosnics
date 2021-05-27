@@ -24,7 +24,7 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
             $workspace = $this->get_component()->getWorkspace();
             if (! $workspace instanceof PersonalWorkspace)
             {
-                $parameters = array();
+                $parameters = [];
                 $parameters[Application::PARAM_CONTEXT] = 'Chamilo\Core\Repository\Workspace';
                 
                 $redirect = new Redirect($parameters);
@@ -38,7 +38,7 @@ class BreadcrumbGenerator extends \Chamilo\Libraries\Format\Structure\Breadcrumb
                             'Chamilo\Core\Repository\Workspace')));
             }
             
-            $parameters = array();
+            $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = Manager::context();
             
             if ($workspace instanceof Workspace)

@@ -13,7 +13,7 @@ class EventParser extends \Chamilo\Core\Repository\Integration\Chamilo\Libraries
 
     public function getEvents()
     {
-        $events = array();
+        $events = [];
         $fromDate = $this->getStartDate();
         $toDate = $this->getEndDate();
         $object = $this->getContentObject();

@@ -14,7 +14,7 @@ class SystemAnnouncementsForm extends ConfigurationForm
      */
     public function addSettings()
     {
-        $group = array();
+        $group = [];
         $group[] = & $this->createElement(
             'radio', 
             SystemAnnouncements::CONFIGURATION_SHOW_EMPTY, 
@@ -38,7 +38,7 @@ class SystemAnnouncementsForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[SystemAnnouncements::CONFIGURATION_SHOW_EMPTY] = $this->getBlock()->getSetting(
             SystemAnnouncements::CONFIGURATION_SHOW_EMPTY, 

@@ -195,7 +195,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public static function get_priority_options()
     {
-        $options = array();
+        $options = [];
 
         $options[self::PRIORITY_NONE] = Translation::get('Unspecified');
         $options[self::PRIORITY_LOW] = Translation::get('Low');
@@ -249,7 +249,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public static function get_types_options()
     {
-        $types = array();
+        $types = [];
 
         $types[self::CATEGORY_ANNIVERSARY] = Translation::get('Anniversary');
         $types[self::CATEGORY_BUSINESS] = Translation::get('Business');

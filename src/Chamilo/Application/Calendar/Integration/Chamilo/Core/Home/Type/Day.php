@@ -52,7 +52,7 @@ class Day extends BlockRenderer implements ConfigurableInterface,
 
     public function renderContentHeader()
     {
-        $html = array();
+        $html = [];
         
         $html[] = '<div class="portal-block-content' . ($this->getBlock()->isVisible() ? '' : ' hidden') . '">';
         
@@ -78,7 +78,7 @@ class Day extends BlockRenderer implements ConfigurableInterface,
                 new CalendarRendererProviderRepository(), 
                 $this->getUser(), 
                 $this->getUser(), 
-                array(), 
+                [], 
                 Manager::context());
             
             $calendarLegend = new Legend($dataProvider);
@@ -94,7 +94,7 @@ class Day extends BlockRenderer implements ConfigurableInterface,
                 $dataProvider, 
                 $calendarLegend, 
                 $time, 
-                array(), 
+                [], 
                 $this->getLinkTarget(), 
                 $hourStep,
                 $this->getBlock()->getSetting(self::CONFIGURATION_TIME_START, 8), 

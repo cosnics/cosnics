@@ -33,7 +33,7 @@ class UserTableCellRenderer extends RecordTableCellRenderer implements TableCell
         $toolbar->add_item(
             new ToolbarItem(
                 Translation::get('Vocabulary', null, Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('language', array(), null, 'fas'), $this->get_component()->get_url(
+                new FontAwesomeGlyph('language', [], null, 'fas'), $this->get_component()->get_url(
                 array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
                     \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID => $this->get_component()

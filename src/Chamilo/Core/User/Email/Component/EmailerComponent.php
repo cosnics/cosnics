@@ -32,12 +32,12 @@ class EmailerComponent extends Manager
         {
             $success = $form->email();
             $this->redirect(
-                Translation::get($success ? 'EmailSent' : 'EmailNotSent'), ($success ? false : true), array()
+                Translation::get($success ? 'EmailSent' : 'EmailNotSent'), ($success ? false : true), []
             );
         }
         else
         {
-            $html = array();
+            $html = [];
 
             $html[] = $this->render_header();
             $html[] = $this->display_targets();
@@ -51,7 +51,7 @@ class EmailerComponent extends Manager
     public function display_targets()
     {
         $target_users = $this->get_target_users();
-        $html = array();
+        $html = [];
 
         $html[] = '<div class="panel panel-default">';
 

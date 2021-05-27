@@ -35,11 +35,11 @@ class RightsTreeRenderer extends HtmlMenu
 
     private function get_group_array($group)
     {
-        $selected_group = array();
+        $selected_group = [];
 
         $selected_group['id'] = 'group_' . $group->get_id();
 
-        $glyph = new FontAwesomeGlyph('users', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
         $selected_group['class'] = $glyph->getClassNamesString();
 
         $selected_group['title'] = $group->get_name();
@@ -59,7 +59,7 @@ class RightsTreeRenderer extends HtmlMenu
      */
     private function get_menu_items()
     {
-        $menu = array();
+        $menu = [];
         $condition = new InCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $this->groups
         );
@@ -89,7 +89,7 @@ class RightsTreeRenderer extends HtmlMenu
     {
         $renderer = new TreeMenuRenderer($this->get_tree_name());
         $this->render($renderer, 'sitemap');
-        $html = array();
+        $html = [];
         $html[] = '<div class="active_elements" style="overflow: auto; height: 300px; width: 310px;">';
         $html[] = $renderer->toHTML();
         $html[] = '</div>';

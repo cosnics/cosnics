@@ -18,7 +18,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(array(self::PROPERTY_PUBLISHER, self::PROPERTY_PUBLISHED));
     }

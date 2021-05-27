@@ -74,7 +74,7 @@ class PublicationHandler implements PublicationHandlerInterface
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject[] $selectedContentObjects
      */
-    public function publish($selectedContentObjects = array())
+    public function publish($selectedContentObjects = [])
     {
         $translator = Translation::getInstance();
         $values = $this->publicationForm->exportValues();

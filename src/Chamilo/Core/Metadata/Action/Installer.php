@@ -37,7 +37,7 @@ abstract class Installer extends \Chamilo\Configuration\Package\Action\Installer
      */
     public function getPropertyProviderTypes()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -108,7 +108,7 @@ class FeedbackRepository  extends \Chamilo\Core\Repository\ContentObject\Assignm
             new StaticConditionVariable($contentObjectPublication->getId())
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

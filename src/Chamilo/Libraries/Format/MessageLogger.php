@@ -28,7 +28,7 @@ class MessageLogger
 
     public function __construct()
     {
-        $this->messages = array();
+        $this->messages = [];
     }
 
     /**
@@ -136,6 +136,6 @@ class MessageLogger
 
     public function truncate()
     {
-        $this->set_messages(array());
+        $this->set_messages([]);
     }
 }

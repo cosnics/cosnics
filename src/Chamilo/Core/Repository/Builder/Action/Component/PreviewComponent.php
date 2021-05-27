@@ -29,7 +29,7 @@ class PreviewComponent extends Manager
      */
     public function render_header()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::render_header();
 

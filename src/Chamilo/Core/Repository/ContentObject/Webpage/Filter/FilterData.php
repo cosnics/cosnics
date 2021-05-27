@@ -30,7 +30,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      * @param string[] $filter_properties
      * @return string[]
      */
-    public function get_filter_properties($filter_properties = array())
+    public function get_filter_properties($filter_properties = [])
     {
         $filter_properties[] = self::FILTER_FILESIZE;
         $filter_properties[] = self::FILTER_COMPARE;

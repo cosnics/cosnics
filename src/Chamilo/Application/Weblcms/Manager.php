@@ -415,7 +415,7 @@ abstract class Manager extends Application
      *
      * @return String
      */
-    public function get_course_user_category_move_url($course_type_user_category = array(), $direction)
+    public function get_course_user_category_move_url($course_type_user_category = [], $direction)
     {
         return $this->get_url(
             array(

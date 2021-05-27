@@ -31,7 +31,7 @@ class FilterData extends \Chamilo\Core\Repository\Filter\FilterData
      *
      * @return string[]
      */
-    public function get_filter_properties($filter_properties = array())
+    public function get_filter_properties($filter_properties = [])
     {
         $filter_properties[] = self::FILTER_START_TIME;
         $filter_properties[] = self::FILTER_END_TIME;

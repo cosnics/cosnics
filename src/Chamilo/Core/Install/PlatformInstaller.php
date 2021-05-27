@@ -70,7 +70,7 @@ class PlatformInstaller
         $this->dataManager = $dataManager;
 
         $this->configurationFilePath = Path::getInstance()->getStoragePath() . 'configuration/configuration.xml';
-        $this->packages = array();
+        $this->packages = [];
     }
 
     /**
@@ -194,7 +194,7 @@ class PlatformInstaller
      */
     private function performPreProduction()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->installerObserver->beforePreProduction();
         $html[] = $this->installerObserver->afterPreProductionDatabaseCreated(
@@ -243,7 +243,7 @@ class PlatformInstaller
     {
         $this->addPackages($this->configuration->get_packages());
         $this->orderPackages();
-        $html = array();
+        $html = [];
 
         echo $this->installerObserver->beforePackagesInstallation();
         flush();
@@ -283,7 +283,7 @@ class PlatformInstaller
 
     private function createFolders()
     {
-        $html = array();
+        $html = [];
 
         $html[] = $this->installerObserver->beforeFilesystemPrepared();
 

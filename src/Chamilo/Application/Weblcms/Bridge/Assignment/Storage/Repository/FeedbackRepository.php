@@ -114,7 +114,7 @@ class FeedbackRepository extends \Chamilo\Core\Repository\ContentObject\Assignme
             new StaticConditionVariable($contentObjectPublicationIdentifier)
         );
 
-        $conditions = array();
+        $conditions = [];
 
         ($condition instanceof Condition) ? $conditions[] = $condition : null;
 

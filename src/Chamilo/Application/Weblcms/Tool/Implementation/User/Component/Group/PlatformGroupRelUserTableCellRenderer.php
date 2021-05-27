@@ -30,7 +30,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
         $toolbar = new Toolbar(Toolbar::TYPE_HORIZONTAL);
 
         // always show details
-        $parameters = array();
+        $parameters = [];
         $parameters[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_USER_DETAILS;
         $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);
         $parameters[Manager::PARAM_OBJECTS] = $groupreluser->get_user_id();
@@ -54,7 +54,7 @@ class PlatformGroupRelUserTableCellRenderer extends DataClassTableCellRenderer
                 )
             );
 
-            $params = array();
+            $params = [];
             $params[Manager::PARAM_OBJECTS] = $groupreluser->get_user_id();
             $params[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = Manager::ACTION_REPORTING;
             $parameters[Manager::PARAM_TAB] = Request::get(Manager::PARAM_TAB);

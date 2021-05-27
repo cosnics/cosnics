@@ -95,7 +95,7 @@ class Request extends EphorusDataClass
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_request_user_id()))
         {
             $this->add_error(
-                Translation::get('RequestUserIdIsRequired'), array(),
+                Translation::get('RequestUserIdIsRequired'), [],
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             );
         }
@@ -103,7 +103,7 @@ class Request extends EphorusDataClass
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_guid()))
         {
             $this->add_error(
-                Translation::get('GuidIsRequired'), array(),
+                Translation::get('GuidIsRequired'), [],
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             );
         }
@@ -255,7 +255,7 @@ class Request extends EphorusDataClass
      *
      * @return string[] - The property request_times.
      */
-    public static function get_default_property_names($default_property_names = array())
+    public static function get_default_property_names($default_property_names = [])
     {
         $default_property_names[] = self::PROPERTY_COURSE_ID;
         $default_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;

@@ -17,7 +17,7 @@ class ExternalLinkTableColumnModel extends DataClassTableColumnModel implements 
 
     public function initialize_columns()
     {
-        $glyph = new FontAwesomeGlyph('link', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('link', [], null, 'fas');
         $this->add_column(
             new DataClassPropertyTableColumn(
                 Instance::class, Instance::PROPERTY_IMPLEMENTATION, $glyph->render()

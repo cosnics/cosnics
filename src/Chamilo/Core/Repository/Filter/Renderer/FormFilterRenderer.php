@@ -94,7 +94,7 @@ class FormFilterRenderer extends FilterRenderer
         )
         );
         $this->form_validator->addElement(
-            'style_button', 'submit', Translation::get('Search', array(), Utilities::COMMON_LIBRARIES), null, null,
+            'style_button', 'submit', Translation::get('Search', [], Utilities::COMMON_LIBRARIES), null, null,
             new FontAwesomeGlyph('search')
         );
     }
@@ -129,7 +129,7 @@ class FormFilterRenderer extends FilterRenderer
         }
 
         // creation date
-        $creationGroup = array();
+        $creationGroup = [];
 
         $creationGroup[] = $this->form_validator->createElement(
             'text', FilterData::FILTER_FROM_DATE, Translation::get('DateFrom'),
@@ -159,7 +159,7 @@ class FormFilterRenderer extends FilterRenderer
         );
 
         // modification date
-        $modificationGroup = array();
+        $modificationGroup = [];
 
         $modificationGroup[] = $this->form_validator->createElement(
             'text', FilterData::FILTER_FROM_DATE, Translation::get('DateFrom'),
@@ -192,7 +192,7 @@ class FormFilterRenderer extends FilterRenderer
         $type_selector = $typeSelectorFactory->getTypeSelector();
 
         $select = $this->form_validator->addElement(
-            'select', FilterData::FILTER_TYPE, Translation::get('ContentObjectType'), array(),
+            'select', FilterData::FILTER_TYPE, Translation::get('ContentObjectType'), [],
             'class="form-control input-sm"'
         );
 
@@ -315,7 +315,7 @@ class FormFilterRenderer extends FilterRenderer
         $parameters = new DataClassRetrievesParameters($condition);
         $user_views = DataManager::retrieves(UserView::class, $parameters);
 
-        $user_view_options = array();
+        $user_view_options = [];
         $user_view_options[0] = '-- ' . Translation::get('SelectAView') . ' --';
 
         foreach($user_views as $user_view)
@@ -326,7 +326,7 @@ class FormFilterRenderer extends FilterRenderer
         return $user_view_options;
     }
 
-    public function set_defaults($defaults = array())
+    public function set_defaults($defaults = [])
     {
         $filter_data = $this->get_filter_data();
 

@@ -30,7 +30,7 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
      */
     public function findStructureLocationByContextAndAction($context, $action = null)
     {
-        $conditions = array();
+        $conditions = [];
         
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_CONTEXT), 

@@ -27,7 +27,7 @@ class Joins implements Countable, Hashable
      *
      * @param \Chamilo\Libraries\Storage\Query\Join[] $joins
      */
-    public function __construct($joins = array())
+    public function __construct($joins = [])
     {
         $this->joins = (is_array($joins) ? $joins : func_get_args());
     }
@@ -66,7 +66,7 @@ class Joins implements Countable, Hashable
      */
     public function getHashParts(): array
     {
-        $hashes = array();
+        $hashes = [];
 
         foreach ($this->joins as $join)
         {

@@ -108,7 +108,7 @@ class ForumPostRendition
     public function get_attachments()
     {
         $forumPost = $this->getForumPost();
-        $html = array();
+        $html = [];
 
         $attachments = $forumPost->get_attached_content_objects();
 
@@ -116,7 +116,7 @@ class ForumPostRendition
         {
             $html[] = '<div class="panel panel-default panel-attachments">';
 
-            $glyph = new FontAwesomeGlyph('paperclip', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('paperclip', [], null, 'fas');
 
             $html[] =
                 '<div class="panel-heading">' . $glyph->render() . ' ' . htmlentities(Translation::get('Attachments')) .
@@ -136,7 +136,7 @@ class ForumPostRendition
              */
             foreach ($attachments as $attachment)
             {
-                $params = array();
+                $params = [];
                 $params[Manager::PARAM_ACTION] = Manager::ACTION_VIEW_ATTACHMENT;
                 $params[Manager::PARAM_FORUM_TOPIC_ID] = $forumPost->get_forum_topic_id();
                 $params[Manager::PARAM_SELECTED_FORUM_POST] = $forumPost->get_id();

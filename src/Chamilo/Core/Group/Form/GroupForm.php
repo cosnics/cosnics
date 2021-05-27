@@ -195,7 +195,7 @@ class GroupForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $group = $this->group;
         $defaults[Group::PROPERTY_ID] = $group->get_id();

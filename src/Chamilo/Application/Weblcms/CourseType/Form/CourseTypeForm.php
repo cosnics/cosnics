@@ -57,7 +57,7 @@ class CourseTypeForm extends CommonCourseForm implements FormLockedSettingsSuppo
      */
     public function get_base_object_default_values(DataClass $base_object)
     {
-        $default_values = array();
+        $default_values = [];
         
         $default_values[CourseType::PROPERTY_TITLE] = $base_object->get_title();
         $default_values[CourseType::PROPERTY_DESCRIPTION] = $base_object->get_description();

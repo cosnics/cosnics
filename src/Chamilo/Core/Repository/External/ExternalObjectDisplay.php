@@ -31,7 +31,7 @@ abstract class ExternalObjectDisplay
      */
     public function as_html()
     {
-        $html = array();
+        $html = [];
         $html[] = $this->get_title();
         $html[] = $this->get_preview() . '<br/>';
         $html[] = $this->get_properties_table();
@@ -60,7 +60,7 @@ abstract class ExternalObjectDisplay
     {
         $object = $this->get_object();
 
-        $properties = array();
+        $properties = [];
         $properties[Translation::get('Title')] = $object->get_title();
 
         if ($object->get_description())
@@ -118,7 +118,7 @@ abstract class ExternalObjectDisplay
             $text = '<h1>' . Translation::get('NoPreviewAvailable') . '</h1>';
         }
 
-        $html = array();
+        $html = [];
         $html[] = '<div class="' . $class . '">';
         $html[] = '<div class="background">';
         $html[] = $glyph->render();

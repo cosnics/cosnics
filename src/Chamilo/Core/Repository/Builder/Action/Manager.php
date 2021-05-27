@@ -83,7 +83,7 @@ abstract class Manager extends Application
         return $this->get_parent()->get_complex_content_object_breadcrumbs();
     }
 
-    public function get_creation_links(ContentObject $content_object, $types = array(), $additional_links = array())
+    public function get_creation_links(ContentObject $content_object, $types = [], $additional_links = [])
     {
         return $this->get_parent()->get_creation_links($content_object, $types, $additional_links);
     }

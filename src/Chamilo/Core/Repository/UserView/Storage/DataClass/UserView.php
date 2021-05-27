@@ -26,7 +26,7 @@ class UserView extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION, self::PROPERTY_USER_ID));

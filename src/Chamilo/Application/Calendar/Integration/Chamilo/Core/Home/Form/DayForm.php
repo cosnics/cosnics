@@ -22,7 +22,7 @@ class DayForm extends ConfigurationForm
 
     public function setDefaults()
     {
-        $defaults = array();
+        $defaults = [];
         
         $defaults[Day::CONFIGURATION_HOUR_STEP] = $this->getBlock()->getSetting(Day::CONFIGURATION_HOUR_STEP, 1);
         $defaults[Day::CONFIGURATION_TIME_START] = $this->getBlock()->getSetting(Day::CONFIGURATION_TIME_START, 8);

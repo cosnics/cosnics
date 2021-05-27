@@ -79,7 +79,7 @@ class TreeMenu extends HtmlMenu
      */
     public function get_menu_items()
     {
-        $menu_items = array();
+        $menu_items = [];
         $menu_items[] = $this->data_provider->get_tree_menu_data()->to_array();
 
         return $menu_items;

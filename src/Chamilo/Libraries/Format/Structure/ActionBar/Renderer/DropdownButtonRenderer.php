@@ -40,7 +40,7 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
      */
     public function renderLinkContent()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::renderLinkContent();
         $html[] = $this->renderCaret();
@@ -54,7 +54,7 @@ class DropdownButtonRenderer extends AbstractButtonRenderer
      */
     public function renderLinkOpeningTag()
     {
-        $html = array();
+        $html = [];
 
         $html[] = '<a';
         $html[] = $this->renderDropdownAttributes();

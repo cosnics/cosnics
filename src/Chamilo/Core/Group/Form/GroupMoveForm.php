@@ -18,7 +18,7 @@ class GroupMoveForm extends FormValidator
 
     private $group;
 
-    private $locations = array();
+    private $locations = [];
 
     private $level = 1;
 
@@ -69,7 +69,7 @@ class GroupMoveForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array())
+    public function setDefaults($defaults = [])
     {
         $group = $this->group;
         $defaults[self::PROPERTY_LOCATION] = $group->get_parent();

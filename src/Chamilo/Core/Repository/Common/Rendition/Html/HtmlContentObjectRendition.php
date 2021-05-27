@@ -16,7 +16,7 @@ class HtmlContentObjectRendition extends ContentObjectRendition
      */
     private function get_bar($percent, $status)
     {
-        $html = array();
+        $html = [];
         
         if ($percent >= 100)
         {

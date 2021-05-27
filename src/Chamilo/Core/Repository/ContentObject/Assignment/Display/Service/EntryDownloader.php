@@ -137,7 +137,7 @@ class EntryDownloader
             $entityIdentifier
         );
 
-        $archiveFileNameParts = array();
+        $archiveFileNameParts = [];
         $archiveFileNameParts[] = $this->getAssignmentName();
         $archiveFileNameParts[] = $entityName;
 

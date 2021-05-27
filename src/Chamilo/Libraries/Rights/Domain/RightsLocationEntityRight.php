@@ -20,7 +20,7 @@ abstract class RightsLocationEntityRight extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = array())
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             array(

@@ -31,7 +31,7 @@ class StorageAliasGenerator
      *
      * @var string[][]
      */
-    private $aliases = array();
+    private $aliases = [];
 
     /**
      *
@@ -43,7 +43,7 @@ class StorageAliasGenerator
 
         foreach ($this->getTypes() as $type)
         {
-            $this->aliases[$type] = array();
+            $this->aliases[$type] = [];
         }
     }
 

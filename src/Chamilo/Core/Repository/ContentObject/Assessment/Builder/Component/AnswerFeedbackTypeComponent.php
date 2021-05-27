@@ -34,7 +34,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
         {
             $table = new AnswerFeedbackTypeTable($this);
             
-            $html = array();
+            $html = [];
             
             $html[] = $this->render_header();
             $html[] = $table->as_html();
@@ -49,7 +49,7 @@ class AnswerFeedbackTypeComponent extends Manager implements TableSupport
                 $complex_question_id = array($complex_question_id);
             }
             
-            $conditions = array();
+            $conditions = [];
             $conditions[] = $this->get_table_condition();
             $conditions[] = new InCondition(
                 new PropertyConditionVariable(

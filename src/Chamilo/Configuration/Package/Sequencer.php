@@ -35,8 +35,8 @@ class Sequencer
         }
 
         $this->package_contexts = $package_contexts;
-        $this->sequence = array();
-        $this->unprocessed_package_contexts = array();
+        $this->sequence = [];
+        $this->unprocessed_package_contexts = [];
     }
 
     public function run()

@@ -15,5 +15,5 @@ interface WriterInterface
      *
      * @param ExportFormatInterface[] $exportedObjects
      */
-    public function writeExportedObjects(array $exportedObjects = array());
+    public function writeExportedObjects(array $exportedObjects = []);
 }

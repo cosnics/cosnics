@@ -23,7 +23,7 @@ class Display extends QuestionDisplay
         if ($this->get_question()->has_hint() && $this->get_configuration()->allow_hints())
         {
             $hint_name = 'hint_' . $this->get_complex_content_object_question()->get_id();
-            $glyph = new FontAwesomeGlyph('gift', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('gift', [], null, 'fas');
 
             $html[] = '<div class="panel-body panel-body-assessment-hint">';
             $html[] = '<a id="' . $hint_name . '" class="btn btn-default hint_button">' . $glyph->render() . ' ' .
@@ -47,14 +47,14 @@ class Display extends QuestionDisplay
         $min = $question->get_low();
         $max = $question->get_high();
         $question_name = $this->get_complex_content_object_question()->get_id() . '_0';
-        $scores = array();
+        $scores = [];
 
         for ($i = $min; $i <= $max; $i ++)
         {
             $scores[$i] = $i;
         }
 
-        $element_template = array();
+        $element_template = [];
         $element_template[] =
             '<div class="panel-body"><!-- BEGIN error --><small class="text-danger">{error}</small><br /><!-- END error -->	{element}';
         $element_template[] = '<div class="clearfix"></div>';

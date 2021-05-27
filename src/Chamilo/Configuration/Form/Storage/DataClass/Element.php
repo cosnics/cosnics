@@ -42,7 +42,7 @@ class Element extends DataClass
     public function DynamicForm($defaultProperties)
     {
         parent::__construct($defaultProperties);
-        // $this->options = array();
+        // $this->options = [];
     }
 
     public function add_options($options)
@@ -74,15 +74,15 @@ class Element extends DataClass
         switch ($type)
         {
             case self::TYPE_TEXTBOX :
-                return new FontAwesomeGlyph('font', array(), null, 'fas');
+                return new FontAwesomeGlyph('font', [], null, 'fas');
             case self::TYPE_HTMLEDITOR :
-                return new FontAwesomeGlyph('code', array(), null, 'fas');
+                return new FontAwesomeGlyph('code', [], null, 'fas');
             case self::TYPE_RADIO_BUTTONS :
-                return new FontAwesomeGlyph('check-circle', array(), null, 'fas');
+                return new FontAwesomeGlyph('check-circle', [], null, 'fas');
             case self::TYPE_CHECKBOX :
-                return new FontAwesomeGlyph('check-square', array(), null, 'fas');
+                return new FontAwesomeGlyph('check-square', [], null, 'fas');
             case self::TYPE_SELECT_BOX :
-                return new FontAwesomeGlyph('caret-square-down', array(), null, 'fas');
+                return new FontAwesomeGlyph('caret-square-down', [], null, 'fas');
         }
     }
 
@@ -99,7 +99,7 @@ class Element extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = array())
+    public static function get_default_property_names($extended_property_names = [])
     {
         return parent::get_default_property_names(
             array(

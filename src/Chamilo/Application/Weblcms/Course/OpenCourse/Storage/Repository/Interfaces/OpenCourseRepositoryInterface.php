@@ -25,7 +25,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return DataClassIterator
      */
-    public function findOpenCoursesByRoles($roles = array(), Condition $condition = null, $offset = null, $count = null, $orderBy = array());
+    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = []);
 
     /**
      * Retrieves the open courses
@@ -37,7 +37,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return DataClassIterator
      */
-    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
+    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
 
     /**
      * Retrieves the courses that are not open
@@ -49,7 +49,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return DataClassIterator
      */
-    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = array());
+    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
 
     /**
      * Counts the open courses by the given user roles
@@ -59,7 +59,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @return int
      */
-    public function countOpenCoursesByRoles($roles = array(), Condition $condition = null);
+    public function countOpenCoursesByRoles($roles = [], Condition $condition = null);
 
     /**
      * Counts all the open courses

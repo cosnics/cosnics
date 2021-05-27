@@ -38,7 +38,7 @@ class TreeMenuItem
      *
      * @var \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem[]
      */
-    private $children = array();
+    private $children = [];
 
     /**
      *
@@ -62,7 +62,7 @@ class TreeMenuItem
 
         if (is_null($class))
         {
-            $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+            $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
             $this->set_class($glyph->getClassNamesString());
         }
         else
@@ -70,7 +70,7 @@ class TreeMenuItem
             $this->set_class($class);
         }
 
-        $this->set_children(array());
+        $this->set_children([]);
         $this->set_collapsed($collapsed);
     }
 
@@ -228,14 +228,14 @@ class TreeMenuItem
      */
     public function to_array()
     {
-        $array = array();
+        $array = [];
         $array['title'] = $this->get_title();
         $array['url'] = $this->get_url();
         $array['id'] = $this->get_id();
         $array['class'] = $this->get_class();
         $array['collapsed'] = $this->get_collapsed();
 
-        $children = array();
+        $children = [];
 
         if ($this->has_children())
         {

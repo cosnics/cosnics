@@ -19,7 +19,7 @@ class QuestionResultExportImplementation extends \Chamilo\Core\Repository\Conten
         
         $question = $this->get_complex_question()->get_ref_object();
         
-        $options = array();
+        $options = [];
         foreach ($question->get_options() as $option_id => $option)
         {
             $options[$option_id] = $option->get_value();

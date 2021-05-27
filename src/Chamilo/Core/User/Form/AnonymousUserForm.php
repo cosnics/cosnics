@@ -41,7 +41,7 @@ class AnonymousUserForm extends FormValidator
         $recaptchaSiteKey =
             Configuration::getInstance()->get_setting(array('Chamilo\Core\Admin', 'recaptcha_site_key'));
 
-        $html = array();
+        $html = [];
 
         $html[] = '<script src="https://www.google.com/recaptcha/api.js"></script>';
         $html[] = '<div class="g-recaptcha" data-sitekey="' . $recaptchaSiteKey . '"></div>';

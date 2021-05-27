@@ -70,7 +70,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
      */
     protected function initializeTemplateParameters(Configuration $configuration)
     {
-        $parameters = array();
+        $parameters = [];
 
         $parameters['chamilo.configuration.general.security_key'] = md5(uniqid(rand() . time()));
         $parameters['chamilo.configuration.general.hashing_algorithm'] = $configuration->get_crypt_algorithm();
@@ -103,7 +103,7 @@ class ConfigurationWriter implements ConfigurationWriterInterface
      *
      * @return string
      */
-    protected function substituteParameters($configurationContent, $parameters = array())
+    protected function substituteParameters($configurationContent, $parameters = [])
     {
         foreach($parameters as $variable => $value)
         {

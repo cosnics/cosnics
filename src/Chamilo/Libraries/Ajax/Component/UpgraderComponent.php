@@ -73,7 +73,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -99,7 +99,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -125,7 +125,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -151,7 +151,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -177,7 +177,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -203,7 +203,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -229,7 +229,7 @@ class UpgraderComponent extends Manager
             $oldAllowedTypes = $existingAssignment->get_allowed_types();
             $oldAllowedTypes = explode(',', $oldAllowedTypes);
 
-            $newAllowedTypes = array();
+            $newAllowedTypes = [];
 
             foreach ($oldAllowedTypes as $oldAllowedType)
             {
@@ -249,10 +249,10 @@ class UpgraderComponent extends Manager
         $contentObjectPublicationService = new ContentObjectPublicationService(
             new ContentObjectPublicationRepository(new PublicationRepository())
         );
-        $formats = array();
+        $formats = [];
         $formats[] = 's:10:"use_object"';
 
-        $conditions = array();
+        $conditions = [];
 
         foreach ($formats as $format)
         {
@@ -285,7 +285,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_answers();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {
@@ -309,7 +309,7 @@ class UpgraderComponent extends Manager
         foreach($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
-            $newOptions = array();
+            $newOptions = [];
 
             foreach ($oldOptions as $key => $oldOption)
             {

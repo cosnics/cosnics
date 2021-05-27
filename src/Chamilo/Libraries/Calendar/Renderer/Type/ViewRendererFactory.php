@@ -59,7 +59,7 @@ class ViewRendererFactory
      */
     public function __construct(
         $rendererType, CalendarRendererProviderInterface $dataProvider, Legend $legend, $displayTime,
-        $actions = array(), $linkTarget = ''
+        $actions = [], $linkTarget = ''
     )
     {
         $this->rendererType = $rendererType;

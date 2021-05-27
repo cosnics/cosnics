@@ -36,7 +36,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Deactivate', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('pause-cicle', array(), null, 'fas'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('pause-cicle', [], null, 'fas'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_DEACTIVATE,
                         Manager::PARAM_INSTANCE_ID => $result->get_id()
@@ -50,7 +50,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('Activate', null, Utilities::COMMON_LIBRARIES),
-                    new FontAwesomeGlyph('play-cicle', array(), null, 'fas'), $this->get_component()->get_url(
+                    new FontAwesomeGlyph('play-cicle', [], null, 'fas'), $this->get_component()->get_url(
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_ACTIVATE,
                         Manager::PARAM_INSTANCE_ID => $result->get_id()
@@ -116,7 +116,7 @@ class InstanceTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
                 $glyph = new NamespaceIdentGlyph(
                     $result->get_implementation(), true, false, false,
-                    IdentGlyph::SIZE_SMALL, array(), $name
+                    IdentGlyph::SIZE_SMALL, [], $name
                 );
 
                 return $glyph->render();

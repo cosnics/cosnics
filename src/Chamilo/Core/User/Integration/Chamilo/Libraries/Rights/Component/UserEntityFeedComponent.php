@@ -70,7 +70,7 @@ class UserEntityFeedComponent extends Manager
      */
     protected function getElementForUser($user)
     {
-        $glyph = new FontAwesomeGlyph('user', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('user', [], null, 'fas');
 
         return new AdvancedElementFinderElement(
             UserEntityProvider::ENTITY_TYPE . '_' . $user->getId(), $glyph->getClassNamesString(),
@@ -87,7 +87,7 @@ class UserEntityFeedComponent extends Manager
     {
         $elements = new AdvancedElementFinderElements();
         $label = $this->getTranslator()->trans('Users', [], 'Chamilo\Core\User');
-        $glyph = new FontAwesomeGlyph('folder', array(), null, 'fas');
+        $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
         // Add user category
         $userCategory = new AdvancedElementFinderElement('users', $glyph->getClassNamesString(), $label, $label);

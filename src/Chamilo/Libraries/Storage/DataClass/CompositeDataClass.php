@@ -19,7 +19,7 @@ abstract class CompositeDataClass extends DataClass
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = array(), $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = null)
     {
         parent::__construct($defaultProperties);
         $this->set_additional_properties($additionalProperties);
@@ -115,7 +115,7 @@ abstract class CompositeDataClass extends DataClass
      */
     public static function get_additional_property_names()
     {
-        return array();
+        return [];
     }
 
     /**

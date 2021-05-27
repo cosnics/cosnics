@@ -44,7 +44,7 @@ class HTML_QuickForm_toggle extends HTML_QuickForm_extended_checkbox
      */
     function toHtml()
     {
-        $html = array();
+        $html = [];
 
         $html[] = parent::toHtml();
         $html[] = ResourceManager::getInstance()->getResourceHtml(

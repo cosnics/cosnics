@@ -18,13 +18,13 @@ class Session
     {
         // session_regenerate_id();
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
     }
 
     public static function destroy()
     {
         session_unset();
-        $_SESSION = array();
+        $_SESSION = [];
         session_destroy();
     }
 
