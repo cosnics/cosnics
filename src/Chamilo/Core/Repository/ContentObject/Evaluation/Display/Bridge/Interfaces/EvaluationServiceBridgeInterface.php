@@ -96,4 +96,10 @@ interface EvaluationServiceBridgeInterface
      * @return EvaluationEntryScore
      */
     public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore;
+
+    /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string;
 }

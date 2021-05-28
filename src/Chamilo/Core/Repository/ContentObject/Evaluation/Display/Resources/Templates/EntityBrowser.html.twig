@@ -465,6 +465,9 @@
                         <template #cell(fullname)="data">
                             <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
                         </template>
+                        <template #cell(name)="data">
+                            <a :href="getUrl(data.item.id)">${data.item.name}</a>
+                        </template>
                         <template #head(members)="data">
                             {{ 'Members'|trans({}, appContext) }}
                         </template>

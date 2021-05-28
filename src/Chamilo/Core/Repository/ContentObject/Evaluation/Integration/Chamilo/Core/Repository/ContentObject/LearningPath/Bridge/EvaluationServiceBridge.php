@@ -143,6 +143,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     }
 
     /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string
+    {
+        return $this->learningPathEvaluationServiceBridge->getEntityDisplayName($this->getCurrentEntityType(), $entityId);
+    }
+
+
+    /**
      * @param User $user
      * @param int $entityType
      * @param int $entityId

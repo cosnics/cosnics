@@ -139,4 +139,14 @@ class PublicationPlatformGroupEntityService implements PublicationEntityServiceI
 
         return $availableEntityIdentifiers[0];
     }
+
+    /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string
+    {
+        $platformGroup = DataManager::retrieve_by_id(Group::class, $entityId);
+        return $platformGroup->get_name();
+    }
 }

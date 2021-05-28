@@ -148,6 +148,15 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     }
 
     /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string
+    {
+        return $this->getPublicationEntityService()->getEntityDisplayName($entityId);
+    }
+
+    /**
      * @param User $user
      * @param int $entityType
      * @param int $entityId

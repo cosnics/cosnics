@@ -76,4 +76,14 @@ class PublicationUserEntityService implements PublicationEntityServiceInterface
     {
         return $currentUser->getId();
     }
+
+    /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string
+    {
+        $user = $this->getUsersForEntity($entityId)[0];
+        return $user->get_fullname();
+    }
 }

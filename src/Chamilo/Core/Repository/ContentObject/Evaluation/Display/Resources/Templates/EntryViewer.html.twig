@@ -371,32 +371,32 @@
                 <div class="dropdown-entity-label">
                     <span class="inline-glyph fa fa-user mod-entity"></span>
                     <span class="entity-type">{{ entityType|trans({}, appContext) }}</span>
-                    <span class="entity-index">{{ USER_INDEX }} / {{ USER_COUNT }}</span>
+                    <span class="entity-index">{{ ENTITY_INDEX }} / {{ ENTITY_COUNT }}</span>
                 </div>
-                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle u-flex u-align-items-center u-justify-content-between mod-entities" title="{{ SELECTED_USER.fullname|raw }}">
-                    <span>{{ SELECTED_USER.fullname|raw }}</span> <span class="caret"></span>
+                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle u-flex u-align-items-center u-justify-content-between mod-entities" title="{{ SELECTED_ENTITY.name|raw }}">
+                    <span>{{ SELECTED_ENTITY.name|raw }}</span> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-entities">
                     <li class="dropdown-header">
                         {{ 'SelectAnother'|trans({}, appContext)|lower }} {{ entityType|trans({}, appContext)|lower }}
                     </li>
-                    {% for USER in USERS %}
+                    {% for ENTITY in ENTITIES %}
                         <li>
-                            {% if USER.selected %}
-                                <a class="selected disabled" title="{{ USER.fullname|raw }}"><span>{{ USER.fullname|raw }}</span></a>
+                            {% if ENTITY.selected %}
+                                <a class="selected disabled" title="{{ ENTITY.name|raw }}"><span>{{ ENTITY.name|raw }}</span></a>
                             {% else %}
-                                <a class="not-selected" title="{{ USER.fullname|raw }}" href="{{ USER.url|raw }}">
-                                    <span>{{ USER.fullname|raw }}</span>
+                                <a class="not-selected" title="{{ ENTITY.name|raw }}" href="{{ ENTITY.url|raw }}">
+                                    <span>{{ ENTITY.name|raw }}</span>
                                 </a>
                             {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
             </div>
-            {% if PREVIOUS_USER %}<a class="btn btn-default mod-btn-prev" title="{{ 'Previous'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ PREVIOUS_USER.url|raw }}">
+            {% if PREVIOUS_ENTITY %}<a class="btn btn-default mod-btn-prev" title="{{ 'Previous'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ PREVIOUS_ENTITY.url|raw }}">
                 <span class="inline-glyph fa fa-backward mod-btn-prev"></span>
             </a>{% endif %}
-            {% if NEXT_USER %}<a class="btn btn-default mod-btn-next" title="{{ 'Next'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ NEXT_USER.url|raw }}">
+            {% if NEXT_ENTITY %}<a class="btn btn-default mod-btn-next" title="{{ 'Next'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ NEXT_ENTITY.url|raw }}">
                 <span class="inline-glyph fa fa-forward mod-btn-next"></span>
             </a>{% endif %}
         </div>

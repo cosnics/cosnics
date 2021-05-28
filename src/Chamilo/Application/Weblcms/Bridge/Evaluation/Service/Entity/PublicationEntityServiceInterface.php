@@ -34,4 +34,10 @@ interface PublicationEntityServiceInterface
      * @return int
      */
     public function getCurrentEntityIdentifier(User $currentUser): int;
+
+    /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string;
 }

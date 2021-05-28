@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupService;
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -20,6 +21,11 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
     protected $publicationEntityServiceManager;
 
     /**
+     * @var CourseGroupService
+     */
+    protected $courseGroupService;
+
+    /**
      * @var UserService
      */
     protected $userService;
@@ -29,9 +35,10 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
      */
     protected $targetCourseGroupIds = [];
 
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, UserService $userService)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, CourseGroupService $courseGroupService, UserService $userService)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
+        $this->courseGroupService = $courseGroupService;
         $this->userService = $userService;
     }
 
@@ -143,5 +150,15 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
             $this->getAvailableEntityIdentifiersForUser($this->getContentObjectPublication(), $currentUser);
 
         return array_pop(array_reverse($availableEntityIdentifiers));
+    }
+
+    /**
+     * @param int $entityId
+     * @return string
+     */
+    public function getEntityDisplayName(int $entityId): string
+    {
+        $courseGroup = $this->courseGroupService->getCourseGroupById($entityId);
+        return $courseGroup->get_name();
     }
 }

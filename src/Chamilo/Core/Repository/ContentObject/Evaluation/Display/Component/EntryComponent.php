@@ -158,33 +158,42 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $rubricView = null;
         $hasRubric = $canUseRubricEvaluation = false;
 
-        $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+        $entityIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
 
-        $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, new FilterParameters());
+        $selectedEntities = $this->getEntityService()->getEntitiesFromIds($entityIds, $contextIdentifier, new FilterParameters());
 
-        $users = array();
-        $selectedUser = null;
-
+        $entities = array();
+        $selectedEntity = null;
         $prev = null;
-        $previousUser = null;
-        $nextUser = null;
+        $previousEntity = null;
+        $nextEntity = null;
         $count = 0;
-        $userIndex = 0;
-        foreach ($selectedUsers as $user)
+        $entityIndex = 0;
+        $entityType = $this->getEntityType();
+
+        foreach ($selectedEntities as $entity)
         {
-            $users[] = ['fullname' => strtoupper($user['lastname']) . ' ' . $user['firstname'], 'url' => $this->get_url(['entity_id' => $user['id']]), 'selected' => $entityId == $user['id']];
-            if ($entityId == $user['id'])
+            if ($entityType == 0)
             {
-                $selectedUser = end($users);
-                $previousUser = $prev;
-                $userIndex = $count + 1;
+                $name = strtoupper($entity['lastname']) . ' ' . $entity['firstname'];
+            }
+            else
+            {
+                $name = $entity['name'];
+            }
+            $entities[] = ['name' => $name, 'url' => $this->get_url(['entity_id' => $entity['id']]), 'selected' => $entityId == $entity['id']];
+            if ($entityId == $entity['id'])
+            {
+                $selectedEntity = end($entities);
+                $previousEntity = $prev;
+                $entityIndex = $count + 1;
             } else if (isset($prev) && $prev['selected'])
             {
-                $nextUser = end($users);
+                $nextEntity = end($entities);
             }
-            $prev = end($users);
+            $prev = end($entities);
             $count++;
         }
 
@@ -204,14 +213,14 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         return [
             'HEADER' => $this->render_header(),
             'EVALUATION_TITLE' => $this->getEvaluation()->get_title(),
-            'USERS' => $users,
-            'SELECTED_USER' => $selectedUser,
-            'PREVIOUS_USER' => $previousUser,
-            'NEXT_USER' => $nextUser,
+            'ENTITIES' => $entities,
+            'SELECTED_ENTITY' => $selectedEntity,
+            'PREVIOUS_ENTITY' => $previousEntity,
+            'NEXT_ENTITY' => $nextEntity,
             'DISPLAY_ALL_ENTITIES_URL' => $this->getEvaluationServiceBridge() instanceof EmbeddedViewSupport,
             'ALL_ENTITIES_URL' => $this->get_url([self::PARAM_ACTION => self::DEFAULT_ACTION, 'entity_id' => null]),
-            'USER_COUNT' => $count,
-            'USER_INDEX' => $userIndex,
+            'ENTITY_COUNT' => $count,
+            'ENTITY_INDEX' => $entityIndex,
             'ENTITY_TYPE' => $entityType,
             'CAN_EDIT_EVALUATION' => $this->getRightsService()->canUserEditEvaluation(),
             'PRESENCE_STATUS' => $presenceStatus,
@@ -269,16 +278,8 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         }
 
         $entityId = $this->getEntityIdentifier();
-        $entityType = $this->getEntityType();
-
-        if ($entityType == 0)
-        {
-            $user = $this->getEvaluationServiceBridge()->getUsersForEntity($entityId)[0];
-            $this->entityName = $user->get_fullname();
-            return $this->entityName;
-        }
-
-        return '';
+        $this->entityName = $this->getEvaluationServiceBridge()->getEntityDisplayName($entityId);
+        return $this->entityName;
     }
 
     public function render_header($pageTitle = '')
