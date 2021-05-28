@@ -25,13 +25,13 @@ use Chamilo\Libraries\Translation\Translation;
 class AssessmentMatchNumericQuestionForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
@@ -72,7 +72,7 @@ class AssessmentMatchNumericQuestionForm extends ContentObjectForm
                     true) . 'AssessmentMatchNumericQuestion.js'));
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         if (! $this->isSubmitted())
         {

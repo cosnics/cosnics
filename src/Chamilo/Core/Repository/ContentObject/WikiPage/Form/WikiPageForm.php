@@ -37,7 +37,7 @@ class WikiPageForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults[ContentObject::PROPERTY_TITLE] = Request::get(ContentObject::PROPERTY_TITLE) == null ? null : Request::get(
             ContentObject::PROPERTY_TITLE);

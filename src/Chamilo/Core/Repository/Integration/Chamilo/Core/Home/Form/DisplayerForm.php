@@ -47,7 +47,7 @@ class DisplayerForm extends ConfigurationForm
             $connector->getDisplayerObjects());
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = [];
         
@@ -59,6 +59,6 @@ class DisplayerForm extends ConfigurationForm
             $defaults[Displayer::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

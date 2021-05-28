@@ -186,7 +186,7 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         if ($this->entityRelation instanceof WorkspaceEntityRelation)
         {

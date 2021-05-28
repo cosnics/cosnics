@@ -251,7 +251,7 @@ class RightsForm extends FormValidator
      *
      * @param string[] $defaults
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $locations = $this->locations;
         $first_location = $locations[0];

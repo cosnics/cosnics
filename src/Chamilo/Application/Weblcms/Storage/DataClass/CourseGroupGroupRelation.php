@@ -237,7 +237,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return array The property names.
      */
-    static function get_default_property_names()
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return array(
             self::PROPERTY_COURSE_CODE,

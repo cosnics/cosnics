@@ -17,7 +17,7 @@ class NewAnnouncementsForm extends ConfigurationForm
         $this->addElement('checkbox', NewAnnouncements::CONFIGURATION_SHOW_CONTENT, Translation::get('ShowContent'));
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = [];
         
@@ -25,6 +25,6 @@ class NewAnnouncementsForm extends ConfigurationForm
             NewAnnouncements::CONFIGURATION_SHOW_CONTENT, 
             true);
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

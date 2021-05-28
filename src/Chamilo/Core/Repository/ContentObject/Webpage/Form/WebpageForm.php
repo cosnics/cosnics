@@ -28,7 +28,7 @@ use HTML_QuickForm_Rule_Required;
 class WebpageForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         $description_options = [];
         $description_options['height'] = '100';
@@ -57,7 +57,7 @@ class WebpageForm extends ContentObjectForm
         $renderer->setElementTemplate('{element}', 'html_content');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         $description_options = [];
         $description_options['height'] = '100';
@@ -152,7 +152,7 @@ class WebpageForm extends ContentObjectForm
         return Path::getInstance()->getRepositoryPath();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         $defaults['html_content'] = file_get_contents($this->get_upload_path() . $object->get_path());

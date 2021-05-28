@@ -21,7 +21,6 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -29,6 +28,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -53,8 +53,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     {
         // check if the content object has indeed been published for the user
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->get_publication_id()
+            ContentObjectPublication::class, $this->get_publication_id()
         );
 
         if (!$this->publication)
@@ -75,8 +74,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         BreadcrumbTrail::getInstance()->add(
             new Breadcrumb(
-                $this->get_url(),
-                Translation::get('ToolViewerComponent', array('TITLE' => $object->get_title()))
+                $this->get_url(), Translation::get('ToolViewerComponent', array('TITLE' => $object->get_title()))
             )
         );
 
@@ -86,8 +84,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
 
         $course_settings_controller = CourseSettingsController::getInstance();
         $this->feedback_allowed = $course_settings_controller->get_course_setting(
-            $this->get_course(),
-            CourseSettingsConnector::ALLOW_FEEDBACK
+            $this->get_course(), CourseSettingsConnector::ALLOW_FEEDBACK
         );
 
         if ($this->feedback_allowed)
@@ -111,45 +108,13 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header()
+    public function count_feedbacks()
     {
-        $html = [];
+        $parameters = new DataClassCountParameters($this->get_feedback_conditions());
 
-        $html[] = parent::render_header();
-        $html[] = $this->getButtonToolbarRenderer()->render();
-        $html[] = $this->html;
-
-        if ($this->feedback_allowed)
-        {
-            $html[] = '<div id="publication_feedback">';
-            $html[] = '<h4>' . Translation::get('Feedbacks') . '</h4>';
-        }
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function render_footer()
-    {
-        $html = [];
-
-        if ($this->feedback_allowed)
-        {
-            $html[] = '</div>';
-        }
-
-        $html[] = parent::render_footer();
-
-        return implode(PHP_EOL, $html);
-    }
-
-    public function get_publication_id()
-    {
-        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
-    }
-
-    public function get_publication_count()
-    {
-        return 1;
+        return DataManager::count(
+            Feedback::class, $parameters
+        );
     }
 
     public function getButtonToolbarRenderer()
@@ -179,59 +144,6 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         return $this->buttonToolbarRenderer;
     }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
-     */
-    public function retrieve_feedbacks($count, $offset)
-    {
-        $parameters = new DataClassRetrievesParameters(
-            $this->get_feedback_conditions(),
-            $count,
-            $offset,
-            array(
-                new OrderBy(
-                    new PropertyConditionVariable(
-                        Feedback::class,
-                        Feedback::PROPERTY_MODIFICATION_DATE
-                    )
-                )
-            )
-        );
-
-        return DataManager::retrieves(
-            Feedback::class,
-            $parameters
-        );
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::count_feedbacks()
-     */
-    public function count_feedbacks()
-    {
-        $parameters = new DataClassCountParameters($this->get_feedback_conditions());
-
-        return DataManager::count(
-            Feedback::class,
-            $parameters
-        );
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::retrieve_feedback()
-     */
-    public function retrieve_feedback($feedback_id)
-    {
-        return DataManager::retrieve_by_id(
-            Feedback::class,
-            $feedback_id
-        );
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::get_feedback()
-     */
     public function get_feedback()
     {
         $feedback = new Feedback();
@@ -240,52 +152,32 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         return $feedback;
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_view_feedback()
-     */
-    public function is_allowed_to_view_feedback()
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_create_feedback()
-     */
-    public function is_allowed_to_create_feedback()
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_update_feedback()
-     */
-    public function is_allowed_to_update_feedback($feedback)
-    {
-        return $feedback->get_user_id() == $this->get_user_id();
-    }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_delete_feedback()
-     */
-    public function is_allowed_to_delete_feedback($feedback)
-    {
-        return $feedback->get_user_id() == $this->get_user_id();
-    }
-
     private function get_feedback_conditions()
     {
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                Feedback::class,
-                Feedback::PROPERTY_PUBLICATION_ID
-            ),
-            new StaticConditionVariable($this->publication->get_id())
+                Feedback::class, Feedback::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($this->publication->get_id())
         );
 
         return new AndCondition($conditions);
     }
+
+    public function get_publication_count()
+    {
+        return 1;
+    }
+
+    public function get_publication_id()
+    {
+        return Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::count_feedbacks()
+     */
 
     /**
      *
@@ -294,5 +186,108 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     public function hasCategories()
     {
         return false;
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::retrieve_feedback()
+     */
+
+    public function is_allowed_to_create_feedback()
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::get_feedback()
+     */
+
+    public function is_allowed_to_delete_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->get_user_id();
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_view_feedback()
+     */
+
+    public function is_allowed_to_update_feedback($feedback)
+    {
+        return $feedback->get_user_id() == $this->get_user_id();
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_create_feedback()
+     */
+
+    public function is_allowed_to_view_feedback()
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_update_feedback()
+     */
+
+    public function render_footer()
+    {
+        $html = [];
+
+        if ($this->feedback_allowed)
+        {
+            $html[] = '</div>';
+        }
+
+        $html[] = parent::render_footer();
+
+        return implode(PHP_EOL, $html);
+    }
+
+    /*
+     * (non-PHPdoc) @see \core\repository\feedback\FeedbackSupport::is_allowed_to_delete_feedback()
+     */
+
+    public function render_header($pageTitle = '')
+    {
+        $html = [];
+
+        $html[] = parent::render_header($pageTitle);
+        $html[] = $this->getButtonToolbarRenderer()->render();
+        $html[] = $this->html;
+
+        if ($this->feedback_allowed)
+        {
+            $html[] = '<div id="publication_feedback">';
+            $html[] = '<h4>' . Translation::get('Feedbacks') . '</h4>';
+        }
+
+        return implode(PHP_EOL, $html);
+    }
+
+    public function retrieve_feedback($feedback_id)
+    {
+        return DataManager::retrieve_by_id(
+            Feedback::class, $feedback_id
+        );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Feedback\FeedbackSupport::retrieve_feedbacks()
+     */
+    public function retrieve_feedbacks($count, $offset)
+    {
+        $parameters = new DataClassRetrievesParameters(
+            $this->get_feedback_conditions(), $count, $offset, array(
+                new OrderBy(
+                    new PropertyConditionVariable(
+                        Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
+                    )
+                )
+            )
+        );
+
+        return DataManager::retrieves(
+            Feedback::class, $parameters
+        );
     }
 }

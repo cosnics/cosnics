@@ -38,13 +38,7 @@ abstract class PlatformCategory extends DataClass
         );
     }
 
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     *
-     */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         return array(
             $this->class_name() => new EqualityCondition(

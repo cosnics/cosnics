@@ -135,7 +135,7 @@ class AllSubscribedUserTableCellRenderer extends RecordTableCellRenderer
                 $user_with_subscription_status_and_type[AllSubscribedUserTableColumnModel::SUBSCRIPTION_TYPE] % 2)
             {
                 if ($this->get_component()->get_user()->is_platform_admin() ||
-                    CourseManagementRights::getInstance()->is_allowed(
+                    CourseManagementRights::getInstance()->is_allowed_management(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $this->get_component()->get_course_id(),
                         CourseManagementRights::TYPE_COURSE, $user_id
                     ))

@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Driver\PDOConnection;
+use Doctrine\DBAL\Driver\PDO\Connection;
+use Doctrine\DBAL\Driver\PDO\SQLSrv\Statement;
+use Doctrine\DBAL\Driver\Result;
 use PDO;
 
 /**
@@ -12,29 +13,55 @@ use PDO;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class MsSqlDoctrinePdoConnection extends PDOConnection implements Connection
+class MsSqlDoctrinePdoConnection extends Connection
 {
-
-    public function getServerVersion()
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $dsn
+     * @param string|null $user
+     * @param string|null $password
+     * @param mixed[]|null $options
+     *
+     * @internal The connection can be only instantiated by its driver.
+     *
+     */
+    public function __construct($dsn, $user = null, $password = null, ?array $options = null)
     {
-        return null;
+        parent::__construct($dsn, $user, $password, $options);
+        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, [Statement::class, []]);
     }
 
     /**
-     * @return \Doctrine\DBAL\Driver\Statement
+     * {@inheritDoc}
      */
-    public function query()
+    public function lastInsertId($name = null)
     {
-        $args = func_get_args();
-        $sql = $args[0];
-        $stmt = $this->prepare($sql);
-        $stmt->execute();
+        if ($name === null)
+        {
+            return parent::lastInsertId($name);
+        }
+
+        $stmt = $this->prepare('SELECT CONVERT(VARCHAR(MAX), current_value) FROM sys.sequences WHERE name = ?');
+        $stmt->execute([$name]);
+
+        if ($stmt instanceof Result)
+        {
+            return $stmt->fetchOne();
+        }
+
+        return $stmt->fetchColumn();
+    }
+
+    public function query(...$args)
+    {
+        $statement = parent::query(...$args);
 
         if (!extension_loaded('pdo_dblib') && extension_loaded('pdo_sqlsrv'))
         {
-            $stmt->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
+            $statement->setAttribute(PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8);
         }
 
-        return $stmt;
+        return $statement;
     }
 }

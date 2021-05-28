@@ -26,7 +26,7 @@ class TimeZoneCalendarWrapper extends \kigkonsult\iCalcreator\vcalendar
         $this->vCalendar = $vCalendar;
     }
 
-    public function getProperty($property)
+    public function getProperty($propName = false, $propix = false, $inclParam = false)
     {
     }
 

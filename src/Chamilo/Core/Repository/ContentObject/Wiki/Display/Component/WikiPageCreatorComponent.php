@@ -64,11 +64,11 @@ class WikiPageCreatorComponent extends Manager implements ViewerInterface, Deleg
         return $this->get_root_content_object()->get_allowed_types();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle, $complex_wiki_page);
 
         $repository_viewer_action = Request::get(\Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION);
 

@@ -82,7 +82,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
     {
         $rights_utilities = CourseManagementRights::getInstance();
         
-        $location = $rights_utilities->create_subtree_root_location(0, WeblcmsRights::TREE_TYPE_COURSE, true);
+        $location = $rights_utilities->create_subtree_root_location(\Chamilo\Application\Weblcms\Manager::context(),0, WeblcmsRights::TREE_TYPE_COURSE, true);
         
         if (! $location)
         {
@@ -94,7 +94,7 @@ class Installer extends \Chamilo\Configuration\Package\Action\Installer
         foreach ($specific_rights as $right_id)
         {
             
-            if (! $rights_utilities->invert_location_entity_right($right_id, 0, 0, $location->get_id()))
+            if (! $rights_utilities->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),$right_id, 0, 0, $location->get_id()))
             {
                 return false;
             }

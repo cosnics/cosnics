@@ -128,9 +128,9 @@ abstract class ImageManipulation
     {
         $info = getimagesize($this->sourceFile);
         $extensions = array('1' => 'gif', '2' => 'jpg', '3' => 'png');
-        $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : '';
+        $extension = array_key_exists($info[2], $extensions) ? $extensions[$info[2]] : null;
 
-        return $extension;
+        return (is_null($extension) ? 'jpeg' : $extension);
     }
 
     /**

@@ -234,7 +234,7 @@ class FillInBlanksQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         if (!$this->isSubmitted())
         {

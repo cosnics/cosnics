@@ -33,7 +33,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
      *
      * @return \Sabre\VObject\Component
      */
-    public function getComponent()
+    public function getComponent($arg1 = null, $arg2 = null)
     {
         return $this->component;
     }
@@ -42,7 +42,7 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
      *
      * @param \Sabre\VObject\Component $component
      */
-    public function setComponent(Component $component)
+    public function setComponent($component, $arg1 = false, $arg2 = false)
     {
         $this->component = $component;
     }
@@ -97,8 +97,12 @@ class TimeZoneComponentWrapper extends TimeZoneCalendarWrapper
      * @param string $name
      * @param string $value
      */
-    public function setProperty($name, $value)
+    public function setProperty()
     {
+        $arglist = func_get_args();
+        $name = $arglist[0];
+        $value = $arglist[1];
+
         if ($name == 'DTSTART')
         {
             $this->getComponent()->add($name, $this->implodeDate($value));

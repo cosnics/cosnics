@@ -448,11 +448,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function render_header(ComplexWikiPage $complex_wiki_page = null)
+    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
     {
         $html = [];
 
-        $html[] = parent::render_header(null, false);
+        $html[] = parent::render_header($pageTitle);
 
         $html[] = '<div class="row">';
 

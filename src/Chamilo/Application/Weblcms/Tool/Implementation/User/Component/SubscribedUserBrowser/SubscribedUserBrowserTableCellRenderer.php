@@ -74,7 +74,7 @@ class SubscribedUserBrowserTableCellRenderer extends RecordTableCellRenderer
             if ($user_id != $this->get_component()->get_user()->get_id() && !isset($group_id))
             {
                 if ($this->get_component()->get_user()->is_platform_admin() ||
-                    CourseManagementRights::getInstance()->is_allowed(
+                    CourseManagementRights::getInstance()->is_allowed_management(
                         CourseManagementRights::TEACHER_UNSUBSCRIBE_RIGHT, $this->get_component()->get_course_id(),
                         CourseManagementRights::TYPE_COURSE, $user_id
                     ))

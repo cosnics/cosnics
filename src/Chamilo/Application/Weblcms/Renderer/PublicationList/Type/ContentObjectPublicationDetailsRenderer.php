@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -22,7 +23,7 @@ class ContentObjectPublicationDetailsRenderer extends ListContentObjectPublicati
      *
      * @see \Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer::get_publications()
      */
-    public function get_publications()
+    public function get_publications($offset = 0, $max_objects = - 1, OrderBy $object_table_order = null)
     {
         $publication_id = $this->get_tool_browser()->get_publication_id();
 

@@ -155,7 +155,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
      *
      * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
      */
-    public function getCurrentTreeNode(LearningPath $learningPath)
+    public function getCurrentTreeNodeForLearningPath(LearningPath $learningPath)
     {
         $tree = $this->getTree($learningPath);
 

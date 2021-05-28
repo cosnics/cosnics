@@ -49,7 +49,7 @@ class RightsForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    function setDefaults()
+    function setDefaults($defaultValues = [], $filter = null)
     {
         $default_elements = new AdvancedElementFinderElements();
         $targets_entities = Rights::getInstance()->get_request_targets_entities();
@@ -68,7 +68,7 @@ class RightsForm extends FormValidator
 
         $this->getElement(self::PROPERTY_ACCESS)->setDefaultValues($default_elements);
 
-        parent::setDefaults([]);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     function set_rights()

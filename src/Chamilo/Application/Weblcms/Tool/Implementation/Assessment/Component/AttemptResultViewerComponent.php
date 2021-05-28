@@ -197,14 +197,14 @@ class AttemptResultViewerComponent extends Manager
     /**
      * Displays the header, depending on the parameters
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
         if (! Request::get(self::PARAM_SHOW_FULL))
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-            $html[] = Application::render_header();
+            $html[] = Application::render_header($pageTitle);
         }
         else
         {

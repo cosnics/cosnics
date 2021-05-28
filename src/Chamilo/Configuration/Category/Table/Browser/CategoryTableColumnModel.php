@@ -23,7 +23,7 @@ class CategoryTableColumnModel extends DataClassTableColumnModel implements Tabl
 
     public function initialize_columns()
     {
-        $category_class_name = get_class($this->get_component()->get_parent()->get_category());
+        $category_class_name = get_class($this->get_component()->get_parent()->getCategory());
 
         $this->add_column(new StaticTableColumn(Translation::get(self::CATEGORY)));
         $this->add_column(new DataClassPropertyTableColumn($category_class_name, PlatformCategory::PROPERTY_NAME));

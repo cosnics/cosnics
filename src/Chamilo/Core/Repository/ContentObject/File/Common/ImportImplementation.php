@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Common\Import\ContentObjectImportImplementation;
 class ImportImplementation extends ContentObjectImportImplementation
 {
 
-    public static function get_types()
+    public static function get_types(array $types = [])
     {
         return parent::get_types(array(ContentObjectImport::FORMAT_FILE, ContentObjectImport::FORMAT_ZIP));
     }

@@ -125,13 +125,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         );
     }
 
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     *
-     */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         $id = $this->get_id();
 

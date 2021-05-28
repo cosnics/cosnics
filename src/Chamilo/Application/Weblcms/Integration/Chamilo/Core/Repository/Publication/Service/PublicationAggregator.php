@@ -199,7 +199,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
                     if ($course_settings_controller->get_course_setting(
                             $course, CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $tool_id
-                        ) && $course_management_rights->is_allowed(
+                        ) && $course_management_rights->is_allowed_management(
                             CourseManagementRights::PUBLISH_FROM_REPOSITORY_RIGHT, $course->get_id()
                         ))
                     {

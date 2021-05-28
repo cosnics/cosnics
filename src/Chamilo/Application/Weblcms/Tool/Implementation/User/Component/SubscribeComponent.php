@@ -67,12 +67,12 @@ class SubscribeComponent extends Manager
 
                     if (DataManager::is_user_direct_subscribed_to_course(
                             $userId, $course_id
-                        ) || (!$this->get_user()->is_platform_admin() && !$course_management_rights->is_allowed(
+                        ) || (!$this->get_user()->is_platform_admin() && !$course_management_rights->is_allowed_management(
                                 CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $course_id,
                                 CourseManagementRights::TYPE_COURSE, $userId
                             )))
                     {
-                        $requestRight = $course_management_rights->is_allowed(
+                        $requestRight = $course_management_rights->is_allowed_management(
                             CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $course_id,
                             CourseManagementRights::TYPE_COURSE, $userId
                         );

@@ -43,7 +43,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
 
         if ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
                     WeblcmsRights::EDIT_RIGHT
-                ) && CourseManagementRights::getInstance()->is_allowed(
+                ) && CourseManagementRights::getInstance()->is_allowed_management(
                     CourseManagementRights::TEACHER_DIRECT_SUBSCRIBE_RIGHT, $this->get_component()->get_course_id(),
                     CourseManagementRights::TYPE_COURSE, $user_with_subscription_status->get_id()
                 )))
@@ -81,7 +81,7 @@ class UnsubscribedUserTableCellRenderer extends DataClassTableCellRenderer
         }
         elseif ($this->get_component()->get_user()->is_platform_admin() || ($this->get_component()->is_allowed(
                     WeblcmsRights::EDIT_RIGHT
-                ) && CourseManagementRights::getInstance()->is_allowed(
+                ) && CourseManagementRights::getInstance()->is_allowed_management(
                     CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $this->get_component()->get_course_id(),
                     CourseManagementRights::TYPE_COURSE, $user_with_subscription_status->get_id()
                 )))

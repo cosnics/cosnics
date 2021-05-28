@@ -96,7 +96,7 @@ class HTML_QuickForm_advanced_element_finder extends HTML_QuickForm_group
      * @access public
      * @return void
      */
-    public function accept($renderer, $required = false, $error = null)
+    public function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderElement($this, $required, $error);
     }

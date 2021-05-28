@@ -189,7 +189,7 @@ class BuilderForm extends FormValidator
         return $succes;
     }
 
-    public function setDefaults($parameters = [])
+    public function setDefaults($parameters = [], $filter = null)
     {
         $parameters[Element::PROPERTY_NAME] = $this->element->get_name();
         $parameters[Element::PROPERTY_REQUIRED] = $this->element->get_required();

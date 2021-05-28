@@ -81,7 +81,7 @@ class AttachmentViewerComponent extends Manager
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         return Page::getInstance()->getHeader()->toHtml();
     }

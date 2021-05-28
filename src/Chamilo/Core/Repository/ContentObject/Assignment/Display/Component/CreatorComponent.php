@@ -108,10 +108,10 @@ class CreatorComponent extends Manager
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $parameters = [
-            'HEADER' => parent::render_header(),
+            'HEADER' => parent::render_header($pageTitle),
             'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__'])
         ];
 

@@ -31,7 +31,7 @@ class PhysicalLocationForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -42,7 +42,7 @@ class PhysicalLocationForm extends ContentObjectForm
             array('size' => '100'));
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -53,7 +53,7 @@ class PhysicalLocationForm extends ContentObjectForm
             array('size' => '100'));
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = [], $filter = null)
     {
         $lo = $this->get_content_object();
         if (isset($lo))

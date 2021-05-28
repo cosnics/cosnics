@@ -99,7 +99,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
         }
     }
 
-    public function getButtonToolbarRenderer($selected_assessment)
+    public function getButtonToolbarRenderer($selected_assessment = null)
     {
         if (!isset($this->buttonToolbarRenderer))
         {

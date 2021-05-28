@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -32,7 +33,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
         $breadcrumbtrail = $this->get_breadcrumbtrail();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
     {
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $complex_wiki_page = DataManager::retrieve_by_id(
@@ -42,7 +43,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
 
         $html = [];
 
-        $html[] = parent::render_header($complex_wiki_page);
+        $html[] = parent::render_header($pageTitle, $complex_wiki_page);
         $html[] = '<h3 id="page-title">' . Translation::get('Edit', null, Utilities::COMMON_LIBRARIES) . ' ' .
             $wiki_page->get_title() . '</h3>';
 

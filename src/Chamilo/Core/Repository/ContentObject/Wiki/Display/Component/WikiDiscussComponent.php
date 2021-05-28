@@ -153,11 +153,11 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function render_header()
+    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
     {
         $html = [];
 
-        $html[] = parent::render_header($this->complexWikiPage);
+        $html[] = parent::render_header($pageTitle, $this->complexWikiPage);
 
         $parser = new MediawikiParser(
             new MediawikiParserContext(

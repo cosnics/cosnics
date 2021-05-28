@@ -36,9 +36,9 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
      *
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
-        $html = [parent::render_header()];
+        $html = [parent::render_header($pageTitle)];
         $html[] = $this->renderCommonFunctionality();
 
         return implode(PHP_EOL, $html);

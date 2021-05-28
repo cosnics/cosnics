@@ -420,7 +420,7 @@ class SettingsForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $has_settings = $this->external_repository->has_settings();
         $is_platform = $this->configurer->get_user()->is_platform_admin();

@@ -49,7 +49,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
      *
      * @return string
      */
-    public function render_cell($result)
+    public function render_cell($column, $result)
     {
         $html = [];
 

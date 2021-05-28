@@ -118,10 +118,10 @@ class PublisherComponent extends Manager implements ViewerInterface, DelegateCom
      *
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = [])
     {
         $html = [];
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $wizardHeader = new WizardHeader();
         $wizardHeader->setStepTitles(

@@ -19,7 +19,7 @@ class HotpotatoesContentObjectImportForm extends ContentObjectImportForm
             Translation::get('FileName', null, Utilities::COMMON_LIBRARIES));
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = [], $filter = null)
     {
         parent::setDefaults(array(self::PROPERTY_TYPE => ContentObjectImport::FORMAT_HOTPOTATOES));
     }

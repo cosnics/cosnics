@@ -118,7 +118,7 @@ class CourseManagementRights extends WeblcmsRights
      * @param $user_id int - [OPTIONAL] default: null
      * @return boolean
      */
-    public function is_allowed($right_id, $identifier, $type = self::TYPE_COURSE, $user_id = null)
+    public function is_allowed_management($right_id, $identifier, $type = self::TYPE_COURSE, $user_id = null)
     {
         $entities = [];
         $entities[UserEntity::ENTITY_TYPE] = new UserEntity();
@@ -301,10 +301,10 @@ class CourseManagementRights extends WeblcmsRights
             switch ($option)
             {
                 case self::RIGHT_OPTION_ALL :
-                    $succes &= $this->invert_location_entity_right($right_id, 0, 0, $location_id);
+                    $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),$right_id, 0, 0, $location_id);
                     break;
                 case self::RIGHT_OTPION_ME :
-                    $succes &= $this->invert_location_entity_right($right_id, Session::get_user_id(), 1, $location_id);
+                    $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),$right_id, Session::get_user_id(), 1, $location_id);
                     break;
                 case self::RIGHT_OPTION_SELECT :
                     if (! array_key_exists(self::PARAM_RIGHT_TARGETS, $values) ||
@@ -317,7 +317,7 @@ class CourseManagementRights extends WeblcmsRights
                     {
                         foreach ($target_ids as $target_id)
                         {
-                            $succes &= $this->invert_location_entity_right(
+                            $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),
                                 $right_id, 
                                 $target_id, 
                                 $entity_type, 

@@ -486,7 +486,9 @@ class ViewerComponent extends BaseHtmlTreeComponent
      *
      * @return string
      */
-    public function get_content_object_display_attachment_url($attachment)
+    public function get_content_object_display_attachment_url(
+        $attachment, $selected_complex_content_object_item_id = null
+    )
     {
         return parent::get_content_object_display_attachment_url($attachment, $this->getCurrentTreeNode()->getId());
     }
@@ -551,14 +553,14 @@ class ViewerComponent extends BaseHtmlTreeComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
         $translator = Translation::getInstance();
 
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $buttonToolbarRenderer->render();
 
         if ($this->canEditCurrentTreeNode())

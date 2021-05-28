@@ -782,11 +782,11 @@ abstract class Manager extends Application
         return true;
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         if ($this->get_action() == self::ACTION_HTML_EDITOR_FILE)
         {

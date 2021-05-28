@@ -12,7 +12,7 @@ use Chamilo\Libraries\Translation\Translation;
 class BookmarkForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -22,7 +22,7 @@ class BookmarkForm extends ContentObjectForm
         );
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -42,7 +42,7 @@ class BookmarkForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $lo = $this->get_content_object();
         if (isset($lo))

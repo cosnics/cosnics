@@ -176,14 +176,14 @@ class PublicationForm extends FormValidator
      * By default the publication is for everybody who has access to the tool and
      * the publication will be available forever.
      */
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = [];
 
         $defaults[self::PROPERTY_TIME_PERIOD_FOREVER] = 1;
         $defaults[self::PROPERTY_RIGHT_OPTION] = self::RIGHT_OPTION_ALL;
 
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 
     /**

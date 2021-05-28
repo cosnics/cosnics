@@ -208,7 +208,7 @@ class ForumPostForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $forump = $this->forumpost;
         if ($this->form_type == self::TYPE_EDIT)

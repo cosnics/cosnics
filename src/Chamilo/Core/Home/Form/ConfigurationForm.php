@@ -100,7 +100,7 @@ abstract class ConfigurationForm extends FormValidator
      *
      * @see HTML_QuickForm::setDefaults()
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         if (!$this->hasStaticTitle)
         {

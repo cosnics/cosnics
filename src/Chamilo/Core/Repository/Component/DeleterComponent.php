@@ -220,7 +220,7 @@ class DeleterComponent extends Manager
         $breadcrumbtrail->add_help('repository_deleter');
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters($additionalParameters = [])
     {
         return parent::get_additional_parameters(
             array(

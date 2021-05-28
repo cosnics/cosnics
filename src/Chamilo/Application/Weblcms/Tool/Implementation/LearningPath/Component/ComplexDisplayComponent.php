@@ -260,11 +260,11 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
 
-            return Application::render_header();
+            return Application::render_header($pageTitle);
         }
         else
         {
-            return parent::render_header();
+            return parent::render_header($pageTitle);
         }
     }
 
@@ -374,7 +374,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     public function getCurrentTreeNode()
     {
-        return parent::getCurrentTreeNode($this->getSelectedLearningPath());
+        return parent::getCurrentTreeNodeForLearningPath($this->getSelectedLearningPath());
     }
 
     public function save_assessment_answer($complex_question_id, $answer = '', $score = 0, $hint = '')

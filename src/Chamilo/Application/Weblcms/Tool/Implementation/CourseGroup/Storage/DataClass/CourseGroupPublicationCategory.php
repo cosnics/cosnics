@@ -35,7 +35,7 @@ class CourseGroupPublicationCategory extends DataClass
     /**
      * @return string[]
      */
-    public static function get_default_property_names()
+    public static function get_default_property_names($extendedPropertyNames = [])
     {
         return parent::get_default_property_names(
             [self::PROPERTY_COURSE_GROUP_ID, self::PROPERTY_PUBLICATION_CATEGORY_ID]

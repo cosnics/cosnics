@@ -221,7 +221,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters($additionalParameters = [])
     {
         return parent::get_additional_parameters(
             array(

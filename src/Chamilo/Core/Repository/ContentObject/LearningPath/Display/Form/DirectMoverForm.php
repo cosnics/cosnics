@@ -152,17 +152,4 @@ class DirectMoverForm extends FormValidator
             )
         );
     }
-
-    /**
-     * Helper functionality for translations
-     *
-     * @param string $variable
-     * @param array $parameters
-     *
-     * @return string
-     */
-    protected function getTranslation($variable, $parameters = [])
-    {
-        return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
-    }
 }

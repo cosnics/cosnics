@@ -17,7 +17,7 @@ class ExportImplementation extends ContentObjectExportImplementation
      * 
      * @return Array
      */
-    public static function get_types()
+    public static function get_types(array $types = [])
     {
         return parent::get_types(array(ContentObjectExport::FORMAT_HTML));
     }

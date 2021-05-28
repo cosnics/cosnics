@@ -122,12 +122,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * **************************************************************************************************************
      */
 
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         $dependencies = [];
 

@@ -68,7 +68,7 @@ class RightsGroupForm extends FormValidator
         $this->addGroup($buttons, 'buttons', null, '&nbsp;', false);
     }
 
-    function setDefaults()
+    function setDefaults($defaultValues = [], $filter = null)
     {
         /*
          * $default_elements = new AdvancedElementFinderElements(); $targets_entities = Rights ::
@@ -79,7 +79,7 @@ class RightsGroupForm extends FormValidator
          * $default_elements->add_element($group_entity->get_element_finder_element($entity)); } $this->getElement(self
          *::PROPERTY_ACCESS)->setDefaultValues($default_elements);
          */
-        parent::setDefaults([]);
+        parent::setDefaults($defaultValues, $filter);
     }
 
     function set_rights()

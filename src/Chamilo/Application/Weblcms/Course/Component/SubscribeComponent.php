@@ -40,7 +40,7 @@ class SubscribeComponent extends Manager
         
         foreach ($course_ids as $course_id)
         {
-            if ($course_management_rights->is_allowed(CourseManagementRights::DIRECT_SUBSCRIBE_RIGHT, $course_id))
+            if ($course_management_rights->is_allowed_management(CourseManagementRights::DIRECT_SUBSCRIBE_RIGHT, $course_id))
             {
                 $courseEntityRelation = new CourseEntityRelation();
                 

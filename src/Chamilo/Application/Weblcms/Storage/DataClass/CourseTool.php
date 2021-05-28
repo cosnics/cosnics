@@ -59,7 +59,7 @@ class CourseTool extends DataClass
      * @return string[string]
      *
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         $id = $this->get_id();
 

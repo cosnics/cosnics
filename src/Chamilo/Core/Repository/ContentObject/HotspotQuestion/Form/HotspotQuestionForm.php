@@ -325,7 +325,7 @@ class HotspotQuestionForm extends ContentObjectForm
         }
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
 
@@ -372,7 +372,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->set_session_answers();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
 
@@ -447,7 +447,7 @@ class HotspotQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         if (!$this->isSubmitted())
         {

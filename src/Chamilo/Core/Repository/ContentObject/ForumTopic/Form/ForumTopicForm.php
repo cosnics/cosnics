@@ -55,7 +55,7 @@ class ForumTopicForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)

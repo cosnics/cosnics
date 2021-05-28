@@ -350,7 +350,7 @@ class RegisterForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $user = $this->user;
         if ($this->form_type == self::TYPE_EDIT)

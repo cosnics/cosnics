@@ -26,7 +26,7 @@ class CpoContentObjectImportForm extends ContentObjectImportForm
         );
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         parent::setDefaults(array(self::PROPERTY_TYPE => ContentObjectImport::FORMAT_CPO));
     }

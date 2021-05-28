@@ -97,14 +97,14 @@ class CourseMenu extends Block
 
         foreach($course_types as $course_type)
         {
-            if ($course_management_rights->is_allowed(
+            if ($course_management_rights->is_allowed_management(
                 CourseManagementRights::CREATE_COURSE_RIGHT, $course_type->get_id(),
                 CourseManagementRights::TYPE_COURSE_TYPE
             ))
             {
                 $count_direct ++;
             }
-            elseif ($course_management_rights->is_allowed(
+            elseif ($course_management_rights->is_allowed_management(
                 CourseManagementRights::REQUEST_COURSE_RIGHT, $course_type->get_id(),
                 CourseManagementRights::TYPE_COURSE_TYPE
             ))

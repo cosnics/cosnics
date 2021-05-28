@@ -19,13 +19,17 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class Workspace extends DataClass implements WorkspaceInterface
 {
-    const WORKSPACE_TYPE = 2;
-    
-    // Properties
-    const PROPERTY_NAME = 'name';
-    const PROPERTY_DESCRIPTION = 'description';
-    const PROPERTY_CREATOR_ID = 'creator_id';
     const PROPERTY_CREATION_DATE = 'creation_date';
+
+    // Properties
+
+    const PROPERTY_CREATOR_ID = 'creator_id';
+
+    const PROPERTY_DESCRIPTION = 'description';
+
+    const PROPERTY_NAME = 'name';
+
+    const WORKSPACE_TYPE = 2;
 
     /**
      *
@@ -35,52 +39,25 @@ class Workspace extends DataClass implements WorkspaceInterface
 
     /**
      *
-     * @return string[]
+     * @return integer
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public function getCreationDate()
     {
-        return parent::get_default_property_names(
-            array(
-                self::PROPERTY_NAME, 
-                self::PROPERTY_DESCRIPTION, 
-                self::PROPERTY_CREATOR_ID, 
-                self::PROPERTY_CREATION_DATE));
+        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
     }
 
     /**
      *
-     * @return string
+     * @return \Chamilo\Core\User\Storage\DataClass\User
      */
-    public function getName()
+    public function getCreator()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
-    }
+        if (!isset($this->creator))
+        {
+            $this->creator = DataManager::retrieve_by_id(User::class, $this->getCreatorId());
+        }
 
-    /**
-     *
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
-    }
-
-    /**
-     *
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        return $this->creator;
     }
 
     /**
@@ -94,88 +71,11 @@ class Workspace extends DataClass implements WorkspaceInterface
 
     /**
      *
-     * @return \Chamilo\Core\User\Storage\DataClass\User
+     * @return string
      */
-    public function getCreator()
+    public function getDescription()
     {
-        if (! isset($this->creator))
-        {
-            $this->creator = DataManager::retrieve_by_id(User::class, $this->getCreatorId());
-        }
-        
-        return $this->creator;
-    }
-
-    /**
-     *
-     * @param integer $creatorId
-     */
-    public function setCreatorId($creatorId)
-    {
-        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creatorId);
-    }
-
-    /**
-     *
-     * @return integer
-     */
-    public function getCreationDate()
-    {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
-    }
-
-    /**
-     *
-     * @param integer $creationDate
-     */
-    public function setCreationDate($creationDate)
-    {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataClass\DataClass::get_dependencies()
-     */
-    public function get_dependencies()
-    {
-        return array(
-            WorkspaceEntityRelation::class => new EqualityCondition(
-                new PropertyConditionVariable(
-                    WorkspaceEntityRelation::class,
-                    WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())), 
-            WorkspaceContentObjectRelation::class => new EqualityCondition(
-                new PropertyConditionVariable(
-                    WorkspaceContentObjectRelation::class,
-                    WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())), 
-            WorkspaceCategoryRelation::class => new EqualityCondition(
-                new PropertyConditionVariable(
-                    WorkspaceCategoryRelation::class,
-                    WorkspaceCategoryRelation::PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())), 
-            WorkspaceUserFavourite::class => new EqualityCondition(
-                new PropertyConditionVariable(
-                    WorkspaceUserFavourite::class,
-                    WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID), 
-                new StaticConditionVariable($this->getId())));
-    }
-
-    /*
-     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
-     */
-    public function getWorkspaceType()
-    {
-        return self::WORKSPACE_TYPE;
-    }
-
-    /*
-     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
-     */
-    public function getTitle()
-    {
-        return $this->getName();
+        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -188,10 +88,115 @@ class Workspace extends DataClass implements WorkspaceInterface
     }
 
     /**
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->get_default_property(self::PROPERTY_NAME);
+    }
+
+    public function getTitle()
+    {
+        return $this->getName();
+    }
+
+    public function getWorkspaceType()
+    {
+        return self::WORKSPACE_TYPE;
+    }
+
+    /**
+     *
+     * @return string[]
+     */
+    public static function get_default_property_names($extended_property_names = [])
+    {
+        return parent::get_default_property_names(
+            array(
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_CREATOR_ID,
+                self::PROPERTY_CREATION_DATE
+            )
+        );
+    }
+
+    public function get_dependencies($dependencies = [])
+    {
+        return array(
+            WorkspaceEntityRelation::class => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceEntityRelation::class, WorkspaceEntityRelation::PROPERTY_WORKSPACE_ID
+                ), new StaticConditionVariable($this->getId())
+            ),
+            WorkspaceContentObjectRelation::class => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceContentObjectRelation::class, WorkspaceContentObjectRelation::PROPERTY_WORKSPACE_ID
+                ), new StaticConditionVariable($this->getId())
+            ),
+            WorkspaceCategoryRelation::class => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceCategoryRelation::class, WorkspaceCategoryRelation::PROPERTY_WORKSPACE_ID
+                ), new StaticConditionVariable($this->getId())
+            ),
+            WorkspaceUserFavourite::class => new EqualityCondition(
+                new PropertyConditionVariable(
+                    WorkspaceUserFavourite::class, WorkspaceUserFavourite::PROPERTY_WORKSPACE_ID
+                ), new StaticConditionVariable($this->getId())
+            )
+        );
+    }
+
+    /**
      * @return string
      */
     public static function get_table_name()
     {
         return 'repository_workspace';
+    }
+
+    /*
+     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getWorkspaceType()
+     */
+
+    /**
+     *
+     * @param integer $creationDate
+     */
+    public function setCreationDate($creationDate)
+    {
+        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
+    }
+
+    /*
+     * (non-PHPdoc) @see \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface::getTitle()
+     */
+
+    /**
+     *
+     * @param integer $creatorId
+     */
+    public function setCreatorId($creatorId)
+    {
+        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creatorId);
+    }
+
+    /**
+     *
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+    }
+
+    /**
+     *
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->set_default_property(self::PROPERTY_NAME, $name);
     }
 }

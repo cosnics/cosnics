@@ -15,11 +15,11 @@ use Chamilo\Core\Rights\Editor\Manager;
  */
 class SimpleRightsEditorComponent extends Manager implements DelegateComponent
 {
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $additional_information = $this->get_additional_information();
 

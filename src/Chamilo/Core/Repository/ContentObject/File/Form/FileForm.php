@@ -56,7 +56,7 @@ class FileForm extends ContentObjectForm
         }
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         $description_options = [];
         $description_options['height'] = '100';
@@ -92,7 +92,7 @@ class FileForm extends ContentObjectForm
         $this->setDefaults(array(File::PROPERTY_SHOW_INLINE => 1));
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         $description_options = [];
         $description_options['height'] = '100';
@@ -275,7 +275,7 @@ class FileForm extends ContentObjectForm
         return Path::getInstance()->getRepositoryPath();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         parent::setDefaults($defaults);

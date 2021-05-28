@@ -82,7 +82,7 @@ class PackageInstaller extends Action
      */
     public static function get_additional_packages()
     {
-        return $this->additional_packages;
+        return [];
     }
 
     /**

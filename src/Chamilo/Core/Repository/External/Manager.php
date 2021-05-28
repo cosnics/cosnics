@@ -427,7 +427,7 @@ abstract class Manager extends Application implements NoContextComponent
         );
     }
 
-    public static function get_packages_from_filesystem()
+    public static function get_packages_from_filesystem($type = null)
     {
         $external_repository_managers = [];
 
@@ -519,7 +519,7 @@ abstract class Manager extends Application implements NoContextComponent
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $action = $this->get_action();
 
@@ -530,7 +530,7 @@ abstract class Manager extends Application implements NoContextComponent
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         }
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $external_repository_actions = $this->get_external_repository_actions();
 

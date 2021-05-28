@@ -1,10 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\AbstractSQLServerDriver;
-use Doctrine\DBAL\Platforms\SQLServer2008Platform;
-use Doctrine\DBAL\Schema\SQLServerSchemaManager;
+use Doctrine\DBAL\Driver\AbstractSQLServerDriver\Exception\PortWithoutHost;
+use Doctrine\Deprecations\Deprecation;
 use Exception;
 
 /**
@@ -18,37 +17,65 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
 {
 
     /**
-     * Constructs the MsSql PDO DSN.
+     * Constructs the Sqlsrv PDO DSN.
      *
-     * @param string[] $parameters
+     * @param mixed[]  $params
+     * @param string[] $connectionOptions
      *
      * @return string The DSN.
-     * @throws \Exception
      */
-    private function _constructPdoDsn(array $parameters)
+    private function _constructPdoDsn(array $params, array $connectionOptions)
     {
         if (extension_loaded('pdo_dblib'))
         {
             $dsn = 'dblib:';
 
-            if (isset($parameters['host']) && $parameters['host'] != '')
+            if (isset($params['host']) && $params['host'] != '')
             {
-                $dsn .= 'host=' . $parameters['host'] . '; ';
+                $dsn .= 'host=' . $params['host'] . '; ';
             }
 
-            if (isset($parameters['dbname']))
+            if (isset($params['dbname']))
             {
-                $dsn .= 'dbname=' . $parameters['dbname'] . ';';
+                $dsn .= 'dbname=' . $params['dbname'] . ';';
             }
 
-            if (isset($parameters['charset']))
+            if (isset($params['charset']))
             {
-                $dsn .= 'charset=' . $parameters['charset'] . ';';
+                $dsn .= 'charset=' . $params['charset'] . ';';
             }
         }
         elseif (extension_loaded('pdo_sqlsrv'))
         {
-            $dsn = 'sqlsrv:Server=' . $parameters['host'] . ';Database=' . $parameters['dbname'];
+            $dsn = 'sqlsrv:server=';
+
+            if (isset($params['host']))
+            {
+                $dsn .= $params['host'];
+
+                if (isset($params['port']))
+                {
+                    $dsn .= ',' . $params['port'];
+                }
+            }
+            elseif (isset($params['port']))
+            {
+                throw PortWithoutHost::new();
+            }
+
+            if (isset($params['dbname']))
+            {
+                $connectionOptions['Database'] = $params['dbname'];
+            }
+
+            if (isset($params['MultipleActiveResultSets']))
+            {
+                $connectionOptions['MultipleActiveResultSets'] = $params['MultipleActiveResultSets'] ? 'true' : 'false';
+            }
+
+            $dsn .= $this->getConnectionOptionsDsn($connectionOptions);
+
+            var_dump($dsn);
         }
         else
         {
@@ -58,42 +85,42 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
         return $dsn;
     }
 
-    /**
-     * Attempts to establish a connection with the underlying driver.
-     *
-     * @param string[] $parameters
-     * @param string $username
-     * @param string $password
-     * @param string[] $driverOptions
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrinePdoConnection
-     * @throws \Exception
-     */
-    public function connect(array $parameters, $username = null, $password = null, array $driverOptions = [])
+    public function connect(array $params, $username = null, $password = null, array $driverOptions = [])
     {
+        $pdoOptions = $dsnOptions = [];
+
+        foreach ($driverOptions as $option => $value)
+        {
+            if (is_int($option))
+            {
+                $pdoOptions[$option] = $value;
+            }
+            else
+            {
+                $dsnOptions[$option] = $value;
+            }
+        }
+
         return new MsSqlDoctrinePdoConnection(
-            $this->_constructPdoDsn($parameters), $username, $password, $driverOptions
+            $this->_constructPdoDsn($params, $dsnOptions), $username, $password, $pdoOptions
         );
     }
 
     /**
-     * @param \Doctrine\DBAL\Connection $conn
+     * Converts a connection options array to the DSN
      *
-     * @return string
+     * @param string[] $connectionOptions
      */
-    public function getDatabase(Connection $conn)
+    private function getConnectionOptionsDsn(array $connectionOptions): string
     {
-        $params = $conn->getParams();
+        $connectionOptionsDsn = '';
 
-        return $params['dbname'];
-    }
+        foreach ($connectionOptions as $paramName => $paramValue)
+        {
+            $connectionOptionsDsn .= sprintf(';%s=%s', $paramName, $paramValue);
+        }
 
-    /**
-     * @return \Doctrine\DBAL\Platforms\SQLServer2008Platform
-     */
-    public function getDatabasePlatform()
-    {
-        return new SQLServer2008Platform();
+        return $connectionOptionsDsn;
     }
 
     /**
@@ -102,16 +129,10 @@ class MsSqlDoctrineDriver extends AbstractSQLServerDriver
      */
     public function getName()
     {
-        return 'pdo_mssql';
-    }
+        Deprecation::trigger(
+            'doctrine/dbal', 'https://github.com/doctrine/dbal/issues/3580', 'Driver::getName() is deprecated'
+        );
 
-    /**
-     * @param \Doctrine\DBAL\Connection $conn
-     *
-     * @return \Doctrine\DBAL\Schema\SQLServerSchemaManager
-     */
-    public function getSchemaManager(Connection $conn)
-    {
-        return new SQLServerSchemaManager($conn);
+        return 'pdo_mssql';
     }
 }

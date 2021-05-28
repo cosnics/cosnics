@@ -197,10 +197,10 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      *
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $this->renderRepoDragPanel();
 
         return implode(PHP_EOL, $html);

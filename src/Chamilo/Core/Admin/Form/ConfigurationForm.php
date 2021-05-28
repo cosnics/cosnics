@@ -392,7 +392,7 @@ class ConfigurationForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $configuration = $this->configuration;
 

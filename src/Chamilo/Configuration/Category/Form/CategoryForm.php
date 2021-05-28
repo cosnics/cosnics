@@ -187,7 +187,7 @@ class CategoryForm extends FormValidator
         {
             if (strpos($key, 'name') !== false)
             {
-                $category = $this->manager->get_parent()->get_category();
+                $category = $this->manager->get_parent()->getCategory();
                 $category->set_name($value);
                 $category->set_parent($this->category->get_parent());
                 $category->set_display_order(
@@ -225,7 +225,7 @@ class CategoryForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $category = $this->category;
         $defaults[PlatformCategory::PROPERTY_ID] = $category->get_id();

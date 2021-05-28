@@ -33,7 +33,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
 
     private $content_object;
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $is_popup = Request::get(self::PARAM_POPUP);
 
@@ -42,7 +42,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
         }
 
-        return parent::render_header();
+        return parent::render_header($pageTitle);
     }
 
     /**

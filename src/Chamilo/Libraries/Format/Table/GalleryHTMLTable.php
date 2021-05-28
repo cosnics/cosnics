@@ -201,7 +201,7 @@ class GalleryHTMLTable extends HtmlTable
      */
     public function getTableClasses()
     {
-        return 'table-gallery';
+        return 'table-gallery col-xs-12';
     }
 
     /**

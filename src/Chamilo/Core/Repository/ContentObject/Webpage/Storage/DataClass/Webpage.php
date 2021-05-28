@@ -147,11 +147,11 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      *
      * @see repository/lib/ContentObject#create()
      */
-    public function create()
+    public function create($create_in_batch = false)
     {
         $this->clear_errors();
 
-        return parent::create();
+        return parent::create($create_in_batch);
     }
 
     public function delete($only_version = false)

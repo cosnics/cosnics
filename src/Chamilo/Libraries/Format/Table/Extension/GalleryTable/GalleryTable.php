@@ -143,7 +143,7 @@ abstract class GalleryTable extends Table
 
         $this->current_row[] = array(
             $this->get_cell_renderer()->render_id_cell($result),
-            $this->get_cell_renderer()->render_cell($result)
+            $this->get_cell_renderer()->render_cell(null, $result)
         );
     }
 

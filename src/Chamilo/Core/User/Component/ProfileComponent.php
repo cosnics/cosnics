@@ -105,13 +105,13 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
      * @return string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $availableTabs = $this->getAvailableTabs();
 
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         if (count($availableTabs) > 1)
         {

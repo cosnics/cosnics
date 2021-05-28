@@ -303,7 +303,7 @@ class SimpleRightsEditorForm extends FormValidator
      *
      * @param array $defaults
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $locations = $this->locations;
 

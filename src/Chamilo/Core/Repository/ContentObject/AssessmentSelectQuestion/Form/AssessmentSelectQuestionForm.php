@@ -23,13 +23,13 @@ use Chamilo\Libraries\Translation\Translation;
 class AssessmentSelectQuestionForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicQuestionForm();
@@ -58,7 +58,7 @@ class AssessmentSelectQuestionForm extends ContentObjectForm
                     true) . 'AssessmentSelectQuestion.js'));
     }
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         if (! $this->isSubmitted())
         {

@@ -154,7 +154,7 @@ abstract class NestedTreeNode extends NestedSet
      * @return boolean
      * @done Migrated to NestedSetDataClassRepository::move()
      */
-    public function move($newParentId = 0, $newPreviousId = 0)
+    public function move($newParentId = 0, $newPreviousId = 0, $condition = null)
     {
         if ($newPreviousId != 0)
         {

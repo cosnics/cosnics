@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Configuration\Category\Component;
 
+use Chamilo\Configuration\Category\Interfaces\CategoryVisibilitySupported;
 use Chamilo\Configuration\Category\Manager;
 use Chamilo\Configuration\Category\Menu\CategoryMenu;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
@@ -65,6 +66,11 @@ class BrowserComponent extends Manager implements TableSupport
         return implode(PHP_EOL, $html);
     }
 
+    public function category_visibility_supported()
+    {
+        return $this->get_parent()->getCategory() instanceof CategoryVisibilitySupported;
+    }
+
     public function getButtonToolbarRenderer()
     {
         if (!isset($this->buttonToolbarRenderer))
@@ -111,7 +117,7 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function get_condition()
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         $class_name = $category_class_name::class_name();
 
         $cat_id = $this->get_category_id();

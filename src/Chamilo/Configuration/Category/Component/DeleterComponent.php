@@ -97,7 +97,7 @@ class DeleterComponent extends Manager
 
     public function delete_categories_recursive($id)
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
 
         $continue = true;
         $children = $this->get_parent()->retrieve_categories(

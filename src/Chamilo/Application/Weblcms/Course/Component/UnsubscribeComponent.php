@@ -41,7 +41,7 @@ class UnsubscribeComponent extends Manager
         {
             $course_id = $course->get_id();
             
-            if (DataManager::is_user_direct_subscribed_to_course($this->get_user_id(), $course->get_id()) && $course_management_rights->is_allowed(
+            if (DataManager::is_user_direct_subscribed_to_course($this->get_user_id(), $course->get_id()) && $course_management_rights->is_allowed_management(
                 CourseManagementRights::DIRECT_UNSUBSCRIBE_RIGHT, 
                 $course->get_id()) && ! $course->is_subscribed_as_course_admin($this->get_user()))
             {

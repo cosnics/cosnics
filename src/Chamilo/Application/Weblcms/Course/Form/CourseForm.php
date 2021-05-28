@@ -86,7 +86,7 @@ class CourseForm extends CommonCourseForm
         $course_types = DataManager::retrieve_active_course_types();
         foreach($course_types as $course_type)
         {
-            if ($this->get_base_object()->get_course_type_id() == $course_type->get_id() || $course_management_rights->is_allowed(
+            if ($this->get_base_object()->get_course_type_id() == $course_type->get_id() || $course_management_rights->is_allowed_management(
                 CourseManagementRights::CREATE_COURSE_RIGHT, 
                 $course_type->get_id(), 
                 CourseManagementRights::TYPE_COURSE_TYPE))
@@ -178,7 +178,7 @@ class CourseForm extends CommonCourseForm
     {
         $course_management_rights = CourseManagementRights::getInstance();
         
-        if (! $course_management_rights->is_allowed($right_id, $this->get_base_object()->get_id()))
+        if (! $course_management_rights->is_allowed_management($right_id, $this->get_base_object()->get_id()))
         {
             $element->freeze();
         }

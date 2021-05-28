@@ -27,11 +27,11 @@ class PreviewComponent extends Manager
      *
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $html[] = '<div class="alert alert-warning">';
         $html[] = Translation::get('PreviewModeWarning');

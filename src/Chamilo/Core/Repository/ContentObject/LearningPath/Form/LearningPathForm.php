@@ -38,7 +38,7 @@ class LearningPathForm extends ContentObjectForm
         return parent::update_content_object();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         /** @var LearningPath $object */
         $object = $this->get_content_object();

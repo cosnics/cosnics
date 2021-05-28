@@ -20,7 +20,7 @@ class WeblcmsBookmarkDisplayForm extends ConfigurationForm
             Translation::get('ShowWhenEmpty'));
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = [];
         
@@ -28,6 +28,6 @@ class WeblcmsBookmarkDisplayForm extends ConfigurationForm
             WeblcmsBookmarkDisplay::CONFIGURATION_SHOW_EMPTY, 
             true);
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

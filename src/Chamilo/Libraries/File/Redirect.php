@@ -210,7 +210,7 @@ class Redirect
      *
      * @return string
      */
-    private function getWebLink($url)
+    protected function getWebLink($url)
     {
         $parameters = $this->getFilteredParameters();
 

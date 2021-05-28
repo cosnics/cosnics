@@ -20,8 +20,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -29,7 +29,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -247,7 +247,8 @@ class Course extends DataClass
 
         // Create course subtree root location
         $course_subtree_root_location = CourseManagementRights::getInstance()->create_subtree_root_location(
-            $this->get_id(), CourseManagementRights::TREE_TYPE_COURSE, true
+            \Chamilo\Application\Weblcms\Manager::context(), $this->get_id(), CourseManagementRights::TREE_TYPE_COURSE,
+            true
         );
 
         if (!$course_subtree_root_location)
@@ -259,7 +260,7 @@ class Course extends DataClass
 
         // Set view right for everyone on root location
         if (!CourseManagementRights::getInstance()->invert_location_entity_right(
-            CourseManagementRights::VIEW_RIGHT, 0, 0,
+            \Chamilo\Application\Weblcms\Manager::context(), CourseManagementRights::VIEW_RIGHT, 0, 0,
             CourseManagementRights::getInstance()->get_courses_subtree_root_id($this->get_id())
         ))
         {

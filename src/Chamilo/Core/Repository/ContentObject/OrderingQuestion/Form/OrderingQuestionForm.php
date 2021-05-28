@@ -207,7 +207,7 @@ class OrderingQuestionForm extends ContentObjectForm
         );
     }
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Items'));
@@ -220,7 +220,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->add_options();
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Items'));
@@ -251,7 +251,7 @@ class OrderingQuestionForm extends ContentObjectForm
         $this->addMetadataTabs();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         if (!$this->isSubmitted())
         {

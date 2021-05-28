@@ -31,7 +31,7 @@ class AssessmentForm extends ContentObjectForm
 
     const UNLIMITED_TIME = 'unlimited_time';
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -178,7 +178,7 @@ class AssessmentForm extends ContentObjectForm
         );
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -362,7 +362,7 @@ class AssessmentForm extends ContentObjectForm
 
     // Inherited
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         if ($object != null)

@@ -84,11 +84,11 @@ abstract class ItemComponent extends Manager implements DelegateComponent
      *
      * @see \libraries\SubManager::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = '<div class="col-xs-12 col-sm-4 col-md-3">';
 
         if ($this->get_parent() instanceof PortfolioComplexRights &&

@@ -151,11 +151,11 @@ abstract class TabComponent extends Manager
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $this->getTabsRenderer()->renderHeader();
 
         return implode(PHP_EOL, $html);

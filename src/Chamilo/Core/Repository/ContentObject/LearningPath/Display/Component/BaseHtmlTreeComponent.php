@@ -219,7 +219,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
     /**
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $isFullScreen = $this->getRequest()->query->get(self::PARAM_FULL_SCREEN, false);
         $isMenuHidden = Session::retrieve('learningPathMenuIsHidden');
@@ -231,7 +231,7 @@ abstract class BaseHtmlTreeComponent extends Manager implements DelegateComponen
 
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $html[] = '<div class="learning-path-display">';
         $html[] = '<iframe class="learning-path-display-full-screen" src="about:blank"></iframe>';

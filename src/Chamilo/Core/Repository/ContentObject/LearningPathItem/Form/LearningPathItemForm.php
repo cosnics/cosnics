@@ -12,14 +12,14 @@ use Chamilo\Libraries\Translation\Translation;
 class LearningPathItemForm extends ContentObjectForm
 {
 
-    public function build_creation_form($default_content_object = null)
+    public function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
         $this->addElement('text', LearningPathItem::PROPERTY_REFERENCE, Translation::get('Reference'));
     }
 
-    public function build_editing_form($object)
+    public function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -35,7 +35,7 @@ class LearningPathItemForm extends ContentObjectForm
         return parent::create_content_object();
     }
 
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $object = $this->get_content_object();
         if ($object)

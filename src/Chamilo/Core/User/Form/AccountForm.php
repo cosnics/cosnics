@@ -361,7 +361,7 @@ class AccountForm extends FormValidator
      *
      * @throws \Exception
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $user = $this->user;
         $defaults[User::PROPERTY_ID] = $user->get_id();

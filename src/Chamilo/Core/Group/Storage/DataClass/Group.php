@@ -7,9 +7,9 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -213,7 +213,7 @@ class Group extends NestedSet
      * @return bool
      * @deprecated Use GroupService::createGroup() now
      */
-    public function create($previous_id = 0)
+    public function create($previous_id = 0, $reference_node = null)
     {
         $parent_id = $this->get_parent_id();
 
@@ -558,7 +558,7 @@ class Group extends NestedSet
      * @return boolean
      * @deprecated Use GroupService::moveGroup() now
      */
-    public function move($new_parent_id, $new_previous_id = 0)
+    public function move($new_parent_id = 0, $new_previous_id = null, $condition = null)
     {
         if ($new_previous_id != 0)
         {

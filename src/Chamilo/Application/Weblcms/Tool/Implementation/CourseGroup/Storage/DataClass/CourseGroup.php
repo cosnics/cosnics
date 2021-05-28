@@ -78,7 +78,7 @@ class CourseGroup extends NestedTreeNode
         return count($members);
     }
 
-    public function create()
+    public function create($previousId = 0, $createInBatch = false)
     {
         if (!$this->get_parent_id())
         {

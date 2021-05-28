@@ -2,6 +2,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\WikiPage\Storage\DataClass\ComplexWikiPage;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -45,11 +46,11 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
         return $component->run();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '', ComplexWikiPage $complex_wiki_page = null)
     {
         if ($this->get_action() == self::ACTION_STATISTICS)
         {
-            return parent::render_header();
+            return parent::render_header($pageTitle, $complex_wiki_page);
         }
         else
         {
@@ -61,7 +62,7 @@ class ReportingTemplateViewerComponent extends Manager implements DelegateCompon
 
             $html = [];
 
-            $html[] = parent::render_header($complex_wiki_page);
+            $html[] = parent::render_header($pageTitle, $complex_wiki_page);
 
             $html[] = '<div class="wiki-pane-content-title">' . Translation::get('Statistics') . ' ' .
                 $wiki_page->get_title() . '</div>';

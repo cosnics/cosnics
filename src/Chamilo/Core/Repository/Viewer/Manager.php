@@ -335,12 +335,12 @@ abstract class Manager extends Application
     {
         if ($this->areTabsDisabled())
         {
-            return parent::render_header();
+            return parent::render_header($pageTitle);
         }
 
         $html = [];
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
 
         $currentTab = $this->getRequest()->get(self::PARAM_TAB);
         if (empty($currentTab))

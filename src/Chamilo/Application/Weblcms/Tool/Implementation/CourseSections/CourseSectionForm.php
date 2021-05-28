@@ -142,7 +142,7 @@ class CourseSectionForm extends FormValidator
      *
      * @param $defaults array Default values for this form's parameters.
      */
-    public function setDefaults($defaults = [])
+    public function setDefaults($defaults = [], $filter = null)
     {
         $course_section = $this->course_section;
         $defaults[CourseSection::PROPERTY_ID] = $course_section->get_id();
