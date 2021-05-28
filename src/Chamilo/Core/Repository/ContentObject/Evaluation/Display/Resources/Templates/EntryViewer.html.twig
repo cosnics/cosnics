@@ -210,7 +210,7 @@
         padding: 0 5px 0 2px;
         transform: translate(5px, 9px);
     }
-    .fa-user.mod-entity {
+    .fa-user.mod-entity, .fa-users.mod-entity {
         color: hsla(0, 0%, 46%, 0.77);
     }
     .entity-type {
@@ -229,8 +229,11 @@
     .entity-icon.mod-btn-all {
         color: #4c84a9;
     }
-    .entity-icon.mod-btn-all:not(:first-child) {
+    .entity-icon.fa-user.mod-btn-all:not(:first-child) {
         margin-left: -3px;
+    }
+    .entity-icon.fa-users.mod-btn-all:not(:first-child) {
+        margin-left: -2px;
     }
 
     #feedback > .form-row.row {
@@ -358,18 +361,20 @@
     {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
     {% set allEntitiesTitle = 'BrowseEntities'|trans({'{NAME}': entityTypesPlural[ENTITY_TYPE]|trans({}, appContext)|lower}, appContext) %}
     {% set entityType = entityTypes[ENTITY_TYPE] %}
+    {% set entityTypeIcons = ['fa-user', 'fa-users', 'fa-users'] %}
+    {% set entityTypeIcon = entityTypeIcons[ENTITY_TYPE] %}
     {% if CAN_EDIT_EVALUATION %}
     <div class="btn-toolbar btn-action-toolbar mod-entities">
         <div class="btn-group u-flex u-align-items-end u-gap-small">
             {% if DISPLAY_ALL_ENTITIES_URL %}
             <a href="{{ ALL_ENTITIES_URL|raw }}" class="btn btn-default mod-btn-all" title="{{ allEntitiesTitle }}">
-                <span class="entity-icon inline-glyph fa fa-user mod-btn-all"></span><span class="entity-icon inline-glyph fa fa-user mod-btn-all"></span><span class="entity-icon inline-glyph fa fa-user mod-btn-all"></span>
+                <span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span><span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span><span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span>
                 <span class="sr-only">{{ allEntitiesTitle }}</span>
             </a>
             {% endif %}
             <div>
                 <div class="dropdown-entity-label">
-                    <span class="inline-glyph fa fa-user mod-entity"></span>
+                    <span class="inline-glyph fa {{ entityTypeIcon }} mod-entity"></span>
                     <span class="entity-type">{{ entityType|trans({}, appContext) }}</span>
                     <span class="entity-index">{{ ENTITY_INDEX }} / {{ ENTITY_COUNT }}</span>
                 </div>
