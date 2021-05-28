@@ -36,7 +36,7 @@ class FilteredCourseListForm extends ConfigurationForm
         );
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = array();
 
@@ -50,6 +50,6 @@ class FilteredCourseListForm extends ConfigurationForm
             "-1"
         );
 
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

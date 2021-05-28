@@ -157,7 +157,7 @@ class Publication extends DataClass
      * 
      * @return \libraries\storage\Condition[string]
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         return array(
             Feedback::class_name() => new EqualityCondition(

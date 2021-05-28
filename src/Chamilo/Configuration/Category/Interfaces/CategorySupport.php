@@ -4,7 +4,7 @@ namespace Chamilo\Configuration\Category\Interfaces;
 interface CategorySupport
 {
 
-    public function get_category();
+    public function getCategory();
 
     public function allowed_to_delete_category($category_id);
 

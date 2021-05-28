@@ -86,11 +86,8 @@ class UserView extends DataClass
         $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
     }
 
-    /**
-     *
-     * @see \libraries\storage\DataClass::get_dependencies()
-     */
-    public function get_dependencies()
+
+    public function get_dependencies($dependencies = [])
     {
         return array(
             UserViewRelContentObject::class_name() => new EqualityCondition(

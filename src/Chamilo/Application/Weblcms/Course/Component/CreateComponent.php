@@ -34,7 +34,7 @@ class CreateComponent extends CourseFormActionComponent
 
         while ($courseType = $courseTypes->next_result())
         {
-            if ($courseManagementRights->is_allowed(
+            if ($courseManagementRights->is_allowed_management(
                 CourseManagementRights::CREATE_COURSE_RIGHT,
                 $courseType->get_id(),
                 CourseManagementRights::TYPE_COURSE_TYPE))

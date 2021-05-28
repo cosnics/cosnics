@@ -15,7 +15,7 @@ class HTML_QuickForm_Rule_DiskQuota extends HTML_QuickForm_Rule
      * @param string[] $file Uploaded file (array)
      * @return boolean True if the filesize doesn't cause a disk quota overflow
      */
-    function validate($file)
+    function validate($file, $options = null)
     {
         $size = $file['size'];
         $calculator = new Calculator(

@@ -92,7 +92,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @return ButtonToolBarRenderer
      */
-    public function getButtonToolbarRenderer($content_object)
+    public function getButtonToolbarRenderer($content_object = null)
     {
         $buttonToolbarRenderer = parent::getButtonToolbarRenderer($content_object);
 

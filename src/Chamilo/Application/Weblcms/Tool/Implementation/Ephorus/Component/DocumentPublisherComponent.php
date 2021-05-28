@@ -60,14 +60,12 @@ class DocumentPublisherComponent extends Manager implements \Chamilo\Core\Reposi
         return array(File::class);
     }
 
-    /**
-     * @return string
-     */
-    public function render_header()
+
+    public function render_header($pageTitle = '')
     {
         $html = array();
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $this->display_warning_message(Translation::get("EphorusMaxUploadSize"));
 
         return implode(PHP_EOL, $html);

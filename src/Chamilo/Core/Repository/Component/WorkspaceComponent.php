@@ -24,13 +24,13 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
         $context = \Chamilo\Core\Repository\Workspace\Manager::context();
 
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters($additionalParameters = [])
     {
-        $parameters = parent::get_additional_parameters();
+        $parameters = parent::get_additional_parameters($additionalParameters);
         $parameters[] = FilterData::FILTER_CATEGORY;
 
         return $parameters;

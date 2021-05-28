@@ -86,7 +86,7 @@ class ScoreForm extends FormValidator
         return $choices;
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaultValues = array();
 
@@ -95,6 +95,6 @@ class ScoreForm extends FormValidator
             $defaultValues[Score::PROPERTY_SCORE] = $this->score->getScore();
         }
 
-        return parent::setDefaults($defaultValues);
+        return parent::setDefaults($defaultValues, $filter);
     }
 }

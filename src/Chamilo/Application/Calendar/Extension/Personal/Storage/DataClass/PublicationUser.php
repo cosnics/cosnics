@@ -29,7 +29,7 @@ class PublicationUser extends DataClass
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names()
+    public static function get_cacheable_property_names($cacheablePropertyNames = [])
     {
         return array();
     }

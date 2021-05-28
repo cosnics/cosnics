@@ -62,7 +62,7 @@ class CourseCategoryManagerComponent extends Manager implements DelegateComponen
         return array();
     }
 
-    public function get_category()
+    public function getCategory()
     {
         return new CourseCategory();
     }

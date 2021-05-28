@@ -679,13 +679,13 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         return $actionSelector->getActionButton($label, $glyph);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $buttonToolBarRenderer = new ButtonToolBarRenderer($this->getButtonToolBar());
 
         $html = array();
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $buttonToolBarRenderer->render();
 
         return implode(PHP_EOL, $html);

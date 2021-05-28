@@ -48,7 +48,7 @@ class ParentChangerComponent extends Manager
 
         $this->set_parameter(self::PARAM_CATEGORY_ID, $ids);
 
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->geCategory());
 
         if (count($ids) != 0)
         {
@@ -195,7 +195,7 @@ class ParentChangerComponent extends Manager
 
     public function build_category_tree($parent_id, $selected_categories, $current_parent)
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id));
@@ -223,7 +223,7 @@ class ParentChangerComponent extends Manager
 
     public function clean_display_order_old_parent($parent)
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
             new StaticConditionVariable($parent));

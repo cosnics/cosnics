@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
 class YoutubeForm extends ContentObjectForm
 {
 
-    protected function build_creation_form()
+    protected function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
@@ -31,7 +31,7 @@ class YoutubeForm extends ContentObjectForm
         $this->addElement('category');
     }
 
-    protected function build_editing_form()
+    protected function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form();
     }

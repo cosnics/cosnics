@@ -26,11 +26,6 @@ abstract class Manager extends Application
     const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
-    public function category_visibility_supported()
-    {
-        return $this->get_category() instanceof CategoryVisibilitySupported;
-    }
-
     public function get_browse_categories_url($category_id = 0)
     {
         return $this->get_url(

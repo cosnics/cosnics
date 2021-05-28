@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 class AssessmentOpenQuestionForm extends ContentObjectForm
 {
 
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = array (), $filter = null)
     {
         $object = $this->get_content_object();
 
@@ -65,14 +65,14 @@ class AssessmentOpenQuestionForm extends ContentObjectForm
             $html_editor_options);
     }
 
-    public function build_creation_form()
+    public function build_creation_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_creation_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicForm();
     }
 
     // Inherited
-    public function build_editing_form()
+    public function build_editing_form($htmleditor_options = [], $in_tab = false)
     {
         parent::build_editing_form($this->getDescriptionHtmlEditorOptions());
         $this->buildBasicForm();

@@ -36,9 +36,4 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME,
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
     }
-
-    public function render_header($visible_tools)
-    {
-        return parent::render_header($visible_tools, false);
-    }
 }

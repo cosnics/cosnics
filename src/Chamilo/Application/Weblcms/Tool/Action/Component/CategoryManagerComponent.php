@@ -77,7 +77,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $this->type = $type;
     }
 
-    public function get_category()
+    public function getCategory()
     {
         $category = new ContentObjectPublicationCategory();
         $category->set_tool($this->get_parent()->get_tool_id());

@@ -181,7 +181,7 @@ class ImpactViewRecyclerComponent extends Manager
      * @return string
      */
     public function get_result($failures, $count, $fail_message_single, $fail_message_multiple, $succes_message_single, 
-        $succes_message_multiple)
+        $succes_message_multiple, $context = null)
     {
         if ($failures)
         {

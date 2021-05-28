@@ -13,7 +13,7 @@ use HTML_QuickForm_Rule;
 class ValidateDatabaseConnection extends HTML_QuickForm_Rule
 {
 
-    public function validate($parameters)
+    public function validate($parameters, $options = null)
     {
         $configuration = new \Doctrine\DBAL\Configuration();
 
@@ -23,13 +23,15 @@ class ValidateDatabaseConnection extends HTML_QuickForm_Rule
             'password' => $parameters[3],
             'host' => $parameters[1],
             'name' => $parameters[4],
-            'charset' => 'utf8');
+            'charset' => 'utf8'
+        );
 
         $connectionFactory = new ConnectionFactory(new DataSourceName($settings));
 
         try
         {
             $connectionFactory->getConnection();
+
             return true;
         }
         catch (\Exception $exception)

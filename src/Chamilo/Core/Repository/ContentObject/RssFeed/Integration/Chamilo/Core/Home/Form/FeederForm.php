@@ -48,7 +48,7 @@ class FeederForm extends ConfigurationForm
             array('class' => 'form-control'));
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = array();
         
@@ -60,6 +60,6 @@ class FeederForm extends ConfigurationForm
             $defaults[Feeder::CONFIGURATION_OBJECT_ID] = $contentObjectPublication->get_content_object_id();
         }
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

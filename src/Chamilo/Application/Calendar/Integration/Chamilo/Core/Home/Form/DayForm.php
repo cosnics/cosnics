@@ -20,7 +20,7 @@ class DayForm extends ConfigurationForm
         $this->addElement('checkbox', Day::CONFIGURATION_TIME_HIDE, Translation::get('TimeHide'));
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = array();
         

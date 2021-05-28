@@ -101,7 +101,7 @@ class VisibilityTogglerComponent extends Manager
      */
     public function toggle_category_visibility($id)
     {
-        $category_class_name = get_class($this->get_parent()->get_category());
+        $category_class_name = get_class($this->get_parent()->getCategory());
         
         $categories = $this->get_parent()->retrieve_categories(
             new EqualityCondition(

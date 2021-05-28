@@ -64,7 +64,7 @@ class HelpItemForm extends FormValidator
      *
      * @param array $defaults Default values for this form's parameters.
      */
-    public function setDefaults($defaults = array ())
+    public function setDefaults($defaults = [], $filter = null)
     {
         $help_item = $this->help_item;
         $defaults[HelpItem::PROPERTY_URL] = $help_item->get_url();

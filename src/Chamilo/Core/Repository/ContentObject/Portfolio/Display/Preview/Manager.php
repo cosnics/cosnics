@@ -41,7 +41,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_delete_feedback()
      */
-    public function is_allowed_to_delete_feedback($feedback)
+    public function is_allowed_to_delete_feedback()
     {
         return true;
     }
@@ -50,7 +50,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_edit_content_object()
      */
-    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
+    public function is_allowed_to_edit_content_object()
     {
         return true;
     }
@@ -59,7 +59,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview
      * (non-PHPdoc) @see
      * \core\repository\content_object\portfolio\PortfolioDisplaySupport::is_allowed_to_view_content_object()
      */
-    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
+    public function is_allowed_to_view_content_object()
     {
         return true;
     }

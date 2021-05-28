@@ -130,7 +130,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @throws NotAllowedException
      */
-    public function checkAuthorization()
+    public function checkAuthorization($context, $action = null)
     {
         // set if we are browsing as course admin, used for displaying the
         // additional tabs and actions

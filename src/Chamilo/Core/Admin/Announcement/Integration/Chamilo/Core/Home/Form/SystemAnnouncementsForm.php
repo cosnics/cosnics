@@ -36,7 +36,7 @@ class SystemAnnouncementsForm extends ConfigurationForm
             false);
     }
 
-    public function setDefaults()
+    public function setDefaults($defaults = [], $filter = null)
     {
         $defaults = array();
         
@@ -44,6 +44,6 @@ class SystemAnnouncementsForm extends ConfigurationForm
             SystemAnnouncements::CONFIGURATION_SHOW_EMPTY, 
             1);
         
-        parent::setDefaults($defaults);
+        parent::setDefaults($defaults, $filter);
     }
 }

@@ -147,9 +147,9 @@ abstract class Manager extends Application implements NoContextComponent
         return $this->get_parent()->get_tool_id();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
-        return $this->get_parent()->render_header();
+        return $this->get_parent()->render_header($pageTitle);
     }
 
     public function get_allowed_content_object_types()

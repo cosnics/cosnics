@@ -159,11 +159,11 @@ class UpdaterComponent extends BaseHtmlTreeComponent
     /**
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = '')
     {
         $html = array();
 
-        $html[] = parent::render_header();
+        $html[] = parent::render_header($pageTitle);
         $html[] = $this->renderRepoDragPanel();
 
         return implode(PHP_EOL, $html);

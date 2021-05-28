@@ -233,35 +233,6 @@ class WeblcmsRights extends RightsUtil
         return implode(PHP_EOL, $target_list);
     }
 
-    public function create_subtree_root_location($tree_identifier, $tree_type, $return_location = false)
-    {
-        return $this->create_location(
-            Manager::context(),
-            self::TYPE_ROOT,
-            0,
-            0,
-            0,
-            0,
-            $tree_identifier,
-            $tree_type,
-            $return_location);
-    }
-
-    /**
-     * Inverts the location entity right for a given right, entity, entity type and location
-     *
-     * @param $right int
-     * @param $entity_id int
-     * @param $entity_type int
-     * @param $location_id int
-     *
-     * @return boolean
-     */
-    public function invert_location_entity_right($right, $entity_id, $entity_type, $location_id)
-    {
-        return parent::invert_location_entity_right(Manager::context(), $right, $entity_id, $entity_type, $location_id);
-    }
-
     /**
      * Returns the publication identifiers on which a right has been granted for a given user in a given course
      *

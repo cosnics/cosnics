@@ -84,7 +84,7 @@ class CategoryMenu extends HtmlMenu
      */
     private function get_menu_items($parent_id)
     {
-        $category_class_name = get_class($this->category_manager->get_category());
+        $category_class_name = get_class($this->category_manager->getCategory());
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($category_class_name::class_name(), $category_class_name::PROPERTY_PARENT),

@@ -14,7 +14,7 @@ class HTML_QuickForm_Rule_Username extends HTML_QuickForm_Rule
      * @param string $username Wanted username
      * @return boolean True if username is of the correct format
      */
-    public function validate($username)
+    public function validate($username, $options = null)
     {
         $filteredUsername = StringUtilities::getInstance()->createString($username)->toAscii()->__toString();
         return $filteredUsername == $username;

@@ -41,7 +41,7 @@ class CreatorComponent extends Manager
 
         $user = $this->get_user();
 
-        $category = $this->get_parent()->get_category();
+        $category = $this->get_parent()->getCategory();
         $category->set_parent(isset($category_id) ? $category_id : 0);
 
         $form = new CategoryForm(

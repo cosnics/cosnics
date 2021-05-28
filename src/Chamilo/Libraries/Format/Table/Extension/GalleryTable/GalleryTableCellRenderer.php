@@ -31,7 +31,7 @@ abstract class GalleryTableCellRenderer extends TableCellRenderer
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass|string[] $result
      * @return string
      */
-    public function render_cell($result)
+    public function render_cell($column, $result)
     {
         $html = array();
 

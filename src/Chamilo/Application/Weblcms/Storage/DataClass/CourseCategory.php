@@ -69,7 +69,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      * @return string[string]
      *
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = [])
     {
         return array();
     }

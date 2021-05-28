@@ -108,7 +108,7 @@ abstract class NestedTreeNode extends NestedSet
      * @param integer $newPreviousId - the previous node id where you want to add the object
      * @return boolean
      */
-    public function move($newParentId = 0, $newPreviousId = 0)
+    public function move($newParentId = 0, $newPreviousId = 0, $condition = null)
     {
         if ($newPreviousId != 0)
         {
