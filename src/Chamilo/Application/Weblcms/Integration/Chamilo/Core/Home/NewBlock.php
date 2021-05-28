@@ -239,7 +239,7 @@ abstract class NewBlock extends Block
         $type = null;
 
         $last_visit_date = WeblcmsDataManager::get_last_visit_date(
-            $course->get_id(), $this->getUserId(), $tool, 0
+            $course->get_id(), $this->getUserId(), $tool
         );
 
         $conditions = [];

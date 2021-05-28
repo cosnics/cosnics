@@ -241,7 +241,7 @@ class CourseImportForm extends FormValidator
 
     public function get_failed_csv()
     {
-        return implode($this->failedcsv, '<br />');
+        return implode('<br />', $this->failedcsv);
     }
 
     public function validate_data($csvcourse)

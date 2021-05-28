@@ -624,8 +624,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
         $body .= '</div></body></html>';
 
-        $log = '';
-        $log .= "mail for publication " . $this->get_id() . " in course ";
+        $log = "mail for publication " . $this->get_id() . " in course ";
         $log .= $course->get_title();
         $log .= " to: \n";
 

@@ -180,7 +180,7 @@ class MoverComponent extends Manager
                 $parameters = [];
                 $parameters[Application::PARAM_ACTION] = self::ACTION_BROWSE_CONTENT_OBJECTS;
                 $parameters[FilterData::FILTER_CATEGORY] = $object->get_parent_id();
-                $this->redirect($message, ($failures ? true : false), $parameters);
+                $this->redirect($message, (bool) $failures, $parameters);
             }
             else
             {

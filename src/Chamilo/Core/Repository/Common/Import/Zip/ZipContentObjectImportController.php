@@ -54,7 +54,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             if (! $utf8)
             {
                 $detect_encoding = mb_detect_encoding($name);
-                $detect_encoding = $detect_encoding ? $detect_encoding : 'CP437';
+                $detect_encoding = $detect_encoding ?: 'CP437';
                 $name = iconv($detect_encoding, 'UTF-8', $name);
             }
         }
@@ -304,7 +304,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         if (! $utf8)
         {
             $detect_encoding = mb_detect_encoding($filename);
-            $detect_encoding = $detect_encoding ? $detect_encoding : 'CP437';
+            $detect_encoding = $detect_encoding ?: 'CP437';
             $filename = iconv($detect_encoding, 'UTF-8', $filename);
         }
         

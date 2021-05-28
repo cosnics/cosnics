@@ -121,7 +121,7 @@ class EventParser
             Event::class);
         
         $events = $parser->getEvents();
-        foreach ($events as &$parsedEvent)
+        foreach ($events as $parsedEvent)
         {
             $parameters = [];
             $parameters[Application::PARAM_CONTEXT] = Manager::context();

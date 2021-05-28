@@ -117,13 +117,13 @@ class RightsLocationFixer
         $this->currentLogger->notice('Fixing locations for course ' . $course->getId());
 
         $rootLocation = $this->rightsLocationRepository->findRightsLocationInCourse(
-            $course, WeblcmsRights::TYPE_ROOT, 0
+            $course
         );
 
         if (!$rootLocation instanceof RightsLocation)
         {
             $this->currentLogger->notice('[MISSING LOCATION] Creating a new location for the root of the course');
-            $rootLocation = $this->createRightsLocationInCourse($course, null, WeblcmsRights::TYPE_ROOT, 0);
+            $rootLocation = $this->createRightsLocationInCourse($course);
         }
 
         $this->totalLocationsCount ++;

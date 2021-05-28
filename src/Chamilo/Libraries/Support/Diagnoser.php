@@ -121,9 +121,9 @@ class Diagnoser
      */
     public function format_on_off($value)
     {
-        return $value ? $this->getTranslation('ConfirmOn', [], Utilities::COMMON_LIBRARIES) :
+        return $value ? $this->getTranslation('ConfirmOn', []) :
             $this->getTranslation(
-                'ConfirmOff', [], Utilities::COMMON_LIBRARIES
+                'ConfirmOff', []
             );
     }
 
@@ -135,9 +135,9 @@ class Diagnoser
      */
     public function format_yes_no($value)
     {
-        return $value ? $this->getTranslation('ConfirmYes', [], Utilities::COMMON_LIBRARIES) :
+        return $value ? $this->getTranslation('ConfirmYes', []) :
             $this->getTranslation(
-                'ConfirmNo', [], Utilities::COMMON_LIBRARIES
+                'ConfirmNo', []
             );
     }
 
@@ -192,8 +192,8 @@ class Diagnoser
 
         $date = Configuration::get('Chamilo\Configuration', 'general', 'install_date');
         $date = DatetimeUtilities::format_locale_date(
-            $this->getTranslation('DateFormatShort', [], Utilities::COMMON_LIBRARIES) . ', ' .
-            $this->getTranslation('TimeNoSecFormat', [], Utilities::COMMON_LIBRARIES), $date
+            $this->getTranslation('DateFormatShort', []) . ', ' .
+            $this->getTranslation('TimeNoSecFormat', []), $date
         );
         $array[] = $this->build_setting(
             1, '[INFORMATION]', $this->getTranslation('InstallDate'), '', $date, '', null,
@@ -541,7 +541,7 @@ class Diagnoser
         $sections = array('chamilo', 'php', 'database', 'webserver');
 
         $current_section = Request::get('section');
-        $current_section = $current_section ? $current_section : 'chamilo';
+        $current_section = $current_section ?: 'chamilo';
 
         $tabs = new DynamicVisualTabsRenderer('diagnoser');
 

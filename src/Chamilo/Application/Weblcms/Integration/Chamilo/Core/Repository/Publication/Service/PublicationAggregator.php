@@ -264,14 +264,13 @@ class PublicationAggregator implements PublicationAggregatorInterface
 
         if ($this->assignmentService->isContentObjectUsedAsEntry($contentObject))
         {
-            return ($isTeacher ? !$this->assignmentService->isContentObjectOwnerSameAsSubmitter($contentObject) :
-                false);
+            return ($isTeacher && !$this->assignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
         }
 
         if ($this->learningPathAssignmentService->isContentObjectUsedAsEntry($contentObject))
         {
-            return ($isTeacher ?
-                !$this->learningPathAssignmentService->isContentObjectOwnerSameAsSubmitter($contentObject) : false);
+            return ($isTeacher &&
+                !$this->learningPathAssignmentService->isContentObjectOwnerSameAsSubmitter($contentObject));
         }
 
         return true;

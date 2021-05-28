@@ -43,7 +43,7 @@ class ContentObjectTemplateLoader
      */
     public function loadTemplates($contentObjectNamespace)
     {
-        return $this->loadTemplatesByNameOrPattern($contentObjectNamespace, '*');
+        return $this->loadTemplatesByNameOrPattern($contentObjectNamespace);
     }
 
     /**

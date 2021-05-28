@@ -68,7 +68,7 @@ class PublisherComponent extends Manager
             $selectedContentObjectIdentifiers = (array) \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
 
             $parentId = $this->getRequest()->get(FilterData::FILTER_CATEGORY);
-            $parentId = $parentId ? $parentId : 0;
+            $parentId = $parentId ?: 0;
 
             foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
             {

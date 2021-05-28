@@ -75,7 +75,6 @@ class DeleterComponent extends Manager
         else
         {
             throw new NotAllowedException();
-            return;
         }
     }
 }

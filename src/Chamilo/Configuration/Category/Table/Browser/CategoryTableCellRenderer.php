@@ -146,7 +146,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             $toolbar->add_item(
                 new ToolbarItem(
                     Translation::get('MoveDown', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('sort-down'),
-                    $this->get_component()->get_move_category_url($category->get_id(), 1), ToolbarItem::DISPLAY_ICON
+                    $this->get_component()->get_move_category_url($category->get_id()), ToolbarItem::DISPLAY_ICON
                 )
             );
         }

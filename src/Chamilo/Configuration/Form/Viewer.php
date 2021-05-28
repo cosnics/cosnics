@@ -39,7 +39,7 @@ class Viewer
         $this->context = $context;
         $this->name = $name;
         $this->user_id = $user_id;
-        $this->title = $title ? $title : Translation::get(
+        $this->title = $title ?: Translation::get(
             (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), $context
         );
     }

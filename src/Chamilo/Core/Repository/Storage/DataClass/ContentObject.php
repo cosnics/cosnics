@@ -2062,7 +2062,7 @@ class ContentObject extends CompositeDataClass
         // repeat a TypeNameDefault translation string
         $type_string = $type_string == 'TypeNameDefault' ? 'TypeName' : $type_string;
 
-        return Translation::get($type_string ? $type_string : 'TypeName', null, $context);
+        return Translation::get($type_string ?: 'TypeName', null, $context);
     }
 
     /**

@@ -154,7 +154,6 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
             if (!$item->delete())
             {
                 $failures ++;
-                continue;
             }
         }
 

@@ -120,7 +120,7 @@ class TargetComponent extends Manager implements TableSupport
                             self::PARAM_ENTITY_TYPE => $this->get_selected_entity_type(),
                             self::PARAM_TARGET_TYPE => $target_type::ENTITY_TYPE
                         )
-                    ), ($this->get_selected_target_type() == $target_type::ENTITY_TYPE ? true : false)
+                    ), $this->get_selected_target_type() == $target_type::ENTITY_TYPE
                     )
                 );
             }

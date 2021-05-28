@@ -22,7 +22,7 @@ class Import
      *
      * @return string[]
      */
-    public function csv_to_array($filename)
+    public static function csv_to_array($filename)
     {
         $result = [];
         $handle = fopen($filename, "r");

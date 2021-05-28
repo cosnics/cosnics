@@ -144,7 +144,7 @@ class BrowserComponent extends Manager implements TableSupport
 
                 foreach ($workspaces as $workspace)
                 {
-                    $isActive = ($workspace->getId() == $this->getWorkspace()->getId()) ? true : false;
+                    $isActive = $workspace->getId() == $this->getWorkspace()->getId();
 
                     $button->addSubButton(
                         new SubButton(
@@ -173,7 +173,7 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $categoryId = $this->filterData->get_category();
 
-        return $categoryId ? $categoryId : 0;
+        return $categoryId ?: 0;
     }
 
     /**

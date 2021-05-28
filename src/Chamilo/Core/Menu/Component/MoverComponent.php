@@ -52,7 +52,7 @@ class MoverComponent extends Manager
         );
 
         $this->redirect(
-            $message, ($success ? false : true), array(
+            $message, !$success, array(
                 Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $item->getParentId()
             )
         );

@@ -42,8 +42,7 @@ class UpdateElementComponent extends Manager
         {
             $success = $form->update_dynamic_form_element();
             $this->redirect(
-                Translation::get($success ? 'DynamicFormElementUpdated' : 'DynamicFormElementNotUpdated'), 
-                ($success ? false : true), 
+                Translation::get($success ? 'DynamicFormElementUpdated' : 'DynamicFormElementNotUpdated'), !$success,
                 array(self::PARAM_ACTION => self::ACTION_BUILD_DYNAMIC_FORM));
         }
         else

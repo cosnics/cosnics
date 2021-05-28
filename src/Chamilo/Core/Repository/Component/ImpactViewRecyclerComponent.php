@@ -121,7 +121,6 @@ class ImpactViewRecyclerComponent extends Manager
                 if (! $version->recycle())
                 {
                     $failures ++;
-                    continue;
                 }
                 else
                 {

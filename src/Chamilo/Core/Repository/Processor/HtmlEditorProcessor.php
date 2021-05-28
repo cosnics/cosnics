@@ -69,7 +69,7 @@ abstract class HtmlEditorProcessor
         return $this->get_parent()->get_parameter($key);
     }
 
-    public function get_repository_document_display_url($parameters = array (), $filter = [], $encode_entities = false)
+    public static function get_repository_document_display_url($parameters = array (), $filter = [], $encode_entities = false)
     {
         $parameters = array_merge(
             array(Manager::PARAM_ACTION => Manager::ACTION_DOWNLOAD_DOCUMENT, 'display' => 1), 
@@ -80,7 +80,7 @@ abstract class HtmlEditorProcessor
         return $redirect->getUrl();
     }
 
-    public function get_repository_document_display_matching_url()
+    public static function get_repository_document_display_matching_url()
     {
         $matching_url = self::get_repository_document_display_url(
             array(Manager::PARAM_CONTENT_OBJECT_ID => '', ContentObject::PARAM_SECURITY_CODE => ''));

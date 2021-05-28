@@ -45,7 +45,7 @@ class Installer extends Action\Installer
 
     public function create_languages()
     {
-        $language_path = Path::getInstance()->getI18nPath('Chamilo\Configuration');
+        $language_path = Path::getInstance()->getI18nPath();
         $language_files = Filesystem::get_directory_content($language_path, Filesystem::LIST_FILES, false);
 
         foreach ($language_files as $language_file)

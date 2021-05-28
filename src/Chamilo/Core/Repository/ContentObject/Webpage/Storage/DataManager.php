@@ -71,6 +71,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             Webpage::class, 
             new DataClassCountParameters($condition));
         
-        return ($count == 1 ? true : false);
+        return $count == 1;
     }
 }

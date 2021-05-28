@@ -80,7 +80,7 @@ abstract class ToolAccessBlock extends ToolBlock
             $reporting_data->add_data_category_row(
                 $tool_name, 
                 Translation::get('TotalVisits'), 
-                $course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS] ? $course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS] : 0);
+                $course_tool_summary_data[CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS] ?: 0);
             
             $reporting_data->add_data_category_row(
                 $tool_name, 

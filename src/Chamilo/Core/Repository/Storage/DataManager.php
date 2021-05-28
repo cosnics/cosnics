@@ -502,7 +502,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 if (!$version->recycle())
                 {
                     $success = false;
-                    continue;
                 }
             }
         }

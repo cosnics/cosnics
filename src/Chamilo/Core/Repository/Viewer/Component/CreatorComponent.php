@@ -154,7 +154,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             $this->get_url(array_merge(array(TypeSelector::PARAM_SELECTION => $template_id), $this->get_parameters()))
         );
 
-        return $this->handle_form($form, ContentObjectForm::TYPE_CREATE);
+        return $this->handle_form($form);
     }
 
     /**

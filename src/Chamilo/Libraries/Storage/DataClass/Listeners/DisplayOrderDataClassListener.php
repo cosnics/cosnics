@@ -231,7 +231,7 @@ class DisplayOrderDataClassListener extends DataClassListener
 
         if (isset($this->old_display_order_condition))
         {
-            $original_value = $this->old_display_order ? $this->old_display_order : $display_order_value;
+            $original_value = $this->old_display_order ?: $display_order_value;
 
             if (!$data_manager::move_display_orders(
                 $data_class->get_display_order_property()->get_class(), $display_order_property, $original_value, null,

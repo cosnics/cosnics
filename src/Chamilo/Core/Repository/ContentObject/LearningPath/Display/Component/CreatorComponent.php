@@ -146,8 +146,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
                 Translation::get(
                     $message,
                     array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
-                    Utilities::COMMON_LIBRARIES),
-                ($failures ? true : false),
+                    Utilities::COMMON_LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep));
         }
     }

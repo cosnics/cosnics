@@ -443,7 +443,7 @@ abstract class ContentObjectForm extends FormValidator
         }
 
         $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));
-        $required = ($value == 1) ? true : false;
+        $required = $value == 1;
         $name =
             Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
@@ -572,11 +572,10 @@ abstract class ContentObjectForm extends FormValidator
         $object = $this->content_object;
         $object->set_owner_id($this->get_owner_id());
         $object->set_template_registration_id(
-            $values[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] ?
-                $values[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] : null
+            $values[ContentObject::PROPERTY_TEMPLATE_REGISTRATION_ID] ?: null
         );
         $object->set_title($values[ContentObject::PROPERTY_TITLE]);
-        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ? $values[ContentObject::PROPERTY_DESCRIPTION] : '';
+        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ?: '';
         $object->set_description($desc);
 
         if ($this->allows_category_selection() && $this->workspace instanceof PersonalWorkspace)
@@ -1046,8 +1045,8 @@ abstract class ContentObjectForm extends FormValidator
 
         $object->set_title($values[ContentObject::PROPERTY_TITLE]);
 
-        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ? $values[ContentObject::PROPERTY_DESCRIPTION] : '';
-        $object->set_description($desc ? $desc : '');
+        $desc = $values[ContentObject::PROPERTY_DESCRIPTION] ?: '';
+        $object->set_description($desc ?: '');
 
         $move = false;
         if ($this->allows_category_selection())

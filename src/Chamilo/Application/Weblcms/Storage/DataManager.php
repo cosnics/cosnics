@@ -396,7 +396,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         $tools_with_new_publications = DataManager::retrieve_new_publication_icon_ids(
-            array_keys($courses), $user->get_id(), false, null, null
+            array_keys($courses), $user->get_id()
         );
 
         $identifiers = [];

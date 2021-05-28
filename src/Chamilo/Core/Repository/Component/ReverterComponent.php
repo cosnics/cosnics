@@ -76,8 +76,7 @@ class ReverterComponent extends Manager
                     Utilities::COMMON_LIBRARIES);
             }
             $this->redirect(
-                $message, 
-                ($failures ? true : false), 
+                $message, (bool) $failures,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS));
         }
         else

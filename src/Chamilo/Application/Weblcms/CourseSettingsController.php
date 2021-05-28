@@ -185,7 +185,7 @@ class CourseSettingsController
      *
      * @return boolean
      */
-    protected function create_course_settings_from_xml($settings_file, $tool_registration_id = null)
+    protected static function create_course_settings_from_xml($settings_file, $tool_registration_id = null)
     {
         if (file_exists($settings_file))
         {
@@ -628,7 +628,7 @@ class CourseSettingsController
      *
      * @return boolean
      */
-    public function install_course_settings(
+    public static function install_course_settings(
         Installer $installer, $tool_registration_id = null
     )
     {

@@ -121,7 +121,7 @@ abstract class TemplateRendition
     public function determine_current_block_id()
     {
         $selected_block = $this->get_context()->get_current_block();
-        return $selected_block ? $selected_block : 0;
+        return $selected_block ?: 0;
     }
 
     public function show_all()

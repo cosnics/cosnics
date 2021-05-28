@@ -95,7 +95,7 @@ class Filtered extends Basic
                 {
                     $block_parameters = array_merge($context_parameters, array(Manager::PARAM_BLOCK_ID => $key));
 
-                    $is_current_block = $key == $this->determine_current_block_id() ? true : false;
+                    $is_current_block = $key == $this->determine_current_block_id();
 
                     $title = Translation::get(
                         ClassnameUtilities::getInstance()->getClassnameFromObject($block), null,

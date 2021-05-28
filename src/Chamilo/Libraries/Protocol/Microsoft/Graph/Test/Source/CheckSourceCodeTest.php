@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Source;
+namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Test\Source;
 
 /**
  * This test case checks the php syntax for the php files of this package

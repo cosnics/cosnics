@@ -672,12 +672,12 @@ class Course extends DataClass
     public function get_parent_rights_location()
     {
         $parent = CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            CourseManagementRights::TYPE_COURSE_TYPE, $this->get_course_type_id(), 0
+            CourseManagementRights::TYPE_COURSE_TYPE, $this->get_course_type_id()
         );
 
         if (!$parent)
         {
-            $parent = CourseManagementRights::get_courses_subtree_root(0);
+            $parent = CourseManagementRights::get_courses_subtree_root();
         }
 
         return $parent;
@@ -691,7 +691,7 @@ class Course extends DataClass
     public function get_rights_location()
     {
         return CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
-            CourseManagementRights::TYPE_COURSE, $this->get_id(), 0
+            CourseManagementRights::TYPE_COURSE, $this->get_id()
         );
     }
 

@@ -302,7 +302,7 @@ class User extends DataClass
         return self::fullname($this->get_firstname(), $this->get_lastname());
     }
 
-    public function get_fullname_format_options()
+    public static function get_fullname_format_options()
     {
         $options = [];
         $options[self::NAME_FORMAT_FIRST] = Translation::get('FirstName') . ' ' . Translation::get('LastName');
@@ -485,7 +485,7 @@ class User extends DataClass
 
     public function is_anonymous_user()
     {
-        return ($this->get_status() == self::STATUS_ANONYMOUS ? true : false);
+        return $this->get_status() == self::STATUS_ANONYMOUS;
     }
 
     /**
@@ -495,7 +495,7 @@ class User extends DataClass
      */
     public function is_platform_admin()
     {
-        return ($this->get_platformadmin() == 1 ? true : false);
+        return $this->get_platformadmin() == 1;
     }
 
     /**
@@ -505,7 +505,7 @@ class User extends DataClass
      */
     public function is_teacher()
     {
-        return ($this->get_status() == self::STATUS_TEACHER ? true : false);
+        return $this->get_status() == self::STATUS_TEACHER;
     }
 
     public function set_activation_date($activation_date)

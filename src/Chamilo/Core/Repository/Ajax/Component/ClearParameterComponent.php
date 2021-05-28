@@ -37,7 +37,7 @@ class ClearParameterComponent extends Manager
             if (count($parameter) == 2 && is_string($parameter[1]))
             {
                 $currentWorkspaceIdentifier = $this->getRequest()->request->get(self::PARAM_CURRENT_WORKSPACE_ID);
-                $currentWorkspaceIdentifier = $currentWorkspaceIdentifier ? $currentWorkspaceIdentifier : null;
+                $currentWorkspaceIdentifier = $currentWorkspaceIdentifier ?: null;
                 
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $currentWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(

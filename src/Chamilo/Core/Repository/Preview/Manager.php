@@ -103,7 +103,7 @@ abstract class Manager extends Application
                     new SubButton(
                         Translation::get('DisplayPreview'), null,
                         $this->get_url(array(self::PARAM_ACTION => self::ACTION_DISPLAY)),
-                        SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, ($isDisplayAction ? true : false)
+                        SubButton::DISPLAY_ICON_AND_LABEL, false, [], null, (bool) $isDisplayAction
                     )
                 );
             }
@@ -134,7 +134,7 @@ abstract class Manager extends Application
             foreach ($views as $view)
             {
                 $isRenditionAction = $this->get_action() == self::ACTION_RENDITION;
-                $isActive = ($isRenditionAction && $this->getCurrentView() == $view ? true : false);
+                $isActive = $isRenditionAction && $this->getCurrentView() == $view;
 
                 $dropdownButton->addSubButton(
                     new SubButton(

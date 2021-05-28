@@ -288,7 +288,7 @@ class UserImportForm extends FormValidator
                     $localSetting = new LocalSetting(
                         new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
                     );
-                    $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
+                    $localSetting->create('platform_language', $csvuser['language']);
 
                     $send_mail = intval($values['mail']['send_mail']);
                     if ($send_mail)
@@ -374,7 +374,7 @@ class UserImportForm extends FormValidator
                     $localSetting = new LocalSetting(
                         new LocalSettingCacheService($this->getConfigurablePathBuilder()), $user->get_id()
                     );
-                    $localSetting->create('platform_language', $csvuser['language'], 'Chamilo\Core\Admin');
+                    $localSetting->create('platform_language', $csvuser['language']);
                 }
             }
             elseif ($action == 'D')

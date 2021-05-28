@@ -53,7 +53,7 @@ class ConfigurerComponent extends Manager
                 Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated', array('OBJECT' => Translation::get('Setting')),
                     Utilities::COMMON_LIBRARIES
-                ), ($success ? false : true), array(
+                ), !$success, array(
                     Application::PARAM_ACTION => self::ACTION_CONFIGURE_PLATFORM,
                     self::PARAM_CONTEXT => $this->get_context(),
                     DynamicVisualTabsRenderer::PARAM_SELECTED_TAB => $this->get_tab()

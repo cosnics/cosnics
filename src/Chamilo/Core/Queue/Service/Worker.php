@@ -70,7 +70,7 @@ class Worker
 
                 $consumer->acknowledge($message);
 
-                $this->jobEntityManager->changeJobStatus($job, Job::STATUS_SUCCESS);
+                $this->jobEntityManager->changeJobStatus($job);
             }
             catch(JobNoLongerValidException $ex)
             {

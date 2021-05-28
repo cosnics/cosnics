@@ -202,7 +202,6 @@ abstract class ComplexContentObjectPath
                 {
                     $root_node = $child_node;
                     $child_found = true;
-                    continue;
                 }
             }
 

@@ -277,8 +277,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
         );
 
         $force_collaborate =
-            Configuration::getInstance()->get_setting(array(Manager::package(), 'force_collaborate')) === 1 ? true :
-                false;
+            Configuration::getInstance()->get_setting(array(Manager::package(), 'force_collaborate')) === 1;
 
         // collaborate right for course admins if we are owner of each content
         // object to share
@@ -772,9 +771,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
         $body .= '</div></body></html>';
 
-        $log = '';
-
-        $log .= "mail for publication " . $publication->get_id() . " in course ";
+        $log = "mail for publication " . $publication->get_id() . " in course ";
         $log .= $this->course->get_title();
         $log .= " to: \n";
 
@@ -866,7 +863,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
             $force_collaborate = Configuration::getInstance()->get_setting(
                 array(Manager::package(), 'force_collaborate')
-            ) === 1 ? true : false;
+            ) === 1;
 
             if ($this->collaborate_possible && !$force_collaborate)
             {

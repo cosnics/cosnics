@@ -805,35 +805,35 @@ class Calculator
                     {
                         $group = $this->getGroupHighest();
 
-                        return ($group > $this->user->get_disk_quota() ? false : true);
+                        return !($group > $this->user->get_disk_quota());
                     }
                     else
                     {
                         $group = $this->getGroupLowest();
 
-                        return $group || !$fallback ? false : true;
+                        return !($group || !$fallback);
                     }
                 }
                 break;
             case self::POLICY_GROUP_HIGHEST :
                 $group = $this->getGroupHighest();
 
-                return $group || !$fallback ? false : true;
+                return !($group || !$fallback);
                 break;
             case self::POLICY_GROUP_LOWEST :
                 $group = $this->getGroupLowest();
 
-                return $group || !$fallback ? false : true;
+                return !($group || !$fallback);
                 break;
             case self::POLICY_HIGHEST :
                 $group = $this->getGroupHighest();
 
-                return ($group > $this->user->get_disk_quota() ? false : true);
+                return !($group > $this->user->get_disk_quota());
                 break;
             case self::POLICY_LOWEST :
                 $group = $this->getGroupLowest();
 
-                return ($group > $this->user->get_disk_quota() || !$group ? true : false);
+                return $group > $this->user->get_disk_quota() || !$group;
                 break;
             default :
                 return true;

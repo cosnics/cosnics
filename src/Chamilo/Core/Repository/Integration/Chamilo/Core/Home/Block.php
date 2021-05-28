@@ -50,7 +50,7 @@ class Block extends BlockRenderer
         \Chamilo\Core\Home\Storage\DataClass\Block $block, $source = self::SOURCE_DEFAULT, $defaultTitle = '')
     {
         parent::__construct($application, $homeService, $block, $source);
-        $this->defaultTitle = $defaultTitle ? $defaultTitle : Translation::get('Object');
+        $this->defaultTitle = $defaultTitle ?: Translation::get('Object');
         
         $this->contentObjectPublicationService = new ContentObjectPublicationService(
             new ContentObjectPublicationRepository(new PublicationRepository()));

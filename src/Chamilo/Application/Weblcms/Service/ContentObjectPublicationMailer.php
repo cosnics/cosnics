@@ -275,8 +275,7 @@ class ContentObjectPublicationMailer
 
         $body .= '</div></body></html>';
 
-        $log = '';
-        $log .= "mail for publication " . $contentObjectPublication->getId() . " in course ";
+        $log = "mail for publication " . $contentObjectPublication->getId() . " in course ";
         $log .= $course->get_title();
         $log .= " to: \n";
 

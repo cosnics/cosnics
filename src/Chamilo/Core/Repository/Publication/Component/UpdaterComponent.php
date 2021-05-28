@@ -46,8 +46,7 @@ class UpdaterComponent extends Manager
                 Translation::get(
                     $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                     array('OBJECT' => Translation::get('Publication')),
-                    Utilities::COMMON_LIBRARIES),
-                ($success ? false : true),
+                    Utilities::COMMON_LIBRARIES), !$success,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE));
         }
         else

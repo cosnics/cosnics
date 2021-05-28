@@ -40,7 +40,7 @@ class ReportingViewerComponent extends Manager implements DelegateComponent
         return $component->run();
     }
 
-    private function add_pcattree_breadcrumbs($pcattree, &$trail)
+    private function add_pcattree_breadcrumbs($pcattree, $trail)
     {
         $cat = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
             ContentObjectPublication::class,

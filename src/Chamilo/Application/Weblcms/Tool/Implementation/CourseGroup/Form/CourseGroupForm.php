@@ -954,7 +954,7 @@ class CourseGroupForm extends FormValidator
 
         // randomize course_users
         /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_users_data_set */
-        $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code, null, null, null);
+        $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code);
         $course_users = [];
         foreach($course_users_data_set as $course_user)
         {
@@ -1003,7 +1003,7 @@ class CourseGroupForm extends FormValidator
     {
         /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_users_drs */
         $course_users_drs = CourseDataManager::retrieve_all_course_users(
-            $parent_course_group->get_course_code(), null, null, null
+            $parent_course_group->get_course_code()
         );
         $course_users = [];
         if ($course_users_drs)

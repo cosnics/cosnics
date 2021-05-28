@@ -100,8 +100,7 @@ class SubscriberComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message),
-                ($failures ? true : false),
+                Translation::get($message), (bool) $failures,
                 array(Application::PARAM_ACTION => self::ACTION_VIEW_GROUP, self::PARAM_GROUP_ID => $group_id));
         }
         else

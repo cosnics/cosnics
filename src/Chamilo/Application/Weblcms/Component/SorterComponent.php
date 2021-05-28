@@ -116,7 +116,7 @@ class SorterComponent extends Manager
             $success = $form->create_course_user_category();
             $this->redirect(
                 Translation::get($success ? 'CourseUserCategoryAdded' : 'CourseUserCategoryNotAdded'),
-                ($success ? false : true), array(self::PARAM_COMPONENT_ACTION => 'view')
+                !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
             );
         }
         else
@@ -185,8 +185,7 @@ class SorterComponent extends Manager
         {
             $success = $form->update_course_type_user_category_rel_course();
             $this->redirect(
-                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'),
-                ($success ? false : true), array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
+                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success, array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
             );
         }
         else
@@ -212,7 +211,7 @@ class SorterComponent extends Manager
         $success = $course_type_user_category->delete();
         $this->redirect(
             Translation::get($success ? 'CourseUserCategoryDeleted' : 'CourseUserCategoryNotDeleted'),
-            ($success ? false : true), array(self::PARAM_COMPONENT_ACTION => 'view')
+            !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
         );
     }
 
@@ -246,8 +245,7 @@ class SorterComponent extends Manager
         {
             $success = $form->update_course_user_category();
             $this->redirect(
-                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'),
-                ($success ? false : true), array(self::PARAM_COMPONENT_ACTION => 'view')
+                Translation::get($success ? 'CourseUserCategoryUpdated' : 'CourseUserCategoryNotUpdated'), !$success, array(self::PARAM_COMPONENT_ACTION => 'view')
             );
         }
         else
@@ -547,7 +545,7 @@ class SorterComponent extends Manager
             $success = $this->move_category($course_type_user_category_id, $direction);
             $this->redirect(
                 Translation::get($success ? 'CourseUserCategoryMoved' : 'CourseUserCategoryNotMoved'),
-                ($success ? false : true), array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
+                !$success, array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
             );
         }
         else
@@ -598,7 +596,7 @@ class SorterComponent extends Manager
         {
             $success = $this->move_course($course, $course_type_user_category_id, $direction);
             $this->redirect(
-                Translation::get($success ? 'CourseUserMoved' : 'CourseUserNotMoved'), ($success ? false : true),
+                Translation::get($success ? 'CourseUserMoved' : 'CourseUserNotMoved'), !$success,
                 array(self::PARAM_COMPONENT_ACTION => self::ACTION_MANAGER_SORT)
             );
         }

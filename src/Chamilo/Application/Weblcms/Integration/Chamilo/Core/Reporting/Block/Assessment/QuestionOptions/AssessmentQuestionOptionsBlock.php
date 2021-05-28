@@ -91,7 +91,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
         );
 
         $reporting_data->add_data_category_row(
-            $row_count, Translation::get('TimesChosen'), $times_chosen ? $times_chosen : 0
+            $row_count, Translation::get('TimesChosen'), $times_chosen ?: 0
         );
 
         if ($correct)

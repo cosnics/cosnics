@@ -379,6 +379,6 @@ class ImporterComponent extends Manager
      */
     private function read_csv($file_handle)
     {
-        return fgetcsv($file_handle, 0, ';', '"');
+        return fgetcsv($file_handle, 0, ';');
     }
 }

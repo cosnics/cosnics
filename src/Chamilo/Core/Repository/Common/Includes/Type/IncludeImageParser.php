@@ -27,7 +27,7 @@ class IncludeImageParser extends ContentObjectIncludeParser
         {
             if (isset($values[$htmlEditor]))
             {
-                $tags = Text::parse_html_file($values[$htmlEditor], 'img');
+                $tags = Text::parse_html_file($values[$htmlEditor]);
 
                 foreach ($tags as $tag)
                 {

@@ -73,7 +73,7 @@ class RightsComponent extends Manager implements DelegateComponent
             );
 
             $this->redirect(
-                $message, ($success ? false : true), array(
+                $message, !$success, array(
                     Manager::PARAM_ACTION => Manager::ACTION_BROWSE,
                     Manager::PARAM_PARENT => $this->getItemParentIdentifier()
                 )

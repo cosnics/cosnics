@@ -41,7 +41,7 @@ class DeleterComponent extends Manager
             'ObjectDeleted', 'ObjectsDeleted'
         );
 
-        $this->redirect($message, ($failures ? true : false), array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
+        $this->redirect($message, (bool) $failures, array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
     }
 
     /**

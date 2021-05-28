@@ -198,7 +198,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             $requestedPageNumber = Request::get(ForumTopic::get_table_name() . '_' . 'page_nr');
 
-            $this->pageNumber = $requestedPageNumber ? $requestedPageNumber : $pageNumber;
+            $this->pageNumber = $requestedPageNumber ?: $pageNumber;
         }
 
         return $this->pageNumber;

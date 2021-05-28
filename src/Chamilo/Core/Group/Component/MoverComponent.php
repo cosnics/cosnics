@@ -48,8 +48,7 @@ class MoverComponent extends Manager
                 array('OBJECT' => Translation::get('Group')),
                 Utilities::COMMON_LIBRARIES);
             $this->redirect(
-                $message,
-                $success ? (false) : true,
+                $message, !$success || false,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_GROUPS, self::PARAM_GROUP_ID => $parent));
         }
         else

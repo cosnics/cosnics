@@ -120,7 +120,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupMember($groupId, $externalUserIdentifier);
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeMemberInGroup')
@@ -178,7 +178,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupMember($groupId, $externalUserIdentifier);
 
         $this->groupRepositoryMock->expects($this->never())
             ->method('removeMemberFromGroup');
@@ -218,7 +218,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupMember($groupId, $externalUserIdentifier);
 
         $this->assertFalse($this->groupService->isMemberOfGroup($groupId, $user));
     }
@@ -230,7 +230,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupMember($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupMember($groupId, $externalUserIdentifier);
 
         $this->assertFalse($this->groupService->isMemberOfGroup($groupId, $user));
     }
@@ -279,7 +279,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupOwner($groupId, $externalUserIdentifier);
 
         $this->groupRepositoryMock->expects($this->once())
             ->method('subscribeOwnerInGroup')
@@ -337,7 +337,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupOwner($groupId, $externalUserIdentifier);
 
         $this->groupRepositoryMock->expects($this->never())
             ->method('removeOwnerFromGroup');
@@ -377,7 +377,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupOwner($groupId, $externalUserIdentifier);
 
         $this->assertFalse($this->groupService->isOwnerOfGroup($groupId, $user));
     }
@@ -389,7 +389,7 @@ class GroupServiceTest extends ChamiloTestCase
         $groupId = 5;
 
         $this->mockGetAzureUser($user, $externalUserIdentifier);
-        $this->mockGetGroupOwner($groupId, $externalUserIdentifier, null);
+        $this->mockGetGroupOwner($groupId, $externalUserIdentifier);
 
         $this->assertFalse($this->groupService->isOwnerOfGroup($groupId, $user));
     }

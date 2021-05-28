@@ -236,7 +236,6 @@ class ContentObjectOwnerChanger
                     return $this->move_scorm_files($co, $old_user_id);
                 }
             default :
-                return;
         }
     }
 

@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class CommonDataClassRepositTest extends ChamiloTestCase
+class CommonDataClassRepositoryTest extends ChamiloTestCase
 {
     /**
      * @var CommonDataClassRepository

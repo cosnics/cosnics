@@ -66,8 +66,7 @@ class VisibilityTogglerComponent extends Manager
             }
             
             $this->redirect(
-                Translation::get($message), 
-                ($bool ? false : true), 
+                Translation::get($message), !$bool,
                 array(
                     self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, 
                     self::PARAM_CATEGORY_ID => $this->redirect_to_parent));

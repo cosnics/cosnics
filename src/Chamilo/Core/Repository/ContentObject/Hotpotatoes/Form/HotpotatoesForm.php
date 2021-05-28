@@ -53,7 +53,7 @@ class HotpotatoesForm extends ContentObjectForm
         }
 
         $att = $values[Hotpotatoes::PROPERTY_MAXIMUM_ATTEMPTS];
-        $object->set_maximum_attempts($att ? $att : 0);
+        $object->set_maximum_attempts($att ?: 0);
 
         $this->set_content_object($object);
         // $object->add_javascript();
@@ -94,7 +94,7 @@ class HotpotatoesForm extends ContentObjectForm
         }
 
         $att = $values[Hotpotatoes::PROPERTY_MAXIMUM_ATTEMPTS];
-        $object->set_maximum_attempts($att ? $att : 0);
+        $object->set_maximum_attempts($att ?: 0);
 
         $this->set_content_object($object);
 

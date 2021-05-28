@@ -48,7 +48,7 @@ class RequestForm extends FormValidator
         );
         $this->addRule(
             Request::PROPERTY_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
-            'numeric', null, 'server'
+            'numeric'
         );
 
         $this->addElement(

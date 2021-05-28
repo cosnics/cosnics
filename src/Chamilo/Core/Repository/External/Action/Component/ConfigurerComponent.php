@@ -21,8 +21,7 @@ class ConfigurerComponent extends Manager
         {
             $success = $form->update_configuration();
             $this->redirect(
-                Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'),
-                ($success ? false : true)
+                Translation::get($success ? 'ConfigurationUpdated' : 'ConfigurationNotUpdated'), !$success
             );
         }
         else

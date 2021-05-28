@@ -96,7 +96,7 @@ class PublicationAccessBlock extends ToolBlock
         }
 
         $category_id = $content_object_publication->get_category_id();
-        $category_id = $category_id ? $category_id : null;
+        $category_id = $category_id ?: null;
 
         $tool_id = $this->get_tool_registration($content_object_publication->get_tool())->get_id();
 

@@ -1434,7 +1434,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_groups_subscribed_as_student($course_id)
     {
         return self::retrieve_groups_directly_subscribed_to_course_as_status(
-            $course_id, CourseEntityRelation::STATUS_STUDENT
+            $course_id
         );
     }
 
@@ -1462,7 +1462,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     public static function retrieve_students_directly_subscribed_to_course($course_id)
     {
         return self::retrieve_users_directly_subscribed_to_course_by_status(
-            $course_id, CourseEntityRelation::STATUS_STUDENT
+            $course_id
         );
     }
 

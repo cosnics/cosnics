@@ -617,35 +617,35 @@ class StorageSpaceCalculator
                     {
                         $groupQuota = $this->getHighestGroupQuotumForUser($user);
 
-                        return ($groupQuota > $user->get_disk_quota() ? false : true);
+                        return !($groupQuota > $user->get_disk_quota());
                     }
                     else
                     {
                         $groupQuota = $this->getLowestGroupQuotumForUser($user);
 
-                        return $groupQuota || !$useQuotaFallback ? false : true;
+                        return !($groupQuota || !$useQuotaFallback);
                     }
                 }
                 break;
             case self::POLICY_GROUP_HIGHEST :
                 $groupQuota = $this->getHighestGroupQuotumForUser($user);
 
-                return $groupQuota || !$useQuotaFallback ? false : true;
+                return !($groupQuota || !$useQuotaFallback);
                 break;
             case self::POLICY_GROUP_LOWEST :
                 $groupQuota = $this->getLowestGroupQuotumForUser($user);
 
-                return $groupQuota || !$useQuotaFallback ? false : true;
+                return !($groupQuota || !$useQuotaFallback);
                 break;
             case self::POLICY_HIGHEST :
                 $groupQuota = $this->getHighestGroupQuotumForUser($user);
 
-                return ($groupQuota > $user->get_disk_quota() ? false : true);
+                return !($groupQuota > $user->get_disk_quota());
                 break;
             case self::POLICY_LOWEST :
                 $groupQuota = $this->getLowestGroupQuotumForUser($user);
 
-                return ($groupQuota > $user->get_disk_quota() || !$groupQuota ? true : false);
+                return $groupQuota > $user->get_disk_quota() || !$groupQuota;
                 break;
             default :
                 return true;

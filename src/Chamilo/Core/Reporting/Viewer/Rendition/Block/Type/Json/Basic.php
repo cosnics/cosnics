@@ -8,7 +8,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Json;
  * @author Hans De Bisschop & Magali Gillard
  * @package reporting.viewer
  */
-class JsonDefaultBlockRendition extends Json
+class Basic extends Json
 {
 
     public function render()

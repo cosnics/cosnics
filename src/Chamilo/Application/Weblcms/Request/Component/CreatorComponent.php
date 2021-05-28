@@ -83,8 +83,7 @@ class CreatorComponent extends Manager
                 Translation::get(
                     $success ? 'ObjectCreated' : 'ObjectNotCreated', 
                     array('OBJECT' => Translation::get('Request')), 
-                    Utilities::COMMON_LIBRARIES), 
-                ($success ? false : true), 
+                    Utilities::COMMON_LIBRARIES), !$success,
                 $parameters);
         }
         else

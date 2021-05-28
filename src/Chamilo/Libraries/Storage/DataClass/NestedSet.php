@@ -341,7 +341,7 @@ abstract class NestedSet extends DataClass
 
         return DataManager::transactional(
             function ($c) use ($nested_set, $insert_after) { // Correct the left and right values wherever necessary.
-                if (!$nested_set->pre_insert($insert_after, 1))
+                if (!$nested_set->pre_insert($insert_after))
                 {
                     return false;
                 }

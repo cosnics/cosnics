@@ -55,8 +55,7 @@ class UpdaterComponent extends Manager
                 }
                 
                 $this->redirect(
-                    $message, 
-                    ($success ? false : true), 
+                    $message, !$success,
                     array(self::PARAM_ACTION => self::ACTION_BROWSE));
             }
             else

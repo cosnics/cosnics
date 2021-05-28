@@ -95,7 +95,7 @@ class CreatorComponent extends Manager implements TabsTypeSelectorSupport
             $content_object_form = ContentObjectForm::factory(
                 ContentObjectForm::TYPE_CREATE, $this->getWorkspace(), $contentObject, 'create_content_object',
                 FormValidator::FORM_METHOD_POST,
-                $this->get_url(array(TypeSelector::PARAM_SELECTION => $templateIdentifier)), null
+                $this->get_url(array(TypeSelector::PARAM_SELECTION => $templateIdentifier))
             );
 
             if ($content_object_form->validate())

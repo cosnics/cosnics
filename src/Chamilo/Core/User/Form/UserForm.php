@@ -183,7 +183,7 @@ class UserForm extends FormValidator
         $this->addElement('text', User::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
         $this->addRule(
             User::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
-            'numeric', null, 'server'
+            'numeric'
         );
         // Database Quota
         $this->addElement(
@@ -191,7 +191,7 @@ class UserForm extends FormValidator
         );
         $this->addRule(
             User::PROPERTY_DATABASE_QUOTA,
-            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric', null, 'server'
+            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
         );
 
         // Status

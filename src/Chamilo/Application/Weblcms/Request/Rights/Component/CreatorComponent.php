@@ -23,8 +23,8 @@ class CreatorComponent extends Manager
             $success = $form->set_rights();
             
             $this->redirect(
-                Translation::get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'), 
-                ($success ? false : true));
+                Translation::get($success ? 'AccessRightsSaved' : 'AccessRightsNotSaved'), !$success
+            );
         }
         else
         {

@@ -79,7 +79,7 @@ class GroupMembershipService
      */
     public function emptyGroup(Group $group)
     {
-        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group, false, false);
+        $impactedUserIds = $this->groupsTreeTraverser->findUserIdentifiersForGroup($group);
 
         $success = $this->getGroupMembershipRepository()->emptyGroup($group);
         if (!$success)

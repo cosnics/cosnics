@@ -79,12 +79,12 @@ class Basic extends Html
     protected function getBlockNamespace($block)
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
-        $namespace = $classNameUtilities->getNamespaceParent($block->context(), 1);
+        $namespace = $classNameUtilities->getNamespaceParent($block->context());
 
         while (strrpos($namespace, 'Reporting') !== false &&
             (strlen($namespace) - strrpos($namespace, 'Reporting')) != 9)
         {
-            $namespace = $classNameUtilities->getNamespaceParent($namespace, 1);
+            $namespace = $classNameUtilities->getNamespaceParent($namespace);
         }
 
         return $namespace;
@@ -214,7 +214,7 @@ class Basic extends Html
                 {
                     $block_parameters = array_merge($context_parameters, array(Manager::PARAM_BLOCK_ID => $key));
 
-                    $is_current_block = $key == $this->determine_current_block_id() ? true : false;
+                    $is_current_block = $key == $this->determine_current_block_id();
 
                     $title = $block->get_title();
 

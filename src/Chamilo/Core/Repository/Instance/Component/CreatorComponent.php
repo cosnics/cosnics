@@ -47,7 +47,7 @@ class CreatorComponent extends Manager
                     Translation::get(
                         $success ? 'ObjectAdded' : 'ObjectNotAdded',
                         array('OBJECT' => Translation::get('ExternalInstance')), Utilities::COMMON_LIBRARIES
-                    ), ($success ? false : true), array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                    ), !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE)
                 );
             }
             else

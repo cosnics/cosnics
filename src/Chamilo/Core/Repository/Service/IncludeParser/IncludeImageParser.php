@@ -20,7 +20,7 @@ class IncludeImageParser extends IncludeTagParser
      */
     protected function findTags($htmlEditorValue)
     {
-        return Text::parse_html_file($htmlEditorValue, 'img');
+        return Text::parse_html_file($htmlEditorValue);
     }
 
     /**

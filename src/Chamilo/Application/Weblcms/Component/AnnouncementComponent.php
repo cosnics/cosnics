@@ -143,7 +143,7 @@ class AnnouncementComponent extends Manager
     {
         $type = Announcement::class;
         $last_visit_date = WeblcmsDataManager::get_last_visit_date(
-            $course->get_id(), $this->get_user_id(), $tool, 0
+            $course->get_id(), $this->get_user_id(), $tool
         );
 
         $conditions = [];

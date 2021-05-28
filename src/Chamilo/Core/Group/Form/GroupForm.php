@@ -72,7 +72,7 @@ class GroupForm extends FormValidator
         $this->addElement('text', Group::PROPERTY_DISK_QUOTA, Translation::get('DiskQuota'), array("size" => "50"));
         $this->addRule(
             Group::PROPERTY_DISK_QUOTA, Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES),
-            'numeric', null, 'server'
+            'numeric'
         );
         // Database Quota
         $this->addElement(
@@ -80,7 +80,7 @@ class GroupForm extends FormValidator
         );
         $this->addRule(
             Group::PROPERTY_DATABASE_QUOTA,
-            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric', null, 'server'
+            Translation::get('ThisFieldMustBeNumeric', null, Utilities::COMMON_LIBRARIES), 'numeric'
         );
 
         $this->add_html_editor(

@@ -158,7 +158,7 @@ class LinkItem extends Item
      *
      * @return string[]
      */
-    public function getTargetTypes($typesOnly = false)
+    public static function getTargetTypes($typesOnly = false)
     {
         $types = [];
 

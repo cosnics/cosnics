@@ -82,7 +82,7 @@ class DeleterComponent extends Manager
             }
 
             $this->redirect(
-                $message, ($failures ? true : false), array(
+                $message, (bool) $failures, array(
                     \Chamilo\Application\Calendar\Manager::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(
                     ),
                     \Chamilo\Application\Calendar\Manager::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE

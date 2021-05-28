@@ -32,7 +32,7 @@ class Executer
     {
         $this->application = $application;
         $this->name = $name;
-        $this->title = $title ? $title : Translation::get(
+        $this->title = $title ?: Translation::get(
             (string) StringUtilities::getInstance()->createString($name)->upperCamelize(), 
             $application->context());
     }
@@ -52,8 +52,7 @@ class Executer
         {
             $success = $form->update_values();
             $this->application->redirect(
-                Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), 
-                ($success ? false : true), 
+                Translation::get($success ? 'DynamicFormExecuted' : 'DynamicFormNotExecuted'), !$success,
                 []);
         }
         else

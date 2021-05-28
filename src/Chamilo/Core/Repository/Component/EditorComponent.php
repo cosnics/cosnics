@@ -135,7 +135,7 @@ class EditorComponent extends Manager implements DelegateComponent
                     Translation::get(
                         $success == ContentObjectForm::RESULT_SUCCESS ? 'ObjectUpdated' : 'ObjectNotUpdated',
                         array('OBJECT' => Translation::get('ContentObject')), Utilities::COMMON_LIBRARIES
-                    ), ($success == ContentObjectForm::RESULT_SUCCESS ? false : true), $parameters
+                    ), !($success == ContentObjectForm::RESULT_SUCCESS), $parameters
                 );
             }
             else

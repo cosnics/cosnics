@@ -144,7 +144,7 @@ class FormFilterRenderer extends FilterRenderer
         );
 
         $this->form_validator->addGroup(
-            $creationGroup, FilterData::FILTER_CREATION_DATE, Translation::get('CreationDate'), null
+            $creationGroup, FilterData::FILTER_CREATION_DATE, Translation::get('CreationDate')
         );
 
         $this->renderer->setElementTemplate(
@@ -172,7 +172,7 @@ class FormFilterRenderer extends FilterRenderer
         );
 
         $this->form_validator->addGroup(
-            $modificationGroup, FilterData::FILTER_MODIFICATION_DATE, Translation::get('ModificationDate'), null
+            $modificationGroup, FilterData::FILTER_MODIFICATION_DATE, Translation::get('ModificationDate')
         );
 
         $this->renderer->setElementTemplate(

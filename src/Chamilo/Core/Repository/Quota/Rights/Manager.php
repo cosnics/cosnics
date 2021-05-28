@@ -37,24 +37,21 @@ abstract class Manager extends Application
         $tabs->add_tab(
             new DynamicVisualTab(
                 self::ACTION_CREATE, Translation::get('Add'), new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                ($current_tab == self::ACTION_CREATE ? true : false)
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
             )
         );
         $tabs->add_tab(
             new DynamicVisualTab(
                 self::ACTION_ACCESS, Translation::get('GeneralAccess'),
                 new FontAwesomeGlyph('key', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)),
-                ($current_tab == self::ACTION_ACCESS ? true : false)
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_ACCESS)), $current_tab == self::ACTION_ACCESS
             )
         );
         $tabs->add_tab(
             new DynamicVisualTab(
                 self::ACTION_BROWSE, Translation::get('Targets'),
                 new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)),
-                ($current_tab == self::ACTION_BROWSE ? true : false)
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE)), $current_tab == self::ACTION_BROWSE
             )
         );
 

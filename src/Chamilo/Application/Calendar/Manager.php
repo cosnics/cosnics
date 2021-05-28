@@ -74,7 +74,7 @@ abstract class Manager extends Application
         if (!isset($this->currentTime))
         {
             $defaultRenderDate = new DateTime();
-            $defaultRenderDate->setTime(0, 0, 0);
+            $defaultRenderDate->setTime(0, 0);
 
             $this->currentTime = $this->getRequest()->query->get(
                 ViewRenderer::PARAM_TIME, $defaultRenderDate->getTimestamp()

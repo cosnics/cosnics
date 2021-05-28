@@ -48,7 +48,7 @@ class LoginHourBlock extends Block
         
         foreach ($hours_names as $key => $name)
         {
-            $reporting_data->add_data_category_row($name, Translation::get('Logins'), ($hours[$key] ? $hours[$key] : 0));
+            $reporting_data->add_data_category_row($name, Translation::get('Logins'), ($hours[$key] ?: 0));
         }
         
         return $reporting_data;

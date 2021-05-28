@@ -129,8 +129,7 @@ class RestorerComponent extends Manager
             }
 
             $this->redirect(
-                $message,
-                ($failures ? true : false),
+                $message, (bool) $failures,
                 array(Application::PARAM_ACTION => self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS));
         }
         else

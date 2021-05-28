@@ -430,7 +430,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     // DONE
 
-    public function retrieve_rights_location($context, $condition = null)
+    public static function retrieve_rights_location($context, $condition = null)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
         $context_dm = ($context . '\Storage\DataManager');
@@ -659,7 +659,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @return <array> two dimensional array: type => id
      */
-    public function retrieve_target_entities_array($right_id, $context, $location)
+    public static function retrieve_target_entities_array($right_id, $context, $location)
     {
         if (is_null($location) && !is_object($location))
         {
@@ -734,11 +734,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             {
                 if ($target_entities[$type])
                 {
-                    $target_entities[$type] = array_merge($parent_entities[$type], $target_entities[$type]);
+                    $target_entities[$type] = array_merge($id_array, $target_entities[$type]);
                 }
                 else
                 {
-                    $target_entities[$type] = $parent_entities[$type];
+                    $target_entities[$type] = $id_array;
                 }
             }
         }

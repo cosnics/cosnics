@@ -9,7 +9,7 @@ use Chamilo\Libraries\Storage\DataClassIntegrationTestCase;
  */
 class CourseRelCourseSettingValueIntegrationTest extends DataClassIntegrationTestCase
 {
-    protected static function modifyEntity(&$entity, $alter_id)
+    protected static function modifyEntity($entity, $alter_id)
     {
         if ($alter_id)
         {

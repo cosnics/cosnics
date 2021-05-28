@@ -189,7 +189,7 @@ class Security
      *
      * @return string string
      */
-    public function removeXSS($variable)
+    public static function removeXSS($variable)
     {
         if (is_array($variable))
         {
@@ -250,7 +250,7 @@ class Security
      *
      * @return string[]
      */
-    public function removeXSSRecursive($array)
+    public static function removeXSSRecursive($array)
     {
         foreach ($array as $key => $value)
         {
@@ -278,7 +278,7 @@ class Security
      *
      * @see removeXSS
      */
-    public function remove_XSS($variable)
+    public static function remove_XSS($variable)
     {
         return self::removeXSS($variable);
     }
@@ -293,7 +293,7 @@ class Security
      *
      * @see removeXSSRecursive
      */
-    public function remove_XSS_recursive($array)
+    public static function remove_XSS_recursive($array)
     {
         return self::removeXSSRecursive($array);
     }

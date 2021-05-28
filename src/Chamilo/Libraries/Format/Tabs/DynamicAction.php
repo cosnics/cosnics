@@ -210,6 +210,6 @@ class DynamicAction
     {
         $confirmation = $this->get_confirm();
 
-        return $confirmation ? true : false;
+        return (bool) $confirmation;
     }
 }

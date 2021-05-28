@@ -51,8 +51,7 @@ class UpdaterComponent extends Manager
             {
                 $success = $form->update_user();
                 $this->redirect(
-                    Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'),
-                    ($success ? false : true),
+                    Translation::get($success ? 'UserUpdated' : 'UserNotUpdated'), !$success,
                     array(Application::PARAM_ACTION => self::ACTION_BROWSE_USERS));
             }
             else

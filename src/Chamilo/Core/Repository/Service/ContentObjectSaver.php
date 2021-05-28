@@ -320,8 +320,7 @@ class ContentObjectSaver
         if ($contentObject instanceof AttachmentSupport)
         {
             $this->attachContentObjectsByIdentifierAndType(
-                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'],
-                ContentObject::ATTACHMENT_NORMAL
+                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object']
             );
         }
 
@@ -353,7 +352,7 @@ class ContentObjectSaver
         foreach ($this->findContentObjectAttachments($contentObject) as $contentObjectAttachment)
         {
             if (!$this->detachContentObjectByIdentifierAndType(
-                $contentObject, $contentObjectAttachment->getId(), ContentObject::ATTACHMENT_NORMAL
+                $contentObject, $contentObjectAttachment->getId()
             ))
             {
                 return false;
@@ -894,10 +893,9 @@ class ContentObjectSaver
              * TODO: Make this faster by providing a function that matches the existing IDs against the ones that need
              * to be added, and attaches and detaches accordingly.
              */
-            $this->detachAllContentObjectsByType($contentObject, ContentObject::ATTACHMENT_NORMAL);
+            $this->detachAllContentObjectsByType($contentObject);
             $this->attachContentObjectsByIdentifierAndType(
-                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object'],
-                ContentObject::ATTACHMENT_NORMAL
+                $contentObject, $values[ContentObjectForm::PROPERTY_ATTACHMENTS]['content_object']
             );
         }
 

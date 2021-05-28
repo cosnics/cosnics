@@ -28,7 +28,7 @@ abstract class HashingUtilities
      *
      * @return string[]
      */
-    public function get_available_types()
+    public static function get_available_types()
     {
         return array(
             'Haval256' => 'HAVAL-256', 

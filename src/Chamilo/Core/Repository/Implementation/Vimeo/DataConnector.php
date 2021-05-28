@@ -355,7 +355,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
                 break;
             case Manager::FEED_TYPE_GENERAL :
-                $search_parameters['query'] = $condition ? $condition : 'chamilo';
+                $search_parameters['query'] = $condition ?: 'chamilo';
 
                 $videos = $this->vimeo->request('/videos', $search_parameters);
                 break;

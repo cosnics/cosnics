@@ -1083,11 +1083,11 @@ abstract class RightsService
             {
                 if ($targetEntities[$type])
                 {
-                    $targetEntities[$type] = array_merge($parentEntities[$type], $targetEntities[$type]);
+                    $targetEntities[$type] = array_merge($id_array, $targetEntities[$type]);
                 }
                 else
                 {
-                    $targetEntities[$type] = $parentEntities[$type];
+                    $targetEntities[$type] = $id_array;
                 }
             }
         }

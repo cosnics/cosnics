@@ -29,7 +29,7 @@ class CreatorComponent extends Manager
         {
             $success = $this->process_admin($form->exportValues());
             
-            $this->redirect(Translation::get($success ? 'AdminsSaved' : 'AdminsNotSaved'), ($success ? false : true));
+            $this->redirect(Translation::get($success ? 'AdminsSaved' : 'AdminsNotSaved'), !$success);
         }
         else
         {

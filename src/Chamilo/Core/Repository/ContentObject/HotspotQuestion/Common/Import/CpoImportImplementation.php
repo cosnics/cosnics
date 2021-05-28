@@ -19,7 +19,7 @@ class CpoImportImplementation extends ImportImplementation
         
         $answers = $content_object->get_answers();
         
-        foreach ($answers as &$answer)
+        foreach ($answers as $answer)
         {
             $answer->set_answer(
                 CpoContentObjectImport::update_resources($this->get_controller(), $answer->get_answer()));

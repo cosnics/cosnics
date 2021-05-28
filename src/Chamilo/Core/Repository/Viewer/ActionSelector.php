@@ -252,7 +252,7 @@ class ActionSelector
 
         $subButtons[] = new SubButton(
             Translation::get('SelectFromRepository'), new FontAwesomeGlyph('folder', [], null, 'fas'),
-            $this->getExistingLink(Manager::ACTION_BROWSER, false), SubButton::DISPLAY_ICON_AND_LABEL
+            $this->getExistingLink(Manager::ACTION_BROWSER), SubButton::DISPLAY_ICON_AND_LABEL
         );
 
         $workspaceService = new WorkspaceService(new WorkspaceRepository());

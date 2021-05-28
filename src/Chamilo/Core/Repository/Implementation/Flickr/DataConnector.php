@@ -167,7 +167,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      */
     public function determine_rights($license, $photo_user_id)
     {
-        $users_match = ($this->retrieve_user_id() == $photo_user_id ? true : false);
+        $users_match = $this->retrieve_user_id() == $photo_user_id;
         // $compatible_license = ($license == 0 ? false : true);
         $compatible_license = true;
 

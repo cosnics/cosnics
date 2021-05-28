@@ -20,8 +20,8 @@ class Csv extends Html
         $file_path = TemplateRenditionImplementation::launch(
             $this->get_context()->get_context(), 
             $this->get_context()->get_template(), 
-            TemplateRendition::FORMAT_CSV, 
-            TemplateRendition::VIEW_BASIC);
+            TemplateRendition::FORMAT_CSV
+        );
         
         $file_properties = FileProperties::from_path($file_path);
         

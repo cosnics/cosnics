@@ -39,7 +39,7 @@ abstract class ConfigurationForm extends FormValidator
      */
     public function __construct(Block $block, $hasStaticTitle)
     {
-        parent::__construct('block', self::FORM_METHOD_POST, '');
+        parent::__construct('block', self::FORM_METHOD_POST);
 
         $this->block = $block;
         $this->hasStaticTitle = $hasStaticTitle;

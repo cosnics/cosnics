@@ -81,7 +81,7 @@ class AssessmentViewerForm extends FormValidator
         );
 
         $start_time = Request::post('start_time');
-        $start_time = $start_time ? $start_time : 0;
+        $start_time = $start_time ?: 0;
 
         $defaults['start_time'] = $start_time;
         $defaults['max_time'] = ($assessment->get_maximum_time() * 60);

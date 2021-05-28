@@ -62,7 +62,7 @@ class TableFormAction
 
         if ($this->get_confirm() == true)
         {
-            $confirmation = $this->getConfirmationMessage() ? $this->getConfirmationMessage() : Translation::get(
+            $confirmation = $this->getConfirmationMessage() ?: Translation::get(
                 'ConfirmYourSelectionAndAction', null, Utilities::COMMON_LIBRARIES
             );
         }

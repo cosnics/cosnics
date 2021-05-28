@@ -277,7 +277,7 @@ abstract class HtmlTable extends HTML_Table
         $variableName = $this->getParameterName(self::PARAM_NUMBER_OF_ITEMS_PER_PAGE);
         $requestedNumberOfItemsPerPage = Request::get($variableName);
 
-        return $requestedNumberOfItemsPerPage ? $requestedNumberOfItemsPerPage : $defaultNumberOfItemsPerPage;
+        return $requestedNumberOfItemsPerPage ?: $defaultNumberOfItemsPerPage;
     }
 
     /**
@@ -377,7 +377,7 @@ abstract class HtmlTable extends HTML_Table
         $variableName = $this->getParameterName(self::PARAM_PAGE_NUMBER);
         $requestedPageNumber = Request::get($variableName);
 
-        return $requestedPageNumber ? $requestedPageNumber : 1;
+        return $requestedPageNumber ?: 1;
     }
 
     /**
@@ -797,7 +797,7 @@ abstract class HtmlTable extends HTML_Table
             $this->setCellAttributes(0, $column, $attributes);
         }
 
-        foreach ($this->contentCellAttributes as $column => & $attributes)
+        foreach ($this->contentCellAttributes as $column => $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }

@@ -58,8 +58,7 @@ class EditorComponent extends Manager
                     Utilities::COMMON_LIBRARIES);
 
                 $this->redirect(
-                    $message,
-                    ($success ? false : true),
+                    $message, !$success,
                     array(
                         Application::PARAM_ACTION => self::ACTION_VIEW_GROUP,
                         self::PARAM_GROUP_ID => $group->get_id()));

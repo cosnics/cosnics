@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion;
+namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Common;
 
 use Chamilo\Core\Repository\Common\ContentObjectDifference;
 

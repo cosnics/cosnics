@@ -93,7 +93,7 @@ class PackageBundles extends BasicBundles
         {
             $packageParentNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($packageNamespace);
 
-            return $packageParentNamespace ? $packageParentNamespace : PackageList::ROOT;
+            return $packageParentNamespace ?: PackageList::ROOT;
         }
     }
 

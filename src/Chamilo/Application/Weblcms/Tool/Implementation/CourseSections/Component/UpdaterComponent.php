@@ -50,8 +50,7 @@ class UpdaterComponent extends Manager
             {
                 $success = $form->update_course_section();
                 $this->redirect(
-                    Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'),
-                    ($success ? false : true),
+                    Translation::get($success ? 'CourseSectionUpdated' : 'CourseSectionNotUpdated'), !$success,
                     array(self::PARAM_ACTION => self::ACTION_VIEW_COURSE_SECTIONS));
             }
             else

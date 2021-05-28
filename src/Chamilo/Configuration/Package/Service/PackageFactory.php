@@ -171,8 +171,8 @@ class PackageFactory
 
         $package->set_extra($extra);
 
-        $package->setCoreInstall($cosnicsProperties->install->core ? $cosnicsProperties->install->core : 0);
-        $package->setDefaultInstall($cosnicsProperties->install->default ? $cosnicsProperties->install->default : 0);
+        $package->setCoreInstall($cosnicsProperties->install->core ?: 0);
+        $package->setDefaultInstall($cosnicsProperties->install->default ?: 0);
 
         foreach ($jsonPackageObject->authors as $author)
         {

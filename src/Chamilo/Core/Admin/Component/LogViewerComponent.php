@@ -169,7 +169,7 @@ class LogViewerComponent extends Manager
         return new BreadcrumbGenerator($this, BreadcrumbTrail::getInstance());
     }
 
-    public function read_file($file, &$table, $count)
+    public function read_file($file, $table, $count)
     {
         $fh = fopen($file, 'r');
         $string = file_get_contents($file);

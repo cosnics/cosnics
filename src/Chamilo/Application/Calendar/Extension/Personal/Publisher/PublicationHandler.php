@@ -115,7 +115,7 @@ class PublicationHandler implements PublicationHandlerInterface
         }
 
         $this->parentComponent->redirect(
-            $message, (!$publicationResult ? true : false), array(
+            $message, !$publicationResult, array(
                 Application::PARAM_CONTEXT => \Chamilo\Application\Calendar\Manager::context(),
                 Application::PARAM_ACTION => \Chamilo\Application\Calendar\Manager::ACTION_BROWSE
             )

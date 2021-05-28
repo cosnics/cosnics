@@ -443,9 +443,9 @@ class ConfigurationForm extends FormValidator
             {
                 if ($has_availability_method)
                 {
-                    $availability_method_exists = ($has_availability_method ? method_exists(
-                        $connector_class, $setting['availability']['source']
-                    ) : false);
+                    $availability_method_exists = ($has_availability_method && method_exists(
+                            $connector_class, $setting['availability']['source']
+                        ));
                     if ($availability_method_exists)
                     {
                         return call_user_func(array($connector_class, $setting['availability']['source']));

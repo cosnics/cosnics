@@ -39,7 +39,7 @@ class QuestionResultDisplay
     private $questionResultDisplay;
 
     public function __construct(
-        $results_viewer, &$form, $complex_content_object_question, $question_nr, $answers, $score, $hints, $feedback,
+        $results_viewer, $form, $complex_content_object_question, $question_nr, $answers, $score, $hints, $feedback,
         $can_change
     )
     {

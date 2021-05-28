@@ -64,7 +64,7 @@ class LoginMonthBlock extends Block
             $reporting_data->add_data_category_row(
                 $name, 
                 Translation::get('Logins'), 
-                ($months[$key + 1] ? $months[$key + 1] : 0));
+                ($months[$key + 1] ?: 0));
         }
         return $reporting_data;
     }

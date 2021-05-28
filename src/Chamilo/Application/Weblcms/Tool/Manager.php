@@ -259,7 +259,7 @@ abstract class Manager extends Application
             $visible_tools = $this->get_visible_tools();
 
             $html[] = '<div class="col-md-3">';
-            $html[] = $this->display_course_menus($visible_tools, false);
+            $html[] = $this->display_course_menus($visible_tools);
             $html[] = '</div>';
         }
 

@@ -83,7 +83,7 @@ class EntityComponent extends Manager implements TableSupport
                             self::PARAM_ACTION => self::ACTION_ENTITY,
                             self::PARAM_ENTITY_TYPE => $entity_type::ENTITY_TYPE
                         )
-                    ), ($this->get_selected_entity_type() == $entity_type::ENTITY_TYPE ? true : false)
+                    ), $this->get_selected_entity_type() == $entity_type::ENTITY_TYPE
                     )
                 );
             }

@@ -141,7 +141,7 @@ class AssessmentResultViewerForm extends FormValidator
         $this->addElement('hidden', $current_page, $this->get_page_number());
 
         $start_time = Request::post('start_time');
-        $start_time = $start_time ? $start_time : 0;
+        $start_time = $start_time ?: 0;
 
         $this->addElement('hidden', 'start_time', $start_time, array('id' => 'start_time'));
     }

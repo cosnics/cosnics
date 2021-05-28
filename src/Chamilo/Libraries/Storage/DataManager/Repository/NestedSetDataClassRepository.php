@@ -143,7 +143,7 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         return $this->transactional(
             function () use ($nestedSet, $insertAfter) { // Correct the left and right values wherever necessary.
-                if (!$this->preInsert($nestedSet, $insertAfter, 1))
+                if (!$this->preInsert($nestedSet, $insertAfter))
                 {
                     return false;
                 }

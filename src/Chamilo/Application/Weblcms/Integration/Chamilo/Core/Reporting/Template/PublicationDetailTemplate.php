@@ -95,7 +95,7 @@ class PublicationDetailTemplate extends ReportingTemplate
                     'TypeName',
                     null,
                     Manager::get_tool_type_namespace(
-                        $this->tool ? $this->tool : Request::get('tool')))));
+                        $this->tool ?: Request::get('tool')))));
 
         $publication = DataManager::retrieve_by_id(
             ContentObjectPublication::class,

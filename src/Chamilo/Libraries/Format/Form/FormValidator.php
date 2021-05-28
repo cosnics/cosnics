@@ -391,12 +391,12 @@ EOT;
         $buttons = [];
 
         $buttons[] = $this->createElement(
-            'style_submit_button', 'submit', $this->getTranslation('Save', [], Utilities::COMMON_LIBRARIES),
+            'style_submit_button', 'submit', $this->getTranslation('Save', []),
             array('class' => 'positive')
         );
 
         $buttons[] = $this->createElement(
-            'style_reset_button', 'reset', $this->getTranslation('Reset', [], Utilities::COMMON_LIBRARIES),
+            'style_reset_button', 'reset', $this->getTranslation('Reset', []),
             array('class' => 'normal empty')
         );
 
@@ -566,7 +566,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
             );
         }
 
@@ -594,7 +594,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
             );
         }
 
@@ -625,7 +625,7 @@ EOT;
         if ($required)
         {
             $this->addRule(
-                $name, $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES), 'required'
+                $name, $this->getTranslation('ThisFieldIsRequired', []), 'required'
             );
         }
 
@@ -1018,7 +1018,7 @@ EOT;
 
         HTML_QuickForm::setRequiredNote(
             '<span class="text-danger">&nbsp;' . $glyph->render() . '&nbsp;<small>' .
-            $this->getTranslation('ThisFieldIsRequired', [], Utilities::COMMON_LIBRARIES) . '</small></span>'
+            $this->getTranslation('ThisFieldIsRequired', []) . '</small></span>'
         );
 
         $this->renderer = $this->defaultRenderer();

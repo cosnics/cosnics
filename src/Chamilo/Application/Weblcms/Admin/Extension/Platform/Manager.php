@@ -175,8 +175,7 @@ abstract class Manager extends Application
             new DynamicVisualTab(
                 self::ACTION_CREATE, Translation::get(self::ACTION_CREATE . 'Component'),
                 new FontAwesomeGlyph('plus', array('fa-lg'), null, 'fas'),
-                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)),
-                ($current_tab == self::ACTION_CREATE ? true : false)
+                $this->get_url(array(self::PARAM_ACTION => self::ACTION_CREATE)), $current_tab == self::ACTION_CREATE
             )
         );
 
@@ -189,7 +188,7 @@ abstract class Manager extends Application
                     self::ACTION_ENTITY, Translation::get(self::ACTION_ENTITY . 'Component'),
                     new FontAwesomeGlyph('chess-pawn', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_ENTITY)),
-                    ($current_tab == self::ACTION_ENTITY ? true : false)
+                    $current_tab == self::ACTION_ENTITY
                 )
             );
         }
@@ -201,7 +200,7 @@ abstract class Manager extends Application
                     self::ACTION_TARGET, Translation::get(self::ACTION_TARGET . 'Component'),
                     new FontAwesomeGlyph('bullseye', array('fa-lg'), null, 'fas'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_TARGET)),
-                    ($current_tab == self::ACTION_TARGET ? true : false)
+                    $current_tab == self::ACTION_TARGET
                 )
             );
         }

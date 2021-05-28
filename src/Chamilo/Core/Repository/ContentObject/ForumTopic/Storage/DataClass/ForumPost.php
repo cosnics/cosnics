@@ -171,7 +171,7 @@ class ForumPost extends DataClass implements AttachmentSupport
 
             if ($success && !$all_posts)
             {
-                $forum_topic->remove_post(1);
+                $forum_topic->remove_post();
             }
         }
 

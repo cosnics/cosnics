@@ -193,7 +193,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
                 Translation::get(
                     $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
                     Utilities::COMMON_LIBRARIES
-                ), ($failures ? true : false),
+                ), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_STEP => $next_step)
             );
         }

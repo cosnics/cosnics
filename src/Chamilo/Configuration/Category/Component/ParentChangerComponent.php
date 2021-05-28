@@ -122,7 +122,7 @@ class ParentChangerComponent extends Manager
                 $this->clean_display_order_old_parent($parent);
 
                 $this->redirect(
-                    Translation::get($success ? 'CategoryMoved' : 'CategoryNotMoved'), ($success ? false : true),
+                    Translation::get($success ? 'CategoryMoved' : 'CategoryNotMoved'), !$success,
                     array(self::PARAM_ACTION => self::ACTION_BROWSE_CATEGORIES, self::PARAM_CATEGORY_ID => $parent)
                 );
             }

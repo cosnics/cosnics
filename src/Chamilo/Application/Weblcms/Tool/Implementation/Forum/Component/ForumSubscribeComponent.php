@@ -54,8 +54,7 @@ class ForumSubscribeComponent extends Manager
                 ContentObject::get_content_object_type_namespace('Forum'));
         }
         $this->redirect(
-            $message, 
-            ($succes ? false : true), 
+            $message, !$succes,
             array(self::PARAM_ACTION => self::ACTION_BROWSE), 
             array(self::PARAM_PUBLICATION_ID));
     }

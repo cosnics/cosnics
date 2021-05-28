@@ -294,8 +294,6 @@ class FillInBlanksQuestionForm extends ContentObjectForm
             }
 
             parent::setDefaults($defaults);
-
-            return;
         }
     }
 

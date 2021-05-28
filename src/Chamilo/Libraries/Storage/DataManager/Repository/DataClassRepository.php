@@ -355,7 +355,7 @@ class DataClassRepository
 
         if ($this->isQueryCacheEnabled())
         {
-            return $this->getDataClassRepositoryCache()->addForDataClass($dataClass, null);
+            return $this->getDataClassRepositoryCache()->addForDataClass($dataClass);
         }
         else
         {

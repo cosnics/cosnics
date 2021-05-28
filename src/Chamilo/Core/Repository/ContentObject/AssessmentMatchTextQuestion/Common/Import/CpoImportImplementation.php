@@ -19,7 +19,7 @@ class CpoImportImplementation extends ImportImplementation
         
         $options = $content_object->get_options();
         
-        foreach ($options as &$option)
+        foreach ($options as $option)
         {
             $option->set_feedback(
                 CpoContentObjectImport::update_resources($this->get_controller(), $option->get_feedback()));

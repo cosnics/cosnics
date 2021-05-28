@@ -98,7 +98,7 @@ class CourseSectionForm extends FormValidator
         $values = $this->exportValues();
 
         $course_section->set_name($values[CourseSection::PROPERTY_NAME]);
-        $visible = $values[CourseSection::PROPERTY_VISIBLE] ? $values[CourseSection::PROPERTY_VISIBLE] : 0;
+        $visible = $values[CourseSection::PROPERTY_VISIBLE] ?: 0;
         $course_section->set_visible($visible);
 
         return $course_section->update();
@@ -131,7 +131,7 @@ class CourseSectionForm extends FormValidator
         }
 
         $course_section->set_name($name);
-        $visible = $values[CourseSection::PROPERTY_VISIBLE] ? $values[CourseSection::PROPERTY_VISIBLE] : 0;
+        $visible = $values[CourseSection::PROPERTY_VISIBLE] ?: 0;
         $course_section->set_visible($visible);
 
         return $course_section->create();

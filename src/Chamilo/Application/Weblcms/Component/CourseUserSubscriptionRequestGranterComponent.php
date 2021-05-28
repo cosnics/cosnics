@@ -75,8 +75,8 @@ class CourseUserSubscriptionRequestGranterComponent extends Manager
         }
         
         $this->redirect(
-            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES), 
-            ($failures ? true : false), 
+            Translation::getInstance()->getTranslation($message, $parameter, Utilities::COMMON_LIBRARIES),
+            (bool) $failures,
             array(self::PARAM_ACTION => self::ACTION_ADMIN_REQUEST_BROWSER));
     }
 }

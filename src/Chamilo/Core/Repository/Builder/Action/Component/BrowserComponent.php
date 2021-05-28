@@ -23,12 +23,6 @@ use Chamilo\Libraries\Utilities\Utilities;
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
-
     public function run()
     {
         $this->get_complex_content_object_breadcrumbs();
@@ -48,12 +42,12 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $html[] = $this->render_header();
 
-        $this->buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->get_root_content_object());
+        $buttonToolbarRenderer = $this->getButtonToolbarRenderer($this->get_root_content_object());
 
-        if ($this->buttonToolbarRenderer)
+        if ($buttonToolbarRenderer)
         {
             $html[] = '<br />';
-            $html[] = $this->buttonToolbarRenderer->render();
+            $html[] = $buttonToolbarRenderer->render();
         }
 
         $html[] = ContentObjectRenditionImplementation::launch(

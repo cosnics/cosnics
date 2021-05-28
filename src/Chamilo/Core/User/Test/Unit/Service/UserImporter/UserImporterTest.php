@@ -308,7 +308,7 @@ class UserImporterTest extends ChamiloTestCase
             'blablabla');
 
         $this->mockImportUserData($importUsersData);
-        $this->mockUserCreate(1);
+        $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
@@ -341,7 +341,7 @@ class UserImporterTest extends ChamiloTestCase
             'blablabla');
 
         $this->mockImportUserData($importUsersData);
-        $this->mockUserCreate(1);
+        $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
@@ -376,7 +376,7 @@ class UserImporterTest extends ChamiloTestCase
             'blablabla');
 
         $this->mockImportUserData($importUsersData);
-        $this->mockUserCreate(1);
+        $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
@@ -411,7 +411,7 @@ class UserImporterTest extends ChamiloTestCase
             'blablabla');
 
         $this->mockImportUserData($importUsersData);
-        $this->mockUserCreate(1);
+        $this->mockUserCreate();
         $this->mockCreateUserSettingForSettingAndUser();
 
         $this->configurationConsulterMock->expects($this->at(1))->method('getSetting')->with(
@@ -547,7 +547,7 @@ class UserImporterTest extends ChamiloTestCase
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
         $this->mockCreateUserSettingForSettingAndUser();
-        $this->mockUserUpdate(1, true);
+        $this->mockUserUpdate();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
@@ -636,7 +636,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
-        $this->mockUserUpdate(1, true);
+        $this->mockUserUpdate();
 
         $this->userServiceMock->expects($this->never())->method('createUserSettingForSettingAndUser');
 
@@ -667,7 +667,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
-        $this->mockUserUpdate(1, true);
+        $this->mockUserUpdate();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
@@ -757,7 +757,7 @@ class UserImporterTest extends ChamiloTestCase
         $this->mockImportUserData($importUsersData);
         $this->mockCreateUserSettingForSettingAndUser();
         $this->mockFindUserByUsername(new User());
-        $this->mockUserUpdate(1, true);
+        $this->mockUserUpdate();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
@@ -786,7 +786,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->mockImportUserData($importUsersData);
         $this->mockCreateUserSettingForSettingAndUser();
-        $this->mockUserCreate(1, true);
+        $this->mockUserCreate();
 
         $userImporterResult = $this->userImporter->importUsersFromFile(new User(), $this->uploadedFile);
         $this->assertEquals(1, $userImporterResult->countSuccessUserResults());
@@ -815,7 +815,7 @@ class UserImporterTest extends ChamiloTestCase
 
         $this->mockImportUserData($importUsersData);
         $this->mockFindUserByUsername(new User());
-        $this->mockUserUpdate(1);
+        $this->mockUserUpdate();
 
         $this->mailerMock->expects($this->once())->method('sendMail');
 

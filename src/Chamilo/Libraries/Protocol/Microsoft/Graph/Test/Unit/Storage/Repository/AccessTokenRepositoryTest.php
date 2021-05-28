@@ -13,7 +13,7 @@ use League\OAuth2\Client\Token\AccessToken;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class Test extends ChamiloTestCase
+class AccessTokenRepositoryTest extends ChamiloTestCase
 {
     /**
      * @var AccessTokenRepository

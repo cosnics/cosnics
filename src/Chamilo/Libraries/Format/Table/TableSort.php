@@ -109,7 +109,7 @@ class TableSort
     {
         $isDate = true;
 
-        foreach ($data as $index => & $row)
+        foreach ($data as $index => $row)
         {
             if (strlen(strip_tags($row[$column])) != 0)
             {
@@ -144,7 +144,7 @@ class TableSort
     {
         $isImage = true;
 
-        foreach ($data as $index => & $row)
+        foreach ($data as $index => $row)
         {
             $isImage &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
             $isImage &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
@@ -169,7 +169,7 @@ class TableSort
     {
         $isNumeric = true;
 
-        foreach ($data as $index => & $row)
+        foreach ($data as $index => $row)
         {
             $isNumeric &= is_numeric(strip_tags($row[$column]));
 

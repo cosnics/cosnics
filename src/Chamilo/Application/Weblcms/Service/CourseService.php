@@ -318,7 +318,7 @@ class CourseService implements CourseServiceInterface
      */
     public function isUserTeacherInCourse(User $user, Course $course)
     {
-        return $this->isUserSubscribedToCourseWithStatus($user, $course, CourseEntityRelation::STATUS_TEACHER);
+        return $this->isUserSubscribedToCourseWithStatus($user, $course);
     }
 
     /**
@@ -355,7 +355,7 @@ class CourseService implements CourseServiceInterface
      */
     public function getStudentsFromCourse(Course $course)
     {
-        return $this->getUsersFromCourseByStatus($course, CourseEntityRelation::STATUS_STUDENT);
+        return $this->getUsersFromCourseByStatus($course);
     }
 
     /**

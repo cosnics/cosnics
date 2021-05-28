@@ -830,7 +830,7 @@ class RightsService
      */
     public function is_allowed($right, $location, $userIdentifier)
     {
-        $userIdentifier = $userIdentifier ? $userIdentifier : Session::get_user_id();
+        $userIdentifier = $userIdentifier ?: Session::get_user_id();
 
         $user = $this->getUserService()->findUserByIdentifier((int) $userIdentifier);
 

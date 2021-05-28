@@ -43,7 +43,7 @@ class FormTypeSelectorRenderer extends TypeSelectorRenderer
     {
         parent::__construct($parent, $type_selector);
 
-        $this->postback_url = $postback_url ? $postback_url : $parent->get_url();
+        $this->postback_url = $postback_url ?: $parent->get_url();
         $this->form = new FormValidator(
             ClassnameUtilities::getInstance()->getClassNameFromNamespace(__CLASS__, true),
             FormValidator::FORM_METHOD_POST, $this->postback_url

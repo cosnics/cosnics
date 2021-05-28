@@ -73,8 +73,7 @@ class DeleterComponent extends Manager
             }
             
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), 
-                ($failures ? true : false), 
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
                 array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE));
         }
         else

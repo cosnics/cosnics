@@ -38,7 +38,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             self::ACTION_VIEW_ACCOUNT, htmlentities(Translation::get(self::ACTION_VIEW_ACCOUNT . 'Title')),
             new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'),
             $this->get_url(array(self::PARAM_ACTION => self::ACTION_VIEW_ACCOUNT)),
-            (self::ACTION_VIEW_ACCOUNT == $this->get_action() ? true : false)
+            self::ACTION_VIEW_ACCOUNT == $this->get_action()
         );
 
         if (Configuration::get(Manager::context(), 'allow_change_user_picture'))
@@ -47,7 +47,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
                 self::ACTION_CHANGE_PICTURE, htmlentities(Translation::get(self::ACTION_CHANGE_PICTURE . 'Title')),
                 new FontAwesomeGlyph('image', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_CHANGE_PICTURE)),
-                (self::ACTION_CHANGE_PICTURE == $this->get_action() ? true : false)
+                self::ACTION_CHANGE_PICTURE == $this->get_action()
             );
         }
 
@@ -55,7 +55,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
             self::ACTION_USER_SETTINGS, htmlentities(Translation::get(self::ACTION_USER_SETTINGS . 'Title')),
             new FontAwesomeGlyph('cog', array('fa-lg'), null, 'fas'),
             $this->get_url(array(self::PARAM_ACTION => self::ACTION_USER_SETTINGS)),
-            (self::ACTION_USER_SETTINGS == $this->get_action() ? true : false)
+            self::ACTION_USER_SETTINGS == $this->get_action()
         );
 
         $conditions = [];
@@ -80,7 +80,7 @@ abstract class ProfileComponent extends Manager implements NoContextComponent
                 htmlentities(Translation::get(self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION . 'Title')),
                 new FontAwesomeGlyph('lightbulb', array('fa-lg'), null, 'fas'),
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION)),
-                (self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action() ? true : false)
+                self::ACTION_ADDITIONAL_ACCOUNT_INFORMATION == $this->get_action()
             );
         }
 

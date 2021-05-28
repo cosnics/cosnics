@@ -34,7 +34,7 @@ class Text
      *
      * @return string
      */
-    public function create_link($url, $text, $new_page = false, $class = null, $styles = [])
+    public static function create_link($url, $text, $new_page = false, $class = null, $styles = [])
     {
         $link = '<a href="' . $url . '" ';
 

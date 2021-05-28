@@ -98,6 +98,6 @@ class ExporterComponent extends Manager
      */
     private function write_line($file_handle, $row = [])
     {
-        fputcsv($file_handle, $row, ';', '"');
+        fputcsv($file_handle, $row, ';');
     }
 }

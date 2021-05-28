@@ -96,7 +96,7 @@ class HelpItem extends DataClass
 
     public function has_url()
     {
-        return $this->get_url() ? true : false;
+        return (bool) $this->get_url();
     }
 
     /**

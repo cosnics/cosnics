@@ -74,7 +74,7 @@ class LoginDayBlock extends Block
         foreach ($day_names as $key => $name)
         {
             $reporting_data->add_data_category_row(
-                $name, Translation::get('Logins'), ($days[$key + 1] ? $days[$key + 1] : 0)
+                $name, Translation::get('Logins'), ($days[$key + 1] ?: 0)
             );
         }
 

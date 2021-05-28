@@ -62,7 +62,7 @@ abstract class Manager extends Application
     public function show_all()
     {
         $show_all = Request::get(self::PARAM_SHOW_ALL);
-        return $show_all == 1 ? true : false;
+        return $show_all == 1;
     }
 
     /**

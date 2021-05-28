@@ -152,7 +152,7 @@ class EventParser
         );
 
         $parsedEvents = $parser->getEvents();
-        foreach ($parsedEvents as &$parsedEvent)
+        foreach ($parsedEvents as $parsedEvent)
         {
             if ($publisher != $this->getCalendarRendererProvider()->getViewingUser()->getId())
             {

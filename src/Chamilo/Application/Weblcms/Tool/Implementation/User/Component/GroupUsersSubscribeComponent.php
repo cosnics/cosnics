@@ -55,8 +55,7 @@ class GroupUsersSubscribeComponent extends Manager
                 }
 
                 $this->redirect(
-                    Translation::get($message),
-                    ($success ? false : true),
+                    Translation::get($message), !$success,
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_GROUP_DETAILS));
             }

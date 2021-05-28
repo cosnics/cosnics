@@ -58,7 +58,7 @@ class UserServiceTest extends ChamiloTestCase
     {
         $user = new User();
 
-        $this->mockGetExternalUserIdentifier($user, null);
+        $this->mockGetExternalUserIdentifier($user);
 
         $this->userRepositoryMock->expects($this->once())
             ->method('getAzureUser')

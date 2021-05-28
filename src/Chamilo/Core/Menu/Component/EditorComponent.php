@@ -62,7 +62,7 @@ class EditorComponent extends Manager implements DelegateComponent
             );
 
             $this->redirect(
-                $message, ($success ? false : true),
+                $message, !$success,
                 array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_ITEM => $item->getParentId())
             );
         }

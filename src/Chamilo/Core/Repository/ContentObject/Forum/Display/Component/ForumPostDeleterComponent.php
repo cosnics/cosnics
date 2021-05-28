@@ -60,6 +60,6 @@ class ForumPostDeleterComponent extends Manager
 
         $filter = array(self::PARAM_SELECTED_FORUM_POST);
 
-        $this->redirect($message, ($success ? false : true), $params, $filter);
+        $this->redirect($message, !$success, $params, $filter);
     }
 }

@@ -31,7 +31,7 @@ class ExportTable extends SortableTableFromArray
         }
         
         $contentCellAttributes = $this->getContentCellAttributes();
-        foreach ($contentCellAttributes as $column => & $attributes)
+        foreach ($contentCellAttributes as $column => $attributes)
         {
             $this->setColAttributes($column, $attributes);
         }

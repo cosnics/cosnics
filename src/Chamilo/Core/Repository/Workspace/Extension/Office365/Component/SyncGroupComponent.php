@@ -54,7 +54,5 @@ class SyncGroupComponent extends Manager
             ],
             [self::PARAM_ACTION]
         );
-
-        return;
     }
 }

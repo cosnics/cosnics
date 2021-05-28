@@ -46,7 +46,7 @@ class DeleterComponent extends Manager
         );
 
         $this->redirect(
-            $message, ($failures ? true : false),
+            $message, (bool) $failures,
             array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE, Manager::PARAM_PARENT => $parentIdentifier)
         );
     }

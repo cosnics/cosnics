@@ -152,7 +152,7 @@ class PackageDescriber
      */
     protected function getDescription($context)
     {
-        return $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context, 1))
+        return $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context))
             ->replace(
                 '\\', ' '
             )->__toString();
@@ -168,7 +168,7 @@ class PackageDescriber
     {
         return explode(
             '\\',
-            $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context, 1))
+            $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context))
                 ->__toString()
         );
     }
@@ -199,7 +199,7 @@ class PackageDescriber
      */
     protected function getPackageName($context)
     {
-        return $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context, 1))
+        return $this->getStringUtilities()->createString($this->getClassnameUtilities()->getNamespaceChild($context))
             ->replace(
                 '\\', '-'
             )->dasherize()->__toString();

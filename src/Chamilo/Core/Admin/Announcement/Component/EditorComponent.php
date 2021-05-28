@@ -76,7 +76,7 @@ class EditorComponent extends Manager
                             $success ? 'ObjectUpdated' : 'ObjectNotUpdated',
                             array('OBJECT' => Translation::get('SystemAnnouncementPublication')),
                             Utilities::COMMON_LIBRARIES
-                        ), ($success ? false : true), array(self::PARAM_ACTION => self::ACTION_BROWSE)
+                        ), !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE)
                     );
                 }
                 else

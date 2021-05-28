@@ -125,7 +125,7 @@ class GranterComponent extends Manager
             }
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), ($failures ? true : false),
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), (bool) $failures,
                 array(self::PARAM_ACTION => self::ACTION_BROWSE)
             );
         }

@@ -121,7 +121,7 @@ abstract class Manager extends Application
      *
      * @return boolean
      */
-    public function any_object_selected()
+    public static function any_object_selected()
     {
         return !is_null(self::get_selected_objects());
     }
@@ -354,7 +354,7 @@ abstract class Manager extends Application
 
         foreach ($tabs as $tabName => $tabProperties)
         {
-            $selected = ($currentTab == $tabName ? true : false);
+            $selected = $currentTab == $tabName;
 
             $label = Translation::get(
                 (string) StringUtilities::getInstance()->createString($tabName)->upperCamelize() . 'Title'

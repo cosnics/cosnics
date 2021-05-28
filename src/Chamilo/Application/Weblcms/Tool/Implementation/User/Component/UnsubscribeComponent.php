@@ -108,8 +108,7 @@ class UnsubscribeComponent extends Manager
                     }
                 }
                 $this->redirect(
-                    Translation::get($message),
-                    ($success ? false : true),
+                    Translation::get($message), !$success,
                     array(
                         self::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
                         self::PARAM_TAB => Request::get(self::PARAM_TAB)));

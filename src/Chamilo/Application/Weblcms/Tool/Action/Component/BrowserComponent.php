@@ -280,9 +280,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
             if ($this->isCourseAdmin())
             {
-                $isSelected =
-                    ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL ? true :
-                        false);
+                $isSelected = $publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL;
 
                 $filterActions[] = new SubButton(
                     Translation::get('AllPublications'), null, $this->get_url(
@@ -293,8 +291,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 );
             }
 
-            $isSelected =
-                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME ? true : false);
+            $isSelected = $publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FOR_ME;
 
             $filterActions[] = new SubButton(
                 Translation::get('PublishedForMe'), null, $this->get_url(
@@ -304,9 +301,7 @@ class BrowserComponent extends Manager implements DelegateComponent
             ), Button::DISPLAY_LABEL, false, [], null, $isSelected
             );
 
-            $isSelected =
-                ($publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME ? true :
-                    false);
+            $isSelected = $publicationType == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_FROM_ME;
 
             $filterActions[] = new SubButton(
                 Translation::get('MyPublications'), null, $this->get_url(

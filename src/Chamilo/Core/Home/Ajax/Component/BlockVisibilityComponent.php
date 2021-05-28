@@ -42,7 +42,7 @@ class BlockVisibilityComponent extends Manager
         
         if ($block->getUserId() == $userId)
         {
-            $block->setVisibility(($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false' ? false : true));
+            $block->setVisibility(!($this->getPostDataValue(self::PARAM_VISIBILITY) == 'false'));
             
             if ($block->update())
             {

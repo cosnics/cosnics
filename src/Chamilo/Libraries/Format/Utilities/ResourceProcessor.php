@@ -69,7 +69,7 @@ class ResourceProcessor
     protected function processFileExtensions($basePath, $baseWebPath)
     {
         $sourceResourceImagePath =
-            $this->pathBuilder->getResourcesPath('Chamilo\Configuration') . 'File' . DIRECTORY_SEPARATOR;
+            $this->pathBuilder->getResourcesPath() . 'File' . DIRECTORY_SEPARATOR;
         $webResourceImagePath = str_replace($basePath, $baseWebPath, $sourceResourceImagePath);
 
         $this->recurseCopy($sourceResourceImagePath, $webResourceImagePath, true);
