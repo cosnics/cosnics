@@ -48,6 +48,17 @@ class LoadEntitiesComponent extends Manager
                     $entity['presence_status'] = ($entity['is_absent']) ? 'absent' : 'present';
                 }
 
+                if ($this->getEvaluationServiceBridge()->getCurrentEntityType() !== 0)
+                {
+                    $members = $this->getEvaluationServiceBridge()->getUsersForEntity($entity['id']);
+                    $entityMembers = array();
+                    foreach ($members as $member)
+                    {
+                        $entityMembers[] = ['lastname' => $member->get_lastname(), 'firstname' => $member->get_firstname()];
+                    }
+                    $entity['members'] = $entityMembers;
+                }
+
                 if (is_null($entity['score']))
                 {
                     $entity['score'] = '';

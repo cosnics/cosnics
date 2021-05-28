@@ -264,7 +264,7 @@
     }
     {% endif %}
     .btn-check.mod-scores-editable {
-        margin: 0 auto 0 15px;
+        margin: 0 35px 0 15px;
     }
     .panel-feedback {
         border: none;
@@ -397,6 +397,11 @@
         margin-left: 60px;
         margin-top: -10px;
     }
+    .group-members {
+        padding: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
@@ -454,8 +459,19 @@
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
                         </template>
+                        <template #head(name)="data">
+                            {{ 'Name'|trans({}, 'Chamilo\\Core\\User') }}
+                        </template>
                         <template #cell(fullname)="data">
                             <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                        </template>
+                        <template #head(members)="data">
+                            {{ 'Members'|trans({}, appContext) }}
+                        </template>
+                        <template #cell(members)="data">
+                            <ul class="group-members">
+                                <li v-for="member in sortedMembers(data.item)">${ member.lastname.toUpperCase() }, ${ member.firstname }</li>
+                            </ul>
                         </template>
                         <template #cell(score)="data">
                             <div class="u-flex u-align-items-center">
@@ -543,20 +559,22 @@
             // 0
             [   { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
                 { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
-                { key: 'score', sortable: true, variant: 'score' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
                 { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
             ],
             // 1
             [   { key: 'name', sortable: true, thClass: '' },
-                { key: 'score', sortable: true, variant: 'score' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
                 { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
             ],
             // 2
             [   { key: 'name', sortable: true, thClass: '' },
-                { key: 'score', sortable: true, variant: 'score' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
                 { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
             ]
         ];
@@ -618,6 +636,15 @@
                     } else {
                         this.focusFollowingScore(index, isNext);
                     }
+                },
+                sortedMembers(entity) {
+                    var members = [].concat(entity.members);
+                    members.sort(function(v1, v2) {
+                        if (v1.lastname < v2.lastname) { return -1; }
+                        if (v1.lastname > v2.lastname) { return 1; }
+                        return 0;
+                    });
+                    return members;
                 },
                 isLabelShown(entity) {
                     return entity.presence_status === 'absent' || (entity.presence_status !== 'absent' && !this.scoresEditable);
