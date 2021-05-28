@@ -56,3 +56,5 @@ OverwriteScoreRubricScore = "Overwrite this score with the calculated rubric sco
 Overwrite = "Overwrite"
 Cancel = "Cancel"
 BrowseEntities = "View all {NAME}"
+HasRubricEntry = "Rubric filled in"
+HasNoRubricEntry = "Rubric not filled in"

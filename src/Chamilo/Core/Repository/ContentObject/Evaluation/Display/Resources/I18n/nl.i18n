@@ -54,3 +54,5 @@ OverwriteScoreRubricScore = "Deze score overschrijven met de berekende rubric-sc
 Overwrite = "Overschrijf"
 Cancel = "Annuleer"
 BrowseEntities = "Bekijk alle {NAME}"
+HasRubricEntry = "Rubric ingevuld"
+HasNoRubricEntry = "Rubric niet ingevuld"

@@ -37,12 +37,12 @@ class ExportComponent extends Manager
             $output = fopen('php://output', 'w');
 
             // output the column headings
-            fputcsv($output, array('lastname', 'firstname', 'official_code', 'score'), ';');
+            fputcsv($output, array('lastname', 'firstname', 'official_code', 'score', 'rubric'), ';');
 
             // output the rows
             foreach ($selectedUsers as $user)
             {
-                fputcsv($output, array($user['lastname'], $user['firstname'], $user['official_code'], $user['score']), ';');
+                fputcsv($output, array($user['lastname'], $user['firstname'], $user['official_code'], $user['score'], $user['rubric']), ';');
             }
         } catch (\Exception $ex)
         {

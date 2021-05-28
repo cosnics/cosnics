@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryRubricResult;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -127,6 +128,18 @@ class EntityRepository
                 'feedback_count'
             )
         );
+
+        $retrieveProperties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT,
+                    new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS)
+                ),
+                'rubric'
+            )
+        );
+
         return $retrieveProperties;
     }
 
@@ -163,10 +176,21 @@ class EntityRepository
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
         );
 
+        $rubricJoinConditions = array();
+        $rubricJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable(EvaluationEntry::class_name())
+        );
+        $rubricJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_ID),
+            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
+        );
+
         $joins = new Joins();
         $joins->add(new Join(EvaluationEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
         $joins->add(new Join(EvaluationEntryScore::class_name(), new AndCondition($scoreJoinConditions), Join::TYPE_LEFT));
         $joins->add(new Join(EvaluationEntryFeedback::class_name(), new AndCondition($feedbackJoinConditions), Join::TYPE_LEFT));
+        $joins->add(new Join(EvaluationEntryRubricResult::class_name(), new AndCondition($rubricJoinConditions), Join::TYPE_LEFT));
         return $joins;
     }
 
