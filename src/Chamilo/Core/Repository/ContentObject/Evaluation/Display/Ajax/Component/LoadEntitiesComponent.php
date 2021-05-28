@@ -3,7 +3,6 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -86,11 +85,14 @@ class LoadEntitiesComponent extends Manager
         $fieldMapper = $entityService->getFieldMapper();
         $fieldMapper->addFieldMapping('score', EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE);
         $filterParameters = $filterParametersBuilder->buildFilterParametersFromRequest($this->getRequest(), $fieldMapper);
-        $sortDirection = strtoupper($this->getRequest()->getFromPostOrUrl(FilterParametersBuilder::PARAM_SORT_DIRECTION));
-        $filterParameters->addOrderBy(new OrderBy(
-            new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT),
-            $sortDirection == FilterParametersBuilder::SORT_ASC ? SORT_DESC : SORT_ASC
-        ));
+        if ($this->getRequest()->getFromPostOrUrl(FilterParametersBuilder::PARAM_SORT_FIELD) === 'score')
+        {
+            $sortDirection = strtoupper($this->getRequest()->getFromPostOrUrl(FilterParametersBuilder::PARAM_SORT_DIRECTION));
+            $filterParameters->addOrderBy(new OrderBy(
+                new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT),
+                $sortDirection == FilterParametersBuilder::SORT_ASC ? SORT_DESC : SORT_ASC
+            ));
+        }
         return $filterParameters;
     }
 }
