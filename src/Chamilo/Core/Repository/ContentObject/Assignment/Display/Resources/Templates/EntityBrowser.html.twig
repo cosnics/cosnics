@@ -174,7 +174,6 @@
     </div>
     {% if SUPPORTS_RUBRICS %}
     <div role="tabpanel" class="tab-pane {{ SELECTED_TAB == 'rubric' ? 'active': '' }} tab-pane-with-border" id="rubric">
-        <div class="alert alert-info">{{ 'BETANotification'|trans({}, appContext) }}</div>
         {% if HAS_RUBRIC %}
             {% if CAN_BUILD_RUBRIC %}
             <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
