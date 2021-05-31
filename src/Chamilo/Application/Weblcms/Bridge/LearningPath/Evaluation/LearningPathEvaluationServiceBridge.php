@@ -114,9 +114,9 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
     /**
      * @param User $currentUser
      * @param int $entityType
-     * @return int
+     * @return int|null
      */
-    public function getCurrentEntityIdentifier(User $currentUser, int $entityType): int
+    public function getCurrentEntityIdentifier(User $currentUser, int $entityType): ?int
     {
         $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
         return $publicationEntityService->getCurrentEntityIdentifier($currentUser);

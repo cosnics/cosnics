@@ -30,10 +30,9 @@ interface PublicationEntityServiceInterface
 
     /**
      * @param User $currentUser
-     *
-     * @return int
+     * @return int|null
      */
-    public function getCurrentEntityIdentifier(User $currentUser): int;
+    public function getCurrentEntityIdentifier(User $currentUser): ?int;
 
     /**
      * @param int $entityId
