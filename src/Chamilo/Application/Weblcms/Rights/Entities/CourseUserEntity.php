@@ -75,7 +75,7 @@ class CourseUserEntity extends UserEntity
     /**
      * Builds the condition with the limited and excluded users
      * 
-     * @param $condition Condition
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return Condition
      */
     public function get_condition(Condition $condition = null)

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Component;
 
+use Chamilo\Application\Weblcms\Admin\CourseAdminValidator;
 use Chamilo\Application\Weblcms\Course\OpenCourse\Service\OpenCourseService;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager as CourseDataManager;
@@ -359,7 +360,39 @@ class CourseViewerComponent extends Manager implements DelegateComponent
             $user = $this->get_user();
             $course = $this->get_course();
 
-            $this->is_teacher = parent::is_teacher($course, $user);
+            if ($user != null && $course != null)
+            {
+                // // If the user is a platform administrator, grant all rights
+                // if ($user->is_platform_admin())
+                // {
+                // return true;
+                // }
+
+                $courseValidator = CourseAdminValidator::getInstance();
+
+                // If the user is a sub administrator, grant all rights
+                if ($courseValidator->isUserAdminOfCourse($user, $course))
+                {
+                    $this->is_teacher = true;
+                }
+
+                // If the user is enrolled as a teacher directlt or via a platform group, grant all rights
+                $relation = $this->retrieve_course_user_relation($course->get_id(), $user->get_id());
+
+                if (($relation && $relation->get_status() == 1) || $user->is_platform_admin())
+                {
+                    $this->is_teacher = true;
+                }
+                else
+                {
+                    $this->is_teacher =
+                        CourseDataManager::is_teacher_by_platform_group_subscription($course->get_id(), $user);
+                }
+            }
+            else
+            {
+                $this->is_teacher = false;
+            }
         }
 
         return $this->is_teacher;

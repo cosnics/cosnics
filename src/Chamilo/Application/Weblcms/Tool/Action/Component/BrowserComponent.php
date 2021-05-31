@@ -77,7 +77,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $content[] = $this->renderToolHeader();
         $content[] = '<div class="publication_container row">';
 
-        $this->checkAuthorization();
+        $this->checkAuthorization('');
 
         $publicationsContent = $this->renderPublications();
 

@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -76,6 +77,7 @@ class UserEntity implements RightsEntity
     /**
      * Function that can be filled in extensions of this class to limit the users
      *
+     * @param ?\Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @return Condition
      */
     public function get_condition($condition = null)

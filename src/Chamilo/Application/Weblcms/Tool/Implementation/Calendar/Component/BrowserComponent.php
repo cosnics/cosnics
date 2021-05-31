@@ -55,7 +55,7 @@ class BrowserComponent extends Manager
     public function run()
     {
         $defaultComponent = $this->getDefaultComponent();
-        $defaultComponent->checkAuthorization();
+        $defaultComponent->checkAuthorization('');
 
         $html = [];
 
