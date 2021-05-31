@@ -114,7 +114,6 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
      */
     protected function getTemplateProperties(EvaluationEntry $evaluationEntry): array
     {
-        $entityType = $this->getEntityType();
         $entityId = $this->getEntityIdentifier();
         $evaluationScore = $this->getEvaluationEntryService()->getEvaluationEntryScore($evaluationEntry->getId());
         $score = '';

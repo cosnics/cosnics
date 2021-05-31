@@ -74,7 +74,6 @@
     }
 
     .presence-absent {
-        /*background-color: #eb6a38;*/
         background-color: #437f7e;
         padding: 0 5px;
         color: #fff;
@@ -85,7 +84,6 @@
         color: #027461;
     }
     .presence-neutral {
-        /*background-color: #00f7ff2e; */
         --color: #c1dcc5;
         background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
         background-size: 7px 7px;
@@ -161,6 +159,7 @@
     }
     .table.mod-evaluation {
         width: initial;
+        border-top-color: #ebebeb;
     }
 
     .table.mod-evaluation .col-fit, .table.mod-evaluation .col-fit[aria-sort]:not(.b-table-sort-icon-left) {
@@ -331,7 +330,6 @@
         border: 1px solid #ebebeb;
         border-radius: 4px;
         border-top-color: #f0f0f0;
-        /* box-shadow: 0 1px 1px #e0e0e0; */
         display: flex;
         margin: 15px 0 5px 8px;
         max-width: fit-content;
@@ -361,13 +359,14 @@
     }
 
     .table.mod-evaluation {
-        overflow: hidden;
         width: initial;
     }
 
     .table.mod-evaluation thead {
         background-color: #f8fbfb;
-        box-shadow: 0px 1px 5px #d5dfe6;
+    }
+    .table.mod-evaluation tbody {
+        background: linear-gradient(to bottom, #e3eaed 0, transparent 4px);
     }
     .table.mod-evaluation th {
         color: #727879;
@@ -397,10 +396,41 @@
         margin-left: 60px;
         margin-top: -10px;
     }
+    .table-members {
+        position: relative;
+    }
     .group-members {
-        padding: 0;
-        margin-bottom: 0;
+        background-color: white;
+        box-shadow: 0px 1px 3px hsl(0deg 0% 60%);
+        left: 3px;
         list-style: none;
+        margin-bottom: 0;
+        padding: 6px 5px 5px;
+        position: absolute;
+        top: 1px;
+        width: max-content;
+        z-index: 10;
+    }
+    .group-members-close {
+        background: white;
+        border-radius: 50%;
+        box-shadow: 1px 1px 1px hsl(0, 0%, 74%);
+        color: #ababab;
+        cursor: pointer;
+        padding: 0px 2px;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+    }
+    .group-members-close:hover, .group-members-close:focus {
+        background: #f0f0f0;
+        color: #567f9b;
+    }
+    .group-members-show {
+        cursor: pointer;
+    }
+    .group-members-show:hover {
+        text-decoration: none;
     }
 </style>
 
@@ -424,7 +454,7 @@
 <div class="dynamic-visual-tab-content tab-content">
     <div role="tabpanel" class="tab-pane mod-pad active" id="entities">
         <div class="u-flex u-gap-large">
-            <div>
+            <div @click="membersEntity = null">
                 <div class="controls mod-mb u-flex u-align-items-center">
                     <div class="btn-toolbar btn-action-toolbar mod-mb">
                         <div class="form-inline u-flex u-justify-content-start mod-entity-search">
@@ -472,9 +502,11 @@
                             {{ 'Members'|trans({}, appContext) }}
                         </template>
                         <template #cell(members)="data">
-                            <ul class="group-members">
+                            <ul v-if="membersEntity === data.item" class="group-members" @click.stop="">
+                                <li class="group-members-close" @click.stop="membersEntity = null"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{{ 'HideMembers'|trans({}, appContext) }}</span></li>
                                 <li v-for="member in sortedMembers(data.item)">${ member.lastname.toUpperCase() }, ${ member.firstname }</li>
                             </ul>
+                            <a v-else @click.stop="membersEntity = data.item" class="group-members-show">{{ 'ShowMembers'|trans({}, appContext) }}</a>
                         </template>
                         <template #cell(score)="data">
                             <div class="u-flex u-align-items-center">
@@ -568,14 +600,14 @@
             ],
             // 1
             [   { key: 'name', sortable: true, thClass: '' },
-                { key: 'members', sortable: false, thClass: 'tbl-no-sort' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort', variant: 'members' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
                 { key: 'score', sortable: true, variant: 'score' },
                 { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
             ],
             // 2
             [   { key: 'name', sortable: true, thClass: '' },
-                { key: 'members', sortable: false, thClass: 'tbl-no-sort' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort', variant: 'members' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
                 { key: 'score', sortable: true, variant: 'score' },
                 { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
@@ -613,7 +645,8 @@
                 labelTitles: {
                     'absent': '{{ MarkedAsAbsent }}',
                     'neutral': '{{ NoScoreAvailable }}'
-                }
+                },
+                membersEntity: null
             },
 
             computed: {
