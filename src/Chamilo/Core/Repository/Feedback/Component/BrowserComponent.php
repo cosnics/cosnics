@@ -93,7 +93,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
         }
         else
-
         {
             $html = array();
 
@@ -102,7 +101,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $this->getPager()->getCurrentRangeOffset()
             );
 
-            $feedbackCount = $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+            $feedbackCount = $this->getFeedbackCount($supportsPrivateFeedback, $canViewPrivateFeedback, $feedbacks);
 
             if ($feedbackCount == 0)
             {
@@ -445,5 +444,40 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->pagerRenderer;
+    }
+
+    /**
+     * @param bool $supportsPrivateFeedback
+     * @param bool $canViewPrivateFeedback
+     * @param $feedbacks
+     * @return int
+     */
+    protected function getFeedbackCount(bool $supportsPrivateFeedback, bool $canViewPrivateFeedback, $feedbacks): int
+    {
+        if (!$supportsPrivateFeedback)
+        {
+            return $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+        }
+
+        if ($feedbacks instanceof ResultSet)
+        {
+            $feedbacks = $feedbacks->as_array();
+        }
+
+        $feedbackCount = 0;
+
+        foreach ($feedbacks as $feedback)
+        {
+            if ($feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+            {
+                $feedbackCount += $canViewPrivateFeedback ? 1 : 0;
+            }
+            else
+            {
+                $feedbackCount += 1;
+            }
+        }
+
+        return $feedbackCount;
     }
 }
