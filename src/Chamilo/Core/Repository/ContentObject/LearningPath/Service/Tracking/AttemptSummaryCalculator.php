@@ -229,7 +229,7 @@ class AttemptSummaryCalculator
             if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted())
             {
                 $score = (int) $treeNodeAttempt->get_score();
-                if($isAssignment && $score > 0)
+                if(!$isAssignment || $score > 0)
                     return $score;
             }
         }
