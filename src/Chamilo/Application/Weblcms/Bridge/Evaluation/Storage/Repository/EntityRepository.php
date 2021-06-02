@@ -78,7 +78,10 @@ class EntityRepository
         $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::COUNT,
-                new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::DISTINCT,
+                    new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ID)
+                ),
                 'feedback_count'
             )
         );
