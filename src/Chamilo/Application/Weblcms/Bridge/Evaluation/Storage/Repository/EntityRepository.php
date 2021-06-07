@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
@@ -69,18 +70,19 @@ class EntityRepository
      *
      * @param int[] $groupIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters $filterParameters
      *
      * @return RecordIterator
      */
-    public function getGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
+    public function getGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters): RecordIterator
     {
         $condition = new InCondition(new PropertyConditionVariable(CourseGroup::class_name(), DataClass::PROPERTY_ID), $groupIds);
 
         $searchProperties = $this->getCourseGroupEntityDataClassProperties();
-        $retrieveProperties = $this->mainEntityRepository->getRetrieveProperties($this->getCourseGroupEntityDataClassProperties());
+        $retrieveProperties = $this->mainEntityRepository->getRetrieveProperties($this->getCourseGroupEntityDataClassProperties(), $evaluationEntityRetrieveProperties);
 
-        $joins = $this->mainEntityRepository->getEvaluationEntryJoins(CourseGroup::class, $contextIdentifier);
+        $joins = $this->mainEntityRepository->getEvaluationEntryJoins(CourseGroup::class, $contextIdentifier, $evaluationEntityRetrieveProperties);
 
         $group_by = new GroupBy();
         $group_by->add(new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_ID));

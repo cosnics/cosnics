@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -27,7 +28,7 @@ class ExportComponent extends Manager
             }
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier);
+            $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, EvaluationEntityRetrieveProperties::ALL());
 
             // output headers so that the file is downloaded rather than displayed
             header('Content-Type: text/csv; charset=utf-8');

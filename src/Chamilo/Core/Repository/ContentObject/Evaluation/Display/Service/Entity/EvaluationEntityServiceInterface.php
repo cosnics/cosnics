@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Iterator\RecordIterator;
  */
 interface EvaluationEntityServiceInterface
 {
-    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): RecordIterator;
+    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters = null): RecordIterator;
     public function countEntitiesFromIds(array $entityIds, FilterParameters $filterParameters): int;
     public function getFieldMapper(): FieldMapper;
 }

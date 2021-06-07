@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repository;
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryRubricResult;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -103,45 +104,60 @@ class EntityRepository
         return $this->dataClassRepository->record($class_name, $parameters);
     }*/
 
-    public function getRetrieveProperties(DataClassProperties $properties): DataClassProperties
+    public function getRetrieveProperties(DataClassProperties $properties, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties): DataClassProperties
     {
-        $retrieveProperties = $properties->get();
-        $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE, 'score');
-        $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT, 'is_absent');
-        $retrieveProperties = new DataClassProperties($retrieveProperties);
+        $retrieveProperties = $properties;
+        $retrieveScores = $evaluationEntityRetrieveProperties->retrieveScores();
 
-        $retrieveProperties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::COUNT,
-                new FunctionConditionVariable(
-                    FunctionConditionVariable::DISTINCT,
-                    new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_ENTRY_ID)
-                ),
-                'score_registered'
-            )
-        );
+        if ($retrieveScores)
+        {
+            $retrieveProperties = $properties->get();
+            $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE, 'score');
+            $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_IS_ABSENT, 'is_absent');
+            $retrieveProperties = new DataClassProperties($retrieveProperties);
+        }
 
-        $retrieveProperties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::COUNT,
+        if ($retrieveScores)
+        {
+            $retrieveProperties->add(
                 new FunctionConditionVariable(
-                    FunctionConditionVariable::DISTINCT,
-                    new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ID)
-                ),
-                'feedback_count'
-            )
-        );
+                    FunctionConditionVariable::COUNT,
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_ENTRY_ID)
+                    ),
+                    'score_registered'
+                )
+            );
+        }
 
-        $retrieveProperties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::COUNT,
+        if ($evaluationEntityRetrieveProperties->retrieveFeedback())
+        {
+            $retrieveProperties->add(
                 new FunctionConditionVariable(
-                    FunctionConditionVariable::DISTINCT,
-                    new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS)
-                ),
-                'rubric'
-            )
-        );
+                    FunctionConditionVariable::COUNT,
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ID)
+                    ),
+                    'feedback_count'
+                )
+            );
+        }
+
+        if ($evaluationEntityRetrieveProperties->retrieveRubric())
+        {
+            $retrieveProperties->add(
+                new FunctionConditionVariable(
+                    FunctionConditionVariable::COUNT,
+                    new FunctionConditionVariable(
+                        FunctionConditionVariable::DISTINCT,
+                        new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS)
+                    ),
+                    'rubric'
+                )
+            );
+        }
 
         return $retrieveProperties;
     }
@@ -151,8 +167,10 @@ class EntityRepository
      * @param ContextIdentifier $contextIdentifier
      * @return Joins
      */
-    public function getEvaluationEntryJoins($class, ContextIdentifier $contextIdentifier): Joins
+    public function getEvaluationEntryJoins($class, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties): Joins
     {
+        $joins = new Joins();
+
         $entryJoinConditions = array();
         $entryJoinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ENTITY_ID),
@@ -166,34 +184,42 @@ class EntityRepository
             new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_CONTEXT_ID),
             new StaticConditionVariable($contextIdentifier->getContextId())
         );
-
-        $feedbackJoinConditions = array();
-        $feedbackJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
-            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
-        );
-
-        $scoreJoinConditions = array();
-        $scoreJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_ENTRY_ID),
-            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
-        );
-
-        $rubricJoinConditions = array();
-        $rubricJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS),
-            new StaticConditionVariable(EvaluationEntry::class_name())
-        );
-        $rubricJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_ID),
-            new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
-        );
-
-        $joins = new Joins();
         $joins->add(new Join(EvaluationEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
-        $joins->add(new Join(EvaluationEntryScore::class_name(), new AndCondition($scoreJoinConditions), Join::TYPE_LEFT));
-        $joins->add(new Join(EvaluationEntryFeedback::class_name(), new AndCondition($feedbackJoinConditions), Join::TYPE_LEFT));
-        $joins->add(new Join(EvaluationEntryRubricResult::class_name(), new AndCondition($rubricJoinConditions), Join::TYPE_LEFT));
+
+        if ($evaluationEntityRetrieveProperties->retrieveScores())
+        {
+            $scoreJoinConditions = array();
+            $scoreJoinConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_ENTRY_ID),
+                new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
+            );
+            $joins->add(new Join(EvaluationEntryScore::class_name(), new AndCondition($scoreJoinConditions), Join::TYPE_LEFT));
+        }
+
+        if ($evaluationEntityRetrieveProperties->retrieveFeedback())
+        {
+            $feedbackJoinConditions = array();
+            $feedbackJoinConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(EvaluationEntryFeedback::class_name(), EvaluationEntryFeedback::PROPERTY_ENTRY_ID),
+                new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
+            );
+            $joins->add(new Join(EvaluationEntryFeedback::class_name(), new AndCondition($feedbackJoinConditions), Join::TYPE_LEFT));
+        }
+
+        if ($evaluationEntityRetrieveProperties->retrieveRubric())
+        {
+            $rubricJoinConditions = array();
+            $rubricJoinConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS),
+                new StaticConditionVariable(EvaluationEntry::class_name())
+            );
+            $rubricJoinConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_ID),
+                new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
+            );
+            $joins->add(new Join(EvaluationEntryRubricResult::class_name(), new AndCondition($rubricJoinConditions), Join::TYPE_LEFT));
+        }
+
         return $joins;
     }
 
@@ -215,18 +241,19 @@ class EntityRepository
      *
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters $filterParameters
      *
      * @return RecordIterator
      */
-    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
+    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters): RecordIterator
     {
         $condition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
 
         $searchProperties = $this->getUserEntityDataClassProperties();
-        $retrieveProperties = $this->getRetrieveProperties($this->getUserEntityDataClassProperties());
+        $retrieveProperties = $this->getRetrieveProperties($this->getUserEntityDataClassProperties(), $evaluationEntityRetrieveProperties);
 
-        $joins = $this->getEvaluationEntryJoins(User::class, $contextIdentifier);
+        $joins = $this->getEvaluationEntryJoins(User::class, $contextIdentifier, $evaluationEntityRetrieveProperties);
 
         $group_by = new GroupBy();
         $group_by->add(new PropertyConditionVariable(User::class_name(), User::PROPERTY_ID));
@@ -275,18 +302,19 @@ class EntityRepository
      *
      * @param int[] $groupIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters $filterParameters
      *
      * @return RecordIterator
      */
-    public function getPlatformGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
+    public function getPlatformGroupsFromIds(array $groupIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters): RecordIterator
     {
         $condition = new InCondition(new PropertyConditionVariable(Group::class_name(), DataClass::PROPERTY_ID), $groupIds);
 
         $searchProperties = $this->getPlatformGroupEntityDataClassProperties();
-        $retrieveProperties = $this->getRetrieveProperties($this->getPlatformGroupEntityDataClassProperties());
+        $retrieveProperties = $this->getRetrieveProperties($this->getPlatformGroupEntityDataClassProperties(), $evaluationEntityRetrieveProperties);
 
-        $joins = $this->getEvaluationEntryJoins(Group::class, $contextIdentifier);
+        $joins = $this->getEvaluationEntryJoins(Group::class, $contextIdentifier, $evaluationEntityRetrieveProperties);
 
         $group_by = new GroupBy();
         $group_by->add(new PropertyConditionVariable(Group::class_name(), User::PROPERTY_ID));

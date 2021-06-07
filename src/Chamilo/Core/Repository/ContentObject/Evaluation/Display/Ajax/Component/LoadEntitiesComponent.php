@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
@@ -36,7 +37,7 @@ class LoadEntitiesComponent extends Manager
 
             $filterParameters = $this->createFilterParameters();
             $entityService = $this->getEntityServiceByType($this->getEvaluationServiceBridge()->getCurrentEntityType());
-            $selectedEntities = $entityService->getEntitiesFromIds($entityIds, $contextIdentifier, $filterParameters);
+            $selectedEntities = $entityService->getEntitiesFromIds($entityIds, $contextIdentifier, EvaluationEntityRetrieveProperties::ALL(), $filterParameters);
 
             $entities = array();
             foreach ($selectedEntities as $entity)

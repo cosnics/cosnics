@@ -35,18 +35,19 @@ class UserEntityService implements EvaluationEntityServiceInterface
      *
      * @param int[] $entityIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters|null $filterParameters
      *
      * @return RecordIterator
      */
-    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): RecordIterator
+    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters = null): RecordIterator
     {
         if (is_null($filterParameters))
         {
             $filterParameters = new FilterParameters();
         }
 
-        return $this->entityRepository->getUsersFromIds($entityIds, $contextIdentifier, $filterParameters);
+        return $this->entityRepository->getUsersFromIds($entityIds, $contextIdentifier, $evaluationEntityRetrieveProperties, $filterParameters);
     }
 
     /**

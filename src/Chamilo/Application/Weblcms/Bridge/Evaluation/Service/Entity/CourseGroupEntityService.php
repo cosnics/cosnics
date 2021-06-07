@@ -2,6 +2,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity;
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Storage\Repository\EntityRepository;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -35,17 +36,18 @@ class CourseGroupEntityService implements EvaluationEntityServiceInterface
      *
      * @param int[] $entityIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters|null $filterParameters
      *
      * @return RecordIterator
      */
-    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): RecordIterator
+    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters = null): RecordIterator
     {
         if (is_null($filterParameters))
         {
             $filterParameters = new FilterParameters();
         }
-        return $this->entityRepository->getGroupsFromIds($entityIds, $contextIdentifier, $filterParameters);
+        return $this->entityRepository->getGroupsFromIds($entityIds, $contextIdentifier, $evaluationEntityRetrieveProperties, $filterParameters);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EmbeddedViewSupport;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Interfaces\ConfirmRubricScoreInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
@@ -161,7 +162,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
 
-        $selectedEntities = $this->getEntityService()->getEntitiesFromIds($entityIds, $contextIdentifier, new FilterParameters());
+        $selectedEntities = $this->getEntityService()->getEntitiesFromIds($entityIds, $contextIdentifier, EvaluationEntityRetrieveProperties::NONE(), new FilterParameters());
 
         $entities = array();
         $selectedEntity = null;

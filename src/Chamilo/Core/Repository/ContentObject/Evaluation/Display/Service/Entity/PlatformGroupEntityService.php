@@ -30,18 +30,19 @@ class PlatformGroupEntityService implements EvaluationEntityServiceInterface
      *
      * @param int[] $entityIds
      * @param ContextIdentifier $contextIdentifier
+     * @param EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties
      * @param FilterParameters|null $filterParameters
      *
      * @return RecordIterator
      */
-    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): RecordIterator
+    public function getEntitiesFromIds(array $entityIds, ContextIdentifier $contextIdentifier, EvaluationEntityRetrieveProperties $evaluationEntityRetrieveProperties, FilterParameters $filterParameters = null): RecordIterator
     {
         if (is_null($filterParameters))
         {
             $filterParameters = new FilterParameters();
         }
 
-        return $this->entityRepository->getPlatformGroupsFromIds($entityIds, $contextIdentifier, $filterParameters);
+        return $this->entityRepository->getPlatformGroupsFromIds($entityIds, $contextIdentifier, $evaluationEntityRetrieveProperties, $filterParameters);
     }
 
     /**
