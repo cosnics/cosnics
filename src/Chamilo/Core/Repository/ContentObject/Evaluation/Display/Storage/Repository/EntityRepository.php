@@ -103,7 +103,7 @@ class EntityRepository
         return $this->dataClassRepository->record($class_name, $parameters);
     }*/
 
-    protected function getRetrieveProperties(DataClassProperties $properties): DataClassProperties
+    public function getRetrieveProperties(DataClassProperties $properties): DataClassProperties
     {
         $retrieveProperties = $properties->get();
         $retrieveProperties[] = new FixedPropertyConditionVariable(EvaluationEntryScore::class_name(), EvaluationEntryScore::PROPERTY_SCORE, 'score');
@@ -151,7 +151,7 @@ class EntityRepository
      * @param ContextIdentifier $contextIdentifier
      * @return Joins
      */
-    protected function getEvaluationEntryJoins($class, ContextIdentifier $contextIdentifier): Joins
+    public function getEvaluationEntryJoins($class, ContextIdentifier $contextIdentifier): Joins
     {
         $entryJoinConditions = array();
         $entryJoinConditions[] = new EqualityCondition(
