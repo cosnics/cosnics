@@ -41,6 +41,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const ACTION_PUBLISH_RUBRIC = 'PublishRubric';
     const ACTION_BUILD_RUBRIC = 'BuildRubric';
     const ACTION_REMOVE_RUBRIC = 'RemoveRubric';
+    const ACTION_IMPORT = 'Import';
     const ACTION_EXPORT = 'Export';
 
     const ACTION_ENTRY = 'Entry';

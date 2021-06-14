@@ -471,7 +471,7 @@
                     </div>
                     <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
                     <div>
-                        <a class="btn btn-default btn-sm" disabled>{{ 'Import'|trans({}, appContext) }}</a>
+                        <a class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'Import'|trans({}, appContext) }}</a>
                         <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
                 </div>

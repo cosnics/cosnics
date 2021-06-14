@@ -31,6 +31,7 @@ abstract class Manager extends AjaxManager
     const ACTION_SAVE_PRESENCE_STATUS = 'SavePresenceStatus';
     const ACTION_LOAD_FEEDBACK = 'LoadFeedback';
     const ACTION_CREATE_FEEDBACK = 'SaveNewFeedback';
+    const ACTION_IMPORT_USERS = 'ImportUsers';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 

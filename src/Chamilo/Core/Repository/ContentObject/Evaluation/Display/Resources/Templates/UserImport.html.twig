@@ -1,0 +1,341 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+<style type="text/css">
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+    .inputfile + label {
+        font-weight: normal;
+    }
+    .inputfile + label.mod-selected {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none;
+    }
+    .inputfile + label.mod-selected:not(:hover):not(:active) {
+        background-color: #fcfcfc;
+    }
+    .inputfile + label.mod-selected + button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .inputfile + label svg, #uploadbutton svg {
+        width: 1em;
+        height: 1em;
+        vertical-align: middle;
+        fill: currentColor;
+        margin-top: -0.25em;
+        margin-right: 0.25em;
+    }
+
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        display: flex;
+        margin: 10px 0 12px 8px;
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+        cursor: pointer;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+        display: flex;
+    }
+    .nav.nav-buttons > li > a span {
+        margin-left: 1px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
+    .badge.mod-invalid {
+        background-color: transparent;
+        color: #e44a28;
+        box-shadow: 1px 1px 1px hsla(207, 38%, 75%, .58);
+    }
+    .curios-table {
+        --selected-border-color: #bbcbbb;
+        --selection-gradient: linear-gradient(to bottom, #e0e8eb 0px, transparent 3px);
+        margin-bottom: 20px;
+    }
+    .tbl-curios-thead {
+        background-color: #f8fbfb;
+        border-bottom: 1px solid #ebebeb;
+        border-top: 1px solid #ebebeb;
+    }
+    .tbl-curios-cell {
+        border-right: 1px solid #ebebeb;
+        padding: 5px;
+    }
+    th.tbl-curios-cell {
+        color: #727879;
+    }
+    .tbl-curios-row {
+        border-bottom: 1px solid #ebebeb;
+        border-left: 1px solid #ebebeb;
+    }
+    .tbl-curios-row.mod-bl {
+        border-bottom-color: transparent;
+    }
+    .tbl-curios-cell:nth-child(n+6) {
+        cursor: pointer;
+        text-align: right;
+        width: 100px;
+    }
+    .tbl-curios-tbody {
+        background: linear-gradient(to bottom, #e3eaed 0, transparent 4px);
+    }
+    .tbl-curios-row.mod-invalid {
+        color: #e44a28;
+    }
+    .tbl-curios-row.mod-stats {
+        background: hsl(139, 63%, 96%);
+    }
+    .tbl-curios-cell.mod-bl {
+        border-right-color: transparent;
+    }
+    .tbl-curios-cell.mod-before-selected,
+    .tbl-curios-cell.mod-selected {
+        border-right-color: var(--selected-border-color);
+    }
+    .tbl-curios-cell.mod-selected.mod-first-cell {
+        border-top: 1px solid var(--selected-border-color);
+    }
+    .tbl-curios-cell.mod-selected.mod-sep {
+        border-bottom: 1px solid #e6e6e6;
+    }
+    .tbl-curios-cell.mod-selected.mod-last-cell {
+        border-bottom: 1px solid var(--selected-border-color);
+    }
+    .tbl-curios-cell.mod-selected {
+        background-color: #e8f2f3;
+    }
+    .tbl-curios-cell.mod-selected.mod-invalid {
+        background-color: #faf5f5;
+    }
+    .tbl-curios-cell.mod-selected.mod-stats {
+        background-color: #eef6ef;
+    }
+    .tbl-curios-cell.mod-selected.mod-first-item {
+        background: #e8f2f3 var(--selection-gradient);
+        border-top: 1px solid #e0e0e0;
+    }
+    .tbl-curios-cell.mod-selected.mod-invalid.mod-first-item {
+        background: #faf5f5 var(--selection-gradient);
+    }
+    .tbl-curios-cell.mod-hover {
+        background-color: #eef6f6;
+    }
+    .tbl-curios-cell.mod-hover.mod-invalid {
+        background-color: #fcf8f8;
+    }
+    .tbl-curios-cell.mod-hover.mod-stats {
+        background-color: #eef6ef;
+    }
+    .tbl-curios-cell.mod-hover.mod-first-item {
+        background: #eef6f6 var(--selection-gradient);
+        border-top: 1px solid #e0e0e0;
+    }
+    .tbl-curios-cell.mod-hover.mod-invalid.mod-first-item {
+        background: #fcf8f8 var(--selection-gradient);
+    }
+    .tbl-curios-cell .fa {
+        margin-left: 3px;
+    }
+    .tbl-curios-cell .fa-check-circle {
+        color: limegreen;
+    }
+</style>
+<div id="users">
+    <div v-if="header_rows.length === 0">
+        <div style="display: flex; align-items: baseline">
+            <input type="file" name="file" id="file" class="inputfile" @change="filename=$event.target.value.split('\\').pop()">
+            <label for="file" class="btn btn-default" :class="{'mod-selected': !!filename}" title="Kies een bestand...">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                <span>${ filename || 'Kies een bestand...'}</span></label>
+            <button v-if="filename" id="uploadbutton" type="button" value="Upload" @click="upload" class="btn btn-primary">Upload</button>
+        </div>
+    </div>
+    <div style="display: flex; align-items: baseline; gap: 12px;" v-if="header_rows.length > 0">
+        <ul class="nav nav-buttons" role="tablist" style="margin-left: 0">
+            <li role="presentation" :class="{active: tab === 'all'}" @click="tab = 'all'"><a aria-controls="curios-table" role="tab">All imports</a></li>
+            <li role="presentation" :class="{active: tab === 'valid'}" @click="tab = 'valid'"><a aria-controls="curios-table" role="tab">Valid imports</a></li>
+            <li role="presentation" :class="{active: tab === 'invalid'}" @click="tab = 'invalid'" v-if="result_rows.filter(o=>!o.valid).length > 0"><a aria-controls="curios-table" role="tab">Missing<span class="badge mod-invalid">${result_rows.filter(o=>!o.valid).length}</span></a></li>
+        </ul>
+        <div style="background-color: #f8fafb;padding: 7px 8px;/* border: 1px solid rgb(252, 252, 252); */border-radius: 4px;display: flex;align-items: baseline;gap: 5px;">Geselecteerd:
+            <template v-if="selected_col > 4">
+                <strong v-if="header_rows[0][selected_col]" style="color: #507177">${header_rows[0][selected_col]}</strong>
+                <span v-if="header_rows[0][selected_col]" style="color: #666">(<em>kolom ${selected_col + 1}</em>)</span>
+                <em v-else style="color: #666">kolom ${selected_col + 1}</em>
+            </template>
+            <em v-else style="color: #666">Niets geselecteerd</em>
+            <button class="btn btn-primary" style="margin-left: 5px;padding: 3px 8px;font-size:13px" :disabled="selected_col < 5">Importeer</button>
+        </div>
+    </div>
+    <table v-if="header_rows" id="curios-table" class="curios-table">
+        <thead class="tbl-curios-thead">
+            <tr v-for="(headers, row_index) in header_rows" class="tbl-curios-row mod-bl">
+            <template>
+                <component :is="(row_index === 0) ? 'th' : 'td'" v-for="(header, col_index) in headers"
+                           :class="getCellClasses(row_index, col_index, {type: 'header'})"
+                           @click.stop="selectCol(col_index)" @mouseover="hoverCol(col_index)" @mouseout="hoverCol(-1)">${header}</component>
+            </template>
+            </tr>
+        </thead>
+        <tbody class="tbl-curios-tbody" v-if="showAll">
+            <tr v-for="(results, row_index) in result_rows" class="tbl-curios-row" :class="{ 'mod-invalid': !results.valid }"
+                :title="!results.valid ? 'Gebruiker maakt geen deel uit van deze cursus' : ''">
+                <td v-for="(result, col_index) in results.values"
+                    :class="getCellClasses(row_index, col_index, {type: 'results', valid: results.valid})"
+                    @click.stop="selectCol(col_index)" @mouseover="hoverCol(col_index)" @mouseout="hoverCol(-1)">
+                    ${result}<template v-if="!results.valid && col_index === 2"> <i aria-hidden="true" class="fa fa-exclamation-circle"></i>
+                        <span class="sr-only">Gebruiker maakt geen deel uit van deze cursus</span>
+                    </template>
+                    <template v-else-if="results.valid && col_index === 2"> <i aria-hidden="true" class="fa fa-check-circle"></i></template>
+                </td>
+            </tr>
+            <tr v-for="(stats, row_index) in stat_rows" class="tbl-curios-row mod-stats" :class="{'mod-bl': row_index < stat_rows.length - 1}">
+                <td v-for="(stat, col_index) in stats"
+                    :class="getCellClasses(row_index, col_index, {type: 'stats'})"
+                    @click.stop="selectCol(col_index)" @mouseover="hoverCol(col_index)" @mouseout="hoverCol(-1)">${stat}</td>
+            </tr>
+        </tbody>
+        <tbody class="tbl-curios-tbody" v-else-if="showValid || showInvalid">
+            <tr v-for="(results, row_index) in filteredResultRows" class="tbl-curios-row" :class="{'mod-invalid': showInvalid}">
+                <td v-for="(result, col_index) in results.values"
+                    :class="getCellClasses(row_index, col_index, {type: 'filtered', valid: showValid})"
+                    @click.stop="selectCol(col_index)" @mouseover="hoverCol(col_index)" @mouseout="hoverCol(-1)">${result}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        new Vue({
+            el: '#users',
+            delimiters: ['${', '}'],
+            data: {
+                header_rows: [],
+                result_rows: [],
+                stat_rows: [],
+                users_without_results: null,
+                tab: 'all',
+                selected_col: -1,
+                hovered_col: -1,
+                filename: ''
+            },
+            computed: {
+                showValid() {
+                    return this.tab === 'valid';
+                },
+                showInvalid() {
+                    return this.tab === 'invalid';
+                },
+                showAll() {
+                    return this.tab === 'all';
+                },
+                validResultRows() {
+                    return this.result_rows.filter(function (v) { return v.valid; });
+                },
+                invalidResultRows() {
+                    return this.result_rows.filter(function (v) { return !v.valid; });
+                },
+                filteredResultRows() {
+                    if (this.showValid) { return this.validResultRows; }
+                    if (this.showInvalid) { return this.invalidResultRows; }
+                    return this.result_rows;
+                }
+            },
+            methods: {
+                selectCol(index) {
+                    if (index > 4) {
+                        this.selected_col = index;
+                    }
+                },
+                hoverCol(index) {
+                    if (index > 4 || index === -1) {
+                        this.hovered_col = index;
+                    }
+                },
+                getCellClasses(row_index, col_index, options) {
+                    var d = options || {};
+                    var is_selected_col = this.selected_col === col_index;
+                    var is_hovered_col = this.hovered_col === col_index;
+                    var is_selected_or_hovered = is_selected_col || is_hovered_col;
+                    var classes = {
+                        'mod-selected': is_selected_col,
+                        'mod-before-selected': this.selected_col !== -1 && this.selected_col === col_index + 1,
+                        'mod-hover': this.hovered_col === col_index,
+                        'mod-bl': d.type === 'stats' && col_index < 4,
+                        'mod-invalid': is_selected_or_hovered && (d.type === 'results' || d.type === 'filtered') && !d.valid,
+                        'mod-stats': is_selected_or_hovered && d.type === 'stats',
+                        'mod-first-item': is_selected_or_hovered && (d.type === 'results' || d.type === 'filtered') && row_index === 0,
+                        'mod-first-cell': is_selected_col && d.type === 'header' && row_index === 0,
+                        'mod-last-cell': is_selected_col && ((d.type === 'stats' && row_index === this.stat_rows.length - 1) || (d.type === 'filtered' && row_index === this.filteredResultRows.length - 1)),
+                        'mod-sep': is_selected_col && ((d.type === 'results' && row_index !== this.stat_rows.length - 1) || (d.type === 'filtered' && row_index !== this.filteredResultRows.length - 1))
+                    };
+                    return ['tbl-curios-cell', classes];
+                },
+                showError() {
+
+                },
+                upload() {
+                    var file_data = $('#file').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('file', file_data);
+
+                    $.ajax({
+                        url: '{{ IMPORT_USERS_URL|raw }}',
+                        type: 'post',
+                        enctype: 'multipart/form-data',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: form_data,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function(data) {
+                        if (data.result_code === 200) {
+                            var properties = data.properties;
+                            this.header_rows = properties.header_rows;
+                            this.result_rows = properties.result_rows;
+                            this.stat_rows = properties.stat_rows;
+                        } else if (data.result_code === 500) {
+                            console.log(data.result_message);
+                        }
+                    }.bind(this)).fail(function (jqXHR) {
+                        console.log('Error');
+                    });
+                }
+            }
+        });
+    });
+</script>
+{{ FOOTER|raw }}
