@@ -169,11 +169,13 @@ abstract class AssignmentJobProcessor implements JobProcessorInterface
      */
     protected function getNotificationUrl($course, $publication, $entry): string
     {
+        $tool = $publication->get_tool() == 'ExamAssignment' ? 'ExamAssignment' : 'Assignment';
+
         $parameters = [
             Application::PARAM_CONTEXT => 'Chamilo\Application\Weblcms',
             Application::PARAM_ACTION => \Chamilo\Application\Weblcms\Manager::ACTION_VIEW_COURSE,
             \Chamilo\Application\Weblcms\Manager::PARAM_COURSE => $course->getId(),
-            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'Assignment',
+            \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => $tool,
             \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager::ACTION_DISPLAY,
             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id(),
             \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $publication->get_category_id(),
