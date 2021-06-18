@@ -269,7 +269,7 @@ class SearcherComponent extends Manager
             
             $forever_conditions[] = new EqualityCondition($from_date_variables, new StaticConditionVariable(0));
             
-            $forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
+            //$forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
             
             $forever_condition = new AndCondition($forever_conditions);
             

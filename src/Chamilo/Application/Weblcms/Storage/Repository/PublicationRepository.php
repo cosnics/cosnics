@@ -219,11 +219,11 @@ class PublicationRepository implements PublicationRepositoryInterface
             new StaticConditionVariable(0)
         );
 
-        $forever_conditions[] = new ComparisonCondition(
-            $to_date_variable,
-            ComparisonCondition::EQUAL,
-            new StaticConditionVariable(0)
-        );
+//        $forever_conditions[] = new ComparisonCondition(
+//            $to_date_variable,
+//            ComparisonCondition::EQUAL,
+//            new StaticConditionVariable(0)
+//        );
 
         $forever_condition = new AndCondition($forever_conditions);
 
