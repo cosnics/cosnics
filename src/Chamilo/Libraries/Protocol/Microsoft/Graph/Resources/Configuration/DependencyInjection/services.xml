@@ -135,5 +135,10 @@
                 id="chamilo.libraries.protocol.microsoft.graph.storage.repository.calendar_repository" />
         </service>
 
+        <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Service\SiteService" autowire="true"/>
+
+        <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\SiteRepository" autowire="true"/>
+        <service id="Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\ListRepository" autowire="true"/>
+
     </services>
 </container>
