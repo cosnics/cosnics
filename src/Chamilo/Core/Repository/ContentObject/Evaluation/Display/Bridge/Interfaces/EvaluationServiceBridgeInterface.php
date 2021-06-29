@@ -63,41 +63,6 @@ interface EvaluationServiceBridgeInterface
     public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool;
 
     /**
-     * @param int $evaluationId
-     * @param int $entityId
-     * @return EvaluationEntry
-     */
-    public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry;
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     * @param int $score
-     *
-     * @return EvaluationEntryScore
-     */
-    public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore;
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     *
-     * @return EvaluationEntryScore
-     */
-    public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore;
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     *
-     * @return EvaluationEntryScore
-     */
-    public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore;
-
-    /**
      * @param int $entityId
      * @return string
      */

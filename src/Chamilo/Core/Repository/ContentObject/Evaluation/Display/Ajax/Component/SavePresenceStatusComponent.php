@@ -22,14 +22,18 @@ class SavePresenceStatusComponent extends Manager
             $isPresent = $this->getRequest()->getFromPost('presence_status') == 'true';
 
             $evaluation = $this->get_root_content_object();
+            $evaluationId = $evaluation->getId();
+            $evaluatorId = $this->getUser()->getId();
+            $contextId = $this->getEvaluationServiceBridge()->getContextIdentifier();
+            $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
 
             if ($isPresent)
             {
-                $evaluationEntryScore = $this->getEvaluationServiceBridge()->saveEntityAsPresent($evaluation->getId(), $this->getUser()->getId(), $entityId);
+                $evaluationEntryScore = $this->getEvaluationEntryService()->saveEntityAsPresent($evaluationId, $evaluatorId, $contextId, $entityType, $entityId);
             }
             else
             {
-                $evaluationEntryScore = $this->getEvaluationServiceBridge()->saveEntityAsAbsent($evaluation->getId(), $this->getUser()->getId(), $entityId);
+                $evaluationEntryScore = $this->getEvaluationEntryService()->saveEntityAsAbsent($evaluationId, $evaluatorId, $contextId, $entityType, $entityId);
             }
 
             $result = new JsonAjaxResult(200, ['entity_id' => $entityId, 'score' => $evaluationEntryScore->getScore(), 'presence_status' => $evaluationEntryScore->isAbsent() ? 'absent' : 'present']);

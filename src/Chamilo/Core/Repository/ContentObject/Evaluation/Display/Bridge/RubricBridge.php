@@ -124,7 +124,13 @@ class RubricBridge implements RubricBridgeInterface
             return;
         }
 
-        $this->evaluationServiceBridge->saveEntryScoreForEntity($this->evaluationEntry->getEvaluationId(), $user->getId(), $this->evaluationEntry->getEntityId(), $relativeScore);
+        $evaluationId = $this->evaluationEntry->getEvaluationId();
+        $evaluatorId = $user->getId();
+        $contextId = $this->evaluationServiceBridge->getContextIdentifier();
+        $entityType = $this->evaluationServiceBridge->getCurrentEntityType();
+        $entityId = $this->evaluationEntry->getEntityId();
+
+        $this->evaluationEntryService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $contextId, $entityType, $entityId, $relativeScore);
     }
 
     /**

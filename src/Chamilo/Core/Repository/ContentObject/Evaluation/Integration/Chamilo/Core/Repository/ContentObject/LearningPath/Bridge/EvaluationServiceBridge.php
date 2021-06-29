@@ -163,48 +163,4 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     {
         return $this->learningPathEvaluationServiceBridge->isUserPartOfEntity($user, $entityType, $entityId);
     }
-
-    /**
-     * @param int $evaluationId
-     * @param int $entityId
-     * @return EvaluationEntry
-     */
-    public function createEvaluationEntryIfNotExists(int $evaluationId, int $entityId): EvaluationEntry
-    {
-        return $this->evaluationEntryService->createEvaluationEntryIfNotExists($evaluationId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
-    }
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     * @param int $score
-     * @return EvaluationEntryScore
-     */
-    public function saveEntryScoreForEntity(int $evaluationId, int $evaluatorId, int $entityId, int $score): EvaluationEntryScore
-    {
-        return $this->evaluationEntryService->createOrUpdateEvaluationEntryScoreForEntity($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId, $score);
-    }
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     * @return EvaluationEntryScore
-     */
-    public function saveEntityAsPresent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
-    {
-        return $this->evaluationEntryService->saveEntityAsPresent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
-    }
-
-    /**
-     * @param int $evaluationId
-     * @param int $evaluatorId
-     * @param int $entityId
-     * @return EvaluationEntryScore
-     */
-    public function saveEntityAsAbsent(int $evaluationId, int $evaluatorId, int $entityId): EvaluationEntryScore
-    {
-        return $this->evaluationEntryService->saveEntityAsAbsent($evaluationId, $evaluatorId, $this->getContextIdentifier(), $this->getCurrentEntityType(), $entityId);
-    }
 }

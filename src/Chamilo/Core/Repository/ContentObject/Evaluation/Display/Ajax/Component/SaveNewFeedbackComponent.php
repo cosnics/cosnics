@@ -27,7 +27,8 @@ class SaveNewFeedbackComponent extends Manager
             $isPrivate = $this->getRequest()->getFromPost('is_private') == 'true';
             $entityId = $this->getRequest()->getFromPost('entity_id');
 
-            $evaluationEntry = $this->getEvaluationServiceBridge()->createEvaluationEntryIfNotExists($evaluation->getId(), $entityId);
+            $evaluationEntry = $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $this->getEvaluationServiceBridge()->getContextIdentifier(), $this->getEvaluationServiceBridge()->getCurrentEntityType(), $entityId);
+
             $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
 
             $feedbackContentObject = $this->createFeedbackContentObject($this->getUser(), $newFeedback);
@@ -37,7 +38,8 @@ class SaveNewFeedbackComponent extends Manager
             {
                 $feedbackItem = $this->getFeedbackServiceBridge()->createFeedback($this->getUser(), $feedbackContentObject, $isPrivate);
                 $success = $feedbackItem instanceof Feedback;
-            } else
+            }
+            else
             {
                 // todo
             }
