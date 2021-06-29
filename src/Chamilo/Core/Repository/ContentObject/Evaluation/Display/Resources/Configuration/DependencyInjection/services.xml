@@ -17,6 +17,9 @@
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\FeedbackService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportFromCuriosCSVService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportFromCuriosExceptionDisplayService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportResultsFromCuriosService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge" autowire="true" />
     </services>
 </container>

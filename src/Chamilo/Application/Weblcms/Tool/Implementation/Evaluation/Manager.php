@@ -18,6 +18,9 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements Categorizable,
     IntroductionTextSupportInterface
 {
+    const ACTION_AJAX = 'Ajax';
+    const ACTION_IMPORT_FROM_CURIOS = 'ImportFromCurios';
+    const ACTION_DISPLAY = 'Display';
 
     public function get_available_browser_types()
     {

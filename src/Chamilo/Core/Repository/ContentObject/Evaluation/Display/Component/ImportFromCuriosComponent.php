@@ -11,12 +11,12 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
  *
  * @author - Stefan Gabriëls - Hogeschool Gent
  */
-class ImportComponent extends Manager
+class ImportFromCuriosComponent extends Manager
 {
     /**
      * @return string
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws NotAllowedException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -26,12 +26,12 @@ class ImportComponent extends Manager
         $this->checkAccessRights();
 
         return $this->getTwig()->render(
-            \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':UserImport.html.twig', $this->getTemplateProperties()
+            \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context() . ':CuriosUserImport.html.twig', $this->getTemplateProperties()
         );
     }
 
     /**
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NotAllowedException
+     * @throws NotAllowedException
      */
     protected function checkAccessRights()
     {
@@ -42,18 +42,27 @@ class ImportComponent extends Manager
 
     /**
      * @return string[]
-     * @throws NotAllowedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
      */
     protected function getTemplateProperties()
     {
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
-            'IMPORT_USERS_URL' => $this->get_url(
+            'PROCESS_CSV_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_IMPORT_USERS
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_PROCESS_CURIOS_CSV
+                ]
+            ),
+            'IMPORT_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_IMPORT
+                ]
+            ),
+            'EVALUATION_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::DEFAULT_ACTION
                 ]
             )
         ];

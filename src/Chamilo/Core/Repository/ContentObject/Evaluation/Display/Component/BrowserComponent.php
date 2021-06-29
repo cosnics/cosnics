@@ -93,7 +93,7 @@ class BrowserComponent extends Manager
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'PHOTO_URL' => $profilePhotoUrl->getUrl(),
-            'IMPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_IMPORT]),
+            'IMPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_IMPORT_FROM_CURIOS]),
             'EXPORT_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_EXPORT]),
             'SUPPORTS_RUBRICS' => $this->supportsRubrics(),
             'HAS_RUBRIC' => $hasRubric,

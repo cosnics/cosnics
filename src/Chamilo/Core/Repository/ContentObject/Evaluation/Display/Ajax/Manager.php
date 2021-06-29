@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax;
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component\AjaxComponent;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService;
@@ -14,6 +15,7 @@ use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -22,7 +24,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Stefan Gabriëls - Hogeschool Gent
  */
 abstract class Manager extends AjaxManager
 {
@@ -31,7 +33,8 @@ abstract class Manager extends AjaxManager
     const ACTION_SAVE_PRESENCE_STATUS = 'SavePresenceStatus';
     const ACTION_LOAD_FEEDBACK = 'LoadFeedback';
     const ACTION_CREATE_FEEDBACK = 'SaveNewFeedback';
-    const ACTION_IMPORT_USERS = 'ImportUsers';
+    const ACTION_PROCESS_CURIOS_CSV = 'ProcessCuriosCSV';
+    const ACTION_IMPORT = 'Import';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
@@ -153,4 +156,21 @@ abstract class Manager extends AjaxManager
         return DatetimeUtilities::format_locale_date($date_format, $date);
     }
 
+    /**
+     * @return array
+     * @throws UserException
+     */
+    protected function getUsers(): array
+    {
+        $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
+        if ($entityType != 0) {
+            throw new UserException('Import functionality is only available for user entities.');
+        }
+
+        $entityIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+        $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
+        $entityService = $this->getEntityServiceByType($entityType);
+        $selectedEntities = $entityService->getEntitiesFromIds($entityIds, $contextIdentifier, EvaluationEntityRetrieveProperties::SCORES(), new FilterParameters());
+        return iterator_to_array($selectedEntities);
+    }
 }

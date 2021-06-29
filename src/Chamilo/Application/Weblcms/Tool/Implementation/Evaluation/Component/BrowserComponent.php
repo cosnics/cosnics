@@ -10,6 +10,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonDivider;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButtonHeader;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
+use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
+use Chamilo\Libraries\Format\Structure\Glyph\InlineGlyph;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Translation\Translation;
@@ -25,6 +27,19 @@ class BrowserComponent extends Manager
     const FILTER_TODAY = 'today';
     const FILTER_THIS_WEEK = 'week';
     const FILTER_THIS_MONTH = 'month';
+
+    public function get_tool_actions()
+    {
+        $toolActions = array();
+
+        $toolActions[] = new Button(
+            Translation::get('Import', null, Manager::context()),
+            new FontAwesomeGlyph('download'),
+            $this->get_url(array(self::PARAM_ACTION => self::ACTION_IMPORT_FROM_CURIOS)),
+            Button::DISPLAY_ICON_AND_LABEL);
+
+        return $toolActions;
+    }
 
     public function getFilterActions()
     {
