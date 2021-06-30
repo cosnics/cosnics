@@ -33,7 +33,9 @@ class ImportFromCuriosCSVService
             'lang_msg_started_at' => 'started',
             'lang_msg_stopped_at' => 'stopped',
             'lang_msg_total_score' => 'total_score',
-            'lang_msg_total_percentage' => 'total_percentage'
+            'lang_msg_total_percentage' => 'total_percentage',
+            'lang_msg_total_score - lang_msg_standard_setting' => 'total_score_cutoff',
+            'lang_msg_total_percentage - lang_msg_standard_setting' => 'total_percentage_cutoff'
         ],
         'nl' => [
             'familienaam' => 'surname',
@@ -44,12 +46,14 @@ class ImportFromCuriosCSVService
             'gestart op' => 'started',
             'gestopt op' => 'stopped',
             'totale score' => 'total_score',
-            'totaal percentage' => 'total_percentage'
+            'totaal percentage' => 'total_percentage',
+            'totale score - standaardsetting' => 'total_score_cutoff',
+            'totaal percentage - standaardsetting' => 'total_percentage_cutoff'
         ],
     ];
 
     const check_should_be_present = ['surname', 'name', 'id', 'started', 'stopped', 'total_score', 'total_percentage'];
-    const check_should_keep = ['surname', 'name', 'id', 'total_percentage'];
+    const check_should_keep = ['surname', 'name', 'id', 'total_percentage', 'total_percentage_cutoff'];
 
     const check_validate = [
         'surname' => 'string',
@@ -58,7 +62,16 @@ class ImportFromCuriosCSVService
         'started' => 'date',
         'stopped' => 'date',
         'total_score' => 'number',
-        'total_percentage' => 'number'
+        'total_percentage' => 'number',
+        'total_score_cutoff' => 'number',
+        'total_percentage_cutoff' => 'number'
+    ];
+
+    const readable_labels = [
+        'lang_msg_total_percentage' => 'Total percentage',
+        'lang_msg_total_percentage - lang_msg_standard_setting' => 'Raised cut-off %',
+        'totaal percentage' => 'Totaalpercentage',
+        'totaal percentage - standaardsetting' => 'Verhoogde cesuur'
     ];
 
     /**
@@ -99,7 +112,7 @@ class ImportFromCuriosCSVService
             throw new MissingFieldsException(1, $this->getMissingNames($lang, $missingFields));
         }
 
-        $fields = $this->getFieldData($data);
+        $fields = $this->getFieldsData($data);
         $results = [];
         $stats = [];
 
@@ -223,24 +236,9 @@ class ImportFromCuriosCSVService
      */
     protected function getKey(string $lang, $prop)
     {
-        if (($lang == 'nl' && str_starts_with($prop, 'totale score')) || ($lang == 'en' && str_starts_with($prop, 'lang_msg_total_score')))
+        if ($lang == 'nl' || $lang == 'en')
         {
-            return 'total_score';
-        }
-
-        if (($lang == 'nl' && str_starts_with($prop, 'totaal percentage')) || ($lang == 'en' && str_starts_with($prop, 'lang_msg_total_percentage')))
-        {
-            return 'total_percentage';
-        }
-
-        if ($lang == 'nl')
-        {
-            return self::properties['nl'][$prop];
-        }
-
-        if ($lang == 'en')
-        {
-            return self::properties['en'][$prop];
+            return self::properties[$lang][$prop];
         }
 
         return null;
@@ -267,11 +265,11 @@ class ImportFromCuriosCSVService
      * @param array $data
      * @return array
      */
-    protected function getFieldData(array $data): array
+    protected function getFieldsData(array $data): array
     {
         $filterPercentage = function ($item)
         {
-            return $item['key'] == 'total_percentage';
+            return $item['key'] == 'total_percentage' || $item['key'] == 'total_percentage_cutoff';
         };
 
         $getDisplayKey = function ($item)
@@ -279,9 +277,19 @@ class ImportFromCuriosCSVService
             return $item['displayKey'];
         };
 
-        $getDataFields = function ($displayKey) use ($data)
+        $getReadableName = function ($name)
         {
-            return ['key' => $displayKey, 'label' => $data[$displayKey]['displayName']];
+            $label = self::readable_labels[strtolower($name)];
+            if (isset($label))
+            {
+                return $label;
+            }
+            return $name;
+        };
+
+        $getDataFields = function ($displayKey) use ($data, $getReadableName)
+        {
+            return ['key' => $displayKey, 'label' => $getReadableName($data[$displayKey]['displayName'])];
         };
 
         $scoreKeys = array_map($getDisplayKey, array_filter($data, $filterPercentage));

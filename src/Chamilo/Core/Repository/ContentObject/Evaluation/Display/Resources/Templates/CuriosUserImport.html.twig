@@ -298,8 +298,8 @@
             <label for="import-title">Titel:</label>
             <input id="import-title" class="form-control" :class="{'input_warning': titleExists}" autocomplete="off" name="title" type="text" v-model="title" />
         </div>
-        <div>{{ 'ImportResultsOverview'|trans({}, appContext)|raw }} <span v-if="hasInvalidResults">{{ 'ImportOnlyValidResults'|trans({}, appContext) }}</span></div>
-        <div class="u-flex" :class="selectableFields.length > 2 ? 'u-flex-column' : 'u-gap-small-2x'">
+        <div>{{ 'ImportResultsOverview'|trans({}, appContext)|raw }} <span v-if="selectableFields.length === 1">{{ 'RememberToImport'|trans({}, appContext)|raw }}</span><span v-else>{{ 'SelectDifferentColumn'|trans({}, appContext)|raw }}</span> <span v-if="hasInvalidResults">{{ 'ImportOnlyValidResults'|trans({}, appContext) }}</span></div>
+        <div class="u-flex" v-if="selectableFields.length > 1" :class="selectableFields.length > 2 ? 'u-flex-column' : 'u-gap-small-2x'">
             <div v-for="(field, col_index) in fields" v-if="col_index > 2">
                 <input type="radio" name="col_select" :id="'col_select_' + col_index" :checked="selected_col === col_index" @change="selectCol(col_index)" />
                 <label :for="'col_select_' + col_index">${field.label}</label>
