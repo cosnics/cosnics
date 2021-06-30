@@ -90,3 +90,4 @@ DuplicateFieldsException = "<b>Regel {LINE}</b>: Velden niet uniek: <b>{FIELDS}<
 DuplicateResultException = "<b>Regel {LINE}</b>: Dubbel resultaat gevonden voor student <b>{LASTNAME} {FIRSTNAME}</b>"
 NoValueException = "<b>Regel {LINE}</b>: Geen waarde opgegeven voor het veld <b>{FIELD}</b>"
 InvalidValueException = "<b>Regel {LINE}</b>: Niet-{TYPE} waarde <b>{VALUE}</b> opgegeven voor het veld <b>{FIELD}</b>"
+NoValidResultsException = "Het opgeladen bestand bevat geen resultaten die kunnen geïmporteerd worden."

@@ -2,14 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service;
 
+use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\CuriosImportException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\DuplicateFieldsException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\DuplicateResultException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\InvalidValueException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\LanguageNotDetectedException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\MissingFieldsException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\NotCSVFileException;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\NoValidResultsException;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Domain\Exceptions\NoValueException;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use DateTime;
 
 /**
@@ -78,7 +79,7 @@ class ImportFromCuriosCSVService
      * @param string $file
      * @param array $users
      * @return array
-     * @throws UserException
+     * @throws CuriosImportException
      */
     public function processCSV(string $file, array $users): array
     {
@@ -160,7 +161,25 @@ class ImportFromCuriosCSVService
                     break;
             }
         }
+        $hasValidResults = count($this->filterValidResults($results)) > 0;
+        if (!$hasValidResults)
+        {
+            throw new NoValidResultsException();
+        }
         return ['fields' => $fields, 'results' => $results, 'stats' => $stats];
+    }
+
+    /**
+     * @param array $results
+     * @return array
+     */
+    protected function filterValidResults(array $results): array
+    {
+        $filterValid = function ($result)
+        {
+            return $result['valid'];
+        };
+        return array_filter($results, $filterValid);
     }
 
     /**
@@ -234,7 +253,7 @@ class ImportFromCuriosCSVService
      * @param $prop
      * @return string|null
      */
-    protected function getKey(string $lang, $prop)
+    protected function getKey(string $lang, $prop): ?string
     {
         if ($lang == 'nl' || $lang == 'en')
         {
@@ -303,7 +322,7 @@ class ImportFromCuriosCSVService
      * @param array $data
      * @param bool $isStats
      * @return array
-     * @throws UserException
+     * @throws CuriosImportException
      */
     protected function processResults(int $line, array $row_tmp, array $data, bool $isStats = false): array
     {
@@ -328,7 +347,7 @@ class ImportFromCuriosCSVService
      * @param array $row_tmp
      * @param array $data
      * @return array
-     * @throws UserException
+     * @throws CuriosImportException
      */
     protected function processStat(int $line, array $row_tmp, array $data): array
     {
@@ -344,7 +363,7 @@ class ImportFromCuriosCSVService
      * @param $value
      * @param string $type
      * @param bool $isStats
-     * @throws UserException
+     * @throws CuriosImportException
      */
     protected function validateField(int $line, string $name, $value, string $type, bool $isStats): void
     {
@@ -400,7 +419,7 @@ class ImportFromCuriosCSVService
      * @param array $users
      * @return array|null
      */
-    protected function findUser(string $userId, array $users)
+    protected function findUser(string $userId, array $users): ?array
     {
         foreach ($users as $user)
         {
