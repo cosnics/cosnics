@@ -339,7 +339,7 @@
         color: #507177;
     }
 </style>
-{% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}
+{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS %}
     <div id="title-student" class="u-flex u-align-items-baseline">
         <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
         {% if PRESENCE_STATUS == 'present' %}<span class="badge score-badge score-success" style="margin-left:10px;min-width:37px;transform:translateY(-1px)">{{ SCORE|raw }}</span>{% endif %}
@@ -408,11 +408,11 @@
     </div>
     {% endif %}
 
-    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and RELEASE_SCORES)) %}
+    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS)) %}
     <div class="row">
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
-                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and RELEASE_SCORES %}{{ 'ViewRubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
+                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS %}{{ 'ViewRubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
             </div>
             {% if CAN_EDIT_EVALUATION %}
                 <ul class="nav nav-buttons">
@@ -471,7 +471,7 @@
         </div>
     </div>
     {% endif %}
-    {% if CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and RELEASE_SCORES) %}
+    {% if CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS) %}
     <div class="row">
         <div class="col-xs-12" id="feedback">
             <div class="title-underline-fw mod-feedback">

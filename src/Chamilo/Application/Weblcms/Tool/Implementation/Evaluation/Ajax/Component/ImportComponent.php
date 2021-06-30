@@ -86,7 +86,7 @@ class ImportComponent extends Manager
         $evaluationPublication = new EvaluationPublication();
         $evaluationPublication->setPublicationId($contentObjectPublication->getId());
         $evaluationPublication->setEntityType(0);
-        $evaluationPublication->setReleaseScores(false);
+        $evaluationPublication->setOpenForStudents(false);
         $evaluationPublication->create();
 
         $contextId = new ContextIdentifier(get_class($evaluationPublication), $contentObjectPublication->getId());

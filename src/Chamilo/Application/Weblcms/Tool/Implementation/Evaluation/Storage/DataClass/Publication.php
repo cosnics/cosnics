@@ -13,7 +13,7 @@ class Publication extends DataClass
 {
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
-    const PROPERTY_RELEASE_SCORES = 'release_scores';
+    const PROPERTY_OPEN_FOR_STUDENTS = 'open_for_students';
 
     /**
      * Get the default properties
@@ -26,7 +26,7 @@ class Publication extends DataClass
             array(
                 self::PROPERTY_PUBLICATION_ID,
                 self::PROPERTY_ENTITY_TYPE,
-                self::PROPERTY_RELEASE_SCORES
+                self::PROPERTY_OPEN_FOR_STUDENTS
             )
         );
     }
@@ -78,17 +78,17 @@ class Publication extends DataClass
     /**
      * @return bool
      */
-    public function getReleaseScores()
+    public function getOpenForStudents()
     {
-        return $this->get_default_property(self::PROPERTY_RELEASE_SCORES);
+        return $this->get_default_property(self::PROPERTY_OPEN_FOR_STUDENTS);
     }
 
     /**
-     * @param bool $releaseScores
+     * @param bool $openForStudents
      */
-    public function setReleaseScores(bool $releaseScores)
+    public function setOpenForStudents(bool $openForStudents)
     {
-        $this->set_default_property(self::PROPERTY_RELEASE_SCORES, $releaseScores);
+        $this->set_default_property(self::PROPERTY_OPEN_FOR_STUDENTS, $openForStudents);
     }
 
     public static function get_table_name()

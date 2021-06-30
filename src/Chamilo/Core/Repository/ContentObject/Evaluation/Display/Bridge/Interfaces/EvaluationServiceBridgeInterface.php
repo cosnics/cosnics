@@ -39,7 +39,7 @@ interface EvaluationServiceBridgeInterface
     /**
      * @return boolean
      */
-    public function getReleaseScores(): bool;
+    public function getOpenForStudents(): bool;
 
     /**
      * @return int[]

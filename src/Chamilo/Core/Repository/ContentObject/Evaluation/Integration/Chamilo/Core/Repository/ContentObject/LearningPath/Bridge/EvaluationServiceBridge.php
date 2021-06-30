@@ -119,9 +119,9 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     /**
      * @return bool
      */
-    public function getReleaseScores(): bool
+    public function getOpenForStudents(): bool
     {
-        return $this->treeNodeConfiguration->getReleaseScores();
+        return $this->treeNodeConfiguration->getOpenForStudents();
     }
 
     /**

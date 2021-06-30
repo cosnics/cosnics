@@ -30,7 +30,7 @@ class ContentObjectPublicationHandler extends \Chamilo\Application\Weblcms\Publi
             $evaluationPublication = new Publication();
             $evaluationPublication->setPublicationId($publication->getId());
             $evaluationPublication->setEntityType(EntityTypes::ENTITY_TYPE_USER()->getValue());
-            $evaluationPublication->setReleaseScores(false);
+            $evaluationPublication->setOpenForStudents(false);
 
             if (!$evaluationPublication->create())
             {

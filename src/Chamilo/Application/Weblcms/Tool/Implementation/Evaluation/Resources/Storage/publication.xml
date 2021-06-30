@@ -20,7 +20,7 @@
                 length="1"
                 default="6" />
         <property
-                name="release_scores"
+                name="open_for_students"
                 type="integer"
                 unsigned="1"
                 length="1"

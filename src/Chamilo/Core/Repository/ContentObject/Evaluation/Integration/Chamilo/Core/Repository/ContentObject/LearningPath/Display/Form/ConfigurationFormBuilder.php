@@ -15,7 +15,7 @@ use Symfony\Component\Translation\Translator;
 class ConfigurationFormBuilder
 {
     const FORM_PROPERTY_ENTITY_TYPE = 'entity_type';
-    const FORM_PROPERTY_RELEASE_SCORES = 'release_scores';
+    const FORM_PROPERTY_OPEN_FOR_STUDENTS = 'open_for_students';
 
     // Entity types
     const ENTITY_TYPE_USER = 0;
@@ -81,8 +81,8 @@ class ConfigurationFormBuilder
         );
 
         $formBuilder->addElement(
-            'checkbox', self::FORM_PROPERTY_RELEASE_SCORES,
-            $this->translator->trans('ReleaseScores', [], self::TRANSLATION_CONTEXT)
+            'checkbox', self::FORM_PROPERTY_OPEN_FOR_STUDENTS,
+            $this->translator->trans('OpenForStudents', [], self::TRANSLATION_CONTEXT)
         );
 
         $buttons = array();
@@ -101,7 +101,7 @@ class ConfigurationFormBuilder
         $formBuilder->setDefaults(
             [
                 self::FORM_PROPERTY_ENTITY_TYPE => $configuration->getEntityType(),
-                self::FORM_PROPERTY_RELEASE_SCORES => $configuration->getReleaseScores()
+                self::FORM_PROPERTY_OPEN_FOR_STUDENTS => $configuration->getOpenForStudents()
             ]
         );
     }

@@ -116,9 +116,9 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     /**
      * @return boolean
      */
-    public function getReleaseScores(): bool
+    public function getOpenForStudents(): bool
     {
-        return $this->evaluationPublication->getReleaseScores();
+        return $this->evaluationPublication->getOpenForStudents();
     }
 
     /**

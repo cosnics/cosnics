@@ -160,7 +160,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
 
         $entityIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-        $releaseScores = $this->getEvaluationServiceBridge()->getReleaseScores();
+        $openForStudents = $this->getEvaluationServiceBridge()->getOpenForStudents();
 
         $selectedEntities = $this->getEntityService()->getEntitiesFromIds($entityIds, $contextIdentifier, EvaluationEntityRetrieveProperties::NONE(), new FilterParameters());
 
@@ -235,7 +235,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
             'RUBRIC_SCORE' => $rubricScore,
             'CONFIRM_OVERWRITE_SCORE' => $confirmOverwriteScore,
-            'RELEASE_SCORES' => $releaseScores,
+            'OPEN_FOR_STUDENTS' => $openForStudents,
             'FOOTER' => $this->render_footer()
         ];
     }

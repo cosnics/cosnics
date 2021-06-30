@@ -67,7 +67,7 @@ class ConfigurerComponent extends Manager implements DelegateComponent
         /** @var EvaluationConfiguration $configuration */
         $configuration = $treeNode->getConfiguration(new EvaluationConfiguration());
         $configuration->setEntityType($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_ENTITY_TYPE]);
-        $configuration->setReleaseScores($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_RELEASE_SCORES] == 1);
+        $configuration->setOpenForStudents($exportValues[ConfigurationFormBuilder::FORM_PROPERTY_OPEN_FOR_STUDENTS] == 1);
 
         $treeNode->setConfiguration($configuration);
 

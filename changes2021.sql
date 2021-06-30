@@ -20,7 +20,7 @@ CREATE TABLE `weblcms_evaluation_publication` (
   `id` int(10) UNSIGNED NOT NULL,
   `publication_id` int(10) UNSIGNED NOT NULL,
   `entity_type` int(3) UNSIGNED NOT NULL,
-  `release_scores` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
+  `open_for_students` tinyint(1) UNSIGNED NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `weblcms_evaluation_publication`

@@ -24,18 +24,18 @@ class EvaluationConfiguration implements TreeNodeConfigurationInterface
      *
      * @Type("bool")
      */
-    protected $releaseScores = false;
+    protected $openForStudents = false;
 
     /**
      * EvaluationConfiguration constructor.
      *
      * @param int $entityType
-     * @param bool $releaseScores
+     * @param bool $openForStudents
      */
-    public function __construct(int $entityType = 0, bool $releaseScores = false)
+    public function __construct(int $entityType = 0, bool $openForStudents = false)
     {
         $this->entityType = $entityType;
-        $this->releaseScores = $releaseScores;
+        $this->openForStudents = $openForStudents;
     }
 
     /**
@@ -57,16 +57,16 @@ class EvaluationConfiguration implements TreeNodeConfigurationInterface
     /**
      * @return bool
      */
-    public function getReleaseScores(): bool
+    public function getOpenForStudents(): bool
     {
-        return $this->releaseScores;
+        return $this->openForStudents;
     }
 
     /**
-     * @param bool $releaseScores
+     * @param bool $openForStudents
      */
-    public function setReleaseScores(bool $releaseScores): void
+    public function setOpenForStudents(bool $openForStudents): void
     {
-        $this->releaseScores = $releaseScores;
+        $this->openForStudents = $openForStudents;
     }
 }

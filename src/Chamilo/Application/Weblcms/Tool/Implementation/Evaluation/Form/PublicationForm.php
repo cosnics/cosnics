@@ -134,8 +134,8 @@ class PublicationForm extends ContentObjectPublicationForm
         );
 
         $this->addElement(
-            'checkbox', Publication::PROPERTY_RELEASE_SCORES,
-            $this->translator->trans('ReleaseScores', [], Manager::context())
+            'checkbox', Publication::PROPERTY_OPEN_FOR_STUDENTS,
+            $this->translator->trans('OpenForStudents', [], Manager::context())
         );
 
     }
@@ -186,7 +186,7 @@ class PublicationForm extends ContentObjectPublicationForm
         $publication = new Publication();
         $publication->setPublicationId($contentObjectPublication->getId());
         $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
-        $publication->setReleaseScores($exportValues[Publication::PROPERTY_RELEASE_SCORES] == 1);
+        $publication->setOpenForStudents($exportValues[Publication::PROPERTY_OPEN_FOR_STUDENTS] == 1);
 
         return $publication->create();
     }
@@ -207,7 +207,7 @@ class PublicationForm extends ContentObjectPublicationForm
                 $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
             $publication->setEntityType($exportValues[Publication::PROPERTY_ENTITY_TYPE]);
-            $publication->setReleaseScores($exportValues[Publication::PROPERTY_RELEASE_SCORES] == 1);
+            $publication->setOpenForStudents($exportValues[Publication::PROPERTY_OPEN_FOR_STUDENTS] == 1);
 
             return $publication->update();
         }
@@ -226,6 +226,6 @@ class PublicationForm extends ContentObjectPublicationForm
             $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
 
         $this->setDefaults([Publication::PROPERTY_ENTITY_TYPE => $publication->getEntityType()]);
-        $this->setDefaults([Publication::PROPERTY_RELEASE_SCORES => $publication->getReleaseScores()]);
+        $this->setDefaults([Publication::PROPERTY_OPEN_FOR_STUDENTS => $publication->getOpenForStudents()]);
     }
 }
