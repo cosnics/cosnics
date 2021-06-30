@@ -12,6 +12,9 @@
     .u-flex {
         display: flex;
     }
+    .u-flex-column {
+        flex-direction: column;
+    }
     .u-align-items-start {
         align-items: flex-start;
     }
@@ -296,7 +299,7 @@
             <input id="import-title" class="form-control" :class="{'input_warning': titleExists}" autocomplete="off" name="title" type="text" v-model="title" />
         </div>
         <div>{{ 'ImportResultsOverview'|trans({}, appContext)|raw }} <span v-if="hasInvalidResults">{{ 'ImportOnlyValidResults'|trans({}, appContext) }}</span></div>
-        <div class="u-flex u-gap-small-2x">
+        <div class="u-flex" :class="selectableFields.length > 2 ? 'u-flex-column' : 'u-gap-small-2x'">
             <div v-for="(field, col_index) in fields" v-if="col_index > 2">
                 <input type="radio" name="col_select" :id="'col_select_' + col_index" :checked="selected_col === col_index" @change="selectCol(col_index)" />
                 <label :for="'col_select_' + col_index">${field.label}</label>
@@ -392,6 +395,9 @@
                 },
                 showAll() {
                     return this.tab === 'all';
+                },
+                selectableFields() {
+                    return this.fields.slice(3);
                 },
                 validResultRows() {
                     return this.results.filter(function (v) { return v.valid; });
