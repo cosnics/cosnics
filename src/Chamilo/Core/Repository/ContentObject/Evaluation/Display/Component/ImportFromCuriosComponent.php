@@ -35,7 +35,8 @@ class ImportFromCuriosComponent extends Manager
      */
     protected function checkAccessRights()
     {
-        if (!$this->getEvaluationServiceBridge()->canEditEvaluation()) {
+        if (!$this->getEvaluationServiceBridge()->canEditEvaluation() || $this->getEvaluationServiceBridge()->getCurrentEntityType() !== 0)
+        {
             throw new NotAllowedException();
         }
     }

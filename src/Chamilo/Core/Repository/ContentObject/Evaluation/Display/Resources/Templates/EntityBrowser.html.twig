@@ -61,6 +61,10 @@
     td.table-lastname {
         text-transform: uppercase;
     }
+    th.table-fb-count {
+        width: 1px;
+        white-space: nowrap;
+    }
     td.table-fb-count {
         text-align: center;
     }
@@ -158,7 +162,7 @@
         padding: 2px 5px;
     }
     .table.mod-evaluation {
-        width: initial;
+        /*width: initial;*/
         border-top-color: #ebebeb;
     }
 
@@ -358,9 +362,9 @@
         color: #507177;
     }
 
-    .table.mod-evaluation {
+    /*.table.mod-evaluation {
         width: initial;
-    }
+    }*/
 
     .table.mod-evaluation thead {
         background-color: #f8fbfb;
@@ -470,8 +474,8 @@
                         </div>
                     </div>
                     <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
-                    <div>
-                        <a class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'Import'|trans({}, appContext) }}</a>
+                    <div style="margin-left: auto">
+                        <a v-if="entityType === 0" class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'ImportFromCurios'|trans({}, appContext) }}</a>
                         <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
                     </div>
                 </div>
@@ -592,7 +596,7 @@
 
         var entityTypeFields = [
             // 0
-            [   { key: 'fullname', sortable: false, thClass: 'tbl-no-sort col-fit'},
+            [   { key: 'fullname', sortable: false, thClass: 'tbl-no-sort'},
                 { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
                 { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
                 { key: 'score', sortable: true, variant: 'score' },

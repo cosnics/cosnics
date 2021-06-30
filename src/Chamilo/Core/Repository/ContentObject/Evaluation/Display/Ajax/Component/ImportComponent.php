@@ -18,7 +18,7 @@ class ImportComponent extends Manager
     {
         try
         {
-            if (!$this->getRequest()->isMethod('POST'))
+            if (!$this->getRequest()->isMethod('POST') || $this->getEvaluationServiceBridge()->getCurrentEntityType() !== 0)
             {
                 throw new NotAllowedException();
             }
