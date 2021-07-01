@@ -42,10 +42,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $this->ensureEntityIdentifier();
         $this->getRubricBridge()->setConfirmRubricScore($this);
         $this->evaluationEntry = $this->ensureEvaluationEntry();
-        if (!$this->evaluationEntry )
-        {
-            throw new NotAllowedException();
-        }
+
         $this->checkAccessRights();
 
         $this->getFeedbackRightsServiceBridge()->setEvaluationEntry($this->evaluationEntry);
@@ -97,15 +94,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $entityType = $this->getEntityType();
         $entityId = $this->getEntityIdentifier();
         $evaluation = $this->get_root_content_object();
-
-        if ($this->getRightsService()->canUserEditEvaluation())
-        {
-            return $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
-        }
-        else
-        {
-            return $this->getEvaluationEntryService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
-        }
+        return $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
     }
 
     /**

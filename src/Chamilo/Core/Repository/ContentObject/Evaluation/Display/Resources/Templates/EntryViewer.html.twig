@@ -339,22 +339,24 @@
         color: #507177;
     }
 </style>
-{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS %}
-    <div id="title-student" class="u-flex u-align-items-baseline">
+{% if not CAN_EDIT_EVALUATION %}
+    {% if OPEN_FOR_STUDENTS %}
+        <div id="title-student" class="u-flex u-align-items-baseline">
+            <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
+            {% if PRESENCE_STATUS == 'present' %}<span class="badge score-badge score-success" style="margin-left:10px;min-width:37px;transform:translateY(-1px)">{{ SCORE|raw }}</span>{% endif %}
+            {% if PRESENCE_STATUS == 'absent' %}<span style="background-color: #437f7e;color: #fff;padding: 0 5px;transform: translateY(-1px);border-radius: 4px;margin-left: 10px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
+        </div>
+        {% if PRESENCE_STATUS == 'neutral' %}
+            <div class="alert alert-info mod-neutral">
+                {{ 'NoScoreAvailableYet'|trans({}, appContext) }}
+            </div>
+        {% endif %}
+    {% else %}
         <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
-        {% if PRESENCE_STATUS == 'present' %}<span class="badge score-badge score-success" style="margin-left:10px;min-width:37px;transform:translateY(-1px)">{{ SCORE|raw }}</span>{% endif %}
-        {% if PRESENCE_STATUS == 'absent' %}<span style="background-color: #437f7e;color: #fff;padding: 0 5px;transform: translateY(-1px);border-radius: 4px;margin-left: 10px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
-    </div>
-    {% if PRESENCE_STATUS == 'neutral' %}
-        <div class="alert alert-info mod-neutral">
-            {{ 'NoScoreAvailableYet'|trans({}, appContext) }}
+        <div class="alert alert-warning mod-neutral">
+            {{ 'EvaluationNotReleased'|trans({}, appContext) }}
         </div>
     {% endif %}
-{% elseif not CAN_EDIT_EVALUATION %}
-    <h3 id="page-title" title="{{ EVALUATION_TITLE|raw }}">{{ EVALUATION_TITLE|raw }}</h3>
-    <div class="alert alert-warning mod-neutral">
-        {{ 'EvaluationNotReleased'|trans({}, appContext) }}
-    </div>
 {% endif %}
 <div class="col-xs-12">
     {% set entityTypes = ['UserEntity', 'CourseGroupEntity', 'PlatformGroupEntity'] %}
