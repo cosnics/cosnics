@@ -62,4 +62,17 @@ class PublicationRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->deletes(Publication::class, $condition);
     }
+
+    /**
+     * @param Publication $publication
+     * @param bool $openForStudents
+     * @return Publication
+     * @throws \Exception
+     */
+    public function setPublicationOpenForStudents(Publication $publication, bool $openForStudents): Publication
+    {
+        $publication->setOpenForStudents($openForStudents);
+        $publication->update();
+        return $publication;
+    }
 }

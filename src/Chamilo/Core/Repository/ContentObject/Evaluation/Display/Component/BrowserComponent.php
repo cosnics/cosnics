@@ -103,6 +103,7 @@ class BrowserComponent extends Manager
             'CAN_BUILD_RUBRIC' => $canBuildRubric,
             'RUBRIC_PREVIEW' => $rubricPreview,
             'ENTITY_TYPE' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
+            'OPEN_FOR_STUDENTS' => $this->getEvaluationServiceBridge()->getOpenForStudents(),
             'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
             'CONTEXT_ID' => $contextIdentifier->getContextId(),
             'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
@@ -140,6 +141,12 @@ class BrowserComponent extends Manager
             'ENTITY_BASE_URL' => $this->get_url(
                 [
                     'evaluation_display_action' => 'Entry'
+                ]
+            ),
+            'SAVE_OPEN_FOR_STUDENTS_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_OPEN_FOR_STUDENTS
                 ]
             )
         ];

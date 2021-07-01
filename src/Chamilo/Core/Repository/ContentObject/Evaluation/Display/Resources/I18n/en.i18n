@@ -93,3 +93,5 @@ DuplicateResultException = "<b>Line {LINE}</b>: Duplicate result found for stude
 NoValueException = "<b>Line {LINE}</b>: No value given for field <b>{FIELD}</b>"
 InvalidValueException = "<b>Line {LINE}</b>: Non-{TYPE} value <b>{VALUE}</b> given for field <b>{FIELD}</b>"
 NoValidResultsException = "The uploaded file doesn't contain any results that can be imported."
+OpenForStudents = "Open for students"
+ClosedForStudents = "Closed for students"

@@ -8,12 +8,11 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationE
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathEvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Domain\EvaluationConfiguration;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Core\Repository\ContentObject\LearningPath\Service\TreeNodeDataService;
 
 /**
  * Class EvaluationServiceBridge
@@ -30,6 +29,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      * @var LearningPathEvaluationServiceBridgeInterface
      */
     protected $learningPathEvaluationServiceBridge;
+
+    /**
+     * @var TreeNodeDataService
+     */
+    protected $treeNodeDataService;
 
     /**
      * @var TreeNode
@@ -51,11 +55,13 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
      *
      * @param LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge
      * @param EvaluationEntryService $evaluationEntryService
+     * @param TreeNodeDataService $treeNodeDataService
      */
-    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EvaluationEntryService $evaluationEntryService)
+    public function __construct(LearningPathEvaluationServiceBridgeInterface $learningPathEvaluationServiceBridge, EvaluationEntryService $evaluationEntryService, TreeNodeDataService $treeNodeDataService)
     {
         $this->learningPathEvaluationServiceBridge = $learningPathEvaluationServiceBridge;
         $this->evaluationEntryService = $evaluationEntryService;
+        $this->treeNodeDataService = $treeNodeDataService;
     }
 
     /**
@@ -122,6 +128,16 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     public function getOpenForStudents(): bool
     {
         return $this->treeNodeConfiguration->getOpenForStudents();
+    }
+
+    /**
+     * @param bool $openForStudents
+     */
+    public function setOpenForStudents(bool $openForStudents)
+    {
+        $this->treeNodeConfiguration->setOpenForStudents($openForStudents);
+        $this->treeNode->setConfiguration($this->treeNodeConfiguration);
+        $this->treeNodeDataService->storeConfigurationForTreeNode($this->treeNode);
     }
 
     /**

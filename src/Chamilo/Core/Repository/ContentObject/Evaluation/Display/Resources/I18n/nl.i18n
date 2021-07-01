@@ -91,3 +91,5 @@ DuplicateResultException = "<b>Regel {LINE}</b>: Dubbel resultaat gevonden voor 
 NoValueException = "<b>Regel {LINE}</b>: Geen waarde opgegeven voor het veld <b>{FIELD}</b>"
 InvalidValueException = "<b>Regel {LINE}</b>: Niet-{TYPE} waarde <b>{VALUE}</b> opgegeven voor het veld <b>{FIELD}</b>"
 NoValidResultsException = "Het opgeladen bestand bevat geen resultaten die kunnen geïmporteerd worden."
+OpenForStudents = "Open voor studenten"
+ClosedForStudents = "Gesloten voor studenten"

@@ -6,8 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication as EvaluationPublication;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntry;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryScore;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
@@ -31,6 +30,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     protected $evaluationEntryService;
 
     /**
+     * @var PublicationRepository
+     */
+    protected $publicationRepository;
+
+    /**
      * @var ContentObjectPublication
      */
     protected $contentObjectPublication;
@@ -49,10 +53,11 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
      * @param PublicationEntityServiceManager $publicationEntityServiceManager
      * @param EvaluationEntryService $evaluationEntryService
      */
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntryService $evaluationEntryService)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, EvaluationEntryService $evaluationEntryService, PublicationRepository $publicationRepository)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->evaluationEntryService = $evaluationEntryService;
+        $this->publicationRepository = $publicationRepository;
     }
 
     /**
@@ -119,6 +124,15 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     public function getOpenForStudents(): bool
     {
         return $this->evaluationPublication->getOpenForStudents();
+    }
+
+    /**
+     * @param bool $openForStudents
+     * @throws \Exception
+     */
+    public function setOpenForStudents(bool $openForStudents)
+    {
+        $this->publicationRepository->setPublicationOpenForStudents($this->evaluationPublication, $openForStudents);
     }
 
     /**

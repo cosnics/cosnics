@@ -335,7 +335,7 @@
         border-radius: 4px;
         border-top-color: #f0f0f0;
         display: flex;
-        margin: 15px 0 5px 8px;
+        /*margin: 15px 0 5px 8px;*/
         max-width: fit-content;
         padding: 0 2px;
     }
@@ -405,7 +405,7 @@
     }
     .group-members {
         background-color: white;
-        box-shadow: 0px 1px 3px hsl(0deg 0% 60%);
+        box-shadow: 0px 1px 3px hsl(0, 0%, 60%);
         left: 3px;
         list-style: none;
         margin-bottom: 0;
@@ -436,17 +436,82 @@
     .group-members-show:hover {
         text-decoration: none;
     }
+
+    .onoffswitch {
+        position: relative;
+        width: 186px;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        border: 1px solid hsla(170, 30%, 65%, 1)!important;
+        border-radius: 3px;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 0;
+        overflow: hidden;
+    }
+
+    .onoffswitch-inner {
+        display: block;
+        margin-left: -100%;
+        transition: margin .2s ease-in 0s;
+        width: 200%;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+
+    .onoffswitch-inner-before, .onoffswitch-inner-after {
+        box-sizing: border-box;
+        color: #fff;
+        display: block;
+        float: left;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        height: 20px;
+        line-height: 18px;
+        padding: 0;
+        width: 50%;
+    }
+
+    .onoffswitch-inner-before {
+        background-color: hsla(130, 65%, 95%, 1)!important;
+        color: hsla(170, 97%, 25%, 1)!important;
+        padding-left: 5px;
+    }
+
+    .onoffswitch-inner-after {
+        background-color: #fff;
+        color: #919191;
+        padding-left: 18px;
+        /*text-align: right;*/
+    }
+
+    .onoffswitch-switch {
+        background: #ffffff;
+        border: 1px solid hsla(170, 30%, 65%, 1)!important;
+        border-radius: 3px;
+        bottom: 0;
+        display: block;
+        margin: 0;
+        position: absolute;
+        right: calc(100% - 12px);
+        top: 0;
+        transition: all .2s ease-in 0s;
+        width: 12px;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0;
+    }
 </style>
 
 {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
-
-<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
-
-<ul class="nav nav-buttons" role="tablist">
-    <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ entityTypesPlural[ENTITY_TYPE]|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
-    <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
-</ul>
 {% set Present = 'Present'|trans({}, appContext) %}
 {% set Absent = 'Absent'|trans({}, appContext) %}
 {% set MarkedAsAbsent = 'MarkedAsAbsent'|trans({}, appContext) %}
@@ -455,142 +520,164 @@
 {% set NoScoreAvailable = 'NoScoreAvailableYet'|trans({}, appContext) %}
 {% set HasRubricEntry = 'HasRubricEntry'|trans({}, appContext) %}
 {% set HasNoRubricEntry = 'HasNoRubricEntry'|trans({}, appContext) %}
-<div class="dynamic-visual-tab-content tab-content">
-    <div role="tabpanel" class="tab-pane mod-pad active" id="entities">
-        <div class="u-flex u-gap-large">
-            <div @click="membersEntity = null">
-                <div class="controls mod-mb u-flex u-align-items-center">
-                    <div class="btn-toolbar btn-action-toolbar mod-mb">
-                        <div class="form-inline u-flex u-justify-content-start mod-entity-search">
-                            <div class="action-bar input-group">
-                                <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                                              type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
-                                <div class="input-group-btn">
-                                    <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                    </button>
+
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
+
+<div id="main-content">
+    <div class="u-flex" style="gap: 15px;align-items: center;margin: 15px 0 5px 8px;">
+        <ul class="nav nav-buttons" role="tablist">
+            <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ entityTypesPlural[ENTITY_TYPE]|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+        </ul>
+        <div class="onoffswitch">
+            <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch">
+            <label class="onoffswitch-label" for="onoffswitch">
+                <span class="onoffswitch-inner">
+                    <span class="onoffswitch-inner-before">{{ 'OpenForStudents'|trans({}, appContext) }}</span>
+                    <span class="onoffswitch-inner-after">{{ 'ClosedForStudents'|trans({}, appContext) }}</span>
+                </span>
+                <span class="onoffswitch-switch"></span>
+            </label>
+        </div>
+    </div>
+    <div class="dynamic-visual-tab-content tab-content">
+        <div role="tabpanel" class="tab-pane mod-pad active" id="entities">
+            <div class="u-flex u-gap-large">
+                <div @click="membersEntity = null">
+                    <div class="controls mod-mb u-flex u-align-items-center">
+                        <div class="btn-toolbar btn-action-toolbar mod-mb">
+                            <div class="form-inline u-flex u-justify-content-start mod-entity-search">
+                                <div class="action-bar input-group">
+                                    <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                                  type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
+                                    <div class="input-group-btn">
+                                        <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                        <div style="margin-left: auto">
+                            <a v-if="entityType === 0" class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'ImportFromCurios'|trans({}, appContext) }}</a>
+                            <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
+                        </div>
                     </div>
-                    <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
-                    <div style="margin-left: auto">
-                        <a v-if="entityType === 0" class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'ImportFromCurios'|trans({}, appContext) }}</a>
-                        <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
+                    <div style="position: relative">
+                        <b-table ref="table" bordered
+                                 :items="entitiesProvider"
+                                 :fields="filteredFields"
+                                 :sort-by.sync="sortBy"
+                                 :sort-desc.sync="sortDesc"
+                                 :filter="globalSearchQuery"
+                                 :per-page="pagination.perPage"
+                                 :current-page="pagination.currentPage"
+                                 class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
+                            <template #head(fullname)="data">
+                                <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
+                                <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                            </template>
+                            <template #head(name)="data">
+                                {{ 'Name'|trans({}, 'Chamilo\\Core\\User') }}
+                            </template>
+                            <template #cell(fullname)="data">
+                                <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                            </template>
+                            <template #cell(name)="data">
+                                <a :href="getUrl(data.item.id)">${data.item.name}</a>
+                            </template>
+                            <template #head(members)="data">
+                                {{ 'Members'|trans({}, appContext) }}
+                            </template>
+                            <template #cell(members)="data">
+                                <ul v-if="membersEntity === data.item" class="group-members" @click.stop="">
+                                    <li class="group-members-close" @click.stop="membersEntity = null"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{{ 'HideMembers'|trans({}, appContext) }}</span></li>
+                                    <li v-for="member in sortedMembers(data.item)">${ member.lastname.toUpperCase() }, ${ member.firstname }</li>
+                                </ul>
+                                <a v-else @click.stop="membersEntity = data.item" class="group-members-show">{{ 'ShowMembers'|trans({}, appContext) }}</a>
+                            </template>
+                            <template #cell(score)="data">
+                                <div class="u-flex u-align-items-center">
+                                    <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
+                                    <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score u-no-spin" :data-item-index="data.index" :value="data.item.score" type="number" required min="0" debounce="750" @update="onScoreUpdated(data.item, $event, data.index)" @keydown.enter.prevent="focusFollowingScore(data.index, true)" @keydown.down.prevent="focusFollowingScore(data.index, true)" @keydown.up.prevent="focusFollowingScore(data.index, false)"></b-form-input>
+                                    <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
+                                        <span aria-hidden="true" class="presence-status-icon" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                                    </button>
+                                </div>
+                            </template>
+                            <template #cell(rubric)="data">
+                                <span v-if="data.item.rubric === '1'" class="fa fa-check" aria-hidden="true"></span><span class="sr-only">${ data.item.rubric === '1' ? '{{ HasRubricEntry }}' : '{{ HasNoRubricEntry }}' }</span>
+                            </template>
+                            <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
+                            </template>
+                        </b-table>
+                        <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                    <div class="pagination-container u-flex u-justify-content-end">
+                        <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                      aria-controls="data-table"></b-pagination>
+                        <ul class="pagination">
+                            <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} ${ pagination.total }</a></li>
+                        </ul>
                     </div>
                 </div>
-                <div style="position: relative">
-                    <b-table ref="table" bordered
-                             :items="entitiesProvider"
-                             :fields="filteredFields"
-                             :sort-by.sync="sortBy"
-                             :sort-desc.sync="sortDesc"
-                             :filter="globalSearchQuery"
-                             :per-page="pagination.perPage"
-                             :current-page="pagination.currentPage"
-                             class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
-                        <template #head(fullname)="data">
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
-                        </template>
-                        <template #head(name)="data">
-                            {{ 'Name'|trans({}, 'Chamilo\\Core\\User') }}
-                        </template>
-                        <template #cell(fullname)="data">
-                            <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
-                        </template>
-                        <template #cell(name)="data">
-                            <a :href="getUrl(data.item.id)">${data.item.name}</a>
-                        </template>
-                        <template #head(members)="data">
-                            {{ 'Members'|trans({}, appContext) }}
-                        </template>
-                        <template #cell(members)="data">
-                            <ul v-if="membersEntity === data.item" class="group-members" @click.stop="">
-                                <li class="group-members-close" @click.stop="membersEntity = null"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{{ 'HideMembers'|trans({}, appContext) }}</span></li>
-                                <li v-for="member in sortedMembers(data.item)">${ member.lastname.toUpperCase() }, ${ member.firstname }</li>
-                            </ul>
-                            <a v-else @click.stop="membersEntity = data.item" class="group-members-show">{{ 'ShowMembers'|trans({}, appContext) }}</a>
-                        </template>
-                        <template #cell(score)="data">
-                            <div class="u-flex u-align-items-center">
-                                <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
-                                <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score u-no-spin" :data-item-index="data.index" :value="data.item.score" type="number" required min="0" debounce="750" @update="onScoreUpdated(data.item, $event, data.index)" @keydown.enter.prevent="focusFollowingScore(data.index, true)" @keydown.down.prevent="focusFollowingScore(data.index, true)" @keydown.up.prevent="focusFollowingScore(data.index, false)"></b-form-input>
-                                <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
-                                    <span aria-hidden="true" class="presence-status-icon" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
-                                </button>
-                            </div>
-                        </template>
-                        <template #cell(rubric)="data">
-                            <span v-if="data.item.rubric === '1'" class="fa fa-check" aria-hidden="true"></span><span class="sr-only">${ data.item.rubric === '1' ? '{{ HasRubricEntry }}' : '{{ HasNoRubricEntry }}' }</span>
-                        </template>
-                        <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
-                        </template>
-                    </b-table>
+                <div v-if="isFeedbackLoading" class="panel panel-default panel-feedback u-flex-grow-1">
                     <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div class="pagination-container u-flex u-justify-content-end">
-                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                                  aria-controls="data-table"></b-pagination>
-                    <ul class="pagination">
-                        <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} ${ pagination.total }</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div v-if="isFeedbackLoading" class="panel panel-default panel-feedback u-flex-grow-1">
-                <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
-            </div>
-            <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
-                <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
-                <div class="list-group">
-                    <div v-for="item in feedback" :key="item.id" class="list-group-item">
-                        <div class="u-flex">
-                            <img class="panel-feedback-profile" :src="item.photo" />
-                            <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
-                                <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>
-                            </h4>
+                <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
+                    <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
+                    <div class="list-group">
+                        <div v-for="item in feedback" :key="item.id" class="list-group-item">
+                            <div class="u-flex">
+                                <img class="panel-feedback-profile" :src="item.photo" />
+                                <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
+                                    <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>
+                                </h4>
+                            </div>
+                            <div class="list-group-item-text feedback-content" v-html="item.content"></div>
                         </div>
-                        <div class="list-group-item-text feedback-content" v-html="item.content"></div>
-                    </div>
-                    <div class="feedback-new u-flex">
-                        <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
-                        <div class="u-flex-1">
-                            <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
-                            <textarea class="feedback-new-input form-control" name="comment" v-model="newFeedback"></textarea>
-                            <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
-                            <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
+                        <div class="feedback-new u-flex">
+                            <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
+                            <div class="u-flex-1">
+                                <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
+                                <textarea class="feedback-new-input form-control" name="comment" v-model="newFeedback"></textarea>
+                                <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
+                                <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div role="tabpanel" class="tab-pane mod-pad" id="properties">
-        <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
-        {{ CONTENT_OBJECT_RENDITION|raw }}
-    </div>
-    {% if SUPPORTS_RUBRICS %}
-    <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
-        {% if HAS_RUBRIC %}
-            {% if CAN_BUILD_RUBRIC %}
-            <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
-            <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents"">
-                <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
-            </form>
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+            <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
+            {{ CONTENT_OBJECT_RENDITION|raw }}
+        </div>
+        {% if SUPPORTS_RUBRICS %}
+        <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
+            {% if HAS_RUBRIC %}
+                {% if CAN_BUILD_RUBRIC %}
+                <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+                <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents">
+                    <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
+                </form>
+                {% else %}
+                <div class="alert alert-warning">
+                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+                </div>
+                {% endif %}
+                <div class="clearfix"></div>
+                <div>{{ RUBRIC_PREVIEW|raw }}</div>
             {% else %}
-            <div class="alert alert-warning">
-                {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
-            </div>
+                <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
+                <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
             {% endif %}
-            <div class="clearfix"></div>
-            <div>{{ RUBRIC_PREVIEW|raw }}</div>
-        {% else %}
-            <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
-            <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
+        </div>
         {% endif %}
     </div>
-    {% endif %}
-</div>
+</div>d
 <script>
     $('document').ready(function () {
 
@@ -624,11 +711,12 @@
         ];
 
         new Vue({
-            el: '#entities',
+            el: '#main-content',
             delimiters: ['${', '}'],
             data: {
                 entityType: {{ ENTITY_TYPE }},
                 context: '',
+                openForStudents: {% if OPEN_FOR_STUDENTS %}true{% else %}false{% endif %},
                 fields: entityTypeFields[{{ ENTITY_TYPE }}],
                 sortBy: defaultSort[{{ ENTITY_TYPE }}],
                 sortDesc: false,
@@ -755,6 +843,24 @@
                                 this.feedback.push(data.properties.feedback);
                             }
                             this.$refs.table.refresh();
+                        }
+                    }.bind(this)).fail(this.checkResponse);
+                },
+                toggleOpenForStudents(isOpen) {
+                    $.ajax({
+                        url: '{{ SAVE_OPEN_FOR_STUDENTS_URL|raw }}',
+                        method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: {
+                            open_for_students: !isOpen
+                        }
+                    }).done(function(data) {
+                        if (data.result_code !== 200) {
+                            console.log(data);
+                            this.open_for_students = !this.open_for_students;
                         }
                     }.bind(this)).fail(this.checkResponse);
                 },

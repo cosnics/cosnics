@@ -35,6 +35,7 @@ abstract class Manager extends AjaxManager
     const ACTION_CREATE_FEEDBACK = 'SaveNewFeedback';
     const ACTION_PROCESS_CURIOS_CSV = 'ProcessCuriosCSV';
     const ACTION_IMPORT = 'Import';
+    const ACTION_SAVE_OPEN_FOR_STUDENTS = 'SaveOpenForStudents';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
