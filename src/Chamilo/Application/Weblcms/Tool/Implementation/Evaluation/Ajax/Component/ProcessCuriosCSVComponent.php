@@ -9,13 +9,14 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class ProcessCuriosCSVComponent extends Manager
+class ProcessCuriosCSVComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

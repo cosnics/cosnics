@@ -365,6 +365,8 @@
 </div>
 <script>
     $(document).ready(function () {
+        var csrf_token = '{{ csrf_token('ComponentToken') }}';
+
         new Vue({
             el: '#curios-import',
             delimiters: ['${', '}'],
@@ -428,6 +430,7 @@
                 uploadCSV() {
                     var file_data = $('#file').prop('files')[0];
                     var form_data = new FormData();
+                    form_data.append('_csrf_token', csrf_token);
                     form_data.append('file', file_data);
 
                     $.ajax({
@@ -469,6 +472,7 @@
                     if (this.needsTitle && !this.title) { return; } // todo: display error
 
                     var data = {};
+                    data['_csrf_token'] = csrf_token;
                     var key = this.fields[this.selected_col].key;
                     data.results = this.validResultRows.map(function(v) {
                         return {'id': v['user_id'], 'score': v[key]};
@@ -491,7 +495,9 @@
                             this.evaluationUrl = this.evaluationUrl.replace('__PUBLICATION_ID__', data.properties.publicationId);
                         }
                         this.imported = true;
-                    }.bind(this)).fail(function() {});
+                    }.bind(this)).fail(function (jqXHR) {
+                        this.handleError('Error');
+                    }.bind(this));
                 }
             }
         });

@@ -6,13 +6,14 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportResultsFromCuriosService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class ImportComponent extends Manager
+class ImportComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

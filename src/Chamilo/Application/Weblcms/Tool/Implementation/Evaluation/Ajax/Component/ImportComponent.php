@@ -10,6 +10,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 
 /**
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class ImportComponent extends Manager
+class ImportComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

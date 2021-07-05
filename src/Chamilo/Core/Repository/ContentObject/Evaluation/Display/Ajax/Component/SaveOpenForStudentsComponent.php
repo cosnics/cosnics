@@ -5,13 +5,14 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Componen
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class SaveOpenForStudentsComponent extends Manager
+class SaveOpenForStudentsComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

@@ -11,13 +11,14 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class ProcessCuriosCSVComponent extends Manager
+class ProcessCuriosCSVComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

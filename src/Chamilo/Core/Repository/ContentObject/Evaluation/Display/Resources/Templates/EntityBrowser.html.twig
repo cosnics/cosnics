@@ -703,6 +703,7 @@
 </div>
 <script>
     $('document').ready(function () {
+        var csrf_token = '{{ csrf_token('ComponentToken') }}';
 
         var entityTypeFields = [
             // 0
@@ -845,6 +846,12 @@
                     }
                 },
                 createFeedback() {
+                    var formData = new FormData();
+                    formData.append('_csrf_token', csrf_token);
+                    formData.append('entity_id', this.feedbackEntity.id);
+                    formData.append('comment', this.newFeedback);
+                    formData.append('is_private', this.isFeedbackPrivate);
+
                     $.ajax({
                         url: '{{ SAVE_NEW_FEEDBACK_URL|raw }}',
                         method: 'post',
@@ -852,11 +859,9 @@
                         accepts: {
                             json: 'application/json'
                         },
-                        data: {
-                            entity_id: this.feedbackEntity.id,
-                            comment: this.newFeedback,
-                            is_private: this.isFeedbackPrivate
-                        }
+                        data: formData,
+                        processData: false,
+                        contentType: false
                     }).done(function(data) {
                         this.newFeedback = '';
                         this.isFeedbackPrivate = false;
@@ -874,6 +879,12 @@
                         el[0].reportValidity();
                         return;
                     }
+
+                    var formData = new FormData();
+                    formData.append('_csrf_token', csrf_token);
+                    formData.append('entity_id', entity.id);
+                    formData.append('score', score);
+
                     $.ajax({
                         url: '{{ SAVE_SCORE_URL|raw }}',
                         method: 'post',
@@ -881,16 +892,20 @@
                         accepts: {
                             json: 'application/json'
                         },
-                        data: {
-                            entity_id: entity.id,
-                            score: score
-                        }
+                        data: formData,
+                        processData: false,
+                        contentType: false
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
                         entity.score = data.properties.score;
                     }).fail(this.checkResponse);
                 },
                 onPresenceStatusUpdated(entity) {
+                    var formData = new FormData();
+                    formData.append('_csrf_token', csrf_token);
+                    formData.append('entity_id', entity.id);
+                    formData.append('presence_status', entity.presence_status === 'absent');
+
                     $.ajax({
                         url: '{{ SAVE_PRESENCE_STATUS_URL|raw }}',
                         method: 'post',
@@ -898,10 +913,9 @@
                         accepts: {
                             json: 'application/json'
                         },
-                        data: {
-                            entity_id: entity.id,
-                            presence_status: entity.presence_status === 'absent'
-                        }
+                        data: formData,
+                        processData: false,
+                        contentType: false
                     }).done(function(data) {
                         entity.presence_status = data.properties.presence_status;
                         entity.score = data.properties.score;
@@ -982,6 +996,10 @@
             },
             methods: {
                 toggleOpenForStudents(isOpen) {
+                    var formData = new FormData();
+                    formData.append('_csrf_token', csrf_token);
+                    formData.append('open_for_students', !isOpen);
+
                     $.ajax({
                         url: '{{ TOGGLE_OPEN_FOR_STUDENTS_URL|raw }}',
                         method: 'post',
@@ -989,9 +1007,9 @@
                         accepts: {
                             json: 'application/json'
                         },
-                        data: {
-                            open_for_students: !isOpen
-                        }
+                        data: formData,
+                        processData: false,
+                        contentType: false
                     }).done(function(data) {
                         if (data.result_code !== 200) {
                             console.log(data);
@@ -1007,39 +1025,44 @@
                 }
             }
         });
-    });
-    new Vue({
-        el: '#onoffswitch-self-evaluation',
-        delimiters: ['${', '}'],
-        data: {
-            selfEvaluationAllowed: {% if SELF_EVALUATION_ALLOWED %}true{% else %}false{% endif %},
-        },
-        methods: {
-            toggleSelfEvaluationAllowed(selfEvaluationAllowed) {
-                $.ajax({
-                    url: '{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL|raw }}',
-                    method: 'post',
-                    dataType: 'json',
-                    accepts: {
-                        json: 'application/json'
-                    },
-                    data: {
-                        self_evaluation_allowed: !selfEvaluationAllowed
-                    }
-                }).done(function(data) {
-                    if (data.result_code !== 200) {
-                        console.log(data);
-                        this.selfEvaluationAllowed = !this.selfEvaluationAllowed;
-                    }
-                }.bind(this)).fail(this.checkResponse);
+
+        new Vue({
+            el: '#onoffswitch-self-evaluation',
+            delimiters: ['${', '}'],
+            data: {
+                selfEvaluationAllowed: {% if SELF_EVALUATION_ALLOWED %}true{% else %}false{% endif %},
             },
-            checkResponse(jqXHR) {
-                if (jqXHR.responseText.indexOf('formLogin') !== '-1') {
-                    // todo: make visible
-                    console.log('het lijkt alsof u niet meer ingelogd bent. gelieve opnieuw aan te melden.')
+            methods: {
+                toggleSelfEvaluationAllowed(selfEvaluationAllowed) {
+                    var formData = new FormData();
+                    formData.append('_csrf_token', csrf_token);
+                    formData.append('self_evaluation_allowed', !selfEvaluationAllowed);
+
+                    $.ajax({
+                        url: '{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL|raw }}',
+                        method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    }).done(function(data) {
+                        if (data.result_code !== 200) {
+                            console.log(data);
+                            this.selfEvaluationAllowed = !this.selfEvaluationAllowed;
+                        }
+                    }.bind(this)).fail(this.checkResponse);
+                },
+                checkResponse(jqXHR) {
+                    if (jqXHR.responseText.indexOf('formLogin') !== '-1') {
+                        // todo: make visible
+                        console.log('het lijkt alsof u niet meer ingelogd bent. gelieve opnieuw aan te melden.')
+                    }
                 }
             }
-        }
+        });
     });
 </script>
 {{ FOOTER|raw }}

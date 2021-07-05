@@ -9,13 +9,14 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class SaveNewFeedbackComponent extends Manager
+class SaveNewFeedbackComponent extends Manager implements CsrfComponentInterface
 {
     public function run(): string
     {

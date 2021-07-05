@@ -4,13 +4,14 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Componen
 
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Manager;
 use Chamilo\Libraries\Architecture\JsonAjaxResult;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Evaluation\Display\Ajax\Component
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class SavePresenceStatusComponent extends Manager
+class SavePresenceStatusComponent extends Manager implements CsrfComponentInterface
 {
     public function run(): string
     {
