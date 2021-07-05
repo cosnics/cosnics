@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Platform\Security\Csrf;
 
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Platform\ChamiloRequest;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
@@ -45,7 +46,16 @@ class CsrfRequestValidator
             return;
         }
 
-        $request = $application->getRequest();
+        $this->validateRequest($application->getRequest());
+    }
+
+    /**
+     * @param ChamiloRequest $request
+     *
+     * @throws NotAllowedException
+     */
+    public function validateRequest(ChamiloRequest $request)
+    {
         $csrfTokenFromRequest = $request->getFromPostOrUrl(self::PARAM_CSRF_TOKEN);
         $tokenObject = new CsrfToken(self::COMPONENT_TOKEN_ID, $csrfTokenFromRequest);
 
@@ -54,5 +64,4 @@ class CsrfRequestValidator
             throw new NotAllowedException();
         }
     }
-
 }
