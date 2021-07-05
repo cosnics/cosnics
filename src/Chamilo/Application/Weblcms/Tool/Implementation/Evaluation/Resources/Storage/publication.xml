@@ -25,6 +25,12 @@
                 unsigned="1"
                 length="1"
                 default="0" />
+        <property
+                name="self_evaluation_allowed"
+                type="integer"
+                unsigned="1"
+                length="1"
+                default="0" />
     </properties>
     <index
             name="publication_id"

@@ -22,6 +22,9 @@
     .u-flex-grow-2 {
         flex-grow: 2;
     }
+    .u-align-items-baseline {
+        align-items: baseline;
+    }
     .u-align-items-center {
         align-items: center;
     }
@@ -439,7 +442,12 @@
 
     .onoffswitch {
         position: relative;
+    }
+    .onoffswitch.mod-open-for-students {
         width: 186px;
+    }
+    .onoffswitch.mod-self-evaluation {
+        width: 220px;
     }
 
     .onoffswitch-checkbox {
@@ -447,7 +455,7 @@
     }
 
     .onoffswitch-label {
-        border: 1px solid hsla(170, 30%, 65%, 1)!important;
+        border: 1px solid #bce1c3!important;
         border-radius: 3px;
         cursor: pointer;
         display: block;
@@ -494,7 +502,7 @@
 
     .onoffswitch-switch {
         background: #ffffff;
-        border: 1px solid hsla(170, 30%, 65%, 1)!important;
+        border: 1px solid #bce1c3!important;
         border-radius: 3px;
         bottom: 0;
         display: block;
@@ -530,9 +538,9 @@
             <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
             <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
         </ul>
-        <div class="onoffswitch">
-            <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch">
-            <label class="onoffswitch-label" for="onoffswitch">
+        <div class="onoffswitch mod-open-for-students">
+            <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch-open-for-students">
+            <label class="onoffswitch-label" for="onoffswitch-open-for-students">
                 <span class="onoffswitch-inner">
                     <span class="onoffswitch-inner-before">{{ 'OpenForStudents'|trans({}, appContext) }}</span>
                     <span class="onoffswitch-inner-after">{{ 'ClosedForStudents'|trans({}, appContext) }}</span>
@@ -658,16 +666,31 @@
         {% if SUPPORTS_RUBRICS %}
         <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
             {% if HAS_RUBRIC %}
-                {% if CAN_BUILD_RUBRIC %}
-                <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
-                <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents">
-                    <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
-                </form>
-                {% else %}
-                <div class="alert alert-warning">
+                {% if not CAN_BUILD_RUBRIC %}
+                <div class="alert alert-warning" style="margin: 0 15px 15px">
                     {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
                 </div>
                 {% endif %}
+                <div class="u-flex u-align-items-center" style="margin-left: 20px; gap: 10px">
+                    {% if CAN_BUILD_RUBRIC %}
+                    <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+                    {% endif %}
+                    <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents">
+                        <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
+                    </form>
+                    <div class="u-inline-block">
+                        <div class="onoffswitch mod-self-evaluation">
+                            <input type="checkbox" v-model="selfEvaluationAllowed" @input="toggleSelfEvaluationAllowed(selfEvaluationAllowed)" class="onoffswitch-checkbox" id="onoffswitch-self-evaluation">
+                            <label class="onoffswitch-label" for="onoffswitch-self-evaluation">
+                                <span class="onoffswitch-inner">
+                                    <span class="onoffswitch-inner-before">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</span>
+                                    <span class="onoffswitch-inner-after">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</span>
+                                </span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="clearfix"></div>
                 <div>{{ RUBRIC_PREVIEW|raw }}</div>
             {% else %}
@@ -711,12 +734,11 @@
         ];
 
         new Vue({
-            el: '#main-content',
+            el: '#entities',
             delimiters: ['${', '}'],
             data: {
                 entityType: {{ ENTITY_TYPE }},
                 context: '',
-                openForStudents: {% if OPEN_FOR_STUDENTS %}true{% else %}false{% endif %},
                 fields: entityTypeFields[{{ ENTITY_TYPE }}],
                 sortBy: defaultSort[{{ ENTITY_TYPE }}],
                 sortDesc: false,
@@ -846,24 +868,6 @@
                         }
                     }.bind(this)).fail(this.checkResponse);
                 },
-                toggleOpenForStudents(isOpen) {
-                    $.ajax({
-                        url: '{{ SAVE_OPEN_FOR_STUDENTS_URL|raw }}',
-                        method: 'post',
-                        dataType: 'json',
-                        accepts: {
-                            json: 'application/json'
-                        },
-                        data: {
-                            open_for_students: !isOpen
-                        }
-                    }).done(function(data) {
-                        if (data.result_code !== 200) {
-                            console.log(data);
-                            this.open_for_students = !this.open_for_students;
-                        }
-                    }.bind(this)).fail(this.checkResponse);
-                },
                 onScoreUpdated(entity, score, index) {
                     var el = $('.form-control.mod-score[data-item-index=' + index + ']');
                     if (el.length && !el[0].checkValidity()) {
@@ -970,6 +974,72 @@
                 }
             }
         });
+        new Vue({
+            el: '#onoffswitch-open-for-students',
+            delimiters: ['${', '}'],
+            data: {
+                openForStudents: {% if OPEN_FOR_STUDENTS %}true{% else %}false{% endif %},
+            },
+            methods: {
+                toggleOpenForStudents(isOpen) {
+                    $.ajax({
+                        url: '{{ TOGGLE_OPEN_FOR_STUDENTS_URL|raw }}',
+                        method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: {
+                            open_for_students: !isOpen
+                        }
+                    }).done(function(data) {
+                        if (data.result_code !== 200) {
+                            console.log(data);
+                            this.openForStudents = !this.openForStudents;
+                        }
+                    }.bind(this)).fail(this.checkResponse);
+                },
+                checkResponse(jqXHR) {
+                    if (jqXHR.responseText.indexOf('formLogin') !== '-1') {
+                        // todo: make visible
+                        console.log('het lijkt alsof u niet meer ingelogd bent. gelieve opnieuw aan te melden.')
+                    }
+                }
+            }
+        });
+    });
+    new Vue({
+        el: '#onoffswitch-self-evaluation',
+        delimiters: ['${', '}'],
+        data: {
+            selfEvaluationAllowed: {% if SELF_EVALUATION_ALLOWED %}true{% else %}false{% endif %},
+        },
+        methods: {
+            toggleSelfEvaluationAllowed(selfEvaluationAllowed) {
+                $.ajax({
+                    url: '{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL|raw }}',
+                    method: 'post',
+                    dataType: 'json',
+                    accepts: {
+                        json: 'application/json'
+                    },
+                    data: {
+                        self_evaluation_allowed: !selfEvaluationAllowed
+                    }
+                }).done(function(data) {
+                    if (data.result_code !== 200) {
+                        console.log(data);
+                        this.selfEvaluationAllowed = !this.selfEvaluationAllowed;
+                    }
+                }.bind(this)).fail(this.checkResponse);
+            },
+            checkResponse(jqXHR) {
+                if (jqXHR.responseText.indexOf('formLogin') !== '-1') {
+                    // todo: make visible
+                    console.log('het lijkt alsof u niet meer ingelogd bent. gelieve opnieuw aan te melden.')
+                }
+            }
+        }
     });
 </script>
 {{ FOOTER|raw }}

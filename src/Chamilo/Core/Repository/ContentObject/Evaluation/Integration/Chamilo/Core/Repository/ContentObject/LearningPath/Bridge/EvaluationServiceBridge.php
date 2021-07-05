@@ -141,6 +141,24 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     }
 
     /**
+     * @return bool
+     */
+    public function getSelfEvaluationAllowed(): bool
+    {
+        return $this->treeNodeConfiguration->getSelfEvaluationAllowed();
+    }
+
+    /**
+     * @param bool $selfEvaluationAllowed
+     */
+    public function setSelfEvaluationAllowed(bool $selfEvaluationAllowed)
+    {
+        $this->treeNodeConfiguration->setSelfEvaluationAllowed($selfEvaluationAllowed);
+        $this->treeNode->setConfiguration($this->treeNodeConfiguration);
+        $this->treeNodeDataService->storeConfigurationForTreeNode($this->treeNode);
+    }
+
+    /**
      * @return int[]
      */
     public function getTargetEntityIds(): array

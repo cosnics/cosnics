@@ -22,7 +22,7 @@ class SaveNewFeedbackComponent extends Manager
         try
         {
             $this->validateEvaluationEntityInput(); // todo: check if necessary
-            $evaluation = $this->get_root_content_object();
+            $evaluation = $this->getEvaluation();
             $newFeedback = $this->getRequest()->getFromPost('comment') ?? '';
             $isPrivate = $this->getRequest()->getFromPost('is_private') == 'true';
             $entityId = $this->getRequest()->getFromPost('entity_id');

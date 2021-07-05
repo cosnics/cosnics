@@ -27,15 +27,24 @@ class EvaluationConfiguration implements TreeNodeConfigurationInterface
     protected $openForStudents = false;
 
     /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $selfEvaluationAllowed = false;
+
+    /**
      * EvaluationConfiguration constructor.
      *
      * @param int $entityType
      * @param bool $openForStudents
+     * @param bool $selfEvaluationAllowed
      */
-    public function __construct(int $entityType = 0, bool $openForStudents = false)
+    public function __construct(int $entityType = 0, bool $openForStudents = false, bool $selfEvaluationAllowed = false)
     {
         $this->entityType = $entityType;
         $this->openForStudents = $openForStudents;
+        $this->selfEvaluationAllowed = $selfEvaluationAllowed;
     }
 
     /**
@@ -68,5 +77,21 @@ class EvaluationConfiguration implements TreeNodeConfigurationInterface
     public function setOpenForStudents(bool $openForStudents): void
     {
         $this->openForStudents = $openForStudents;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSelfEvaluationAllowed(): bool
+    {
+        return $this->selfEvaluationAllowed;
+    }
+
+    /**
+     * @param bool $selfEvaluationAllowed
+     */
+    public function setSelfEvaluationAllowed(bool $selfEvaluationAllowed): void
+    {
+        $this->selfEvaluationAllowed = $selfEvaluationAllowed;
     }
 }

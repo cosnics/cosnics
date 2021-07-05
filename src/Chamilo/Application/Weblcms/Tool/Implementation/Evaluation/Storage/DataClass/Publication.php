@@ -14,6 +14,7 @@ class Publication extends DataClass
     const PROPERTY_PUBLICATION_ID = 'publication_id';
     const PROPERTY_ENTITY_TYPE = 'entity_type';
     const PROPERTY_OPEN_FOR_STUDENTS = 'open_for_students';
+    const PROPERTY_SELF_EVALUATION_ALLOWED = 'self_evaluation_allowed';
 
     /**
      * Get the default properties
@@ -26,7 +27,8 @@ class Publication extends DataClass
             array(
                 self::PROPERTY_PUBLICATION_ID,
                 self::PROPERTY_ENTITY_TYPE,
-                self::PROPERTY_OPEN_FOR_STUDENTS
+                self::PROPERTY_OPEN_FOR_STUDENTS,
+                self::PROPERTY_SELF_EVALUATION_ALLOWED
             )
         );
     }
@@ -34,7 +36,7 @@ class Publication extends DataClass
     /**
      * @return int
      */
-    public function getPublicationId()
+    public function getPublicationId(): int
     {
         return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
     }
@@ -42,7 +44,7 @@ class Publication extends DataClass
     /**
      * @param int $publicationId
      */
-    public function setPublicationId($publicationId)
+    public function setPublicationId(int $publicationId)
     {
         $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publicationId);
     }
@@ -52,7 +54,7 @@ class Publication extends DataClass
      *
      * @param int $publicationId
      */
-    public function set_publication_id($publicationId)
+    public function set_publication_id(int $publicationId)
     {
         $this->setPublicationId($publicationId);
     }
@@ -61,7 +63,7 @@ class Publication extends DataClass
      *
      * @return int
      */
-    public function getEntityType()
+    public function getEntityType(): int
     {
         return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
     }
@@ -70,7 +72,7 @@ class Publication extends DataClass
      *
      * @param int $entityType
      */
-    public function setEntityType($entityType)
+    public function setEntityType(int $entityType)
     {
         $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
@@ -78,7 +80,7 @@ class Publication extends DataClass
     /**
      * @return bool
      */
-    public function getOpenForStudents()
+    public function getOpenForStudents(): bool
     {
         return $this->get_default_property(self::PROPERTY_OPEN_FOR_STUDENTS);
     }
@@ -89,6 +91,22 @@ class Publication extends DataClass
     public function setOpenForStudents(bool $openForStudents)
     {
         $this->set_default_property(self::PROPERTY_OPEN_FOR_STUDENTS, $openForStudents);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSelfEvaluationAllowed(): bool
+    {
+        return $this->get_default_property(self::PROPERTY_SELF_EVALUATION_ALLOWED);
+    }
+
+    /**
+     * @param bool $selfEvaluationAllowed
+     */
+    public function setSelfEvaluationAllowed(bool $selfEvaluationAllowed)
+    {
+        $this->set_default_property(self::PROPERTY_SELF_EVALUATION_ALLOWED, $selfEvaluationAllowed);
     }
 
     public static function get_table_name()

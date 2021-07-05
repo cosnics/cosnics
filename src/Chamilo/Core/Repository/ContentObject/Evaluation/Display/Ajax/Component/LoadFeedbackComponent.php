@@ -21,11 +21,7 @@ class LoadFeedbackComponent extends Manager
     {
         try
         {
-            $evaluation = $this->get_root_content_object();
-
-            if (!$evaluation instanceof Evaluation) {
-                $this->throwUserException('EvaluationNotFound');
-            }
+            $evaluation = $this->getEvaluation();
 
             $this->initializeEntry();
             $feedbackItems = $this->getFeedbackServiceBridge()->getFeedback();

@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\Eval
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\Feedback\Bridge\FeedbackServiceBridgeInterface;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\AjaxManager;
@@ -36,6 +37,7 @@ abstract class Manager extends AjaxManager
     const ACTION_PROCESS_CURIOS_CSV = 'ProcessCuriosCSV';
     const ACTION_IMPORT = 'Import';
     const ACTION_SAVE_OPEN_FOR_STUDENTS = 'SaveOpenForStudents';
+    const ACTION_SAVE_SELF_EVALUATION_ALLOWED = 'SaveSelfEvaluationAllowed';
 
     const PARAM_ACTION = 'evaluation_display_ajax_action';
 
@@ -67,6 +69,22 @@ abstract class Manager extends AjaxManager
     protected function get_root_content_object()
     {
         return $this->get_application()->get_root_content_object();
+    }
+
+    /**
+     * @return Evaluation
+     * @throws UserException
+     */
+    protected function getEvaluation(): Evaluation
+    {
+        $evaluation = $this->get_root_content_object();
+
+        if (!$evaluation instanceof Evaluation)
+        {
+            $this->throwUserException('EvaluationNotFound');
+        }
+
+        return $evaluation;
     }
 
     /**

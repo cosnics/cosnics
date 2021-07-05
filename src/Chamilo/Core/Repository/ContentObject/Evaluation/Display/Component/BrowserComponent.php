@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
@@ -47,24 +48,26 @@ class BrowserComponent extends Manager
     }
 
     /**
-     * @return string[]
-     * @throws NotAllowedException
+     * @return array
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function getTemplateProperties()
+    protected function getTemplateProperties(): array
     {
-        $evaluation = $this->get_root_content_object();
+        $evaluation = $this->getEvaluation();
 
         $supportsRubrics = $this->supportsRubrics();
         $hasRubric = false;
         $canBuildRubric = false;
         $rubricPreview = null;
+        $selfEvaluationAllowed = false;
 
         if ($supportsRubrics)
         {
-            $hasRubric = $this->getEvaluationRubricService()->evaluationHasRubric($evaluation);;
+            $hasRubric = $this->getEvaluationRubricService()->evaluationHasRubric($evaluation);
             $rubricPreview = $this->runRubricComponent('Preview');
             $rubricContentObject = $this->getEvaluationRubricService()->getRubricForEvaluation($evaluation);
+            $selfEvaluationAllowed = $this->getEvaluationServiceBridge()->getSelfEvaluationAllowed();
 
             if ($rubricContentObject instanceof Rubric)
             {
@@ -100,13 +103,14 @@ class BrowserComponent extends Manager
             'ADD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PUBLISH_RUBRIC]),
             'BUILD_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_BUILD_RUBRIC]),
             'REMOVE_RUBRIC_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_REMOVE_RUBRIC]),
+            'SELF_EVALUATION_ALLOWED' => $selfEvaluationAllowed,
             'CAN_BUILD_RUBRIC' => $canBuildRubric,
             'RUBRIC_PREVIEW' => $rubricPreview,
             'ENTITY_TYPE' => $this->getEvaluationServiceBridge()->getCurrentEntityType(),
             'OPEN_FOR_STUDENTS' => $this->getEvaluationServiceBridge()->getOpenForStudents(),
             'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
             'CONTEXT_ID' => $contextIdentifier->getContextId(),
-            'CONTENT_OBJECT_TITLE' => $this->get_root_content_object()->get_title(),
+            'CONTENT_OBJECT_TITLE' => $evaluation->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
             'LOAD_ENTITIES_URL' => $this->get_url(
                 [
@@ -143,10 +147,16 @@ class BrowserComponent extends Manager
                     'evaluation_display_action' => 'Entry'
                 ]
             ),
-            'SAVE_OPEN_FOR_STUDENTS_URL' => $this->get_url(
+            'TOGGLE_OPEN_FOR_STUDENTS_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_OPEN_FOR_STUDENTS
+                ]
+            ),
+            'TOGGLE_RUBRIC_SELF_EVALUATION_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_SELF_EVALUATION_ALLOWED
                 ]
             )
         ];

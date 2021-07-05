@@ -187,10 +187,11 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @return string|\Symfony\Component\HttpFoundation\Response
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ClassNotExistException
+     * @throws UserException
      */
     protected function runRubricComponent(string $action, bool $embedded = true)
     {
-        $rubricId = $this->get_root_content_object()->getRubricId();
+        $rubricId = $this->getEvaluation()->getRubricId();
 
         if (!$rubricId)
         {
@@ -285,11 +286,19 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject | \Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation
+     * @return Evaluation
+     * @throws UserException
      */
-    public function getEvaluation()
+    public function getEvaluation(): Evaluation
     {
-        return $this->get_root_content_object();
+        $evaluation = $this->get_root_content_object();
+
+        if (!$evaluation instanceof Evaluation)
+        {
+            $this->throwUserException('EvaluationNotFound');
+        }
+
+        return $evaluation;
     }
 
     /**

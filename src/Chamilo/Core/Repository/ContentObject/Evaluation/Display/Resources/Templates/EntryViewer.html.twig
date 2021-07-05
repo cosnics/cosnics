@@ -417,13 +417,13 @@
         </div>
     </div>
     {% endif %}
-    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS)) %}
+    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or OPEN_FOR_STUDENTS) %}
     <div class="row">
         <div class="col-xs-12" id="rubric">
             <div class="title-underline-fw mod-rubric">
-                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS %}{{ 'ViewRubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
+                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS and not SELF_EVALUATION_ALLOWED %}{{ 'RubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
             </div>
-            {% if CAN_EDIT_EVALUATION %}
+            {% if CAN_EDIT_EVALUATION or (OPEN_FOR_STUDENTS and SELF_EVALUATION_ALLOWED) %}
             <ul class="nav nav-buttons">
                 <li {% if RUBRIC_ACTION == 'Entry' %}class="active"{% endif %}><a href="{{ RUBRIC_ENTRY_URL }}#rubric">{{ 'FillInRubric'|trans({}, appContext) }}</a></li>
                 <li {% if RUBRIC_ACTION == 'Result' %}class="active"{% endif %}><a href="{{ RUBRIC_RESULTS_URL }}#rubric">{{ 'ViewRubricResults'|trans({}, appContext) }}</a></li>

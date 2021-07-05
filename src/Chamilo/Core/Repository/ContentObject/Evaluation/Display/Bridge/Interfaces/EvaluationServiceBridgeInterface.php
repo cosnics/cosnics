@@ -42,6 +42,11 @@ interface EvaluationServiceBridgeInterface
     public function getOpenForStudents(): bool;
 
     /**
+     * @return boolean
+     */
+    public function getSelfEvaluationAllowed(): bool;
+
+    /**
      * @return int[]
      */
     public function getTargetEntityIds(): array;

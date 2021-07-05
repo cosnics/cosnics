@@ -25,7 +25,7 @@ class LoadEntitiesComponent extends Manager
     {
         try
         {
-            $evaluation = $this->get_root_content_object();
+            $evaluation = $this->getEvaluation();
 
             if (!$evaluation instanceof Evaluation)
             {

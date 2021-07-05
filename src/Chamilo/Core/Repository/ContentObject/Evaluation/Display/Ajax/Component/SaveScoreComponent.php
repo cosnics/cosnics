@@ -20,7 +20,7 @@ class SaveScoreComponent extends Manager
 
             $entityId = $this->getRequest()->getFromPost('entity_id');
             $score = (int) $this->getRequest()->getFromPost('score');
-            $evaluation = $this->get_root_content_object();
+            $evaluation = $this->getEvaluation();
             $evaluationId = $evaluation->getId();
             $evaluatorId = $this->getUser()->getId();
             $contextId = $this->getEvaluationServiceBridge()->getContextIdentifier();

@@ -23,7 +23,7 @@ class ImportComponent extends Manager
                 throw new NotAllowedException();
             }
             $results = $this->getRequest()->getFromPost('results');
-            $evaluation = $this->get_root_content_object();
+            $evaluation = $this->getEvaluation();
             $contextId = $this->getEvaluationServiceBridge()->getContextIdentifier();
 
             /** @var ImportResultsFromCuriosService $importService */

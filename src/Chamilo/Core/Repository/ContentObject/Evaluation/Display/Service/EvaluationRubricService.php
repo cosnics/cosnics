@@ -85,15 +85,4 @@ class EvaluationRubricService
     {
         return $this->rubricResultRepository->countRubricResultsForContextIdentifier($entryContextIdentifier) > 0;
     }
-
-    /**
-     * @param Evaluation $evaluation
-     *
-     * @return bool
-     */
-    public function isSelfEvaluationAllowed(Evaluation $evaluation) : bool
-    {
-        // todo
-        return false;
-    }
 }

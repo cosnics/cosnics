@@ -21,7 +21,7 @@ class SavePresenceStatusComponent extends Manager
             $entityId = $this->getRequest()->getFromPost('entity_id');
             $isPresent = $this->getRequest()->getFromPost('presence_status') == 'true';
 
-            $evaluation = $this->get_root_content_object();
+            $evaluation = $this->getEvaluation();
             $evaluationId = $evaluation->getId();
             $evaluatorId = $this->getUser()->getId();
             $contextId = $this->getEvaluationServiceBridge()->getContextIdentifier();

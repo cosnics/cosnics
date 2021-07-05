@@ -21,11 +21,7 @@ class ExportComponent extends Manager
 
         try
         {
-            $evaluation = $this->get_root_content_object();
-            if (!$evaluation instanceof Evaluation)
-            {
-                $this->throwUserException('EvaluationNotFound');
-            }
+            $evaluation = $this->getEvaluation();
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
             $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, EvaluationEntityRetrieveProperties::ALL());

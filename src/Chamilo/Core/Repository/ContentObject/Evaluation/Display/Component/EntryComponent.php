@@ -93,7 +93,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
         $entityType = $this->getEntityType();
         $entityId = $this->getEntityIdentifier();
-        $evaluation = $this->get_root_content_object();
+        $evaluation = $this->getEvaluation();
         return $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
     }
 
@@ -222,6 +222,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             'RUBRIC_ENTRY_URL' => $this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]),
             'RUBRIC_RESULTS_URL' => $this->get_url([self::PARAM_RUBRIC_RESULTS => 1], [self::PARAM_RUBRIC_ENTRY]),
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
+            'SELF_EVALUATION_ALLOWED' => $this->getEvaluationServiceBridge()->getSelfEvaluationAllowed(),
             'RUBRIC_SCORE' => $rubricScore,
             'CONFIRM_OVERWRITE_SCORE' => $confirmOverwriteScore,
             'OPEN_FOR_STUDENTS' => $openForStudents,
@@ -366,7 +367,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             return true;
         }
 
-        return $this->getEvaluationRubricService()->isSelfEvaluationAllowed($this->getEvaluation());
+        return $this->getEvaluationServiceBridge()->getSelfEvaluationAllowed();
     }
 
     /**

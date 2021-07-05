@@ -75,4 +75,17 @@ class PublicationRepository extends CommonDataClassRepository
         $publication->update();
         return $publication;
     }
+
+    /**
+     * @param Publication $publication
+     * @param bool $selfEvaluationAllowed
+     * @return Publication
+     * @throws \Exception
+     */
+    public function setSelfEvaluationAllowed(Publication $publication, bool $selfEvaluationAllowed): Publication
+    {
+        $publication->setSelfEvaluationAllowed($selfEvaluationAllowed);
+        $publication->update();
+        return $publication;
+    }
 }

@@ -26,9 +26,9 @@ class RemoveRubricComponent extends Manager
 
         try
         {
-            $object = $this->get_root_content_object();
-            $object->setRubricId(null);
-            $object->update();
+            $evaluation = $this->getEvaluation();
+            $evaluation->setRubricId(null);
+            $evaluation->update();
             $message = 'RubricRemoved';
         }
         catch (\Exception $ex)

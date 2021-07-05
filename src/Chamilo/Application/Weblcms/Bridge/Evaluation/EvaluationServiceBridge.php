@@ -136,6 +136,23 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     }
 
     /**
+     * @return boolean
+     */
+    public function getSelfEvaluationAllowed(): bool
+    {
+        return $this->evaluationPublication->getSelfEvaluationAllowed();
+    }
+
+    /**
+     * @param bool $selfEvaluationAllowed
+     * @throws \Exception
+     */
+    public function setSelfEvaluationAllowed(bool $selfEvaluationAllowed)
+    {
+        $this->publicationRepository->setSelfEvaluationAllowed($this->evaluationPublication, $selfEvaluationAllowed);
+    }
+
+    /**
      * @return int[]
      */
     public function getTargetEntityIds(): array

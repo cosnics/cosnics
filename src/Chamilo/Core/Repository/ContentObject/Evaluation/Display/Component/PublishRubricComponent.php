@@ -44,9 +44,9 @@ class PublishRubricComponent extends Manager
             {
                 $selectedRubricId = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects($this->getUser());
 
-                $object = $this->get_root_content_object();
-                $object->setRubricId((int) $selectedRubricId);
-                $object->update();
+                $evaluation = $this->getEvaluation();
+                $evaluation->setRubricId((int) $selectedRubricId);
+                $evaluation->update();
 
                 $success = true;
                 $message = 'RubricPublished';
