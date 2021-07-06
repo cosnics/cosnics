@@ -538,7 +538,7 @@
             <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
             <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
         </ul>
-        <div class="onoffswitch mod-open-for-students">
+        <div class="onoffswitch mod-open-for-students" style="display: none">
             <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch-open-for-students">
             <label class="onoffswitch-label" for="onoffswitch-open-for-students">
                 <span class="onoffswitch-inner">
@@ -762,6 +762,10 @@
                     'neutral': '{{ NoScoreAvailable }}'
                 },
                 membersEntity: null
+            },
+
+            mounted() {
+                $('.onoffswitch.mod-open-for-students').css('display','block');
             },
 
             computed: {
