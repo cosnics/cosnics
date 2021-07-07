@@ -209,12 +209,12 @@ class GroupService
     {
         if (empty($groupCode))
         {
-            throw new InvalidArgumentException('The given $groupCode can not be empty');
+            throw new InvalidArgumentException('The given $groupCode can not be empty for group code ' . $groupCode);
         }
 
         if (empty($parentIdentifier))
         {
-            throw new InvalidArgumentException('The given $parentIdentifier can not be empty');
+            throw new InvalidArgumentException('The given $parentIdentifier can not be empty for group code ' . $groupCode);
         }
 
         $group = $this->groupRepository->findGroupByCodeAndParentIdentifier($groupCode, $parentIdentifier);
