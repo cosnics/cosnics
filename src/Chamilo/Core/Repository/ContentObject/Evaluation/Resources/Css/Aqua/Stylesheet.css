@@ -7,6 +7,14 @@ ul.tree-menu li div a.type_evaluation_default {
     background-image: url(../../Images/Aqua/Logo/16.png);
 }
 
+ul.tree-menu li div a.evaluation.type_completed, ul.tree-menu li div a.type_evaluation.type_completed, ul.tree-menu li div a.type_evaluation_default.type_completed,
+.fancytree-custom-icon.type_evaluation.type_completed,
+.fancytree-custom-icon.type_evaluation_default.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_evaluation.type_completed,
+.treeview .list-group .list-group-item .icon.node-icon.type_evaluation_default.type_completed {
+    background-image: url(../../Images/Aqua/Logo/16Completed.png);
+}
+
 .ident.ident-c165ec6feb785738b2ca5c4969a2a25a:before {
     font-family: 'FontAwesome';
     content: '\f201';

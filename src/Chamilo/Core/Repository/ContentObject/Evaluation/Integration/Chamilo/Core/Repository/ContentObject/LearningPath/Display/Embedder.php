@@ -39,6 +39,8 @@ class Embedder extends ContentObjectEmbedder
 
         $this->buildBridgeServices($activeAttempt);
 
+        $this->trackingService->setActiveAttemptCompleted($this->learningPath, $this->treeNode, $this->get_application()->getUser());
+
         $applicationFactory = $this->getApplicationFactory();
         $applicationFactory->setEvaluationServiceBridge(
             $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class)
