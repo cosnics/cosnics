@@ -173,19 +173,22 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $hasEditRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
 
-        /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
-        $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
-        $evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
+        if($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\Evaluation'))
+        {
+            /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
+            $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
+            $evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
 
-        /** @var PublicationEntityServiceManager $publicationEntityServiceManager */
-        $publicationEntityServiceManager = $this->getService(PublicationEntityServiceManager::class);
-        $publicationEntityServiceManager->setContentObjectPublication($this->publication);
+            /** @var PublicationEntityServiceManager $publicationEntityServiceManager */
+            $publicationEntityServiceManager = $this->getService(PublicationEntityServiceManager::class);
+            $publicationEntityServiceManager->setContentObjectPublication($this->publication);
 
-        /** @var LearningPathEvaluationServiceBridge $learningPathEvaluationServiceBridge */
-        $learningPathEvaluationServiceBridge = $this->getService(LearningPathEvaluationServiceBridge::class);
-        $learningPathEvaluationServiceBridge->setContentObjectPublication($this->publication);
-        $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
-        $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
+            /** @var LearningPathEvaluationServiceBridge $learningPathEvaluationServiceBridge */
+            $learningPathEvaluationServiceBridge = $this->getService(LearningPathEvaluationServiceBridge::class);
+            $learningPathEvaluationServiceBridge->setContentObjectPublication($this->publication);
+            $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
+            $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
+        }
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */
         $assignmentServiceBridge = $this->getService(AssignmentServiceBridge::class);
