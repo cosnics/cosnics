@@ -21,8 +21,6 @@ class LoadFeedbackComponent extends Manager
     {
         try
         {
-            $evaluation = $this->getEvaluation();
-
             $this->initializeEntry();
             $feedbackItems = $this->getFeedbackServiceBridge()->getFeedback();
 

@@ -92,13 +92,14 @@ abstract class Manager extends AjaxManager
      */
     protected function initializeEntry(): void
     {
+        $evaluation = $this->getEvaluation();
         $entityId = $this->getRequest()->getFromPostOrUrl('entity_id');
         $entityType = $this->getEvaluationServiceBridge()->getCurrentEntityType();
         $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-        $evaluationEntry = $this->getEvaluationEntryService()->getEvaluationEntryForEntity($contextIdentifier, $entityType, $entityId);
+        $evaluationEntry = $this->getEvaluationEntryService()->createEvaluationEntryIfNotExists($evaluation->getId(), $contextIdentifier, $entityType, $entityId);
         if (!$evaluationEntry)
         {
-            $this->throwUserException('EntryNotFound');
+            $this->throwUserException('NoEvaluationEntry');
         }
         $this->getFeedbackServiceBridge()->setEntryId($evaluationEntry->getId());
     }
