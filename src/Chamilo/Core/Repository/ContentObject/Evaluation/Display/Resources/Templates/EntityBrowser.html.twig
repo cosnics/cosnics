@@ -455,12 +455,15 @@
     }
 
     .onoffswitch-label {
-        border: 1px solid #bce1c3!important;
+        border: 1px solid #80a2b3;
         border-radius: 3px;
         cursor: pointer;
         display: block;
         margin-bottom: 0;
         overflow: hidden;
+    }
+    .onoffswitch-label.mod-evaluation {
+        border-color: #d6dee0;
     }
 
     .onoffswitch-inner {
@@ -487,10 +490,10 @@
         width: 50%;
     }
 
-    .onoffswitch-inner-before {
-        background-color: hsla(130, 65%, 95%, 1)!important;
-        color: hsla(170, 97%, 25%, 1)!important;
-        padding-left: 5px;
+    .onoffswitch-inner-before.mod-evaluation {
+        background-color: #f0f3f4;
+        color: #4171b5;
+        padding-left: 8px;
     }
 
     .onoffswitch-inner-after {
@@ -500,9 +503,14 @@
         /*text-align: right;*/
     }
 
+    .onoffswitch-inner-before.mod-evaluation, .onoffswitch-inner-after.mod-evaluation {
+        height: 32px;
+        line-height: 32px;
+    }
+
     .onoffswitch-switch {
         background: #ffffff;
-        border: 1px solid #bce1c3!important;
+        border: 1px solid #80a2b3;
         border-radius: 3px;
         bottom: 0;
         display: block;
@@ -512,6 +520,10 @@
         top: 0;
         transition: all .2s ease-in 0s;
         width: 12px;
+    }
+
+    .onoffswitch-switch.mod-evaluation {
+        border-color: #c2ced1;
     }
 
     .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
@@ -605,12 +617,12 @@
         </ul>
         <div class="onoffswitch mod-open-for-students" style="display: none">
             <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch-open-for-students">
-            <label class="onoffswitch-label" for="onoffswitch-open-for-students">
+            <label class="onoffswitch-label mod-evaluation" for="onoffswitch-open-for-students">
                 <span class="onoffswitch-inner">
-                    <span class="onoffswitch-inner-before">{{ 'OpenForStudents'|trans({}, appContext) }}</span>
-                    <span class="onoffswitch-inner-after">{{ 'ClosedForStudents'|trans({}, appContext) }}</span>
+                    <span class="onoffswitch-inner-before mod-evaluation">{{ 'OpenForStudents'|trans({}, appContext) }}</span>
+                    <span class="onoffswitch-inner-after mod-evaluation">{{ 'ClosedForStudents'|trans({}, appContext) }}</span>
                 </span>
-                <span class="onoffswitch-switch"></span>
+                <span class="onoffswitch-switch mod-evaluation"></span>
             </label>
         </div>
     </div>
@@ -746,12 +758,12 @@
                     <div class="u-inline-block">
                         <div class="onoffswitch mod-self-evaluation">
                             <input type="checkbox" v-model="selfEvaluationAllowed" @input="toggleSelfEvaluationAllowed(selfEvaluationAllowed)" class="onoffswitch-checkbox" id="onoffswitch-self-evaluation">
-                            <label class="onoffswitch-label" for="onoffswitch-self-evaluation">
+                            <label class="onoffswitch-label mod-evaluation" for="onoffswitch-self-evaluation">
                                 <span class="onoffswitch-inner">
-                                    <span class="onoffswitch-inner-before">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</span>
-                                    <span class="onoffswitch-inner-after">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</span>
+                                    <span class="onoffswitch-inner-before mod-evaluation">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</span>
+                                    <span class="onoffswitch-inner-after mod-evaluation">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</span>
                                 </span>
-                                <span class="onoffswitch-switch"></span>
+                                <span class="onoffswitch-switch mod-evaluation"></span>
                             </label>
                         </div>
                     </div>
