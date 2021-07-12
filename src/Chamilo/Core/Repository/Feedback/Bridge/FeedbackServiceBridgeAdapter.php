@@ -34,11 +34,12 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+     * @param bool $isPrivate
      *
      * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
     public function createFeedback(
-        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject, bool $isPrivate = false
     )
     {
         $feedbackObject = $this->feedbackSupportComponent->get_feedback();
@@ -116,5 +117,10 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
         {
             throw new \RuntimeException('Could not create feedback in the database');
         }
+    }
+
+    public function supportsPrivateFeedback()
+    {
+        return false;
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\PlatformGroupEntityService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager" autowire="true">
+            <call method="addEntityService">
+                <argument type="string">0</argument>
+                <argument type="service" id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\UserEntityService" />
+            </call>
+            <call method="addEntityService">
+                <argument type="string">2</argument>
+                <argument type="service" id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\PlatformGroupEntityService" />
+            </call>
+        </service>
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\FeedbackService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationRubricService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportFromCuriosCSVService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportFromCuriosExceptionDisplayService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\ImportResultsFromCuriosService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\FeedbackServiceBridge" autowire="true" />
+    </services>
+</container>

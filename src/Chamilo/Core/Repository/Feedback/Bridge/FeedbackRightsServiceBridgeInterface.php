@@ -22,6 +22,11 @@ interface FeedbackRightsServiceBridgeInterface
     public function canViewFeedback();
 
     /**
+     * @return bool
+     */
+    public function canViewPrivateFeedback();
+
+    /**
      * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
      *
      * @return bool

@@ -31,4 +31,9 @@ class RubricBridge implements \Chamilo\Core\Repository\ContentObject\Rubric\Disp
     {
         // TODO: Implement saveScore() method.
     }
+
+    public function getPostSaveRedirectParameters()
+    {
+        // TODO: Implement getPostSaveRedirectParameters() method.
+    }
 }

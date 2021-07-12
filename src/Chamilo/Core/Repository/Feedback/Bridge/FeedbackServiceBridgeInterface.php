@@ -17,12 +17,18 @@ interface FeedbackServiceBridgeInterface
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+     * @param bool $isPrivate
      *
      * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback
      */
     public function createFeedback(
-        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject
+        User $user, \Chamilo\Core\Repository\ContentObject\Feedback\Storage\DataClass\Feedback $feedbackContentObject, bool $isPrivate
     );
+
+    /**
+     * @return bool
+     */
+    public function supportsPrivateFeedback();
 
     /**
      * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback

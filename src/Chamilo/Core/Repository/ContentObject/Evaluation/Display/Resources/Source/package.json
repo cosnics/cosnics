@@ -1,0 +1,12 @@
+{
+  "name": "@cosnics/evaluation",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "vue-cli-service build src/main.js --target lib --dest ./../../../Resources/Javascript/ --name cosnics_evaluation && node post-build.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "p-queue": "^6.2.1"
+  }
+}

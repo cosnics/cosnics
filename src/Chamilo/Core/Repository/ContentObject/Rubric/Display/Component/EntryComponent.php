@@ -56,7 +56,12 @@ class EntryComponent extends Manager implements DelegateComponent
         $formHandled = $formHandler->handle($form, $this->getRequest());
         if ($formHandled)
         {
-            $this->redirect($completedMessage, false, [self::PARAM_COMPLETED => 1]);
+            $parameters = $this->getRubricBridge()->getPostSaveRedirectParameters();
+            if (!isset($parameters))
+            {
+                $parameters = [self::PARAM_COMPLETED => 1];
+            }
+            $this->redirect($completedMessage, false, $parameters);
             return null;
         }
         else

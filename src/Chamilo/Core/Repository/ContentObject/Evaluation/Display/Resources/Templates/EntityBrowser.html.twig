@@ -1,0 +1,1064 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+<style type="text/css">
+    .u-contents {
+        display: contents;
+    }
+    .u-inline-block {
+        display: inline-block;
+    }
+    .u-flex {
+        display: flex;
+    }
+    .u-flex-1 {
+        flex: 1;
+    }
+    .u-flex-grow-1 {
+        flex-grow: 1;
+    }
+    .u-flex-grow-2 {
+        flex-grow: 2;
+    }
+    .u-align-items-baseline {
+        align-items: baseline;
+    }
+    .u-align-items-center {
+        align-items: center;
+    }
+    .u-justify-content-start {
+        justify-content: flex-start;
+    }
+    .u-justify-content-end {
+        justify-content: flex-end;
+    }
+    .u-gap-small {
+        gap: 5px;
+    }
+    .u-gap-large {
+        gap: 45px;
+    }
+    .u-no-spin::-webkit-outer-spin-button,
+    .u-no-spin::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .u-no-spin {
+        -moz-appearance: textfield; /* Firefox */
+    }
+
+    .form-inline.mod-entity-search {
+        margin: 5px 0 0 5px;
+    }
+
+    .table-selected {
+        background-color: #ecf1f3;
+    }
+
+    .table-bordered > tbody > tr.table-selected > td:not(:last-child) {
+        border-right-color: #d4d4d4;
+    }
+
+    td.table-lastname {
+        text-transform: uppercase;
+    }
+    th.table-fb-count {
+        width: 1px;
+        white-space: nowrap;
+    }
+    td.table-fb-count {
+        text-align: center;
+    }
+    .tbl-no-sort {
+        pointer-events: none
+    }
+
+    .presence {
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .presence-absent {
+        background-color: #437f7e;
+        padding: 0 5px;
+        color: #fff;
+    }
+
+    .presence-present {
+        background-color: #ddf8e1;
+        color: #027461;
+    }
+    .presence-neutral {
+        --color: #c1dcc5;
+        background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
+        background-size: 7px 7px;
+    }
+    .table-selected .presence-neutral {
+        --color: #b7d7bc;
+    }
+    .presence-neutral::before {
+        content: '.';
+        color: transparent;
+    }
+
+    .presence-status-icon {
+        background-repeat: no-repeat;
+        display: inline-block;
+        height: 15px;
+        width: 13px;
+        transform: translateY(2px);
+    }
+
+    .presence-status-icon.btn-icon-present, .presence-status-icon.btn-icon-neutral {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 63.09 72.73'%3E%3Cg fill='%23406e8e'%3E%3Cpath d='M31.3 0.0C27.9 0.0 24.4 1.0 21.2 2.8C16.4 5.6 13.1 9.7 11.4 15.0C10.6 17.3 10.3 22.5 10.8 24.9C11.2 27.0 12.0 29.3 12.8 30.7C13.2 31.4 13.5 32.0 13.5 32.1C13.5 32.3 12.6 32.8 11.5 33.3C9.4 34.2 6.9 36.2 5.3 38.2C2.0 42.5 0.3 48.3 0.0 56.4C-0.1 59.8 0.0 61.0 0.4 62.5C0.5 63.1 0.7 63.7 0.9 64.3L6.7 64.3C5.5 62.5 5.2 60.7 5.2 57.3C5.3 45.9 9.6 38.2 16.5 37.2C17.5 37.0 17.8 37.1 19.3 38.2C21.5 39.7 23.6 40.8 26.2 41.5C29.0 42.4 34.2 42.4 37.0 41.5C39.8 40.7 41.9 39.7 43.8 38.2C45.4 37.1 45.6 37.0 46.6 37.2C48.3 37.4 50.8 38.6 52.0 39.6C56.0 43.2 58.1 49.8 57.9 58.0C57.8 61.4 57.7 61.9 57.1 63.3C56.9 63.6 56.7 63.9 56.5 64.3L62.3 64.3C62.5 63.9 62.6 63.5 62.7 63.1C63.3 61.1 63.2 53.2 62.6 49.9C61.1 41.5 57.5 36.0 51.8 33.4C50.7 32.8 49.8 32.4 49.7 32.3C49.7 32.3 50.1 31.3 50.6 30.2C52.5 26.2 53.1 22.5 52.5 18.5C52.1 15.5 51.6 14.0 50.2 11.4C46.3 4.0 38.9 -0.1 31.3 0.0ZM31.8 5.3C36.4 5.4 41.0 7.5 44.2 11.6C47.8 16.2 48.4 23.2 45.6 28.6C43.6 32.3 39.7 35.4 35.5 36.4C29.8 37.9 24.3 36.3 20.2 32.1C17.2 29.0 15.9 25.6 15.9 21.1C15.9 17.2 16.9 14.1 19.2 11.2C22.6 7.2 27.2 5.2 31.8 5.3Z' %3E%3C/path%3E%3Cpath d='M26.5 70.8C25.8 70.3 14.6 59.1 14.3 58.6C14.0 58.1 14.0 57.0 14.3 56.5C14.4 56.3 15.3 55.2 16.4 54.2C18.2 52.5 18.4 52.3 19.0 52.2C19.4 52.1 19.8 52.2 20.1 52.3C20.4 52.4 22.2 54.1 24.2 56.1L27.8 59.7L35.8 51.7C42.6 44.9 43.8 43.8 44.3 43.7C45.3 43.5 45.7 43.7 47.5 45.5C49.7 47.6 50.1 48.1 50.1 49.0C50.1 49.5 50.0 49.8 49.7 50.3C49.2 51.1 29.8 70.4 29.1 70.9C28.3 71.4 27.3 71.4 26.5 70.8Z' %3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .presence-status-icon.btn-icon-absent {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 63.09 72.73'%3E%3Cg %3E%3Cpath d='M31.3 0.0C27.9 0.0 24.4 1.0 21.2 2.8C16.4 5.6 13.1 9.7 11.4 15.0C10.6 17.3 10.3 22.5 10.8 24.9C11.2 27.0 12.0 29.3 12.8 30.7C13.2 31.4 13.5 32.0 13.5 32.1C13.5 32.3 12.6 32.8 11.5 33.3C9.4 34.2 6.9 36.2 5.3 38.2C2.0 42.5 0.3 48.3 0.0 56.4C-0.1 59.8 0.0 61.0 0.4 62.5C0.5 63.1 0.7 63.7 0.9 64.3L6.7 64.3C5.5 62.5 5.2 60.7 5.2 57.3C5.3 45.9 9.6 38.2 16.5 37.2C17.5 37.0 17.8 37.1 19.3 38.2C21.5 39.7 23.6 40.8 26.2 41.5C29.0 42.4 34.2 42.4 37.0 41.5C39.8 40.7 41.9 39.7 43.8 38.2C45.4 37.1 45.6 37.0 46.6 37.2C48.3 37.4 50.8 38.6 52.0 39.6C56.0 43.2 58.1 49.8 57.9 58.0C57.8 61.4 57.7 61.9 57.1 63.3C56.9 63.6 56.7 63.9 56.5 64.3L62.3 64.3C62.5 63.9 62.6 63.5 62.7 63.1C63.3 61.1 63.2 53.2 62.6 49.9C61.1 41.5 57.5 36.0 51.8 33.4C50.7 32.8 49.8 32.4 49.7 32.3C49.7 32.3 50.1 31.3 50.6 30.2C52.5 26.2 53.1 22.5 52.5 18.5C52.1 15.5 51.6 14.0 50.2 11.4C46.3 4.0 38.9 -0.1 31.3 0.0ZM31.8 5.3C36.4 5.4 41.0 7.5 44.2 11.6C47.8 16.2 48.4 23.2 45.6 28.6C43.6 32.3 39.7 35.4 35.5 36.4C29.8 37.9 24.3 36.3 20.2 32.1C17.2 29.0 15.9 25.6 15.9 21.1C15.9 17.2 16.9 14.1 19.2 11.2C22.6 7.2 27.2 5.2 31.8 5.3Z' fill='%23406e8e'%3E%3C/path%3E%3Cpath d='M22.8 72.5C22.3 72.4 21.7 71.9 20.5 70.6C19.6 69.7 18.8 68.7 18.6 68.4C18.3 68.0 18.2 67.2 18.5 66.5C18.5 66.3 20.2 64.6 22.0 62.8C23.9 60.9 25.5 59.3 25.5 59.2C25.5 59.1 24.0 57.5 22.1 55.6C20.2 53.8 18.6 52.1 18.5 51.9C18.3 51.3 18.3 50.5 18.5 49.9C18.7 49.7 19.6 48.6 20.6 47.7C22.5 45.8 23.0 45.5 24.1 45.8C24.7 45.9 24.6 45.8 28.5 49.6C30.3 51.4 31.8 52.8 31.8 52.8C31.9 52.8 33.5 51.2 35.4 49.4C39.2 45.6 39.4 45.4 40.7 45.8C41.1 45.9 41.6 46.3 43.1 47.7C44.0 48.6 45.0 49.7 45.1 49.9C45.4 50.5 45.4 51.3 45.1 51.9C45.0 52.1 43.4 53.8 41.5 55.6C39.7 57.5 38.2 59.1 38.2 59.2C38.2 59.3 39.7 60.9 41.6 62.8C43.5 64.7 45.1 66.4 45.2 66.6C45.4 67.2 45.3 68.0 45.0 68.4C44.9 68.7 44.0 69.7 43.0 70.7C41.6 72.1 41.2 72.5 40.7 72.6C39.4 72.9 39.2 72.8 35.4 68.9C33.5 67.0 31.9 65.5 31.8 65.5C31.7 65.5 30.1 67.0 28.2 68.9C25.4 71.8 24.7 72.5 24.2 72.6C23.5 72.8 23.5 72.8 22.8 72.5Z' fill='%23bc5329'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .tbl-sort-option {
+        background-position: right calc(.75rem / 2) center;
+        background-repeat: no-repeat;
+        background-size: .65em 1em;
+        cursor: pointer;
+        padding-right: calc(.75rem + .85em);
+        pointer-events: all;
+    }
+    .tbl-sort-option[aria-sort=none] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22zM51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .tbl-sort-option[aria-sort=ascending] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .tbl-sort-option[aria-sort=descending] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+    }
+    .table.mod-evaluation:not(.is-scores-editable) th.table-score {
+        text-align: center;
+    }
+    td.table-score {
+        min-width: 72px;
+    }
+    .table.is-scores-editable td.table-score {
+        padding: 5px 8px;
+        width: 8rem;
+    }
+    td.table-rubric {
+        text-align: center;
+        color: #5a9695;
+    }
+    input.form-control.mod-score {
+        border-radius: .2rem;
+        font-size: 1.3rem;
+        height: calc(1.5em + .5rem + 2px);
+        line-height: 1.5;
+        min-width: 46px;
+        padding: .25rem .5rem;
+    }
+
+    .btn.mod-presence {
+        font-size: 14px;
+        margin-left: 5px;
+        padding: 2px 5px;
+    }
+    .table.mod-evaluation {
+        /*width: initial;*/
+        border-top-color: #ebebeb;
+    }
+
+    .table.mod-evaluation .col-fit, .table.mod-evaluation .col-fit[aria-sort]:not(.b-table-sort-icon-left) {
+        padding-right: 30px;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    {% if not HAS_RUBRIC %}
+    /* TODO: I copied these styles from rubrics but they should be global */
+    .btn-check {
+        background: none;
+        border: none;
+        color: #888;
+        cursor: default;
+        margin: 0;
+        padding: 0;
+    }
+    .btn-icon-check {
+        margin-right: .3em;
+        width: 1em;
+    }
+    .btn-icon-check:before {
+        content: "\f096";
+    }
+    .btn-check.checked .btn-icon-check:before {
+        content: "\f046";
+    }
+    .lbl-check {
+        border: 1px solid transparent;
+        border-radius: 3px;
+    }
+    .btn-check:focus, .btn-check:hover {
+        color: #1d4567;
+    }
+    .btn-check, .lbl-check:focus {
+        outline: none;
+    }
+    .lds-ellipsis {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+
+    .lds-ellipsis div {
+        position: absolute;
+        top: 13px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: hsla(190, 40%, 45%, 1);
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .lds-ellipsis div:nth-child(1) {
+         left: 8px;
+         animation: lds-ellipsis1 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(2) {
+         left: 8px;
+         animation: lds-ellipsis2 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(3) {
+         left: 32px;
+         animation: lds-ellipsis2 0.6s infinite;
+     }
+
+    .lds-ellipsis div:nth-child(4) {
+         left: 56px;
+         animation: lds-ellipsis3 0.6s infinite;
+     }
+
+    @keyframes lds-ellipsis1 {
+        0% {
+            transform: scale(0);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes lds-ellipsis3 {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
+    @keyframes lds-ellipsis2 {
+        0% {
+            transform: translate(0, 0);
+        }
+        100% {
+            transform: translate(24px, 0);
+        }
+    }
+    {% endif %}
+    .btn-check.mod-scores-editable {
+        margin: 0 35px 0 15px;
+    }
+    .panel-feedback {
+        border: none;
+        margin-right:30px;
+        margin-top: 60px;
+        max-width: 80ch;
+    }
+    .panel-feedback h3 {
+        color: #507177;
+        font-size: 2rem;
+    }
+    .panel-feedback .list-group-item {
+        padding-top: 20px;
+    }
+    .panel-feedback .list-group-item:nth-child(odd) {
+        background-color: #e0e0e0;
+    }
+    .feedback-private {
+        background-color: #d35555;
+        color: #fff;
+        font-size: 11px;
+        margin-top: 4px;
+        padding: 2px;
+        text-transform: uppercase
+    }
+    .feedback-count {
+        cursor: pointer;
+        padding: 6px;
+    }
+    .feedback-new {
+        margin-top: 20px;
+        padding: 0 10px 0 15px;
+    }
+    .feedback-new-heading {
+        color: #507177;
+    }
+    .feedback-new-input {
+        margin-bottom: 5px;
+        padding: 5px;
+        width: 100%;
+    }
+    .btn.mod-save-feedback {
+        margin-top: 10px;
+    }
+    #is_private + label {
+        font-weight: 500;
+        transform: translateY(1px);
+    }
+    .table.mod-evaluation + .lds-ellipsis {
+        display: none;
+        left: calc(50% - 20px);
+        position: absolute;
+        top: 40px;
+    }
+    .table.mod-evaluation[aria-busy=true] + .lds-ellipsis {
+        display: inline-block;
+    }
+    .tab-pane.mod-pad {
+        padding: 10px 15px;
+    }
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        display: flex;
+        /*margin: 15px 0 5px 8px;*/
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
+
+    /*.table.mod-evaluation {
+        width: initial;
+    }*/
+
+    .table.mod-evaluation thead {
+        background-color: #f8fbfb;
+    }
+    .table.mod-evaluation tbody {
+        background: linear-gradient(to bottom, #e3eaed 0, transparent 4px);
+    }
+    .table.mod-evaluation th {
+        color: #727879;
+    }
+    .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
+        border: 1px solid #ebebeb;
+    }
+    .table-bordered > tbody > tr.table-selected > td:not(:last-child) {
+        border-right-color: #dedede;
+    }
+    .panel-feedback {
+        box-shadow: none;
+    }
+    .panel-feedback h3 {
+        margin-left: 69px;
+    }
+    .form-inline.mod-entity-search .action-bar-search {
+        box-shadow: none;
+    }
+    .controls.mod-mb {
+        margin-bottom: 15px;
+    }
+    .btn-action-toolbar.mod-mb {
+        margin-bottom: 0;
+    }
+    .panel-feedback .lds-ellipsis {
+        margin-left: 60px;
+        margin-top: -10px;
+    }
+    .table-members {
+        position: relative;
+    }
+    .group-members {
+        background-color: white;
+        box-shadow: 0px 1px 3px hsl(0, 0%, 60%);
+        left: 3px;
+        list-style: none;
+        margin-bottom: 0;
+        padding: 6px 5px 5px;
+        position: absolute;
+        top: 1px;
+        width: max-content;
+        z-index: 10;
+    }
+    .group-members-close {
+        background: white;
+        border-radius: 50%;
+        box-shadow: 1px 1px 1px hsl(0, 0%, 74%);
+        color: #ababab;
+        cursor: pointer;
+        padding: 0px 2px;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+    }
+    .group-members-close:hover, .group-members-close:focus {
+        background: #f0f0f0;
+        color: #567f9b;
+    }
+    .group-members-show {
+        cursor: pointer;
+    }
+    .group-members-show:hover {
+        text-decoration: none;
+    }
+
+    .onoffswitch {
+        position: relative;
+    }
+    .onoffswitch.mod-open-for-students {
+        width: 186px;
+    }
+    .onoffswitch.mod-self-evaluation {
+        width: 220px;
+    }
+
+    .onoffswitch-checkbox {
+        display: none;
+    }
+
+    .onoffswitch-label {
+        border: 1px solid #80a2b3;
+        border-radius: 3px;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 0;
+        overflow: hidden;
+    }
+    .onoffswitch-label.mod-evaluation {
+        border-color: #d6dee0;
+    }
+
+    .onoffswitch-inner {
+        display: block;
+        margin-left: -100%;
+        transition: margin .2s ease-in 0s;
+        width: 200%;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+
+    .onoffswitch-inner-before, .onoffswitch-inner-after {
+        box-sizing: border-box;
+        color: #fff;
+        display: block;
+        float: left;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        font-weight: 500;
+        height: 20px;
+        line-height: 18px;
+        padding: 0;
+        width: 50%;
+    }
+
+    .onoffswitch-inner-before.mod-evaluation {
+        background-color: #f0f3f4;
+        color: #4171b5;
+        padding-left: 8px;
+    }
+
+    .onoffswitch-inner-after {
+        background-color: #fff;
+        color: #919191;
+        padding-left: 18px;
+        /*text-align: right;*/
+    }
+
+    .onoffswitch-inner-before.mod-evaluation, .onoffswitch-inner-after.mod-evaluation {
+        height: 32px;
+        line-height: 32px;
+    }
+
+    .onoffswitch-switch {
+        background: #ffffff;
+        border: 1px solid #80a2b3;
+        border-radius: 3px;
+        bottom: 0;
+        display: block;
+        margin: 0;
+        position: absolute;
+        right: calc(100% - 12px);
+        top: 0;
+        transition: all .2s ease-in 0s;
+        width: 12px;
+    }
+
+    .onoffswitch-switch.mod-evaluation {
+        border-color: #c2ced1;
+    }
+
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0;
+    }
+    .block-ui {
+        background: rgba(111,119,128,.66);
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 1000;
+    }
+    .save-error {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .save-error-msg {
+        background: #cc2424;
+        color: #fff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1.3em;
+        max-width: 70ch;
+        padding: .3em 1em;
+        text-align: left;
+        z-index: 1001;
+    }
+    .save-error-msg a {
+        color: #fff;
+        text-decoration: underline;
+    }
+</style>
+
+{% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
+{% set Present = 'Present'|trans({}, appContext) %}
+{% set Absent = 'Absent'|trans({}, appContext) %}
+{% set MarkedAsAbsent = 'MarkedAsAbsent'|trans({}, appContext) %}
+{% set MarkPresentTooltip = 'MarkPresentTooltip'|trans({}, appContext) %}
+{% set MarkAbsentTooltip = 'MarkAbsentTooltip'|trans({}, appContext) %}
+{% set NoScoreAvailable = 'NoScoreAvailableYet'|trans({}, appContext) %}
+{% set HasRubricEntry = 'HasRubricEntry'|trans({}, appContext) %}
+{% set HasNoRubricEntry = 'HasNoRubricEntry'|trans({}, appContext) %}
+{% set ChangeSingle = 'ChangeSingle'|trans({}, appContext) %}
+{% set ChangeMultiple = 'ChangeMultiple'|trans({}, appContext) %}
+{% set LoggedOutError = 'LoggedOutError'|trans({}, appContext)|raw %}
+{% set TimeoutError = 'TimeoutError'|trans({}, appContext)|raw %}
+{% set UnknownError = 'UnknownError'|trans({}, appContext)|raw %}
+{% set LoggedOutPostError = 'LoggedOutPostError'|trans({}, appContext)|raw %}
+{% set TimeoutPostError = 'TimeoutPostError'|trans({}, appContext)|raw %}
+{% set UnknownPostError = 'UnknownPostError'|trans({}, appContext)|raw %}
+
+{{ getJavascript('cosnics_evaluation.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation') }}
+
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<div id="save-state" style="display: none">
+    <div v-if="!error" class="notifications">
+        <div class="alert alert-info" role="alert" aria-live="polite">
+            <template v-if="dataConnector && dataConnector.isSaving()">
+                ${ dataConnector.processingSize() } ${ dataConnector.processingSize() === 1 ? '{{ ChangeSingle }}' : '{{ ChangeMultiple }}' }...
+            </template>
+            <template v-else-if="dataConnector">
+                {{ 'ChangesSaved'|trans({}, appContext) }}
+            </template>
+        </div>
+    </div>
+    <div v-if="error" class="block-ui"></div>
+    <div v-if="error" class="save-error">
+        <div class="save-error-msg">
+            <span v-if="error === 'logged_out'" v-html="requestType === 'post' ? '{{ LoggedOutPostError }}' : '{{ LoggedOutError }}'"></span>
+            <span v-else-if="error === 'timeout'" v-html="requestType === 'post' ? '{{ TimeoutPostError }}' : '{{ TimeoutError }}'"></span>
+            <span v-else v-html="requestType === 'post' ? '{{ UnknownPostError }}' : '{{ UnknownError }}'"></span>
+        </div>
+    </div>
+</div>
+<div id="main-content">
+    <div class="u-flex" style="gap: 15px;align-items: center;margin: 15px 0 5px 8px;">
+        <ul class="nav nav-buttons" role="tablist">
+            <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ entityTypesPlural[ENTITY_TYPE]|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#rubric" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Rubric'|trans({}, appContext) }}</a></li>
+        </ul>
+        <div class="onoffswitch mod-open-for-students" style="display: none">
+            <input type="checkbox" v-model="openForStudents" @input="toggleOpenForStudents(openForStudents)" class="onoffswitch-checkbox" id="onoffswitch-open-for-students">
+            <label class="onoffswitch-label mod-evaluation" for="onoffswitch-open-for-students">
+                <span class="onoffswitch-inner">
+                    <span class="onoffswitch-inner-before mod-evaluation">{{ 'OpenForStudents'|trans({}, appContext) }}</span>
+                    <span class="onoffswitch-inner-after mod-evaluation">{{ 'ClosedForStudents'|trans({}, appContext) }}</span>
+                </span>
+                <span class="onoffswitch-switch mod-evaluation"></span>
+            </label>
+        </div>
+    </div>
+    <div class="dynamic-visual-tab-content tab-content">
+        <div role="tabpanel" class="tab-pane mod-pad active" id="entities">
+            <div class="u-flex u-gap-large">
+                <div @click="membersEntity = null">
+                    <div class="controls mod-mb u-flex u-align-items-center">
+                        <div class="btn-toolbar btn-action-toolbar mod-mb">
+                            <div class="form-inline u-flex u-justify-content-start mod-entity-search">
+                                <div class="action-bar input-group">
+                                    <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
+                                                  type="text" placeholder="{{ 'Search'|trans({}, appContext) }}" debounce="750" autocomplete="off"></b-form-input>
+                                    <div class="input-group-btn">
+                                        <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button aria-label="" aria-expanded="false" class="btn-check mod-scores-editable" :class="{ 'checked': scoresEditable }" @click="scoresEditable = !scoresEditable"><span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ 'EditScores'|trans({}, appContext) }}</span></button>
+                        <div style="margin-left: auto">
+                            <a v-if="entityType === 0" class="btn btn-default btn-sm" href="{{ IMPORT_URL }}">{{ 'ImportFromCurios'|trans({}, appContext) }}</a>
+                            <a class="btn btn-default btn-sm" href="{{ EXPORT_URL }}">{{ 'Export'|trans({}, appContext) }}</a>
+                        </div>
+                    </div>
+                    <div style="position: relative">
+                        <b-table ref="table" bordered
+                                 :items="entitiesProvider"
+                                 :fields="filteredFields"
+                                 :sort-by.sync="sortBy"
+                                 :sort-desc.sync="sortDesc"
+                                 :filter="globalSearchQuery"
+                                 :per-page="pagination.perPage"
+                                 :current-page="pagination.currentPage"
+                                 class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
+                            <template #head(fullname)="data">
+                                <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
+                                <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                            </template>
+                            <template #head(name)="data">
+                                {{ 'Name'|trans({}, 'Chamilo\\Core\\User') }}
+                            </template>
+                            <template #cell(fullname)="data">
+                                <a :href="getUrl(data.item.id)">${data.item.lastname.toUpperCase()}, ${data.item.firstname}</a>
+                            </template>
+                            <template #cell(name)="data">
+                                <a :href="getUrl(data.item.id)">${data.item.name}</a>
+                            </template>
+                            <template #head(members)="data">
+                                {{ 'Members'|trans({}, appContext) }}
+                            </template>
+                            <template #cell(members)="data">
+                                <ul v-if="membersEntity === data.item" class="group-members" @click.stop="">
+                                    <li class="group-members-close" @click.stop="membersEntity = null"><span class="fa fa-times" aria-hidden="true"></span><span class="sr-only">{{ 'HideMembers'|trans({}, appContext) }}</span></li>
+                                    <li v-for="member in sortedMembers(data.item)">${ member.lastname.toUpperCase() }, ${ member.firstname }</li>
+                                </ul>
+                                <a v-else @click.stop="membersEntity = data.item" class="group-members-show">{{ 'ShowMembers'|trans({}, appContext) }}</a>
+                            </template>
+                            <template #cell(score)="data">
+                                <div class="u-flex u-align-items-center">
+                                    <span v-if="isLabelShown(data.item)" class="presence u-flex-1" :class="['presence-' + data.item.presence_status]" :title="labelTitles[data.item.presence_status]">${ getLabelText(data.item) }</span>
+                                    <b-form-input v-if="isInputShown(data.item)" class="form-control-sm mod-score u-no-spin" :data-item-index="data.index" :value="data.item.score" type="number" required min="0" debounce="750" @update="onScoreUpdated(data.item, $event, data.index)" @keydown.enter.prevent="focusFollowingScore(data.index, true)" @keydown.down.prevent="focusFollowingScore(data.index, true)" @keydown.up.prevent="focusFollowingScore(data.index, false)"></b-form-input>
+                                    <button v-if="scoresEditable" class="btn btn-default btn-sm mod-presence" @click.prevent="onPresenceStatusUpdated(data.item)" :title="(data.item.presence_status === 'absent' ? '{{ MarkPresentTooltip }}' : '{{ MarkAbsentTooltip }}')">
+                                        <span aria-hidden="true" class="presence-status-icon" :class="['btn-icon-' + (data.item.presence_status === 'absent' ? 'present' : 'absent')]"></span><span class="sr-only">{{ MarkAs }} ${data.item.presence_status === 'absent' ? '{{ Present }}' : '{{ Absent }}'}</span>
+                                    </button>
+                                </div>
+                            </template>
+                            <template #cell(rubric)="data">
+                                <span v-if="data.item.rubric === '1'" class="fa fa-check" aria-hidden="true"></span><span class="sr-only">${ data.item.rubric === '1' ? '{{ HasRubricEntry }}' : '{{ HasNoRubricEntry }}' }</span>
+                            </template>
+                            <template #cell(feedback_count)="data"><a class="feedback-count" @click="loadFeedback(data.item)">${ data.item.feedback_count }</a>
+                            </template>
+                        </b-table>
+                        <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                    </div>
+                    <div class="pagination-container u-flex u-justify-content-end">
+                        <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                      aria-controls="data-table"></b-pagination>
+                        <ul class="pagination">
+                            <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} ${ pagination.total }</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div v-if="isFeedbackLoading" class="panel panel-default panel-feedback u-flex-grow-1">
+                    <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div v-if="feedbackEntity" class="panel panel-default panel-feedback u-flex-grow-1">
+                    <div class="u-flex"><h3>Feedback</h3><a class="btn btn-sm" @click.prevent="closeFeedback">{{ 'Close'|trans({}, commonContext) }}</a></div>
+                    <div class="list-group">
+                        <div v-for="item in feedback" :key="item.id" class="list-group-item">
+                            <div class="u-flex">
+                                <img class="panel-feedback-profile" :src="item.photo" />
+                                <h4 class="list-group-item-heading u-flex-grow-2">${item.user}<div class="feedback-date">${item.date}</div>
+                                    <div v-if="item.isPrivate" style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</em></div>
+                                </h4>
+                            </div>
+                            <div class="list-group-item-text feedback-content" v-html="item.content"></div>
+                        </div>
+                        <div class="feedback-new u-flex">
+                            <img src="{{ PHOTO_URL|raw }}" class="panel-feedback-profile">
+                            <div class="u-flex-1">
+                                <h4 class="feedback-new-heading">{{ 'AddFeedback'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</h4>
+                                <textarea class="feedback-new-input form-control" name="comment" v-model="newFeedback"></textarea>
+                                <div class="u-flex u-gap-small"><input type="checkbox" v-model="isFeedbackPrivate" id="is_private" name="is_private" /><label for="#is_private">{{ 'IsPrivate'|trans({}, 'Chamilo\\Core\\Repository\\Feedback') }}</label></div>
+                                <button class="btn btn-default mod-save-feedback" @click="createFeedback">{{ 'Save'|trans({}, commonContext) }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+            <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
+            {{ CONTENT_OBJECT_RENDITION|raw }}
+        </div>
+        {% if SUPPORTS_RUBRICS %}
+        <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
+            {% if HAS_RUBRIC %}
+                {% if not CAN_BUILD_RUBRIC %}
+                <div class="alert alert-warning" style="margin: 0 15px 15px">
+                    {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
+                </div>
+                {% endif %}
+                <div class="u-flex u-align-items-center" style="margin-left: 20px; gap: 10px">
+                    {% if CAN_BUILD_RUBRIC %}
+                    <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
+                    {% endif %}
+                    <form action="{{ REMOVE_RUBRIC_URL }}" method="post" class="u-contents">
+                        <button class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</button>
+                    </form>
+                    <div class="u-inline-block">
+                        <div class="onoffswitch mod-self-evaluation">
+                            <input type="checkbox" v-model="selfEvaluationAllowed" @input="toggleSelfEvaluationAllowed(selfEvaluationAllowed)" class="onoffswitch-checkbox" id="onoffswitch-self-evaluation">
+                            <label class="onoffswitch-label mod-evaluation" for="onoffswitch-self-evaluation">
+                                <span class="onoffswitch-inner">
+                                    <span class="onoffswitch-inner-before mod-evaluation">{{ 'SelfEvaluationAllowed'|trans({}, appContext) }}</span>
+                                    <span class="onoffswitch-inner-after mod-evaluation">{{ 'SelfEvaluationNotAllowed'|trans({}, appContext) }}</span>
+                                </span>
+                                <span class="onoffswitch-switch mod-evaluation"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div>{{ RUBRIC_PREVIEW|raw }}</div>
+            {% else %}
+                <div class="alert alert-info">{{ 'RubricNotPublishedMessage'|trans({}, appContext) }}</div>
+                <a href="{{ ADD_RUBRIC_URL }}" class="btn btn-success">{{ 'AddRubric'|trans({}, appContext) }}</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+    $('document').ready(function () {
+        var csrf_token = '{{ csrf_token('ComponentToken') }}';
+        var apiConfiguration = {
+            updateScoreURL: '{{ SAVE_SCORE_URL|raw }}',
+            saveNewFeedbackURL: '{{ SAVE_NEW_FEEDBACK_URL|raw }}',
+            savePresenceStatusURL: '{{ SAVE_PRESENCE_STATUS_URL|raw }}',
+            toggleOpenForStudentsURL: '{{ TOGGLE_OPEN_FOR_STUDENTS_URL|raw }}',
+            toggleRubricSelfEvaluationURL: '{{ TOGGLE_RUBRIC_SELF_EVALUATION_URL|raw }}',
+            loadFeedbackURL: '{{ LOAD_FEEDBACK_URL|raw }}',
+            loadEntitiesURL: '{{ LOAD_ENTITIES_URL|raw }}'
+        };
+        var dataConnector = new cosnics_evaluation.DataConnector(apiConfiguration, csrf_token);
+
+        var entityTypeFields = [
+            // 0
+            [   { key: 'fullname', sortable: false, thClass: 'tbl-no-sort'},
+                { key: 'official_code', label: '{{ 'OfficialCode'|trans({}, 'Chamilo\\Core\\User') }}', sortable: true, thClass: 'col-fit' },
+                { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ],
+            // 1
+            [   { key: 'name', sortable: true, thClass: '' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort', variant: 'members' },
+                { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ],
+            // 2
+            [   { key: 'name', sortable: true, thClass: '' },
+                { key: 'members', sortable: false, thClass: 'tbl-no-sort', variant: 'members' },
+                { key: 'rubric', sortable: false, thClass: 'tbl-no-sort', variant: 'rubric' },
+                { key: 'score', sortable: true, variant: 'score' },
+                { key: 'feedback_count', label: '{{ 'NumberOfFeedbacks'|trans({}, 'Chamilo\\Application\\Weblcms') }}', sortable: false, thClass: 'tbl-no-sort', variant: 'fb-count' }
+            ]
+        ];
+        var defaultSort = [
+            'lastname',
+            'name',
+            'name'
+        ];
+
+        new Vue({
+            el: '#entities',
+            delimiters: ['${', '}'],
+            data: {
+                entityType: {{ ENTITY_TYPE }},
+                context: '',
+                fields: entityTypeFields[{{ ENTITY_TYPE }}],
+                sortBy: defaultSort[{{ ENTITY_TYPE }}],
+                sortDesc: false,
+                pagination: {
+                    currentPage: 1,
+                    perPage: 20, //3,
+                    total: 0
+                },
+                globalSearchQuery: '',
+                requestCount: true,
+                scoresEditable: false,
+                hasRubric: {% if SUPPORTS_RUBRICS and HAS_RUBRIC %}true{% else %}false{% endif %},
+                feedback: [],
+                feedbackEntity: null,
+                newFeedback: '',
+                isFeedbackLoading: false,
+                isFeedbackPrivate: false,
+                labelTitles: {
+                    'absent': '{{ MarkedAsAbsent }}',
+                    'neutral': '{{ NoScoreAvailable }}'
+                },
+                membersEntity: null,
+                dataConnector: dataConnector
+            },
+
+            mounted() {
+                $('.onoffswitch.mod-open-for-students').css('display', 'block');
+            },
+
+            computed: {
+                filteredFields() {
+                    if (!this.hasRubric) {
+                        return this.fields.filter(function(field) {
+                            return field.key !== 'rubric';
+                        });
+                    }
+                    return this.fields;
+                }
+            },
+
+            methods: {
+                focusFollowingScore(index, isNext) {
+                    index = parseInt(index);
+                    if (isNaN(index)) { return; }
+                    index = index + (isNext ? 1 : -1);
+                    if (index < 0 || index >= this.pagination.perPage) { return; }
+                    var el = $('.form-control.mod-score[data-item-index=' + index + ']');
+                    if (el.length) {
+                        el.focus();
+                    } else {
+                        this.focusFollowingScore(index, isNext);
+                    }
+                },
+                sortedMembers(entity) {
+                    var members = [].concat(entity.members);
+                    members.sort(function(v1, v2) {
+                        if (v1.lastname < v2.lastname) { return -1; }
+                        if (v1.lastname > v2.lastname) { return 1; }
+                        return 0;
+                    });
+                    return members;
+                },
+                isLabelShown(entity) {
+                    return entity.presence_status === 'absent' || (entity.presence_status !== 'absent' && !this.scoresEditable);
+                },
+                getLabelText(entity) {
+                    if (entity.presence_status === 'present') {
+                        return entity.score;
+                    }
+                    if (entity.presence_status === 'absent') {
+                        return '{{ Absent }}';
+                    }
+                    return null;
+                },
+                isInputShown(entity) {
+                    return entity.presence_status !== 'absent' && this.scoresEditable;
+                },
+                getUrl(entityId)
+                {
+                    return '{{ ENTITY_BASE_URL|raw }}&entity_type=' + this.entityType + '&entity_id=' + entityId;
+                },
+                loadFeedback(entity) {
+                    this.feedbackEntity = null;
+                    this.isFeedbackLoading = true;
+
+                    this.dataConnector.loadFeedback(entity.id, function(feedback) {
+                        this.feedback = feedback;
+                        this.feedbackEntity = entity;
+                        var items = this.$refs.table.computedItems;
+                        this.selectEntity(items, this.feedbackEntity.id);
+                        this.isFeedbackLoading = false;
+                    }.bind(this));
+                },
+                closeFeedback() {
+                    this.feedback = [];
+                    this.feedbackEntity = null;
+                    var items = this.$refs.table.computedItems;
+                    for (var i = 0; i < items.length; i += 1) {
+                        items[i]._rowVariant = undefined;
+                    }
+                },
+                createFeedback() {
+                    this.dataConnector.createFeedback(this.feedbackEntity.id, this.newFeedback, this.isFeedbackPrivate, function(data) {
+                        this.newFeedback = '';
+                        this.isFeedbackPrivate = false;
+                        if (data.status === 'ok') {
+                            if (this.feedbackEntity && this.feedbackEntity.id === data.entity_id) {
+                                this.feedback.push(data.feedback);
+                            }
+                            this.$refs.table.refresh();
+                        }
+                    }.bind(this));
+                },
+                onScoreUpdated(entity, score, index) {
+                    var el = $('.form-control.mod-score[data-item-index=' + index + ']');
+                    if (el.length && !el[0].checkValidity()) {
+                        el[0].reportValidity();
+                        return;
+                    }
+
+                    this.dataConnector.updateScore(entity.id, score, function(data) {
+                        entity.presence_status = data.presence_status;
+                        entity.score = data.score;
+                    });
+                },
+                onPresenceStatusUpdated(entity) {
+                    this.dataConnector.savePresenceStatus(entity.id, entity.presence_status === 'absent', function(data) {
+                        entity.presence_status = data.presence_status;
+                        entity.score = data.score;
+                    });
+                },
+                getSortStatus(name) {
+                    if (this.sortBy !== name) { return 'none'; }
+                    return this.sortDesc ? 'descending' : 'ascending';
+                },
+                sortByNameField(namefield) {
+                    if (this.sortBy === namefield) {
+                        this.sortDesc = !this.sortDesc;
+                        return;
+                    }
+                    this.sortBy = namefield;
+                    this.sortDesc = false;
+                },
+                onFilterChanged: function() {
+                    this.requestCount = true;
+                },
+                onFilterCleared: function() {
+                    if (this.globalSearchQuery !== '') {
+                        this.globalSearchQuery = '';
+                        this.requestCount = true;
+                    }
+                },
+                selectEntity(items, id) {
+                    for (var i = 0; i < items.length; i += 1) {
+                        if (items[i].id === id) {
+                            items[i]._rowVariant = 'selected';
+                        } else {
+                            items[i]._rowVariant = undefined;
+                        }
+                    }
+                },
+                entitiesProvider: function(ctx, callback) {
+                    var parameters = {
+                        global_search_query: ctx.filter,
+                        sort_field: ctx.sortBy,
+                        sort_direction: ctx.sortDesc ? 'desc' : 'asc',
+                        items_per_page: ctx.perPage,
+                        page_number: ctx.currentPage,
+                        request_count: this.requestCount
+                    };
+                    this.dataConnector.loadEntities(parameters, function(data) {
+                        this.context = data.context;
+                        if (data.count !== undefined) {
+                            this.pagination.total = data.count;
+                            this.requestCount = false;
+                        }
+                        var items = data.entities;
+                        if (this.feedbackEntity) {
+                            this.selectEntity(items, this.feedbackEntity.id);
+                        }
+                        callback(items);
+                    }.bind(this));
+                }
+            }
+        });
+        new Vue({
+            el: '#onoffswitch-open-for-students',
+            delimiters: ['${', '}'],
+            data: {
+                openForStudents: {% if OPEN_FOR_STUDENTS %}true{% else %}false{% endif %},
+                dataConnector: dataConnector
+            },
+            methods: {
+                toggleOpenForStudents(isOpen) {
+                    this.dataConnector.toggleOpenForStudents(!isOpen);
+                }
+            }
+        });
+
+        new Vue({
+            el: '#onoffswitch-self-evaluation',
+            delimiters: ['${', '}'],
+            data: {
+                selfEvaluationAllowed: {% if SELF_EVALUATION_ALLOWED %}true{% else %}false{% endif %},
+                dataConnector: dataConnector
+            },
+            methods: {
+                toggleSelfEvaluationAllowed(selfEvaluationAllowed) {
+                    this.dataConnector.toggleRubricSelfEvaluation(!selfEvaluationAllowed);
+                }
+            }
+        });
+
+        new Vue({
+            el: '#save-state',
+            delimiters: ['${', '}'],
+            data: {
+                dataConnector: dataConnector,
+                error: null,
+                requestType: null
+            },
+            mounted() {
+                this.dataConnector.addErrorListener(this);
+                $('#save-state').css('display', 'block');
+            },
+            methods: {
+                setError(err, requestType) {
+                    this.error = err;
+                    this.requestType = requestType;
+                }
+            }
+        });
+    });
+</script>
+{{ FOOTER|raw }}

@@ -1,0 +1,501 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+<style type="text/css">
+    .u-inline-block {
+        display: inline-block;
+    }
+    .u-flex {
+        display: flex;
+    }
+    .u-align-items-baseline {
+        align-items: baseline;
+    }
+    .u-align-items-center {
+        align-items: center;
+    }
+    .u-align-items-end {
+        align-items: flex-end;
+    }
+    .u-justify-content-between {
+        justify-content: space-between;
+    }
+    .u-gap-small {
+        gap: 5px;
+    }
+    .u-no-spin::-webkit-outer-spin-button,
+    .u-no-spin::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    .u-no-spin {
+        -moz-appearance: textfield; /* Firefox */
+    }
+    #page-title {
+        padding-left: 15px;
+    }
+
+    .rubric-action {
+        margin-top: 20px;
+        padding-bottom: 5px;
+    }
+
+    .section-title {
+        color: #507177;
+        font-size: 2rem;
+        font-weight: 500;
+        margin-right: 15px;
+    }
+
+    .title-underline-fw {
+        border-bottom: 1px solid #ededed;
+    }
+
+    .title-underline-fw.mod-rubric {
+        margin: 0 0 10px;
+    }
+
+    .title-underline-fw.mod-score {
+        margin: 15px 0 20px;
+    }
+
+    .title-underline-fw.mod-absent {
+        margin: 15px 0 5px;
+    }
+
+    .title-underline-fw.mod-feedback {
+        margin: 20px 0 15px;
+    }
+
+    #feedback h3:not(.section-title) {
+        color: #507177;
+        display: inline-block;
+        font-size: 1.75rem;
+        margin: 5px 0 15px 15px;
+    }
+
+    #rubric .save-rubric-area {
+        margin-bottom: 20px;
+        margin-left: 1.2em;
+    }
+
+    .control-label.score-label {
+        color: #507177;
+        margin: 0 10px 5px 0;
+    }
+
+    #score_score {
+        font-size: 1.3rem;
+        height: initial;
+        line-height: 1.5;
+        padding: 5px 10px;
+        width: 57px;
+    }
+    .btn.mod-save-score {
+        margin-left: 5px;
+        margin-right: 5px;
+        font-size: 1.3rem;
+        line-height: 1.5;
+        padding: 5px 10px;
+    }
+    .btn.mod-mark {
+        font-size: 1.3rem;
+        padding-top: 3px;
+    }
+
+    #rubric-entry h4, #rubric-result h4 {
+        display: none;
+    }
+
+    #feedback .panel-feedback {
+        border-color: transparent;
+        max-width: 110ch;
+    }
+
+    #feedback > form {
+        margin-left: 15px;
+        max-width: 107ch;
+    }
+
+    .form-inline.mod-score {
+        margin-left: 15px;
+    }
+
+    .alert-important {
+        margin: 0 10px 0 0;
+    }
+    .alert-important .fa {
+        color: #31708f;
+        font-size: 1.8rem;
+        margin-right: 5px;
+    }
+    .alert-important strong {
+        border-radius: 3px;
+        background-color: #eb6a38;
+        padding: 0 3px 2px;
+        color: #fff;
+        font-weight: 400;
+    }
+
+    .presence-status-icon {
+        background-repeat: no-repeat;
+        display: inline-block;
+        height: 16px;
+        margin-right: 5px;
+        width: 14px;
+        transform: translateY(2px);
+    }
+
+    .presence-status-icon.btn-icon-present {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 63.09 72.73'%3E%3Cg fill='%23fff'%3E%3Cpath d='M31.3 0.0C27.9 0.0 24.4 1.0 21.2 2.8C16.4 5.6 13.1 9.7 11.4 15.0C10.6 17.3 10.3 22.5 10.8 24.9C11.2 27.0 12.0 29.3 12.8 30.7C13.2 31.4 13.5 32.0 13.5 32.1C13.5 32.3 12.6 32.8 11.5 33.3C9.4 34.2 6.9 36.2 5.3 38.2C2.0 42.5 0.3 48.3 0.0 56.4C-0.1 59.8 0.0 61.0 0.4 62.5C0.5 63.1 0.7 63.7 0.9 64.3L6.7 64.3C5.5 62.5 5.2 60.7 5.2 57.3C5.3 45.9 9.6 38.2 16.5 37.2C17.5 37.0 17.8 37.1 19.3 38.2C21.5 39.7 23.6 40.8 26.2 41.5C29.0 42.4 34.2 42.4 37.0 41.5C39.8 40.7 41.9 39.7 43.8 38.2C45.4 37.1 45.6 37.0 46.6 37.2C48.3 37.4 50.8 38.6 52.0 39.6C56.0 43.2 58.1 49.8 57.9 58.0C57.8 61.4 57.7 61.9 57.1 63.3C56.9 63.6 56.7 63.9 56.5 64.3L62.3 64.3C62.5 63.9 62.6 63.5 62.7 63.1C63.3 61.1 63.2 53.2 62.6 49.9C61.1 41.5 57.5 36.0 51.8 33.4C50.7 32.8 49.8 32.4 49.7 32.3C49.7 32.3 50.1 31.3 50.6 30.2C52.5 26.2 53.1 22.5 52.5 18.5C52.1 15.5 51.6 14.0 50.2 11.4C46.3 4.0 38.9 -0.1 31.3 0.0ZM31.8 5.3C36.4 5.4 41.0 7.5 44.2 11.6C47.8 16.2 48.4 23.2 45.6 28.6C43.6 32.3 39.7 35.4 35.5 36.4C29.8 37.9 24.3 36.3 20.2 32.1C17.2 29.0 15.9 25.6 15.9 21.1C15.9 17.2 16.9 14.1 19.2 11.2C22.6 7.2 27.2 5.2 31.8 5.3Z'%3E%3C/path%3E%3Cpath d='M26.5 70.8C25.8 70.3 14.6 59.1 14.3 58.6C14.0 58.1 14.0 57.0 14.3 56.5C14.4 56.3 15.3 55.2 16.4 54.2C18.2 52.5 18.4 52.3 19.0 52.2C19.4 52.1 19.8 52.2 20.1 52.3C20.4 52.4 22.2 54.1 24.2 56.1L27.8 59.7L35.8 51.7C42.6 44.9 43.8 43.8 44.3 43.7C45.3 43.5 45.7 43.7 47.5 45.5C49.7 47.6 50.1 48.1 50.1 49.0C50.1 49.5 50.0 49.8 49.7 50.3C49.2 51.1 29.8 70.4 29.1 70.9C28.3 71.4 27.3 71.4 26.5 70.8Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .presence-status-icon.btn-icon-absent {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 63.09 72.73'%3E%3Cg fill='%23406e8e'%3E%3Cpath d='M31.3 0.0C27.9 0.0 24.4 1.0 21.2 2.8C16.4 5.6 13.1 9.7 11.4 15.0C10.6 17.3 10.3 22.5 10.8 24.9C11.2 27.0 12.0 29.3 12.8 30.7C13.2 31.4 13.5 32.0 13.5 32.1C13.5 32.3 12.6 32.8 11.5 33.3C9.4 34.2 6.9 36.2 5.3 38.2C2.0 42.5 0.3 48.3 0.0 56.4C-0.1 59.8 0.0 61.0 0.4 62.5C0.5 63.1 0.7 63.7 0.9 64.3L6.7 64.3C5.5 62.5 5.2 60.7 5.2 57.3C5.3 45.9 9.6 38.2 16.5 37.2C17.5 37.0 17.8 37.1 19.3 38.2C21.5 39.7 23.6 40.8 26.2 41.5C29.0 42.4 34.2 42.4 37.0 41.5C39.8 40.7 41.9 39.7 43.8 38.2C45.4 37.1 45.6 37.0 46.6 37.2C48.3 37.4 50.8 38.6 52.0 39.6C56.0 43.2 58.1 49.8 57.9 58.0C57.8 61.4 57.7 61.9 57.1 63.3C56.9 63.6 56.7 63.9 56.5 64.3L62.3 64.3C62.5 63.9 62.6 63.5 62.7 63.1C63.3 61.1 63.2 53.2 62.6 49.9C61.1 41.5 57.5 36.0 51.8 33.4C50.7 32.8 49.8 32.4 49.7 32.3C49.7 32.3 50.1 31.3 50.6 30.2C52.5 26.2 53.1 22.5 52.5 18.5C52.1 15.5 51.6 14.0 50.2 11.4C46.3 4.0 38.9 -0.1 31.3 0.0ZM31.8 5.3C36.4 5.4 41.0 7.5 44.2 11.6C47.8 16.2 48.4 23.2 45.6 28.6C43.6 32.3 39.7 35.4 35.5 36.4C29.8 37.9 24.3 36.3 20.2 32.1C17.2 29.0 15.9 25.6 15.9 21.1C15.9 17.2 16.9 14.1 19.2 11.2C22.6 7.2 27.2 5.2 31.8 5.3Z'%3E%3C/path%3E%3Cpath d='M22.8 72.5C22.3 72.4 21.7 71.9 20.5 70.6C19.6 69.7 18.8 68.7 18.6 68.4C18.3 68.0 18.2 67.2 18.5 66.5C18.5 66.3 20.2 64.6 22.0 62.8C23.9 60.9 25.5 59.3 25.5 59.2C25.5 59.1 24.0 57.5 22.1 55.6C20.2 53.8 18.6 52.1 18.5 51.9C18.3 51.3 18.3 50.5 18.5 49.9C18.7 49.7 19.6 48.6 20.6 47.7C22.5 45.8 23.0 45.5 24.1 45.8C24.7 45.9 24.6 45.8 28.5 49.6C30.3 51.4 31.8 52.8 31.8 52.8C31.9 52.8 33.5 51.2 35.4 49.4C39.2 45.6 39.4 45.4 40.7 45.8C41.1 45.9 41.6 46.3 43.1 47.7C44.0 48.6 45.0 49.7 45.1 49.9C45.4 50.5 45.4 51.3 45.1 51.9C45.0 52.1 43.4 53.8 41.5 55.6C39.7 57.5 38.2 59.1 38.2 59.2C38.2 59.3 39.7 60.9 41.6 62.8C43.5 64.7 45.1 66.4 45.2 66.6C45.4 67.2 45.3 68.0 45.0 68.4C44.9 68.7 44.0 69.7 43.0 70.7C41.6 72.1 41.2 72.5 40.7 72.6C39.4 72.9 39.2 72.8 35.4 68.9C33.5 67.0 31.9 65.5 31.8 65.5C31.7 65.5 30.1 67.0 28.2 68.9C25.4 71.8 24.7 72.5 24.2 72.6C23.5 72.8 23.5 72.8 22.8 72.5Z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .btn-action-toolbar.mod-entities {
+        margin-bottom: 0;
+        margin-left: -5px;
+    }
+
+    /* Todo: simplify this code */
+
+    .dropdown-toggle.mod-entities {
+        background-color: transparent;
+        color: #333;
+        float: unset;
+        min-width: 222px;
+        padding-top: 8px;
+        text-align: inherit;
+    }
+
+    .dropdown-toggle.mod-entities:active:hover,
+    .dropdown-toggle.mod-entities.active:hover,
+    .open > .dropdown-toggle.mod-entities:hover,
+    .dropdown-toggle.mod-entities:active:focus,
+    .dropdown-toggle.mod-entities.active:focus,
+    .open > .dropdown-toggle.mod-entities:focus,
+    .dropdown-toggle.mod-entities:active.focus,
+    .dropdown-toggle.mod-entities.active.focus,
+    .open > .dropdown-toggle.mod-entities.focus,
+    .dropdown-toggle.mod-entities:active,
+    .dropdown-toggle.mod-entities.active,
+    .open > .dropdown-toggle.mod-entities
+    {
+        color: #333;
+        background-color: transparent;
+        border-color: #adadad;
+    }
+    .btn-group > .btn.mod-btn-prev:not(:first-child):not(.dropdown-toggle),
+    .btn-group > .btn.mod-btn-next:not(:first-child):not(.dropdown-toggle) {
+        border-radius: 4px;
+        padding: 7px 12px;
+    }
+    .btn-group > .btn.mod-btn-all:first-child:not(:last-child):not(.dropdown-toggle) {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        padding: 7px;
+    }
+
+    .btn.mod-btn-prev:not(:hover), .btn.mod-btn-next:not(:hover) {
+        border-color: transparent;
+    }
+    .dropdown-entity-label {
+        background: #fff;
+        border-radius: 3px;
+        display: inline-block;
+        padding: 0 5px 0 2px;
+        transform: translate(5px, 9px);
+    }
+    .fa-user.mod-entity, .fa-users.mod-entity {
+        color: hsla(0, 0%, 46%, 0.77);
+    }
+    .entity-type {
+        color: #757575;
+    }
+    .entity-index {
+        color: #507177;
+        margin-left: 3px;
+    }
+    .fa-backward.mod-btn-prev {
+        transform: scale(1.2)translateX(-1px);
+    }
+    .fa-forward.mod-btn-next {
+        transform: scale(1.2)translateX(1px);
+    }
+    .entity-icon.mod-btn-all {
+        color: #4c84a9;
+    }
+    .entity-icon.fa-user.mod-btn-all:not(:first-child) {
+        margin-left: -3px;
+    }
+    .entity-icon.fa-users.mod-btn-all:not(:first-child) {
+        margin-left: -2px;
+    }
+
+    #feedback > .form-row.row {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        margin-top: -5px;
+    }
+    #feedback > .form-row.row > .form-label {
+        font-weight: 500;
+        padding: 0;
+        transform: translateY(2px);
+        width: initial;
+    }
+    #feedback > .form-row.row > .formw {
+        padding: 0;
+        width: initial;
+    }
+    #feedback .alert.alert-info {
+        margin-left: 15px;
+        margin-top: -15px;
+        max-width: 107ch;
+    }
+    .alert.alert-info.mod-neutral {
+        /*margin-left: 30px;*/
+        margin-left: 15px;
+        margin-bottom: 0;
+        margin-top: 10px;
+        max-width: 107ch;
+    }
+    .alert.alert-warning.mod-neutral {
+        margin: 15px;
+        max-width: 107ch;
+    }
+    .modal-overlay {
+        background-color: rgba(0, 0, 0, .4);
+        display: block;
+        height: 100%;
+        left: 0;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 50;
+        -webkit-animation: fadein 200ms; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 200ms; /* Firefox < 16 */
+        -ms-animation: fadein 200ms; /* Internet Explorer */
+        -o-animation: fadein 200ms; /* Opera < 12.1 */
+        animation: fadein 200ms;
+    }
+    .modal.mod-confirm-overwrite-score {
+        display: block;
+        margin: 80px auto 20px auto;
+        max-height: 600px;
+        max-width: 680px;
+        overflow: visible;
+        -webkit-animation: fadein 200ms; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 200ms; /* Firefox < 16 */
+        -ms-animation: fadein 200ms; /* Internet Explorer */
+        -o-animation: fadein 200ms; /* Opera < 12.1 */
+        animation: fadein 200ms;
+    }
+    .overwrite-form {
+        background-color: #fff;
+        border-radius: 4px;
+        box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.25);
+        max-height: 100%;
+        overflow: auto;
+        padding: 20px 15px 25px;
+    }
+    .overwrite-form p {
+        margin-left: 5px;
+    }
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        /* box-shadow: 0 1px 1px #e0e0e0; */
+        display: flex;
+        margin: 15px 0 0 8px;
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
+</style>
+{% if not CAN_EDIT_EVALUATION %}
+    <h3 title="{{ EVALUATION_TITLE|raw }}" style="margin-left: 15px;color: #507177;margin-top: 0;">{{ EVALUATION_TITLE|raw }}</h3>
+    {% if not OPEN_FOR_STUDENTS %}
+    <div class="alert alert-warning mod-neutral">
+        {{ 'EvaluationNotReleased'|trans({}, appContext) }}
+    </div>
+    {% endif %}
+{% endif %}
+<div class="col-xs-12">
+    {% set entityTypes = ['UserEntity', 'CourseGroupEntity', 'PlatformGroupEntity'] %}
+    {% set entityTypesPlural = ['UsersEntity', 'CourseGroupsEntity', 'PlatformGroupsEntity'] %}
+    {% set allEntitiesTitle = 'BrowseEntities'|trans({'{NAME}': entityTypesPlural[ENTITY_TYPE]|trans({}, appContext)|lower}, appContext) %}
+    {% set entityType = entityTypes[ENTITY_TYPE] %}
+    {% set entityTypeIcons = ['fa-user', 'fa-users', 'fa-users'] %}
+    {% set entityTypeIcon = entityTypeIcons[ENTITY_TYPE] %}
+    {% if CAN_EDIT_EVALUATION %}
+    <div class="btn-toolbar btn-action-toolbar mod-entities">
+        <div class="btn-group u-flex u-align-items-end u-gap-small">
+            {% if DISPLAY_ALL_ENTITIES_URL %}
+            <a href="{{ ALL_ENTITIES_URL|raw }}" class="btn btn-default mod-btn-all" title="{{ allEntitiesTitle }}">
+                <span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span><span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span><span class="entity-icon inline-glyph fa {{ entityTypeIcon }} mod-btn-all"></span>
+                <span class="sr-only">{{ allEntitiesTitle }}</span>
+            </a>
+            {% endif %}
+            <div>
+                <div class="dropdown-entity-label">
+                    <span class="inline-glyph fa {{ entityTypeIcon }} mod-entity"></span>
+                    <span class="entity-type">{{ entityType|trans({}, appContext) }}</span>
+                    <span class="entity-index">{{ ENTITY_INDEX }} / {{ ENTITY_COUNT }}</span>
+                </div>
+                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default dropdown-toggle u-flex u-align-items-center u-justify-content-between mod-entities" title="{{ SELECTED_ENTITY.name|raw }}">
+                    <span>{{ SELECTED_ENTITY.name|raw }}</span> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-entities">
+                    <li class="dropdown-header">
+                        {{ 'SelectAnother'|trans({}, appContext)|lower }} {{ entityType|trans({}, appContext)|lower }}
+                    </li>
+                    {% for ENTITY in ENTITIES %}
+                        <li>
+                            {% if ENTITY.selected %}
+                                <a class="selected disabled" title="{{ ENTITY.name|raw }}"><span>{{ ENTITY.name|raw }}</span></a>
+                            {% else %}
+                                <a class="not-selected" title="{{ ENTITY.name|raw }}" href="{{ ENTITY.url|raw }}">
+                                    <span>{{ ENTITY.name|raw }}</span>
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if PREVIOUS_ENTITY %}<a class="btn btn-default mod-btn-prev" title="{{ 'Previous'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ PREVIOUS_ENTITY.url|raw }}">
+                <span class="inline-glyph fa fa-backward mod-btn-prev"></span>
+            </a>{% endif %}
+            {% if NEXT_ENTITY %}<a class="btn btn-default mod-btn-next" title="{{ 'Next'|trans({}, commonContext) }} {{ entityType|trans({}, appContext)|lower }}" href="{{ NEXT_ENTITY.url|raw }}">
+                <span class="inline-glyph fa fa-forward mod-btn-next"></span>
+            </a>{% endif %}
+        </div>
+    </div>
+    {% elseif OPEN_FOR_STUDENTS %}
+    <div class="row">
+        <div class="col-xs-12" id="score">
+            <div class="title-underline-fw">
+                <div class="u-flex u-align-items-baseline">
+                    <h3 class="section-title u-inline-block">Score{% if PRESENCE_STATUS != 'neutral' %}:{% endif %}</h3>
+                    {% if PRESENCE_STATUS == 'present' %}<span style="background: #eafbed;color: #027e69;font-size: 2rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ SCORE|raw }}%</span>{% endif %}
+                    {% if PRESENCE_STATUS == 'absent' %}<span style="background: #437f7e;color: #fff;font-size: 1.8rem;padding: 0 5px 2px;font-weight: 500;border-radius: 3px;margin-left: -5px;">{{ 'MarkedAsAbsent'|trans({}, appContext) }}</span>{% endif %}
+                </div>
+            </div>
+            {% if PRESENCE_STATUS == 'neutral' %}
+            <div class="alert alert-info mod-neutral">
+                {{ 'NoScoreAvailableYet'|trans({}, appContext) }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% if HAS_RUBRIC and (CAN_EDIT_EVALUATION or OPEN_FOR_STUDENTS) %}
+    <div class="row">
+        <div class="col-xs-12" id="rubric">
+            <div class="title-underline-fw mod-rubric">
+                <h3 class="section-title u-inline-block">{% if not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS and not SELF_EVALUATION_ALLOWED %}{{ 'RubricResults'|trans({}, appContext) }}{% else %}Rubric{% endif %}</h3>
+            </div>
+            {% if CAN_EDIT_EVALUATION or (OPEN_FOR_STUDENTS and SELF_EVALUATION_ALLOWED) %}
+            <ul class="nav nav-buttons">
+                <li {% if RUBRIC_ACTION == 'Entry' %}class="active"{% endif %}><a href="{{ RUBRIC_ENTRY_URL }}#rubric">{{ 'FillInRubric'|trans({}, appContext) }}</a></li>
+                <li {% if RUBRIC_ACTION == 'Result' %}class="active"{% endif %}><a href="{{ RUBRIC_RESULTS_URL }}#rubric">{{ 'ViewRubricResults'|trans({}, appContext) }}</a></li>
+            </ul>
+            {% endif %}
+            {% if RUBRIC_VIEW is empty %}
+            <div class="alert alert-info mod-neutral">
+                {{ 'NoRubricResultsAvailableYet'|trans({}, appContext) }}
+            </div>
+            {% else %}
+                {{ RUBRIC_VIEW|raw }}
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if CAN_EDIT_EVALUATION %}
+    <div class="row">
+        <div class="col-xs-12" id="score">
+            {% if PRESENCE_STATUS == 'absent' %}
+                <div class="title-underline-fw mod-absent">
+                    <h3 class="section-title u-inline-block"><span aria-hidden="true" class="presence-status-icon btn-icon-absent"></span>{{ 'MarkedAsAbsent'|trans({}, appContext)|raw }}</h3>
+                </div>
+            {% else %}
+                <div class="title-underline-fw mod-score">
+                    <h3 class="section-title u-inline-block">{{ 'ScoreEntry'|trans({}, appContext) }}</h3>
+                </div>
+            {% endif %}
+            <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" class="form-inline u-flex u-align-items-baseline mod-score">
+                {% if PRESENCE_STATUS == 'absent' %}<button name="action" value="present" class="btn btn-primary btn-sm mod-mark" title="{{ 'MarkPresentTooltip'|trans({}, appContext) }}"><span aria-hidden="true" class="presence-status-icon btn-icon-present"></span><span>{{ 'MarkPresent'|trans({}, appContext) }}</span></button>{% endif %}
+                {% if PRESENCE_STATUS != 'absent' %}<label class="control-label required score-label" for="score_score">Score:</label><input id="score_score" name="score" value="{{ SCORE|raw }}" type="number" min="0" required class="form-control form-control-sm u-no-spin" autocomplete="off">
+                <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Save'|trans({}, commonContext) }}</button>
+                {% endif %}
+                {% if PRESENCE_STATUS == 'neutral' or PRESENCE_STATUS == 'present' %}<button name="action" value="absent" formnovalidate class="btn btn-default btn-sm mod-mark" title="{{ 'MarkAbsentTooltip'|trans({}, appContext) }}"><span aria-hidden="true" class="presence-status-icon btn-icon-absent"></span><span>{{ 'MarkAbsent'|trans({}, appContext) }}</span></button>{% endif %}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
+            </form>
+            {% if CONFIRM_OVERWRITE_SCORE %}
+                <div class="modal-overlay"></div>
+                <div class="modal mod-confirm-overwrite-score">
+                    <div class="overwrite-form">
+                        <script type="text/javascript">
+                            var hideForm = function() {
+                                $('.modal.mod-confirm-overwrite-score').hide();
+                                $('.modal-overlay').hide();
+                            }
+                        </script>
+                        <p>{{ 'OverwriteScoreEvaluationScore'|trans({}, appContext)}} <strong>{{ SCORE|raw }}</strong>.</p>
+                        <p style="margin-bottom: 15px">{{ 'OverwriteScoreRubricScore'|trans({}, appContext)}} <strong>{{ RUBRIC_SCORE|raw }}</strong>?</p>
+                        <div>
+                            <form name="score" action="{{ SAVE_SCORE_URL|raw }}" method="post" style="display: contents">
+                                <input type="hidden" name="score" value="{{ RUBRIC_SCORE|raw }}">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('ComponentToken') }}">
+                                <button type="submit" name="action" value="save" class="btn btn-primary mod-save-score">{{ 'Overwrite'|trans({}, appContext)}}</button>
+                            </form>
+                            <button class="btn btn-default mod-save-score" style="margin-left: 0" onclick="hideForm()">{{ 'Cancel'|trans({}, appContext)}}</button>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% if CAN_EDIT_EVALUATION or (not CAN_EDIT_EVALUATION and OPEN_FOR_STUDENTS) %}
+    <div class="row">
+        <div class="col-xs-12" id="feedback">
+            <div class="title-underline-fw mod-feedback">
+                <h3 class="section-title u-inline-block">Feedback</h3>
+            </div>
+            {{ FEEDBACK_MANAGER|raw }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{{ FOOTER|raw }}

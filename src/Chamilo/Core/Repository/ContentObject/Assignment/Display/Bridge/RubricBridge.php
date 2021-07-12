@@ -100,4 +100,9 @@ class RubricBridge implements RubricBridgeInterface
 
         $this->scoreService->createOrUpdateScoreForEntry($this->entry, $relativeScore, $user);
     }
+
+    public function getPostSaveRedirectParameters()
+    {
+        return null;
+    }
 }

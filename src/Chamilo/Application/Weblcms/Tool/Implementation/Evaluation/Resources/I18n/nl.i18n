@@ -1,0 +1,31 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\evaluation
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Evaluaties"
+TypeNameSingle = "Evaluatie"
+InstallTypeName = "Evaluaties"
+BrowserComponent = "Doorblader evaluaties"
+ViewerComponent = "Bekijk evaluatie"
+PublicationUpdaterComponent = "Bewerk evaluatie"
+PublisherComponent = "Publiceer evaluatie"
+UpdaterComponent = "Bewerk evaluatie"
+IntroductionPublisherComponent = "Publiceer introductietekst"
+SentByEmail = "Verstuurd via email"
+ViewPeriodHeader = "Selecteer periode"
+DefaultProperties = "Algemene eigenschappen"
+EvaluationProperties = "Eigenschappen voor de evaluatie"
+PublishEvaluationForEntity = "Evaluatietype"
+TypeUsersEntity = "Individuele evaluatie"
+TypeCourseGroupsEntity = "Groepsevaluatie voor cursusgroepen"
+TypePlatformGroupsEntity = "Groepsevaluatie voor platformgroepen"
+OpenForStudents = "Zet open voor studenten"
+Import = "Importeer vanuit Curios"
+UsersEntity = "Studenten"
+UserEntity = "Student"
+CourseGroupsEntity = "Cursusgroepen"
+CourseGroupEntity = "Cursusgroep"
+PlatformGroupsEntity = "Platformgroepen"
+PlatformGroupEntity = "Platformgroep"
+

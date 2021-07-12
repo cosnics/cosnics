@@ -45,6 +45,14 @@ class FeedbackRightsServiceBridgeAdapter implements FeedbackRightsServiceBridgeI
     }
 
     /**
+     * @return bool
+     */
+    public function canViewPrivateFeedback()
+    {
+        return false;
+    }
+
+    /**
      * @param \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback $feedback
      *
      * @return bool
