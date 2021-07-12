@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity
@@ -23,10 +24,16 @@ class PublicationUserEntityService implements PublicationEntityServiceInterface
      */
     protected $userService;
 
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, UserService $userService)
+    /**
+     * @var Translator
+     */
+    protected $translator;
+
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, UserService $userService, Translator $translator)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->userService = $userService;
+        $this->translator = $translator;
     }
 
     /**
@@ -85,5 +92,16 @@ class PublicationUserEntityService implements PublicationEntityServiceInterface
     {
         $user = $this->getUsersForEntity($entityId)[0];
         return $user->get_fullname();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluralEntityName(): string
+    {
+        return $this->translator->trans(
+            'UsersEntity', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
+        );
     }
 }

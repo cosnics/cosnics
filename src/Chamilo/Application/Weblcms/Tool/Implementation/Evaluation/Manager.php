@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation;
 
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
@@ -54,4 +55,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
     }
 
+    /**
+     * @return PublicationEntityServiceManager
+     */
+    public function getPublicationEntityServiceManager()
+    {
+        return $this->getService(PublicationEntityServiceManager::class);
+    }
 }

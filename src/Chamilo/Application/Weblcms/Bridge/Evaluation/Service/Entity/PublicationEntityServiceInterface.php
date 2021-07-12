@@ -39,4 +39,9 @@ interface PublicationEntityServiceInterface
      * @return string
      */
     public function getEntityDisplayName(int $entityId): string;
+
+    /**
+     * @return string
+     */
+    public function getPluralEntityName(): string;
 }

@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\S
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity
@@ -31,15 +32,21 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
     protected $userService;
 
     /**
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
      * @var array
      */
     protected $targetCourseGroupIds = [];
 
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, CourseGroupService $courseGroupService, UserService $userService)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, CourseGroupService $courseGroupService, UserService $userService, Translator $translator)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->courseGroupService = $courseGroupService;
         $this->userService = $userService;
+        $this->translator = $translator;
     }
 
     /**
@@ -160,5 +167,16 @@ class PublicationCourseGroupEntityService implements PublicationEntityServiceInt
     {
         $courseGroup = $this->courseGroupService->getCourseGroupById($entityId);
         return $courseGroup->get_name();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluralEntityName(): string
+    {
+        return $this->translator->trans(
+            'CourseGroupsEntity', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
+        );
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity
@@ -25,14 +26,20 @@ class PublicationPlatformGroupEntityService implements PublicationEntityServiceI
     protected $userService;
 
     /**
+     * @var Translator
+     */
+    protected $translator;
+
+    /**
      * @var array
      */
     protected $targetPlatformGroupIds = [];
 
-    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, UserService $userService)
+    public function __construct(PublicationEntityServiceManager $publicationEntityServiceManager, UserService $userService, Translator $translator)
     {
         $this->publicationEntityServiceManager = $publicationEntityServiceManager;
         $this->userService = $userService;
+        $this->translator = $translator;
     }
 
     /**
@@ -148,5 +155,16 @@ class PublicationPlatformGroupEntityService implements PublicationEntityServiceI
     {
         $platformGroup = DataManager::retrieve_by_id(Group::class, $entityId);
         return $platformGroup->get_name();
+    }
+
+    /**
+     * @return string
+     */
+    public function getPluralEntityName(): string
+    {
+        return $this->translator->trans(
+            'PlatformGroupsEntity', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
+        );
     }
 }

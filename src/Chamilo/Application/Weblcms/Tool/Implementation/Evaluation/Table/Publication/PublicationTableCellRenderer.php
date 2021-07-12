@@ -2,25 +2,20 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Table\Publication;
 
-use Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Table\Publication\Table\ObjectPublicationTableCellRenderer;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
-use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication;
-use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Parameters\FilterParameters;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Libraries\Utilities\Utilities;
+use Chamilo\Application\Weblcms\Bridge\Evaluation\Domain\EntityTypes;
 
 /**
  * Extension on the content object publication table cell renderer for this tool
  *
- * @author Sven Vanpoucke - Hogeschool Gent
+ * @author Stefan Gabriëls - Hogeschool Gent
  */
 class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
 {
@@ -42,12 +37,25 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
      */
     public function render_cell($column, $publication)
     {
-        $content_object = $this->get_component()->get_content_object_from_publication($publication);
         switch ($column->get_name())
         {
             case ContentObject::PROPERTY_TITLE :
                 return $this->generate_title_link($publication);
+            case Publication::PROPERTY_ENTITY_TYPE:
+                $contentObjectPublication = new ContentObjectPublication();
+                $contentObjectPublication->setId($publication[DataClass::PROPERTY_ID]);
 
+                $contentObjectPublication->set_content_object_id(
+                    $publication[ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID]
+                );
+
+                $entityType = $this->getEvaluationPublication($contentObjectPublication)->getEntityType();
+                $entityTypeName = $this->getPublicationEntityServiceManager()->getEntityServiceByType($entityType)->getPluralEntityName();
+                $iconName = ($entityType == EntityTypes::ENTITY_TYPE_USER()->getValue()) ? 'user' : 'users';
+
+                $glyph = new FontAwesomeGlyph($iconName, [], $entityTypeName);
+
+                return $glyph->render();
         }
         return parent::render_cell($column, $publication);
     }
@@ -73,28 +81,27 @@ class PublicationTableCellRenderer extends ObjectPublicationTableCellRenderer
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Service\AssignmentService
+     * @return \Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager
      */
-    protected function getAssignmentService()
+    protected function getPublicationEntityServiceManager()
     {
-        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\BrowserComponent $component */
+        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component\BrowserComponent $component */
         $component = $this->get_component()->get_tool_browser()->get_parent();
 
-        return $component->getAssignmentService();
+        return $component->getPublicationEntityServiceManager();
     }
 
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Storage\DataClass\Publication|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass
      */
-    protected function getAssignmentPublication(ContentObjectPublication $contentObjectPublication)
+    protected function getEvaluationPublication(ContentObjectPublication $contentObjectPublication)
     {
-        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Component\BrowserComponent $component */
+        /** @var \Chamilo\Application\Weblcms\Tool\Implementation\Evaluation\Component\BrowserComponent $component */
         $component = $this->get_component()->get_tool_browser()->get_parent();
 
-        return $component->getAssignmentPublication($contentObjectPublication);
+        return $component->getEvaluationPublication($contentObjectPublication);
     }
-
 }
