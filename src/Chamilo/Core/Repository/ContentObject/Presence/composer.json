@@ -1,0 +1,48 @@
+{
+    "name": "cosnics/core-repository-content-object-presence",
+    "version": "1.0.0",
+    "description": "Core Repository ContentObject Presence",
+    "keywords": [
+        "Core",
+        "Repository",
+        "ContentObject",
+        "Presence"
+    ],
+    "homepage": "http://www.cosnics.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stefan Gabriëls",
+            "email": "stefan.gabriels@hogent.be"
+        },
+        {
+            "name": "Sven Vanpoucke",
+            "email": "sven.vanpoucke@hogent.be"
+        },
+        {
+            "name": "Hans De Bisschop",
+            "email": "hans.de.bisschop@ehb.be"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "extra": {
+        "cosnics": {
+            "name": "Presence",
+            "context": "Chamilo\\Core\\Repository\\ContentObject\\Presence",
+            "type": "Chamilo\\Core\\Repository\\ContentObject",
+            "category": "News",
+            "install": {
+                "default": 1,
+                "core": 0
+            },
+            "dependencies": [
+                {
+                    "id": "Chamilo\\Core\\Repository",
+                    "version": ">=1.0.0"
+                }
+            ]
+        }
+    }
+}
