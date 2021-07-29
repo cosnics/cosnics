@@ -112,26 +112,26 @@ class Footer extends BaseFooter
                  Configuration::get('Chamilo\Core\Admin', 'version');
         }
 
-        if (key_exists('_uid', $_SESSION))
-        {
-            $user = new User();
-            $user->setId(Session::get_user_id());
-            $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
-                $user,
-                'Chamilo\Core\Admin',
-                'ViewWhoisOnline');
-
-            if ($whoisOnlineAuthorized)
-            {
-                $redirect = new Redirect(
-                    array(
-                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
-                        Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE));
-
-                $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation::get('WhoisOnline') .
-                     '?</a>';
-            }
-        }
+//        if (key_exists('_uid', $_SESSION))
+//        {
+//            $user = new User();
+//            $user->setId(Session::get_user_id());
+//            $whoisOnlineAuthorized = $this->getAuthorizationChecker()->isAuthorized(
+//                $user,
+//                'Chamilo\Core\Admin',
+//                'ViewWhoisOnline');
+//
+//            if ($whoisOnlineAuthorized)
+//            {
+//                $redirect = new Redirect(
+//                    array(
+//                        Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+//                        Application::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE));
+//
+//                $links[] = '<a href="' . htmlspecialchars($redirect->getUrl()) . '">' . Translation::get('WhoisOnline') .
+//                     '?</a>';
+//            }
+//        }
 
         return $links;
     }
