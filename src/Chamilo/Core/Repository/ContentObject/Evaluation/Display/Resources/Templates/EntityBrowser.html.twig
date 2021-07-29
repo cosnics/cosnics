@@ -589,7 +589,7 @@
 
 <h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
 <div id="save-state" style="display: none">
-    <div v-if="!error" class="notifications">
+    <div v-if="!error" class="notifications js-save-state">
         <div class="alert alert-info" role="alert" aria-live="polite">
             <template v-if="dataConnector && dataConnector.isSaving()">
                 ${ dataConnector.processingSize() } ${ dataConnector.processingSize() === 1 ? '{{ ChangeSingle }}' : '{{ ChangeMultiple }}' }...
@@ -1050,6 +1050,11 @@
             },
             mounted() {
                 this.dataConnector.addErrorListener(this);
+                try {
+                    $('.notifications:not(.js-save-state)').children().insertBefore($('.notifications.js-save-state').children()[0]);
+                } catch (err) {
+
+                }
                 $('#save-state').css('display', 'block');
             },
             methods: {
