@@ -3,6 +3,8 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Service;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository\SiteRepository;
+use Microsoft\Graph\Model\ListInfo;
+use Microsoft\Graph\Model\Site;
 
 /**
  * @package Chamilo\Libraries\Protocol\Microsoft\Graph\Service
@@ -25,7 +27,13 @@ class SiteService
      */
     public function getSite(string $siteName)
     {
-        return $this->siteRepository->getSite($siteName);
+        $site = $this->siteRepository->getSite($siteName);
+        if (!$site instanceof Site)
+        {
+            throw new \RuntimeException('Could not retrieve the site ' . $siteName);
+        }
+
+        return $site;
     }
 
     /**
@@ -40,15 +48,23 @@ class SiteService
     }
 
     /**
-     * @param string $siteId
+     * @param Site $site
      * @param string $listTitle
      *
      * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\ListInfo|null
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getList(string $siteId, string $listTitle)
+    public function getList(Site $site, string $listTitle)
     {
-        return $this->siteRepository->getList($siteId, $listTitle);
+        $list = $this->siteRepository->getList($site->getId(), $listTitle);
+        if (!$list instanceof ListInfo)
+        {
+            throw new \RuntimeException(
+                sprintf('Could not retrieve the "%s" list for site %s', $listTitle, $site->getDisplayName())
+            );
+        }
+
+        return $list;
     }
 
     /**
