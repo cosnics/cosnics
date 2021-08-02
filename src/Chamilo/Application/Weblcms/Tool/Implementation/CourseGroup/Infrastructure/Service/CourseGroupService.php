@@ -259,4 +259,34 @@ class CourseGroupService
 
         return $this->countMembersDirectlySubscribedInGroup($courseGroup) >= $courseGroup->get_max_number_of_members();
     }
+
+    /**
+     * @param string $courseGroupName
+     * @param int $courseId
+     * @param int $parentGroupId
+     *
+     * @return CourseGroup
+     */
+    public function createCourseGroup(string $courseGroupName, int $courseId, int $parentGroupId = 0)
+    {
+        $courseGroup = new CourseGroup();
+        $courseGroup->set_course_code($courseId);
+
+        if (empty($parentGroupId))
+        {
+            $parentGroupId = $this->courseGroupRepository->getRootCourseGroup($courseId)->getId();
+        }
+
+        $courseGroup->set_parent_id($parentGroupId);
+        $courseGroup->set_name($courseGroupName);
+
+        if (!$this->courseGroupRepository->createCourseGroup($courseGroup))
+        {
+            throw new \RuntimeException(
+                sprintf('Could not create course group with name %s in course %s', $courseGroupName, $courseId)
+            );
+        }
+
+        return $courseGroup;
+    }
 }

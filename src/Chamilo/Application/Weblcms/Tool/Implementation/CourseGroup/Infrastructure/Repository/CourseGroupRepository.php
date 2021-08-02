@@ -175,5 +175,37 @@ class CourseGroupRepository extends CommonDataClassRepository
         $condition = new AndCondition($conditions);
 
         return $condition;
-}
+    }
+
+    public function createCourseGroup(CourseGroup $courseGroup)
+    {
+        return $this->dataClassRepository->create($courseGroup);
+    }
+
+    /**
+     * @param int $courseId
+     *
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false|CourseGroup
+     */
+    public function getRootCourseGroup(int $courseId)
+    {
+        $conditions = array();
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($courseId)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class_name(), CourseGroup::PROPERTY_PARENT_ID),
+            new StaticConditionVariable(0)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return $this->dataClassRepository->retrieve(
+            CourseGroup::class_name(), new DataClassRetrieveParameters($condition)
+        );
+    }
+
 }
