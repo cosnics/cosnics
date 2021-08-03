@@ -9,8 +9,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * Course group service to help with the management of course groups
@@ -163,6 +161,8 @@ class CourseGroupService
 
     /**
      * @param int $courseGroupId
+     *
+     * @return bool|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|CourseGroup
      */
     public function getCourseGroupById(int $courseGroupId)
     {
@@ -285,6 +285,21 @@ class CourseGroupService
             throw new \RuntimeException(
                 sprintf('Could not create course group with name %s in course %s', $courseGroupName, $courseId)
             );
+        }
+
+        return $courseGroup;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroup
+     */
+    public function updateCourseGroup(CourseGroup $courseGroup)
+    {
+        if (!$this->courseGroupRepository->updateCourseGroup($courseGroup))
+        {
+            throw new \RuntimeException('Could not update course group with id ' . $courseGroup->getId());
         }
 
         return $courseGroup;
