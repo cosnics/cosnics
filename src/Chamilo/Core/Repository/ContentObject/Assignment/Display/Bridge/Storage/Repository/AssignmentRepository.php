@@ -425,7 +425,7 @@ abstract class AssignmentRepository
         $joinCondition = new AndCondition($joinConditions);
 
         $joins = new Joins();
-        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_LEFT));
+        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_NORMAL));
 
         $group_by = new GroupBy();
         $group_by->add($baseVariable);
