@@ -360,7 +360,7 @@ abstract class AssignmentRepository
 
         $joinCondition = new AndCondition($joinConditions);
 
-        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_NORMAL));
+        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_LEFT));
 
         $group_by = new GroupBy();
         $group_by->add($baseVariable);
@@ -372,7 +372,7 @@ abstract class AssignmentRepository
 
         $conditions = [];
         $conditions[] = $entitiesCondition;
-        $conditions[] = $contextCondition;
+//        $conditions[] = $contextCondition;
         $condition = new OrCondition($conditions);
 
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
@@ -425,7 +425,7 @@ abstract class AssignmentRepository
         $joinCondition = new AndCondition($joinConditions);
 
         $joins = new Joins();
-        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_NORMAL));
+        $joins->add(new Join($this->getEntryClassName(), $joinCondition, Join::TYPE_LEFT));
 
         $group_by = new GroupBy();
         $group_by->add($baseVariable);
