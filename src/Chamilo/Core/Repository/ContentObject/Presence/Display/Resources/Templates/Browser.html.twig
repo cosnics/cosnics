@@ -3,6 +3,8 @@
 {% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Presence\\Display' %}
 {% set commonContext = 'Chamilo\\Libraries' %}
 
+{{ getJavascript('cosnics-presence.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
+
 <style type="text/css">
     .nav.nav-buttons {
         align-items: baseline;
@@ -48,5 +50,36 @@
             <li role="presentation"><a href="#presence" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
     </div>
+    <div id="presence-builder">
+        <presence-main-app :api-config="apiConfig"></presence-main-app>
+    </div>
 </div>
+<script>
+    Vue.use(BootstrapVue);
+    Vue.use(VueI18n);
+    Vue.use(window['cosnics-presence'].default);
+
+    const messages = { en: [], nl: [] };
+
+    let lang;
+    try {
+        lang = '{{ LANGUAGE|raw }}';
+    } catch (err) {
+        console.warn('Language could not be set, defaulting to English instead.');
+        lang = 'en';
+    }
+
+    new Vue({
+        i18n: new VueI18n({ locale: lang, messages }),
+        el: '#presence-builder',
+        delimiters: ['${', '}'],
+        data: {
+            apiConfig: {
+                loadStudentsURL: `/api/students`,
+                loadPresenceURL: `/api/presence`,
+                updatePresenceURL: `/api/update-presence`
+            }
+        }
+    });
+</script>
 {{ FOOTER|raw }}

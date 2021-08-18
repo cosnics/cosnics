@@ -61,6 +61,7 @@ class BrowserComponent extends Manager
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
+            'LANGUAGE' => $this->getTranslator()->getLocale(),
             //'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
             //'CONTEXT_ID' => $contextIdentifier->getContextId(),
             'CONTENT_OBJECT_TITLE' => $presence->get_title(),
