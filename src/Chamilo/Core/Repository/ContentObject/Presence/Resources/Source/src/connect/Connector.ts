@@ -50,6 +50,7 @@ export default class Connector {
         this.addToQueue(async () => {
             const parameters = {data: JSON.stringify({id, statuses})};
             const res = await this.executeAPIRequest(this.apiConfig.updatePresenceURL, parameters);
+            return res.data;
         });
     }
 

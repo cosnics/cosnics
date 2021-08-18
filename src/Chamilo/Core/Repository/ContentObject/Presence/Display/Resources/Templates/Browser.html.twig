@@ -4,6 +4,7 @@
 {% set commonContext = 'Chamilo\\Libraries' %}
 
 {{ getJavascript('cosnics-presence.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
+{{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 
 <style type="text/css">
     .nav.nav-buttons {
@@ -75,9 +76,9 @@
         delimiters: ['${', '}'],
         data: {
             apiConfig: {
-                loadStudentsURL: `/api/students`,
-                loadPresenceURL: `/api/presence`,
-                updatePresenceURL: `/api/update-presence`
+                loadStudentsURL: '/api/students',
+                loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
+                updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}'
             }
         }
     });

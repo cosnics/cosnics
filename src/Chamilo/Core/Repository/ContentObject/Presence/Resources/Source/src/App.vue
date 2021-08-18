@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
-    <Main :api-config="apiConfig"></Main>
-  </div>
+    <div id="app">
+        <div class="banner">
+            <h1 class="banner-header">Presence Tool</h1>
+        </div>
+        <Main :api-config="apiConfig"></Main>
+    </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import APIConfig from './connect/APIConfig';
 import Main from './components/Main.vue';
 
 @Component({
-  components: { Main }
+    components: {Main}
 })
 export default class App extends Vue {
     readonly apiConfig = APIConfig.from({

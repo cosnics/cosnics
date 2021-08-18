@@ -65,7 +65,19 @@ class BrowserComponent extends Manager
             //'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
             //'CONTEXT_ID' => $contextIdentifier->getContextId(),
             'CONTENT_OBJECT_TITLE' => $presence->get_title(),
-            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject()
+            'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
+            'LOAD_PRESENCE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE
+                ]
+            ),
+            'UPDATE_PRESENCE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    \Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE
+                ]
+            ),
         ];
     }
 

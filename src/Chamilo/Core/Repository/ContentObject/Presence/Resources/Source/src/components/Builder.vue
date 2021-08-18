@@ -2,12 +2,12 @@
   <div @click.stop="selectedStatus = null">
     <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields" class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}" :tbody-tr-class="rowClass">
       <template #cell(code)="status">
-        <div class="cell-pad" @click.stop="onSelectStatus(status.item)"><b-input type="text" v-model="status.item.code" autocomplete="off" :disabled="createNew" class="mod-input mod-small" @focus="onSelectStatus(status.item)" /></div>
+        <div class="cell-pad" @click.stop="onSelectStatus(status.item)"><b-input type="text" v-model="status.item.code" autocomplete="off" :disabled="createNew" class="mod-input mod-pad mod-small" @focus="onSelectStatus(status.item)" /></div>
       </template>
       <template #cell(title)="status">
         <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
           <template v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'"><span style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span></template>
-          <b-input v-else type="text" v-model="status.item.title" autocomplete="off" :disabled="createNew" class="mod-input" @focus="onSelectStatus(status.item)" />
+          <b-input v-else type="text" v-model="status.item.title" autocomplete="off" :disabled="createNew" class="mod-input mod-pad" @focus="onSelectStatus(status.item)" />
         </div>
       </template>
       <template #cell(meaning)="status">
@@ -43,10 +43,10 @@
         </div>
       </template>
       <template #foot(code)="">
-        <input type="text" class="form-control mod-input mod-small" id="new-presence-code" v-model="codeNew" />
+        <input type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew" />
       </template>
       <template #foot(title)="">
-        <b-input type="text" class="mod-input" v-model="titleNew" />
+        <b-input type="text" class="mod-input mod-pad" v-model="titleNew" />
       </template>
       <template #foot(meaning)="">
         <select class="form-control mod-select" v-model="aliasNew">

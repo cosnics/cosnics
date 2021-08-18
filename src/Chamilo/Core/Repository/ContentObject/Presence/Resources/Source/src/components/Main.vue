@@ -1,8 +1,5 @@
 <template>
     <div v-if="presence">
-        <div class="banner">
-            <h1 class="banner-header">{{ presence.title }}</h1>
-        </div>
         <div class="presence-builder">
             <div>
                 <h2 class="presence-header">Builder</h2>
@@ -159,7 +156,7 @@ export default class Main extends Vue {
     color: red;
 }
 
-.form-control.mod-input {
+.form-control.mod-input.mod-pad {
     height: initial;
     padding: 2px 5px;
 }
