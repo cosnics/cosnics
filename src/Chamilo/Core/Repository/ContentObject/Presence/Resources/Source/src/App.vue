@@ -15,9 +15,8 @@ import Main from './components/Main.vue';
 export default class App extends Vue {
     readonly apiConfig = APIConfig.from({
         loadStudentsURL: `/api/students`,
-        loadStatusDefaultsURL: `/api/status-defaults`,
-        loadPresencesURL: `/api/presences`,
-        updatePresencesURL: `/api/update-presences`
+        loadPresenceURL: `/api/presence/1`,
+        updatePresenceURL: `/api/update-presence`
     });
 }
 </script>

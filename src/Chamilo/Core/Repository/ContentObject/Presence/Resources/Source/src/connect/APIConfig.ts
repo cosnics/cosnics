@@ -1,8 +1,7 @@
 export default class APIConfig {
     public readonly loadStudentsURL = '';
-    public readonly loadStatusDefaultsURL = '';
-    public readonly loadPresencesURL = '';
-    public readonly updatePresencesURL = '';
+    public readonly loadPresenceURL = '';
+    public readonly updatePresenceURL = '';
 
     constructor(config: Record<string, string>) {
         Object.assign(this, config);
