@@ -19,8 +19,9 @@ class PresenceForm extends ContentObjectForm
     // Inherited
     public function create_content_object()
     {
-        $object = new Presence();
-        $this->set_content_object($object);
+        $presence = new Presence();
+        $presence->setOptions($this->getTranslator()->getLocale() == 'nl' ? Presence::OPTIONS_DEFAULTS_NL : Presence::OPTIONS_DEFAULTS_EN);
+        $this->set_content_object($presence);
         return parent::create_content_object();
     }
 }
