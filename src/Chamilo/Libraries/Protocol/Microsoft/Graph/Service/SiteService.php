@@ -75,9 +75,9 @@ class SiteService
      * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\ListItem[]|null
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getListItems(string $siteId, string $listId, bool $showFields = true)
+    public function getListItems(string $siteId, string $listId, string $filter = '', bool $showFields = true)
     {
-        return $this->siteRepository->getListItems($siteId, $listId, $showFields);
+        return $this->siteRepository->getListItems($siteId, $listId, $filter, $showFields);
     }
 
     /**

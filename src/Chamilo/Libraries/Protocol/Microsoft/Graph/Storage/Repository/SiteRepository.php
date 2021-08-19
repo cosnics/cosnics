@@ -103,12 +103,24 @@ class SiteRepository
      * @return \Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\ListItem[]|null
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
      */
-    public function getListItems(string $siteId, string $listId, bool $showFields = true)
+    public function getListItems(string $siteId, string $listId, string $filter = '', bool $showFields = true)
     {
         $url = '/sites/' . $siteId . '/lists/' . $listId . '/items';
+
+        $parameters = [];
         if($showFields)
         {
-            $url .= '?expand=fields';
+            $parameters['expand'] = 'fields';
+        }
+
+        if($filter)
+        {
+            $parameters['$filter'] = $filter;
+        }
+
+        if(count($parameters) > 0)
+        {
+            $url .= '?' . http_build_query($parameters);
         }
 
         return $this->graphRepository->executeGetWithAccessTokenExpirationRetry(
