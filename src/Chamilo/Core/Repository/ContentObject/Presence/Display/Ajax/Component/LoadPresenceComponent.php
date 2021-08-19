@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component
@@ -23,26 +24,21 @@ class LoadPresenceComponent extends Manager
                 $this->throwUserException('PresenceNotFound');
             }
 
-            $statusDefaults = $this->getTranslator()->getLocale() == 'nl' ? Presence::STATUS_DEFAULTS_NL : Presence::STATUS_DEFAULTS_EN;
+            $statusDefaults = $this->getTranslator()->getLocale() == 'nl' ? Presence::FIXED_STATUS_DEFAULTS_NL : Presence::FIXED_STATUS_DEFAULTS_EN;
 
             $resultData = [
-                'status-defaults' => json_decode($statusDefaults),
+                'status-defaults' => $this->deserialize($statusDefaults),
                 'presence' => [
                     'id' => $presence->getId(),
                     'title' => $presence->get_title(),
-                    'statuses' => json_decode($presence->getOptions())
+                    'statuses' => $this->deserialize($presence->getOptions())
                 ]
             ];
-
-            http_response_code(200);
-            header('Content-type: application/json');
-            echo json_encode($resultData);
+            return new JsonResponse($this->serialize($resultData), 200, [], true);
         }
         catch (\Exception $ex)
         {
-            http_response_code(500);
-            header('Content-type: application/json');
-            echo $ex->getMessage();
+            return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
     }
 }

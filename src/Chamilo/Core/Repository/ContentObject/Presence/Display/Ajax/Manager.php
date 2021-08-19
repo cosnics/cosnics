@@ -45,6 +45,20 @@ abstract class Manager extends AjaxManager
         parent::__construct($applicationConfiguration);
     }
 
+    /**
+     * @param string $json
+     * @return array
+     */
+    protected function deserialize(string $json): array
+    {
+        return $this->getSerializer()->deserialize($json, 'array', 'json');
+    }
+
+    protected function serialize(array $array): string
+    {
+        return $this->getSerializer()->serialize($array, 'json');
+    }
+
     protected function get_root_content_object()
     {
         return $this->get_application()->get_root_content_object();
