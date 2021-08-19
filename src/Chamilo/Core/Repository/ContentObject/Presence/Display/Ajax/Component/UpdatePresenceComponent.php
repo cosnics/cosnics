@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class LoadPresenceComponent extends Manager
+class UpdatePresenceComponent extends Manager
 {
     function run()
     {
         try
         {
+            $this->ajaxComponent->validateIsPostRequest();
             $presence = $this->getPresence();
 
             if (!$presence instanceof Presence)
@@ -24,17 +25,10 @@ class LoadPresenceComponent extends Manager
                 $this->throwUserException('PresenceNotFound');
             }
 
-            $statusDefaults = $this->getTranslator()->getLocale() == 'nl' ? Presence::FIXED_STATUS_DEFAULTS_NL : Presence::FIXED_STATUS_DEFAULTS_EN;
+            $json = $this->getRequest()->getFromPost('data');
+            $data = $this->deserialize($json);
 
-            $resultData = [
-                'status-defaults' => $this->deserialize($statusDefaults),
-                'presence' => [
-                    'id' => (int) $presence->getId(),
-                    'title' => $presence->get_title(),
-                    'statuses' => $this->deserialize($presence->getOptions())
-                ]
-            ];
-            return new JsonResponse($this->serialize($resultData), 200, [], true);
+            return new JsonResponse($this->serialize(['message' => 'ok']), 200, [], true);
         }
         catch (\Exception $ex)
         {

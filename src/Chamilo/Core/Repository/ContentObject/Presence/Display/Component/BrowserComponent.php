@@ -69,13 +69,13 @@ class BrowserComponent extends Manager
             'LOAD_PRESENCE_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE
                 ]
             ),
             'UPDATE_PRESENCE_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    \Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE
                 ]
             ),
         ];

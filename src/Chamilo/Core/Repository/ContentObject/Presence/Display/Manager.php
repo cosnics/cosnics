@@ -178,7 +178,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @throws NotAllowedException
      */
-    protected function validateIsPostRequest()
+    public function validateIsPostRequest()
     {
         if (!$this->getRequest()->isMethod('POST'))
         {
