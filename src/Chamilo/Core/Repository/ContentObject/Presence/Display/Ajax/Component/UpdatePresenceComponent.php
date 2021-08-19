@@ -28,11 +28,29 @@ class UpdatePresenceComponent extends Manager
             $json = $this->getRequest()->getFromPost('data');
             $data = $this->deserialize($json);
 
+            if ($data['id'] != $presence->getId())
+            {
+                $this->throwUserException('InvalidPresenceId');
+            }
+
+            $this->validateStatuses($data['statuses']);
+
+            $presence->setOptions($this->serialize($data['statuses']));
+            $presence->update();
+
             return new JsonResponse($this->serialize(['message' => 'ok']), 200, [], true);
         }
         catch (\Exception $ex)
         {
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
+    }
+
+    /**
+     * @param array $statuses
+     */
+    protected function validateStatuses(array $statuses): void
+    {
+        // todo
     }
 }
