@@ -14,7 +14,6 @@
         border-radius: 4px;
         border-top-color: #f0f0f0;
         display: flex;
-        /*margin: 15px 0 5px 8px;*/
         max-width: fit-content;
         padding: 0 2px;
     }
@@ -40,22 +39,31 @@
     .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
         color: #507177;
     }
+    .tab-pane.mod-pad {
+        padding: 10px 15px;
+    }
 </style>
 
 <h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
 <div id="main-content">
-    <div>
+    <div style="margin: 15px 0 5px 8px">
         <ul class="nav nav-buttons" role="tablist">
-            <li role="presentation" class="active"><a href="#entities" aria-controls="entities" role="tab" data-toggle="tab">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
+            <li role="presentation" class="active"><a href="#presence-entry" aria-controls="entities" role="tab" data-toggle="tab">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
             <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
-            <li role="presentation"><a href="#presence" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#presence-builder" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
     </div>
-    <div id="presence-entry" style="width: fit-content;margin-top: 25px">
-        <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
-    </div>
-    <div id="presence-builder">
-        <presence-builder :api-config="apiConfig" @presence-data-changed="onPresenceDataChanged"></presence-builder>
+    <div class="dynamic-visual-tab-content tab-content">
+        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: fit-content; margin-top: 10px">
+            <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
+        </div>
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+            <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
+            {{ CONTENT_OBJECT_RENDITION|raw }}
+        </div>
+        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder">
+            <presence-builder :api-config="apiConfig" @presence-data-changed="onPresenceDataChanged"></presence-builder>
+        </div>
     </div>
 </div>
 <script>

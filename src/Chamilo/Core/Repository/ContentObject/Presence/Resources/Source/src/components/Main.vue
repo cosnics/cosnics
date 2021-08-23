@@ -1,21 +1,19 @@
 <template>
-    <div v-if="presence">
-        <div class="presence-builder">
-            <div>
-                <h2 class="presence-header">Builder</h2>
-                <builder :presence-statuses="presenceStatuses" :status-defaults="statusDefaults" @move-up="onMoveUp"
-                         @move-down="onMoveDown" @create="onCreate" @remove="onRemove" @save="onSave"></builder>
+    <div v-if="presence" class="presence-builder">
+        <div>
+            <h2 class="presence-header">Builder</h2>
+            <builder :presence-statuses="presenceStatuses" :status-defaults="statusDefaults" @move-up="onMoveUp"
+                     @move-down="onMoveDown" @create="onCreate" @remove="onRemove" @save="onSave"></builder>
+        </div>
+        <div>
+            <div style="width: 140px; margin-bottom: 21px" class="switch">
+                <input type="checkbox" id="myinput" class="switch-check sr-only" v-model="showPreview">
+                <label class="switch-lbl" for="myinput" aria-hidden="true">
+                    <span class="switch-lbl-txt">Preview</span>
+                </label>
             </div>
-            <div>
-                <div style="width: 140px; margin-bottom: 21px" class="switch">
-                    <input type="checkbox" id="myinput" class="switch-check sr-only" v-model="showPreview">
-                    <label class="switch-lbl" for="myinput" aria-hidden="true">
-                        <span class="switch-lbl-txt">Preview</span>
-                    </label>
-                </div>
-                <preview-entry v-if="showPreview" :presence-statuses="presenceStatuses"
-                               :preview-students="preview_students"></preview-entry>
-            </div>
+            <preview-entry v-if="showPreview" :presence-statuses="presenceStatuses"
+                           :preview-students="preview_students"></preview-entry>
         </div>
     </div>
 </template>
@@ -174,18 +172,6 @@ export default class Main extends Vue {
     width: initial;
 }
 
-.banner {
-    background-color: #2b6597;
-    border-bottom: 1px solid #14578f;
-    padding: 20px 15px;
-}
-
-.banner-header {
-    color: #fff;
-    font-size: 2.2rem;
-    margin: 0;
-}
-
 .presence-header {
     color: #507177;
     font-size: 1.6rem;
@@ -196,7 +182,6 @@ export default class Main extends Vue {
     align-items: baseline;
     display: flex;
     gap: 40px;
-    margin: 25px 20px 20px;
 }
 
 @media only screen and (max-width: 840px) {

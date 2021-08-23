@@ -201,7 +201,23 @@ input {
 button.btn {
     text-shadow: none;
 }
+</style>
+<style>
+.banner {
+    background-color: #2b6597;
+    border-bottom: 1px solid #14578f;
+    padding: 20px 15px;
+}
 
+.banner-header {
+    color: #fff;
+    font-size: 2.2rem;
+    margin: 0;
+}
+
+.presence-builder {
+    margin: 25px 20px 20px;
+}
 </style>
 
 
