@@ -51,8 +51,11 @@
             <li role="presentation"><a href="#presence" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
     </div>
+    <div id="presence-entry" style="width: fit-content;margin-top: 25px">
+        <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
+    </div>
     <div id="presence-builder">
-        <presence-main-app :api-config="apiConfig"></presence-main-app>
+        <presence-builder :api-config="apiConfig" @presence-data-changed="onPresenceDataChanged"></presence-builder>
     </div>
 </div>
 <script>
@@ -70,15 +73,44 @@
         lang = 'en';
     }
 
+    const apiConfig = {
+        loadPresenceEntriesURL: '{{ LOAD_PRESENCE_ENTRIES_URL|raw }}',
+        loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
+        updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}'
+    };
+
+    const bus = new Vue();
+
+    new Vue({
+        i18n: new VueI18n({ locale: lang, messages }),
+        el: '#presence-entry',
+        delimiters: ['${', '}'],
+        data: {
+            apiConfig,
+            statusDefaults: [],
+            presence: null
+        },
+        methods: {
+            setPresenceData: function(presenceData) {
+                this.statusDefaults = presenceData.statusDefaults;
+                this.presence = presenceData.presence;
+            }
+        },
+        mounted() {
+            bus.$on('presence-data-changed', this.setPresenceData);
+        }
+    });
+
     new Vue({
         i18n: new VueI18n({ locale: lang, messages }),
         el: '#presence-builder',
         delimiters: ['${', '}'],
         data: {
-            apiConfig: {
-                loadStudentsURL: '/api/students',
-                loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
-                updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}'
+            apiConfig
+        },
+        methods: {
+            onPresenceDataChanged: function(presenceData) {
+                bus.$emit('presence-data-changed', presenceData);
             }
         }
     });

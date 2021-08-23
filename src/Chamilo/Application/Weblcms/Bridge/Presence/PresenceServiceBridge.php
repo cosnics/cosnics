@@ -3,6 +3,7 @@
 namespace Chamilo\Application\Weblcms\Bridge\Presence;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\DataClass\Publication as PresencePublication;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 //use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
@@ -85,5 +86,13 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     public function setCanEditPresence(bool $canEditPresence = true)
     {
         $this->canEditPresence = $canEditPresence;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getTargetUserIds(): array
+    {
+        return DataManager::getPublicationTargetUserIds($this->contentObjectPublication->getId(), $this->contentObjectPublication->get_course_id());
     }
 }

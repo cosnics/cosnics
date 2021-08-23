@@ -50,6 +50,7 @@ export default class Main extends Vue {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
         }
+        this.$emit('presence-data-changed', presenceData);
     }
 
     get presenceStatuses(): PresenceStatus[] {
@@ -97,7 +98,9 @@ export default class Main extends Vue {
         if (!this.presence) {
             return;
         }
-        this.connector?.updatePresence(this.presence.id, this.presenceStatuses);
+        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
+            this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
+        });
     }
 
     mounted(): void {

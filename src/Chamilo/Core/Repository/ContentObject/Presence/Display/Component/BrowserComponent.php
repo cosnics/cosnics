@@ -78,6 +78,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_UPDATE_PRESENCE
                 ]
             ),
+            'LOAD_PRESENCE_ENTRIES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE_ENTRIES
+                ]
+            )
         ];
     }
 

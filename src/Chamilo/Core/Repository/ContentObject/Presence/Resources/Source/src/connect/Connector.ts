@@ -34,9 +34,8 @@ export default class Connector {
     }
 
     // eslint-disable-next-line
-    async loadStudents() {
-        const res = await axios.get(this.apiConfig.loadStudentsURL);
-        console.log('loadStudents', res.data);
+    async loadPresenceEntries() {
+        const res = await axios.get(this.apiConfig.loadPresenceEntriesURL);
         return res.data;
     }
 
@@ -46,10 +45,14 @@ export default class Connector {
         return res.data;
     }
 
-    async updatePresence(id: number, statuses: PresenceStatus[]) {
+    async updatePresence(id: number, statuses: PresenceStatus[], callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = {data: JSON.stringify({id, statuses})};
             const data = await this.executeAPIRequest(this.apiConfig.updatePresenceURL, parameters);
+            console.log('updatePresence', data);
+            if (callback) {
+                callback(data);
+            }
             return data;
         });
     }

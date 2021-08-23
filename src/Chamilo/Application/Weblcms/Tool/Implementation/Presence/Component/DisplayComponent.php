@@ -68,9 +68,9 @@ class DisplayComponent extends Manager implements DelegateComponent
         //$evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
         //$evaluationEntityServiceManager->addEntityService(1, $this->getService(CourseGroupEntityService::class));
 
-        /** @var PublicationEntityServiceManager $publicationEntityServiceManager */
-        //$publicationEntityServiceManager = $this->getService(PublicationEntityServiceManager::class);
-        //$publicationEntityServiceManager->setContentObjectPublication($contentObjectPublication);
+        // /** @var PublicationUserEntityService $publicationUserEntityService */
+        //$publicationUserEntityService = $this->getService(PublicationUserEntityService::class);
+        //$publicationUserEntityService->setContentObjectPublication($contentObjectPublication);
 
         /** @var PresenceServiceBridge $presenceServiceBridge */
         $presenceServiceBridge = $this->getService(PresenceServiceBridge::class);

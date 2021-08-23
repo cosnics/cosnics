@@ -2,11 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax;
 
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Component\AjaxComponent;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use JMS\Serializer\SerializationContext;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax
@@ -17,6 +21,7 @@ abstract class Manager extends AjaxManager
 {
     const ACTION_LOAD_PRESENCE = 'LoadPresence';
     const ACTION_UPDATE_PRESENCE = 'UpdatePresence';
+    const ACTION_LOAD_PRESENCE_ENTRIES = 'LoadPresenceEntries';
 
     const PARAM_ACTION = 'presence_display_ajax_action';
 
@@ -46,6 +51,30 @@ abstract class Manager extends AjaxManager
     }
 
     /**
+     * @return PresenceServiceBridgeInterface
+     */
+    protected function getPresenceServiceBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(PresenceServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService(): UserService
+    {
+        return $this->getService(UserService::class);
+    }
+
+    /**
+     * @return PresenceService
+     */
+    protected function getPresenceService(): PresenceService
+    {
+        return $this->getService(PresenceService::class);
+    }
+
+    /**
      * @param string $json
      * @return array
      */
@@ -56,7 +85,9 @@ abstract class Manager extends AjaxManager
 
     protected function serialize(array $array): string
     {
-        return $this->getSerializer()->serialize($array, 'json');
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        return $this->getSerializer()->serialize($array, 'json', $context);
     }
 
     protected function get_root_content_object()

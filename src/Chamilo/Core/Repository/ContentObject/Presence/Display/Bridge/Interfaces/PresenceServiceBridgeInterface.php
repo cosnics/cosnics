@@ -20,4 +20,10 @@ interface PresenceServiceBridgeInterface
      * @return boolean
      */
     public function canEditPresence(): bool;
+
+    /**
+     * @return int[]
+     */
+    public function getTargetUserIds(): array;
+
 }

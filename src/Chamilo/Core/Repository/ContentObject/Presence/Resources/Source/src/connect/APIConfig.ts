@@ -1,5 +1,5 @@
 export default class APIConfig {
-    public readonly loadStudentsURL = '';
+    public readonly loadPresenceEntriesURL = '';
     public readonly loadPresenceURL = '';
     public readonly updatePresenceURL = '';
 
