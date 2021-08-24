@@ -54,14 +54,14 @@
         </ul>
     </div>
     <div class="dynamic-visual-tab-content tab-content">
-        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: fit-content; margin-top: 10px">
+        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
             <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties">
             <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
-        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder">
+        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
             <presence-builder :api-config="apiConfig" @presence-data-changed="onPresenceDataChanged"></presence-builder>
         </div>
     </div>

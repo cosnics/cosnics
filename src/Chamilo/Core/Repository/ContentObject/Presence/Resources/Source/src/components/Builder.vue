@@ -1,7 +1,17 @@
 <template>
   <div @click.stop="selectedStatus = null">
     <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields" class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}" :tbody-tr-class="rowClass">
-      <template #cell(code)="status">
+        <template #thead-top="">
+            <b-tr>
+                <b-th style="background: white;font-weight: 400">Display</b-th>
+                <b-th colspan="3" style="background: white">
+                    <div class="u-flex u-gap-small u-flex-wrap" style="padding: 4px 0">
+                        <div v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code" :class="[status.color]"><span>{{ status.code }}</span></div>
+                    </div>
+                </b-th>
+            </b-tr>
+        </template>
+        <template #cell(code)="status">
         <div class="cell-pad" @click.stop="onSelectStatus(status.item)"><b-input type="text" v-model="status.item.code" autocomplete="off" :disabled="createNew" class="mod-input mod-pad mod-small" @focus="onSelectStatus(status.item)" /></div>
       </template>
       <template #cell(title)="status">
