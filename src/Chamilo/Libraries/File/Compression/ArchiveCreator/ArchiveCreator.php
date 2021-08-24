@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +66,16 @@ class ArchiveCreator
         }
 
         $archivePath = $this->fileCompression->create_archive($temporaryFolder);
-        $this->fileSystem->remove([$temporaryFolder]);
+
+        try
+        {
+            $this->fileSystem->remove([$temporaryFolder]);
+        }
+        catch(IOException $ex)
+        {
+            usleep(10000);
+            $this->fileSystem->remove([$temporaryFolder]);
+        }
 
         return $archivePath;
     }
