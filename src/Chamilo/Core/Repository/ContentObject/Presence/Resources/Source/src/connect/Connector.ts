@@ -34,8 +34,8 @@ export default class Connector {
     }
 
     // eslint-disable-next-line
-    async loadPresenceEntries() {
-        const res = await axios.get(this.apiConfig.loadPresenceEntriesURL);
+    async loadPresenceEntries(params: any) {
+        const res = await axios.get(this.apiConfig.loadPresenceEntriesURL, {params});
         return res.data;
     }
 

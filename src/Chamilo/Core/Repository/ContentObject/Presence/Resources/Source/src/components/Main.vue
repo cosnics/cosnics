@@ -105,6 +105,10 @@ export default class Main extends Vue {
     flex-flow: wrap;
 }
 
+.u-justify-content-end {
+    justify-content: flex-end;
+}
+
 .u-txt-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -257,6 +261,10 @@ export default class Main extends Vue {
     position: absolute;
     right: -5px;
     z-index: 10;
+}
+
+.tbl-no-sort {
+    pointer-events: none
 }
 
 .table.mod-presence {
@@ -853,7 +861,6 @@ export default class Main extends Vue {
     --selected-color: #{lighten($color, 55%)};
 }
 </style>
-
 <style>
 .bs-popover-auto[x-placement^=right], .bs-popover-right {
     margin-left: .5rem;
@@ -869,5 +876,24 @@ export default class Main extends Vue {
 
 .bs-popover-auto[x-placement^=top], .bs-popover-top {
     margin-bottom: .5rem;
+}
+</style>
+<style>
+.tbl-sort-option {
+    background-position: right calc(.75rem / 2) center;
+    background-repeat: no-repeat;
+    background-size: .65em 1em;
+    cursor: pointer;
+    padding-right: calc(.75rem + .85em);
+    pointer-events: all;
+}
+.tbl-sort-option[aria-sort=none] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22zM51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+}
+.tbl-sort-option[aria-sort=ascending] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
+}
+.tbl-sort-option[aria-sort=descending] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
 }
 </style>

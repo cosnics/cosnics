@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use JMS\Serializer\SerializationContext;
 
 /**
@@ -109,6 +110,11 @@ abstract class Manager extends AjaxManager
         }
 
         return $presence;
+    }
+
+    protected function getFilterParametersBuilder() : FilterParametersBuilder
+    {
+        return $this->getService(FilterParametersBuilder::class);
     }
 
     /**

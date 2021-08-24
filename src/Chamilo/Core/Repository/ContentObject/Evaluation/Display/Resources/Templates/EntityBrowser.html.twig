@@ -661,7 +661,7 @@
                                  :current-page="pagination.currentPage"
                                  class="mod-evaluation" :class="{ 'is-scores-editable': scoresEditable }">
                             <template #head(fullname)="data">
-                                <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
+                                <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')"  @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
                                 <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
                             </template>
                             <template #head(name)="data">

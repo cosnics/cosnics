@@ -7,7 +7,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
-use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Service
@@ -93,7 +92,7 @@ class UserService
     /**
      * @return FieldMapper
      */
-    /*public function getFieldMapper(): FieldMapper
+    public function getFieldMapper(): FieldMapper
     {
         if (! isset($this->fieldMapper))
         {
@@ -104,5 +103,5 @@ class UserService
             $this->fieldMapper->addFieldMapping('official_code', $class_name, User::PROPERTY_OFFICIAL_CODE);
         }
         return $this->fieldMapper;
-    }*/
+    }
 }
