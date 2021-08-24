@@ -73,7 +73,7 @@ class ArchiveCreator
         }
         catch(IOException $ex)
         {
-            usleep(100000);
+            sleep(1);
             $this->fileSystem->remove([$temporaryFolder]);
         }
 
