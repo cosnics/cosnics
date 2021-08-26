@@ -81,7 +81,7 @@ export default class Entry extends Vue {
     sortDesc = false;
     pagination = {
         currentPage: 1,
-        perPage: 3,
+        perPage: 5, // 20
         total: 0
     };
     globalSearchQuery = '';
@@ -143,8 +143,9 @@ export default class Entry extends Vue {
         return this.getStudentStatusForPeriod(student, this.last) === status;
     }
 
-    setSelectedStudentStatus(student: any, status: number) {
+    async setSelectedStudentStatus(student: any, status: number) {
         student[`period#${this.last}-status`] = status;
+        const data = await this.connector?.savePresenceEntry(this.last, student.id, status);
     }
 
     get presenceStatuses(): PresenceStatus[] {

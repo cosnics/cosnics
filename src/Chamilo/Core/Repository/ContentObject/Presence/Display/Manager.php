@@ -25,7 +25,7 @@ use Chamilo\Libraries\Architecture\Exceptions\UserException;
 abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 {
     const PARAM_ACTION = 'presence_display_action';
-    const PARAM_ENTITY_ID = 'entity_id';
+    const PARAM_USER_ID = 'user_id';
 
     const DEFAULT_ACTION = 'Browser';
 
@@ -36,7 +36,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      *
      * @var integer
      */
-    protected $entityIdentifier;
+    protected $userIdentifier;
 
     /**
      * @var RightsService
@@ -78,25 +78,23 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @return mixed
      */
-    protected function getEntityIdentifier() {
-/*        if (!isset($this->entityIdentifier))
+    protected function getUserIdentifier() {
+        if (!isset($this->userIdentifier))
         {
-            $this->entityIdentifier = $this->getRequest()->getFromPostOrUrl(self::PARAM_ENTITY_ID);
+            $this->userIdentifier = $this->getRequest()->getFromPostOrUrl(self::PARAM_USER_ID);
 
-            if (empty($this->entityIdentifier))
+            if (empty($this->userIdentifier))
             {
-                $this->entityIdentifier =
-                    $this->getEvaluationServiceBridge()->getCurrentEntityIdentifier($this->getUser());
+                $this->userIdentifier = $this->getUser()->getId();
             }
         }
 
-        if (empty($this->entityIdentifier))
+        if (empty($this->userIdentifier))
         {
-            throw new UserException($this->getTranslator()->trans('CanNotViewEvaluation', [], Manager::context()));
+            throw new UserException($this->getTranslator()->trans('CanNotViewPresence', [], Manager::context()));
         }
 
-        return $this->entityIdentifier;*/
-
+        return $this->userIdentifier;
     }
 
     /**
@@ -168,12 +166,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @throws NotAllowedException
      * @throws UserException
      */
-/*    public function validateEvaluationEntityInput()
+    public function validatePresenceUserInput()
     {
         $this->validateIsPostRequest();
-        $this->validateIsEvaluation();
-        $this->validateEntity();
-    }*/
+        $this->validateIsPresence();
+        $this->validateUser();
+    }
 
     /**
      * @throws NotAllowedException
@@ -202,22 +200,22 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @throws UserException
      */
-/*    protected function validateEntity()
+    protected function validateUser()
     {
-        $entityId = $this->getEntityIdentifier();
+        $userId = $this->getUserIdentifier();
 
-        if (empty($entityId))
+        if (empty($userId))
         {
-            $this->throwUserException('EntityIdNotProvided');
+            $this->throwUserException('UserIdNotProvided');
         }
 
-        $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
+        $userIds = $this->getPresenceServiceBridge()->getTargetUserIds();
 
-        if (! in_array($entityId, $userIds))
+        if (! in_array($userId, $userIds))
         {
-            $this->throwUserException('EntityNotInList');
+            $this->throwUserException('UserNotInList');
         }
-    }*/
+    }
 
     /**
      * @param string $key

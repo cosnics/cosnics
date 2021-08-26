@@ -58,7 +58,6 @@
             <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties">
-            <h3>{{ CONTENT_OBJECT_TITLE }}</h3>
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
@@ -84,7 +83,8 @@
     const apiConfig = {
         loadPresenceEntriesURL: '{{ LOAD_PRESENCE_ENTRIES_URL|raw }}',
         loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
-        updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}'
+        updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}',
+        savePresenceEntryURL: '{{  SAVE_PRESENCE_ENTRY_URL|raw }}'
     };
 
     const bus = new Vue();

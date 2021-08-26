@@ -47,9 +47,20 @@ export default class Connector {
 
     async updatePresence(id: number, statuses: PresenceStatus[], callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
-            const parameters = {data: JSON.stringify({id, statuses})};
+            const parameters = { data: JSON.stringify({id, statuses}) };
             const data = await this.executeAPIRequest(this.apiConfig.updatePresenceURL, parameters);
-            console.log('updatePresence', data);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
+    async savePresenceEntry(periodId: number, userId: number, statusId: number, callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const parameters = { 'period_id': periodId, 'user_id': userId, 'status_id': statusId };
+            const data = await this.executeAPIRequest(this.apiConfig.savePresenceEntryURL, parameters);
+            console.log(data);
             if (callback) {
                 callback(data);
             }
@@ -84,6 +95,7 @@ export default class Connector {
 //          this.logResponse(err);
                 throw err;
             }
+            console.log(res);
             if (typeof res.data === 'object') {
                 //console.log('result', res.data);
                 return res.data;

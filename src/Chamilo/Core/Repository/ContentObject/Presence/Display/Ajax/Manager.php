@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\AjaxManager;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use JMS\Serializer\SerializationContext;
@@ -23,6 +24,7 @@ abstract class Manager extends AjaxManager
     const ACTION_LOAD_PRESENCE = 'LoadPresence';
     const ACTION_UPDATE_PRESENCE = 'UpdatePresence';
     const ACTION_LOAD_PRESENCE_ENTRIES = 'LoadPresenceEntries';
+    const ACTION_SAVE_PRESENCE_ENTRY = 'SavePresenceEntry';
 
     const PARAM_ACTION = 'presence_display_ajax_action';
 
@@ -115,6 +117,15 @@ abstract class Manager extends AjaxManager
     protected function getFilterParametersBuilder() : FilterParametersBuilder
     {
         return $this->getService(FilterParametersBuilder::class);
+    }
+
+    /**
+     * @throws UserException
+     * @throws NotAllowedException
+     */
+    protected function validatePresenceUserInput()
+    {
+        $this->ajaxComponent->validatePresenceUserInput();
     }
 
     /**

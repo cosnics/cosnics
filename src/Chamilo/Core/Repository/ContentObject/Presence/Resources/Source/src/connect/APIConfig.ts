@@ -2,6 +2,7 @@ export default class APIConfig {
     public readonly loadPresenceEntriesURL = '';
     public readonly loadPresenceURL = '';
     public readonly updatePresenceURL = '';
+    public readonly savePresenceEntryURL = '';
 
     constructor(config: Record<string, string>) {
         Object.assign(this, config);
