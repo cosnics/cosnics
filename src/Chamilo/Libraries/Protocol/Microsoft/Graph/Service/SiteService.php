@@ -60,7 +60,7 @@ class SiteService
         if (!$list instanceof ListInfo)
         {
             throw new \RuntimeException(
-                sprintf('Could not retrieve the "%s" list for site %s', $listTitle, $site->getDisplayName())
+                sprintf('Could not retrieve the %s list for site %s', $listTitle, $site->getDisplayName())
             );
         }
 
