@@ -1,24 +1,20 @@
 <?php
 
-namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces;
+namespace Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces;
 
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
-/**
- *
- * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Interfaces
- * @author Stefan Gabriëls <stefan.gabriels@hogent.be>
- */
-interface PresenceServiceBridgeInterface
+interface LearningPathPresenceServiceBridgeInterface
 {
     /**
+     * @param int $stepId
      * @return ContextIdentifier
      */
-    public function getContextIdentifier(): ContextIdentifier;
+    public function getContextIdentifier(int $stepId): ContextIdentifier;
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canEditPresence(): bool;
 
@@ -27,5 +23,4 @@ interface PresenceServiceBridgeInterface
      * @return int[]
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array;
-
 }
