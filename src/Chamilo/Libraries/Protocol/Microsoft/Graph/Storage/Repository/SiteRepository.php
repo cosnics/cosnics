@@ -3,6 +3,7 @@
 namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
+use Microsoft\Graph\Model\DriveItem;
 use Microsoft\Graph\Model\FieldValueSet;
 use Microsoft\Graph\Model\ListInfo;
 use Microsoft\Graph\Model\ListItem;
@@ -213,4 +214,24 @@ class SiteRepository
         $this->graphRepository->executeDeleteWithAccessTokenExpirationRetry($url);
     }
 
+    /**
+     * @param string $siteId
+     * @param string $relativePathFromRoot
+     *
+     * @return DriveItem[]|\Microsoft\Graph\Model\Entity|\Microsoft\Graph\Model\Entity[]
+     * @throws GraphException
+     */
+    public function getChildrenFromFolder(string $siteId, string $relativePathFromRoot, string $listId = '')
+    {
+        if(!empty($relativePathFromRoot))
+        {
+            $relativePathFromRoot = ':' . $relativePathFromRoot . ':';
+        }
+
+        $url = empty($listId) ?
+            '/sites/' . $siteId . '/drive/items/root' . $relativePathFromRoot . '/children' :
+            '/sites/' . $siteId . '/lists/' . $listId . '/drive/root' . $relativePathFromRoot . '/children';
+
+        return $this->graphRepository->executeGetWithAccessTokenExpirationRetry($url, DriveItem::class, true);
+    }
 }

@@ -133,4 +133,17 @@ class SiteService
         $this->siteRepository->deleteListItem($siteId, $listId, $itemId);
     }
 
+    /**
+     * @param string $siteId
+     * @param string $relativePathFromRoot
+     * @param string|null $listId
+     *
+     * @return \Microsoft\Graph\Model\DriveItem[]
+     * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException
+     */
+    public function getChildrenFromFolder(string $siteId, string $relativePathFromRoot, string $listId = null)
+    {
+        return $this->siteRepository->getChildrenFromFolder($siteId, $relativePathFromRoot, $listId);
+    }
+
 }
