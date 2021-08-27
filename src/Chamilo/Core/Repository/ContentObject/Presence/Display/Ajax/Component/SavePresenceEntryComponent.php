@@ -53,7 +53,7 @@ class SavePresenceEntryComponent extends Manager
         $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
         $period = $this->getPresenceService()->findResultPeriodForPresence($this->getPresence()->getId(), $periodId, $contextIdentifier);
-        if (! isset($period))
+        if (empty($period))
         {
             $this->throwUserException('PresenceResultPeriodNotFound');
         }
