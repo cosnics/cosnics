@@ -1,9 +1,28 @@
+<i18n>
+{
+    "en": {
+        "search": "Find",
+        "last-name": "Last name",
+        "first-name": "First name",
+        "official-code": "Official code",
+        "total": "Total"
+    },
+    "nl": {
+        "search": "Zoeken",
+        "last-name": "Familienaam",
+        "first-name": "Voornaam",
+        "official-code": "Officiële code",
+        "total": "Totaal"
+    }
+}
+</i18n>
+
 <template>
     <div>
         <div class="u-flex" style="margin-bottom: 15px">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                              type="text" placeholder="Search" debounce="750" autocomplete="off"></b-form-input>
+                              type="text" :placeholder="$t('search')" debounce="750" autocomplete="off"></b-form-input>
                 <div class="input-group-btn">
                     <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -15,10 +34,11 @@
             <b-table bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                      :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                      :current-page="pagination.currentPage" :filter="globalSearchQuery">
-                <template #head(fullname)="data">
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ 'Lastname'|trans({}, 'Chamilo\\Core\\User')|upper }}</a>
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ 'Firstname'|trans({}, 'Chamilo\\Core\\User') }}</a>
+                <template #head(fullname)>
+                    <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
+                    <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                 </template>
+                <template #head(official_code)>{{ $t('official-code') }}</template>
                 <template #cell(fullname)="student">
                     {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
                 </template>
@@ -56,7 +76,7 @@
             <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                           aria-controls="data-table"></b-pagination>
             <ul class="pagination">
-                <li class="page-item active"><a class="page-link">{{ 'Total'|trans({}, appContext) }} {{ pagination.total }}</a></li>
+                <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
             </ul>
         </div>
     </div>

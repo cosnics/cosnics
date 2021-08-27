@@ -7,6 +7,7 @@
     "build": "vue-cli-service build --target lib --dest ./../Javascript/ --name cosnics-presence src/plugin.ts && node post-build.js"
   },
   "dependencies": {
+    "@kazupon/vue-i18n-loader": "^0.5.0",
     "axios": "^0.21.1",
     "bootstrap": "^3.4.1",
     "bootstrap-vue": "^2.2.2",
@@ -14,6 +15,7 @@
     "p-queue": "^6.6.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
+    "vue-i18n": "^8.18.2",
     "vue-property-decorator": "^9.1.2"
   },
   "devDependencies": {

@@ -1,7 +1,18 @@
+<i18n>
+{
+    "en": {
+        "presence-tool": "Presence Tool"
+    },
+    "nl": {
+        "presence-tool": "Aanwezigheidstool"
+    }
+}
+</i18n>
+
 <template>
     <div id="app">
         <div class="banner">
-            <h1 class="banner-header">Presence Tool</h1>
+            <h1 class="banner-header">{{ $t('presence-tool') }}</h1>
         </div>
         <Main :api-config="apiConfig"></Main>
     </div>
