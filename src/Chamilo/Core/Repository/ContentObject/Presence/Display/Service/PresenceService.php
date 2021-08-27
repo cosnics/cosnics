@@ -129,7 +129,7 @@ class PresenceService
     {
         $presenceResultEntry->setChoiceId($statusId);
         $presenceResultEntry->setPresenceStatusId($fixedStatusId);
-        $presenceResultEntry->setCheckedInDate((int)new DateTime());
+        $presenceResultEntry->setCheckedInDate($fixedStatusId == 3 ? (new DateTime())->getTimestamp() : 0);
         $presenceResultEntry->setCheckedOutDate(0);
         return $presenceResultEntry;
     }
