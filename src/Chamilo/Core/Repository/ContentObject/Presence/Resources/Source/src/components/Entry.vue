@@ -31,7 +31,7 @@
             </div>
         </div>
         <div style="position: relative">
-            <b-table bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+            <b-table ref="table" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                      :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                      :current-page="pagination.currentPage" :filter="globalSearchQuery">
                 <template #head(fullname)>
@@ -67,6 +67,14 @@
                         <div class="color-code" :class="[getStatusColorForStudent(student.item) || 'mod-none']">
                             <span>{{ getStatusCodeForStudent(student.item) }}</span>
                         </div>
+                    </div>
+                </template>
+                <template #head(period-plh)>
+                    <a @click.stop="createResultPeriod('P1')" style="pointer-events: all; cursor: pointer">P1</a>
+                </template>
+                <template #cell(period-plh)>
+                    <div class="result-wrap">
+                        <div class="color-code mod-none"></div>
                     </div>
                 </template>
             </b-table>
@@ -163,6 +171,13 @@ export default class Entry extends Vue {
         return this.getStudentStatusForPeriod(student, this.last) === status;
     }
 
+    async createResultPeriod(label: string) {
+        const data = await this.connector?.createResultPeriod(label);
+        if (data.status === 'ok') {
+            (this.$refs.table as any).refresh();
+        }
+    }
+
     async setSelectedStudentStatus(student: any, status: number) {
         student[`period#${this.last}-status`] = status;
         const data = await this.connector?.savePresenceEntry(this.last, student.id, status);
@@ -185,6 +200,13 @@ export default class Entry extends Vue {
     }
 
     get fields() {
+        if (!this.periods.length) {
+            return [
+                {key: 'fullname', sortable: false, label: 'Student'},
+                {key: 'official_code', sortable: true},
+                {key: 'period-plh', sortable: false, thClass: 'tbl-no-sort'}
+            ];
+        }
         return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},

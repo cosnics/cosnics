@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\PresenceRepository;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
@@ -124,6 +125,7 @@ class PresenceService
      * @param PresenceResultEntry $presenceResultEntry
      * @param int $statusId
      * @param int $fixedStatusId
+     * @return PresenceResultEntry
      */
     protected function updatePresenceResultEntryFields(PresenceResultEntry $presenceResultEntry, int $statusId, int $fixedStatusId): PresenceResultEntry
     {
@@ -169,5 +171,29 @@ class PresenceService
     protected function getPresenceOptions(Presence $presence): array
     {
         return $this->serializer->deserialize($presence->getOptions(), 'array', 'json');
+    }
+
+    /**
+     * @param Presence $presence
+     * @param ContextIdentifier $contextIdentifier
+     * @param string $label
+     * @return PresenceResultPeriod
+     */
+    public function createPresenceResultPeriod(Presence $presence, ContextIdentifier $contextIdentifier, string $label = ''): PresenceResultPeriod
+    {
+        $presenceResultPeriod = new PresenceResultPeriod();
+        $presenceResultPeriod->setPresenceId($presence->getId());
+        if (empty($label)) {
+            $periods = $this->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
+            $label = 'P' . (count($periods) + 1);
+        }
+        $presenceResultPeriod->setLabel($label);
+        $presenceResultPeriod->setDate((new DateTime())->getTimestamp());
+        $presenceResultPeriod->setContextClass($contextIdentifier->getContextClass());
+        $presenceResultPeriod->setContextId($contextIdentifier->getContextId());
+
+        $this->presenceRepository->createPresenceResultPeriod($presenceResultPeriod);
+
+        return $presenceResultPeriod;
     }
 }

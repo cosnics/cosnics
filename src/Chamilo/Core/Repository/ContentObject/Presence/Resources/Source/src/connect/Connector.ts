@@ -33,6 +33,13 @@ export default class Connector {
         this._isSaving = false;
     }
 
+    async createResultPeriod(label: string) {
+        const formData = new FormData();
+        formData.set('label', label);
+        const res = await axios.post(this.apiConfig.createPresencePeriodURL, formData);
+        return res.data;
+    }
+
     // eslint-disable-next-line
     async loadPresenceEntries(params: any) {
         const res = await axios.get(this.apiConfig.loadPresenceEntriesURL, {params});
