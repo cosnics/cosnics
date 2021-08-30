@@ -6,8 +6,7 @@
         "first-name": "First name",
         "official-code": "Official code",
         "total": "Total",
-        "stop-edit-mode": "Stop editing",
-        "edit-title": "Edit title"
+        "stop-edit-mode": "Stop editing"
     },
     "nl": {
         "search": "Zoeken",
@@ -15,18 +14,17 @@
         "first-name": "Voornaam",
         "official-code": "Officiële code",
         "total": "Totaal",
-        "stop-edit-mode": "Sluit editeren af",
-        "edit-title": "Wijzig titel"
+        "stop-edit-mode": "Sluit editeren af"
     }
 }
 </i18n>
 
 <template>
     <div>
-        <div class="u-flex" style="margin-bottom: 15px; align-items: center; gap: 15px; justify-content: space-between">
+        <div class="u-flex" style="margin-bottom: 15px; align-items: flex-end; gap: 15px; justify-content: space-between">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                              type="text" :placeholder="$t('search')" debounce="750" autocomplete="off"></b-form-input>
+                              type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
                 <div class="input-group-btn">
                     <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -62,8 +60,7 @@
                     </div>
                 </template>
                 <template #head(period)>
-                    {{ selectedPeriod.label }} <i class="fa fa-pencil" :title="$t('edit-title')"></i>
-                    <!--<b-input type="text" debounce="750" v-model="selectedPeriod.label" style="font-weight: normal;"></b-input>-->
+                    <b-input type="text" debounce="750" v-model="selectedPeriod.label" style="font-weight: normal;"></b-input>
                 </template>
                 <template #cell(period)="student">
                     <div class="u-flex u-gap-small u-flex-wrap">
@@ -74,6 +71,7 @@
                     </div>
                 </template>
                 <template #head(period-result)="">
+                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </template>
                 <template #cell(period-result)="student">
                     <div class="result-wrap">
@@ -131,6 +129,10 @@ export default class Entry extends Vue {
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
     @Prop({type: Object, default: null}) readonly presence!: Presence|null;
+
+    get isSaving() {
+        return this.connector?.isSaving || false;
+    }
 
     get selectedLabelField() {
         return this.periods.find((p: any) => p.id === this.selectedKeyId)?.label || '';
@@ -234,7 +236,7 @@ export default class Entry extends Vue {
                 {key: 'fullname', sortable: false, label: 'Student'},
                 {key: 'official_code', sortable: true},
                 {key: 'period', sortable: false, label: this.selectedLabelField, variant: 'period'},
-                {key: 'period-result', sortable: false, label: '', variant: 'result'}
+                {key: 'period-result', sortable: false, label: '', variant: 'result mod-save'}
             ];
         }
         return [

@@ -433,6 +433,9 @@ export default class Main extends Vue {
 .table.mod-entry th.table-result {
     max-width: 1px;
 }
+.table.mod-entry th.table-result.mod-save {
+    text-align: center;
+}
 
 .table.mod-entry .table-period {
     border-right: 0;
