@@ -63,6 +63,18 @@ export default class Connector {
         });
     }
 
+    async updatePresencePeriod(periodId: number, label: string, callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const parameters = { 'period_id': periodId, 'period_label': label };
+            const data = await this.executeAPIRequest(this.apiConfig.updatePresencePeriodURL, parameters);
+            console.log(data);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
     async savePresenceEntry(periodId: number, userId: number, statusId: number, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = { 'period_id': periodId, 'user_id': userId, 'status_id': statusId };

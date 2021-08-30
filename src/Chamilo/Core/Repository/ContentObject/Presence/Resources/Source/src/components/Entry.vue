@@ -60,7 +60,7 @@
                     </div>
                 </template>
                 <template #head(period)>
-                    <b-input type="text" debounce="750" v-model="selectedPeriod.label" style="font-weight: normal;"></b-input>
+                    <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
                 </template>
                 <template #cell(period)="student">
                     <div class="u-flex u-gap-small u-flex-wrap">
@@ -129,6 +129,23 @@ export default class Entry extends Vue {
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
     @Prop({type: Object, default: null}) readonly presence!: Presence|null;
+
+    get selectedPeriodLabel() {
+        return this.selectedPeriod.label;
+    }
+
+    set selectedPeriodLabel(label: string) {
+        this.selectedPeriod.label = label;
+        if (this.selectedKeyId === null) { return; }
+        if (label === '') {
+            const el = this.$refs['selectedPeriodLabel'] as HTMLFormElement;
+            if (el && !el.checkValidity()) {
+                el.reportValidity();
+            }
+            return;
+        }
+        this.connector?.updatePresencePeriod(this.selectedKeyId, label);
+    }
 
     get isSaving() {
         return this.connector?.isSaving || false;

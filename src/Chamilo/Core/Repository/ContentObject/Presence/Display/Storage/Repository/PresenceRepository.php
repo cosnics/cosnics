@@ -164,4 +164,14 @@ class PresenceRepository
     {
         return $this->dataClassRepository->create($presenceResultPeriod);
     }
+
+    /**
+     * @param PresenceResultPeriod $presenceResultPeriod
+     *
+     * @return bool
+     */
+    public function updatePresenceResultPeriod(PresenceResultPeriod $presenceResultPeriod): bool
+    {
+        return $this->dataClassRepository->update($presenceResultPeriod);
+    }
 }
