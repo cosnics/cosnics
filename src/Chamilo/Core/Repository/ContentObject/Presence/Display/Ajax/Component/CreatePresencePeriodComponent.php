@@ -25,7 +25,7 @@ class CreatePresencePeriodComponent extends Manager
 
             $result = [
                 'status' => 'ok',
-                'id' => $presenceResultPeriod->getId(),
+                'id' => (int) $presenceResultPeriod->getId(),
                 'label' => $presenceResultPeriod->getLabel()
             ];
 

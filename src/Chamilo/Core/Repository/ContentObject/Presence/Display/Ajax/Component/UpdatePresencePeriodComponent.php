@@ -33,7 +33,7 @@ class UpdatePresencePeriodComponent extends Manager
 
             $result = [
                 'status' => 'ok',
-                'id' => $this->presenceResultPeriod->getId(),
+                'id' => (int) $this->presenceResultPeriod->getId(),
                 'label' => $this->presenceResultPeriod->getLabel()
             ];
 

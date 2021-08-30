@@ -21,7 +21,7 @@
 
 <template>
     <div>
-        <div class="u-flex" style="margin-bottom: 15px; align-items: flex-end; gap: 15px; justify-content: space-between">
+        <div class="u-flex" style="margin-bottom: 15px; gap: 15px;" :style="selectedKeyId !== null ? 'align-items: flex-end;justify-content: space-between' : 'align-items: center;'">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                               type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
@@ -33,6 +33,9 @@
             </div>
             <div v-if="selectedKeyId !== null">
                 <a @click="selectedKeyId = null" style="cursor: pointer">{{ $t('stop-edit-mode') }}</a>
+            </div>
+            <div v-else-if="periods.length >= 1">
+                <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
             </div>
         </div>
         <div style="position: relative">
@@ -241,6 +244,12 @@ export default class Entry extends Vue {
     }
 
     get fields() {
+        if (!this.students.length) {
+            return [
+                {key: 'fullname', sortable: false, label: 'Student'},
+                {key: 'official_code', sortable: true}
+            ];
+        }
         if (!this.periods.length) {
             return [
                 {key: 'fullname', sortable: false, label: 'Student'},
