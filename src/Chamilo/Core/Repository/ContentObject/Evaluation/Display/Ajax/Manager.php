@@ -62,6 +62,10 @@ abstract class Manager extends AjaxManager
         }
 
         $this->ajaxComponent = $applicationConfiguration->getApplication();
+        if (!$this->ajaxComponent->getRightsService()->canUserEditEvaluation())
+        {
+            throw new NotAllowedException();
+        }
 
         parent::__construct($applicationConfiguration);
     }
