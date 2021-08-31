@@ -34,72 +34,76 @@
             <div v-if="selectedKeyId !== null">
                 <a @click="selectedKeyId = null" style="cursor: pointer">{{ $t('stop-edit-mode') }}</a>
             </div>
-            <div v-else-if="periods.length >= 1">
+        </div>
+        <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
+            <div v-if="selectedKeyId === null && periods.length >= 1" style="padding: 10px 0">
                 <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
             </div>
-        </div>
-        <div style="position: relative">
-            <b-table ref="table" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
-                     :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
-                     :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
-                <template #head(fullname)>
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
-                    <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
-                </template>
-                <template #head(official_code)>{{ $t('official-code') }}</template>
-                <template #cell(fullname)="student">
-                    {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
-                </template>
-                <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
-                    <div class="u-txt-truncate" :title="data.label">
-                        <a @click="selectedKeyId = fieldKey.id" style="cursor: pointer">{{ data.label }}</a>
-                    </div>
-                </template>
-                <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
-                    <div class="result-wrap">
-                        <div class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
-                            <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
-                        </div>
-                    </div>
-                </template>
-                <template #head(period)>
-                    <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
-                </template>
-                <template #cell(period)="student">
-                    <div class="u-flex u-gap-small u-flex-wrap">
-                        <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
-                                :class="[status.color, { 'is-selected': hasSelectedStudentStatus(student.item, status.id) }]"
-                                @click="setSelectedStudentStatus(student.item, status.id)"
-                                :aria-pressed="hasSelectedStudentStatus(student.item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
-                    </div>
-                </template>
-                <template #head(period-result)="">
-                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                </template>
-                <template #cell(period-result)="student">
-                    <div class="result-wrap">
-                        <div class="color-code" :class="[getStatusColorForStudent(student.item) || 'mod-none']">
-                            <span>{{ getStatusCodeForStudent(student.item) }}</span>
-                        </div>
-                    </div>
-                </template>
-                <template #head(period-plh)>
-                    <a @click="createResultPeriod('P1')" style="cursor: pointer">P1</a>
-                </template>
-                <template #cell(period-plh)>
-                    <div class="result-wrap">
-                        <div class="color-code mod-none"></div>
-                    </div>
-                </template>
-            </b-table>
-            <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
-        </div>
-        <div class="pagination-container u-flex u-justify-content-end">
-            <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                          aria-controls="data-table"></b-pagination>
-            <ul class="pagination">
-                <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
-            </ul>
+            <div>
+                <div style="position: relative">
+                    <b-table ref="table" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+                             :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
+                             :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
+                        <template #head(fullname)>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
+                        </template>
+                        <template #head(official_code)>{{ $t('official-code') }}</template>
+                        <template #cell(fullname)="student">
+                            {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
+                        </template>
+                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
+                            <div class="u-txt-truncate" :title="data.label">
+                                <a @click="selectedKeyId = fieldKey.id" style="cursor: pointer">{{ data.label }}</a>
+                            </div>
+                        </template>
+                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
+                            <div class="result-wrap">
+                                <div class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
+                                    <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
+                                </div>
+                            </div>
+                        </template>
+                        <template #head(period)>
+                            <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
+                        </template>
+                        <template #cell(period)="student">
+                            <div class="u-flex u-gap-small u-flex-wrap">
+                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
+                                        :class="[status.color, { 'is-selected': hasSelectedStudentStatus(student.item, status.id) }]"
+                                        @click="setSelectedStudentStatus(student.item, status.id)"
+                                        :aria-pressed="hasSelectedStudentStatus(student.item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
+                            </div>
+                        </template>
+                        <template #head(period-result)="">
+                            <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                        </template>
+                        <template #cell(period-result)="student">
+                            <div class="result-wrap">
+                                <div class="color-code" :class="[getStatusColorForStudent(student.item) || 'mod-none']">
+                                    <span>{{ getStatusCodeForStudent(student.item) }}</span>
+                                </div>
+                            </div>
+                        </template>
+                        <template #head(period-plh)>
+                            <a @click="createResultPeriod('P1')" style="cursor: pointer">P1</a>
+                        </template>
+                        <template #cell(period-plh)>
+                            <div class="result-wrap">
+                                <div class="color-code mod-none"></div>
+                            </div>
+                        </template>
+                    </b-table>
+                    <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                </div>
+                <div class="pagination-container u-flex u-justify-content-end">
+                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                  aria-controls="data-table"></b-pagination>
+                    <ul class="pagination">
+                        <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </template>
