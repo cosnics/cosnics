@@ -9,3 +9,7 @@ export type PresenceStatus = {
 export type Presence = {
   id: number; title: string; statuses: PresenceStatus[];
 };
+
+export type PresencePeriod = {
+  id: number; date: number; label: string;
+};

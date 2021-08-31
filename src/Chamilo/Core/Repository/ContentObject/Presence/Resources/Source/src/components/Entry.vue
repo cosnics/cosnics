@@ -21,7 +21,7 @@
 
 <template>
     <div>
-        <div class="u-flex" style="margin-bottom: 15px; gap: 15px;" :style="selectedKeyId !== null ? 'align-items: flex-end;justify-content: space-between' : 'align-items: center;'">
+        <div class="u-flex" style="margin-bottom: 15px; gap: 15px;" :style="!!selectedPeriod ? 'align-items: flex-end;justify-content: space-between' : 'align-items: center;'">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                               type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
@@ -31,12 +31,12 @@
                     </button>
                 </div>
             </div>
-            <div v-if="selectedKeyId !== null">
-                <a @click="selectedKeyId = null" style="cursor: pointer">{{ $t('stop-edit-mode') }}</a>
+            <div v-if="!!selectedPeriod">
+                <a @click="selectedPeriod = null" style="cursor: pointer">{{ $t('stop-edit-mode') }}</a>
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div v-if="selectedKeyId === null && periods.length >= 1" style="padding: 10px 0">
+            <div v-if="!selectedPeriod && periods.length >= 1" style="padding: 10px 0">
                 <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
             </div>
             <div>
@@ -54,7 +54,7 @@
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
                             <div class="u-txt-truncate" :title="data.label">
-                                <a @click="selectedKeyId = fieldKey.id" style="cursor: pointer">{{ data.label }}</a>
+                                <a @click="setSelectedPeriod(fieldKey.id)" style="cursor: pointer">{{ data.label }}</a>
                             </div>
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
@@ -110,7 +110,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import {Presence, PresenceStatus, PresenceStatusDefault} from '../types';
+import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../types';
 import APIConfig from '../connect/APIConfig';
 import Connector from '../connect/Connector';
 
@@ -119,9 +119,9 @@ import Connector from '../connect/Connector';
 })
 export default class Entry extends Vue {
     connector: Connector | null = null;
-    periods: any[] = [];
+    periods: PresencePeriod[] = [];
+    selectedPeriod: PresencePeriod | null = null;
     students: any[] = [];
-    selectedKeyId: number | null = null;
 
     sortBy = 'lastname';
     sortDesc = false;
@@ -137,13 +137,13 @@ export default class Entry extends Vue {
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
     @Prop({type: Object, default: null}) readonly presence!: Presence|null;
 
-    get selectedPeriodLabel() {
-        return this.selectedPeriod.label;
+    get selectedPeriodLabel(): string {
+        return this.selectedPeriod?.label || '';
     }
 
     set selectedPeriodLabel(label: string) {
+        if (!this.selectedPeriod) { return; }
         this.selectedPeriod.label = label;
-        if (this.selectedKeyId === null) { return; }
         if (label === '') {
             const el = this.$refs['selectedPeriodLabel'] as HTMLFormElement;
             if (el && !el.checkValidity()) {
@@ -151,22 +151,19 @@ export default class Entry extends Vue {
             }
             return;
         }
-        this.connector?.updatePresencePeriod(this.selectedKeyId, label);
+        this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
 
     get isSaving() {
         return this.connector?.isSaving || false;
     }
 
-    get selectedLabelField() {
-        return this.periods.find((p: any) => p.id === this.selectedKeyId)?.label || '';
+    setSelectedPeriod(id: number) {
+        const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
+        this.selectedPeriod = selectedPeriod || null;
     }
 
-    get selectedPeriod() {
-        return this.periods.find((p: any) => p.id === this.selectedKeyId);
-    }
-
-    get dynamicFieldKeys() {
+    get dynamicFieldKeys(): any {
         return this.periods.map((period: any) => ({key: `period#${period.id}`, id: period.id}));
     }
 
@@ -206,8 +203,8 @@ export default class Entry extends Vue {
     }
 
     hasSelectedStudentStatus(student: any, status: number) {
-        if (this.selectedKeyId === null) { return false; }
-        return this.getStudentStatusForPeriod(student, this.selectedKeyId) === status;
+        if (!this.selectedPeriod) { return false; }
+        return this.getStudentStatusForPeriod(student, this.selectedPeriod.id) === status;
     }
 
     async createResultPeriod(label: string) {
@@ -218,9 +215,10 @@ export default class Entry extends Vue {
     }
 
     async setSelectedStudentStatus(student: any, status: number) {
-        if (this.selectedKeyId === null) { return; }
-        student[`period#${this.selectedKeyId}-status`] = status;
-        const data = await this.connector?.savePresenceEntry(this.selectedKeyId, student.id, status);
+        if (!this.selectedPeriod) { return; }
+        const periodId = this.selectedPeriod.id;
+        student[`period#${periodId}-status`] = status;
+        const data = await this.connector?.savePresenceEntry(periodId, student.id, status);
     }
 
     get presenceStatuses(): PresenceStatus[] {
@@ -233,16 +231,16 @@ export default class Entry extends Vue {
 
     getStatusCodeForStudent(student: any, periodId: number|undefined = undefined): string {
         if (periodId === undefined) {
-            if (this.selectedKeyId === null) { return ''; }
-            return this.getPresenceStatus(this.getStudentStatusForPeriod(student, this.selectedKeyId))?.code || '';
+            if (!this.selectedPeriod) { return ''; }
+            periodId = this.selectedPeriod.id;
         }
         return this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId))?.code || '';
     }
 
     getStatusColorForStudent(student: any, periodId: number|undefined = undefined): string {
         if (periodId === undefined) {
-            if (this.selectedKeyId === null) { return ''; }
-            return this.getPresenceStatus(this.getStudentStatusForPeriod(student, this.selectedKeyId))?.color || '';
+            if (!this.selectedPeriod) { return ''; }
+            periodId = this.selectedPeriod.id;
         }
         return this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId))?.color || '';
     }
@@ -261,11 +259,11 @@ export default class Entry extends Vue {
                 {key: 'period-plh', sortable: false}
             ];
         }
-        if (this.selectedKeyId !== null) {
+        if (!!this.selectedPeriod) {
             return [
                 {key: 'fullname', sortable: false, label: 'Student'},
                 {key: 'official_code', sortable: true},
-                {key: 'period', sortable: false, label: this.selectedLabelField, variant: 'period'},
+                {key: 'period', sortable: false, label: this.selectedPeriodLabel, variant: 'period'},
                 {key: 'period-result', sortable: false, label: '', variant: 'result mod-save'}
             ];
         }
