@@ -372,8 +372,11 @@
     .table.mod-evaluation thead {
         background-color: #f8fbfb;
     }
-    .table.mod-evaluation tbody {
-        background: linear-gradient(to bottom, #e3eaed 0, transparent 4px);
+    .table.mod-evaluation tbody tr:first-child {
+        background: linear-gradient(to bottom, #e3eaed 0, rgba(255, 255, 255, 0) 4px);
+    }
+    .table.mod-evaluation tbody tr.table-selected:first-child {
+        background: linear-gradient(to bottom, #e3eaed 0, #ecf1f3 4px);
     }
     .table.mod-evaluation th {
         color: #727879;
