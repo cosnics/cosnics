@@ -168,6 +168,7 @@ export default class Entry extends Vue {
     }
 
     async itemsProvider(ctx: any) {
+        const selectedPeriod = this.selectedPeriod;
         const parameters = {
             global_search_query: ctx.filter,
             sort_field: ctx.sortBy,
@@ -183,6 +184,9 @@ export default class Entry extends Vue {
         if (data.count !== undefined) {
             this.pagination.total = data.count;
             this.requestCount = false;
+        }
+        if (selectedPeriod) {
+            this.setSelectedPeriod(selectedPeriod.id);
         }
         return students;
     }
