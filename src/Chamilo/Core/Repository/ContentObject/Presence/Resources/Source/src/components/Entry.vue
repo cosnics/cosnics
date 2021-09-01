@@ -21,7 +21,7 @@
 
 <template>
     <div>
-        <div class="u-flex" style="margin-bottom: 15px; gap: 15px;" :style="!!selectedPeriod ? 'align-items: flex-end;justify-content: space-between' : 'align-items: center;'">
+        <div class="u-flex" style="margin-bottom: 15px; max-width: fit-content">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                               type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
@@ -30,9 +30,6 @@
                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </button>
                 </div>
-            </div>
-            <div v-if="!!selectedPeriod">
-                <a @click="selectedPeriod = null" style="cursor: pointer">{{ $t('stop-edit-mode') }}</a>
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
@@ -44,6 +41,17 @@
                     <b-table ref="table" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                              :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
+                        <template slot="table-colgroup" v-if="!!selectedPeriod">
+                            <col>
+                            <col>
+                            <template v-for="period in periods">
+                                <template v-if="period === selectedPeriod">
+                                    <col style="border-top: 1px double #aec2cb;border-bottom: 1px double #aec2cb;border-left: 1px double #aec2cb;border-right:none;">
+                                    <col style="border-top: 1px double #aec2cb;border-bottom: 1px double #aec2cb;border-right: 1px double #aec2cb;border-left:none;">
+                                </template>
+                                <col v-else>
+                            </template>
+                        </template>
                         <template #head(fullname)>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
@@ -77,6 +85,7 @@
                         </template>
                         <template #head(period-result)="">
                             <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                         </template>
                         <template #cell(period-result)="student">
                             <div class="result-wrap">
@@ -263,7 +272,20 @@ export default class Entry extends Vue {
                 {key: 'period-plh', sortable: false}
             ];
         }
-        if (!!this.selectedPeriod) {
+        const fields: any = [
+            {key: 'fullname', sortable: false, label: 'Student'},
+            {key: 'official_code', sortable: true},
+        ];
+        this.periods.forEach((period: any) => {
+            if (period === this.selectedPeriod) {
+                fields.push({key: 'period', sortable: false, label: this.selectedPeriodLabel, variant: 'period'});
+                fields.push({key: 'period-result', sortable: false, label: '', variant: 'result mod-save'});
+            } else {
+                fields.push({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'});
+            }
+        });
+        return fields;
+        /*if (!!this.selectedPeriod) {
             return [
                 {key: 'fullname', sortable: false, label: 'Student'},
                 {key: 'official_code', sortable: true},
@@ -275,7 +297,7 @@ export default class Entry extends Vue {
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},
             ...this.periods.map((period: any) => ({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'}))
-        ];
+        ];*/
 /*        return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},

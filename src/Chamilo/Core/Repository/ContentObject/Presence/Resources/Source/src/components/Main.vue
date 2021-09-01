@@ -434,7 +434,28 @@ export default class Main extends Vue {
     max-width: 1px;
 }
 .table.mod-entry th.table-result.mod-save {
+    background-clip: padding-box;
+    position: relative;
     text-align: center;
+}
+
+.selected-period-close-btn {
+    align-items: center;
+    background: white;
+    border: 1px solid #aec2cb;
+    border-radius: 50%;
+    display: flex;
+    height: 19px;
+    justify-content: center;
+    position: absolute;
+    right: -6px;
+    width: 19px;
+    top: -6px;
+}
+
+.selected-period-close-btn:hover {
+    border-color: #5a93c4;
+    color: #5a93c4;
 }
 
 .table.mod-entry .table-period {
