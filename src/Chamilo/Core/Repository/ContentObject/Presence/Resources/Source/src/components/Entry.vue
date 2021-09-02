@@ -58,8 +58,8 @@
                             {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
-                            <div class="u-txt-truncate" :title="data.label">
-                                <a @click="setSelectedPeriod(fieldKey.id)" style="cursor: pointer">{{ data.label }}</a>
+                            <div role="button" tabindex="0" @keydown.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="data.label">
+                                {{ data.label }}
                             </div>
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
@@ -71,7 +71,7 @@
                         </template>
                         <template #head(period)>
                             <div>
-                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
+                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>

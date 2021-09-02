@@ -474,6 +474,21 @@ export default class Main extends Vue {
     max-width: fit-content;
 }
 
+.select-period-btn {
+    background: #f7f7f7;
+    border: 1px solid;
+    border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.2);
+    border-radius: 4px;
+    color: #333;
+    font-weight: 400;
+    padding: 1px 4px;
+    text-align: center;
+}
+
+.select-period-btn:hover, .select-period-btn:focus {
+    background: #ededed;
+}
+
 /*.table.mod-entry .table-period {
     border-right: 0;
 }
