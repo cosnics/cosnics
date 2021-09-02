@@ -71,7 +71,10 @@
                         </template>
                         <template #head(period)>
                             <div>
-                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" :placeholder="getPlaceHolder(selectedPeriod)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                                <button style="padding: 1px 2px;background: #f7f7f7;border: 1px solid;border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.2);border-radius: 4px;">
+                                    <i class="fa fa-minus-circle" style="color: red;"></i>
+                                </button>
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
@@ -97,7 +100,7 @@
                             </div>
                         </template>
                         <template #head(period-plh)>
-                            <a @click="createResultPeriod('P1')" style="cursor: pointer">P1</a>
+                            <a @click="createResultPeriod('')" style="cursor: pointer">1</a>
                         </template>
                         <template #cell(period-plh)>
                             <div class="result-wrap">
@@ -165,6 +168,10 @@ export default class Entry extends Vue {
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
 
+    getPlaceHolder(period: PresencePeriod) {
+        return `P${this.periods.indexOf(period) + 1}`;
+    }
+
     get isSaving() {
         return this.connector?.isSaving || false;
     }
@@ -222,8 +229,8 @@ export default class Entry extends Vue {
         return this.getStudentStatusForPeriod(student, this.selectedPeriod.id) === status;
     }
 
-    async createResultPeriod(label: string) {
-        const data = await this.connector?.createResultPeriod(label);
+    async createResultPeriod() {
+        const data = await this.connector?.createResultPeriod();
         if (data.status === 'ok') {
             (this.$refs.table as any).refresh();
         }
@@ -274,18 +281,15 @@ export default class Entry extends Vue {
                 {key: 'period-plh', sortable: false}
             ];
         }
-        const fields: any = [
+        return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},
+            ... this.periods.map((period: any, index: number) => {
+                const key = period === this.selectedPeriod ? 'period' : `period#${period.id}`;
+                const variant = period === this.selectedPeriod ? 'period' : 'result';
+                return {key, sortable: false, label: period.label || `P${index + 1}`, variant};
+            })
         ];
-        this.periods.forEach((period: any) => {
-            if (period === this.selectedPeriod) {
-                fields.push({key: 'period', sortable: false, label: this.selectedPeriodLabel, variant: 'period'});
-            } else {
-                fields.push({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'});
-            }
-        });
-        return fields;
         /*if (!!this.selectedPeriod) {
             return [
                 {key: 'fullname', sortable: false, label: 'Student'},

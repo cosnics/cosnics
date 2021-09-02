@@ -183,10 +183,6 @@ class PresenceService
     {
         $presenceResultPeriod = new PresenceResultPeriod();
         $presenceResultPeriod->setPresenceId($presence->getId());
-        if (empty($label)) {
-            $periods = $this->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
-            $label = 'P' . (count($periods) + 1);
-        }
         $presenceResultPeriod->setLabel($label);
         $presenceResultPeriod->setDate((new DateTime())->getTimestamp());
         $presenceResultPeriod->setContextClass($contextIdentifier->getContextClass());

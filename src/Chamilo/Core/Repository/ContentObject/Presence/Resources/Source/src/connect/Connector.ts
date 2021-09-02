@@ -33,10 +33,8 @@ export default class Connector {
         this._isSaving = false;
     }
 
-    async createResultPeriod(label: string) {
-        const formData = new FormData();
-        formData.set('label', label);
-        const res = await axios.post(this.apiConfig.createPresencePeriodURL, formData);
+    async createResultPeriod() {
+        const res = await axios.post(this.apiConfig.createPresencePeriodURL);
         return res.data;
     }
 

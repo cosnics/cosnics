@@ -19,9 +19,8 @@ class CreatePresencePeriodComponent extends Manager
             $this->validatePresenceUserInput();
             $presence = $this->getPresence();
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-            $periodLabel = $this->getRequest()->getFromPostOrUrl('period_label') || '';
 
-            $presenceResultPeriod = $this->getPresenceService()->createPresenceResultPeriod($presence, $contextIdentifier, $periodLabel);
+            $presenceResultPeriod = $this->getPresenceService()->createPresenceResultPeriod($presence, $contextIdentifier);
 
             $result = [
                 'status' => 'ok',
