@@ -194,7 +194,16 @@ export default class Main extends Vue {
 }
 
 .color-code {
-    transition: background 75ms linear, color 75ms linear;
+    transition: background 75ms linear, color 75ms linear, opacity 75ms linear;
+}
+
+.table-period .color-code {
+    opacity: .42;
+}
+
+.table-period .color-code.is-selected,
+.table-period .color-code:hover {
+    opacity: 1;
 }
 
 .table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code:not(.is-selected):hover {
@@ -247,10 +256,10 @@ export default class Main extends Vue {
     position: relative;
 }
 
-.color-code.is-selected:after {
+/*.color-code.is-selected:after {
     background-color: inherit;
     /*  border: 1px solid rgba(255, 255, 255, .92);*/
-    border-radius: 50%;
+    /*border-radius: 50%;
     bottom: -5px;
     content: '\f00c';
     font-family: 'FontAwesome';
@@ -261,7 +270,7 @@ export default class Main extends Vue {
     position: absolute;
     right: -5px;
     z-index: 10;
-}
+}*/
 
 .tbl-no-sort {
     pointer-events: none
@@ -458,13 +467,20 @@ export default class Main extends Vue {
     color: #5a93c4;
 }
 
-.table.mod-entry .table-period {
+.table.mod-entry th.table-period > div {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    max-width: fit-content;
+}
+
+/*.table.mod-entry .table-period {
     border-right: 0;
 }
 
 .table.mod-entry .table-result {
     border-left: 0;
-}
+}*/
 
 .table-period {
     position: relative;
@@ -475,7 +491,7 @@ export default class Main extends Vue {
     max-width: fit-content;
 }
 
-.table.mod-entry tbody .table-period:after {
+/*.table.mod-entry tbody .table-period:after {
     background-color: #ebebeb;
     bottom: 8px;
     content: '';
@@ -484,7 +500,7 @@ export default class Main extends Vue {
     right: -1px;
     top: 8px;
     width: 1px;
-}
+}*/
 
 .table.mod-entry + .lds-ellipsis {
     display: none;

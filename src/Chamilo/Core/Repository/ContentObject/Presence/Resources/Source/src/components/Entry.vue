@@ -45,10 +45,7 @@
                             <col>
                             <col>
                             <template v-for="period in periods">
-                                <template v-if="period === selectedPeriod">
-                                    <col style="border-top: 1px double #aec2cb;border-bottom: 1px double #aec2cb;border-left: 1px double #aec2cb;border-right:none;">
-                                    <col style="border-top: 1px double #aec2cb;border-bottom: 1px double #aec2cb;border-right: 1px double #aec2cb;border-left:none;">
-                                </template>
+                                <col v-if="period === selectedPeriod" style="border: 1px double #aec2cb">
                                 <col v-else>
                             </template>
                         </template>
@@ -73,7 +70,13 @@
                             </div>
                         </template>
                         <template #head(period)>
-                            <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
+                            <div>
+                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" v-model="selectedPeriodLabel" style="font-weight: normal;"></b-input>
+                                <div style="width: 15px">
+                                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                </div>
+                            </div>
+                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                         </template>
                         <template #cell(period)="student">
                             <div class="u-flex u-gap-small u-flex-wrap">
@@ -84,7 +87,6 @@
                             </div>
                         </template>
                         <template #head(period-result)="">
-                            <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                         </template>
                         <template #cell(period-result)="student">
@@ -279,7 +281,6 @@ export default class Entry extends Vue {
         this.periods.forEach((period: any) => {
             if (period === this.selectedPeriod) {
                 fields.push({key: 'period', sortable: false, label: this.selectedPeriodLabel, variant: 'period'});
-                fields.push({key: 'period-result', sortable: false, label: '', variant: 'result mod-save'});
             } else {
                 fields.push({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'});
             }
