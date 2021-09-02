@@ -37,6 +37,12 @@ class LoadPresenceEntriesComponent extends Manager
             $presenceService = $this->getPresenceService();
             $periods = $presenceService->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
 
+            if (count($periods) == 0)
+            {
+                $period = $presenceService->createPresenceResultPeriod($presence, $contextIdentifier);
+                $periods = [['date' => (int) $period->getDate(), 'id' => (int) $period->getId()]];
+            }
+
             foreach ($periods as $period)
             {
                 foreach ($users as $index => $user)

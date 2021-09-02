@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div v-if="!selectedPeriod && periods.length >= 1" style="padding: 10px 0">
+            <div style="padding: 10px 0">
                 <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
             </div>
             <div>
@@ -58,8 +58,9 @@
                             {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
-                            <div role="button" tabindex="0" @keydown.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="data.label">
-                                {{ data.label }}
+                            <div role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="data.label">
+                                <span v-if="data.label">{{ data.label }}</span>
+                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
                             </div>
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
@@ -71,10 +72,7 @@
                         </template>
                         <template #head(period)>
                             <div>
-                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" :placeholder="getPlaceHolder(selectedPeriod)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
-                                <button style="padding: 1px 2px;background: #f7f7f7;border: 1px solid;border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.2);border-radius: 4px;">
-                                    <i class="fa fa-minus-circle" style="color: red;"></i>
-                                </button>
+                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
@@ -87,24 +85,6 @@
                                         :class="[status.color, { 'is-selected': hasSelectedStudentStatus(student.item, status.id) }]"
                                         @click="setSelectedStudentStatus(student.item, status.id)"
                                         :aria-pressed="hasSelectedStudentStatus(student.item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
-                            </div>
-                        </template>
-                        <template #head(period-result)="">
-                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
-                        </template>
-                        <template #cell(period-result)="student">
-                            <div class="result-wrap">
-                                <div class="color-code" :class="[getStatusColorForStudent(student.item) || 'mod-none']">
-                                    <span>{{ getStatusCodeForStudent(student.item) }}</span>
-                                </div>
-                            </div>
-                        </template>
-                        <template #head(period-plh)>
-                            <a @click="createResultPeriod('')" style="cursor: pointer">1</a>
-                        </template>
-                        <template #cell(period-plh)>
-                            <div class="result-wrap">
-                                <div class="color-code mod-none"></div>
                             </div>
                         </template>
                     </b-table>
@@ -136,6 +116,8 @@ export default class Entry extends Vue {
     periods: PresencePeriod[] = [];
     selectedPeriod: PresencePeriod | null = null;
     students: any[] = [];
+    createdId: number | null = null;
+    pageLoaded = false;
 
     sortBy = 'lastname';
     sortDesc = false;
@@ -168,8 +150,8 @@ export default class Entry extends Vue {
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
 
-    getPlaceHolder(period: PresencePeriod) {
-        return `P${this.periods.indexOf(period) + 1}`;
+    getPlaceHolder(periodId: number) {
+        return `P${this.periods.findIndex(p => p.id === periodId) + 1}`;
     }
 
     get isSaving() {
@@ -203,7 +185,13 @@ export default class Entry extends Vue {
             this.pagination.total = data.count;
             this.requestCount = false;
         }
-        if (selectedPeriod) {
+        if (!this.pageLoaded && this.periods.length) {
+            this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
+            this.pageLoaded = true;
+        } else if (this.createdId !== null) {
+            this.setSelectedPeriod(this.createdId);
+            this.createdId = null;
+        } else if (selectedPeriod) {
             this.setSelectedPeriod(selectedPeriod.id);
         }
         return students;
@@ -232,6 +220,7 @@ export default class Entry extends Vue {
     async createResultPeriod() {
         const data = await this.connector?.createResultPeriod();
         if (data.status === 'ok') {
+            this.createdId = data.id;
             (this.$refs.table as any).refresh();
         }
     }
@@ -268,48 +257,15 @@ export default class Entry extends Vue {
     }
 
     get fields() {
-        if (!this.students.length) {
-            return [
-                {key: 'fullname', sortable: false, label: 'Student'},
-                {key: 'official_code', sortable: true}
-            ];
-        }
-        if (!this.periods.length) {
-            return [
-                {key: 'fullname', sortable: false, label: 'Student'},
-                {key: 'official_code', sortable: true},
-                {key: 'period-plh', sortable: false}
-            ];
-        }
         return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},
-            ... this.periods.map((period: any, index: number) => {
+            ... this.periods.map((period: any) => {
                 const key = period === this.selectedPeriod ? 'period' : `period#${period.id}`;
                 const variant = period === this.selectedPeriod ? 'period' : 'result';
-                return {key, sortable: false, label: period.label || `P${index + 1}`, variant};
+                return {key, sortable: false, label: period.label, variant};
             })
         ];
-        /*if (!!this.selectedPeriod) {
-            return [
-                {key: 'fullname', sortable: false, label: 'Student'},
-                {key: 'official_code', sortable: true},
-                {key: 'period', sortable: false, label: this.selectedPeriodLabel, variant: 'period'},
-                {key: 'period-result', sortable: false, label: '', variant: 'result mod-save'}
-            ];
-        }
-        return [
-            {key: 'fullname', sortable: false, label: 'Student'},
-            {key: 'official_code', sortable: true},
-            ...this.periods.map((period: any) => ({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'}))
-        ];*/
-/*        return [
-            {key: 'fullname', sortable: false, label: 'Student'},
-            {key: 'official_code', sortable: true},
-            ...this.pastPeriods.map((period: any) => ({key: `period#${period.id}`, sortable: false, label: period.label, thClass: 'tbl-no-sort', variant: 'result'})),
-            {key: 'period', sortable: false, label: this.lastLabelField , thClass: 'tbl-no-sort', variant: 'period'},
-            {key: 'period-result', sortable: false, label: '', thClass: 'tbl-no-sort', variant: 'result'}
-        ];*/
     }
 
     getSortStatus(name: string) {
