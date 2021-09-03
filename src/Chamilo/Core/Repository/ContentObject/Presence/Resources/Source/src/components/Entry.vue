@@ -54,23 +54,23 @@
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </template>
                         <template #head(official_code)>{{ $t('official-code') }}</template>
-                        <template #cell(fullname)="student">
-                            {{ student.item.lastname.toUpperCase() }}, {{ student.item.firstname }}
+                        <template #cell(fullname)="{item}">
+                            {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
                         </template>
-                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="data">
-                            <div role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="data.label">
-                                <span v-if="data.label">{{ data.label }}</span>
+                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
+                            <div role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
+                                <span v-if="label">{{ label }}</span>
                                 <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
                             </div>
                         </template>
-                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{ item }">
+                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
                             <div class="result-wrap">
                                 <div class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
                                     <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
                                 </div>
                             </div>
                         </template>
-                        <template #head(period)>
+                        <template #head(period-entry)>
                             <div>
                                 <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
                                 <div style="width: 15px">
@@ -79,12 +79,12 @@
                             </div>
                             <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                         </template>
-                        <template #cell(period)="student">
+                        <template #cell(period-entry)="{item}">
                             <div class="u-flex u-gap-small u-flex-wrap">
                                 <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
-                                        :class="[status.color, { 'is-selected': hasSelectedStudentStatus(student.item, status.id) }]"
-                                        @click="setSelectedStudentStatus(student.item, status.id)"
-                                        :aria-pressed="hasSelectedStudentStatus(student.item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
+                                        :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
+                                        @click="setSelectedStudentStatus(item, status.id)"
+                                        :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
                             </div>
                         </template>
                     </b-table>
@@ -253,8 +253,8 @@ export default class Entry extends Vue {
         return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: true},
-            ... this.periods.map((period: any) => {
-                const key = period === this.selectedPeriod ? 'period' : `period#${period.id}`;
+            ... this.periods.map(period => {
+                const key = period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
                 const variant = period === this.selectedPeriod ? 'period' : 'result';
                 return {key, sortable: false, label: period.label, variant};
             })
