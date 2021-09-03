@@ -72,7 +72,7 @@
                         </template>
                         <template #head(period)>
                             <div>
-                                <b-input ref="selectedPeriodLabel" type="text" required debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                                <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
@@ -140,13 +140,6 @@ export default class Entry extends Vue {
     set selectedPeriodLabel(label: string) {
         if (!this.selectedPeriod) { return; }
         this.selectedPeriod.label = label;
-        if (label === '') {
-            const el = this.$refs['selectedPeriodLabel'] as HTMLFormElement;
-            if (el && !el.checkValidity()) {
-                el.reportValidity();
-            }
-            return;
-        }
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
 

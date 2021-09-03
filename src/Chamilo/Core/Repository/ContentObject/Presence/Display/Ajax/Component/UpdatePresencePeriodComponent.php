@@ -62,11 +62,6 @@ class UpdatePresencePeriodComponent extends Manager
 
         $periodLabel = $this->getRequest()->getFromPostOrUrl('period_label');
 
-        if (empty($periodLabel))
-        {
-            $this->throwUserException('NoPeriodLabelProvided');
-        }
-
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
         $period = $this->getPresenceService()->findResultPeriodForPresence($this->getPresence()->getId(), $periodId, $contextIdentifier);
         if (empty($period))
