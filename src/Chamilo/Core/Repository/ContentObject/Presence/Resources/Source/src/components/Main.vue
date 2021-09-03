@@ -443,27 +443,31 @@ export default class Main extends Vue {
     max-width: 1px;
 }
 .table.mod-entry th.table-result.mod-save {
-    background-clip: padding-box;
     position: relative;
     text-align: center;
 }
-
+@-moz-document url-prefix() {
+    .table.mod-entry th.table-period {
+        background-clip: padding-box;
+    }
+}
 .selected-period-close-btn {
     align-items: center;
-    background: white;
-    border: 1px solid #aec2cb;
-    border-radius: 50%;
+    background: #f8fbfb;
+    border: 1px solid #337ab7;
     display: flex;
-    height: 19px;
+    height: 22px;
     justify-content: center;
     position: absolute;
-    right: -6px;
-    width: 19px;
-    top: -6px;
+    right: -1px;
+    top: -22px;
+    border-bottom: none;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px 8px 0;
 }
 
 .selected-period-close-btn:hover {
-    border-color: #5a93c4;
     color: #5a93c4;
 }
 
@@ -506,6 +510,10 @@ export default class Main extends Vue {
     max-width: fit-content;
 }
 
+tfoot .table-period {
+    text-align: right;
+}
+
 /*.table.mod-entry tbody .table-period:after {
     background-color: #ebebeb;
     bottom: 8px;
@@ -516,6 +524,15 @@ export default class Main extends Vue {
     top: 8px;
     width: 1px;
 }*/
+
+.table.mod-entry tfoot tr {
+    border: 1px solid transparent;
+}
+
+.table.mod-entry tfoot th {
+    border: none;
+    font-weight: 400;
+}
 
 .table.mod-entry + .lds-ellipsis {
     display: none;

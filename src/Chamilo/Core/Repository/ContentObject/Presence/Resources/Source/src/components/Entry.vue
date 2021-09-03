@@ -38,14 +38,14 @@
             </div>
             <div>
                 <div style="position: relative">
-                    <b-table ref="table" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+                    <b-table ref="table" :foot-clone="!!selectedPeriod" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                              :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
                         <template slot="table-colgroup" v-if="!!selectedPeriod">
                             <col>
                             <col>
                             <template v-for="period in periods">
-                                <col v-if="period === selectedPeriod" style="border: 1px double #aec2cb">
+                                <col v-if="period === selectedPeriod" style="border: 1px double #337ab7">
                                 <col v-else>
                             </template>
                         </template>
@@ -53,7 +53,11 @@
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </template>
-                        <template #head(official_code)>{{ $t('official-code') }}</template>
+                        <template #foot(fullname)><span></span></template>
+                        <template #head(official_code)>
+                            <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
+                        </template>
+                        <template #foot(official_code)><span></span></template>
                         <template #cell(fullname)="{item}">
                             {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
                         </template>
@@ -70,6 +74,8 @@
                                 </div>
                             </div>
                         </template>
+                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]>
+                        </template>
                         <template #head(period-entry)>
                             <div>
                                 <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
@@ -77,7 +83,7 @@
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
                             </div>
-                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-times"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
+                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null">{{ $t('stop-edit-mode') }}</button>
                         </template>
                         <template #cell(period-entry)="{item}">
                             <div class="u-flex u-gap-small u-flex-wrap">
@@ -86,6 +92,9 @@
                                         @click="setSelectedStudentStatus(item, status.id)"
                                         :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
                             </div>
+                        </template>
+                        <template #foot(period-entry)>
+                            <a class="btn-sm btn-danger" style="cursor:pointer;text-decoration:none"><i class="fa fa-trash"></i> Verwijder periode</a>
                         </template>
                     </b-table>
                     <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
@@ -252,7 +261,7 @@ export default class Entry extends Vue {
     get fields() {
         return [
             {key: 'fullname', sortable: false, label: 'Student'},
-            {key: 'official_code', sortable: true},
+            {key: 'official_code', sortable: false},
             ... this.periods.map(period => {
                 const key = period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
                 const variant = period === this.selectedPeriod ? 'period' : 'result';
