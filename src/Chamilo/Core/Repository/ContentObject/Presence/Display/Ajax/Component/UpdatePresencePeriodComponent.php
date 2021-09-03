@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class UpdatePresencePeriodComponent extends Manager
+class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInterface
 {
     /**
      * @var PresenceResultPeriod

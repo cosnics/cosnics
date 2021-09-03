@@ -33,9 +33,14 @@ export default class Connector {
         this._isSaving = false;
     }
 
-    async createResultPeriod() {
-        const res = await axios.post(this.apiConfig.createPresencePeriodURL);
-        return res.data;
+    async createResultPeriod(callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const data = await this.executeAPIRequest(this.apiConfig.createPresencePeriodURL);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
     }
 
     // eslint-disable-next-line
@@ -95,10 +100,13 @@ export default class Connector {
         this.queue.onIdle().then(this.finishSaving);
     }
 
-    private async executeAPIRequest(apiURL: string, parameters: any) {
+    private async executeAPIRequest(apiURL: string, parameters: any = {}) {
         this.beginSaving();
 
         const formData = new FormData();
+        if (this.apiConfig.csrfToken) {
+            formData.set('_csrf_token', this.apiConfig.csrfToken);
+        }
         for (const [key, value] of Object.entries(parameters)) {
             formData.set(key, value as any);
         }

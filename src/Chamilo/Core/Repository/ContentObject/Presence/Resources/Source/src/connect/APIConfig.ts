@@ -5,6 +5,7 @@ export default class APIConfig {
     public readonly savePresenceEntryURL = '';
     public readonly createPresencePeriodURL = '';
     public readonly updatePresencePeriodURL = '';
+    public readonly csrfToken = '';
 
     constructor(config: Record<string, string>) {
         Object.assign(this, config);

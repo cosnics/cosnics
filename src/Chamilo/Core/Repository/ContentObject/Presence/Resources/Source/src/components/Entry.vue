@@ -220,11 +220,12 @@ export default class Entry extends Vue {
     }
 
     async createResultPeriod() {
-        const data = await this.connector?.createResultPeriod();
-        if (data.status === 'ok') {
-            this.createdId = data.id;
-            (this.$refs.table as any).refresh();
-        }
+        await this.connector?.createResultPeriod((data: any) => {
+            if (data.status === 'ok') {
+                this.createdId = data.id;
+                (this.$refs.table as any).refresh();
+            }
+        });
     }
 
     async setSelectedStudentStatus(student: any, status: number) {

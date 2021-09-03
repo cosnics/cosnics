@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class UpdatePresenceComponent extends Manager
+class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

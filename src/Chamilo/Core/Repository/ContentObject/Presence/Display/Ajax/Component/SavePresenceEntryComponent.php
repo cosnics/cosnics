@@ -3,10 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
-use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
-use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -14,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class SavePresenceEntryComponent extends Manager
+class SavePresenceEntryComponent extends Manager  implements CsrfComponentInterface
 {
     function run()
     {
