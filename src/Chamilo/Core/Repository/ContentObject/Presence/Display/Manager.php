@@ -30,7 +30,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const DEFAULT_ACTION = 'Browser';
 
     const ACTION_AJAX = 'Ajax';
-    const ACTION_ENTRY = 'Entry';
+    const ACTION_USER_PRESENCES = 'UserPresences';
 
     /**
      *

@@ -1,0 +1,30 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Presence\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+{{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
+<div id="main-content">
+    <div id="user-presences">
+        <b-table>
+
+        </b-table>
+    </div>
+</div>
+<script>
+    Vue.use(BootstrapVue);
+    Vue.use(VueI18n);
+
+    const messages = { en: [], nl: [] };
+
+    let lang;
+    try {
+        lang = '{{ LANGUAGE|raw }}';
+    } catch (err) {
+        console.warn('Language could not be set, defaulting to English instead.');
+        lang = 'en';
+    }
+
+</script>
+
+{{ FOOTER|raw }}

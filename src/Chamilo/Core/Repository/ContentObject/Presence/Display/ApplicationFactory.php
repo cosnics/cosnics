@@ -30,7 +30,7 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
         if ($this->presenceServiceBridge->canEditPresence()) {
             return 'Browser';
         }
-        return Manager::ACTION_ENTRY;
+        return Manager::ACTION_USER_PRESENCES;
     }
 
 }
