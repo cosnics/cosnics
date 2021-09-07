@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\File\Compression;
 
-use Chamilo\Libraries\File\Compression\Pclzip\PclzipFilecompression;
+use Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 
@@ -59,11 +59,11 @@ abstract class Filecompression
     /**
      * Create a filecompression instance
      *
-     * @return \Chamilo\Libraries\File\Compression\Pclzip\PclzipFilecompression
+     * @return \Chamilo\Libraries\File\Compression\ZipArchive\ZipArchiveFilecompression
      */
     public static function factory()
     {
-        return new PclzipFilecompression();
+        return new ZipArchiveFilecompression();
     }
 
     /**

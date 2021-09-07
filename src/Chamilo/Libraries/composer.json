@@ -4,7 +4,7 @@
     "description": "Libraries",
     "require": {
         "php": ">=7.4.0",
-        "pclzip/pclzip": "2.8.2",
+        "ext-zip": "*",
         "phpmailer/phpmailer": "=v6.0.5",
         "kriswallsmith/assetic": "1.x",
         "voku/stringy": "6.*",

@@ -127,6 +127,7 @@ class ExporterComponent extends Manager
                 $glyph = new FontAwesomeGlyph('folder', [], null, 'fas');
 
                 $headers = [];
+                $headers[] = new StaticTableColumn();
                 $headers[] = new StaticTableColumn(Translation::get('Type'));
                 $headers[] = new StaticTableColumn(Translation::get('ShortCount'));
 
