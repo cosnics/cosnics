@@ -35,6 +35,7 @@
             <argument type="service" id="symfony.component.filesystem.filesystem" />
             <argument type="service" id="chamilo.libraries.file.compression.file_compression" />
             <argument type="service" id="chamilo.libraries.file.configurable_path_builder" />
+            <argument type="service" id="chamilo.libraries.architecture.error_handler.exception_logger" />
         </service>
     </services>
 </container>

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Libraries\File\Compression\ArchiveCreator;
 
+use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\File\Compression\Filecompression;
 use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -32,20 +33,25 @@ class ArchiveCreator
      */
     protected $configurablePathBuilder;
 
+    protected ExceptionLoggerInterface $exceptionLogger;
+
     /**
      * ArchiveCreator constructor.
      *
      * @param \Symfony\Component\Filesystem\Filesystem $fileSystem
      * @param \Chamilo\Libraries\File\Compression\Filecompression $fileCompression
      * @param \Chamilo\Libraries\File\ConfigurablePathBuilder $configurablePathBuilder
+     * @param ExceptionLoggerInterface $exceptionLogger
      */
     public function __construct(
-        Filesystem $fileSystem, Filecompression $fileCompression, ConfigurablePathBuilder $configurablePathBuilder
+        Filesystem $fileSystem, Filecompression $fileCompression, ConfigurablePathBuilder $configurablePathBuilder,
+        ExceptionLoggerInterface $exceptionLogger
     )
     {
         $this->fileSystem = $fileSystem;
         $this->fileCompression = $fileCompression;
         $this->configurablePathBuilder = $configurablePathBuilder;
+        $this->exceptionLogger = $exceptionLogger;
     }
 
     /**
@@ -73,8 +79,16 @@ class ArchiveCreator
         }
         catch(IOException $ex)
         {
-            sleep(1);
-            $this->fileSystem->remove([$temporaryFolder]);
+            sleep(2);
+
+            try
+            {
+                $this->fileSystem->remove([$temporaryFolder]);
+            }
+            catch(IOException $ex)
+            {
+                $this->exceptionLogger->logException($ex);
+            }
         }
 
         return $archivePath;
