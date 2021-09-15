@@ -87,6 +87,7 @@
                     "output": "Chamilo/Libraries/Resources/Javascript/cosnics.vendor.angular.min.js",
                     "input": [
                         "Resources/Plugin/AngularJS/angular.min.js",
+                        "Resources/Plugin/AngularJS/angular-route.min.js",
                         "Resources/Plugin/AngularJS/angular-sanitize.min.js",
                         "Resources/Plugin/AngularJS-UI-Bootstrap/ui-bootstrap.min.js"
                     ]

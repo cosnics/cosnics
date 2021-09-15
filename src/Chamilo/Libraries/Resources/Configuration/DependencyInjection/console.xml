@@ -42,10 +42,6 @@
             <tag name="chamilo.libraries.console.command"/>
         </service>
 
-        <service id="Chamilo\Libraries\Console\Command\ProcessResourcesCommand">
-            <tag name="chamilo.libraries.console.command"/>
-        </service>
-
         <service id="Chamilo\Libraries\Console\Command\GenerateResourcesCommand">
             <tag name="chamilo.libraries.console.command"/>
         </service>
