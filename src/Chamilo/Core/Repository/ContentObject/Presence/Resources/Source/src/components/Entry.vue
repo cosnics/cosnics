@@ -69,7 +69,7 @@
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
                             <div class="result-wrap">
-                                <div class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
+                                <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']" style="cursor: default">
                                     <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
                                 </div>
                             </div>
@@ -88,6 +88,7 @@
                             <div class="u-flex u-gap-small u-flex-wrap">
                                 <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
                                         :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
+                                        :title="getPresenceStatusTitle(status)"
                                         @click="setSelectedStudentStatus(item, status.id)"
                                         :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
                             </div>
@@ -234,6 +235,13 @@ export default class Entry extends Vue {
         const data = await this.connector?.savePresenceEntry(periodId, student.id, status);
     }
 
+    getPresenceStatusTitle(status: PresenceStatus): string {
+        if (status.type !== 'custom') {
+            return this.statusDefaults.find(statusDefault => statusDefault.id === status.id)?.title || '';
+        }
+        return status.title || '';
+    }
+
     get presenceStatuses(): PresenceStatus[] {
         return this.presence?.statuses || [];
     }
@@ -256,6 +264,15 @@ export default class Entry extends Vue {
             periodId = this.selectedPeriod.id;
         }
         return this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId))?.color || '';
+    }
+
+    getStatusTitleForStudent(student: any, periodId: number|undefined = undefined): string {
+        if (periodId === undefined) {
+            if (!this.selectedPeriod) { return ''; }
+            periodId = this.selectedPeriod.id;
+        }
+        const status = this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId));
+        return status ? this.getPresenceStatusTitle(status) : '';
     }
 
     get fields() {
