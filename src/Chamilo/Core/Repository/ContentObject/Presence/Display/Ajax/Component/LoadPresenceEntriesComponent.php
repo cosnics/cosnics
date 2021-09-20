@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -27,7 +28,21 @@ class LoadPresenceEntriesComponent extends Manager
                 $this->throwUserException('PresenceNotFound');
             }
 
-            $userIds = $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters());
+            $canUserEditPresence = $this->canUserEditPresence();
+
+            if ($canUserEditPresence)
+            {
+                $userIds = $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters());
+            }
+            elseif ($this->canUserViewPresence())
+            {
+                $userIds = [$this->getUser()->getId()];
+            }
+            else
+            {
+                throw new NotAllowedException();
+            }
+
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
 
             $filterParameters = $this->createFilterParameters()->setCount(null)->setOffset(null);
@@ -37,7 +52,7 @@ class LoadPresenceEntriesComponent extends Manager
             $presenceService = $this->getPresenceService();
             $periods = $presenceService->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
 
-            if (count($periods) == 0)
+            if ($canUserEditPresence && count($periods) == 0)
             {
                 $period = $presenceService->createPresenceResultPeriod($presence, $contextIdentifier);
                 $periods = [['date' => (int) $period->getDate(), 'id' => (int) $period->getId()]];
@@ -57,7 +72,7 @@ class LoadPresenceEntriesComponent extends Manager
 
             $resultData = ['students' => $users, 'periods' => $periods, 'last' => (int) end($periods)['id']];
 
-            if ($this->getRequest()->getFromPostOrUrl('request_count') == 'true')
+            if ($canUserEditPresence && $this->getRequest()->getFromPostOrUrl('request_count') == 'true')
             {
                 $resultData['count'] = count($this->getPresenceServiceBridge()->getTargetUserIds($filterParameters));
             }
