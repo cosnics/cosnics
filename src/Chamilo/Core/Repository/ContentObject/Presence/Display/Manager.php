@@ -4,8 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display;
 
 /*use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\RightsService;*/
+use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;*/
+
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
@@ -41,39 +42,30 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @var RightsService
      */
-//    protected $rightsService;
+    protected $rightsService;
 
-    /**
-     * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
-     */
-    public function __construct(ApplicationConfigurationInterface $applicationConfiguration)
+    protected function ensureUserIdentifier()
     {
-        parent::__construct($applicationConfiguration);
-        $this->buildBridgeServices();
-    }
-
-/*    protected function ensureEntityIdentifier()
-    {
-        $entityIdentifier = $this->getEntityIdentifier();
-        if ($entityIdentifier)
+        $userIdentifier = $this->getUserIdentifier();
+        if ($userIdentifier)
         {
-            $this->set_parameter(self::PARAM_ENTITY_ID, $entityIdentifier);
+            $this->set_parameter(self::PARAM_USER_ID, $userIdentifier);
         }
-    }*/
+    }
 
     /**
      * @return RightsService
      */
-/*    public function getRightsService()
+    public function getRightsService()
     {
         if (!isset($this->rightsService))
         {
             $this->rightsService = new RightsService();
-            $this->rightsService->setEvaluationServiceBridge($this->getEvaluationServiceBridge());
+            $this->rightsService->setPresenceServiceBridge($this->getPresenceServiceBridge());
         }
 
         return $this->rightsService;
-    }*/
+    }
 
     /**
      * @return mixed
@@ -95,13 +87,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $this->userIdentifier;
-    }
-
-    /**
-     * Builds the bridge services
-     */
-    protected function buildBridgeServices()
-    {
     }
 
     /**

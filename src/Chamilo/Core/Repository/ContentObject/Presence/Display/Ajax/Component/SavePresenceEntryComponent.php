@@ -19,6 +19,10 @@ class SavePresenceEntryComponent extends Manager  implements CsrfComponentInterf
     {
         try
         {
+            if (!$this->canUserEditPresence())
+            {
+                throw new NotAllowedException();
+            }
             $this->validatePresenceUserInput();
 
             $periodId = $this->getRequest()->getFromPostOrUrl('period_id');

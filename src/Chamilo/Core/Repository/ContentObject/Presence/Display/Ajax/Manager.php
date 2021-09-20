@@ -56,6 +56,22 @@ abstract class Manager extends AjaxManager
     }
 
     /**
+     * @return bool
+     */
+    protected function canUserEditPresence(): bool
+    {
+        return $this->ajaxComponent->getRightsService()->canUserEditPresence();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function canUserViewPresence(): bool
+    {
+        return $this->ajaxComponent->getRightsService()->canUserViewPresence($this->getUser());
+    }
+
+    /**
      * @return PresenceServiceBridgeInterface
      */
     protected function getPresenceServiceBridge()

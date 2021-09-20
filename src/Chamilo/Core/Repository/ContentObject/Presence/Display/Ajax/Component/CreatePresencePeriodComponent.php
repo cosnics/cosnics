@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -17,6 +18,10 @@ class CreatePresencePeriodComponent extends Manager implements CsrfComponentInte
     {
         try
         {
+            if (!$this->canUserEditPresence())
+            {
+                throw new NotAllowedException();
+            }
             $this->validatePresenceUserInput();
             $presence = $this->getPresence();
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();

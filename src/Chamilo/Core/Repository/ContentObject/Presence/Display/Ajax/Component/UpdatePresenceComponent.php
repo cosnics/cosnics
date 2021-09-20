@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -18,6 +19,10 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
     {
         try
         {
+            if (!$this->canUserEditPresence())
+            {
+                throw new NotAllowedException();
+            }
             $this->ajaxComponent->validateIsPostRequest();
             $presence = $this->getPresence();
 

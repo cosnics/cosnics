@@ -28,7 +28,12 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
 
     function run()
     {
-        try {
+        try
+        {
+            if (!$this->canUserEditPresence())
+            {
+                throw new NotAllowedException();
+            }
             $this->validatePresenceUserInput();
             $this->getPresenceService()->setPresencePeriodResultLabel($this->presenceResultPeriod, $this->presencePeriodLabel);
 
