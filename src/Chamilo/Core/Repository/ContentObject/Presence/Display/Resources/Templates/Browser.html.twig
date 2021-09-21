@@ -55,7 +55,7 @@
     </div>
     <div class="dynamic-visual-tab-content tab-content">
         <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :load-index="updateCount"></presence-entry>
+            <presence-entry :api-config="apiConfig" :load-index="updateCount" can-edit-presence="true"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties">
             {{ CONTENT_OBJECT_RENDITION|raw }}

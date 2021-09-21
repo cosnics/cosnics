@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Component;
 
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager as AjaxManager;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Manager;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
@@ -56,7 +57,20 @@ class UserPresencesComponent extends Manager
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'LANGUAGE' => $this->getTranslator()->getLocale(),
-            'PRESENCE_TITLE' => $this->getPresence()->get_title()
+            'PRESENCE_TITLE' => $this->getPresence()->get_title(),
+            'CAN_EDIT_PRESENCE' => $this->getPresenceServiceBridge()->canEditPresence(),
+            'LOAD_PRESENCE_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE
+                ]
+            ),
+            'LOAD_PRESENCE_ENTRIES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_PRESENCE_ENTRIES
+                ]
+            )
         ];
     }
 

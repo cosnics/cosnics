@@ -21,7 +21,7 @@
 
 <template>
     <div>
-        <div class="u-flex" style="margin-bottom: 15px; max-width: fit-content">
+        <div v-if="canEditPresence" class="u-flex" style="margin-bottom: 15px; max-width: fit-content">
             <div class="action-bar input-group">
                 <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
                               type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
@@ -33,15 +33,15 @@
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div style="padding: 10px 0">
+            <div style="padding: 10px 0" v-if="canEditPresence">
                 <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
             </div>
             <div>
                 <div style="position: relative">
-                    <b-table ref="table" :foot-clone="!!selectedPeriod" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+                    <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                              :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
-                        <template slot="table-colgroup" v-if="!!selectedPeriod">
+                        <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
                             <col>
                             <col>
                             <template v-for="period in periods">
@@ -49,20 +49,26 @@
                                 <col v-else>
                             </template>
                         </template>
-                        <template #head(fullname)>
+                        <template #head(fullname) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </template>
+                        <template #head(fullname) v-if="!canEditPresence">Student</template>
                         <template #foot(fullname)><span></span></template>
-                        <template #head(official_code)>
+                        <template #head(official_code) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
                         </template>
+                        <template #head(official_code) v-if="!canEditPresence">{{ $t('official-code') }}</template>
                         <template #foot(official_code)><span></span></template>
                         <template #cell(fullname)="{item}">
                             {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-                            <div role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
+                            <div v-if="canEditPresence" role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
+                                <span v-if="label">{{ label }}</span>
+                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                            </div>
+                            <div v-else class="u-txt-truncate" style="font-weight: 400; text-align: center">
                                 <span v-if="label">{{ label }}</span>
                                 <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
                             </div>
@@ -99,7 +105,7 @@
                     </b-table>
                     <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div class="pagination-container u-flex u-justify-content-end">
+                <div v-if="canEditPresence" class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="data-table"></b-pagination>
                     <ul class="pagination">
@@ -142,6 +148,7 @@ export default class Entry extends Vue {
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
+    @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
 
     async load(): Promise<void> {
         const presenceData : any = await this.connector?.loadPresence();
@@ -170,6 +177,7 @@ export default class Entry extends Vue {
     }
 
     setSelectedPeriod(id: number) {
+        if (!this.canEditPresence) { return; }
         const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
         this.selectedPeriod = selectedPeriod || null;
     }
@@ -289,8 +297,8 @@ export default class Entry extends Vue {
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
             ... this.periods.map(period => {
-                const key = period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
-                const variant = period === this.selectedPeriod ? 'period' : 'result';
+                const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
+                const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
                 return {key, sortable: false, label: period.label, variant};
             })
         ];
