@@ -27,6 +27,7 @@ abstract class Manager extends AjaxManager
     const ACTION_SAVE_PRESENCE_ENTRY = 'SavePresenceEntry';
     const ACTION_CREATE_PRESENCE_PERIOD = 'CreatePresencePeriod';
     const ACTION_UPDATE_PRESENCE_PERIOD = 'UpdatePresencePeriod';
+    const ACTION_DELETE_PRESENCE_PERIOD = 'DeletePresencePeriod';
 
     const PARAM_ACTION = 'presence_display_ajax_action';
 

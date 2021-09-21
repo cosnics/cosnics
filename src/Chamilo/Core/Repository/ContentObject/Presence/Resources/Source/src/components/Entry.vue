@@ -6,7 +6,9 @@
         "first-name": "First name",
         "official-code": "Official code",
         "total": "Total",
-        "stop-edit-mode": "Stop editing"
+        "stop-edit-mode": "Stop editing",
+        "new-period": "New period",
+        "remove-period": "Remove period"
     },
     "nl": {
         "search": "Zoeken",
@@ -14,7 +16,9 @@
         "first-name": "Voornaam",
         "official-code": "Officiële code",
         "total": "Totaal",
-        "stop-edit-mode": "Sluit editeren af"
+        "stop-edit-mode": "Sluit editeren af",
+        "new-period": "Nieuwe periode",
+        "remove-period": "Verwijder periode"
     }
 }
 </i18n>
@@ -33,8 +37,8 @@
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div style="padding: 10px 0" v-if="canEditPresence">
-                <a style="cursor: pointer" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> Nieuwe periode</a>
+            <div v-if="canEditPresence" :style="selectedPeriod ? 'margin-top: 15px' : 'margin-top: 12px'">
+                <a style="cursor: pointer; text-decoration: none" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> {{ $t('new-period') }}</a>
             </div>
             <div>
                 <div style="position: relative">
@@ -100,12 +104,12 @@
                             </div>
                         </template>
                         <template #foot(period-entry)>
-                            <a class="btn-sm btn-danger" style="cursor:pointer;text-decoration:none"><i class="fa fa-trash"></i> Verwijder periode</a>
+                            <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
                         </template>
                     </b-table>
                     <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="canEditPresence" class="pagination-container u-flex u-justify-content-end">
+                <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="data-table"></b-pagination>
                     <ul class="pagination">
@@ -132,6 +136,7 @@ export default class Entry extends Vue {
     connector: Connector | null = null;
     periods: PresencePeriod[] = [];
     selectedPeriod: PresencePeriod | null = null;
+    toRemovePeriod: PresencePeriod | null = null;
     students: any[] = [];
     createdId: number | null = null;
     pageLoaded = false;
@@ -180,6 +185,19 @@ export default class Entry extends Vue {
         if (!this.canEditPresence) { return; }
         const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
         this.selectedPeriod = selectedPeriod || null;
+    }
+
+    removeSelectedPeriod() {
+        if (!this.selectedPeriod) { return; }
+        this.toRemovePeriod = this.selectedPeriod;
+        const index = this.periods.indexOf(this.selectedPeriod);
+        this.connector?.deletePresencePeriod(this.selectedPeriod.id, (data: any) => {
+            if (data.status === 'ok') {
+                this.selectedPeriod = null;
+                this.toRemovePeriod = null;
+                this.periods.splice(index, 1);
+            }
+        })
     }
 
     get dynamicFieldKeys(): any {

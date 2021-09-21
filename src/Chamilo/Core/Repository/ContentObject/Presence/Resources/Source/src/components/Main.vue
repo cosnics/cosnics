@@ -531,6 +531,7 @@ tfoot .table-period {
 .table.mod-entry tfoot th {
     border: none;
     font-weight: 400;
+    padding: 6px 8px;
 }
 
 .table.mod-entry + .lds-ellipsis {
@@ -542,6 +543,26 @@ tfoot .table-period {
 
 .table.mod-entry[aria-busy=true] + .lds-ellipsis {
     display: inline-block;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: #d9534f;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-remove[disabled] {
+    cursor: not-allowed;
+}
+
+.btn-remove:hover {
+    color: #b72d2a;
+}
+
+.btn-remove:active, .btn-remove:focus {
+    color: #ac2925;
 }
 </style>
 

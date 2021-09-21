@@ -70,7 +70,17 @@ export default class Connector {
         this.addToQueue(async () => {
             const parameters = { 'period_id': periodId, 'period_label': label };
             const data = await this.executeAPIRequest(this.apiConfig.updatePresencePeriodURL, parameters);
-            console.log(data);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
+    async deletePresencePeriod(periodId: number, callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const parameters = { 'period_id': periodId };
+            const data = await this.executeAPIRequest(this.apiConfig.deletePresencePeriodURL, parameters);
             if (callback) {
                 callback(data);
             }

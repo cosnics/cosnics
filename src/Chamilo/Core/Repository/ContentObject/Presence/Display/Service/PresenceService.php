@@ -193,9 +193,21 @@ class PresenceService
         return $presenceResultPeriod;
     }
 
+    /**
+     * @param PresenceResultPeriod $presenceResultPeriod
+     * @param string $label
+     */
     public function setPresencePeriodResultLabel(PresenceResultPeriod $presenceResultPeriod, string $label)
     {
         $presenceResultPeriod->setLabel($label);
         $this->presenceRepository->updatePresenceResultPeriod($presenceResultPeriod);
+    }
+
+    /**
+     * @param PresenceResultPeriod $presenceResultPeriod
+     */
+    public function deletePresenceResultPeriod(PresenceResultPeriod $presenceResultPeriod)
+    {
+        $this->presenceRepository->deletePresenceResultPeriod($presenceResultPeriod);
     }
 }
