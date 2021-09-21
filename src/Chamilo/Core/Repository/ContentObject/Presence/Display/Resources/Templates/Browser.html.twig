@@ -55,13 +55,13 @@
     </div>
     <div class="dynamic-visual-tab-content tab-content">
         <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :status-defaults="statusDefaults" :presence="presence"></presence-entry>
+            <presence-entry :api-config="apiConfig" :load-index="updateCount"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties">
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
-            <presence-builder :api-config="apiConfig" @presence-data-changed="onPresenceDataChanged"></presence-builder>
+            <presence-builder :api-config="apiConfig" @presence-data-changed="$emit('presence-data-changed')"></presence-builder>
         </div>
     </div>
 </div>
@@ -90,39 +90,30 @@
         csrfToken: '{{ csrf_token('ComponentToken') }}'
     };
 
-    const bus = new Vue();
-
-    new Vue({
-        i18n: new VueI18n({ locale: lang, messages }),
-        el: '#presence-entry',
-        delimiters: ['${', '}'],
-        data: {
-            apiConfig,
-            statusDefaults: [],
-            presence: null
-        },
-        methods: {
-            setPresenceData: function(presenceData) {
-                this.statusDefaults = presenceData['status-defaults'];
-                this.presence = presenceData.presence;
-            }
-        },
-        mounted() {
-            bus.$on('presence-data-changed', this.setPresenceData);
-        }
-    });
-
-    new Vue({
+    const presenceBuilder = new Vue({
         i18n: new VueI18n({ locale: lang, messages }),
         el: '#presence-builder',
         delimiters: ['${', '}'],
         data: {
             apiConfig
+        }
+    });
+
+    const presenceEntry = new Vue({
+        i18n: new VueI18n({ locale: lang, messages }),
+        el: '#presence-entry',
+        delimiters: ['${', '}'],
+        data: {
+            apiConfig,
+            updateCount: 0
         },
         methods: {
-            onPresenceDataChanged: function(presenceData) {
-                bus.$emit('presence-data-changed', presenceData);
+            updatePresenceData: function() {
+                this.updateCount++;
             }
+        },
+        mounted() {
+            presenceBuilder.$on('presence-data-changed', this.updatePresenceData);
         }
     });
 </script>

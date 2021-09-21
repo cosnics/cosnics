@@ -112,7 +112,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../types';
 import APIConfig from '../connect/APIConfig';
 import Connector from '../connect/Connector';
@@ -121,6 +121,8 @@ import Connector from '../connect/Connector';
     name: 'entry'
 })
 export default class Entry extends Vue {
+    statusDefaults: PresenceStatusDefault[] = [];
+    presence: Presence | null = null;
     connector: Connector | null = null;
     periods: PresencePeriod[] = [];
     selectedPeriod: PresencePeriod | null = null;
@@ -139,8 +141,15 @@ export default class Entry extends Vue {
     requestCount = true;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
-    @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
-    @Prop({type: Object, default: null}) readonly presence!: Presence|null;
+    @Prop({type: Number, default: 0}) readonly loadIndex!: number;
+
+    async load(): Promise<void> {
+        const presenceData : any = await this.connector?.loadPresence();
+        if (presenceData) {
+            this.statusDefaults = presenceData['status-defaults'];
+            this.presence = presenceData.presence;
+        }
+    }
 
     get selectedPeriodLabel(): string {
         return this.selectedPeriod?.label || '';
@@ -303,6 +312,12 @@ export default class Entry extends Vue {
 
     mounted(): void {
         this.connector = new Connector(this.apiConfig);
+        this.load();
+    }
+
+    @Watch('loadIndex')
+    _loadIndex() {
+        this.load();
     }
 }
 </script>

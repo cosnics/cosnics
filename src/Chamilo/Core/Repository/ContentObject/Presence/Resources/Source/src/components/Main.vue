@@ -32,7 +32,6 @@ export default class Main extends Vue {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
         }
-        this.$emit('presence-data-changed', presenceData);
     }
 
     get presenceStatuses(): PresenceStatus[] {
