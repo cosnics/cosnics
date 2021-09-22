@@ -64,7 +64,7 @@ export default class Main extends Vue {
     }
 
     onRemove(status: PresenceStatus) {
-        if (!this.presence || status.type !== 'custom') {
+        if (!this.presence || status.type === 'fixed') {
             return;
         }
         const statuses = this.presence.statuses;
