@@ -1,5 +1,5 @@
 <template>
-    <builder v-if="presence" class="presence-builder" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults" @move-up="onMoveUp"
+    <builder v-if="presence" class="presence-builder" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults" :saved-entry-statuses="savedEntryStatuses" @move-up="onMoveUp"
              @move-down="onMoveDown" @create="onCreate" @remove="onRemove" @save="onSave"></builder>
 </template>
 
@@ -16,6 +16,7 @@ import Builder from './Builder.vue';
 export default class Main extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
     presence: Presence | null = null;
+    savedEntryStatuses: number[] = [];
     connector: Connector | null = null;
     showPreview = false;
 
@@ -36,10 +37,9 @@ export default class Main extends Vue {
     }
 
     async loadSavedEntryStatuses(): Promise<void> {
-        console.log('loadSavedEntryStatuses');
         const data: any = await this.connector?.loadSavedEntryStatuses();
         if (data) {
-            console.log(data);
+            this.savedEntryStatuses = data.statuses;
         }
     }
 
@@ -67,7 +67,7 @@ export default class Main extends Vue {
         if (!this.presence) {
             return;
         }
-        status.id = Math.max.apply(null, this.presence.statuses.map(s => s.id)) + 1;
+        status.id = Math.max(this.statusDefaults.length, Math.max.apply(null, this.presence.statuses.map(s => s.id))) + 1;
         status.type = 'custom';
         this.presence.statuses.push(status);
     }

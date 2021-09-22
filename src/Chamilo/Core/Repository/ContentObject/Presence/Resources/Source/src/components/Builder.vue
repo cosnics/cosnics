@@ -55,6 +55,8 @@
                 <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
                     <template v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'"><span
                         style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span></template>
+                    <template v-else-if="savedEntryStatuses.includes(status.item.id)"><span
+                        style="line-height: 26px">{{ status.item.title }}</span></template>
                     <b-input v-else type="text" v-model="status.item.title" autocomplete="off" :disabled="createNew"
                              class="mod-input mod-pad" @focus="onSelectStatus(status.item)"/>
                 </div>
@@ -68,6 +70,7 @@
                     <span v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'">{{
                             getStatusDefault(status.item, true).title
                         }}</span>
+                    <span v-else-if="savedEntryStatuses.includes(status.item.id)">{{ statusDefaults.find(s => s.id === status.item.aliasses).title }}</span>
                     <select v-else class="form-control mod-select" :disabled="createNew"
                             @focus="onSelectStatus(status.item)" v-model="status.item.aliasses">
                         <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`"
@@ -103,7 +106,7 @@
                             <i class="fa fa-arrow-down" aria-hidden="true"></i>
                             <span class="sr-only">{{ $t('move-down') }}</span>
                         </button>
-                        <button :title="$t('remove')" :disabled="createNew || status.item.type === 'fixed'"
+                        <button :title="$t('remove')" :disabled="createNew || status.item.type === 'fixed' || savedEntryStatuses.includes(status.item.id)"
                                 class="btn btn-default btn-sm mod-presence" @click.stop="$emit('remove', status.item)"
                                 @focus="onSelectStatus(status.item)">
                             <i class="fa fa-minus-circle" aria-hidden="true"></i>
@@ -188,7 +191,8 @@ export default class Builder extends Vue {
   
   @Prop({type: Array, required: true}) readonly presenceStatuses!: PresenceStatus[];
   @Prop({type: Array, required: true}) readonly statusDefaults!: PresenceStatusDefault[];
-  
+  @Prop({type: Array, default: () => []}) readonly savedEntryStatuses!: number[];
+
   get fixedStatusDefaults(): PresenceStatusDefault[] {
     return this.statusDefaults.filter((s : PresenceStatusDefault) => s.type === 'fixed');
   }
