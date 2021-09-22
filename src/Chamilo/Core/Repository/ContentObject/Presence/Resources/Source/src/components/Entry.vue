@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div v-if="canEditPresence" :style="selectedPeriod ? 'margin-top: 15px' : 'margin-top: 12px'">
+            <div v-if="canEditPresence && !creatingNew" :style="selectedPeriod ? 'margin-top: 15px' : 'margin-top: 12px'">
                 <a style="cursor: pointer; text-decoration: none" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> {{ $t('new-period') }}</a>
             </div>
             <div>
@@ -53,16 +53,22 @@
                                 <col v-else>
                             </template>
                         </template>
+                        <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
+                            <col>
+                            <col>
+                            <col v-for="period in periods">
+                            <col style="border: 1px double #337ab7">
+                        </template>
                         <template #head(fullname) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
                         </template>
-                        <template #head(fullname) v-if="!canEditPresence">Student</template>
+                        <template #head(fullname) v-else>Student</template>
                         <template #foot(fullname)><span></span></template>
                         <template #head(official_code) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
                         </template>
-                        <template #head(official_code) v-if="!canEditPresence">{{ $t('official-code') }}</template>
+                        <template #head(official_code) v-else>{{ $t('official-code') }}</template>
                         <template #foot(official_code)><span></span></template>
                         <template #cell(fullname)="{item}">
                             {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
@@ -85,6 +91,20 @@
                             </div>
                         </template>
                         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
+                        <template #head(period-entry-plh)>
+                            <div>
+                                <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" style="font-weight: normal;height:30px;padding:6px;background:none;font-style: italic; pointer-events:none;box-shadow:none;border-color: #e9eaea;"></b-input>
+                                <div style="width: 15px">
+                                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                </div>
+                            </div>
+                        </template>
+                        <template #cell(period-entry-plh)>
+                            <div class="u-flex u-gap-small u-flex-wrap" style="pointer-events: none">
+                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
+                                        :class="[status.color]"><span>{{ status.code }}</span></button>
+                            </div>
+                        </template>
                         <template #head(period-entry)>
                             <div>
                                 <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
@@ -107,7 +127,7 @@
                             <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
                         </template>
                     </b-table>
-                    <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                    <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
                 <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
@@ -138,6 +158,7 @@ export default class Entry extends Vue {
     selectedPeriod: PresencePeriod | null = null;
     toRemovePeriod: PresencePeriod | null = null;
     students: any[] = [];
+    creatingNew = false;
     createdId: number | null = null;
     pageLoaded = false;
 
@@ -228,6 +249,7 @@ export default class Entry extends Vue {
         } else if (this.createdId !== null) {
             this.setSelectedPeriod(this.createdId);
             this.createdId = null;
+            this.creatingNew = false;
         } else if (selectedPeriod) {
             this.setSelectedPeriod(selectedPeriod.id);
         }
@@ -255,6 +277,8 @@ export default class Entry extends Vue {
     }
 
     async createResultPeriod() {
+        this.selectedPeriod = null;
+        this.creatingNew = true;
         await this.connector?.createResultPeriod((data: any) => {
             if (data.status === 'ok') {
                 this.createdId = data.id;
@@ -311,7 +335,7 @@ export default class Entry extends Vue {
     }
 
     get fields() {
-        return [
+        const fields = [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
             ... this.periods.map(period => {
@@ -320,6 +344,10 @@ export default class Entry extends Vue {
                 return {key, sortable: false, label: period.label, variant};
             })
         ];
+        if (this.creatingNew) {
+            return [...fields, {key: 'period-entry-plh', sortable: false, variant: 'period'}];
+        }
+        return fields;
     }
 
     getSortStatus(name: string) {
