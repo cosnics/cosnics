@@ -66,6 +66,11 @@ export default class Connector {
         });
     }
 
+    async loadSavedEntryStatuses() {
+        const res = await axios.get(this.apiConfig.loadSavedEntryStatusesURL);
+        return res.data;
+    }
+
     async updatePresencePeriod(periodId: number, label: string, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = { 'period_id': periodId, 'period_label': label };

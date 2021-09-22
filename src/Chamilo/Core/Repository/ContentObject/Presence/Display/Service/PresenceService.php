@@ -49,11 +49,28 @@ class PresenceService
     {
         $periods = $this->presenceRepository->getResultPeriodsForPresence($presenceId, $contextIdentifier);
         $periods = iterator_to_array($periods);
-        foreach ($periods as $index => $period) {
+        foreach ($periods as $index => $period)
+        {
             $periods[$index]['date'] = (int)$period['date'];
             $periods[$index]['id'] = (int)$period['id'];
         }
         return $periods;
+    }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return array
+     */
+    public function getDistinctSavedStatuses(ContextIdentifier $contextIdentifier): array
+    {
+        $statuses = $this->presenceRepository->getDistinctSavedStatuses($contextIdentifier);
+        $lst = [];
+        foreach ($statuses as $status)
+        {
+            $lst[] = (int) $status['choice_id'];
+        }
+        return $lst;
     }
 
     /**

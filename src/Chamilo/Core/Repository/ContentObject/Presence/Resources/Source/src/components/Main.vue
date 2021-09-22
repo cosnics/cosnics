@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {PresenceStatusDefault, PresenceStatus, Presence} from '../types';
 import APIConfig from '../connect/APIConfig';
 import Connector from '../connect/Connector';
@@ -25,12 +25,21 @@ export default class Main extends Vue {
     ];
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
+    @Prop({type: Number, default: 0}) readonly loadIndex!: number;
 
     async load(): Promise<void> {
         const presenceData : any = await this.connector?.loadPresence();
         if (presenceData) {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
+        }
+    }
+
+    async loadSavedEntryStatuses(): Promise<void> {
+        console.log('loadSavedEntryStatuses');
+        const data: any = await this.connector?.loadSavedEntryStatuses();
+        if (data) {
+            console.log(data);
         }
     }
 
@@ -87,6 +96,11 @@ export default class Main extends Vue {
     mounted(): void {
         this.connector = new Connector(this.apiConfig);
         this.load();
+    }
+
+    @Watch('loadIndex')
+    _loadIndex() {
+        this.loadSavedEntryStatuses();
     }
 }
 </script>
