@@ -62,9 +62,9 @@ class PresenceService
      *
      * @return array
      */
-    public function getDistinctSavedStatuses(int $presenceId): array
+    public function getRegisteredPresenceEntryStatuses(int $presenceId): array
     {
-        $statuses = $this->presenceRepository->getDistinctSavedStatuses($presenceId);
+        $statuses = $this->presenceRepository->getRegisteredPresenceEntryStatuses($presenceId);
         $lst = [];
         foreach ($statuses as $status)
         {
@@ -185,7 +185,7 @@ class PresenceService
      * @param Presence $presence
      * @return array
      */
-    protected function getPresenceOptions(Presence $presence): array
+    public function getPresenceOptions(Presence $presence): array
     {
         return $this->serializer->deserialize($presence->getOptions(), 'array', 'json');
     }

@@ -4,5 +4,6 @@
     <services>
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService" autowire="true" />
     </services>
 </container>

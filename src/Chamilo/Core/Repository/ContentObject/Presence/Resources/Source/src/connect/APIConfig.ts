@@ -6,7 +6,7 @@ export default class APIConfig {
     public readonly createPresencePeriodURL = '';
     public readonly updatePresencePeriodURL = '';
     public readonly deletePresencePeriodURL = '';
-    public readonly loadSavedEntryStatusesURL = '';
+    public readonly loadRegisteredPresenceEntryStatusesURL = '';
     public readonly csrfToken = '';
 
     constructor(config: Record<string, string>) {

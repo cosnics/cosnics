@@ -194,7 +194,7 @@ class PresenceRepository
      *
      * @return RecordIterator
      */
-    public function getDistinctSavedStatuses(int $presenceId): RecordIterator
+    public function getRegisteredPresenceEntryStatuses(int $presenceId): RecordIterator
     {
         $class_name = PresenceResultEntry::class_name();
 

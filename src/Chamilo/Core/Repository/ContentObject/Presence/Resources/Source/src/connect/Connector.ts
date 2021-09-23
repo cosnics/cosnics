@@ -66,8 +66,8 @@ export default class Connector {
         });
     }
 
-    async loadSavedEntryStatuses() {
-        const res = await axios.get(this.apiConfig.loadSavedEntryStatusesURL);
+    async loadRegisteredPresenceEntryStatuses() {
+        const res = await axios.get(this.apiConfig.loadRegisteredPresenceEntryStatusesURL);
         return res.data;
     }
 

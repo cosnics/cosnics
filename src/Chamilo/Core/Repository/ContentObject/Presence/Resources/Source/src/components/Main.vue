@@ -37,7 +37,7 @@ export default class Main extends Vue {
     }
 
     async loadSavedEntryStatuses(): Promise<void> {
-        const data: any = await this.connector?.loadSavedEntryStatuses();
+        const data: any = await this.connector?.loadRegisteredPresenceEntryStatuses();
         if (data) {
             this.savedEntryStatuses = data.statuses;
         }

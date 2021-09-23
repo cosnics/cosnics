@@ -108,10 +108,10 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_DELETE_PRESENCE_PERIOD
                 ]
             ),
-            'LOAD_SAVED_ENTRY_STATUSES_URL' =>  $this->get_url(
+            'LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES_URL' =>  $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
-                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_SAVED_ENTRY_STATUSES
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES
                 ]
             )
         ];

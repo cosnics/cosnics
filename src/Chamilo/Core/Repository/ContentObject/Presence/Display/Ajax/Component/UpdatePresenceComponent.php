@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -24,12 +25,8 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
                 throw new NotAllowedException();
             }
             $this->ajaxComponent->validateIsPostRequest();
-            $presence = $this->getPresence();
 
-            if (!$presence instanceof Presence)
-            {
-                $this->throwUserException('PresenceNotFound');
-            }
+            $presence = $this->getPresence();
 
             $json = $this->getRequest()->getFromPost('data');
             $data = $this->deserialize($json);
@@ -39,7 +36,10 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
                 $this->throwUserException('InvalidPresenceId');
             }
 
-            $this->validateStatuses($data['statuses']);
+            $registeredPresenceEntryStatuses = $this->getPresenceService()->getRegisteredPresenceEntryStatuses($presence->getId());
+            $savedStatuses = $this->getCurrentStatuses($presence);
+
+            $this->getPresenceValidationService()->validateStatuses($data['statuses'], $savedStatuses, $registeredPresenceEntryStatuses);
 
             $presence->setOptions($this->serialize($data['statuses']));
             $presence->update();
@@ -53,10 +53,19 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
     }
 
     /**
-     * @param array $statuses
+     * @param Presence $presence
+     * @return array
      */
-    protected function validateStatuses(array $statuses): void
+    protected function getCurrentStatuses(Presence $presence): array
     {
-        // todo
+        $currentStatuses = [];
+        $statuses = $this->deserialize($presence->getOptions());
+        foreach ($statuses as $status)
+        {
+            $id = $status['id'];
+            $currentStatuses[$id] = $status;
+        }
+        return $currentStatuses;
     }
+
 }

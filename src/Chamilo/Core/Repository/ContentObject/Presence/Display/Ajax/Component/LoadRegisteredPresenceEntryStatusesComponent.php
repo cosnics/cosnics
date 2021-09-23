@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class LoadSavedEntryStatusesComponent extends Manager
+class LoadRegisteredPresenceEntryStatusesComponent extends Manager
 {
     function run()
     {
@@ -24,7 +24,7 @@ class LoadSavedEntryStatusesComponent extends Manager
                 $this->throwUserException('PresenceNotFound');
             }
 
-            $statuses = $this->getPresenceService()->getDistinctSavedStatuses($presence->getId());
+            $statuses = $this->getPresenceService()->getRegisteredPresenceEntryStatuses($presence->getId());
 
             $resultData = ['statuses' => $statuses];
 
