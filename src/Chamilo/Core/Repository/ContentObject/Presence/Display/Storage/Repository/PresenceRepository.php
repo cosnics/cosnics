@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
@@ -189,11 +190,11 @@ class PresenceRepository
     }
 
     /**
-     * @param ContextIdentifier $contextIdentifier
+     * @param int $presenceId
      *
      * @return RecordIterator
      */
-    public function getDistinctSavedStatuses(ContextIdentifier $contextIdentifier): RecordIterator
+    public function getDistinctSavedStatuses(int $presenceId): RecordIterator
     {
         $class_name = PresenceResultEntry::class_name();
 
@@ -205,25 +206,23 @@ class PresenceRepository
         ]);
 
         $joins = new Joins();
-        $periodJoinConditions = array();
-        $periodJoinConditions[] = new EqualityCondition(
+        $periodJoinCondition = new EqualityCondition(
             new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
             new PropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID)
         );
-
-        $periodJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_CLASS),
-            new StaticConditionVariable($contextIdentifier->getContextClass())
+        $presenceJoinCondition = new EqualityCondition(
+            new PropertyConditionVariable(Presence::class_name(), DataClass::PROPERTY_ID),
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_PRESENCE_ID)
         );
 
-        $periodJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_ID),
-            new StaticConditionVariable($contextIdentifier->getContextId())
-        );
+        $joins->add(new Join(PresenceResultPeriod::class_name(), $periodJoinCondition, Join::TYPE_LEFT));
+        $joins->add(new Join(Presence::class_name(), $presenceJoinCondition, Join::TYPE_LEFT));
 
-        $joins->add(new Join(PresenceResultPeriod::class_name(), new AndCondition($periodJoinConditions), Join::TYPE_LEFT));
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Presence::class_name(), DataClass::PROPERTY_ID),
+            new StaticConditionVariable($presenceId));
 
-        $parameters = new RecordRetrievesParameters($retrieveProperties);
+        $parameters = new RecordRetrievesParameters($retrieveProperties, $condition);
         $parameters->setJoins($joins);
 
         return $this->dataClassRepository->records($class_name, $parameters);

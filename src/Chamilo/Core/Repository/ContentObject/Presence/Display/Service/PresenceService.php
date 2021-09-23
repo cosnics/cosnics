@@ -58,13 +58,13 @@ class PresenceService
     }
 
     /**
-     * @param ContextIdentifier $contextIdentifier
+     * @param int $presenceId
      *
      * @return array
      */
-    public function getDistinctSavedStatuses(ContextIdentifier $contextIdentifier): array
+    public function getDistinctSavedStatuses(int $presenceId): array
     {
-        $statuses = $this->presenceRepository->getDistinctSavedStatuses($contextIdentifier);
+        $statuses = $this->presenceRepository->getDistinctSavedStatuses($presenceId);
         $lst = [];
         foreach ($statuses as $status)
         {

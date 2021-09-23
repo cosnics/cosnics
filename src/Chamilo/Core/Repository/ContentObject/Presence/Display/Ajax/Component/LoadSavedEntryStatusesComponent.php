@@ -24,9 +24,7 @@ class LoadSavedEntryStatusesComponent extends Manager
                 $this->throwUserException('PresenceNotFound');
             }
 
-            $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-
-            $statuses = $this->getPresenceService()->getDistinctSavedStatuses($contextIdentifier);
+            $statuses = $this->getPresenceService()->getDistinctSavedStatuses($presence->getId());
 
             $resultData = ['statuses' => $statuses];
 
