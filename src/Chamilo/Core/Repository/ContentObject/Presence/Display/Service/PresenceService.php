@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\Pr
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use http\Exception\InvalidArgumentException;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use DateTime;
 
@@ -55,6 +56,22 @@ class PresenceService
             $periods[$index]['id'] = (int)$period['id'];
         }
         return $periods;
+    }
+
+    /**
+     * @param Presence $presence
+     * @return array
+     */
+    public function getPresenceStatuses(Presence $presence): array
+    {
+        $currentStatuses = [];
+        $statuses = $this->getPresenceOptions($presence);
+        foreach ($statuses as $status)
+        {
+            $id = $status['id'];
+            $currentStatuses[$id] = $status;
+        }
+        return $currentStatuses;
     }
 
     /**
@@ -188,6 +205,19 @@ class PresenceService
     public function getPresenceOptions(Presence $presence): array
     {
         return $this->serializer->deserialize($presence->getOptions(), 'array', 'json');
+    }
+
+    /**
+     * @param Presence $presence
+     * @param array $options
+     * @throws \Exception
+     */
+    public function setPresenceOptions(Presence $presence, array $options)
+    {
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        $presence->setOptions($this->serializer->serialize($options, 'json', $context));
+        $presence->update();
     }
 
     /**

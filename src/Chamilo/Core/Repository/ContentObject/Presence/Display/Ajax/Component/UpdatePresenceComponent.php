@@ -5,7 +5,6 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
-use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -36,13 +35,8 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
                 $this->throwUserException('InvalidPresenceId');
             }
 
-            $registeredPresenceEntryStatuses = $this->getPresenceService()->getRegisteredPresenceEntryStatuses($presence->getId());
-            $savedStatuses = $this->getCurrentStatuses($presence);
-
-            $this->getPresenceValidationService()->validateStatuses($data['statuses'], $savedStatuses, $registeredPresenceEntryStatuses);
-
-            $presence->setOptions($this->serialize($data['statuses']));
-            $presence->update();
+            $this->getPresenceValidationService()->validateStatuses($presence, $data['statuses']);
+            $this->getPresenceService()->setPresenceOptions($presence, $data['statuses']);
 
             return new JsonResponse($this->serialize(['message' => 'ok']), 200, [], true);
         }
@@ -51,21 +45,4 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
     }
-
-    /**
-     * @param Presence $presence
-     * @return array
-     */
-    protected function getCurrentStatuses(Presence $presence): array
-    {
-        $currentStatuses = [];
-        $statuses = $this->deserialize($presence->getOptions());
-        foreach ($statuses as $status)
-        {
-            $id = $status['id'];
-            $currentStatuses[$id] = $status;
-        }
-        return $currentStatuses;
-    }
-
 }

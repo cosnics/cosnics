@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Domain\Exceptions\PresenceValidationException;
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Service
@@ -11,28 +12,31 @@ use Chamilo\Core\Repository\ContentObject\Presence\Domain\Exceptions\PresenceVal
  */
 class PresenceValidationService
 {
-    private const COLORS = ['pink', 'blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'deep-orange', 'grey'];
-    private const VALUES = ['-100', '-300', '-500', '-700', '-900'];
-    private const FIXED_STATUS_IDS = [1, 2, 3];
-    private const ONLINE_PRESENT_STATUS_ID = 4;
-    private const STATUS_TYPE_FIXED = 'fixed';
-    private const STATUS_TYPE_SEMIFIXED = 'semifixed';
-    private const STATUS_TYPE_CUSTOM = 'custom';
+    /**
+     * @var PresenceService
+     */
+    protected $presenceService;
 
     /**
+     * @param PresenceService $presenceService
+     */
+    public function __construct(PresenceService $presenceService)
+    {
+        $this->presenceService = $presenceService;
+    }
+
+    /**
+     * @param Presence $presence
      * @param array $statuses
-     * @param array $savedStatuses
-     * @param array $registeredPresenceEntryStatuses
      *
      * @throws PresenceValidationException
      */
-    public function validateStatuses(array $statuses, array $savedStatuses, array $registeredPresenceEntryStatuses)
+    public function validateStatuses(Presence $presence, array $statuses)
     {
-        $getId = function ($status) {
-            return $status['id'];
-        };
+        $statusIds = $this->getStatusIds($statuses);
+        $savedStatuses = $this->presenceService->getPresenceStatuses($presence);
+        $registeredPresenceEntryStatuses = $this->presenceService->getRegisteredPresenceEntryStatuses($presence->getId());
 
-        $statusIds = array_map($getId, $statuses);
         foreach ($registeredPresenceEntryStatuses as $statusId)
         {
             if (! in_array($statusId, $statusIds))
@@ -49,6 +53,20 @@ class PresenceValidationService
             $this->checkCode($status);
             $this->checkColor($status);
         }
+    }
+
+    /**
+     * @param array $statuses
+     *
+     * @return array
+     */
+    protected function getStatusIds(array $statuses): array
+    {
+        $getId = function ($status) {
+            return $status['id'];
+        };
+
+        return array_map($getId, $statuses);
     }
 
     /**
@@ -72,17 +90,17 @@ class PresenceValidationService
     {
         $statusId = $status['id'];
 
-        if ($statusId == self::ONLINE_PRESENT_STATUS_ID)
+        if ($statusId == Presence::ONLINE_PRESENT_STATUS_ID)
         {
-            return self::STATUS_TYPE_SEMIFIXED;
+            return Presence::STATUS_TYPE_SEMIFIXED;
         }
 
-        if (in_array($statusId, self::FIXED_STATUS_IDS))
+        if (in_array($statusId, Presence::FIXED_STATUS_IDS))
         {
-            return self::STATUS_TYPE_FIXED;
+            return Presence::STATUS_TYPE_FIXED;
         }
 
-        return self::STATUS_TYPE_CUSTOM;
+        return Presence::STATUS_TYPE_CUSTOM;
     }
 
     /**
@@ -97,7 +115,7 @@ class PresenceValidationService
         $statusId = $status['id'];
         $title = $status['title'];
 
-        if ($status['type'] === self::STATUS_TYPE_CUSTOM)
+        if ($status['type'] === Presence::STATUS_TYPE_CUSTOM)
         {
             if (empty($title))
             {
@@ -122,9 +140,9 @@ class PresenceValidationService
     {
         $statusId = $status['id'];
 
-        if ($status['type'] === self::STATUS_TYPE_CUSTOM)
+        if ($status['type'] === Presence::STATUS_TYPE_CUSTOM)
         {
-            if (!in_array($status['aliasses'], self::FIXED_STATUS_IDS))
+            if (! in_array($status['aliasses'], Presence::FIXED_STATUS_IDS))
             {
                 throw new PresenceValidationException('InvalidAlias', $statusId);
             }
@@ -177,6 +195,6 @@ class PresenceValidationService
      */
     protected function isValidColor(string $color): bool
     {
-        return in_array(substr($color, 0, -4), self::COLORS) && in_array(substr($color, -4), self::VALUES);
+        return in_array(substr($color, 0, -4), Presence::COLORS) && in_array(substr($color, -4), Presence::VALUES);
     }
 }

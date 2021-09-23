@@ -22,6 +22,14 @@ class Presence extends ContentObject implements Versionable
     const OPTIONS_DEFAULTS_EN = '[{"id": 1, "type": "fixed", "code": "abs", "color": "deep-orange-500"},{"id": 2, "type": "fixed", "code": "aabs", "color": "amber-700"},{"id": 3, "type": "fixed", "code": "pres", "color": "lime-500"},{"id": 4, "type": "semifixed", "code": "online", "color": "green-300"}]';
     const OPTIONS_DEFAULTS_NL = '[{"id": 1, "type": "fixed", "code": "afw", "color": "deep-orange-500"},{"id": 2, "type": "fixed", "code": "gafw", "color": "amber-700"},{"id": 3, "type": "fixed", "code": "aanw", "color": "lime-500"},{"id": 4, "type": "semifixed", "code": "online", "color": "green-300"}]';
 
+    const COLORS = ['pink', 'blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'deep-orange', 'grey'];
+    const VALUES = ['-100', '-300', '-500', '-700', '-900'];
+    const FIXED_STATUS_IDS = [1, 2, 3];
+    const ONLINE_PRESENT_STATUS_ID = 4;
+    const STATUS_TYPE_FIXED = 'fixed';
+    const STATUS_TYPE_SEMIFIXED = 'semifixed';
+    const STATUS_TYPE_CUSTOM = 'custom';
+
     public static function get_type_name()
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class_name(), true);
