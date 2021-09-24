@@ -168,13 +168,12 @@ import APIConfig from '../connect/APIConfig';
 import Connector from '../connect/Connector';
 import ColorPicker from './ColorPicker.vue';
 
-//import Builder from './Builder.vue';
 const DEFAULT_COLOR_NEW = 'yellow-100';
 
 @Component({
     components: {ColorPicker}
 })
-export default class Main extends Vue {
+export default class Builder extends Vue {
     readonly fields = [
         { key: 'code', sortable: false },
         { key: 'title', sortable: false },

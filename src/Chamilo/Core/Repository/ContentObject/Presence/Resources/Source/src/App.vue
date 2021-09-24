@@ -14,17 +14,17 @@
         <div class="banner">
             <h1 class="banner-header">{{ $t('presence-tool') }}</h1>
         </div>
-        <Main :api-config="apiConfig"></Main>
+        <builder :api-config="apiConfig"></builder>
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import APIConfig from './connect/APIConfig';
-import Main from './components/Main.vue';
+import Builder from './components/Builder.vue';
 
 @Component({
-    components: {Main}
+    components: {Builder}
 })
 export default class App extends Vue {
     readonly apiConfig = APIConfig.from({

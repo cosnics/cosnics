@@ -7,7 +7,7 @@ import { makeServer } from "./server"
 import VueI18n from 'vue-i18n';
 Vue.use(VueI18n);
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   makeServer();
 }
 Vue.use(BootstrapVue);
@@ -17,6 +17,6 @@ Vue.config.productionTip = false;
 const lang = document.querySelector('html')!.getAttribute('lang');
 
 new Vue({
-  i18n: new VueI18n({ locale: 'nl' || undefined }),
+  i18n: new VueI18n({ locale: lang || undefined }),
   render: h => h(App),
 }).$mount('#app');
