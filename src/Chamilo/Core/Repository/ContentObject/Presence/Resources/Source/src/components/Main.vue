@@ -30,7 +30,7 @@
 </i18n>
 
 <template>
-    <div v-if="presence" @click.stop="selectedStatus = null">
+    <div v-if="presence" class="presence-builder" @click.stop="selectedStatus = null">
         <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields"
                  class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}"
                  :tbody-tr-class="rowClass">
