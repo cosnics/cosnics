@@ -92,7 +92,7 @@
             </template>
             <template #cell(actions)="status">
                 <div class="cell-pad-x">
-                    <div class="u-flex u-gap-small presence-actions">
+                    <div @click.stop="" class="u-flex u-gap-small presence-actions">
                         <button class="btn btn-default btn-sm mod-presence" :title="$t('move-up')"
                                 :disabled="createNew || status.index === 0" @click.stop="onMoveUp(status)"
                                 :id="`btn-up-${status.index}`" @focus="onSelectStatus(status.item)">
@@ -156,7 +156,10 @@
                 {{ $t('new-presence-status') }}</a>
         </div>
         <div style="margin: 16px 0 0 8px" v-if="!createNew">
-            <button class="btn btn-primary mod-presence-save" @click="onSave()">{{ $t('save') }}</button>
+            <button :disabled="isSaving" class="btn btn-primary mod-presence-save" @click="onSave()">
+                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin" style="margin-right: 5px"></div>
+                {{ $t('save') }}
+            </button>
         </div>
     </div>
 </template>
@@ -227,6 +230,10 @@ export default class Builder extends Vue {
             return;
         }
         this.presence.statuses = statuses.slice(0, index).concat(statuses.slice(index + 1));
+    }
+
+    get isSaving() {
+        return this.connector?.isSaving || false;
     }
 
     onSave() {
