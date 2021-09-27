@@ -181,19 +181,17 @@
             <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                 {{ $t('new-presence-status') }}</a>
         </div>
-        <template v-if="errorData">
-            <div class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
-                <template v-if="errorData.type === 'NoTitleGiven'">
-                    {{ $t('error-NoTitleGiven') }}
-                    <span style="display: block">{{ errorData.status }}</span>
-                    {{ $t('changes-not-saved') }}
-                </template>
-                <span v-else-if="!!errorData.status">
-                    {{ $t(`error-${errorData.type}`, { title: errorData.status.title }) }} {{ $t('changes-not-saved') }}
-                </span>
-                <span v-else>{{ $t(`error-${errorData.type}`) }}</span>
-            </div>
-        </template>
+        <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
+            <template v-if="errorData.type === 'NoTitleGiven'">
+                {{ $t('error-NoTitleGiven') }}
+                <span style="display: block">{{ errorData.status }}</span>
+                {{ $t('changes-not-saved') }}
+            </template>
+            <span v-else-if="!!errorData.status">
+                {{ $t(`error-${errorData.type}`, { title: errorData.status.title }) }} {{ $t('changes-not-saved') }}
+            </span>
+            <span v-else>{{ $t(`error-${errorData.type}`) }}</span>
+        </div>
         <div style="margin: 16px 0 0 8px" v-if="!createNew">
             <button :disabled="isSaving" class="btn btn-primary mod-presence-save" @click="onSave()">
                 <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin" style="margin-right: 5px"></div>

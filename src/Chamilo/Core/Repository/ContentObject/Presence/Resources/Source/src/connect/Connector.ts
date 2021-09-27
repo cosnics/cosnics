@@ -158,7 +158,6 @@ export default class Connector {
             } else {
                 error = { 'type': 'Unknown' };
             }
-            //console.log(err?.response?.data?.error);
             this.errorListeners.forEach(errorListener => errorListener.setError(error));
         }
     }

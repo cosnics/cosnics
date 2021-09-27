@@ -8,7 +8,10 @@
         "total": "Total",
         "stop-edit-mode": "Stop editing",
         "new-period": "New period",
-        "remove-period": "Remove period"
+        "remove-period": "Remove period",
+        "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
+        "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
+        "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later."
     },
     "nl": {
         "search": "Zoeken",
@@ -18,7 +21,10 @@
         "total": "Totaal",
         "stop-edit-mode": "Sluit editeren af",
         "new-period": "Nieuwe periode",
-        "remove-period": "Verwijder periode"
+        "remove-period": "Verwijder periode",
+        "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
+        "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
+        "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw."
     }
 }
 </i18n>
@@ -136,6 +142,10 @@
                         <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
                     </ul>
                 </div>
+                <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
+                    <span v-if="errorData.code === 500">{{ errorData.message }}</span>
+                    <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -145,7 +155,7 @@
 import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../types';
 import APIConfig from '../connect/APIConfig';
-import Connector from '../connect/Connector';
+import Connector, {ConnectorErrorListener} from '../connect/Connector';
 
 @Component({
     name: 'entry'
@@ -161,6 +171,7 @@ export default class Entry extends Vue {
     creatingNew = false;
     createdId: number | null = null;
     pageLoaded = false;
+    errorData: string|null = null;
 
     sortBy = 'lastname';
     sortDesc = false;
@@ -190,6 +201,7 @@ export default class Entry extends Vue {
 
     set selectedPeriodLabel(label: string) {
         if (!this.selectedPeriod) { return; }
+        this.errorData = null;
         this.selectedPeriod.label = label;
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
@@ -210,15 +222,20 @@ export default class Entry extends Vue {
 
     removeSelectedPeriod() {
         if (!this.selectedPeriod) { return; }
+        this.errorData = null;
         this.toRemovePeriod = this.selectedPeriod;
         const index = this.periods.indexOf(this.selectedPeriod);
         this.connector?.deletePresencePeriod(this.selectedPeriod.id, (data: any) => {
+            this.toRemovePeriod = null;
             if (data.status === 'ok') {
                 this.selectedPeriod = null;
-                this.toRemovePeriod = null;
                 this.periods.splice(index, 1);
             }
         })
+    }
+
+    setError(data: any) : void {
+        this.errorData = data;
     }
 
     get dynamicFieldKeys(): any {
@@ -279,6 +296,7 @@ export default class Entry extends Vue {
     async createResultPeriod() {
         this.selectedPeriod = null;
         this.creatingNew = true;
+        this.errorData = null;
         await this.connector?.createResultPeriod((data: any) => {
             if (data.status === 'ok') {
                 this.createdId = data.id;
@@ -289,9 +307,10 @@ export default class Entry extends Vue {
 
     async setSelectedStudentStatus(student: any, status: number) {
         if (!this.selectedPeriod) { return; }
+        this.errorData = null;
         const periodId = this.selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
-        const data = await this.connector?.savePresenceEntry(periodId, student.id, status);
+        await this.connector?.savePresenceEntry(periodId, student.id, status);
     }
 
     getPresenceStatusTitle(status: PresenceStatus): string {
@@ -366,6 +385,7 @@ export default class Entry extends Vue {
 
     mounted(): void {
         this.connector = new Connector(this.apiConfig);
+        this.connector.addErrorListener(this as ConnectorErrorListener);
         this.load();
     }
 
