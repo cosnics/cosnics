@@ -384,7 +384,7 @@ export default class Builder extends Vue {
 
 .presence-new .fa {
     font-size: 13px;
-    margin-right: 5px;
+    margin-right: 2px;
 }
 
 .btn.btn-default.mod-presence {
