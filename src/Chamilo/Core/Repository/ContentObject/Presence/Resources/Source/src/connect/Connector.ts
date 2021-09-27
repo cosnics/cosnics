@@ -5,16 +5,31 @@ import {PresenceStatus} from '../types';
 
 const TIMEOUT_SEC = 30;
 
+export interface ConnectorErrorListener {
+    setError(data: any) : void;
+}
+
 export default class Connector {
     private apiConfig: APIConfig;
     private queue = new PQueue({concurrency: 1});
 
     private _isSaving = false;
-    private hasError = false;
+    private errorListeners: ConnectorErrorListener[] = [];
 
     constructor(apiConfig: APIConfig) {
         this.apiConfig = apiConfig;
         this.finishSaving = this.finishSaving.bind(this);
+    }
+
+    addErrorListener(errorListener: ConnectorErrorListener) {
+        this.errorListeners.push(errorListener);
+    }
+
+    removeErrorListener(errorListener: ConnectorErrorListener) {
+        const index = this.errorListeners.indexOf(errorListener);
+        if (index >= 0) {
+            this.errorListeners.splice(index, 1);
+        }
     }
 
     get processingSize() {
@@ -106,9 +121,6 @@ export default class Connector {
     }
 
     private addToQueue(callback: Function) {
-        if (this.hasError) {
-            return;
-        }
         this.queue.add(async () => {
             await callback();
         });
@@ -127,23 +139,27 @@ export default class Connector {
         }
 
         try {
-            let res;
-            try {
-                res = await axios.post(apiURL, formData, {timeout: TIMEOUT_SEC * 1000});
-            } catch (err) {
-                console.log(err);
-//          this.logResponse(err);
-                throw err;
-            }
-            console.log(res);
+            const res = await axios.post(apiURL, formData, {timeout: TIMEOUT_SEC * 1000});
             if (typeof res.data === 'object') {
-                //console.log('result', res.data);
                 return res.data;
+            } else if (typeof res.data === 'string' && res.data.indexOf('formLogin') !== -1) {
+                throw { 'type': 'LoggedOut' };
+            } else {
+                throw { 'type': 'Unknown' };
             }
-
         } catch (err) {
-            this.hasError = true;
-            console.log(err);
+            let error: any;
+            if (err?.isAxiosError && err.message?.toLowerCase().indexOf('timeout') !== -1) {
+                error = { 'type': 'Timeout' };
+            } else if (!!err?.response?.data?.error) {
+                error = err.response.data.error;
+            } else if (!!err?.type) {
+                error = err;
+            } else {
+                error = { 'type': 'Unknown' };
+            }
+            //console.log(err?.response?.data?.error);
+            this.errorListeners.forEach(errorListener => errorListener.setError(error));
         }
     }
 }

@@ -11,7 +11,20 @@
         "label": "Label",
         "title": "Title",
         "meaning": "Maps to",
-        "color": "Color"
+        "color": "Color",
+        "error-NoTitleGiven": "You haven't given a title for the following status:",
+        "error-TitleUpdateForbidden": "The title of the status '{title}' can no longer be changed.",
+        "error-InvalidType": "The status '{title}' has a wrong type set.",
+        "error-PresenceStatusMissing": "The status '{title}' can no longer be removed.",
+        "error-InvalidAlias": "The status with title '{title}' has a wrong mapping set.",
+        "error-AliasUpdateForbiddene": "The mapping of the status '{title}' can no longer be changed.",
+        "error-NoCodeGiven": "You haven't given a label for the status '{title}'.",
+        "error-NoColorGiven": "You haven't given a color for the status '{title}'.",
+        "error-InvalidColor": "You have given the status '{title}' an invalid color.",
+        "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
+        "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
+        "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
+        "changes-not-saved": "Your changes have not been saved."
     },
     "nl": {
         "display": "Weergave",
@@ -24,7 +37,20 @@
         "label": "Label",
         "title": "Titel",
         "meaning": "Mapt naar",
-        "color": "Kleur"
+        "color": "Kleur",
+        "error-NoTitleGiven": "Je hebt geen titel opgegeven voor de volgende status:",
+        "error-TitleUpdateForbidden": "De titel van de status '{title}' kan niet meer gewijzigd worden.",
+        "error-InvalidType": "De status '{title}' status heeft een verkeerd type.",
+        "error-PresenceStatusMissing": "De status '{title}' kan niet meer gewist worden.",
+        "error-InvalidAlias": "De status '{title}' heeft een verkeerde mapping.",
+        "error-AliasUpdateForbidden": "De mapping van de status '{title}' kan niet meer gewijzigd worden.",
+        "error-NoCodeGiven": "Je hebt geen label opgegeven voor de status '{title}'.",
+        "error-NoColorGiven": "Je hebt geen kleur opgegeven voor de status '{title}'.",
+        "error-InvalidColor": "Je hebt de status '{title}' een verkeerde kleur toegewezen.",
+        "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
+        "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
+        "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
+        "changes-not-saved": "Je wijzigingen werden niet opgeslagen."
     }
 }
 </i18n>
@@ -155,6 +181,19 @@
             <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                 {{ $t('new-presence-status') }}</a>
         </div>
+        <template v-if="errorData">
+            <div class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
+                <template v-if="errorData.type === 'NoTitleGiven'">
+                    {{ $t('error-NoTitleGiven') }}
+                    <span style="display: block">{{ errorData.status }}</span>
+                    {{ $t('changes-not-saved') }}
+                </template>
+                <span v-else-if="!!errorData.status">
+                    {{ $t(`error-${errorData.type}`, { title: errorData.status.title }) }} {{ $t('changes-not-saved') }}
+                </span>
+                <span v-else>{{ $t(`error-${errorData.type}`) }}</span>
+            </div>
+        </template>
         <div style="margin: 16px 0 0 8px" v-if="!createNew">
             <button :disabled="isSaving" class="btn btn-primary mod-presence-save" @click="onSave()">
                 <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin" style="margin-right: 5px"></div>
@@ -168,10 +207,11 @@
 import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {PresenceStatusDefault, PresenceStatus, Presence} from '../types';
 import APIConfig from '../connect/APIConfig';
-import Connector from '../connect/Connector';
+import Connector, {ConnectorErrorListener} from '../connect/Connector';
 import ColorPicker from './ColorPicker.vue';
 
 const DEFAULT_COLOR_NEW = 'yellow-100';
+const CONFLICT_ERRORS = ['PresenceStatusMissing', 'InvalidType', 'NoTitleGiven', 'TitleUpdateForbidden', 'InvalidAlias', 'AliasUpdateForbidden', 'NoCodeGiven', 'NoColorGiven', 'InvalidColor'];
 
 @Component({
     components: {ColorPicker}
@@ -189,6 +229,7 @@ export default class Builder extends Vue {
     presence: Presence | null = null;
     savedEntryStatuses: number[] = [];
     connector: Connector | null = null;
+    errorData: string|null = null;
 
     createNew = false;
     codeNew = '';
@@ -240,13 +281,25 @@ export default class Builder extends Vue {
         if (!this.presence) {
             return;
         }
+        this.errorData = null;
         this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
-            this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
+            if (data.message === 'ok') {
+                this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
+            }
         });
+    }
+
+    setError(data: any) : void {
+        this.errorData = data;
+    }
+
+    isConflictError(errorType: string): boolean {
+        return CONFLICT_ERRORS.includes(errorType);
     }
 
     mounted(): void {
         this.connector = new Connector(this.apiConfig);
+        this.connector.addErrorListener(this as ConnectorErrorListener);
         this.load();
     }
 
