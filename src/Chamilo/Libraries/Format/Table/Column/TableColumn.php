@@ -36,16 +36,16 @@ abstract class TableColumn
     private $name;
 
     /**
-     * The visible title of the column in the layout
-     */
-    private $title;
-
-    /**
      * Whether or not the column is sortable
      *
      * @var boolean
      */
     private $sortable;
+
+    /**
+     * The visible title of the column in the layout
+     */
+    private $title;
 
     /**
      *
@@ -83,12 +83,10 @@ abstract class TableColumn
         $this->set_title($title);
         $this->set_sortable($sortable);
 
-        $this->setCssClasses(
-            array(
+        $this->setCssClasses(array(
                 self::CSS_CLASSES_COLUMN_HEADER => $headerCssClasses,
                 self::CSS_CLASSES_COLUMN_CONTENT => $contentCssClasses
-            )
-        );
+            ));
     }
 
     /**

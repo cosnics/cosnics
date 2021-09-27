@@ -36,16 +36,55 @@ abstract class HtmlTable extends HTML_Table
     protected $allowMultiSort = false;
 
     /**
+     * Additional parameters to pass in the URL
      *
-     * @var string
+     * @var string[]
      */
-    private $tableName;
+    private $additionalParameters;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $allowPageNavigation = true;
+
+    /**
+     *
+     * @var boolean
+     */
+    private $allowPageSelection = true;
+
+    /**
+     *
+     * @var string[]
+     */
+    private $contentCellAttributes;
 
     /**
      *
      * @var integer
      */
-    private $pageNumber;
+    private $defaultOrderColumn;
+
+    /**
+     *
+     * @var integer
+     */
+    private $defaultOrderDirection;
+
+    /**
+     * Additional attributes for the th-tags
+     *
+     * @var string[]
+     */
+    private $headerAttributes;
+
+    /**
+     * Number of items to display per page
+     *
+     * @var integer
+     */
+    private $numberOfItemsPerPage;
 
     /**
      *
@@ -64,20 +103,7 @@ abstract class HtmlTable extends HTML_Table
      *
      * @var integer
      */
-    private $defaultOrderColumn;
-
-    /**
-     *
-     * @var integer
-     */
-    private $defaultOrderDirection;
-
-    /**
-     * Number of items to display per page
-     *
-     * @var integer
-     */
-    private $numberOfItemsPerPage;
+    private $pageNumber;
 
     /**
      * The pager object to split the data in several pages
@@ -93,11 +119,11 @@ abstract class HtmlTable extends HTML_Table
     private $pagerRenderer;
 
     /**
-     * The total number of items in the table
+     * The function to get the total number of items
      *
-     * @var integer
+     * @var string[]
      */
-    private $sourceDataCount;
+    private $sourceCountFunction;
 
     /**
      *
@@ -106,11 +132,11 @@ abstract class HtmlTable extends HTML_Table
     private $sourceData;
 
     /**
-     * The function to get the total number of items
+     * The total number of items in the table
      *
-     * @var string[]
+     * @var integer
      */
-    private $sourceCountFunction;
+    private $sourceDataCount;
 
     /**
      * The function to the the data to display
@@ -127,36 +153,10 @@ abstract class HtmlTable extends HTML_Table
     private $tableFormActions;
 
     /**
-     * Additional parameters to pass in the URL
      *
-     * @var string[]
+     * @var string
      */
-    private $additionalParameters;
-
-    /**
-     * Additional attributes for the th-tags
-     *
-     * @var string[]
-     */
-    private $headerAttributes;
-
-    /**
-     *
-     * @var string[]
-     */
-    private $contentCellAttributes;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $allowPageSelection = true;
-
-    /**
-     *
-     * @var boolean
-     */
-    private $allowPageNavigation = true;
+    private $tableName;
 
     /**
      *
@@ -784,6 +784,15 @@ abstract class HtmlTable extends HTML_Table
         return $this->allowPageSelection;
     }
 
+    /**
+     *
+     * @return boolean
+     */
+    public function isPageNavigationAllowed()
+    {
+        return $this->allowPageNavigation;
+    }
+
     public function prepareTableData()
     {
         $this->processSourceData();
@@ -853,7 +862,7 @@ abstract class HtmlTable extends HTML_Table
             null, $this->getNumberOfItemsPerPage(), $this->getOrderColumn(), $this->getOrderDirection()
         );
 
-        if ($this->allowPageNavigation)
+        if ($this->isPageNavigationAllowed())
         {
             return $this->getPagerRenderer()->renderPaginationWithPageLimit(
                 $queryParameters, $this->getParameterName(self::PARAM_PAGE_NUMBER)
@@ -870,7 +879,7 @@ abstract class HtmlTable extends HTML_Table
      */
     public function renderNumberOfItemsPerPageSelector()
     {
-        if ($this->allowPageSelection)
+        if ($this->isPageSelectionAllowed())
         {
             $sourceDataCount = $this->countSourceData();
 
@@ -898,8 +907,6 @@ abstract class HtmlTable extends HTML_Table
      */
     public function renderTableBody()
     {
-
-
         $this->prepareTableData();
 
         return HTML_Table::toHTML();
@@ -922,7 +929,7 @@ abstract class HtmlTable extends HTML_Table
     {
         $hasFormActions = $this->getTableFormActions() instanceof TableFormActions &&
             $this->getTableFormActions()->has_form_actions();
-        $allowNavigation = $this->allowPageSelection || $this->allowPageNavigation;
+        $allowNavigation = $this->isPageSelectionAllowed() || $this->isPageNavigationAllowed();
 
         $html = [];
 

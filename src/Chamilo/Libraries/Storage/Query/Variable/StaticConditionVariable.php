@@ -13,13 +13,6 @@ class StaticConditionVariable extends ConditionVariable
 {
 
     /**
-     * A static value that should remain unchanged in the Condition
-     *
-     * @var string
-     */
-    private $value;
-
-    /**
      * Whether or not the variable should be quoted
      *
      * @var boolean
@@ -27,8 +20,15 @@ class StaticConditionVariable extends ConditionVariable
     private $quote;
 
     /**
+     * A static value that should remain unchanged in the Condition
      *
-     * @param string $value
+     * @var string|int
+     */
+    private $value;
+
+    /**
+     *
+     * @param string|int $value
      * @param boolean $quote
      */
     public function __construct($value, $quote = true)
@@ -70,7 +70,7 @@ class StaticConditionVariable extends ConditionVariable
 
     /**
      *
-     * @return string
+     * @return string|int
      */
     public function get_value()
     {
@@ -79,7 +79,7 @@ class StaticConditionVariable extends ConditionVariable
 
     /**
      *
-     * @param string $value
+     * @param string|int $value
      */
     public function set_value($value)
     {
