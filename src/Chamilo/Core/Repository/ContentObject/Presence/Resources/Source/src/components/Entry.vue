@@ -177,7 +177,7 @@ export default class Entry extends Vue {
     sortDesc = false;
     pagination = {
         currentPage: 1,
-        perPage: 5, // 20
+        perPage: 20,
         total: 0
     };
     globalSearchQuery = '';
