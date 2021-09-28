@@ -3,10 +3,12 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\Exceptions\PresenceValidationException;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component
@@ -39,6 +41,15 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
             $this->getPresenceService()->setPresenceOptions($presence, $data['statuses']);
 
             return new JsonResponse($this->serialize(['message' => 'ok']), 200, [], true);
+        }
+        catch (PresenceValidationException $ex)
+        {
+            $err = ['type' => $ex->getErrorCode(), 'status_id' => $ex->getPresenceStatusId()];
+            if (!empty($ex->getSavedStatus()))
+            {
+                $err['status'] = $ex->getSavedStatus();
+             }
+            return new JsonResponse(['error' => $err], Response::HTTP_CONFLICT);
         }
         catch (\Exception $ex)
         {

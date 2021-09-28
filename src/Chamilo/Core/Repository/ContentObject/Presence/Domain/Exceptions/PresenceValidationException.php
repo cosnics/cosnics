@@ -21,16 +21,22 @@ class PresenceValidationException extends \Exception
     protected int $presenceStatusId;
 
     /**
+     * @var array|null
+     */
+    protected ?array $savedStatus;
+
+    /**
      * PresenceValidationException constructor.
      * @param string $code
      * @param int $presenceStatusId
      */
-    public function __construct(string $code, int $presenceStatusId)
+    public function __construct(string $code, int $presenceStatusId, ?array $savedStatus = null)
     {
-        parent::__construct(sprintf('%s: id %s', $code, $presenceStatusId));
+        parent::__construct(sprintf('%s %s', $code, $presenceStatusId));
 
         $this->code = $code;
         $this->presenceStatusId = $presenceStatusId;
+        $this->savedStatus = $savedStatus;
     }
 
     /**
@@ -47,5 +53,13 @@ class PresenceValidationException extends \Exception
     public function getPresenceStatusId(): int
     {
         return $this->presenceStatusId;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getSavedStatus(): ?array
+    {
+        return $this->savedStatus;
     }
 }

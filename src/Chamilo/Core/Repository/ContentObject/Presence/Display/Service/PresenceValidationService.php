@@ -41,17 +41,17 @@ class PresenceValidationService
         {
             if (! in_array($statusId, $statusIds))
             {
-                throw new PresenceValidationException('PresenceStatusMissing', $statusId); // todo: specify because it's missing
+                throw new PresenceValidationException('PresenceStatusMissing', $statusId, $savedStatuses[$statusId]); // todo: specify because it's missing
             }
         }
 
         foreach ($statuses as $status)
         {
-            $this->checkType($status);
+            $this->checkType($status, $savedStatuses);
             $this->checkTitle($status, $savedStatuses, $registeredPresenceEntryStatuses);
             $this->checkAliasses($status, $savedStatuses, $registeredPresenceEntryStatuses);
-            $this->checkCode($status);
-            $this->checkColor($status);
+            $this->checkCode($status, $savedStatuses);
+            $this->checkColor($status, $savedStatuses);
         }
     }
 
@@ -71,13 +71,16 @@ class PresenceValidationService
 
     /**
      * @param $status
+     * @param $savedStatuses
      *
      * @throws PresenceValidationException
      */
-    protected function checkType($status)
+    protected function checkType($status, $savedStatuses)
     {
+        $statusId = $status['id'];
+
         if ($status['type'] !== $this->getExpectedType($status)) {
-            throw new PresenceValidationException('InvalidType', $status['id']);
+            throw new PresenceValidationException('InvalidType', $statusId, $savedStatuses[$statusId] ?? $status);
         }
     }
 
@@ -119,12 +122,12 @@ class PresenceValidationService
         {
             if (empty($title))
             {
-                throw new PresenceValidationException('NoTitleGiven', $statusId);
+                throw new PresenceValidationException('NoTitleGiven', $statusId, $savedStatuses[$statusId] ?? $status);
             }
 
             if (in_array($statusId, $registeredPresenceEntryStatuses) && $title !== $savedStatuses[$statusId]['title'])
             {
-                throw new PresenceValidationException('AttemptedTitleUpdate', $statusId);
+                throw new PresenceValidationException('TitleUpdateForbidden', $statusId, $savedStatuses[$statusId]);
             }
         }
     }
@@ -142,49 +145,53 @@ class PresenceValidationService
 
         if ($status['type'] === Presence::STATUS_TYPE_CUSTOM)
         {
-            if (! in_array($status['aliasses'], Presence::FIXED_STATUS_IDS))
-            {
-                throw new PresenceValidationException('InvalidAlias', $statusId);
-            }
-
             if (in_array($statusId, $registeredPresenceEntryStatuses) && $status['aliasses'] !== $savedStatuses[$statusId]['aliasses'])
             {
-                throw new PresenceValidationException('AttemptedAliasUpdate', $statusId);
+                throw new PresenceValidationException('AliasUpdateForbidden', $statusId, $savedStatuses[$statusId]);
+            }
+
+            if (! in_array($status['aliasses'], Presence::FIXED_STATUS_IDS))
+            {
+                throw new PresenceValidationException('InvalidAlias', $statusId, $savedStatuses[$statusId] ?? $status);
             }
         }
     }
 
     /**
      * @param $status
+     * @param $savedStatuses
      *
      * @throws PresenceValidationException
      */
-    protected function checkCode($status)
+    protected function checkCode($status, $savedStatuses)
     {
+        $statusId = $status['id'];
+
         if (empty($status['code']))
         {
-            throw new PresenceValidationException('NoCodeGiven', $status['id']);
+            throw new PresenceValidationException('NoCodeGiven', $statusId, $savedStatuses[$statusId] ?? $status);
         }
     }
 
     /**
      * @param $status
+     * @param $savedStatuses
      *
      * @throws PresenceValidationException
      */
-    protected function checkColor($status)
+    protected function checkColor($status, $savedStatuses)
     {
         $statusId = $status['id'];
         $color = $status['color'];
 
         if (empty($color))
         {
-            throw new PresenceValidationException('NoColorGiven', $statusId);
+            throw new PresenceValidationException('NoColorGiven', $statusId, $savedStatuses[$statusId] ?? $status);
         }
 
         if (!$this->isValidColor($color))
         {
-            throw new PresenceValidationException('InvalidColor', $statusId);
+            throw new PresenceValidationException('InvalidColor', $statusId, $savedStatuses[$statusId] ?? $status);
         }
     }
 

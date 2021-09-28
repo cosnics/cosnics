@@ -69,6 +69,21 @@ class PresenceService
         foreach ($statuses as $status)
         {
             $id = $status['id'];
+            switch ($id)
+            {
+                case 1:
+                    $status['title'] = 'Absent / Afwezig';
+                    break;
+                case 2:
+                    $status['title'] = 'Authorized absent / Gewettigd afwezig';
+                    break;
+                case 3:
+                    $status['title'] = 'Present / Aanwezig';
+                    break;
+                case 4:
+                    $status['title'] = 'Online present / Online aanwezig';
+                    break;
+            }
             $currentStatuses[$id] = $status;
         }
         return $currentStatuses;
