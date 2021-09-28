@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Format\Table;
 
-use ArrayIterator;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
@@ -58,9 +57,9 @@ abstract class Table
 
     /**
      *
-     * @var \Chamilo\Libraries\Architecture\Application\Application
+     * @var \Chamilo\Libraries\Format\Table\TableCellRenderer
      */
-    private $component;
+    private $cell_renderer;
 
     /**
      *
@@ -70,15 +69,15 @@ abstract class Table
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Table\TableDataProvider
+     * @var \Chamilo\Libraries\Architecture\Application\Application
      */
-    private $data_provider;
+    private $component;
 
     /**
      *
-     * @var \Chamilo\Libraries\Format\Table\TableCellRenderer
+     * @var \Chamilo\Libraries\Format\Table\TableDataProvider
      */
-    private $cell_renderer;
+    private $data_provider;
 
     /**
      *
@@ -163,8 +162,7 @@ abstract class Table
      */
     protected function constructTable()
     {
-        $this->table = new SortableTable(
-            $this->get_name(), array($this, 'countData'), array($this, 'getData'),
+        $this->table = new SortableTable($this->get_name(), array($this, 'countData'), array($this, 'getData'),
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(), $this->get_column_model()->get_default_order_direction(),
             !$this->prohibits_page_selection(), true, $this->get_column_model() instanceof TableMultiColumnSortSupport

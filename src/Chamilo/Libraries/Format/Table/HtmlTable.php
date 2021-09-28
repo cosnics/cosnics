@@ -779,18 +779,18 @@ abstract class HtmlTable extends HTML_Table
      *
      * @return boolean
      */
-    public function isPageSelectionAllowed()
+    public function isPageNavigationAllowed()
     {
-        return $this->allowPageSelection;
+        return $this->allowPageNavigation;
     }
 
     /**
      *
      * @return boolean
      */
-    public function isPageNavigationAllowed()
+    public function isPageSelectionAllowed()
     {
-        return $this->allowPageNavigation;
+        return $this->allowPageSelection;
     }
 
     public function prepareTableData()
@@ -1040,10 +1040,7 @@ abstract class HtmlTable extends HTML_Table
     {
         $header = $this->getHeader();
 
-        for ($i = 0; $i < count($headerAttributes); $i ++)
-        {
-            $header->setColAttributes($i, $headerAttributes);
-        }
+        $header->setColAttributes($orderColumn, $headerAttributes);
 
         // TODO: Make sure the order column index and direction index match
 
