@@ -281,7 +281,7 @@ export default class Builder extends Vue {
         }
         this.errorData = null;
         this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
-            if (data.message === 'ok') {
+            if (data?.status === 'ok') {
                 this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
             }
         });

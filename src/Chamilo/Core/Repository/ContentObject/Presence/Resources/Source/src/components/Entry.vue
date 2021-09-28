@@ -227,7 +227,7 @@ export default class Entry extends Vue {
         const index = this.periods.indexOf(this.selectedPeriod);
         this.connector?.deletePresencePeriod(this.selectedPeriod.id, (data: any) => {
             this.toRemovePeriod = null;
-            if (data.status === 'ok') {
+            if (data?.status === 'ok') {
                 this.selectedPeriod = null;
                 this.periods.splice(index, 1);
             }

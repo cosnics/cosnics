@@ -32,6 +32,7 @@ class SavePresenceEntryComponent extends Manager  implements CsrfComponentInterf
             $presenceResultEntry = $this->getPresenceService()->createOrUpdatePresenceResultEntry($this->getPresence(), $periodId, $userId, $statusId);
 
             $result = [
+                'status' => 'ok',
                 'period_id' => $presenceResultEntry->getPresencePeriodId(),
                 'user_id' => $presenceResultEntry->getUserId(),
                 'status_id' => $presenceResultEntry->getChoiceId(),
