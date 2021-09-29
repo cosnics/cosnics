@@ -112,7 +112,6 @@ export default class Connector {
         this.addToQueue(async () => {
             const parameters = { 'period_id': periodId, 'user_id': userId, 'status_id': statusId };
             const data = await this.executeAPIRequest(this.apiConfig.savePresenceEntryURL, parameters);
-            console.log(data);
             if (callback) {
                 callback(data);
             }

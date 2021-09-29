@@ -11,7 +11,9 @@
         "remove-period": "Remove period",
         "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
         "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
-        "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later."
+        "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
+        "checked-out": "Checked out",
+        "not-checked-out": "Not checked out"
     },
     "nl": {
         "search": "Zoeken",
@@ -24,7 +26,9 @@
         "remove-period": "Verwijder periode",
         "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
-        "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw."
+        "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
+        "checked-out": "Uitgechecked",
+        "not-checked-out": "Niet uitgechecked"
     }
 }
 </i18n>
@@ -48,7 +52,7 @@
             </div>
             <div>
                 <div style="position: relative">
-                    <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+                    <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                              :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
                         <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
@@ -112,21 +116,45 @@
                             </div>
                         </template>
                         <template #head(period-entry)>
-                            <div>
-                                <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                            <!--<div>
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
+                            </div>-->
+                            <div class="selected-period-controls" style="justify-content: space-between">
+                                <div class="u-flex u-gap-small">
+                                    <button class="btn btn-default btn-sm selected-period-checkinout-btn" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false">In</button>
+                                    <button class="btn btn-default btn-sm selected-period-checkinout-btn" :class="{'is-active': checkoutMode}" @click="checkoutMode = true">Uit</button>
+                                </div>
+                                <div class="u-flex u-gap-small" style="align-items: baseline">
+                                    <div style="width: 15px">
+                                        <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                                    </div>
+                                    <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
+                                </div>
                             </div>
-                            <button :title="$t('stop-edit-mode')" class="selected-period-close-btn" @click="selectedPeriod = null">{{ $t('stop-edit-mode') }}</button>
                         </template>
                         <template #cell(period-entry)="{item}">
-                            <div class="u-flex u-gap-small u-flex-wrap">
+                            <div v-if="!checkoutMode" class="u-flex u-gap-small u-flex-wrap">
                                 <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
                                         :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
                                         :title="getPresenceStatusTitle(status)"
-                                        @click="setSelectedStudentStatus(item, status.id)"
+                                        @click="!hasSelectedStudentStatus(item, status.id) ? setSelectedStudentStatus(item, status.id) : null"
                                         :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
+                            </div>
+                            <div v-else>
+                                <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
+                                    <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
+                                    <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox">
+                                    <label class="onoffswitch-label mod-checkout" :for="`onoffswitch-${item.id}`">
+                                        <span class="onoffswitch-inner">
+                                            <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
+                                            <span class="onoffswitch-inner-after mod-checkout">{{ $t('not-checked-out') }}</span>
+                                        </span>
+                                        <span class="onoffswitch-switch mod-evaluation"></span>
+                                    </label>
+                                </div>
                             </div>
                         </template>
                         <template #foot(period-entry)>
@@ -172,6 +200,7 @@ export default class Entry extends Vue {
     createdId: number | null = null;
     pageLoaded = false;
     errorData: string|null = null;
+    checkoutMode = false;
 
     sortBy = 'lastname';
     sortDesc = false;
@@ -218,6 +247,7 @@ export default class Entry extends Vue {
         if (!this.canEditPresence) { return; }
         const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
         this.selectedPeriod = selectedPeriod || null;
+        this.checkoutMode = false;
     }
 
     removeSelectedPeriod() {
@@ -298,7 +328,7 @@ export default class Entry extends Vue {
         this.creatingNew = true;
         this.errorData = null;
         await this.connector?.createResultPeriod((data: any) => {
-            if (data.status === 'ok') {
+            if (data?.status === 'ok') {
                 this.createdId = data.id;
                 (this.$refs.table as any).refresh();
             }
@@ -307,10 +337,16 @@ export default class Entry extends Vue {
 
     async setSelectedStudentStatus(student: any, status: number) {
         if (!this.selectedPeriod) { return; }
+        const selectedPeriod = this.selectedPeriod;
         this.errorData = null;
-        const periodId = this.selectedPeriod.id;
+        const periodId = selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
-        await this.connector?.savePresenceEntry(periodId, student.id, status);
+        this.connector?.savePresenceEntry(periodId, student.id, status, function(data: any) {
+            if (data?.status === 'ok') {
+                student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
+                student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
+            }
+        });
     }
 
     getPresenceStatusTitle(status: PresenceStatus): string {

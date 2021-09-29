@@ -62,9 +62,24 @@ class LoadPresenceEntriesComponent extends Manager
             {
                 foreach ($users as $index => $user)
                 {
+                    $changed = false;
                     if (! array_key_exists('period#' . $period['id'] . '-status', $user))
                     {
                         $user['period#' . $period['id'] . '-status'] = NULL;
+                        $changed = true;
+                    }
+                    if (array_key_exists('period#' . $period['id'] . '-checked_in_date', $user))
+                    {
+                        $user['period#' . $period['id'] . '-checked_in_date'] = (int) $user['period#' . $period['id'] . '-checked_in_date'];
+                        $changed = true;
+                    }
+                    if (array_key_exists('period#' . $period['id'] . '-checked_out_date', $user))
+                    {
+                        $user['period#' . $period['id'] . '-checked_out_date'] = (int) $user['period#' . $period['id'] . '-checked_out_date'];
+                        $changed = true;
+                    }
+                    if ($changed)
+                    {
                         $users[$index] = $user;
                     }
                 }

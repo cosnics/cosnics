@@ -36,7 +36,9 @@ class SavePresenceEntryComponent extends Manager  implements CsrfComponentInterf
                 'period_id' => $presenceResultEntry->getPresencePeriodId(),
                 'user_id' => $presenceResultEntry->getUserId(),
                 'status_id' => $presenceResultEntry->getChoiceId(),
-                'fixed_status_id' => $presenceResultEntry->getPresenceStatusId()
+                'fixed_status_id' => $presenceResultEntry->getPresenceStatusId(),
+                'checked_in_date' => $presenceResultEntry->getCheckedInDate(),
+                'checked_out_date' => $presenceResultEntry->getCheckedOutDate()
             ];
 
             return new JsonResponse($this->serialize($result), 200, [], true);

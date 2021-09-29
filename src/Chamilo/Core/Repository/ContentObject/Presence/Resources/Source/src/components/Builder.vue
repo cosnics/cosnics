@@ -766,26 +766,66 @@ td.table-period {
         background-clip: padding-box;
     }
 }
-.selected-period-close-btn {
+.selected-period-controls {
     align-items: center;
     background: #f8fbfb;
     border: 1px solid #337ab7;
-    display: flex;
-    height: 22px;
-    justify-content: center;
-    position: absolute;
-    right: -1px;
-    top: -22px;
     border-bottom: none;
+    display: flex;
     font-size: 12px;
     font-weight: normal;
+    height: 32px;
+    /*justify-content: center;*/
+    left: -1px;
     padding: 4px 8px 0;
+    position: absolute;
+    right: -1px;
+    top: -32px;
 }
 
+.selected-period-checkinout-btn, .selected-period-close-btn {
+    padding: 0 4px;
+    height: 20px;
+}
+
+.selected-period-checkinout-btn.is-active {
+    background: #ddd;
+}
+
+.btn-check, .lbl-check:focus {
+    outline: none;
+}
+
+.btn-check {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: default;
+    margin: 0;
+    padding: 0;
+}
+.btn-check:focus, .btn-check:hover {
+    color: #1d4567;
+}
+.lbl-check {
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+.btn-icon-check {
+    margin-right: .3em;
+    width: 1em;
+}
+.btn-check.checked .btn-icon-check:before {
+    content: "\f046";
+}
+.btn-icon-check:before {
+    content: "\f096";
+}
 .selected-period-close-btn:hover {
-    color: #5a93c4;
+/*    color: #5a93c4;*/
 }
-
+.table.mod-entry th.table-period {
+    max-width: 1px;
 }
 /*.table.mod-entry th.table-period > div:first-child {*/
     /*align-items: center;*/
@@ -1383,4 +1423,88 @@ tfoot .table-period {
 .tbl-sort-option[aria-sort=descending] {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
 }
+</style>
+<style>
+.onoffswitch {
+    position: relative;
+}
+.onoffswitch.mod-checkout {
+    width: 136px;
+}
+
+.onoffswitch-checkbox {
+    display: none;
+}
+
+.onoffswitch-label {
+    border: 1px solid #80a2b3;
+    border-radius: 3px;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+.onoffswitch-label.mod-checkout {
+    border-color: #d6dee0;
+}
+
+.onoffswitch-inner {
+    display: block;
+    margin-left: -100%;
+    transition: margin .2s ease-in 0s;
+    width: 200%;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+
+.onoffswitch-inner-before, .onoffswitch-inner-after {
+    box-sizing: border-box;
+    color: #fff;
+    display: block;
+    float: left;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    height: 20px;
+    line-height: 18px;
+    padding: 0;
+    width: 50%;
+}
+
+.onoffswitch-inner-before.mod-checkout {
+    background-color: #f0f3f4;
+    color: #4171b5;
+    padding-left: 8px;
+}
+
+.onoffswitch-inner-after {
+    background-color: #fff;
+    color: #919191;
+    padding-left: 16px;
+    /*text-align: right;*/
+}
+
+.onoffswitch-switch {
+    background: #ffffff;
+    border: 1px solid #80a2b3;
+    border-radius: 3px;
+    bottom: 0;
+    display: block;
+    margin: 0;
+    position: absolute;
+    right: calc(100% - 12px);
+    top: 0;
+    transition: all .2s ease-in 0s;
+    width: 12px;
+}
+
+.onoffswitch-switch.mod-evaluation {
+    border-color: #c2ced1;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0;
+}
+
 </style>
