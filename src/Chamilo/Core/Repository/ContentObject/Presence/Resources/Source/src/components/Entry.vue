@@ -137,13 +137,13 @@
                         </template>
                         <template #cell(period-entry)="{item}">
                             <div v-if="!checkoutMode" class="u-flex u-gap-small u-flex-wrap">
-                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
+                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
                                         :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
                                         :title="getPresenceStatusTitle(status)"
                                         @click="!hasSelectedStudentStatus(item, status.id) ? setSelectedStudentStatus(item, status.id) : null"
                                         :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
                             </div>
-                            <div v-else>
+                            <template v-else>
                                 <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
                                     <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
                                     <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox">
@@ -155,7 +155,10 @@
                                         <span class="onoffswitch-switch mod-evaluation"></span>
                                     </label>
                                 </div>
-                            </div>
+                                <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
+                                    <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
+                                </div>
+                            </template>
                         </template>
                         <template #foot(period-entry)>
                             <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>

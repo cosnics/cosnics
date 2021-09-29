@@ -512,16 +512,16 @@ td.table-period {
     min-width: 120px;
 }
 
-.table-period .color-code {
+.table-period .color-code.mod-selectable {
     opacity: .42;
 }
 
-.table-period .color-code.is-selected,
+.table-period .color-code.mod-selectable.is-selected,
 .table-period .color-code:hover {
     opacity: 1;
 }
 
-.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code:not(.is-selected):hover {
+.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code.mod-selectable:not(.is-selected):hover {
     box-shadow: 1px 1px 2px -1px #673ab7;
 }
 
