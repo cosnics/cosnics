@@ -508,6 +508,10 @@ export default class Builder extends Vue {
     transition: background 75ms linear, color 75ms linear, opacity 75ms linear;
 }
 
+td.table-period {
+    min-width: 120px;
+}
+
 .table-period .color-code {
     opacity: .42;
 }
@@ -782,12 +786,14 @@ export default class Builder extends Vue {
     color: #5a93c4;
 }
 
-.table.mod-entry th.table-period > div {
-    align-items: center;
-    display: flex;
-    gap: 5px;
-    max-width: fit-content;
 }
+/*.table.mod-entry th.table-period > div:first-child {*/
+    /*align-items: center;*/
+    /*display: flex;*/
+    /*max-width: fit-content;*/
+    /*gap: 5px;*/
+    /*margin: 0 auto;*/
+/*}*/
 
 .select-period-btn {
     background: #f7f7f7;
