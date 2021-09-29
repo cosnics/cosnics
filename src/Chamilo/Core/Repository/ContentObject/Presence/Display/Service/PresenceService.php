@@ -160,6 +160,35 @@ class PresenceService
     /**
      * @param int $periodId
      * @param int $userId
+     *
+     * @return PresenceResultEntry
+     */
+    public function togglePresenceResultEntryCheckout(int $periodId, int $userId): PresenceResultEntry
+    {
+        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
+
+        if (! $presenceResultEntry instanceof PresenceResultEntry)
+        {
+            throw new InvalidArgumentException();
+        }
+
+        $checkedInDate = $presenceResultEntry->getCheckedInDate();
+        $checkedOutDate = $presenceResultEntry->getCheckedOutDate();
+
+        if ($checkedInDate > 0)
+        {
+            $isCheckedOut = $checkedOutDate > $checkedInDate;
+            $presenceResultEntry->setCheckedOutDate($isCheckedOut ? 0 : (new DateTime())->getTimestamp());
+            $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
+        }
+
+        return $presenceResultEntry;
+    }
+
+
+    /**
+     * @param int $periodId
+     * @param int $userId
      * @return PresenceResultEntry
      */
     protected function createPresenceResultEntry(int $periodId, int $userId): PresenceResultEntry

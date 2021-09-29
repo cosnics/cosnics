@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @author Stefan Gabriëls - Hogeschool Gent
  */
-class SavePresenceEntryComponent extends Manager  implements CsrfComponentInterface
+class SavePresenceEntryComponent extends Manager implements CsrfComponentInterface
 {
     function run()
     {

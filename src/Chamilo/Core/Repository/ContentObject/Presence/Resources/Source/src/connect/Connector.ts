@@ -119,6 +119,17 @@ export default class Connector {
         });
     }
 
+    async togglePresenceEntryCheckout(periodId: number, userId: number, callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const parameters = { 'period_id': periodId, 'user_id': userId };
+            const data = await this.executeAPIRequest(this.apiConfig.togglePresenceEntryCheckoutURL, parameters);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
     private addToQueue(callback: Function) {
         this.queue.add(async () => {
             await callback();

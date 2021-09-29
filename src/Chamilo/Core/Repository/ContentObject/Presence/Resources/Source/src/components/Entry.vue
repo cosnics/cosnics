@@ -117,11 +117,6 @@
                         </template>
                         <template #head(period-entry)>
                             <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
-                            <!--<div>
-                                <div style="width: 15px">
-                                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                                </div>
-                            </div>-->
                             <div class="selected-period-controls" style="justify-content: space-between">
                                 <div class="u-flex">
                                     <button class="" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false"
@@ -150,7 +145,9 @@
                             <template v-else>
                                 <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
                                     <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
-                                    <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox">
+                                    <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
+                                           :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
+                                            @input="toggleCheckout(item)">
                                     <label class="onoffswitch-label mod-checkout" :for="`onoffswitch-${item.id}`">
                                         <span class="onoffswitch-inner">
                                             <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
@@ -240,6 +237,18 @@ export default class Entry extends Vue {
         this.errorData = null;
         this.selectedPeriod.label = label;
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
+    }
+
+    toggleCheckout(student: any) {
+        if (!this.selectedPeriod) { return; }
+        const periodId = this.selectedPeriod.id;
+        if (!student[`period#${periodId}-checked_in_date`]) { return; }
+        this.connector?.togglePresenceEntryCheckout(periodId, student.id, (data: any) => {
+            if (data?.status === 'ok') {
+                student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
+                student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
+            }
+        });
     }
 
     getPlaceHolder(periodId: number) {
