@@ -79,10 +79,8 @@
             </template>
             <template #cell(title)="status">
                 <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
-                    <template v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'"><span
-                        style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span></template>
-                    <template v-else-if="savedEntryStatuses.includes(status.item.id)"><span
-                        style="line-height: 26px">{{ status.item.title }}</span></template>
+                    <span v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'" style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span>
+                    <span v-else-if="savedEntryStatuses.includes(status.item.id)" style="line-height: 26px">{{ status.item.title }}</span>
                     <b-input v-else type="text" required v-model="status.item.title" autocomplete="off" :disabled="createNew"
                              class="mod-input mod-pad" @focus="onSelectStatus(status.item)"/>
                 </div>
@@ -113,7 +111,7 @@
                             :disabled="createNew" @focus="onSelectStatus(status.item)"></button>
                     <color-picker :target="`color-${status.index}`" triggers="click blur" placement="right"
                                   :selected-color="status.item.color"
-                                  @color-selected="setColorForItem(status.item, $event)"></color-picker>
+                                  @color-selected="setStatusColor(status.item, $event)"></color-picker>
                 </div>
             </template>
             <template #cell(actions)="status">
@@ -225,7 +223,9 @@ export default class Builder extends Vue {
 
     statusDefaults: PresenceStatusDefault[] = [];
     presence: Presence | null = null;
+    selectedStatus: PresenceStatus|null = null;
     savedEntryStatuses: number[] = [];
+
     connector: Connector | null = null;
     errorData: string|null = null;
 
@@ -235,82 +235,18 @@ export default class Builder extends Vue {
     aliasNew = 3;
     colorNew = DEFAULT_COLOR_NEW;
 
-    selectedStatus: PresenceStatus|null = null;
-
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
 
     async load(): Promise<void> {
         const presenceData : any = await this.connector?.loadPresence();
-        if (presenceData) {
-            this.statusDefaults = presenceData['status-defaults'];
-            this.presence = presenceData.presence;
-        }
+        this.statusDefaults = presenceData?.['status-defaults'] || [];
+        this.presence = presenceData?.presence || null;
     }
 
     async loadSavedEntryStatuses(): Promise<void> {
         const data: any = await this.connector?.loadRegisteredPresenceEntryStatuses();
-        if (data) {
-            this.savedEntryStatuses = data.statuses;
-        }
-    }
-
-    get presenceStatuses(): PresenceStatus[] {
-        return this.presence?.statuses || [];
-    }
-
-    onRemove(status: PresenceStatus) {
-        if (!this.presence || status.type === 'fixed') {
-            return;
-        }
-        const statuses = this.presence.statuses;
-        const index = statuses.findIndex(o => o === status);
-        if (index === -1) {
-            return;
-        }
-        this.presence.statuses = statuses.slice(0, index).concat(statuses.slice(index + 1));
-    }
-
-    get isSaving() {
-        return this.connector?.isSaving || false;
-    }
-
-    hasEmptyFields(): boolean {
-        let hasEmptyFields = false;
-
-        const inputs = [...document.querySelectorAll<HTMLFormElement>('.presence-builder .form-control')];
-        inputs.reverse();
-        inputs.forEach(input => {
-            if (!input.checkValidity()) {
-                input.reportValidity();
-                hasEmptyFields = true;
-            }
-        });
-
-        return hasEmptyFields;
-    }
-
-    onSave() {
-        if (!this.presence) {
-            return;
-        }
-
-        if (this.hasEmptyFields()) { return; }
-
-        this.errorData = null;
-        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
-            if (data?.status === 'ok') {
-                this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
-            }
-        });
-    }
-
-    setError(data: any) : void {
-        this.errorData = data;
-    }
-
-    isConflictError(errorType: string): boolean {
-        return CONFLICT_ERRORS.includes(errorType);
+        this.savedEntryStatuses = data?.statuses;
     }
 
     mounted(): void {
@@ -319,48 +255,53 @@ export default class Builder extends Vue {
         this.load();
     }
 
+    get isSaving(): boolean {
+        return this.connector?.isSaving || false;
+    }
+
+    get presenceStatuses(): PresenceStatus[] {
+        return this.presence?.statuses || [];
+    }
+
     get fixedStatusDefaults(): PresenceStatusDefault[] {
-        return this.statusDefaults.filter((s : PresenceStatusDefault) => s.type === 'fixed');
+        return this.statusDefaults.filter(sd => sd.type === 'fixed');
     }
 
     getStatusDefault(status: PresenceStatus, fixed = false): PresenceStatusDefault {
-        const statusDefault = this.statusDefaults.find(s => s.id === status.id)!;
+        const statusDefault = this.statusDefaults.find(sd => sd.id === status.id)!;
         if (!fixed) { return statusDefault; }
-        return statusDefault.type === 'fixed' ? statusDefault : this.statusDefaults.find(s => s.id === statusDefault.aliasses)!;
+        return statusDefault.type === 'fixed' ? statusDefault : this.statusDefaults.find(sd => sd.id === statusDefault.aliasses)!;
     }
 
-    onSelectStatus(status: PresenceStatus) {
-        if (!this.createNew) {
-            this.selectedStatus = status;
+    setStatusColor(status: PresenceStatus, color: string) {
+        if (status.color !== color) {
+            status.color = color;
         }
     }
 
-    onCreateNew() {
-        this.createNew = true;
-        this.selectedStatus = null;
-        this.$nextTick(() => {
-            document.getElementById('new-presence-code')?.focus();
-        });
+    rowClass(status: PresenceStatus) : string {
+        return status === this.selectedStatus ? 'is-selected' : '';
     }
 
-    onSaveNew() {
-        if (!this.presence) {
-            return;
-        }
-        const status = {
-            id: Math.max(this.statusDefaults.length, Math.max.apply(null, this.presence.statuses.map(s => s.id))) + 1,
-            type: 'custom', code: this.codeNew, title: this.titleNew, aliasses: this.aliasNew, color: this.colorNew
-        };
-        this.presence.statuses.push(status);
-
-        this.resetNew();
-        this.$nextTick(() => {
-            this.selectedStatus = this.presenceStatuses[this.presenceStatuses.length - 1];
+    hasEmptyFields(): boolean {
+        let hasEmptyFields = false;
+        const inputs = [...document.querySelectorAll<HTMLFormElement>('.presence-builder .form-control')];
+        inputs.reverse();
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.reportValidity();
+                hasEmptyFields = true;
+            }
         });
+        return hasEmptyFields;
     }
 
-    onCancelNew() {
-        this.resetNew();
+    isConflictError(errorType: string): boolean {
+        return CONFLICT_ERRORS.includes(errorType);
+    }
+
+    setError(data: any): void {
+        this.errorData = data;
     }
 
     resetNew() {
@@ -371,11 +312,39 @@ export default class Builder extends Vue {
         this.colorNew = DEFAULT_COLOR_NEW;
     }
 
+    onCreateNew() {
+        this.createNew = true;
+        this.selectedStatus = null;
+        this.$nextTick(() => {
+            document.getElementById('new-presence-code')?.focus();
+        });
+    }
+
+    onCancelNew() {
+        this.resetNew();
+    }
+
+    onSaveNew() {
+        if (!this.presence) { return; }
+        this.presence.statuses.push({
+            id: Math.max(this.statusDefaults.length, Math.max.apply(null, this.presence.statuses.map(s => s.id))) + 1,
+            type: 'custom', code: this.codeNew, title: this.titleNew, aliasses: this.aliasNew, color: this.colorNew
+        });
+        this.resetNew();
+        this.$nextTick(() => {
+            this.selectedStatus = this.presenceStatuses[this.presenceStatuses.length - 1];
+        });
+    }
+
+    onSelectStatus(status: PresenceStatus) {
+        if (!this.createNew) {
+            this.selectedStatus = status;
+        }
+    }
+
     onMoveDown(status: any) {
         const index = status.index;
-        if (!this.presence || index >= this.presence.statuses.length - 1) {
-            return;
-        }
+        if (!this.presence || index >= this.presence.statuses.length - 1) { return; }
         const statuses = this.presence.statuses;
         this.presence.statuses = statuses.slice(0, index).concat(statuses[index + 1], statuses[index]).concat(statuses.slice(index + 2));
         this.$nextTick(() => {
@@ -389,9 +358,7 @@ export default class Builder extends Vue {
 
     onMoveUp(status: any) {
         const index = status.index;
-        if (!this.presence || index <= 0) {
-            return;
-        }
+        if (!this.presence || index <= 0) { return; }
         const statuses = this.presence.statuses;
         this.presence.statuses = statuses.slice(0, index - 1).concat(statuses[index], statuses[index - 1]).concat(statuses.slice(index + 1));
         this.$nextTick(() => {
@@ -403,15 +370,23 @@ export default class Builder extends Vue {
         });
     }
 
-    setColorForItem(item: PresenceStatus, color: string) {
-        if (item.color !== color) {
-            item.color = color;
-        }
+    onRemove(status: PresenceStatus) {
+        if (!this.presence || status.type === 'fixed') { return; }
+        const statuses = this.presence.statuses;
+        const index = statuses.findIndex(s => s === status);
+        if (index === -1) { return; }
+        this.presence.statuses = statuses.slice(0, index).concat(statuses.slice(index + 1));
     }
 
-    rowClass(item: PresenceStatus) : string {
-        if (item === this.selectedStatus) { return 'is-selected'; }
-        return '';
+    onSave() {
+        if (!this.presence) { return; }
+        if (this.hasEmptyFields()) { return; }
+        this.setError(null);
+        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
+            if (data?.status === 'ok') {
+                this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
+            }
+        });
     }
 
     @Watch('loadIndex')
