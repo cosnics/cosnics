@@ -278,7 +278,7 @@ export default class Builder extends Vue {
     hasEmptyFields(): boolean {
         let hasEmptyFields = false;
 
-        const inputs = Array.from(document.querySelectorAll('.presence-builder .form-control')) as unknown as HTMLFormElement[];
+        const inputs = [...document.querySelectorAll<HTMLFormElement>('.presence-builder .form-control')];
         inputs.reverse();
         inputs.forEach(input => {
             if (!input.checkValidity()) {
