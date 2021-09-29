@@ -73,7 +73,7 @@
             </template>
             <template #cell(code)="status">
                 <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
-                    <b-input type="text" v-model="status.item.code" autocomplete="off" :disabled="createNew"
+                    <b-input type="text" required v-model="status.item.code" autocomplete="off" :disabled="createNew"
                              class="mod-input mod-pad mod-small" @focus="onSelectStatus(status.item)"/>
                 </div>
             </template>
@@ -83,7 +83,7 @@
                         style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span></template>
                     <template v-else-if="savedEntryStatuses.includes(status.item.id)"><span
                         style="line-height: 26px">{{ status.item.title }}</span></template>
-                    <b-input v-else type="text" v-model="status.item.title" autocomplete="off" :disabled="createNew"
+                    <b-input v-else type="text" required v-model="status.item.title" autocomplete="off" :disabled="createNew"
                              class="mod-input mod-pad" @focus="onSelectStatus(status.item)"/>
                 </div>
             </template>
@@ -142,11 +142,11 @@
                 </div>
             </template>
             <template #foot(code)="">
-                <input type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code"
+                <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code"
                        v-model="codeNew"/>
             </template>
             <template #foot(title)="">
-                <b-input type="text" class="mod-input mod-pad" v-model="titleNew"/>
+                <b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/>
             </template>
             <template #foot(meaning)="">
                 <select class="form-control mod-select" v-model="aliasNew">
@@ -275,10 +275,29 @@ export default class Builder extends Vue {
         return this.connector?.isSaving || false;
     }
 
+    hasEmptyFields(): boolean {
+        let hasEmptyFields = false;
+
+        const el = document.querySelectorAll('.presence-builder .form-control');
+        if (el.length) {
+            for (let i = el.length - 1; i >= 0; i--) {
+                if (! (el[i] as any).checkValidity()) {
+                    (el[i] as any).reportValidity();
+                    hasEmptyFields = true;
+                }
+            }
+        }
+
+        return hasEmptyFields;
+    }
+
     onSave() {
         if (!this.presence) {
             return;
         }
+
+        if (this.hasEmptyFields()) { return; }
+
         this.errorData = null;
         this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
             if (data?.status === 'ok') {
