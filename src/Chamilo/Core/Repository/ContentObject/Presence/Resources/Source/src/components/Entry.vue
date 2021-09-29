@@ -123,9 +123,13 @@
                                 </div>
                             </div>-->
                             <div class="selected-period-controls" style="justify-content: space-between">
-                                <div class="u-flex u-gap-small">
-                                    <button class="btn btn-default btn-sm selected-period-checkinout-btn" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false">In</button>
-                                    <button class="btn btn-default btn-sm selected-period-checkinout-btn" :class="{'is-active': checkoutMode}" @click="checkoutMode = true">Uit</button>
+                                <div class="u-flex">
+                                    <button class="" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false"
+                                            :style="{background: !checkoutMode ? 'hsl(205, 20%, 71%)' : 'none', color: !checkoutMode ? 'white' : '#5a7287'}"
+                                            style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;">In</button>
+                                    <button class="" :class="{'is-active': checkoutMode}" @click="checkoutMode = true"
+                                            :style="{background: !!checkoutMode ? 'hsl(205, 20%, 71%)' : 'none',  color: checkoutMode ? 'white' : '#5a7287'}"
+                                            style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-left: none;border-top-left-radius: 0;border-bottom-left-radius: 0;">Uit</button>
                                 </div>
                                 <div class="u-flex u-gap-small" style="align-items: baseline">
                                     <div style="width: 15px">
