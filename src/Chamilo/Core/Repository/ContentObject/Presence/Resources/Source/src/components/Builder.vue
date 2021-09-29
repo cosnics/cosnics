@@ -278,15 +278,14 @@ export default class Builder extends Vue {
     hasEmptyFields(): boolean {
         let hasEmptyFields = false;
 
-        const el = document.querySelectorAll('.presence-builder .form-control');
-        if (el.length) {
-            for (let i = el.length - 1; i >= 0; i--) {
-                if (! (el[i] as any).checkValidity()) {
-                    (el[i] as any).reportValidity();
-                    hasEmptyFields = true;
-                }
+        const inputs = Array.from(document.querySelectorAll('.presence-builder .form-control')) as unknown as HTMLFormElement[];
+        inputs.reverse();
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.reportValidity();
+                hasEmptyFields = true;
             }
-        }
+        });
 
         return hasEmptyFields;
     }
