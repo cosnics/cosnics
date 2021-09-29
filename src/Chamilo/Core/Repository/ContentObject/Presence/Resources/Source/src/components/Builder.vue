@@ -769,7 +769,7 @@ td.table-period {
 .selected-period-controls {
     align-items: center;
     background: #f8fbfb;
-    border: 1px solid #337ab7;
+    border: 1px solid #8ea4b3;
     border-bottom: none;
     display: flex;
     font-size: 12px;
@@ -821,6 +821,17 @@ td.table-period {
 .btn-icon-check:before {
     content: "\f096";
 }
+.selected-period-close-btn {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    border-radius: 50%;
+    width: 20px;
+    padding: 0;
+    border-color: #8ea4b3;
+    background: #f8fbfb;
+    color: #406e8e;
+}
 .selected-period-close-btn:hover {
 /*    color: #5a93c4;*/
 }
@@ -867,9 +878,9 @@ td.table-period {
     max-width: fit-content;
 }
 
-tfoot .table-period {
+/*tfoot .table-period {
     text-align: right;
-}
+}*/
 
 /*.table.mod-entry tbody .table-period:after {
     background-color: #ebebeb;

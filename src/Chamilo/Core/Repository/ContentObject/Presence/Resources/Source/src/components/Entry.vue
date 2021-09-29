@@ -59,7 +59,7 @@
                             <col>
                             <col>
                             <template v-for="period in periods">
-                                <col v-if="period === selectedPeriod" style="border: 1px double #337ab7">
+                                <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
                                 <col v-else>
                             </template>
                         </template>
@@ -67,7 +67,7 @@
                             <col>
                             <col>
                             <col v-for="period in periods">
-                            <col style="border: 1px double #337ab7">
+                            <col style="border: 1px double #8ea4b3">
                         </template>
                         <template #head(fullname) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
