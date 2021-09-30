@@ -1,56 +1,18 @@
 <i18n>
 {
     "en": {
-        "display": "Display",
-        "move-up": "Move up",
-        "move-down": "Move down",
-        "remove": "Remove",
-        "save": "Save",
-        "cancel": "Cancel",
         "new-presence-status": "New presence status",
         "label": "Label",
         "title": "Title",
-        "meaning": "Maps to",
-        "color": "Color",
-        "error-NoTitleGiven": "You haven't given a title for the following status:",
-        "error-TitleUpdateForbidden": "The title of the status '{title}' can no longer be changed.",
-        "error-InvalidType": "The status '{title}' has a wrong type set.",
-        "error-PresenceStatusMissing": "The status '{title}' can no longer be removed.",
-        "error-InvalidAlias": "The status with title '{title}' has a wrong mapping set.",
-        "error-AliasUpdateForbiddene": "The mapping of the status '{title}' can no longer be changed.",
-        "error-NoCodeGiven": "You haven't given a label for the status '{title}'.",
-        "error-NoColorGiven": "You haven't given a color for the status '{title}'.",
-        "error-InvalidColor": "You have given the status '{title}' an invalid color.",
-        "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
-        "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
-        "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
-        "changes-not-saved": "Your changes have not been saved."
+        "aliasses": "Maps to",
+        "color": "Color"
     },
     "nl": {
-        "display": "Weergave",
-        "move-up": "Verplaats naar boven",
-        "move-down": "Verplaats naar beneden",
-        "remove": "Verwijder",
-        "save": "Opslaan",
-        "cancel": "Annuleren",
         "new-presence-status": "Nieuwe aanwezigheidsstatus",
         "label": "Label",
         "title": "Titel",
-        "meaning": "Mapt naar",
-        "color": "Kleur",
-        "error-NoTitleGiven": "Je hebt geen titel opgegeven voor de volgende status:",
-        "error-TitleUpdateForbidden": "De titel van de status '{title}' kan niet meer gewijzigd worden.",
-        "error-InvalidType": "De status '{title}' status heeft een verkeerd type.",
-        "error-PresenceStatusMissing": "De status '{title}' kan niet meer gewist worden.",
-        "error-InvalidAlias": "De status '{title}' heeft een verkeerde mapping.",
-        "error-AliasUpdateForbidden": "De mapping van de status '{title}' kan niet meer gewijzigd worden.",
-        "error-NoCodeGiven": "Je hebt geen label opgegeven voor de status '{title}'.",
-        "error-NoColorGiven": "Je hebt geen kleur opgegeven voor de status '{title}'.",
-        "error-InvalidColor": "Je hebt de status '{title}' een verkeerde kleur toegewezen.",
-        "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
-        "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
-        "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
-        "changes-not-saved": "Je wijzigingen werden niet opgeslagen."
+        "aliasses": "Mapt naar",
+        "color": "Kleur"
     }
 }
 </i18n>
@@ -61,162 +23,99 @@
                  class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}"
                  :tbody-tr-class="rowClass">
             <template #thead-top="">
-                <b-tr>
-                    <b-th style="background: white;font-weight: 400">{{ $t('display') }}</b-th>
-                    <b-th colspan="3" style="background: white">
-                        <div class="u-flex u-gap-small u-flex-wrap" style="padding: 4px 0">
-                            <div v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
-                                 :class="[status.color]"><span>{{ status.code }}</span></div>
-                        </div>
-                    </b-th>
-                </b-tr>
+                <selection-preview :presence-statuses="presenceStatuses" />
             </template>
-            <template #cell(code)="status">
-                <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
-                    <b-input type="text" required v-model="status.item.code" autocomplete="off" :disabled="createNew"
-                             class="mod-input mod-pad mod-small" @focus="onSelectStatus(status.item)"/>
-                </div>
-            </template>
-            <template #cell(title)="status">
-                <div class="cell-pad" @click.stop="onSelectStatus(status.item)">
-                    <span v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'" style="line-height: 26px">{{ getStatusDefault(status.item).title }}</span>
-                    <span v-else-if="savedEntryStatuses.includes(status.item.id)" style="line-height: 26px">{{ status.item.title }}</span>
-                    <b-input v-else type="text" required v-model="status.item.title" autocomplete="off" :disabled="createNew"
-                             class="mod-input mod-pad" @focus="onSelectStatus(status.item)"/>
-                </div>
-            </template>
-            <template #head(code)>{{ $t('label') }}</template>
+            <template #head(label)>{{ $t('label') }}</template>
             <template #head(title)>{{ $t('title') }}</template>
-            <template #head(meaning)>{{ $t('meaning') }}</template>
+            <template #head(aliasses)>{{ $t('aliasses') }}</template>
             <template #head(color)>{{ $t('color') }}</template>
-            <template #cell(meaning)="status">
-                <div class="cell-pad" style="line-height: 26px" @click.stop="onSelectStatus(status.item)">
-                    <span v-if="status.item.type === 'fixed' || status.item.type === 'semifixed'">{{
-                            getStatusDefault(status.item, true).title
-                        }}</span>
-                    <span v-else-if="savedEntryStatuses.includes(status.item.id)">{{ statusDefaults.find(s => s.id === status.item.aliasses).title }}</span>
-                    <select v-else class="form-control mod-select" :disabled="createNew"
-                            @focus="onSelectStatus(status.item)" v-model="status.item.aliasses">
-                        <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`"
-                                :value="statusDefault.id">{{ statusDefault.title }}
-                        </option>
-                    </select>
+            <template #cell(label)="{item}">
+                <div class="cell-pad" @click.stop="onSelectStatus(item)">
+                    <b-input type="text" required v-model="item.code" autocomplete="off" :disabled="createNew"
+                             class="mod-input mod-pad mod-small" @focus="onSelectStatus(item)"/>
                 </div>
             </template>
-            <template #cell(color)="status">
-                <div class="u-flex cell-pad" style="align-items: center; height: 42px;"
-                     @click.stop="onSelectStatus(status.item)">
-                    <button :id="`color-${status.index}`" class="color"
-                            :class="[{'is-selected': status.item === selectedStatus}, status.item.color]"
-                            :disabled="createNew" @focus="onSelectStatus(status.item)"></button>
-                    <color-picker :target="`color-${status.index}`" triggers="click blur" placement="right"
-                                  :selected-color="status.item.color"
-                                  @color-selected="setStatusColor(status.item, $event)"></color-picker>
-                </div>
+            <template #cell(title)="{item}">
+                <title-control :status="item" :status-title="getStatusTitle(item)"
+                               :is-editable="isStatusEditable(item)" :disabled="createNew"
+                               class="cell-pad" @select="onSelectStatus(item)" />
             </template>
-            <template #cell(actions)="status">
-                <div class="cell-pad-x">
-                    <div @click.stop="" class="u-flex u-gap-small presence-actions">
-                        <button class="btn btn-default btn-sm mod-presence" :title="$t('move-up')"
-                                :disabled="createNew || status.index === 0" @click.stop="onMoveUp(status)"
-                                :id="`btn-up-${status.index}`" @focus="onSelectStatus(status.item)">
-                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                            <span class="sr-only">{{ $t('move-up') }}</span>
-                        </button>
-                        <button class="btn btn-default btn-sm mod-presence" :title="$t('move-down')"
-                                :disabled="createNew || status.index >= presenceStatuses.length - 1"
-                                @click.stop="onMoveDown(status)" :id="`btn-down-${status.index}`"
-                                @focus="onSelectStatus(status.item)">
-                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                            <span class="sr-only">{{ $t('move-down') }}</span>
-                        </button>
-                        <button :title="$t('remove')" :disabled="createNew || status.item.type === 'fixed' || savedEntryStatuses.includes(status.item.id)"
-                                class="btn btn-default btn-sm mod-presence" @click.stop="onRemove(status.item)"
-                                @focus="onSelectStatus(status.item)">
-                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                            <span class="sr-only">{{ $t('remove') }}</span>
-                        </button>
-                    </div>
-                </div>
+            <template #cell(aliasses)="{item}">
+                <alias-control :status="item" :alias-title="getAliasedTitle(item)" :fixed-status-defaults="fixedStatusDefaults"
+                               :is-editable="isStatusEditable(item)" :is-select-disabled="createNew"
+                               class="cell-pad" style="line-height: 26px"
+                               @select="onSelectStatus(item)"/>
             </template>
-            <template #foot(code)="">
-                <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code"
-                       v-model="codeNew"/>
+            <template #cell(color)="{item, index}">
+                <color-control :id="index" :disabled="createNew" :color="item.color" :selected="item === selectedStatus"
+                               class="u-flex cell-pad" style="align-items: center; height: 42px;"
+                               @select="onSelectStatus(item)"
+                               @color-selected="setStatusColor(item, $event)"/>
+            </template>
+            <template #cell(actions)="{item, index}">
+                <selection-controls
+                    :id="item.id"
+                    :is-up-disabled="createNew || index === 0"
+                    :is-down-disabled="createNew || index >= presenceStatuses.length - 1"
+                    :is-remove-disabled="createNew || item.type === 'fixed' || savedEntryStatuses.includes(item.id)"
+                    class="cell-pad-x"
+                    @move-down="onMoveDown(item.id, index)" @move-up="onMoveUp(item.id, index)"
+                    @remove="onRemove(item)" @select="onSelectStatus(item)"/>
+            </template>
+            <template #foot(label)="">
+                <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew"/>
             </template>
             <template #foot(title)="">
                 <b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/>
             </template>
-            <template #foot(meaning)="">
-                <select class="form-control mod-select" v-model="aliasNew">
-                    <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`"
-                            :value="statusDefault.id">{{ statusDefault.title }}
-                    </option>
-                </select>
+            <template #foot(aliasses)="">
+                <alias-control :status="aliasNew" :fixed-status-defaults="fixedStatusDefaults"/>
             </template>
             <template #foot(color)="">
-                <div class="u-flex">
-                    <button class="color" :class="colorNew" id="color-new"></button>
-                    <color-picker target="color-new" triggers="click blur" placement="right" :selected-color="colorNew"
-                                  @color-selected="colorNew = $event"></color-picker>
-                </div>
+                <color-control id="999" :color="colorNew" class="u-flex" @color-selected="colorNew = $event"/>
             </template>
             <template #foot(actions)="">
-                <div class="u-flex u-gap-small presence-actions">
-                    <button class="btn btn-default btn-sm mod-presence" :title="$t('save')" @click.stop="onSaveNew"
-                            :disabled="!(codeNew && titleNew && aliasNew > 0)">
-                        <i class="fa fa-check-circle" aria-hidden="true"></i>
-                        <span class="sr-only">{{ $t('save') }}</span>
-                    </button>
-                    <button class="btn btn-default btn-sm mod-presence mod-cancel" :title="$t('cancel')"
-                            @click.stop="onCancelNew">
-                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                        <span class="sr-only">{{ $t('cancel') }}</span>
-                    </button>
-                </div>
+                <new-status-controls :isSavingDisabled="!(codeNew && titleNew && aliasNew.aliasses > 0)"
+                                     class="u-flex u-gap-small presence-actions"
+                                     @save="onSaveNew" @cancel="onCancelNew" />
             </template>
         </b-table>
         <div style="margin: 8px 0 0 8px" v-if="!createNew">
             <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                 {{ $t('new-presence-status') }}</a>
         </div>
-        <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
-            <template v-if="errorData.type === 'NoTitleGiven'">
-                {{ $t('error-NoTitleGiven') }}
-                <span style="display: block">{{ errorData.status }}</span>
-                {{ $t('changes-not-saved') }}
-            </template>
-            <span v-else-if="!!errorData.status">
-                {{ $t(`error-${errorData.type}`, { title: errorData.status.title }) }} {{ $t('changes-not-saved') }}
-            </span>
-            <span v-else>{{ $t(`error-${errorData.type}`) }}</span>
-        </div>
-        <div style="margin: 16px 0 0 8px" v-if="!createNew">
-            <button :disabled="isSaving" class="btn btn-primary mod-presence-save" @click="onSave()">
-                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin" style="margin-right: 5px"></div>
-                {{ $t('save') }}
-            </button>
-        </div>
+        <error-display v-if="errorData" :error-data="errorData" style="margin: 10px 0 0 0; max-width: 85ch" />
+        <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" style="margin: 16px 0 0 8px" />
     </div>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-import {PresenceStatusDefault, PresenceStatus, Presence} from '../types';
+import {Presence, PresenceStatus, PresenceStatusDefault} from '../types';
 import APIConfig from '../connect/APIConfig';
 import Connector, {ConnectorErrorListener} from '../connect/Connector';
-import ColorPicker from './ColorPicker.vue';
+import TitleControl from './builder/TitleControl.vue';
+import AliasControl from './builder/AliasControl.vue';
+import ColorControl from './builder/ColorControl.vue';
+import SelectionControls from './builder/SelectionControls.vue';
+import NewStatusControls from './builder/NewStatusControls.vue';
+import SelectionPreview from './builder/SelectionPreview.vue';
+import SaveControl from './builder/SaveControl.vue';
+import ErrorDisplay from './builder/ErrorDisplay.vue';
 
 const DEFAULT_COLOR_NEW = 'yellow-100';
 const CONFLICT_ERRORS = ['PresenceStatusMissing', 'InvalidType', 'NoTitleGiven', 'TitleUpdateForbidden', 'InvalidAlias', 'AliasUpdateForbidden', 'NoCodeGiven', 'NoColorGiven', 'InvalidColor'];
 
 @Component({
-    components: {ColorPicker}
+    components: {
+        TitleControl, AliasControl, ColorControl, SelectionControls, NewStatusControls, SelectionPreview, SaveControl, ErrorDisplay
+    }
 })
 export default class Builder extends Vue {
     readonly fields = [
-        { key: 'code', sortable: false },
+        { key: 'label', sortable: false },
         { key: 'title', sortable: false },
-        { key: 'meaning', sortable: false },
+        { key: 'aliasses', sortable: false },
         { key: 'color', sortable: false },
         { key: 'actions', sortable: false, label: '', variant: 'actions' }
     ];
@@ -232,7 +131,7 @@ export default class Builder extends Vue {
     createNew = false;
     codeNew = '';
     titleNew = '';
-    aliasNew = 3;
+    aliasNew = { aliasses: 3};
     colorNew = DEFAULT_COLOR_NEW;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
@@ -273,6 +172,24 @@ export default class Builder extends Vue {
         return statusDefault.type === 'fixed' ? statusDefault : this.statusDefaults.find(sd => sd.id === statusDefault.aliasses)!;
     }
 
+    isStatusEditable(status: PresenceStatus) {
+        return !(status.type === 'fixed' || status.type === 'semifixed' || this.savedEntryStatuses.includes(status.id));
+    }
+
+    getStatusTitle(status: PresenceStatus) {
+        if (status.type === 'fixed' || status.type === 'semifixed') {
+            return this.getStatusDefault(status)?.title || '';
+        }
+        return status.title;
+    }
+
+    getAliasedTitle(status: PresenceStatus): string {
+        if (status.type === 'fixed' || status.type === 'semifixed') {
+            return this.getStatusDefault(status, true)?.title || '';
+        }
+        return this.statusDefaults.find(sd => sd.id === status.aliasses)?.title || '';
+    }
+
     setStatusColor(status: PresenceStatus, color: string) {
         if (status.color !== color) {
             status.color = color;
@@ -308,7 +225,7 @@ export default class Builder extends Vue {
         this.createNew = false;
         this.codeNew = '';
         this.titleNew = '';
-        this.aliasNew = 3;
+        this.aliasNew.aliasses = 3;
         this.colorNew = DEFAULT_COLOR_NEW;
     }
 
@@ -328,7 +245,7 @@ export default class Builder extends Vue {
         if (!this.presence) { return; }
         this.presence.statuses.push({
             id: Math.max(this.statusDefaults.length, Math.max.apply(null, this.presence.statuses.map(s => s.id))) + 1,
-            type: 'custom', code: this.codeNew, title: this.titleNew, aliasses: this.aliasNew, color: this.colorNew
+            type: 'custom', code: this.codeNew, title: this.titleNew, aliasses: this.aliasNew.aliasses, color: this.colorNew
         });
         this.resetNew();
         this.$nextTick(() => {
@@ -342,13 +259,12 @@ export default class Builder extends Vue {
         }
     }
 
-    onMoveDown(status: any) {
-        const index = status.index;
+    onMoveDown(id: number, index: number) {
         if (!this.presence || index >= this.presence.statuses.length - 1) { return; }
         const statuses = this.presence.statuses;
         this.presence.statuses = statuses.slice(0, index).concat(statuses[index + 1], statuses[index]).concat(statuses.slice(index + 2));
         this.$nextTick(() => {
-            let el : HTMLButtonElement|null = document.querySelector(`#btn-down-${status.index + 1}`);
+            let el : HTMLButtonElement|null = document.querySelector(`#btn-down-${id}`);
             if (el?.disabled) {
                 el = el?.previousSibling as HTMLButtonElement;
             }
@@ -356,13 +272,12 @@ export default class Builder extends Vue {
         });
     }
 
-    onMoveUp(status: any) {
-        const index = status.index;
+    onMoveUp(id: number, index: number) {
         if (!this.presence || index <= 0) { return; }
         const statuses = this.presence.statuses;
         this.presence.statuses = statuses.slice(0, index - 1).concat(statuses[index], statuses[index - 1]).concat(statuses.slice(index + 1));
         this.$nextTick(() => {
-            let el : HTMLButtonElement|null = document.querySelector(`#btn-up-${status.index - 1}`);
+            let el : HTMLButtonElement|null = document.querySelector(`#btn-up-${id}`);
             if (el?.disabled) {
                 el = el?.nextSibling as HTMLButtonElement;
             }
