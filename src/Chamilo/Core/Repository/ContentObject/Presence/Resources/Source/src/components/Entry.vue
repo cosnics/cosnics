@@ -58,7 +58,7 @@
                         <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
                             <col>
                             <col>
-                            <template v-for="period in periods">
+                            <template v-for="period in periodsReversed">
                                 <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
                                 <col v-else>
                             </template>
@@ -66,8 +66,8 @@
                         <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
                             <col>
                             <col>
-                            <col v-for="period in periods">
                             <col style="border: 1px double #8ea4b3">
+                            <col v-for="period in periodsReversed">
                         </template>
                         <template #head(fullname) v-if="canEditPresence">
                             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
@@ -226,6 +226,12 @@ export default class Entry extends Vue {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
         }
+    }
+
+    get periodsReversed() {
+        const periods = [...this.periods];
+        periods.reverse();
+        return periods;
     }
 
     get selectedPeriodLabel(): string {
@@ -406,19 +412,18 @@ export default class Entry extends Vue {
     }
 
     get fields() {
-        const fields = [
+        let periods: any = this.periods.map(period => {
+            const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
+            const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
+            return {key, sortable: false, label: period.label, variant};
+        });
+        periods = this.creatingNew ? [...periods, {key: 'period-entry-plh', sortable: false, variant: 'period'}] : periods;
+        periods.reverse();
+        return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
-            ... this.periods.map(period => {
-                const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
-                const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
-                return {key, sortable: false, label: period.label, variant};
-            })
+            ...periods
         ];
-        if (this.creatingNew) {
-            return [...fields, {key: 'period-entry-plh', sortable: false, variant: 'period'}];
-        }
-        return fields;
     }
 
     getSortStatus(name: string) {
