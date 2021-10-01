@@ -417,7 +417,7 @@ export default class Builder extends Vue {
 }
 
 td.table-period {
-    min-width: 120px;
+    min-width: 136px;
 }
 
 .table-period .color-code.mod-selectable {
@@ -675,20 +675,13 @@ td.table-period {
     }
 }
 .selected-period-controls {
-    align-items: center;
-    background: #f8fbfb;
-    border: 1px solid #8ea4b3;
-    border-bottom: none;
-    display: flex;
     font-size: 12px;
     font-weight: normal;
     height: 32px;
-    /*justify-content: center;*/
     left: -1px;
-    padding: 4px 8px 0;
     position: absolute;
     right: -1px;
-    top: -32px;
+    top: -31px;
 }
 
 .selected-period-checkinout-btn, .selected-period-close-btn {
@@ -1351,6 +1344,10 @@ td.table-period {
     width: 136px;
 }
 
+.onoffswitch.mod-checkout-choice {
+    width: 116px;
+}
+
 .onoffswitch-checkbox {
     display: none;
 }
@@ -1363,8 +1360,13 @@ td.table-period {
     margin-bottom: 0;
     overflow: hidden;
 }
-.onoffswitch-label.mod-checkout {
+
+.onoffswitch-label.mod-checkout, .onoffswitch-label.mod-checkout-choice {
     border-color: #d6dee0;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout-choice {
+    border-color: #91a0b1;
 }
 
 .onoffswitch-inner {
@@ -1391,7 +1393,7 @@ td.table-period {
     width: 50%;
 }
 
-.onoffswitch-inner-before.mod-checkout.mod-choice, .onoffswitch-inner-after.mod-checkout.mod-choice {
+.onoffswitch-inner-before.mod-checkout-choice, .onoffswitch-inner-after.mod-checkout-choice {
     font-size: 12px;
     line-height: 20px;
 }
@@ -1399,6 +1401,12 @@ td.table-period {
 .onoffswitch-inner-before.mod-checkout {
     background-color: #f0f3f4;
     color: #4171b5;
+    padding-left: 8px;
+}
+
+.onoffswitch-inner-before.mod-checkout-choice {
+    background-color: #91a0b1;
+    color: white;
     padding-left: 8px;
 }
 
@@ -1423,8 +1431,12 @@ td.table-period {
     width: 12px;
 }
 
-.onoffswitch-switch.mod-checkout {
+.onoffswitch-switch.mod-checkout, .onoffswitch-switch.mod-checkout-choice {
     border-color: #c2ced1;
+}
+
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout-choice {
+    border-color: #91a0b1;
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {

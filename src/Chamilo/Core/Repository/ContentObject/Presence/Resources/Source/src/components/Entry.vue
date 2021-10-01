@@ -110,8 +110,8 @@
                     <template #head(period-entry-plh)>
                         <div class="u-flex u-gap-small" style="align-items:center">
                             <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" style="font-weight: normal;height:30px;padding:6px;background:none;font-style: italic; pointer-events:none;box-shadow:none;border-color: #e9eaea;"></b-input>
-                            <div v-if="isSaving" style="width: 15px">
-                                <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                            <div style="min-width: 13px">
+                                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             </div>
                         </div>
                     </template>
@@ -122,27 +122,27 @@
                         </div>
                     </template>
                     <template #head(period-entry)>
-                        <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
-                        <div class="selected-period-controls" style="justify-content: space-between">
-                            <div class="onoffswitch mod-checkout" style="display: block;">
+                        <div class="u-flex u-gap-small" style="align-items:center">
+                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                            <div style="min-width: 13px">
+                                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+                            </div>
+                        </div>
+                        <div class="selected-period-controls">
+                            <div class="onoffswitch mod-checkout-choice" style="display: block;">
                                 <input type="checkbox" id="onoffswitch-checkout" class="onoffswitch-checkbox"
                                        :checked="checkoutMode"
                                        @input="checkoutMode = !checkoutMode">
-                                <label class="onoffswitch-label mod-checkout" for="onoffswitch-checkout">
+                                <label class="onoffswitch-label mod-checkout-choice" for="onoffswitch-checkout">
                                     <span class="onoffswitch-inner">
-                                        <span class="onoffswitch-inner-before mod-checkout mod-choice">{{ $t('checkout-mode') }}</span>
-                                        <span class="onoffswitch-inner-after mod-checkout mod-choice">{{ $t('checkout-mode') }}</span>
+                                        <span class="onoffswitch-inner-before mod-checkout-choice">{{ $t('checkout-mode') }}</span>
+                                        <span class="onoffswitch-inner-after mod-checkout-choice">{{ $t('checkout-mode') }}</span>
                                     </span>
-                                    <span class="onoffswitch-switch mod-checkout"></span>
+                                    <span class="onoffswitch-switch mod-checkout-choice"></span>
                                 </label>
                             </div>
-                            <div class="u-flex u-gap-small" style="align-items: baseline">
-                                <div style="width: 15px">
-                                    <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                                </div>
-                                <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
-                            </div>
                         </div>
+                        <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                     </template>
                     <template #cell(period-entry)="{item}">
                         <div v-if="!checkoutMode" class="u-flex u-gap-small u-flex-wrap">
