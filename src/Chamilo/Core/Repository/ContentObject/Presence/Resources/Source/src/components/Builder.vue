@@ -1391,6 +1391,11 @@ td.table-period {
     width: 50%;
 }
 
+.onoffswitch-inner-before.mod-checkout.mod-choice, .onoffswitch-inner-after.mod-checkout.mod-choice {
+    font-size: 12px;
+    line-height: 20px;
+}
+
 .onoffswitch-inner-before.mod-checkout {
     background-color: #f0f3f4;
     color: #4171b5;
@@ -1418,7 +1423,7 @@ td.table-period {
     width: 12px;
 }
 
-.onoffswitch-switch.mod-evaluation {
+.onoffswitch-switch.mod-checkout {
     border-color: #c2ced1;
 }
 

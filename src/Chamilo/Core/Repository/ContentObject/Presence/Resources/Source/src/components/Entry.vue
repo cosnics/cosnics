@@ -13,7 +13,8 @@
         "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
         "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
         "checked-out": "Checked out",
-        "not-checked-out": "Not checked out"
+        "not-checked-out": "Not checked out",
+        "checkout-mode": "Checkout mode"
     },
     "nl": {
         "search": "Zoeken",
@@ -28,7 +29,8 @@
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "checked-out": "Uitgechecked",
-        "not-checked-out": "Niet uitgechecked"
+        "not-checked-out": "Niet uitgechecked",
+        "checkout-mode": "Uitcheckmodus"
     }
 }
 </i18n>
@@ -122,13 +124,17 @@
                     <template #head(period-entry)>
                         <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
                         <div class="selected-period-controls" style="justify-content: space-between">
-                            <div class="u-flex">
-                                <button class="" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false"
-                                        :style="{background: !checkoutMode ? 'hsl(205, 20%, 71%)' : 'none', color: !checkoutMode ? 'white' : '#5a7287'}"
-                                        style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;">In</button>
-                                <button class="" :class="{'is-active': checkoutMode}" @click="checkoutMode = true"
-                                        :style="{background: !!checkoutMode ? 'hsl(205, 20%, 71%)' : 'none',  color: checkoutMode ? 'white' : '#5a7287'}"
-                                        style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-left: none;border-top-left-radius: 0;border-bottom-left-radius: 0;">Uit</button>
+                            <div class="onoffswitch mod-checkout" style="display: block;">
+                                <input type="checkbox" id="onoffswitch-checkout" class="onoffswitch-checkbox"
+                                       :checked="checkoutMode"
+                                       @input="checkoutMode = !checkoutMode">
+                                <label class="onoffswitch-label mod-checkout" for="onoffswitch-checkout">
+                                    <span class="onoffswitch-inner">
+                                        <span class="onoffswitch-inner-before mod-checkout mod-choice">{{ $t('checkout-mode') }}</span>
+                                        <span class="onoffswitch-inner-after mod-checkout mod-choice">{{ $t('checkout-mode') }}</span>
+                                    </span>
+                                    <span class="onoffswitch-switch mod-checkout"></span>
+                                </label>
                             </div>
                             <div class="u-flex u-gap-small" style="align-items: baseline">
                                 <div style="width: 15px">
@@ -148,7 +154,6 @@
                         </div>
                         <template v-else>
                             <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
-                                <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
                                 <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
                                        :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
                                         @input="toggleCheckout(item)">
@@ -157,7 +162,7 @@
                                         <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
                                         <span class="onoffswitch-inner-after mod-checkout">{{ $t('not-checked-out') }}</span>
                                     </span>
-                                    <span class="onoffswitch-switch mod-evaluation"></span>
+                                    <span class="onoffswitch-switch mod-checkout"></span>
                                 </label>
                             </div>
                             <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
@@ -415,7 +420,7 @@ export default class Entry extends Vue {
     }
 
     get fields() {
-        let periods: any = this.periods.map(period => {
+        const periods = this.periods.map(period => {
             const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
             const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
             return {key, sortable: false, label: period.label, variant};
