@@ -4,14 +4,14 @@
         "new-presence-status": "New presence status",
         "label": "Label",
         "title": "Title",
-        "aliasses": "Maps to",
+        "aliasses": "Corresponds to",
         "color": "Color"
     },
     "nl": {
         "new-presence-status": "Nieuwe aanwezigheidsstatus",
         "label": "Label",
         "title": "Titel",
-        "aliasses": "Mapt naar",
+        "aliasses": "Komt overeen met",
         "color": "Kleur"
     }
 }
