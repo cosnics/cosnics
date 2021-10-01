@@ -46,138 +46,141 @@
                 </div>
             </div>
         </div>
-        <div class="u-flex" style="flex-direction: row-reverse; gap: 8px">
-            <div v-if="canEditPresence && !creatingNew" :style="selectedPeriod ? 'margin-top: 15px' : 'margin-top: 12px'">
-                <a style="cursor: pointer; text-decoration: none" @click="createResultPeriod('')"><i aria-hidden="true" class="fa fa-plus"></i> {{ $t('new-period') }}</a>
-            </div>
-            <div>
-                <div style="position: relative">
-                    <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
-                             :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
-                             :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
-                        <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
-                            <col>
-                            <col>
-                            <template v-for="period in periodsReversed">
-                                <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
-                                <col v-else>
-                            </template>
+        <div>
+            <div style="position: relative">
+                <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
+                         :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
+                         :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
+                    <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
+                        <col>
+                        <col>
+                        <col v-if="canEditPresence && !creatingNew">
+                        <template v-for="period in periodsReversed">
+                            <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
+                            <col v-else>
                         </template>
-                        <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
-                            <col>
-                            <col>
-                            <col style="border: 1px double #8ea4b3">
-                            <col v-for="period in periodsReversed">
-                        </template>
-                        <template #head(fullname) v-if="canEditPresence">
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
-                        </template>
-                        <template #head(fullname) v-else>Student</template>
-                        <template #foot(fullname)><span></span></template>
-                        <template #head(official_code) v-if="canEditPresence">
-                            <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
-                        </template>
-                        <template #head(official_code) v-else>{{ $t('official-code') }}</template>
-                        <template #foot(official_code)><span></span></template>
-                        <template #cell(fullname)="{item}">
-                            {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
-                        </template>
-                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-                            <div v-if="canEditPresence" role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
-                                <span v-if="label">{{ label }}</span>
-                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                    </template>
+                    <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
+                        <col>
+                        <col>
+                        <col v-if="canEditPresence && !creatingNew">
+                        <col style="border: 1px double #8ea4b3">
+                        <col v-for="period in periodsReversed">
+                    </template>
+                    <template #head(fullname) v-if="canEditPresence">
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
+                    </template>
+                    <template #head(fullname) v-else>Student</template>
+                    <template #foot(fullname)><span></span></template>
+                    <template #head(official_code) v-if="canEditPresence">
+                        <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
+                    </template>
+                    <template #head(official_code) v-else>{{ $t('official-code') }}</template>
+                    <template #head(new_period)>
+                        <div role="button" tabindex="0" class="select-period-btn" style="padding: 2px 4px 0" @keyup.enter="createResultPeriod('')" @click="createResultPeriod('')" :title="$t('new-period')">
+                            <i aria-hidden="true" class="fa fa-plus" style="color: #337ab7"></i> <span class="sr-only">{{ $t('new-period') }}</span>
+                        </div>
+                    </template>
+                    <template #foot(new_period)><span></span></template>
+                    <template #foot(official_code)><span></span></template>
+                    <template #cell(fullname)="{item}">
+                        {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
+                    </template>
+                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
+                        <div v-if="canEditPresence" role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
+                            <span v-if="label">{{ label }}</span>
+                            <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                        </div>
+                        <div v-else class="u-txt-truncate" style="font-weight: 400; text-align: center">
+                            <span v-if="label">{{ label }}</span>
+                            <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                        </div>
+                    </template>
+                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
+                        <div class="result-wrap">
+                            <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']" style="cursor: default">
+                                <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
                             </div>
-                            <div v-else class="u-txt-truncate" style="font-weight: 400; text-align: center">
-                                <span v-if="label">{{ label }}</span>
-                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                        </div>
+                    </template>
+                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
+                    <template #head(period-entry-plh)>
+                        <div class="u-flex u-gap-small" style="align-items:center">
+                            <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" style="font-weight: normal;height:30px;padding:6px;background:none;font-style: italic; pointer-events:none;box-shadow:none;border-color: #e9eaea;"></b-input>
+                            <div v-if="isSaving" style="width: 15px">
+                                <div class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             </div>
-                        </template>
-                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
-                            <div class="result-wrap">
-                                <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']" style="cursor: default">
-                                    <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
-                                </div>
+                        </div>
+                    </template>
+                    <template #cell(period-entry-plh)>
+                        <div class="u-flex u-gap-small u-flex-wrap" style="pointer-events: none">
+                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code" style="opacity: .42"
+                                    :class="[status.color]"><span>{{ status.code }}</span></button>
+                        </div>
+                    </template>
+                    <template #head(period-entry)>
+                        <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
+                        <div class="selected-period-controls" style="justify-content: space-between">
+                            <div class="u-flex">
+                                <button class="" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false"
+                                        :style="{background: !checkoutMode ? 'hsl(205, 20%, 71%)' : 'none', color: !checkoutMode ? 'white' : '#5a7287'}"
+                                        style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;">In</button>
+                                <button class="" :class="{'is-active': checkoutMode}" @click="checkoutMode = true"
+                                        :style="{background: !!checkoutMode ? 'hsl(205, 20%, 71%)' : 'none',  color: checkoutMode ? 'white' : '#5a7287'}"
+                                        style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-left: none;border-top-left-radius: 0;border-bottom-left-radius: 0;">Uit</button>
                             </div>
-                        </template>
-                        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
-                        <template #head(period-entry-plh)>
-                            <div>
-                                <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" style="font-weight: normal;height:30px;padding:6px;background:none;font-style: italic; pointer-events:none;box-shadow:none;border-color: #e9eaea;"></b-input>
+                            <div class="u-flex u-gap-small" style="align-items: baseline">
                                 <div style="width: 15px">
                                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                                 </div>
+                                <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
+                            </div>
+                        </div>
+                    </template>
+                    <template #cell(period-entry)="{item}">
+                        <div v-if="!checkoutMode" class="u-flex u-gap-small u-flex-wrap">
+                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
+                                    :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
+                                    :title="getPresenceStatusTitle(status)"
+                                    @click="!hasSelectedStudentStatus(item, status.id) ? setSelectedStudentStatus(item, status.id) : null"
+                                    :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
+                        </div>
+                        <template v-else>
+                            <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
+                                <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
+                                <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
+                                       :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
+                                        @input="toggleCheckout(item)">
+                                <label class="onoffswitch-label mod-checkout" :for="`onoffswitch-${item.id}`">
+                                    <span class="onoffswitch-inner">
+                                        <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
+                                        <span class="onoffswitch-inner-after mod-checkout">{{ $t('not-checked-out') }}</span>
+                                    </span>
+                                    <span class="onoffswitch-switch mod-evaluation"></span>
+                                </label>
+                            </div>
+                            <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
+                                <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
                             </div>
                         </template>
-                        <template #cell(period-entry-plh)>
-                            <div class="u-flex u-gap-small u-flex-wrap" style="pointer-events: none">
-                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code"
-                                        :class="[status.color]"><span>{{ status.code }}</span></button>
-                            </div>
-                        </template>
-                        <template #head(period-entry)>
-                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
-                            <div class="selected-period-controls" style="justify-content: space-between">
-                                <div class="u-flex">
-                                    <button class="" :class="{'is-active': !checkoutMode}" @click="checkoutMode = false"
-                                            :style="{background: !checkoutMode ? 'hsl(205, 20%, 71%)' : 'none', color: !checkoutMode ? 'white' : '#5a7287'}"
-                                            style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;">In</button>
-                                    <button class="" :class="{'is-active': checkoutMode}" @click="checkoutMode = true"
-                                            :style="{background: !!checkoutMode ? 'hsl(205, 20%, 71%)' : 'none',  color: checkoutMode ? 'white' : '#5a7287'}"
-                                            style="font-size: 12px;line-height: 1.5;border-radius: 3px;padding: 0 6px;background: none;border: 1px solid hsl(205, 20%, 71%);border-left: none;border-top-left-radius: 0;border-bottom-left-radius: 0;">Uit</button>
-                                </div>
-                                <div class="u-flex u-gap-small" style="align-items: baseline">
-                                    <div style="width: 15px">
-                                        <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                                    </div>
-                                    <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
-                                </div>
-                            </div>
-                        </template>
-                        <template #cell(period-entry)="{item}">
-                            <div v-if="!checkoutMode" class="u-flex u-gap-small u-flex-wrap">
-                                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
-                                        :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
-                                        :title="getPresenceStatusTitle(status)"
-                                        @click="!hasSelectedStudentStatus(item, status.id) ? setSelectedStudentStatus(item, status.id) : null"
-                                        :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
-                            </div>
-                            <template v-else>
-                                <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
-                                    <!--{{item[`period#${selectedPeriod.id}-checked_in_date`]}}-->
-                                    <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
-                                           :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
-                                            @input="toggleCheckout(item)">
-                                    <label class="onoffswitch-label mod-checkout" :for="`onoffswitch-${item.id}`">
-                                        <span class="onoffswitch-inner">
-                                            <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
-                                            <span class="onoffswitch-inner-after mod-checkout">{{ $t('not-checked-out') }}</span>
-                                        </span>
-                                        <span class="onoffswitch-switch mod-evaluation"></span>
-                                    </label>
-                                </div>
-                                <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
-                                    <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
-                                </div>
-                            </template>
-                        </template>
-                        <template #foot(period-entry)>
-                            <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
-                        </template>
-                    </b-table>
-                    <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
-                </div>
-                <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
-                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                                  aria-controls="data-table"></b-pagination>
-                    <ul class="pagination">
-                        <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
-                    </ul>
-                </div>
-                <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
-                    <span v-if="errorData.code === 500">{{ errorData.message }}</span>
-                    <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
-                </div>
+                    </template>
+                    <template #foot(period-entry)>
+                        <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
+                    </template>
+                </b-table>
+                <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+            </div>
+            <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
+                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                              aria-controls="data-table"></b-pagination>
+                <ul class="pagination">
+                    <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
+                </ul>
+            </div>
+            <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
+                <span v-if="errorData.code === 500">{{ errorData.message }}</span>
+                <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
         </div>
     </div>
@@ -417,11 +420,12 @@ export default class Entry extends Vue {
             const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
             return {key, sortable: false, label: period.label, variant};
         });
-        periods = this.creatingNew ? [...periods, {key: 'period-entry-plh', sortable: false, variant: 'period'}] : periods;
         periods.reverse();
         return [
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
+            this.canEditPresence && !this.creatingNew ? {key: 'new_period', sortable: false, label: ''} : null,
+            this.creatingNew ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
             ...periods
         ];
     }
