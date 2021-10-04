@@ -215,7 +215,7 @@ class EntityRepository
                 new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_EVALUATION_ID)
             )));
 
-            $joins->add(new Join(Evaluation::class, new EqualityCondition(
+            $joins->add(new Join(Rubric::class, new EqualityCondition(
                 new PropertyConditionVariable(Evaluation::class_name(), Evaluation::PROPERTY_RUBRIC_ID),
                 new PropertyConditionVariable(Rubric::class_name(), Rubric::PROPERTY_ID)
             )));
