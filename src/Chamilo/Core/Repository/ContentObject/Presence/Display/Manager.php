@@ -6,6 +6,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;*/
 
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
@@ -31,6 +32,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     const DEFAULT_ACTION = 'Browser';
 
     const ACTION_AJAX = 'Ajax';
+    const ACTION_EXPORT = 'Export';
+
     const ACTION_USER_PRESENCES = 'UserPresences';
 
     /**
@@ -65,6 +68,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $this->rightsService;
+    }
+
+    /**
+     * @return ExportService
+     */
+    protected function getExportService(): ExportService
+    {
+        return $this->getService(ExportService::class);
     }
 
     /**

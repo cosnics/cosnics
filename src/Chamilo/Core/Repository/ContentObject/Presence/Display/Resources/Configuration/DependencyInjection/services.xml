@@ -5,5 +5,6 @@
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService" autowire="true" />
     </services>
 </container>

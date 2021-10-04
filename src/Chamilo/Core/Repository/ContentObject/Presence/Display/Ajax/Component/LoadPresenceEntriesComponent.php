@@ -23,11 +23,6 @@ class LoadPresenceEntriesComponent extends Manager
         {
             $presence = $this->getPresence();
 
-            if (!$presence instanceof Presence)
-            {
-                $this->throwUserException('PresenceNotFound');
-            }
-
             $canUserEditPresence = $this->canUserEditPresence();
 
             if ($canUserEditPresence)
