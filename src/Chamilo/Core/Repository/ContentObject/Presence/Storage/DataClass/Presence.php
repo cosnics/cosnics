@@ -15,6 +15,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class Presence extends ContentObject implements Versionable
 {
     const PROPERTY_OPTIONS = 'options';
+    const PROPERTY_HAS_CHECKOUT = 'has_checkout';
 
     const FIXED_STATUS_DEFAULTS_EN = '[{"id": 1, "type": "fixed", "title": "Absent"},{"id": 2, "type": "fixed", "title": "Authorized absent"},{"id": 3, "type": "fixed", "title": "Present"},{"id": 4, "type": "semifixed", "title": "Online present", "aliasses": 3}]';
     const FIXED_STATUS_DEFAULTS_NL = '[{"id": 1, "type": "fixed", "title": "Afwezig"},{"id": 2, "type": "fixed", "title": "Gewettigd afwezig"},{"id": 3, "type": "fixed", "title": "Aanwezig"},{"id": 4, "type": "semifixed", "title": "Online aanwezig", "aliasses": 3}]';
@@ -39,6 +40,7 @@ class Presence extends ContentObject implements Versionable
     {
         $propertyNames = parent::get_additional_property_names();
         $propertyNames[] = self::PROPERTY_OPTIONS;
+        $propertyNames[] = self::PROPERTY_HAS_CHECKOUT;
         return $propertyNames;
     }
 
@@ -58,6 +60,25 @@ class Presence extends ContentObject implements Versionable
     public function setOptions(string $options): Presence
     {
         $this->set_additional_property(self::PROPERTY_OPTIONS, $options);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCheckout(): bool
+    {
+        return $this->get_additional_property(self::PROPERTY_HAS_CHECKOUT);
+    }
+
+    /**
+     * @param bool $hasCheckout
+     *
+     * @return $this
+     */
+    public function setHasCheckout(bool $hasCheckout): Presence
+    {
+        $this->set_additional_property(self::PROPERTY_HAS_CHECKOUT, $hasCheckout);
         return $this;
     }
 }

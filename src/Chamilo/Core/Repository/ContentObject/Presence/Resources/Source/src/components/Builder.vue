@@ -5,14 +5,18 @@
         "label": "Label",
         "title": "Title",
         "aliasses": "Corresponds to",
-        "color": "Color"
+        "color": "Color",
+        "checkout": "Checkout possible",
+        "no-checkout": "No checkout"
     },
     "nl": {
         "new-presence-status": "Nieuwe aanwezigheidsstatus",
         "label": "Label",
         "title": "Titel",
         "aliasses": "Komt overeen met",
-        "color": "Kleur"
+        "color": "Kleur",
+        "checkout": "Checkout mogelijk",
+        "no-checkout": "Geen checkout"
     }
 }
 </i18n>
@@ -83,6 +87,20 @@
         <div style="margin: 8px 0 0 8px" v-if="!createNew">
             <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                 {{ $t('new-presence-status') }}</a>
+        </div>
+        <div style="margin: 10px 0 0 10px">
+            <div class="onoffswitch" style="display: block;width:136px">
+                <input type="checkbox" id="onoffswitch-allow-checkout" class="onoffswitch-checkbox"
+                       :checked="presence.has_checkout"
+                       @input="presence.has_checkout = !presence.has_checkout">
+                <label class="onoffswitch-label mod-checkout-choice" for="onoffswitch-allow-checkout">
+                    <span class="onoffswitch-inner">
+                        <span class="onoffswitch-inner-before mod-checkout-choice">{{ $t('checkout') }}</span>
+                        <span class="onoffswitch-inner-after mod-checkout-choice">{{ $t('no-checkout') }}</span>
+                    </span>
+                    <span class="onoffswitch-switch mod-checkout-choice"></span>
+                </label>
+            </div>
         </div>
         <error-display v-if="errorData" :error-data="errorData" style="margin: 10px 0 0 0; max-width: 85ch" />
         <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" style="margin: 16px 0 0 8px" />
@@ -297,7 +315,7 @@ export default class Builder extends Vue {
         if (!this.presence) { return; }
         if (this.hasEmptyFields()) { return; }
         this.setError(null);
-        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, (data: any) => {
+        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, this.presence.has_checkout, (data: any) => {
             if (data?.status === 'ok') {
                 this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
             }

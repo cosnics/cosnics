@@ -38,7 +38,7 @@ class UpdatePresenceComponent extends Manager implements CsrfComponentInterface
             }
 
             $this->getPresenceValidationService()->validateStatuses($presence, $data['statuses']);
-            $this->getPresenceService()->setPresenceOptions($presence, $data['statuses']);
+            $this->getPresenceService()->setPresenceOptions($presence, $data['statuses'], $data['has_checkout']);
 
             return new JsonResponse($this->serialize(['status' => 'ok']), 200, [], true);
         }

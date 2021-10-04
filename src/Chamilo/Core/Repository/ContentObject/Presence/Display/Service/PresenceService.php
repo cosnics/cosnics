@@ -254,13 +254,16 @@ class PresenceService
     /**
      * @param Presence $presence
      * @param array $options
+     * @param bool $hasCheckout
+     *
      * @throws \Exception
      */
-    public function setPresenceOptions(Presence $presence, array $options)
+    public function setPresenceOptions(Presence $presence, array $options, bool $hasCheckout = false)
     {
         $context = new SerializationContext();
         $context->setSerializeNull(true);
         $presence->setOptions($this->serializer->serialize($options, 'json', $context));
+        $presence->setHasCheckout($hasCheckout);
         $presence->update();
     }
 

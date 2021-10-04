@@ -31,7 +31,8 @@ class LoadPresenceComponent extends Manager
                 'presence' => [
                     'id' => (int) $presence->getId(),
                     'title' => $presence->get_title(),
-                    'statuses' => $this->deserialize($presence->getOptions())
+                    'statuses' => $this->deserialize($presence->getOptions()),
+                    'has_checkout' => $presence->hasCheckout()
                 ]
             ];
             return new JsonResponse($this->serialize($resultData), 200, [], true);
