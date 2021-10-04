@@ -128,7 +128,7 @@
                                 <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             </div>
                         </div>
-                        <div v-if="presence.has_checkout" class="selected-period-controls">
+                        <div v-if="presence && presence.has_checkout" class="selected-period-controls">
                             <div class="onoffswitch mod-checkout-choice" style="display: block;">
                                 <input type="checkbox" id="onoffswitch-checkout" class="onoffswitch-checkbox"
                                        :checked="checkoutMode"
@@ -145,7 +145,7 @@
                         <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                     </template>
                     <template #cell(period-entry)="{item}">
-                        <template v-if="presence.has_checkout && checkoutMode">
+                        <template v-if="presence && presence.has_checkout && checkoutMode">
                             <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
                                 <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
                                        :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
