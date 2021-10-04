@@ -12,6 +12,7 @@ class EvaluationEntryRubricResult extends DataClass
 {
     const PROPERTY_CONTEXT_CLASS = 'context_class';
     const PROPERTY_CONTEXT_ID = 'context_id';
+    const PROPERTY_RUBRIC_DATA_ID = 'rubric_data_id';
 
     /**
      * Get the default properties
@@ -23,7 +24,8 @@ class EvaluationEntryRubricResult extends DataClass
         return parent::get_default_property_names(
             array(
                 self::PROPERTY_CONTEXT_CLASS,
-                self::PROPERTY_CONTEXT_ID
+                self::PROPERTY_CONTEXT_ID,
+                self::PROPERTY_RUBRIC_DATA_ID
             )
         );
     }
