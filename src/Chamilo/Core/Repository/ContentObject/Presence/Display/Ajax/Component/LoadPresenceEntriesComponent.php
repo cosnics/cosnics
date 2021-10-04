@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -78,6 +80,19 @@ class LoadPresenceEntriesComponent extends Manager
                         $users[$index] = $user;
                     }
                 }
+            }
+
+            foreach ($users as $index => $user)
+            {
+                $profilePhotoUrl = new Redirect(
+                    array(
+                        Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                        Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                        \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $user['id']
+                    )
+                );
+                $user['photo'] = $profilePhotoUrl->getUrl();
+                $users[$index] = $user;
             }
 
             $resultData = ['students' => $users, 'periods' => $periods, 'last' => (int) end($periods)['id']];

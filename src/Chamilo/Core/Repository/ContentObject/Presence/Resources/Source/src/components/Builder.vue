@@ -438,6 +438,19 @@ td.table-period {
     min-width: 136px;
 }
 
+.table.mod-entry td.table-photo {
+    padding: 0;
+}
+
+.table-photo img {
+    max-height: 40px;
+    max-width: 40px;
+}
+/*.table-photo img:hover {
+    max-height: 100px;
+    max-width: 100px;
+}*/
+
 .table-period .color-code.mod-selectable {
     opacity: .42;
 }

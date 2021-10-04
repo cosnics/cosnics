@@ -59,7 +59,7 @@
                          :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                          :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
                     <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
-                        <!--<col>-->
+                        <col>
                         <col>
                         <col>
                         <col v-if="canEditPresence && !creatingNew">
@@ -69,16 +69,16 @@
                         </template>
                     </template>
                     <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
-                        <!--<col>-->
+                        <col>
                         <col>
                         <col>
                         <col v-if="canEditPresence && !creatingNew">
                         <col style="border: 1px double #8ea4b3">
                         <col v-for="period in periodsReversed">
                     </template>
-                    <!--<template #cell(photo)>
-                        <img src="http://cosnics.local.hogent.be/index.php?application=Chamilo%5CCore%5CUser%5CAjax&amp;go=UserPicture&amp;user_id=2" style="max-width: 32px;max-height:32px">
-                    </template>-->
+                    <template #cell(photo)="{item}">
+                        <img :src="item.photo">
+                    </template>
                     <template #head(fullname) v-if="canEditPresence">
                         <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
                         <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
@@ -437,7 +437,7 @@ export default class Entry extends Vue {
         });
         periods.reverse();
         return [
-            /*{key: 'photo', sortable: false, label: ''},*/
+            {key: 'photo', sortable: false, label: '', variant: 'photo'},
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
             this.canEditPresence && !this.creatingNew ? {key: 'new_period', sortable: false, label: ''} : null,
