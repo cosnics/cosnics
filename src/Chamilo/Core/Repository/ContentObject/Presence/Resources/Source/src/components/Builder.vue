@@ -417,7 +417,7 @@ export default class Builder extends Vue {
 }
 
 .color {
-    height: 16px;
+    height: 18px;
     width: 40px;
 }
 
@@ -444,12 +444,7 @@ td.table-period {
 
 .table-photo img {
     max-height: 40px;
-    max-width: 40px;
 }
-/*.table-photo img:hover {
-    max-height: 100px;
-    max-width: 100px;
-}*/
 
 .table-period .color-code.mod-selectable {
     opacity: .42;
@@ -493,9 +488,9 @@ td.table-period {
 
 .color-code {
     display: flex;
-    height: 20px;
+    height: 24px;
     min-width: 40px;
-    padding: 2px 4px;
+    padding: 4px;
     justify-content: center;
 }
 
