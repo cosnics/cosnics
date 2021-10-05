@@ -85,23 +85,24 @@ class CourseCopier implements CourseCopierInterface
     {
         foreach ($selectedContentObjectPublicationIds as $publicationId)
         {
-            $contentObjectPublication = $this->courseCopierRepository->findContentObjectPublicationById($publicationId);
-
-            $publicationExtension = $this->courseCopierRepository->findContentObjectPublicationExtension(
-                $contentObjectPublication
-            );
-
-            if (!$publicationExtension instanceof DataClass)
+            try
             {
-                $publicationExtension = null;
-            }
+                $contentObjectPublication =
+                    $this->courseCopierRepository->findContentObjectPublicationById($publicationId);
 
-            $parentId = $contentObjectPublication->get_category_id();
-            $oldId = $contentObjectPublication->getId();
+                $publicationExtension = $this->courseCopierRepository->findContentObjectPublicationExtension(
+                    $contentObjectPublication
+                );
 
-            foreach ($targetCourseIds as $courseId)
-            {
-                try
+                if (!$publicationExtension instanceof DataClass)
+                {
+                    $publicationExtension = null;
+                }
+
+                $parentId = $contentObjectPublication->get_category_id();
+                $oldId = $contentObjectPublication->getId();
+
+                foreach ($targetCourseIds as $courseId)
                 {
                     $this->copyContentObjectPublicationToCourse(
                         $contentObjectPublication,
@@ -112,9 +113,9 @@ class CourseCopier implements CourseCopierInterface
                         $categoryIdMapping
                     );
                 }
-                catch (\Exception $ex)
-                {
-                }
+            }
+            catch (\Exception $ex)
+            {
             }
         }
     }
