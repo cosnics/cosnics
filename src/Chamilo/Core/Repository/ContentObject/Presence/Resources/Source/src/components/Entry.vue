@@ -62,7 +62,7 @@
                         <col>
                         <col>
                         <col>
-                        <col v-if="canEditPresence && !creatingNew">
+                        <col v-if="!creatingNew">
                         <template v-for="period in periodsReversed">
                             <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
                             <col v-else>
@@ -72,11 +72,11 @@
                         <col>
                         <col>
                         <col>
-                        <col v-if="canEditPresence && !creatingNew">
+                        <col v-if="!creatingNew">
                         <col style="border: 1px double #8ea4b3">
                         <col v-for="period in periodsReversed">
                     </template>
-                    <template #cell(photo)="{item}">
+                    <template #cell(photo)="{item}" v-if="canEditPresence">
                         <img :src="item.photo">
                     </template>
                     <template #head(fullname) v-if="canEditPresence">
@@ -437,7 +437,7 @@ export default class Entry extends Vue {
         });
         periods.reverse();
         return [
-            {key: 'photo', sortable: false, label: '', variant: 'photo'},
+            this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
             this.canEditPresence && !this.creatingNew ? {key: 'new_period', sortable: false, label: ''} : null,
