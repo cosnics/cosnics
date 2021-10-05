@@ -820,6 +820,10 @@ td.table-period {
     width: 1px;
 }*/
 
+.table.mod-entry {
+    width: max-content;
+}
+
 .table.mod-entry tfoot tr {
     border: 1px solid transparent;
 }

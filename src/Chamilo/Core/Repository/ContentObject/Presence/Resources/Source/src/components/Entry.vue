@@ -15,7 +15,8 @@
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
-        "export": "Export"
+        "export": "Export",
+        "legend": "Legend"
     },
     "nl": {
         "search": "Zoeken",
@@ -32,7 +33,8 @@
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
-        "export": "Exporteer"
+        "export": "Exporteer",
+        "legend": "Legende"
     }
 }
 </i18n>
@@ -55,6 +57,13 @@
         </div>
         <div>
             <div style="position: relative">
+                <div v-if="!canEditPresence" class="u-flex" style="align-items: baseline; gap: 15px; margin: 20px 8px 15px;">
+                    <span style="color: #507177">{{ $t('legend') }}:</span>
+                    <div v-for="status in presenceStatuses" class="u-flex" style="align-items: baseline; gap: 5px">
+                        <div class="color-code" :class="[status.color]" style="padding: 2px 4px; height: 20px;"><span>{{status.code}}</span></div>
+                        <span>{{ getPresenceStatusTitle(status) }}</span>
+                    </div>
+                </div>
                 <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                          :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                          :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
