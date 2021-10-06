@@ -89,18 +89,9 @@
                 {{ $t('new-presence-status') }}</a>
         </div>
         <div style="margin: 10px 0 0 10px">
-            <div class="onoffswitch" style="display: block;width:136px">
-                <input type="checkbox" id="onoffswitch-allow-checkout" class="onoffswitch-checkbox"
-                       :checked="presence.has_checkout"
-                       @input="presence.has_checkout = !presence.has_checkout">
-                <label class="onoffswitch-label mod-checkout-choice" for="onoffswitch-allow-checkout">
-                    <span class="onoffswitch-inner">
-                        <span class="onoffswitch-inner-before mod-checkout-choice">{{ $t('checkout') }}</span>
-                        <span class="onoffswitch-inner-after mod-checkout-choice">{{ $t('no-checkout') }}</span>
-                    </span>
-                    <span class="onoffswitch-switch mod-checkout-choice"></span>
-                </label>
-            </div>
+            <on-off-switch id="allow-checkout" :checked="presence.has_checkout" :on-text="$t('checkout')" :off-text="$t('no-checkout')"
+                           switch-class="mod-checkout-choice" style="width: 136px"
+                           @toggle="presence.has_checkout = !presence.has_checkout"/>
         </div>
         <error-display v-if="errorData" :error-data="errorData" style="margin: 10px 0 0 0; max-width: 85ch" />
         <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" style="margin: 16px 0 0 8px" />
@@ -120,13 +111,14 @@ import NewStatusControls from './builder/NewStatusControls.vue';
 import SelectionPreview from './builder/SelectionPreview.vue';
 import SaveControl from './builder/SaveControl.vue';
 import ErrorDisplay from './builder/ErrorDisplay.vue';
+import OnOffSwitch from './OnOffSwitch.vue';
 
 const DEFAULT_COLOR_NEW = 'yellow-100';
 const CONFLICT_ERRORS = ['PresenceStatusMissing', 'InvalidType', 'NoTitleGiven', 'TitleUpdateForbidden', 'InvalidAlias', 'AliasUpdateForbidden', 'NoCodeGiven', 'NoColorGiven', 'InvalidColor'];
 
 @Component({
     components: {
-        TitleControl, AliasControl, ColorControl, SelectionControls, NewStatusControls, SelectionPreview, SaveControl, ErrorDisplay
+        OnOffSwitch, TitleControl, AliasControl, ColorControl, SelectionControls, NewStatusControls, SelectionPreview, SaveControl, ErrorDisplay
     }
 })
 export default class Builder extends Vue {

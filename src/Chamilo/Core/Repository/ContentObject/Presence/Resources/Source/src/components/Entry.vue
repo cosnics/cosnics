@@ -1,7 +1,6 @@
 <i18n>
 {
     "en": {
-        "search": "Find",
         "last-name": "Last name",
         "first-name": "First name",
         "official-code": "Official code",
@@ -19,7 +18,6 @@
         "legend": "Legend"
     },
     "nl": {
-        "search": "Zoeken",
         "last-name": "Familienaam",
         "first-name": "Voornaam",
         "official-code": "Officiële code",
@@ -42,15 +40,7 @@
 <template>
     <div>
         <div v-if="canEditPresence" class="u-flex" style="margin-bottom: 15px; max-width: fit-content; align-items: center; gap: 15px">
-            <div class="action-bar input-group">
-                <b-form-input class="form-group action-bar-search" v-model="globalSearchQuery" @input="onFilterChanged"
-                              type="text" :placeholder="$t('search')" debounce="750" autocomplete="off" style="box-shadow: none"></b-form-input>
-                <div class="input-group-btn">
-                    <button name="clear" class="btn btn-default" value="clear" @click="onFilterCleared">
-                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                    </button>
-                </div>
-            </div>
+            <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div>
                 <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
             </div>
@@ -59,31 +49,21 @@
             <div style="position: relative">
                 <div v-if="!canEditPresence" class="u-flex" style="align-items: baseline; gap: 15px; margin: 20px 8px 15px;">
                     <span style="color: #507177">{{ $t('legend') }}:</span>
-                    <div v-for="status in presenceStatuses" class="u-flex" style="align-items: baseline; gap: 5px">
-                        <div class="color-code" :class="[status.color]" style="padding: 2px 4px; height: 20px;"><span>{{status.code}}</span></div>
-                        <span>{{ getPresenceStatusTitle(status) }}</span>
-                    </div>
+                    <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
                 <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
                          :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
                          :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
-                    <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
+                    <template slot="table-colgroup" v-if="canEditPresence">
                         <col>
                         <col>
                         <col>
-                        <col v-if="!creatingNew">
-                        <template v-for="period in periodsReversed">
-                            <col v-if="period === selectedPeriod" style="border: 1px double #8ea4b3">
+                        <col v-if="!!selectedPeriod && !creatingNew">
+                        <col v-else-if="creatingNew" style="border: 1px double #8ea4b3">
+                        <template v-if="!!selectedPeriod || creatingNew" v-for="period in periodsReversed">
+                            <col v-if="!creatingNew && period === selectedPeriod" style="border: 1px double #8ea4b3">
                             <col v-else>
                         </template>
-                    </template>
-                    <template slot="table-colgroup" v-else-if="canEditPresence && creatingNew">
-                        <col>
-                        <col>
-                        <col>
-                        <col v-if="!creatingNew">
-                        <col style="border: 1px double #8ea4b3">
-                        <col v-for="period in periodsReversed">
                     </template>
                     <template #cell(photo)="{item}" v-if="canEditPresence">
                         <img :src="item.photo">
@@ -109,14 +89,12 @@
                         {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
                     </template>
                     <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-                        <div v-if="canEditPresence" role="button" tabindex="0" @keyup.enter="setSelectedPeriod(fieldKey.id)" @click="setSelectedPeriod(fieldKey.id)" class="select-period-btn u-txt-truncate" :title="label">
-                            <span v-if="label">{{ label }}</span>
-                            <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
-                        </div>
-                        <div v-else class="u-txt-truncate" style="font-weight: 400; text-align: center">
-                            <span v-if="label">{{ label }}</span>
-                            <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
-                        </div>
+                        <dynamic-field-key :is-editable="canEditPresence" @select="setSelectedPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
+                            <template v-slot>
+                                <span v-if="label">{{ label }}</span>
+                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                            </template>
+                        </dynamic-field-key>
                     </template>
                     <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
                         <div class="result-wrap">
@@ -148,35 +126,19 @@
                             </div>
                         </div>
                         <div v-if="presence && presence.has_checkout" class="selected-period-controls">
-                            <div class="onoffswitch mod-checkout-choice" style="display: block;">
-                                <input type="checkbox" id="onoffswitch-checkout" class="onoffswitch-checkbox"
-                                       :checked="checkoutMode"
-                                       @input="checkoutMode = !checkoutMode">
-                                <label class="onoffswitch-label mod-checkout-choice" for="onoffswitch-checkout">
-                                    <span class="onoffswitch-inner">
-                                        <span class="onoffswitch-inner-before mod-checkout-choice">{{ $t('checkout-mode') }}</span>
-                                        <span class="onoffswitch-inner-after mod-checkout-choice">{{ $t('checkout-mode') }}</span>
-                                    </span>
-                                    <span class="onoffswitch-switch mod-checkout-choice"></span>
-                                </label>
-                            </div>
+                            <on-off-switch id="checkout" switch-class="mod-checkout-choice"
+                                           :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
+                                           @toggle="checkoutMode = !checkoutMode"/>
                         </div>
                         <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
                     </template>
                     <template #cell(period-entry)="{item}">
                         <template v-if="presence && presence.has_checkout && checkoutMode">
-                            <div v-if="item[`period#${selectedPeriod.id}-checked_in_date`]" class="onoffswitch mod-checkout" style="display: block;">
-                                <input type="checkbox" :id="`onoffswitch-${item.id}`" class="onoffswitch-checkbox"
-                                       :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
-                                       @input="toggleCheckout(item)">
-                                <label class="onoffswitch-label mod-checkout" :for="`onoffswitch-${item.id}`">
-                                    <span class="onoffswitch-inner">
-                                        <span class="onoffswitch-inner-before mod-checkout">{{ $t('checked-out') }}</span>
-                                        <span class="onoffswitch-inner-after mod-checkout">{{ $t('not-checked-out') }}</span>
-                                    </span>
-                                    <span class="onoffswitch-switch mod-checkout"></span>
-                                </label>
-                            </div>
+                            <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
+                                           :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
+                                           :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
+                                           switch-class="mod-checkout"
+                                           @toggle="toggleCheckout(item)"/>
                             <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
                                 <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
                             </div>
@@ -215,9 +177,14 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../types';
 import APIConfig from '../connect/APIConfig';
 import Connector, {ConnectorErrorListener} from '../connect/Connector';
+import LegendItem from './entry/LegendItem.vue';
+import SearchBar from './entry/SearchBar.vue';
+import DynamicFieldKey from './entry/DynamicFieldKey.vue';
+import OnOffSwitch from './OnOffSwitch.vue';
 
 @Component({
-    name: 'entry'
+    name: 'entry',
+    components: {OnOffSwitch, SearchBar, LegendItem, DynamicFieldKey}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -240,7 +207,9 @@ export default class Entry extends Vue {
         perPage: 20,
         total: 0
     };
-    globalSearchQuery = '';
+    searchOptions = {
+        globalSearchQuery: ''
+    };
     requestCount = true;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
@@ -253,6 +222,14 @@ export default class Entry extends Vue {
             this.statusDefaults = presenceData['status-defaults'];
             this.presence = presenceData.presence;
         }
+    }
+
+    get globalSearchQuery() {
+        return this.searchOptions.globalSearchQuery;
+    }
+
+    set globalSearchQuery(query: string) {
+        this.searchOptions.globalSearchQuery = query;
     }
 
     get periodsReversed() {
