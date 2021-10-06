@@ -36,7 +36,8 @@ class CreatePresencePeriodComponent extends Manager implements CsrfComponentInte
 
             return new JsonResponse($this->serialize($result), 200, [], true);
         }
-        catch (\Exception $ex) {
+        catch (\Exception $ex)
+        {
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
     }

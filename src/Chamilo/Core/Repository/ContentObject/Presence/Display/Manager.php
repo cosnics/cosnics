@@ -2,18 +2,12 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display;
 
-/*use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceInterface;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityServiceManager;
-use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\EvaluationEntryService;*/
-
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
-use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 
@@ -109,32 +103,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface
-     */
-/*    protected function getEvaluationServiceBridge()
-    {
-        return $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
-    }*/
-
-    /**
-     * @return EvaluationEntityServiceInterface
-     */
-/*    protected function getEntityService(): EvaluationEntityServiceInterface
-    {
-        /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
-/*        $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
-        return $evaluationEntityServiceManager->getEntityServiceByType($this->getEntityType());
-    }*/
-
-    /**
-     * @return EvaluationEntryService
-     */
-/*    protected function getEvaluationEntryService()
-    {
-        return $this->getService(EvaluationEntryService::class);
-    }*/
-
-    /**
      * @return PresenceServiceBridgeInterface
      */
     protected function getPresenceServiceBridge()
@@ -217,7 +185,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
      * @param string $key
      * @throws UserException
      */
-    public function throwUserException($key = "")
+    public function throwUserException(string $key = '')
     {
         throw new UserException(
             $this->getTranslator()->trans($key, [], Manager::context())
