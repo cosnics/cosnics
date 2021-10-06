@@ -26,7 +26,7 @@ class CreatePresencePeriodComponent extends Manager implements CsrfComponentInte
             $presence = $this->getPresence();
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
 
-            $presenceResultPeriod = $this->getPresenceService()->createPresenceResultPeriod($presence, $contextIdentifier);
+            $presenceResultPeriod = $this->getPresenceResultPeriodService()->createPresenceResultPeriod($presence, $contextIdentifier);
 
             $result = [
                 'status' => 'ok',

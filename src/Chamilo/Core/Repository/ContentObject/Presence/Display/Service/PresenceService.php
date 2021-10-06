@@ -3,16 +3,9 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
-use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
-use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
-use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\PresenceRepository;
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
-use http\Exception\InvalidArgumentException;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
-use DateTime;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Service
@@ -42,24 +35,8 @@ class PresenceService
     }
 
     /**
-     * @param int $presenceId
-     * @param ContextIdentifier $contextIdentifier
-     * @return array
-     */
-    public function getResultPeriodsForPresence(int $presenceId, ContextIdentifier $contextIdentifier): array
-    {
-        $periods = $this->presenceRepository->getResultPeriodsForPresence($presenceId, $contextIdentifier);
-        $periods = iterator_to_array($periods);
-        foreach ($periods as $index => $period)
-        {
-            $periods[$index]['date'] = (int)$period['date'];
-            $periods[$index]['id'] = (int)$period['id'];
-        }
-        return $periods;
-    }
-
-    /**
      * @param Presence $presence
+     *
      * @return array
      */
     public function getPresenceStatuses(Presence $presence): array
@@ -106,19 +83,9 @@ class PresenceService
     }
 
     /**
-     * @param int $presenceId
-     * @param $periodId
-     * @param ContextIdentifier $contextIdentifier
-     * @return CompositeDataClass|DataClass|false
-     */
-    public function findResultPeriodForPresence(int $presenceId, $periodId, ContextIdentifier $contextIdentifier)
-    {
-        return $this->presenceRepository->findResultPeriodForPresence($presenceId, $periodId, $contextIdentifier);
-    }
-
-    /**
      * @param Presence $presence
      * @param int $statusId
+     *
      * @return bool
      */
     public function isValidStatusId(Presence $presence, int $statusId): bool
@@ -127,99 +94,13 @@ class PresenceService
         return in_array($statusId, array_column($options, 'id'));
     }
 
-    /**
-     * @param Presence $presence
-     * @param int $periodId
-     * @param int $userId
-     * @param int $statusId
-     * @return PresenceResultEntry
-     */
-    public function createOrUpdatePresenceResultEntry(Presence $presence, int $periodId, int $userId, int $statusId): PresenceResultEntry
-    {
-        $fixedStatusId = $this->findFixedStatusId($presence, $statusId);
-        if ($fixedStatusId == -1)
-        {
-            throw new InvalidArgumentException();
-        }
-
-        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
-        if (! $presenceResultEntry instanceof PresenceResultEntry)
-        {
-            $presenceResultEntry = $this->createPresenceResultEntry($periodId, $userId);
-            $presenceResultEntry = $this->updatePresenceResultEntryFields($presenceResultEntry, $statusId, $fixedStatusId);
-            $this->presenceRepository->createPresenceResultEntry($presenceResultEntry);
-        }
-        else
-        {
-            $presenceResultEntry = $this->updatePresenceResultEntryFields($presenceResultEntry, $statusId, $fixedStatusId);
-            $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
-        }
-        return $presenceResultEntry;
-    }
-
-    /**
-     * @param int $periodId
-     * @param int $userId
-     *
-     * @return PresenceResultEntry
-     */
-    public function togglePresenceResultEntryCheckout(int $periodId, int $userId): PresenceResultEntry
-    {
-        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
-
-        if (! $presenceResultEntry instanceof PresenceResultEntry)
-        {
-            throw new InvalidArgumentException();
-        }
-
-        $checkedInDate = $presenceResultEntry->getCheckedInDate();
-        $checkedOutDate = $presenceResultEntry->getCheckedOutDate();
-
-        if ($checkedInDate > 0)
-        {
-            $isCheckedOut = $checkedOutDate > $checkedInDate;
-            $presenceResultEntry->setCheckedOutDate($isCheckedOut ? 0 : (new DateTime())->getTimestamp());
-            $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
-        }
-
-        return $presenceResultEntry;
-    }
-
-
-    /**
-     * @param int $periodId
-     * @param int $userId
-     * @return PresenceResultEntry
-     */
-    protected function createPresenceResultEntry(int $periodId, int $userId): PresenceResultEntry
-    {
-        $presenceResultEntry = new PresenceResultEntry();
-        $presenceResultEntry->setPresencePeriodId($periodId);
-        $presenceResultEntry->setUserId($userId);
-        return $presenceResultEntry;
-    }
-
-    /**
-     * @param PresenceResultEntry $presenceResultEntry
-     * @param int $statusId
-     * @param int $fixedStatusId
-     * @return PresenceResultEntry
-     */
-    protected function updatePresenceResultEntryFields(PresenceResultEntry $presenceResultEntry, int $statusId, int $fixedStatusId): PresenceResultEntry
-    {
-        $presenceResultEntry->setChoiceId($statusId);
-        $presenceResultEntry->setPresenceStatusId($fixedStatusId);
-        $presenceResultEntry->setCheckedInDate($fixedStatusId == 3 ? (new DateTime())->getTimestamp() : 0);
-        $presenceResultEntry->setCheckedOutDate(0);
-        return $presenceResultEntry;
-    }
 
     /**
      * @param Presence $presence
      * @param int $statusId
      * @return int
      */
-    protected function findFixedStatusId(Presence $presence, int $statusId): int
+    public function findFixedStatusId(Presence $presence, int $statusId): int
     {
         if (in_array($statusId, [1, 2, 3]))
         {
@@ -265,43 +146,5 @@ class PresenceService
         $presence->setOptions($this->serializer->serialize($options, 'json', $context));
         $presence->setHasCheckout($hasCheckout);
         $presence->update();
-    }
-
-    /**
-     * @param Presence $presence
-     * @param ContextIdentifier $contextIdentifier
-     * @param string $label
-     * @return PresenceResultPeriod
-     */
-    public function createPresenceResultPeriod(Presence $presence, ContextIdentifier $contextIdentifier, string $label = ''): PresenceResultPeriod
-    {
-        $presenceResultPeriod = new PresenceResultPeriod();
-        $presenceResultPeriod->setPresenceId($presence->getId());
-        $presenceResultPeriod->setLabel($label);
-        $presenceResultPeriod->setDate((new DateTime())->getTimestamp());
-        $presenceResultPeriod->setContextClass($contextIdentifier->getContextClass());
-        $presenceResultPeriod->setContextId($contextIdentifier->getContextId());
-
-        $this->presenceRepository->createPresenceResultPeriod($presenceResultPeriod);
-
-        return $presenceResultPeriod;
-    }
-
-    /**
-     * @param PresenceResultPeriod $presenceResultPeriod
-     * @param string $label
-     */
-    public function setPresencePeriodResultLabel(PresenceResultPeriod $presenceResultPeriod, string $label)
-    {
-        $presenceResultPeriod->setLabel($label);
-        $this->presenceRepository->updatePresenceResultPeriod($presenceResultPeriod);
-    }
-
-    /**
-     * @param PresenceResultPeriod $presenceResultPeriod
-     */
-    public function deletePresenceResultPeriod(PresenceResultPeriod $presenceResultPeriod)
-    {
-        $this->presenceRepository->deletePresenceResultPeriod($presenceResultPeriod);
     }
 }

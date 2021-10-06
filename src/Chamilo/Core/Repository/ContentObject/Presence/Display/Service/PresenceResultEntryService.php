@@ -2,13 +2,15 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
-use Chamilo\Libraries\Architecture\Application\Application;
-use Chamilo\Libraries\File\Redirect;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\PresenceRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParametersBuilder;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use http\Exception\InvalidArgumentException;
+use DateTime;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Service
@@ -17,6 +19,11 @@ use Chamilo\Libraries\Architecture\ContextIdentifier;
  */
 class PresenceResultEntryService
 {
+    /**
+     * @var PresenceRepository
+     */
+    protected $presenceRepository;
+
     /**
      * @var UserService
      */
@@ -33,35 +40,17 @@ class PresenceResultEntryService
     protected $filterParametersBuilder;
 
     /**
+     * @param PresenceRepository $presenceRepository
      * @param UserService $userService
      * @param PresenceService $presenceService
      * @param FilterParametersBuilder $filterParametersBuilder
      */
-    public function __construct(UserService $userService, PresenceService $presenceService, FilterParametersBuilder $filterParametersBuilder)
+    public function __construct(PresenceRepository $presenceRepository, UserService $userService, PresenceService $presenceService, FilterParametersBuilder $filterParametersBuilder)
     {
+        $this->presenceRepository = $presenceRepository;
         $this->userService = $userService;
         $this->presenceService = $presenceService;
         $this->filterParametersBuilder = $filterParametersBuilder;
-    }
-
-    /**
-     * @param Presence $presence
-     * @param ContextIdentifier $contextIdentifier
-     * @param bool $canUserEditPresence
-     * @param bool $createIfNeeded
-     *
-     * @return array
-     */
-    public function getResultPeriods(Presence $presence, ContextIdentifier $contextIdentifier, bool $canUserEditPresence, bool $createIfNeeded = false): array
-    {
-        $periods = $this->presenceService->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
-
-        if ($createIfNeeded && $canUserEditPresence && count($periods) == 0)
-        {
-            $period = $this->presenceService->createPresenceResultPeriod($presence, $contextIdentifier);
-            $periods = [['date' => $period->getDate(), 'id' => (int) $period->getId()]];
-        }
-        return $periods;
     }
 
     /**
@@ -87,6 +76,92 @@ class PresenceResultEntryService
     }
 
     /**
+     * @param Presence $presence
+     * @param int $periodId
+     * @param int $userId
+     * @param int $statusId
+     * @return PresenceResultEntry
+     */
+    public function createOrUpdatePresenceResultEntry(Presence $presence, int $periodId, int $userId, int $statusId): PresenceResultEntry
+    {
+        $fixedStatusId = $this->presenceService->findFixedStatusId($presence, $statusId);
+        if ($fixedStatusId == -1)
+        {
+            throw new InvalidArgumentException();
+        }
+
+        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
+        if (! $presenceResultEntry instanceof PresenceResultEntry)
+        {
+            $presenceResultEntry = $this->createPresenceResultEntry($periodId, $userId);
+            $presenceResultEntry = $this->updatePresenceResultEntryFields($presenceResultEntry, $statusId, $fixedStatusId);
+            $this->presenceRepository->createPresenceResultEntry($presenceResultEntry);
+        }
+        else
+        {
+            $presenceResultEntry = $this->updatePresenceResultEntryFields($presenceResultEntry, $statusId, $fixedStatusId);
+            $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
+        }
+        return $presenceResultEntry;
+    }
+
+    /**
+     * @param int $periodId
+     * @param int $userId
+     * @return PresenceResultEntry
+     */
+    protected function createPresenceResultEntry(int $periodId, int $userId): PresenceResultEntry
+    {
+        $presenceResultEntry = new PresenceResultEntry();
+        $presenceResultEntry->setPresencePeriodId($periodId);
+        $presenceResultEntry->setUserId($userId);
+        return $presenceResultEntry;
+    }
+
+    /**
+     * @param PresenceResultEntry $presenceResultEntry
+     * @param int $statusId
+     * @param int $fixedStatusId
+     * @return PresenceResultEntry
+     */
+    protected function updatePresenceResultEntryFields(PresenceResultEntry $presenceResultEntry, int $statusId, int $fixedStatusId): PresenceResultEntry
+    {
+        $presenceResultEntry->setChoiceId($statusId);
+        $presenceResultEntry->setPresenceStatusId($fixedStatusId);
+        $presenceResultEntry->setCheckedInDate($fixedStatusId == 3 ? (new DateTime())->getTimestamp() : 0);
+        $presenceResultEntry->setCheckedOutDate(0);
+        return $presenceResultEntry;
+    }
+
+    /**
+     * @param int $periodId
+     * @param int $userId
+     *
+     * @return PresenceResultEntry
+     */
+    public function togglePresenceResultEntryCheckout(int $periodId, int $userId): PresenceResultEntry
+    {
+        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
+
+        if (! $presenceResultEntry instanceof PresenceResultEntry)
+        {
+            throw new InvalidArgumentException();
+        }
+
+        $checkedInDate = $presenceResultEntry->getCheckedInDate();
+        $checkedOutDate = $presenceResultEntry->getCheckedOutDate();
+
+        if ($checkedInDate > 0)
+        {
+            $isCheckedOut = $checkedOutDate > $checkedInDate;
+            $presenceResultEntry->setCheckedOutDate($isCheckedOut ? 0 : (new DateTime())->getTimestamp());
+            $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
+        }
+
+        return $presenceResultEntry;
+    }
+
+    /**
      * @param array $user
      * @param int $periodId
      *
@@ -99,7 +174,7 @@ class PresenceResultEntryService
 
         if (!isset($user['photo']))
         {
-            $user['photo'] = $this->getProfilePhotoUrl($userId);
+            $user['photo'] = $this->userService->getProfilePhotoUrl($userId);
         }
 
         $periodStr = 'period#' . $periodId;
@@ -123,23 +198,6 @@ class PresenceResultEntryService
         }
 
         return $user;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return string
-     */
-    protected function getProfilePhotoUrl(int $userId): string
-    {
-        $profilePhotoUrl = new Redirect(
-            array(
-                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
-                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
-                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $userId
-            )
-        );
-        return $profilePhotoUrl->getUrl();
     }
 
     /**

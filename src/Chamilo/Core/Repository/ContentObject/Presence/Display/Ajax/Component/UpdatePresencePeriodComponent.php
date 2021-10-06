@@ -35,7 +35,7 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
                 throw new NotAllowedException();
             }
             $this->validatePresenceUserInput();
-            $this->getPresenceService()->setPresencePeriodResultLabel($this->presenceResultPeriod, $this->presencePeriodLabel);
+            $this->getPresenceResultPeriodService()->setPresencePeriodResultLabel($this->presenceResultPeriod, $this->presencePeriodLabel);
 
             $result = [
                 'status' => 'ok',
@@ -69,7 +69,7 @@ class UpdatePresencePeriodComponent extends Manager implements CsrfComponentInte
         $periodLabel = $this->getRequest()->getFromPostOrUrl('period_label');
 
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-        $period = $this->getPresenceService()->findResultPeriodForPresence($this->getPresence()->getId(), $periodId, $contextIdentifier);
+        $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
         if (empty($period))
         {
             $this->throwUserException('PresenceResultPeriodNotFound');

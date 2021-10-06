@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\UserRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -78,16 +80,21 @@ class UserService
     }
 
     /**
+     * @param int $userId
      *
-     * @param int[] $entityIds
-     * @param FilterParameters $filterParameters
-     *
-     * @return integer
+     * @return string
      */
-    /*public function countEntitiesFromIds(array $entityIds, FilterParameters $filterParameters): int
+    public function getProfilePhotoUrl(int $userId): string
     {
-        return $this->userRepository->countUsersFromIds($entityIds, $filterParameters);
-    }*/
+        $profilePhotoUrl = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\User\Ajax\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Core\User\Ajax\Manager::ACTION_USER_PICTURE,
+                \Chamilo\Core\User\Manager::PARAM_USER_USER_ID => $userId
+            )
+        );
+        return $profilePhotoUrl->getUrl();
+    }
 
     /**
      * @return FieldMapper

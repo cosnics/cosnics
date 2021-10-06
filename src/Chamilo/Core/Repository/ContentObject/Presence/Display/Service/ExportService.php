@@ -25,6 +25,11 @@ class ExportService
     protected $presenceService;
 
     /**
+     * @var PresenceResultPeriodService
+     */
+    protected $presenceResultPeriodService;
+
+    /**
      * @var Translator
      */
     protected $translator;
@@ -32,11 +37,13 @@ class ExportService
     /**
      * @param UserService $userService
      * @param PresenceService $presenceService
+     * @param PresenceResultPeriodService $presenceResultPeriodService
      */
-    public function __construct(UserService $userService, PresenceService $presenceService)
+    public function __construct(UserService $userService, PresenceService $presenceService, PresenceResultPeriodService $presenceResultPeriodService)
     {
         $this->userService = $userService;
         $this->presenceService = $presenceService;
+        $this->presenceResultPeriodService = $presenceResultPeriodService;
     }
 
     /**
@@ -58,7 +65,7 @@ class ExportService
         // create a file pointer connected to the output stream
         $output = fopen('php://output', 'w');
 
-        $periods = $this->presenceService->getResultPeriodsForPresence($presence->getId(), $contextIdentifier);
+        $periods = $this->presenceResultPeriodService->getResultPeriodsForPresence($presence, $contextIdentifier);
         $this->outputColumnHeadings($output, $presence, $periods);
 
         $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier);

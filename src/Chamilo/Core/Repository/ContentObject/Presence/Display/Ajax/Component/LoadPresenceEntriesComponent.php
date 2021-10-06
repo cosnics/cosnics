@@ -24,7 +24,7 @@ class LoadPresenceEntriesComponent extends Manager
             $filterParameters = $this->createFilterParameters(true);
             $userIds = $this->getTargetUserIds();
 
-            $periods = $this->getPresenceResultEntryService()->getResultPeriods($presence, $contextIdentifier, $canEditPresence, true);
+            $periods = $this->getPresenceResultPeriodService()->getResultPeriodsForPresence($presence, $contextIdentifier, $canEditPresence);
             $users = $this->getPresenceResultEntryService()->getUsers($userIds, $periods, $contextIdentifier, $filterParameters);
 
             $resultData = ['students' => $users, 'periods' => $periods];

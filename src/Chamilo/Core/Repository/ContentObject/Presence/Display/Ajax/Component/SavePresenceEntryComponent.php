@@ -29,7 +29,7 @@ class SavePresenceEntryComponent extends Manager implements CsrfComponentInterfa
             $userId = $this->getRequest()->getFromPostOrUrl('user_id');
             $statusId = $this->getRequest()->getFromPostOrUrl('status_id');
 
-            $presenceResultEntry = $this->getPresenceService()->createOrUpdatePresenceResultEntry($this->getPresence(), $periodId, $userId, $statusId);
+            $presenceResultEntry = $this->getPresenceResultEntryService()->createOrUpdatePresenceResultEntry($this->getPresence(), $periodId, $userId, $statusId);
 
             $result = [
                 'status' => 'ok',
@@ -43,7 +43,8 @@ class SavePresenceEntryComponent extends Manager implements CsrfComponentInterfa
 
             return new JsonResponse($this->serialize($result), 200, [], true);
         }
-        catch (\Exception $ex) {
+        catch (\Exception $ex)
+        {
             return new JsonResponse(['error' => ['code' => 500, 'message' => $ex->getMessage()]], 500);
         }
     }
@@ -58,7 +59,7 @@ class SavePresenceEntryComponent extends Manager implements CsrfComponentInterfa
 
         $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-        $period = $this->getPresenceService()->findResultPeriodForPresence($this->getPresence()->getId(), $periodId, $contextIdentifier);
+        $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
         if (empty($period))
         {
             $this->throwUserException('PresenceResultPeriodNotFound');

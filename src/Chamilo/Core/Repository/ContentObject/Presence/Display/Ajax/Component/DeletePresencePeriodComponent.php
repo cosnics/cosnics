@@ -30,7 +30,7 @@ class DeletePresencePeriodComponent extends Manager implements CsrfComponentInte
                 throw new NotAllowedException();
             }
             $this->validatePresenceUserInput();
-            $this->getPresenceService()->deletePresenceResultPeriod($this->presenceResultPeriod);
+            $this->getPresenceResultPeriodService()->deletePresenceResultPeriod($this->presenceResultPeriod);
 
             $result = [
                 'status' => 'ok',
@@ -61,7 +61,7 @@ class DeletePresencePeriodComponent extends Manager implements CsrfComponentInte
         }
 
         $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-        $period = $this->getPresenceService()->findResultPeriodForPresence($this->getPresence()->getId(), $periodId, $contextIdentifier);
+        $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
         if (empty($period))
         {
             $this->throwUserException('PresenceResultPeriodNotFound');

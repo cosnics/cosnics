@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Component\AjaxComponent;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultEntryService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService;
@@ -98,6 +99,14 @@ abstract class Manager extends AjaxManager
     protected function getPresenceService(): PresenceService
     {
         return $this->getService(PresenceService::class);
+    }
+
+    /**
+     * @return PresenceResultPeriodService
+     */
+    protected function getPresenceResultPeriodService(): PresenceResultPeriodService
+    {
+        return $this->getService(PresenceResultPeriodService::class);
     }
 
     /**

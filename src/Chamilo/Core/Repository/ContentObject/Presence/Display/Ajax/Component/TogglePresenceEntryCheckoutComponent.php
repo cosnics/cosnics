@@ -25,7 +25,7 @@ class TogglePresenceEntryCheckoutComponent extends Manager implements CsrfCompon
 
             $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
             $userId = $this->getRequest()->getFromPostOrUrl('user_id');
-            $presenceResultEntry = $this->getPresenceService()->togglePresenceResultEntryCheckout($periodId, $userId);
+            $presenceResultEntry = $this->getPresenceResultEntryService()->togglePresenceResultEntryCheckout($periodId, $userId);
 
             $result = [
                 'status' => 'ok',
