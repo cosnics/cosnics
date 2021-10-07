@@ -1,0 +1,6 @@
+@import url('../Aqua/Stylesheet.css');
+
+ul.tree-menu li div a.presence, ul.tree-menu li div a.type_presence,
+	ul.tree-menu li div a.type_presence_default {
+	background-image: url(../../Images/Ruby/Logo/16.png);
+}

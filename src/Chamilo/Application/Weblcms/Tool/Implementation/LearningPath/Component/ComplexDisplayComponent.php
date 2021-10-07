@@ -11,6 +11,7 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBr
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Evaluation\LearningPathEvaluationServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\ExternalTool\ExternalToolServiceBridge;
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Presence\LearningPathPresenceServiceBridge;
 use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
@@ -173,7 +174,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
         $hasEditRight = $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
 
-        if($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\Evaluation'))
+        if ($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\Evaluation'))
         {
             /** @var EvaluationEntityServiceManager $evaluationEntityServiceManager */
             $evaluationEntityServiceManager = $this->getService(EvaluationEntityServiceManager::class);
@@ -188,6 +189,15 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathEvaluationServiceBridge->setContentObjectPublication($this->publication);
             $learningPathEvaluationServiceBridge->setCanEditEvaluation($hasEditRight);
             $this->getBridgeManager()->addBridge($learningPathEvaluationServiceBridge);
+        }
+
+        if ($this->getRegistrationConsulter()->isContextRegistered('Chamilo\Application\Weblcms\Bridge\Presence'))
+        {
+            /** @var LearningPathPresenceServiceBridge $learningPathPresenceServiceBridge */
+            $learningPathPresenceServiceBridge = $this->getService(LearningPathPresenceServiceBridge::class);
+            $learningPathPresenceServiceBridge->setContentObjectPublication($this->publication);
+            $learningPathPresenceServiceBridge->setCanEditPresence($hasEditRight);
+            $this->getBridgeManager()->addBridge($learningPathPresenceServiceBridge);
         }
 
         /** @var AssignmentServiceBridge $assignmentServiceBridge */

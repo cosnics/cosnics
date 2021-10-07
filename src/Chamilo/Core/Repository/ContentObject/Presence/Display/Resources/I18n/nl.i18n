@@ -1,0 +1,6 @@
+Properties = "Eigenschappen"
+BrowserComponent = "Bekijk aanwezigheid"
+UsersEntity = "Studenten"
+PresenceBuilder = "Builder"
+CheckedOutYes = "ja"
+CheckedOutNo = "nee"

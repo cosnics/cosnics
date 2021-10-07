@@ -1,0 +1,14 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\presence
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Presence"
+TypeCategory = "Content Objects"
+Title = "Subject"
+Description = "Message"
+PresenceToolBrowserComponent = "Presences"
+PresenceToolIntroductionPublisherComponent = "Publish introduction"
+PresenceToolPublisherComponent = "Publish"
+PresenceToolUpdaterComponent = "Edit presence"
+PresenceToolViewerComponent = "View presence"
