@@ -47,7 +47,7 @@
         </div>
         <div>
             <div class="u-relative">
-                <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-gap-small-3x m-legend">
+                <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend">
                     <span style="color: #507177">{{ $t('legend') }}:</span>
                     <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
