@@ -63,7 +63,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected $courses;
 
-    protected bool $someCoursesClosed;
+    protected bool $someCoursesClosed = false;
 
     /**
      * **************************************************************************************************************
