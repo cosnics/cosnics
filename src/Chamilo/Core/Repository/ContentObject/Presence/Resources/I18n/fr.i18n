@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\presence
+; Language = fr
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Présence"
+Title = "Sujet"
+Description = "Message"
+AnnouncementToolBrowserComponent = "Parcourir les présences"
+AnnouncementToolIntroductionPublisherComponent = "Publier une introduction"
+AnnouncementToolPublisherComponent = "Publier une présence"
+AnnouncementToolUpdaterComponent = "Modifier une présence"
+AnnouncementToolViewerComponent = "Voir une présence"

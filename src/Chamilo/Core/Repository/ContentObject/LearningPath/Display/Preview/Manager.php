@@ -133,6 +133,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
     public function is_allowed_to_edit_content_object()
     {
+        $rightsService = \Chamilo\Core\Repository\Workspace\Service\RightsService::getInstance();
+        if (!$rightsService->canEditContentObject($this->getUser(), $this->get_root_content_object()))
+        {
+            return false;
+        }
+
         return true;
     }
 

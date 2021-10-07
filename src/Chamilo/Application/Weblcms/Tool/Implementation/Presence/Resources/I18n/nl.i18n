@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\presence
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aanwezigheden"
+TypeNameSingle = "Aanwezigheid"
+InstallTypeName = "Aanwezigheden"
+BrowserComponent = "Doorblader aanwezigheden"
+ViewerComponent = "Bekijk aanwezigheid"
+PublisherComponent = "Publiceer aanwezigheid"
+UpdaterComponent = "Bewerk aanwezigheid"
+IntroductionPublisherComponent = "Publiceer introductietekst"
+SentByEmail = "Verstuurd via email"
+ViewPeriodHeader = "Selecteer periode"

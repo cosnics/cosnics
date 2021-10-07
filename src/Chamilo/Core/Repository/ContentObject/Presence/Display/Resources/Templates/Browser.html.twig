@@ -1,0 +1,144 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Presence\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+
+{{ getJavascript('cosnics-presence.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
+{{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
+
+<style type="text/css">
+    .nav.nav-buttons {
+        align-items: baseline;
+        background-color: #f7f7f7;
+        border: 1px solid #ebebeb;
+        border-radius: 4px;
+        border-top-color: #f0f0f0;
+        display: flex;
+        max-width: fit-content;
+        padding: 0 2px;
+    }
+
+    .nav.nav-buttons .active {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px #e8e8e8;
+    }
+    .nav.nav-buttons .active:hover, .nav.nav-buttons .active:focus {
+        box-shadow: 0 1px 2px #d5d5d5;
+    }
+    .nav.nav-buttons li {
+        margin: 7px 5px;
+    }
+    .nav.nav-buttons > li > a:hover, .nav.nav-buttons > li > a:focus {
+        background-color: #fff;
+    }
+    .nav.nav-buttons > li > a {
+        border-radius: 4px;
+        padding: 3px 5px;
+    }
+    .nav.nav-buttons > li.active > a:not(:hover):not(:focus) {
+        color: #507177;
+    }
+    .tab-pane.mod-pad {
+        padding: 10px 15px;
+    }
+</style>
+
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<div id="main-content">
+    <div style="margin: 15px 0 5px 8px">
+        <ul class="nav nav-buttons" role="tablist">
+            <li role="presentation" class="active"><a href="#presence-entry" aria-controls="entities" role="tab" data-toggle="tab">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation"><a href="#presence-builder" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
+        </ul>
+    </div>
+    <div class="dynamic-visual-tab-content tab-content">
+        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
+            <presence-entry :api-config="apiConfig" :load-index="updateCount" can-edit-presence="true"></presence-entry>
+        </div>
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+            {{ CONTENT_OBJECT_RENDITION|raw }}
+        </div>
+        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
+            <presence-builder :api-config="apiConfig" :load-index="updateCount" @presence-data-changed="$emit('presence-data-changed')"></presence-builder>
+        </div>
+    </div>
+</div>
+<script>
+    Vue.use(BootstrapVue);
+    Vue.use(VueI18n);
+    Vue.use(window['cosnics-presence'].default);
+
+    const messages = { en: [], nl: [] };
+
+    let lang;
+    try {
+        lang = '{{ LANGUAGE|raw }}';
+    } catch (err) {
+        console.warn('Language could not be set, defaulting to English instead.');
+        lang = 'en';
+    }
+
+    const apiConfig = {
+        loadPresenceEntriesURL: '{{ LOAD_PRESENCE_ENTRIES_URL|raw }}',
+        loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
+        updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}',
+        savePresenceEntryURL: '{{ SAVE_PRESENCE_ENTRY_URL|raw }}',
+        createPresencePeriodURL: '{{ CREATE_PRESENCE_PERIOD_URL|raw }}',
+        updatePresencePeriodURL: '{{ UPDATE_PRESENCE_PERIOD_URL|raw }}',
+        deletePresencePeriodURL: '{{ DELETE_PRESENCE_PERIOD_URL|raw }}',
+        loadRegisteredPresenceEntryStatusesURL: '{{ LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES_URL|raw }}',
+        togglePresenceEntryCheckoutURL: '{{ TOGGLE_PRESENCE_ENTRY_CHECKOUT_URL|raw }}',
+        exportURL: '{{ EXPORT_URL|raw }}',
+        csrfToken: '{{ csrf_token('ComponentToken') }}'
+    };
+
+    const presenceBuilder = new Vue({
+        i18n: new VueI18n({ locale: lang, messages }),
+        el: '#presence-builder',
+        delimiters: ['${', '}'],
+        data: {
+            apiConfig,
+            updateCount: 0
+        },
+        mounted() {
+            const elemToObserve = document.getElementById('presence-builder');
+            let prevClassState = elemToObserve.classList.contains('active');
+
+            const observer = new MutationObserver(mutations => {
+                mutations.forEach(mutation => {
+                    if (mutation.attributeName === 'class'){
+                        const currentClassState = mutation.target.classList.contains('active');
+                        if (prevClassState !== currentClassState)    {
+                            prevClassState = currentClassState;
+                            if (currentClassState) {
+                                this.updateCount++;
+                            }
+                        }
+                    }
+                });
+            });
+            observer.observe(elemToObserve, {attributes: true});
+        }
+    });
+
+    const presenceEntry = new Vue({
+        i18n: new VueI18n({ locale: lang, messages }),
+        el: '#presence-entry',
+        delimiters: ['${', '}'],
+        data: {
+            apiConfig,
+            updateCount: 0
+        },
+        methods: {
+            updatePresenceData: function() {
+                this.updateCount++;
+            }
+        },
+        mounted() {
+            presenceBuilder.$on('presence-data-changed', this.updatePresenceData);
+        }
+    });
+</script>
+{{ FOOTER|raw }}

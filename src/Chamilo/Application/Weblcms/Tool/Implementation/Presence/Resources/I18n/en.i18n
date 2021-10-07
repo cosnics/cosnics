@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\presence
+; Language = en
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Presence"
+TypeCategory = "Course Tools"
+InstallTypeName = "Presence Tool"
+BrowserComponent = "Browse presences"
+ViewerComponent = "View presence"
+PublisherComponent = "Publish presence"
+UpdaterComponent = "Edit presence"
+IntroductionPublisherComponent = "Publish introduction"
+TypeNameSingle = "Presence"
+SentByEmail = "Sent by email"

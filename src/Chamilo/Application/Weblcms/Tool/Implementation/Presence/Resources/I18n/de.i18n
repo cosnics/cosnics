@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\presence
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Ankündigungen"
+InstallTypeName = ""
+BrowserComponent = "Ankündigungen durchsuchen"
+ViewerComponent = "Ankündigung ansehen"
+PublisherComponent = "Ankündigung veröffentlichen"
+UpdaterComponent = "Ankündigung bearbeiten"
+IntroductionPublisherComponent = "Vorstellung veröffentlichen"

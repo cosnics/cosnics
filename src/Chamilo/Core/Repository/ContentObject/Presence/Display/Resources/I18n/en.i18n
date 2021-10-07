@@ -1,0 +1,6 @@
+Properties = "Properties"
+BrowserComponent = "View Presence"
+UsersEntity = "Students"
+PresenceBuilder = "Builder"
+CheckedOutYes = "yes"
+CheckedOutNo = "no"

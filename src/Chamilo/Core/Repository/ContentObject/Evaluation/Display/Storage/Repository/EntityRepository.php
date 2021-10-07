@@ -4,7 +4,9 @@ namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display\Storage\Repos
 
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Service\Entity\EvaluationEntityRetrieveProperties;
+use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\Evaluation;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Storage\DataClass\EvaluationEntryRubricResult;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -208,6 +210,16 @@ class EntityRepository
 
         if ($evaluationEntityRetrieveProperties->retrieveRubric())
         {
+            $joins->add(new Join(Evaluation::class, new EqualityCondition(
+                new PropertyConditionVariable(Evaluation::class_name(), Evaluation::PROPERTY_ID),
+                new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_EVALUATION_ID)
+            ), Join::TYPE_LEFT));
+
+            $joins->add(new Join(Rubric::class, new EqualityCondition(
+                new PropertyConditionVariable(Evaluation::class_name(), Evaluation::PROPERTY_RUBRIC_ID),
+                new PropertyConditionVariable(Rubric::class_name(), Rubric::PROPERTY_ID)
+            ), Join::TYPE_LEFT));
+
             $rubricJoinConditions = array();
             $rubricJoinConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_CLASS),
@@ -216,6 +228,10 @@ class EntityRepository
             $rubricJoinConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_CONTEXT_ID),
                 new PropertyConditionVariable(EvaluationEntry::class_name(), EvaluationEntry::PROPERTY_ID)
+            );
+            $rubricJoinConditions[] = new EqualityCondition(
+                new PropertyConditionVariable(Rubric::class_name(), Rubric::PROPERTY_ACTIVE_RUBRIC_DATA_ID),
+                new PropertyConditionVariable(EvaluationEntryRubricResult::class_name(), EvaluationEntryRubricResult::PROPERTY_RUBRIC_DATA_ID)
             );
             $joins->add(new Join(EvaluationEntryRubricResult::class_name(), new AndCondition($rubricJoinConditions), Join::TYPE_LEFT));
         }

@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\presence
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Aanwezigheid"
+Title = "Onderwerp"
+Description = "Bericht"
+PresenceToolBrowserComponent = "Aanwezigheden"
+PresenceToolIntroductionPublisherComponent = "Publiceer introductietekst"
+PresenceToolPublisherComponent = "Publiceer aanwezigheid"
+PresenceToolUpdaterComponent = "Bewerk aanwezigheid"
+PresenceToolViewerComponent = "Bekijk aanwezigheid"
