@@ -2,7 +2,7 @@
     <div @click.stop="$emit('select')">
         <b-input v-if="isEditable" type="text" required v-model="status.title" autocomplete="off" :disabled="disabled"
                  class="mod-input mod-pad" @focus="$emit('select')"/>
-        <span v-else style="line-height: 26px">{{ statusTitle }}</span>
+        <span v-else>{{ statusTitle }}</span>
     </div>
 </template>
 

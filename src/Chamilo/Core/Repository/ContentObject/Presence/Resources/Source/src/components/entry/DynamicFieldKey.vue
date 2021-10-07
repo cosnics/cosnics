@@ -2,7 +2,7 @@
     <div v-if="isEditable" role="button" tabindex="0" @keyup.enter="$emit('select')" @click="$emit('select')">
         <slot></slot>
     </div>
-    <div v-else style="font-weight: 400; text-align: center">
+    <div v-else class="u-font-normal u-cursor-default u-text-center">
         <slot></slot>
     </div>
 </template>

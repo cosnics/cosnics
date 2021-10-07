@@ -36,7 +36,7 @@
 <template>
     <div class="alert alert-danger">
         <template v-if="errorData.type === 'NoTitleGiven'">
-            {{ $t('error-NoTitleGiven') }} <span style="display: block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
+            {{ $t('error-NoTitleGiven') }} <span class="u-block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
         </template>
         <span v-else-if="!!errorData.status">{{ $t(`error-${errorData.type}`, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
         <span v-else>{{ $t(`error-${errorData.type}`) }}</span>

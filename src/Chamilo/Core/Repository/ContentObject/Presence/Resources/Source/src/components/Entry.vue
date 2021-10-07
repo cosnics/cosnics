@@ -39,15 +39,15 @@
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex" style="margin-bottom: 15px; max-width: fit-content; align-items: center; gap: 15px">
+        <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x u-max-w-fit m-controls">
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div>
                 <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
             </div>
         </div>
         <div>
-            <div style="position: relative">
-                <div v-if="!canEditPresence" class="u-flex" style="align-items: baseline; gap: 15px; margin: 20px 8px 15px;">
+            <div class="u-relative">
+                <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-gap-small-3x m-legend">
                     <span style="color: #507177">{{ $t('legend') }}:</span>
                     <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
@@ -59,9 +59,9 @@
                         <col>
                         <col>
                         <col v-if="!!selectedPeriod && !creatingNew">
-                        <col v-else-if="creatingNew" style="border: 1px double #8ea4b3">
+                        <col v-else-if="creatingNew" class="bd-selected-period">
                         <template v-if="!!selectedPeriod || creatingNew" v-for="period in periodsReversed">
-                            <col v-if="!creatingNew && period === selectedPeriod" style="border: 1px double #8ea4b3">
+                            <col v-if="!creatingNew && period === selectedPeriod" class="bd-selected-period">
                             <col v-else>
                         </template>
                     </template>
@@ -79,7 +79,7 @@
                     </template>
                     <template #head(official_code) v-else>{{ $t('official-code') }}</template>
                     <template #head(new_period)>
-                        <div role="button" tabindex="0" class="select-period-btn" style="padding: 2px 4px 0" @keyup.enter="createResultPeriod('')" @click="createResultPeriod('')" :title="$t('new-period')">
+                        <div role="button" tabindex="0" class="select-period-btn mod-new" @keyup.enter="createResultPeriod('')" @click="createResultPeriod('')" :title="$t('new-period')">
                             <i aria-hidden="true" class="fa fa-plus" style="color: #337ab7"></i> <span class="sr-only">{{ $t('new-period') }}</span>
                         </div>
                     </template>
@@ -92,36 +92,36 @@
                         <dynamic-field-key :is-editable="canEditPresence" @select="setSelectedPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
                             <template v-slot>
                                 <span v-if="label">{{ label }}</span>
-                                <span v-else style="font-style: italic">{{ getPlaceHolder(fieldKey.id) }}</span>
+                                <span v-else class="u-font-italic">{{ getPlaceHolder(fieldKey.id) }}</span>
                             </template>
                         </dynamic-field-key>
                     </template>
                     <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
                         <div class="result-wrap">
-                            <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']" style="cursor: default">
+                            <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
                                 <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
                             </div>
                         </div>
                     </template>
                     <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
                     <template #head(period-entry-plh)>
-                        <div class="u-flex u-gap-small" style="align-items:center">
-                            <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" style="font-weight: normal;height:30px;padding:6px;background:none;font-style: italic; pointer-events:none;box-shadow:none;border-color: #e9eaea;"></b-input>
-                            <div style="min-width: 13px">
+                        <div class="u-flex u-align-items-center u-gap-small">
+                            <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" class="u-bg-none u-font-normal u-font-italic u-pointer-events-none ti-label mod-border"></b-input>
+                            <div class="spin">
                                 <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             </div>
                         </div>
                     </template>
                     <template #cell(period-entry-plh)>
-                        <div class="u-flex u-gap-small u-flex-wrap" style="pointer-events: none">
-                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code" style="opacity: .42"
+                        <div class="u-flex u-gap-small u-flex-wrap u-pointer-events-none">
+                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-plh"
                                     :class="[status.color]"><span>{{ status.code }}</span></button>
                         </div>
                     </template>
                     <template #head(period-entry)>
-                        <div class="u-flex u-gap-small" style="align-items:center">
-                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" style="font-weight: normal;height:30px;padding:6px;"></b-input>
-                            <div style="min-width: 13px">
+                        <div class="u-flex u-align-items-center u-gap-small">
+                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" class="u-font-normal ti-label"></b-input>
+                            <div class="spin">
                                 <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                                            :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
                                            switch-class="mod-checkout"
                                            @toggle="toggleCheckout(item)"/>
-                            <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']" style="cursor: default">
+                            <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']">
                                 <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
                             </div>
                         </template>
@@ -164,7 +164,7 @@
                     <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
                 </ul>
             </div>
-            <div v-if="errorData" class="alert alert-danger" style="margin: 10px 0 0 0; max-width: 85ch">
+            <div v-if="errorData" class="alert alert-danger m-errors">
                 <span v-if="errorData.code === 500">{{ errorData.message }}</span>
                 <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
@@ -458,3 +458,29 @@ export default class Entry extends Vue {
     }
 }
 </script>
+
+<style scoped>
+.m-controls {
+    margin-bottom: 15px;
+}
+.m-legend {
+    margin: 20px 8px 15px;
+}
+.m-errors {
+    margin: 10px 0 0 0;
+    max-width: 85px;
+}
+.bd-selected-period {
+    border: 1px double #8ea4b3;
+}
+.spin {
+    min-width: 13px;
+}
+.ti-label {
+    height: 30px;
+    padding: 6px;
+}
+.ti-label.mod-border {
+    border-color: #e9eaea;
+}
+</style>

@@ -42,17 +42,16 @@
             <template #cell(title)="{item}">
                 <title-control :status="item" :status-title="getStatusTitle(item)"
                                :is-editable="isStatusEditable(item)" :disabled="createNew"
-                               class="cell-pad" @select="onSelectStatus(item)" />
+                               class="cell-pad mod-lh" @select="onSelectStatus(item)" />
             </template>
             <template #cell(aliasses)="{item}">
                 <alias-control :status="item" :alias-title="getAliasedTitle(item)" :fixed-status-defaults="fixedStatusDefaults"
                                :is-editable="isStatusEditable(item)" :is-select-disabled="createNew"
-                               class="cell-pad" style="line-height: 26px"
-                               @select="onSelectStatus(item)"/>
+                               class="cell-pad mod-lh" @select="onSelectStatus(item)"/>
             </template>
             <template #cell(color)="{item, index}">
                 <color-control :id="index" :disabled="createNew" :color="item.color" :selected="item === selectedStatus"
-                               class="u-flex cell-pad" style="align-items: center; height: 42px;"
+                               class="u-flex u-align-items-center cell-pad mod-h"
                                @select="onSelectStatus(item)"
                                @color-selected="setStatusColor(item, $event)"/>
             </template>
@@ -84,17 +83,17 @@
                                      @save="onSaveNew" @cancel="onCancelNew" />
             </template>
         </b-table>
-        <div style="margin: 8px 0 0 8px" v-if="!createNew">
+        <div class="m-new" v-if="!createNew">
             <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                 {{ $t('new-presence-status') }}</a>
         </div>
-        <div style="margin: 10px 0 0 10px">
+        <div class="m-checkout">
             <on-off-switch id="allow-checkout" :checked="presence.has_checkout" :on-text="$t('checkout')" :off-text="$t('no-checkout')"
                            switch-class="mod-checkout-choice" style="width: 136px"
                            @toggle="presence.has_checkout = !presence.has_checkout"/>
         </div>
-        <error-display v-if="errorData" :error-data="errorData" style="margin: 10px 0 0 0; max-width: 85ch" />
-        <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" style="margin: 16px 0 0 8px" />
+        <error-display v-if="errorData" :error-data="errorData" class="m-errors" />
+        <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" class="m-save" />
     </div>
 </template>
 
@@ -322,6 +321,12 @@ export default class Builder extends Vue {
 </script>
 
 <style>
+.u-relative {
+    position: relative;
+}
+.u-block {
+    display: block;
+}
 .u-flex {
     display: flex;
 }
@@ -330,18 +335,70 @@ export default class Builder extends Vue {
     gap: 5px;
 }
 
+.u-gap-small-2x {
+    gap: 10px;
+}
+
+.u-gap-small-3x {
+    gap: 15px;
+}
+
 .u-flex-wrap {
     flex-flow: wrap;
+}
+
+.u-align-items-baseline {
+    align-items: baseline;
+}
+
+.u-align-items-center {
+    align-items: center;
 }
 
 .u-justify-content-end {
     justify-content: flex-end;
 }
 
+.u-max-w-fit {
+    max-width: fit-content;
+}
+
+.u-bg-none {
+    background: none;
+}
+
+.u-font-normal {
+    font-weight: 400;
+}
+
+.u-font-medium {
+    font-weight: 500;
+}
+
+.u-font-bold {
+    font-weight: 700;
+}
+
+.u-font-italic {
+    font-style: italic;
+}
+
+.u-text-center {
+    text-align: center;
+}
+
 .u-txt-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.u-pointer-events-none {
+    pointer-events: none;
+}
+
+.u-cursor-default {
+    cursor: default;
 }
 
 .btn.mod-presence-save:focus {
@@ -438,7 +495,7 @@ td.table-period {
     max-height: 40px;
 }
 
-.table-period .color-code.mod-selectable {
+.table-period .color-code.mod-selectable, .table-period .color-code.mod-plh {
     opacity: .42;
 }
 
@@ -525,6 +582,10 @@ td.table-period {
     background-color: #f8fbfb;
 }
 
+.table.mod-presence.mod-builder thead tr:first-child th {
+    background-color: #fff;
+}
+
 .table.mod-presence.mod-builder thead th:not(.table-actions) {
     border-top: 1px solid #ebebeb;
 }
@@ -588,6 +649,14 @@ td.table-period {
 
 .table.mod-builder .cell-pad {
     padding: 8px;
+}
+
+.table.mod-builder .cell-pad.mod-lh {
+    line-height: 26px;
+}
+
+.table.mod-builder .cell-pad.mod-h {
+    height: 42px;
 }
 
 .table.mod-builder .cell-pad-x {
@@ -776,6 +845,10 @@ td.table-period {
     text-align: center;
 }
 
+.select-period-btn.mod-new {
+    padding: 2px 4px 0;
+}
+
 .select-period-btn:hover, .select-period-btn:focus {
     background: #ededed;
 }
@@ -855,6 +928,22 @@ td.table-period {
 
 .btn-remove:active, .btn-remove:focus {
     color: #ac2925;
+}
+</style>
+
+<style scoped>
+.m-new {
+    margin: 8px 0 0 8px;
+}
+.m-checkout {
+    margin: 10px 0 0 10px;
+}
+.m-errors {
+    margin: 10px 0 0 0;
+    max-width: 85px;
+}
+.m-save {
+    margin: 16px 0 0 8px;
 }
 </style>
 

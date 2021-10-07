@@ -1,5 +1,5 @@
 <template>
-    <div class="onoffswitch" :class="[switchClass]" style="display: block;">
+    <div class="onoffswitch" :class="[switchClass]">
         <input type="checkbox" :id="`onoffswitch-${id}`" class="onoffswitch-checkbox"
                :checked="checked"
                @input="$emit('toggle')">

@@ -11,8 +11,8 @@
 
 <template>
     <b-tr>
-        <b-th style="background: white;font-weight: 400">{{ $t('display') }}</b-th>
-        <b-th colspan="3" style="background: white">
+        <b-th class="u-font-normal">{{ $t('display') }}</b-th>
+        <b-th colspan="3">
             <div class="u-flex u-gap-small u-flex-wrap" style="padding: 4px 0">
                 <div v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
                      class="color-code" :class="[status.color]"><span>{{ status.code }}</span></div>

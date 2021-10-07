@@ -1,6 +1,6 @@
 <template>
-    <div class="u-flex" style="align-items: baseline; gap: 5px">
-        <div :class="['color-code', color]" style="padding: 2px 4px; height: 20px;">
+    <div class="u-flex u-align-items-baseline u-gap-small">
+        <div :class="['color-code', color]" style="height: 20px; padding: 2px 4px;">
             <span>{{label}}</span>
         </div>
         <span>{{ title }}</span>
