@@ -63,6 +63,8 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
      */
     protected $courses;
 
+    protected bool $someCoursesClosed;
+
     /**
      * **************************************************************************************************************
      * Main Functionality *
@@ -385,6 +387,11 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
 
         $html[] = '</div>';
 
+        if($this->someCoursesClosed)
+        {
+            $html[] = '<div class="alert alert-warning">' . Translation::get('CoursesClosedWarning') . '</div>';
+        }
+
         return implode($html, "\n");
     }
 
@@ -529,6 +536,7 @@ class CourseTypeCourseListRenderer extends CourseListRenderer
                         if (!$course_admin)
                         {
                             $url = null;
+                            $this->someCoursesClosed = true;
                         }
 
                         $locked = '<span class="glyphicon glyphicon-lock" aria-hidden="true"></span>';
