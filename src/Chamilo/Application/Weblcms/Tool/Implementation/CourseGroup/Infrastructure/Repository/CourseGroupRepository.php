@@ -179,7 +179,7 @@ class CourseGroupRepository extends CommonDataClassRepository
 
     public function createCourseGroup(CourseGroup $courseGroup)
     {
-        return $this->dataClassRepository->create($courseGroup);
+        return $courseGroup->create();
     }
 
     /**
