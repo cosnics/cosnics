@@ -24,15 +24,15 @@
 }
 </i18n>
 <template>
-    <div class="rr-selected-criterium-wrapper">
-        <div class="rr-selected-criterium">
+    <div class="rr-selected-treenode-wrapper">
+        <div class="rr-selected-treenode">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
-            <div class="rr-selected-criterium-results">
-                <div class="rr-selected-criterium-results-title u-markdown-criterium" v-html="criterium.toMarkdown()"></div>
+            <div class="rr-selected-treenode-results">
+                <div class="rr-selected-treenode-results-title u-markdown-criterium" v-html="treeNode.toMarkdown()"></div>
                 <div class="rr-selected-result" v-for="{evaluator, score, level, feedback} in evaluations">
-                    <p v-if="rubric.useScores && level !== null">
+                    <p v-if="rubric.useScores">
                         <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ score || '0' }}</span>
-                        (<span class="score-title">{{ level.title }}</span>)
+                        <template v-if="level !== null"> (<span class="score-title">{{ level.title }}</span>)</template>
                     </p>
                     <p v-else-if="level !== null">
                         <span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
@@ -43,15 +43,15 @@
                     </p>
                 </div>
             </div>
-            <div class="rr-selected-criterium-levels">
+            <div v-if="isCriterium(treeNode)" class="rr-selected-criterium-levels">
                 <div class="title">{{ $t('level-descriptions') }}:</div>
                 <ul class="levels-list">
                     <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
                         <div class="levels-list-item-header">
                             <div class="title">{{ level.title }}</div>
-                            <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(criterium, level) }}</div>
+                            <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(treeNode, level) }}</div>
                         </div>
-                        <div class="choice-feedback" v-html="rubric.getChoice(criterium, level).toMarkdown()"></div>
+                        <div class="choice-feedback" v-html="rubric.getChoice(treeNode, level).toMarkdown()"></div>
                     </li>
                 </ul>
             </div>
@@ -61,7 +61,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
+    import TreeNode from '../Domain/TreeNode';
     import Rubric from '../Domain/Rubric';
+    import Cluster from '../Domain/Cluster';
+    import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
 
     @Component({
@@ -73,10 +76,14 @@
             }
         }
     })
-    export default class CriteriumResultsView extends Vue {
+    export default class TreeNodeResultsView extends Vue {
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Criterium}) readonly criterium!: Criterium;
+        @Prop({type: [Cluster, Category, Criterium]}) readonly treeNode!: Cluster|Category|Criterium;
         @Prop({type: Array}) readonly evaluations!: any[];
+
+        isCriterium(treeNode: TreeNode) {
+            return treeNode instanceof Criterium;
+        }
     }
 </script>
 <style lang="scss">
@@ -108,11 +115,11 @@
         }
     }
 
-    .rr-selected-criterium-wrapper{
+    .rr-selected-treenode-wrapper {
         margin-top: 1em;
     }
 
-    .rr-selected-criterium {
+    .rr-selected-treenode {
         max-width: 80ch;
     }
 
@@ -134,7 +141,7 @@
             display: none;
         }
 
-        .rr-selected-criterium-wrapper {
+        .rr-selected-treenode-wrapper {
             border-left: 1px solid hsla(191, 21%, 80%, 1);
             margin-left: 1.5em;
             padding-left: 1.5em;
@@ -142,14 +149,14 @@
             pointer-events: none;
         }
 
-        .rr-selected-criterium {
+        .rr-selected-treenode {
             position: -webkit-sticky;
             position: sticky;
             top: 10px;
         }
     }
     @media only screen and (max-width: 899px) {
-        .rr-selected-criterium-wrapper {
+        .rr-selected-treenode-wrapper {
             align-items: flex-start;
             background: hsla(0, 0, 0, .15);
             display: flex;
@@ -166,7 +173,7 @@
             z-index: 10000;
         }
 
-        .rr-selected-criterium {
+        .rr-selected-treenode {
             background: #fff;
             border-radius: $border-radius;
             box-shadow: 1px 1px 5px #999;
@@ -176,13 +183,13 @@
         }
     }
 
-    .rr-selected-criterium-results {
+    .rr-selected-treenode-results {
         /*background: #e4e3e3;*/
         border-radius: $border-radius;
         padding: .5em;
     }
 
-    .rr-selected-criterium-results-title {
+    .rr-selected-treenode-results-title {
         color: hsla(191, 41%, 38%, 1);
         font-size: 1.4rem;
         font-weight: 700;

@@ -151,6 +151,11 @@ class CpoImportImplementation extends ImportImplementation
 
             $this->createdLevels[$levelArray['id']] = $level;
         }
+
+        foreach (array_values($this->createdLevels) as $index => $level)
+        {
+            $level->setSort($levelsArray[$index]['sort']);
+        }
     }
 
     /**
