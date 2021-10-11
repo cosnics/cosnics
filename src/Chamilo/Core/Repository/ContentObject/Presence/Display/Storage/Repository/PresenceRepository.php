@@ -227,4 +227,56 @@ class PresenceRepository
 
         return $this->dataClassRepository->records($class_name, $parameters);
     }
+
+    /**
+     * @param int $presenceId
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return RecordIterator
+     */
+    public function getDistinctPresenceResultEntryUsers(int $presenceId, ContextIdentifier $contextIdentifier): RecordIterator
+    {
+        $class_name = PresenceResultEntry::class_name();
+
+        $retrieveProperties = new DataClassProperties([
+            new FunctionConditionVariable(
+                FunctionConditionVariable::DISTINCT,
+                new PropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_USER_ID)
+            )
+        ]);
+
+        $joins = new Joins();
+        $presenceJoinCondition = new EqualityCondition(
+            new PropertyConditionVariable(Presence::class_name(), DataClass::PROPERTY_ID),
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_PRESENCE_ID)
+        );
+
+        $periodJoinConditions = array();
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
+            new PropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID)
+        );
+
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable($contextIdentifier->getContextClass())
+        );
+
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_ID),
+            new StaticConditionVariable($contextIdentifier->getContextId())
+        );
+
+        $joins->add(new Join(PresenceResultPeriod::class_name(), new AndCondition($periodJoinConditions), Join::TYPE_LEFT));
+        $joins->add(new Join(Presence::class_name(), $presenceJoinCondition, Join::TYPE_LEFT));
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Presence::class_name(), DataClass::PROPERTY_ID),
+            new StaticConditionVariable($presenceId));
+
+        $parameters = new RecordRetrievesParameters($retrieveProperties, $condition);
+        $parameters->setJoins($joins);
+
+        return $this->dataClassRepository->records($class_name, $parameters);
+    }
 }

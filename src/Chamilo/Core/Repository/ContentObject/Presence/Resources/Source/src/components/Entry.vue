@@ -306,9 +306,11 @@ export default class Entry extends Vue {
             sort_direction: ctx.sortDesc ? 'desc' : 'asc',
             items_per_page: ctx.perPage,
             page_number: ctx.currentPage,
-            request_count: this.requestCount
+            request_count: this.requestCount,
+            request_non_registered_students: false
         };
         const data = await this.connector?.loadPresenceEntries(parameters);
+        console.log(data);
         const {periods, students} = data;
         this.periods = periods;
         this.students = students;

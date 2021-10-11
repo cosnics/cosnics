@@ -217,4 +217,36 @@ class PresenceResultEntryService
         }
         return $filterParameters;
     }
+
+    /**
+     * @param Presence $presence
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return array
+     */
+    public function getDistinctPresenceResultEntryUsers(Presence $presence, ContextIdentifier $contextIdentifier): array
+    {
+        $users = $this->presenceRepository->getDistinctPresenceResultEntryUsers($presence->getId(), $contextIdentifier);
+        return iterator_to_array($users);
+    }
+
+
+    /**
+     * @param array $users
+     * @param array $registeredUserIds
+     *
+     * @return array
+     */
+    public function filterNonRegisteredPresenceResultEntryUsers(array $users, array $registeredUserIds): array
+    {
+        $nonRegisteredUsers = [];
+        foreach ($users as $user)
+        {
+            if (!in_array($user['user_id'], $registeredUserIds))
+            {
+                $nonRegisteredUsers[] = $user['user_id'];
+            }
+        }
+        return $nonRegisteredUsers;
+    }
 }

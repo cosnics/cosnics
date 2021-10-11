@@ -25,13 +25,35 @@ class LoadPresenceEntriesComponent extends Manager
             $userIds = $this->getTargetUserIds();
 
             $periods = $this->getPresenceResultPeriodService()->getResultPeriodsForPresence($presence, $contextIdentifier, $canEditPresence);
-            $users = $this->getPresenceResultEntryService()->getUsers($userIds, $periods, $contextIdentifier, $filterParameters);
+            $presenceResultEntryService = $this->getPresenceResultEntryService();
+            $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $filterParameters);
 
             $resultData = ['students' => $users, 'periods' => $periods];
 
-            if ($canEditPresence && $this->getRequest()->getFromPostOrUrl('request_count') == 'true')
+            $requestCount = $this->getRequest()->getFromPostOrUrl('request_count') == 'true';
+            $requestNonRegisteredUsers = $this->getRequest()->getFromPostOrUrl('request_non_registered_students') == 'true';
+
+            if ($canEditPresence && ($requestCount || $requestNonRegisteredUsers))
             {
-                $resultData['count'] = count($this->getPresenceServiceBridge()->getTargetUserIds($filterParameters));
+                $allTargetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds($filterParameters);
+
+                if ($requestCount)
+                {
+                    $resultData['count'] = count($allTargetUserIds);
+                }
+
+                if ($requestNonRegisteredUsers)
+                {
+                    $resultData['non_registered_students'] = false;
+                    $distinctUsers = $presenceResultEntryService->getDistinctPresenceResultEntryUsers($presence, $contextIdentifier);
+                    $nonRegisteredUserIds = $presenceResultEntryService->filterNonRegisteredPresenceResultEntryUsers($distinctUsers, $allTargetUserIds);
+                    $hasNonRegisteredUsers = count($nonRegisteredUserIds) > 0;
+                    if ($hasNonRegisteredUsers)
+                    {
+                        $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters());
+                        $resultData['non_registered_students'] = $nonRegisteredUsers;
+                    }
+                }
             }
 
             return new JsonResponse($this->serialize($resultData), 200, [], true);
