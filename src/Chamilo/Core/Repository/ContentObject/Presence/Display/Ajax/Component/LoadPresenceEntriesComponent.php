@@ -31,7 +31,7 @@ class LoadPresenceEntriesComponent extends Manager
             $resultData = ['students' => $users, 'periods' => $periods];
 
             $requestCount = $this->getRequest()->getFromPostOrUrl('request_count') == 'true';
-            $requestNonRegisteredUsers = $this->getRequest()->getFromPostOrUrl('request_non_registered_students') == 'true';
+            $requestNonRegisteredUsers = $this->getRequest()->getFromPostOrUrl('request_non_course_students') == 'true';
 
             if ($canEditPresence && ($requestCount || $requestNonRegisteredUsers))
             {
@@ -44,14 +44,14 @@ class LoadPresenceEntriesComponent extends Manager
 
                 if ($requestNonRegisteredUsers)
                 {
-                    $resultData['non_registered_students'] = false;
+                    $resultData['non_course_students'] = false;
                     $distinctUsers = $presenceResultEntryService->getDistinctPresenceResultEntryUsers($presence, $contextIdentifier);
                     $nonRegisteredUserIds = $presenceResultEntryService->filterNonRegisteredPresenceResultEntryUsers($distinctUsers, $allTargetUserIds);
                     $hasNonRegisteredUsers = count($nonRegisteredUserIds) > 0;
                     if ($hasNonRegisteredUsers)
                     {
                         $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters());
-                        $resultData['non_registered_students'] = $nonRegisteredUsers;
+                        $resultData['non_course_students'] = $nonRegisteredUsers;
                     }
                 }
             }

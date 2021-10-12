@@ -26,16 +26,16 @@
 </i18n>
 
 <template>
-    <b-table v-if="items.length" ref="table" :foot-clone="showRemovePeriod && !checkoutMode" bordered :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table v-if="items.length" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
-        <!-- -->
+        <!-- COLUMNS -->
         <template slot="table-colgroup" v-if="canEditPresence">
             <col>
             <col>
             <col>
-            <col v-if="!!selectedPeriod && !isCreatingNewPeriod && !isCreatePeriodDisabled">
+            <col v-if="!!selectedPeriod && !isCreatingNewPeriod && isFullyEditable">
             <col v-else-if="isCreatingNewPeriod" class="bd-selected-period">
             <template v-if="!!selectedPeriod || isCreatingNewPeriod" v-for="period in periodsReversed">
                 <col v-if="!isCreatingNewPeriod && period === selectedPeriod" class="bd-selected-period">
@@ -49,7 +49,7 @@
         </template>
 
         <!-- FULLNAME -->
-        <template #head(fullname) v-if="isSortable">
+        <template #head(fullname) v-if="isFullyEditable">
             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
         </template>
@@ -61,7 +61,7 @@
         </template>
 
         <!-- OFFICIAL CODE -->
-        <template #head(official_code) v-if="isSortable">
+        <template #head(official_code) v-if="isFullyEditable">
             <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
         </template>
         <template #head(official_code) v-else>{{ $t('official-code') }}</template>
@@ -93,7 +93,7 @@
 
         <!-- DYNAMIC FIELD KEYS -->
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-            <dynamic-field-key :is-editable="canEditPresence" @select="selectPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
+            <dynamic-field-key :is-editable="canEditPresence" @select="setSelectedPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
                 <template v-slot>
                     <span v-if="label">{{ label }}</span>
                     <span v-else class="u-font-italic">{{ getPlaceHolder(fieldKey.id) }}</span>
@@ -112,9 +112,9 @@
         <!-- PRESENCE PERIOD ENTRY -->
         <template #head(period-entry)>
             <div class="u-flex u-align-items-center u-gap-small">
-                <b-input v-if="isPeriodLabelEditable" type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" class="u-font-normal ti-label"></b-input>
-                <span v-else-if="selectedPeriodLabel">{{ selectedPeriodLabel }}</span>
-                <span v-else class="u-font-italic">{{ getPlaceHolder(selectedPeriod.id) }}</span>
+                <b-input v-if="isFullyEditable" type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" class="u-font-normal ti-label"></b-input>
+                <span v-else-if="selectedPeriodLabel" style="width: 100%">{{ selectedPeriodLabel }}</span>
+                <span v-else class="u-font-italic" style="width: 100%">{{ getPlaceHolder(selectedPeriod.id) }}</span>
                 <div class="spin">
                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </div>
@@ -124,7 +124,7 @@
                                :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
                                @toggle="checkoutMode = !checkoutMode"/>
             </div>
-            <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="$emit('clear-select')"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
+            <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
         </template>
         <template #cell(period-entry)="{item}">
             <template v-if="presence && presence.has_checkout && checkoutMode">
@@ -132,7 +132,7 @@
                                :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
                                :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
                                switch-class="mod-checkout"
-                               @toggle="$emit('toggle-checkout', item, selectedPeriod)"/>
+                               @toggle="$emit('toggle-checkout', item, selectedPeriod, hasNonCourseStudents)"/>
                 <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']">
                     <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
                 </div>
@@ -141,12 +141,12 @@
                 <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
                         :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
                         :title="getPresenceStatusTitle(status)"
-                        @click="!hasSelectedStudentStatus(item, status.id) ? $emit('select-student-status', item, selectedPeriod, status.id) : null"
+                        @click="!hasSelectedStudentStatus(item, status.id) ? $emit('select-student-status', item, selectedPeriod, status.id, hasNonCourseStudents) : null"
                         :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
             </div>
         </template>
         <template #foot(period-entry)>
-            <button class="btn-remove" @click="$emit('remove-selected-period')" :disabled="isRemovePeriodDisabled">{{ $t('remove-period') }}</button>
+            <button class="btn-remove" @click="$emit('remove-selected-period', selectedPeriod)" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
         </template>
     </b-table>
 </template>
@@ -164,26 +164,29 @@ import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '.
 export default class EntryTable extends Vue {
     sortBy = 'lastname';
     sortDesc = false;
-
+    selectedPeriod: PresencePeriod | null = null;
     checkoutMode = false;
 
     @Prop({type: String, default: '' }) readonly id!: string;
     @Prop() readonly items!: any;
-    @Prop() readonly pagination!: any;
-    @Prop({type: Boolean, default: false}) readonly showRemovePeriod!: boolean;
-    @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
-    @Prop({type: Boolean, default: false}) readonly isSortable!: boolean;
+    @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0})}) readonly pagination!: any;
     @Prop({type: Boolean, default: false}) readonly isSaving!: boolean;
-    @Prop({type: Boolean, default: false}) readonly isCreatePeriodDisabled!: boolean;
-    @Prop({type: Boolean, default: false}) readonly isRemovePeriodDisabled!: boolean;
-    @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
-    @Prop({type: Boolean, default: false}) readonly isPeriodLabelEditable!: boolean;
-    @Prop({type: Boolean, default: false}) readonly hasRegisteredStudents!: boolean;
     @Prop({type: String, default: ''}) readonly globalSearchQuery!: string;
-    @Prop({type: Object, default: null }) readonly presence!: Presence|null;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
     @Prop({type: Array, default: () => []}) readonly periods!: PresencePeriod[];
-    @Prop({type: Object, default: null }) readonly selectedPeriod!: PresencePeriod|null;
+    @Prop({type: Object, default: null }) readonly presence!: Presence|null;
+    @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
+    @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
+    @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
+    @Prop({type: Object, default: null }) readonly toRemovePeriod!: PresencePeriod|null;
+
+    get isFullyEditable() {
+        return this.canEditPresence && !this.hasNonCourseStudents;
+    }
+
+    get isRemovePeriodButtonShown() {
+        return this.isFullyEditable && !!this.selectedPeriod && !this.checkoutMode;
+    }
 
     getSortStatus(name: string) {
         if (this.sortBy !== name) { return 'none'; }
@@ -214,15 +217,19 @@ export default class EntryTable extends Vue {
     }
 
     set selectedPeriodLabel(label: string) {
-        this.$emit('period-label-changed', label);
+        if (!this.selectedPeriod) { return; }
+        this.$emit('period-label-changed', this.selectedPeriod, label);
     }
 
-    selectPeriod(periodId: number) {
-        this.$emit('select', periodId);
+    setSelectedPeriod(periodId: number) {
+        if (!this.canEditPresence) { return; }
+        const selectedPeriod = this.periods.find((p: any) => p.id === periodId) || null;
+        this.selectedPeriod = selectedPeriod || null;
         this.checkoutMode = false;
     }
 
     createPeriod() {
+        this.selectedPeriod = null;
         this.$emit('create-period', () => {
             (this.$refs.table as any).refresh();
         });
@@ -293,17 +300,34 @@ export default class EntryTable extends Vue {
             this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false},
-            this.canEditPresence && this.hasRegisteredStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
+            this.canEditPresence && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
             this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
             ...periodFields
         ];
     }
 
     created() {
-        console.log('created');
         this.$parent.$on('selected-period', (periodId: number) => {
-            console.log('event selected-period');
-            console.log(periodId);
+            this.$nextTick(() => {
+                this.setSelectedPeriod(periodId);
+            });
+        });
+        this.$parent.$on('selected-period-maybe', () => {
+            this.$nextTick(() => {
+                if (this.selectedPeriod) {
+                    this.setSelectedPeriod(this.selectedPeriod.id);
+                }
+            });
+        });
+        this.$parent.$on('period-removed', (periodId: number) => {
+            this.$nextTick(() => {
+                if (this.selectedPeriod?.id === periodId) {
+                    this.selectedPeriod = null;
+                }
+            })
+        });
+        this.$parent.$on('creating-new-period', () => {
+            this.selectedPeriod = null;
         });
     }
 }

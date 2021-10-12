@@ -1,37 +1,19 @@
 <i18n>
 {
     "en": {
-        "last-name": "Last name",
-        "first-name": "First name",
-        "official-code": "Official code",
         "total": "Total",
-        "stop-edit-mode": "Stop editing",
-        "new-period": "New period",
-        "remove-period": "Remove period",
         "error-Timeout": "The server took too long to respond. Your changes have possibly not been saved. You can try again later.",
         "error-LoggedOut": "It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.",
         "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
-        "checked-out": "Checked out",
-        "not-checked-out": "Not checked out",
-        "checkout-mode": "Checkout mode",
         "export": "Export",
         "legend": "Legend",
         "students-not-in-course": "Students not in course"
     },
     "nl": {
-        "last-name": "Familienaam",
-        "first-name": "Voornaam",
-        "official-code": "Officiële code",
         "total": "Totaal",
-        "stop-edit-mode": "Sluit editeren af",
-        "new-period": "Nieuwe periode",
-        "remove-period": "Verwijder periode",
         "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
-        "checked-out": "Uitgechecked",
-        "not-checked-out": "Niet uitgechecked",
-        "checkout-mode": "Uitcheckmodus",
         "export": "Exporteer",
         "legend": "Legende",
         "students-not-in-course": "Studenten niet in cursus"
@@ -53,16 +35,15 @@
                     <span style="color: #507177">{{ $t('legend') }}:</span>
                     <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
-                <entry-table id="table-1" :items="itemsProvider" :periods="periods" :can-edit-presence="canEditPresence" :is-sortable="canEditPresence"
-                     :pagination="pagination" :global-search-query="globalSearchQuery" :presence="presence" :status-defaults="statusDefaults" :selected-period="selectedPeriod"
-                     :is-saving="isSaving" :is-creating-new-period="creatingNew" :is-period-label-editable="true"
-                     :show-remove-period="canEditPresence && !!selectedPeriod"
-                     :is-remove-period-disabled="toRemovePeriod === selectedPeriod" :has-registered-students="true"
-                     @select="setSelectedPeriod" @clear-select="selectedPeriod = null" @create-period="createResultPeriod($event)"
-                     @select-student-status="setSelectedStudentStatus"
-                     @toggle-checkout="toggleCheckout"
-                     @period-label-changed="selectedPeriodLabel = $event"
-                     @remove-selected-period="removeSelectedPeriod" />
+                <entry-table id="course-students" :items="itemsProvider" :periods="periods"
+                             :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence"
+                             :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving"
+                             :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod"
+                             @create-period="createResultPeriod"
+                             @remove-selected-period="removeSelectedPeriod"
+                             @period-label-changed="setSelectedPeriodLabel"
+                             @select-student-status="setSelectedStudentStatus"
+                             @toggle-checkout="toggleCheckout" />
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
@@ -76,15 +57,11 @@
                 <span v-if="errorData.code === 500">{{ errorData.message }}</span>
                 <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
-            <b v-if="nonRegisteredStudents.length">{{ $t('students-not-in-course') }}</b>
-            <entry-table id="table-2" :items="nonRegisteredStudents" :periods="periods" :can-edit-presence="canEditPresence" :is-sortable="false"
-                 :pagination="pagination" :presence="presence" :status-defaults="statusDefaults" :selected-period="selectedPeriodNonRegistered"
-                 :is-saving="isSaving" :is-creating-new-period="creatingNew" :is-create-period-disabled="true"
-                 :show-remove-period="false"
-                 style="margin-top: 20px"
-                 @select="setSelectedPeriodNonRegistered" @clear-select="selectedPeriodNonRegistered = null"
-                 @select-student-status="setSelectedStudentStatus"
-                 @toggle-checkout="toggleCheckout" />
+            <b v-if="nonCourseStudents.length">{{ $t('students-not-in-course') }}</b>
+            <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
+                         :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
+                         :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
+                         @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
         </div>
     </div>
 </template>
@@ -108,41 +85,31 @@ export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
     presence: Presence | null = null;
     connector: Connector | null = null;
+    connectorNonCourse: Connector | null = null;
     periods: PresencePeriod[] = [];
-    selectedPeriod: PresencePeriod | null = null;
-    selectedPeriodNonRegistered: PresencePeriod | null = null;
     toRemovePeriod: PresencePeriod | null = null;
     students: any[] = [];
-    nonRegisteredStudents: any[] = [];
+    nonCourseStudents: any[] = [];
     creatingNew = false;
     createdId: number | null = null;
     pageLoaded = false;
     errorData: string|null = null;
 
-    sortBy = 'lastname';
-    sortDesc = false;
     pagination = {
         currentPage: 1,
         perPage: 20,
         total: 0
     };
+
     searchOptions = {
         globalSearchQuery: ''
     };
     requestCount = true;
-    requestNonRegisteredStudents = true;
+    requestNonCourseStudents = true;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
-
-    async load(): Promise<void> {
-        const presenceData : any = await this.connector?.loadPresence();
-        if (presenceData) {
-            this.statusDefaults = presenceData['status-defaults'];
-            this.presence = presenceData.presence;
-        }
-    }
 
     get globalSearchQuery() {
         return this.searchOptions.globalSearchQuery;
@@ -150,103 +117,6 @@ export default class Entry extends Vue {
 
     set globalSearchQuery(query: string) {
         this.searchOptions.globalSearchQuery = query;
-    }
-
-    get selectedPeriodLabel(): string {
-        return this.selectedPeriod?.label || '';
-    }
-
-    set selectedPeriodLabel(label: string) {
-        if (!this.selectedPeriod) { return; }
-        this.errorData = null;
-        this.selectedPeriod.label = label;
-        this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
-    }
-
-    toggleCheckout(student: any, selectedPeriod: PresencePeriod) {
-        const periodId = selectedPeriod.id;
-        if (!student[`period#${periodId}-checked_in_date`]) { return; }
-        this.connector?.togglePresenceEntryCheckout(periodId, student.id, (data: any) => {
-            if (data?.status === 'ok') {
-                student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
-                student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
-            }
-        });
-    }
-
-    get isSaving() {
-        return this.connector?.isSaving || false;
-    }
-
-    setSelectedPeriod(id: number) {
-        if (!this.canEditPresence) { return; }
-        const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
-        this.selectedPeriod = selectedPeriod || null;
-    }
-
-    setSelectedPeriodNonRegistered(id: number) {
-        if (!this.canEditPresence) { return; }
-        const selectedPeriodNonRegistered = this.periods.find((p: any) => p.id === id) || null;
-        this.selectedPeriodNonRegistered = selectedPeriodNonRegistered || null;
-    }
-
-    removeSelectedPeriod() {
-        if (!this.selectedPeriod) { return; }
-        this.errorData = null;
-        this.toRemovePeriod = this.selectedPeriod;
-        const index = this.periods.indexOf(this.selectedPeriod);
-        this.connector?.deletePresencePeriod(this.selectedPeriod.id, (data: any) => {
-            this.toRemovePeriod = null;
-            if (data?.status === 'ok') {
-                this.selectedPeriod = null;
-                this.periods.splice(index, 1);
-            }
-        })
-    }
-
-    setError(data: any) : void {
-        this.errorData = data;
-    }
-
-    async itemsProvider(ctx: any) {
-        const selectedPeriod = this.selectedPeriod;
-        const parameters = {
-            global_search_query: ctx.filter,
-            sort_field: ctx.sortBy,
-            sort_direction: ctx.sortDesc ? 'desc' : 'asc',
-            items_per_page: ctx.perPage,
-            page_number: ctx.currentPage,
-            request_count: this.requestCount,
-            request_non_registered_students: this.requestNonRegisteredStudents
-        };
-        const data = await this.connector?.loadPresenceEntries(parameters);
-        const {periods, students} = data;
-        this.periods = periods;
-        this.students = students;
-        if (data.count !== undefined) {
-            this.pagination.total = data.count;
-            this.requestCount = false;
-        }
-        if (this.requestNonRegisteredStudents) {
-            if (data['non_registered_students'] !== undefined) {
-                this.nonRegisteredStudents = data['non_registered_students'];
-            }
-            this.requestNonRegisteredStudents = false;
-        }
-        if (!this.pageLoaded && this.periods.length) {
-            this.$emit('selected-period', this.periods[this.periods.length - 1].id);
-            this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
-            this.pageLoaded = true;
-        } else if (this.createdId !== null) {
-            this.$emit('selected-period', this.createdId);
-            this.setSelectedPeriod(this.createdId);
-            this.createdId = null;
-            this.creatingNew = false;
-        } else if (selectedPeriod) {
-            this.$emit('selected-period', selectedPeriod.id);
-            this.setSelectedPeriod(selectedPeriod.id);
-        }
-        return students;
     }
 
     onFilterChanged() {
@@ -260,8 +130,77 @@ export default class Entry extends Vue {
         }
     }
 
+    getPresenceStatusTitle(status: PresenceStatus): string {
+        if (status.type !== 'custom') {
+            return this.statusDefaults.find(statusDefault => statusDefault.id === status.id)?.title || '';
+        }
+        return status.title || '';
+    }
+
+    get presenceStatuses(): PresenceStatus[] {
+        return this.presence?.statuses || [];
+    }
+
+    async load(): Promise<void> {
+        const presenceData : any = await this.connector?.loadPresence();
+        if (presenceData) {
+            this.statusDefaults = presenceData['status-defaults'];
+            this.presence = presenceData.presence;
+        }
+    }
+
+    async itemsProvider(ctx: any) {
+        const parameters = {
+            global_search_query: ctx.filter,
+            sort_field: ctx.sortBy,
+            sort_direction: ctx.sortDesc ? 'desc' : 'asc',
+            items_per_page: ctx.perPage,
+            page_number: ctx.currentPage,
+            request_count: this.requestCount,
+            request_non_course_students: this.requestNonCourseStudents
+        };
+        const data = await this.connector?.loadPresenceEntries(parameters);
+        const {periods, students} = data;
+        this.periods = periods;
+        this.students = students;
+        if (data.count !== undefined) {
+            this.pagination.total = data.count;
+            this.requestCount = false;
+        }
+        if (this.requestNonCourseStudents) {
+            if (data['non_course_students'] !== undefined) {
+                this.nonCourseStudents = data['non_course_students'];
+            }
+            this.requestNonCourseStudents = false;
+        }
+        if (!this.pageLoaded && this.periods.length) {
+            this.$emit('selected-period', this.periods[this.periods.length - 1].id);
+            this.pageLoaded = true;
+        } else if (this.createdId !== null) {
+            this.$emit('selected-period', this.createdId);
+            this.createdId = null;
+            this.creatingNew = false;
+        } else {
+            this.$emit('selected-period-maybe');
+        }
+        return students;
+    }
+
+    get isSaving() {
+        return this.connector?.isSaving || false;
+    }
+
+    get isSavingNonCourse() {
+        return this.connectorNonCourse?.isSaving || false;
+    }
+
+    setError(data: any) : void {
+        this.errorData = data;
+    }
+
     async createResultPeriod(callback: Function|undefined = undefined) {
-        this.selectedPeriod = null;
+        if (!this.canEditPresence) { return; }
+        this.$emit('creating-new-period');
         this.creatingNew = true;
         this.errorData = null;
         await this.connector?.createResultPeriod((data: any) => {
@@ -274,11 +213,34 @@ export default class Entry extends Vue {
         });
     }
 
-    async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number) {
+    removeSelectedPeriod(selectedPeriod: PresencePeriod) {
+        if (!this.canEditPresence) { return; }
+        this.errorData = null;
+        this.toRemovePeriod = selectedPeriod;
+        const index = this.periods.indexOf(selectedPeriod);
+        this.connector?.deletePresencePeriod(selectedPeriod.id, (data: any) => {
+            this.toRemovePeriod = null;
+            if (data?.status === 'ok') {
+                this.$emit('period-removed', selectedPeriod.id);
+                this.periods.splice(index, 1);
+            }
+        })
+    }
+
+    setSelectedPeriodLabel(selectedPeriod: PresencePeriod, label: string) {
+        if (!this.canEditPresence) { return; }
+        this.errorData = null;
+        selectedPeriod.label = label;
+        this.connector?.updatePresencePeriod(selectedPeriod.id, label);
+    }
+
+    async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number, hasNonCourseStudents = false) {
+        if (!this.canEditPresence) { return; }
         this.errorData = null;
         const periodId = selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
-        this.connector?.savePresenceEntry(periodId, student.id, status, function(data: any) {
+        const connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+        connector?.savePresenceEntry(periodId, student.id, status, function(data: any) {
             if (data?.status === 'ok') {
                 student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
                 student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
@@ -286,20 +248,24 @@ export default class Entry extends Vue {
         });
     }
 
-    getPresenceStatusTitle(status: PresenceStatus): string {
-        if (status.type !== 'custom') {
-            return this.statusDefaults.find(statusDefault => statusDefault.id === status.id)?.title || '';
-        }
-        return status.title || '';
-    }
-
-    get presenceStatuses(): PresenceStatus[] {
-        return this.presence?.statuses || [];
+    toggleCheckout(student: any, selectedPeriod: PresencePeriod, hasNonCourseStudents = false) {
+        if (!this.canEditPresence) { return; }
+        const periodId = selectedPeriod.id;
+        if (!student[`period#${periodId}-checked_in_date`]) { return; }
+        const connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+        connector?.togglePresenceEntryCheckout(periodId, student.id, (data: any) => {
+            if (data?.status === 'ok') {
+                student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
+                student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
+            }
+        });
     }
 
     mounted(): void {
         this.connector = new Connector(this.apiConfig);
         this.connector.addErrorListener(this as ConnectorErrorListener);
+        this.connectorNonCourse = new Connector(this.apiConfig);
+        this.connectorNonCourse.addErrorListener(this as ConnectorErrorListener);
         this.load();
     }
 
@@ -318,7 +284,7 @@ export default class Entry extends Vue {
     margin: 20px 8px 15px;
 }
 .m-errors {
-    margin: 10px 0 0 0;
-    max-width: 85px;
+    margin: 10px 0;
+    max-width: 85ch;
 }
 </style>

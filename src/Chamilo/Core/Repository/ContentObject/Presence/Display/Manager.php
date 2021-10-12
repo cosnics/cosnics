@@ -173,12 +173,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
             $this->throwUserException('UserIdNotProvided');
         }
 
-        $userIds = $this->getPresenceServiceBridge()->getTargetUserIds();
+        /*$userIds = $this->getPresenceServiceBridge()->getTargetUserIds();
 
         if (! in_array($userId, $userIds))
         {
             $this->throwUserException('UserNotInList');
-        }
+        }*/
     }
 
     /**

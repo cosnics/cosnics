@@ -940,7 +940,7 @@ td.table-period {
 }
 .m-errors {
     margin: 10px 0 0 0;
-    max-width: 85px;
+    max-width: 85ch;
 }
 .m-save {
     margin: 16px 0 0 8px;
