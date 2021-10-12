@@ -35,6 +35,10 @@ class LoadPresenceEntriesComponent extends Manager
 
             if ($canEditPresence && ($requestCount || $requestNonRegisteredUsers))
             {
+                // Note:
+                // $allTargetUserIds will only be effectively all users if no global query filter is set.
+                // If $requestNonRegisteredUsers is set then the results in $resultData['non_course_students'] will likely be incorrect.
+                // However this shouldn't be a problem because $requestNonRegisteredUsers is normally only true the first time around when no global query filter is set.
                 $allTargetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds($filterParameters);
 
                 if ($requestCount)
