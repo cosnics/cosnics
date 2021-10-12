@@ -57,7 +57,7 @@
                 <span v-if="errorData.code === 500">{{ errorData.message }}</span>
                 <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
-            <b v-if="nonCourseStudents.length">{{ $t('students-not-in-course') }}</b>
+            <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
             <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
                          :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
                          :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
