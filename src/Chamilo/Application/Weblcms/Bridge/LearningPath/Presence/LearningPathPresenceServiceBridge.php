@@ -7,7 +7,8 @@ use Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repo
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
-use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository;
+use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Service\PublicationService;
+
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\LearningPath\Presence
@@ -22,9 +23,9 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
     protected $learningPathStepContextService;
 
     /**
-     * @var PublicationRepository
+     * @var PublicationService
      */
-    protected $publicationRepository;
+    protected $publicationService;
 
     /**
      * @var ContentObjectPublication
@@ -36,10 +37,14 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
      */
     protected $canEditPresence;
 
-    public function __construct(LearningPathStepContextService $learningPathStepContextService, PublicationRepository $publicationRepository)
+    /**
+     * @param LearningPathStepContextService $learningPathStepContextService
+     * @param PublicationService $publicationService
+     */
+    public function __construct(LearningPathStepContextService $learningPathStepContextService, PublicationService $publicationService)
     {
         $this->learningPathStepContextService = $learningPathStepContextService;
-        $this->publicationRepository = $publicationRepository;
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -84,6 +89,6 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {
-        return $this->publicationRepository->getTargetUserIds($this->contentObjectPublication, $filterParameters);
+        return $this->publicationService->getTargetUserIds($this->contentObjectPublication, $filterParameters);
     }
 }

@@ -5,7 +5,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Presence;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\DataClass\Publication as PresencePublication;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
-use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository;
+use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Service\PublicationService;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
@@ -18,9 +18,9 @@ use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 class PresenceServiceBridge implements PresenceServiceBridgeInterface
 {
     /**
-     * @var PublicationRepository
+     * @var PublicationService
      */
-    protected $publicationRepository;
+    protected $publicationService;
 
     /**
      * @var ContentObjectPublication
@@ -38,11 +38,11 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     protected $canEditPresence;
 
     /**
-     * @param PublicationRepository $publicationRepository
+     * @param PublicationService $publicationService
      */
-    public function __construct(PublicationRepository $publicationRepository)
+    public function __construct(PublicationService $publicationService)
     {
-        $this->publicationRepository = $publicationRepository;
+        $this->publicationService = $publicationService;
     }
 
     /**
@@ -91,6 +91,6 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {
-        return $this->publicationRepository->getTargetUserIds($this->contentObjectPublication, $filterParameters);
+        return $this->publicationService->getTargetUserIds($this->contentObjectPublication, $filterParameters);
     }
 }

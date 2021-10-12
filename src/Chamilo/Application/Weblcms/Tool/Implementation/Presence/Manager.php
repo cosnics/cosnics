@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Presence;
 
 use Chamilo\Application\Weblcms\Renderer\PublicationList\ContentObjectPublicationListRenderer;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
+use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Service\PublicationService;
 use Chamilo\Application\Weblcms\Tool\Interfaces\IntroductionTextSupportInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Libraries\Architecture\Interfaces\Categorizable;
@@ -35,11 +36,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     }
 
     /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository
+     * @return PublicationService
      */
-    public function getPublicationRepository()
+    public function getPublicationService(): PublicationService
     {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.presence.storage.repository.publication_repository');
+        return $this->getService(PublicationService::class);
     }
 
     /**
@@ -49,6 +50,6 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
      */
     public function getPresencePublication(ContentObjectPublication $contentObjectPublication)
     {
-        return $this->getPublicationRepository()->findPublicationByContentObjectPublication($contentObjectPublication);
+        return $this->getPublicationService()->findPublicationByContentObjectPublication($contentObjectPublication);
     }
 }

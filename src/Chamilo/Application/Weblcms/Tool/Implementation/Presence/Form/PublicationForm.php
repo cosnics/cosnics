@@ -5,8 +5,8 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Presence\Form;
 use Chamilo\Application\Weblcms\Form\ContentObjectPublicationForm;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Manager;
+use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Service\PublicationService;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\DataClass\Publication;
-use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Symfony\Component\Translation\Translator;
 
@@ -23,9 +23,9 @@ class PublicationForm extends ContentObjectPublicationForm
     protected $translator;
 
     /**
-     * @var \Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository
+     * @var PublicationService
      */
-    protected $publicationRepository;
+    protected $publicationService;
 
     /**
      *
@@ -38,17 +38,17 @@ class PublicationForm extends ContentObjectPublicationForm
      * @param array $selectedContentObjects
      *
      * @param \Symfony\Component\Translation\Translator $translator
-     * @param \Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository $publicationRepository
+     * @param PublicationService $publicationService
      *
      * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
      */
     public function __construct(
         User $user, $form_type, $publications, $course, $action, $is_course_admin,
-             $selectedContentObjects = array(), Translator $translator, PublicationRepository $publicationRepository
+             $selectedContentObjects = array(), Translator $translator, PublicationService $publicationService
     )
     {
         $this->translator = $translator;
-        $this->publicationRepository = $publicationRepository;
+        $this->publicationService = $publicationService;
 
         parent::__construct(
             'Chamilo\Application\Weblcms\Tool\Implementation\Presence',
@@ -145,7 +145,7 @@ class PublicationForm extends ContentObjectPublicationForm
         try
         {
             $publication =
-                $this->publicationRepository->findPublicationByContentObjectPublication($contentObjectPublication);
+                $this->publicationService->findPublicationByContentObjectPublication($contentObjectPublication);
 
             return $publication->update();
         }

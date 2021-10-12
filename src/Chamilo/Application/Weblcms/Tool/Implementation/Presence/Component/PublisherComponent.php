@@ -53,7 +53,7 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
             $course,
             $this->get_url(),
             $is_course_admin,
-            $selectedContentObjects, $this->getTranslator(), $this->getPublicationRepository()
+            $selectedContentObjects, $this->getTranslator(), $this->getPublicationService()
         );
     }
 
@@ -74,13 +74,4 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
             $publicationForm
         );
     }
-
-    /**
-     * @return PublicationRepository
-     */
-    public function getPublicationRepository()
-    {
-        return $this->getService('chamilo.application.weblcms.tool.implementation.presence.storage.repository.publication_repository');
-    }
-
 }
