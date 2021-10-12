@@ -15,7 +15,8 @@
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
         "export": "Export",
-        "legend": "Legend"
+        "legend": "Legend",
+        "students-not-in-course": "Students not in course"
     },
     "nl": {
         "last-name": "Familienaam",
@@ -32,7 +33,8 @@
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
         "export": "Exporteer",
-        "legend": "Legende"
+        "legend": "Legende",
+        "students-not-in-course": "Studenten niet in cursus"
     }
 }
 </i18n>
@@ -51,110 +53,16 @@
                     <span style="color: #507177">{{ $t('legend') }}:</span>
                     <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
-                <b-table ref="table" :foot-clone="canEditPresence && !!selectedPeriod && !checkoutMode" bordered :items="itemsProvider" :fields="fields" class="mod-presence mod-entry"
-                         :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage"
-                         :current-page="pagination.currentPage" :filter="globalSearchQuery" no-sort-reset>
-                    <template slot="table-colgroup" v-if="canEditPresence">
-                        <col>
-                        <col>
-                        <col>
-                        <col v-if="!!selectedPeriod && !creatingNew">
-                        <col v-else-if="creatingNew" class="bd-selected-period">
-                        <template v-if="!!selectedPeriod || creatingNew" v-for="period in periodsReversed">
-                            <col v-if="!creatingNew && period === selectedPeriod" class="bd-selected-period">
-                            <col v-else>
-                        </template>
-                    </template>
-                    <template #cell(photo)="{item}" v-if="canEditPresence">
-                        <img :src="item.photo">
-                    </template>
-                    <template #head(fullname) v-if="canEditPresence">
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
-                    </template>
-                    <template #head(fullname) v-else>Student</template>
-                    <template #foot(fullname)><span></span></template>
-                    <template #head(official_code) v-if="canEditPresence">
-                        <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
-                    </template>
-                    <template #head(official_code) v-else>{{ $t('official-code') }}</template>
-                    <template #head(new_period)>
-                        <div role="button" tabindex="0" class="select-period-btn mod-new" @keyup.enter="createResultPeriod('')" @click="createResultPeriod('')" :title="$t('new-period')">
-                            <i aria-hidden="true" class="fa fa-plus" style="color: #337ab7"></i> <span class="sr-only">{{ $t('new-period') }}</span>
-                        </div>
-                    </template>
-                    <template #foot(new_period)><span></span></template>
-                    <template #foot(official_code)><span></span></template>
-                    <template #cell(fullname)="{item}">
-                        {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
-                    </template>
-                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-                        <dynamic-field-key :is-editable="canEditPresence" @select="setSelectedPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
-                            <template v-slot>
-                                <span v-if="label">{{ label }}</span>
-                                <span v-else class="u-font-italic">{{ getPlaceHolder(fieldKey.id) }}</span>
-                            </template>
-                        </dynamic-field-key>
-                    </template>
-                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
-                        <div class="result-wrap">
-                            <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
-                                <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
-                    <template #head(period-entry-plh)>
-                        <div class="u-flex u-align-items-center u-gap-small">
-                            <b-input type="text" autocomplete="off" :placeholder="$t('new-period') + '...'" class="u-bg-none u-font-normal u-font-italic u-pointer-events-none ti-label mod-border"></b-input>
-                            <div class="spin">
-                                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                            </div>
-                        </div>
-                    </template>
-                    <template #cell(period-entry-plh)>
-                        <div class="u-flex u-gap-small u-flex-wrap u-pointer-events-none">
-                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-plh"
-                                    :class="[status.color]"><span>{{ status.code }}</span></button>
-                        </div>
-                    </template>
-                    <template #head(period-entry)>
-                        <div class="u-flex u-align-items-center u-gap-small">
-                            <b-input type="text" debounce="750" autocomplete="off" :placeholder="getPlaceHolder(selectedPeriod.id)" v-model="selectedPeriodLabel" class="u-font-normal ti-label"></b-input>
-                            <div class="spin">
-                                <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
-                            </div>
-                        </div>
-                        <div v-if="presence && presence.has_checkout" class="selected-period-controls">
-                            <on-off-switch id="checkout" switch-class="mod-checkout-choice"
-                                           :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
-                                           @toggle="checkoutMode = !checkoutMode"/>
-                        </div>
-                        <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
-                    </template>
-                    <template #cell(period-entry)="{item}">
-                        <template v-if="presence && presence.has_checkout && checkoutMode">
-                            <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
-                                           :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
-                                           :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
-                                           switch-class="mod-checkout"
-                                           @toggle="toggleCheckout(item)"/>
-                            <div v-else :title="getStatusTitleForStudent(item, selectedPeriod.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, selectedPeriod.id) || 'mod-none']">
-                                <span>{{ getStatusCodeForStudent(item, selectedPeriod.id) }}</span>
-                            </div>
-                        </template>
-                        <div v-else class="u-flex u-gap-small u-flex-wrap">
-                            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
-                                    :class="[status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id) }]"
-                                    :title="getPresenceStatusTitle(status)"
-                                    @click="!hasSelectedStudentStatus(item, status.id) ? setSelectedStudentStatus(item, status.id) : null"
-                                    :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>
-                        </div>
-                    </template>
-                    <template #foot(period-entry)>
-                        <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
-                    </template>
-                </b-table>
+                <entry-table id="table-1" :items="itemsProvider" :periods="periods" :can-edit-presence="canEditPresence" :is-sortable="canEditPresence"
+                     :pagination="pagination" :global-search-query="globalSearchQuery" :presence="presence" :status-defaults="statusDefaults" :selected-period="selectedPeriod"
+                     :is-saving="isSaving" :is-creating-new-period="creatingNew" :is-period-label-editable="true"
+                     :show-remove-period="canEditPresence && !!selectedPeriod"
+                     :is-remove-period-disabled="toRemovePeriod === selectedPeriod" :has-registered-students="true"
+                     @select="setSelectedPeriod" @clear-select="selectedPeriod = null" @create-period="createResultPeriod($event)"
+                     @select-student-status="setSelectedStudentStatus"
+                     @toggle-checkout="toggleCheckout"
+                     @period-label-changed="selectedPeriodLabel = $event"
+                     @remove-selected-period="removeSelectedPeriod" />
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
@@ -168,6 +76,15 @@
                 <span v-if="errorData.code === 500">{{ errorData.message }}</span>
                 <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
+            <b v-if="nonRegisteredStudents.length">{{ $t('students-not-in-course') }}</b>
+            <entry-table id="table-2" :items="nonRegisteredStudents" :periods="periods" :can-edit-presence="canEditPresence" :is-sortable="false"
+                 :pagination="pagination" :presence="presence" :status-defaults="statusDefaults" :selected-period="selectedPeriodNonRegistered"
+                 :is-saving="isSaving" :is-creating-new-period="creatingNew" :is-create-period-disabled="true"
+                 :show-remove-period="false"
+                 style="margin-top: 20px"
+                 @select="setSelectedPeriodNonRegistered" @clear-select="selectedPeriodNonRegistered = null"
+                 @select-student-status="setSelectedStudentStatus"
+                 @toggle-checkout="toggleCheckout" />
         </div>
     </div>
 </template>
@@ -180,11 +97,12 @@ import Connector, {ConnectorErrorListener} from '../connect/Connector';
 import LegendItem from './entry/LegendItem.vue';
 import SearchBar from './entry/SearchBar.vue';
 import DynamicFieldKey from './entry/DynamicFieldKey.vue';
+import EntryTable from './entry/EntryTable.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
 
 @Component({
     name: 'entry',
-    components: {OnOffSwitch, SearchBar, LegendItem, DynamicFieldKey}
+    components: {EntryTable, OnOffSwitch, SearchBar, LegendItem, DynamicFieldKey}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -192,13 +110,14 @@ export default class Entry extends Vue {
     connector: Connector | null = null;
     periods: PresencePeriod[] = [];
     selectedPeriod: PresencePeriod | null = null;
+    selectedPeriodNonRegistered: PresencePeriod | null = null;
     toRemovePeriod: PresencePeriod | null = null;
     students: any[] = [];
+    nonRegisteredStudents: any[] = [];
     creatingNew = false;
     createdId: number | null = null;
     pageLoaded = false;
     errorData: string|null = null;
-    checkoutMode = false;
 
     sortBy = 'lastname';
     sortDesc = false;
@@ -211,6 +130,7 @@ export default class Entry extends Vue {
         globalSearchQuery: ''
     };
     requestCount = true;
+    requestNonRegisteredStudents = true;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
@@ -232,12 +152,6 @@ export default class Entry extends Vue {
         this.searchOptions.globalSearchQuery = query;
     }
 
-    get periodsReversed() {
-        const periods = [...this.periods];
-        periods.reverse();
-        return periods;
-    }
-
     get selectedPeriodLabel(): string {
         return this.selectedPeriod?.label || '';
     }
@@ -249,9 +163,8 @@ export default class Entry extends Vue {
         this.connector?.updatePresencePeriod(this.selectedPeriod.id, label);
     }
 
-    toggleCheckout(student: any) {
-        if (!this.selectedPeriod) { return; }
-        const periodId = this.selectedPeriod.id;
+    toggleCheckout(student: any, selectedPeriod: PresencePeriod) {
+        const periodId = selectedPeriod.id;
         if (!student[`period#${periodId}-checked_in_date`]) { return; }
         this.connector?.togglePresenceEntryCheckout(periodId, student.id, (data: any) => {
             if (data?.status === 'ok') {
@@ -259,10 +172,6 @@ export default class Entry extends Vue {
                 student[`period#${periodId}-checked_out_date`] = data.checked_out_date;
             }
         });
-    }
-
-    getPlaceHolder(periodId: number) {
-        return `P${this.periods.findIndex(p => p.id === periodId) + 1}`;
     }
 
     get isSaving() {
@@ -273,7 +182,12 @@ export default class Entry extends Vue {
         if (!this.canEditPresence) { return; }
         const selectedPeriod = this.periods.find((p: any) => p.id === id) || null;
         this.selectedPeriod = selectedPeriod || null;
-        this.checkoutMode = false;
+    }
+
+    setSelectedPeriodNonRegistered(id: number) {
+        if (!this.canEditPresence) { return; }
+        const selectedPeriodNonRegistered = this.periods.find((p: any) => p.id === id) || null;
+        this.selectedPeriodNonRegistered = selectedPeriodNonRegistered || null;
     }
 
     removeSelectedPeriod() {
@@ -294,10 +208,6 @@ export default class Entry extends Vue {
         this.errorData = data;
     }
 
-    get dynamicFieldKeys(): any {
-        return this.periods.map((period: any) => ({key: `period#${period.id}`, id: period.id}));
-    }
-
     async itemsProvider(ctx: any) {
         const selectedPeriod = this.selectedPeriod;
         const parameters = {
@@ -307,10 +217,9 @@ export default class Entry extends Vue {
             items_per_page: ctx.perPage,
             page_number: ctx.currentPage,
             request_count: this.requestCount,
-            request_non_registered_students: false
+            request_non_registered_students: this.requestNonRegisteredStudents
         };
         const data = await this.connector?.loadPresenceEntries(parameters);
-        console.log(data);
         const {periods, students} = data;
         this.periods = periods;
         this.students = students;
@@ -318,14 +227,23 @@ export default class Entry extends Vue {
             this.pagination.total = data.count;
             this.requestCount = false;
         }
+        if (this.requestNonRegisteredStudents) {
+            if (data['non_registered_students'] !== undefined) {
+                this.nonRegisteredStudents = data['non_registered_students'];
+            }
+            this.requestNonRegisteredStudents = false;
+        }
         if (!this.pageLoaded && this.periods.length) {
+            this.$emit('selected-period', this.periods[this.periods.length - 1].id);
             this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
             this.pageLoaded = true;
         } else if (this.createdId !== null) {
+            this.$emit('selected-period', this.createdId);
             this.setSelectedPeriod(this.createdId);
             this.createdId = null;
             this.creatingNew = false;
         } else if (selectedPeriod) {
+            this.$emit('selected-period', selectedPeriod.id);
             this.setSelectedPeriod(selectedPeriod.id);
         }
         return students;
@@ -342,30 +260,21 @@ export default class Entry extends Vue {
         }
     }
 
-    getStudentStatusForPeriod(student: any, periodId: number) {
-        return student[`period#${periodId}-status`];
-    }
-
-    hasSelectedStudentStatus(student: any, status: number) {
-        if (!this.selectedPeriod) { return false; }
-        return this.getStudentStatusForPeriod(student, this.selectedPeriod.id) === status;
-    }
-
-    async createResultPeriod() {
+    async createResultPeriod(callback: Function|undefined = undefined) {
         this.selectedPeriod = null;
         this.creatingNew = true;
         this.errorData = null;
         await this.connector?.createResultPeriod((data: any) => {
             if (data?.status === 'ok') {
                 this.createdId = data.id;
-                (this.$refs.table as any).refresh();
+                if (callback) {
+                    callback(this.createdId);
+                }
             }
         });
     }
 
-    async setSelectedStudentStatus(student: any, status: number) {
-        if (!this.selectedPeriod) { return; }
-        const selectedPeriod = this.selectedPeriod;
+    async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number) {
         this.errorData = null;
         const periodId = selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
@@ -386,66 +295,6 @@ export default class Entry extends Vue {
 
     get presenceStatuses(): PresenceStatus[] {
         return this.presence?.statuses || [];
-    }
-
-    getPresenceStatus(statusId: number): PresenceStatus | undefined {
-        return this.presenceStatuses.find(status => status.id === statusId);
-    }
-
-    getStatusCodeForStudent(student: any, periodId: number|undefined = undefined): string {
-        if (periodId === undefined) {
-            if (!this.selectedPeriod) { return ''; }
-            periodId = this.selectedPeriod.id;
-        }
-        return this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId))?.code || '';
-    }
-
-    getStatusColorForStudent(student: any, periodId: number|undefined = undefined): string {
-        if (periodId === undefined) {
-            if (!this.selectedPeriod) { return ''; }
-            periodId = this.selectedPeriod.id;
-        }
-        return this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId))?.color || '';
-    }
-
-    getStatusTitleForStudent(student: any, periodId: number|undefined = undefined): string {
-        if (periodId === undefined) {
-            if (!this.selectedPeriod) { return ''; }
-            periodId = this.selectedPeriod.id;
-        }
-        const status = this.getPresenceStatus(this.getStudentStatusForPeriod(student, periodId));
-        return status ? this.getPresenceStatusTitle(status) : '';
-    }
-
-    get fields() {
-        const periods = this.periods.map(period => {
-            const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
-            const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
-            return {key, sortable: false, label: period.label, variant};
-        });
-        periods.reverse();
-        return [
-            this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
-            {key: 'fullname', sortable: false, label: 'Student'},
-            {key: 'official_code', sortable: false},
-            this.canEditPresence && !this.creatingNew ? {key: 'new_period', sortable: false, label: ''} : null,
-            this.creatingNew ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
-            ...periods
-        ];
-    }
-
-    getSortStatus(name: string) {
-        if (this.sortBy !== name) { return 'none'; }
-        return this.sortDesc ? 'descending' : 'ascending';
-    }
-
-    sortByNameField(namefield: string) {
-        if (this.sortBy === namefield) {
-            this.sortDesc = !this.sortDesc;
-            return;
-        }
-        this.sortBy = namefield;
-        this.sortDesc = false;
     }
 
     mounted(): void {
@@ -471,18 +320,5 @@ export default class Entry extends Vue {
 .m-errors {
     margin: 10px 0 0 0;
     max-width: 85px;
-}
-.bd-selected-period {
-    border: 1px double #8ea4b3;
-}
-.spin {
-    min-width: 13px;
-}
-.ti-label {
-    height: 30px;
-    padding: 6px;
-}
-.ti-label.mod-border {
-    border-color: #e9eaea;
 }
 </style>
