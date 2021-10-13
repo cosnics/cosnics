@@ -25,8 +25,13 @@ class Presence extends ContentObject implements Versionable
 
     const COLORS = ['pink', 'blue', 'cyan', 'teal', 'green', 'light-green', 'lime', 'yellow', 'amber', 'deep-orange', 'grey'];
     const VALUES = ['-100', '-300', '-500', '-700', '-900'];
-    const FIXED_STATUS_IDS = [1, 2, 3];
+
+    const ABSENT_STATUS_ID = 1;
+    const AUTHORIZED_ABSENT_STATUS_ID = 2;
+    const PRESENT_STATUS_ID = 3;
     const ONLINE_PRESENT_STATUS_ID = 4;
+
+    const FIXED_STATUS_IDS = [1, 2, 3];
     const STATUS_TYPE_FIXED = 'fixed';
     const STATUS_TYPE_SEMIFIXED = 'semifixed';
     const STATUS_TYPE_CUSTOM = 'custom';

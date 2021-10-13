@@ -76,6 +76,22 @@ class PresenceResultEntryService
     }
 
     /**
+     * @param int $periodId
+     * @param int $userId
+     *
+     * @return int
+     */
+    public function getPresenceResultEntryPresenceStatus(int $periodId, int $userId): int
+    {
+        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
+        if (! $presenceResultEntry instanceof PresenceResultEntry)
+        {
+            return Presence::ABSENT_STATUS_ID;
+        }
+        return $presenceResultEntry->getPresenceStatusId();
+    }
+
+    /**
      * @param Presence $presence
      * @param int $periodId
      * @param int $userId
