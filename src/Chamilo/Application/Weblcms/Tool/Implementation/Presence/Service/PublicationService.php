@@ -3,6 +3,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Presence\Service;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 
 /**
@@ -45,5 +46,21 @@ class PublicationService
     public function getTargetUserIds(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null): array
     {
         return $this->publicationRepository->getTargetUserIds($contentObjectPublication, $filterParameters);
+    }
+
+    /**
+     * @param User $user
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param array|null $targetUserIds
+     *
+     * @return bool
+     */
+    public function isUserSubscribedToPublication(User $user, ContentObjectPublication $contentObjectPublication, array $targetUserIds = null): bool
+    {
+        if (is_null($targetUserIds))
+        {
+            $targetUserIds = $this->getTargetUserIds($contentObjectPublication);
+        }
+        return in_array($user->getId(), $targetUserIds);
     }
 }
