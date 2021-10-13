@@ -1,10 +1,7 @@
 <?php
-namespace Chamilo\Application\ExamAssignment\DependencyInjection;
+namespace Chamilo\Application\Presence\DependencyInjection;
 
-use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\ExamRendererDecoratorCompilerPass;
-use Chamilo\Application\ExamAssignment\DependencyInjection\CompilerPass\RequestValidatorCompilerPass;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
@@ -23,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension
+class DependencyInjectionExtension extends Extension implements ExtensionInterface
 {
 
     /**
@@ -39,7 +36,7 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
         
         $xmlFileLoader = new XmlFileLoader(
             $container, 
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Application\ExamAssignment') . 'DependencyInjection'));
+            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Application\Presence') . 'DependencyInjection'));
 
         $xmlFileLoader->load('services.xml');
     }
@@ -52,15 +49,6 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
      */
     public function getAlias()
     {
-        return 'chamilo.application.exam_assignments';
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function registerCompilerPasses(ContainerBuilder $container)
-    {
-        $container->addCompilerPass(new RequestValidatorCompilerPass());
-        $container->addCompilerPass(new ExamRendererDecoratorCompilerPass());
+        return 'chamilo.application.presence';
     }
 }

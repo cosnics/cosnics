@@ -83,12 +83,23 @@ class PresenceResultEntryService
      */
     public function getPresenceResultEntryPresenceStatus(int $periodId, int $userId): int
     {
-        $presenceResultEntry = $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
+        $presenceResultEntry = $this->getPresenceResultEntry($periodId, $userId);
         if (! $presenceResultEntry instanceof PresenceResultEntry)
         {
             return Presence::ABSENT_STATUS_ID;
         }
         return $presenceResultEntry->getPresenceStatusId();
+    }
+
+    /**
+     * @param int $periodId
+     * @param int $userId
+     *
+     * @return PresenceResultEntry|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass|false
+     */
+    public function getPresenceResultEntry(int $periodId, int $userId)
+    {
+        return $this->presenceRepository->getPresenceResultEntry($periodId, $userId);
     }
 
     /**

@@ -17,6 +17,10 @@ class PresenceResultEntry extends DataClass
     const PROPERTY_CHECKED_IN_DATE = 'checked_in_date';
     const PROPERTY_CHECKED_OUT_DATE = 'checked_out_date';
 
+    const STATUS_ABSENT = 1;
+    const STATUS_AUTHORIZED_ABSENT = 2;
+    const STATUS_PRESENT = 3;
+
     /**
      * Get the default properties
      *
@@ -122,7 +126,7 @@ class PresenceResultEntry extends DataClass
     /**
      * @return int
      */
-    public function getCheckedOutDate(): int
+    public function getCheckedOutDate(): ?int
     {
         return $this->get_default_property(self::PROPERTY_CHECKED_OUT_DATE);
     }
