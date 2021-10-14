@@ -108,7 +108,7 @@ class ExportService
             $id = $status['aliasses'];
         }
 
-        if ($id == Presence::ONLINE_PRESENT_STATUS_ID)
+        if ($id == Presence::STATUS_ONLINE_PRESENT)
         {
             return 3;
         }

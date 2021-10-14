@@ -93,7 +93,7 @@ class PresenceValidationService
     {
         $statusId = $status['id'];
 
-        if ($statusId == Presence::ONLINE_PRESENT_STATUS_ID)
+        if ($statusId == Presence::STATUS_ONLINE_PRESENT)
         {
             return Presence::STATUS_TYPE_SEMIFIXED;
         }

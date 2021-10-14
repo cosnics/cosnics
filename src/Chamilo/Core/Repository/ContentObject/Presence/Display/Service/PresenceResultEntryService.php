@@ -86,7 +86,7 @@ class PresenceResultEntryService
         $presenceResultEntry = $this->getPresenceResultEntry($periodId, $userId);
         if (! $presenceResultEntry instanceof PresenceResultEntry)
         {
-            return Presence::ABSENT_STATUS_ID;
+            return Presence::STATUS_ABSENT;
         }
         return $presenceResultEntry->getPresenceStatusId();
     }
