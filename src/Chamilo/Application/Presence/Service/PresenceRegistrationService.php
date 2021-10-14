@@ -92,7 +92,7 @@ class PresenceRegistrationService
         if (!$result instanceof PresenceResultEntry)
         {
             $result = $this->resultEntryService->createOrUpdatePresenceResultEntry(
-                $presence, $lastPeriod['id'], $user->getId(), PresenceResultEntry::STATUS_PRESENT
+                $presence, $lastPeriod['id'], $user->getId(), Presence::STATUS_PRESENT
             );
         }
 
