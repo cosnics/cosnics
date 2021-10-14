@@ -1,0 +1,11 @@
+{{ HEADER|raw }}
+
+<img alt="qr-code" src="{{ SELF_SERVICE_QR_CODE|raw }}" />
+
+<script type="application/javascript">
+    window.onload = function() {
+        window.print();
+    }
+</script>
+
+{{ FOOTER|raw }}

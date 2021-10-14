@@ -5,13 +5,8 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Component;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRendition;
 use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementation;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Manager;
-use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
-use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager as AjaxManager;
-use Chamilo\Libraries\File\Redirect;
-use Endroid\QrCode\QrCode;
 
 /**
  *
@@ -57,36 +52,14 @@ class BrowserComponent extends Manager
     {
         $presence = $this->getPresence();
 
-        //$contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-
-        $registerPresenceUrl = $this->get_url(
-            [
-                self::PARAM_CONTEXT => \Chamilo\Application\Presence\Manager::context(),
-                self::PARAM_ACTION => \Chamilo\Application\Presence\Manager::ACTION_PRESENCE_REGISTRATION,
-                \Chamilo\Application\Presence\Manager::PARAM_PUBLICATION_ID => $this->getRequest()->getFromUrl(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
-                ),
-                \Chamilo\Application\Presence\Manager::PARAM_TREE_NODE_ID => $this->getRequest()->getFromUrl(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-                )
-            ]
-        );
-
-        $presenceQRCode = new QrCode($registerPresenceUrl);
-        $presenceQRCode->setWriterByName('png');
-        $presenceQRCode->setSize('500');
-
-        $qrCodeString =  'data:image/png;base64,' . base64_encode($presenceQRCode->writeString());
-
         return [
             'HEADER' => $this->render_header(),
             'FOOTER' => $this->render_footer(),
             'LANGUAGE' => $this->getTranslator()->getLocale(),
-            //'CONTEXT_CLASS' => $contextIdentifier->getContextClass(),
-            //'CONTEXT_ID' => $contextIdentifier->getContextId(),
             'CONTENT_OBJECT_TITLE' => $presence->get_title(),
             'CONTENT_OBJECT_RENDITION' => $this->renderContentObject(),
-            'SELF_SERVICE_QR_CODE' => $qrCodeString,
+            'SELF_SERVICE_QR_CODE' => $this->getRegisterPresenceUrl(true),
+            'PRINT_QR_CODE_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_PRINT_QR_CODE]),
             'LOAD_PRESENCE_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
@@ -168,4 +141,5 @@ class BrowserComponent extends Manager
 
         return implode(PHP_EOL, $html);
     }
+
 }

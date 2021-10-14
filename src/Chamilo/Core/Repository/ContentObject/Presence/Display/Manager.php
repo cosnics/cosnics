@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
@@ -10,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Architecture\Application\Application;
 
 /**
  *
@@ -27,6 +29,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     const ACTION_AJAX = 'Ajax';
     const ACTION_EXPORT = 'Export';
+    const ACTION_PRINT_QR_CODE = 'PrintPresenceRegistrationQr';
 
     const ACTION_USER_PRESENCES = 'UserPresences';
 
@@ -70,6 +73,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getExportService(): ExportService
     {
         return $this->getService(ExportService::class);
+    }
+
+    /**
+     * @return QRService
+     */
+    protected function getQRService(): QRService
+    {
+        return $this->getService(QRService::class);
     }
 
     /**
@@ -192,4 +203,30 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         );
     }
 
+    /**
+     * @return string
+     */
+    protected function getRegisterPresenceUrl($qr = false): string
+    {
+        $url = $this->get_url(
+            [
+                Application::PARAM_CONTEXT => \Chamilo\Application\Presence\Manager::context(),
+                Manager::PARAM_ACTION => \Chamilo\Application\Presence\Manager::ACTION_PRESENCE_REGISTRATION,
+                \Chamilo\Application\Presence\Manager::PARAM_PUBLICATION_ID => $this->getRequest()->getFromUrl(
+                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+                ),
+                \Chamilo\Application\Presence\Manager::PARAM_TREE_NODE_ID => $this->getRequest()->getFromUrl(
+                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
+                )
+            ],
+            [Application::PARAM_ACTION]
+        );
+
+        if ($qr)
+        {
+            return $this->getQRService()->getQRForURL($url, 500, true);
+        }
+
+        return $url;
+    }
 }
