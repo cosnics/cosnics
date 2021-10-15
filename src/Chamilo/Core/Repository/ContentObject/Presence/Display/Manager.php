@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display;
 
+use Chamilo\Application\Presence\Service\PresenceRegistrationService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\RightsService;
@@ -12,6 +13,7 @@ use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\Architecture\Application\Application;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  *
@@ -86,7 +88,8 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     /**
      * @return mixed
      */
-    protected function getUserIdentifier() {
+    protected function getUserIdentifier()
+    {
         if (!isset($this->userIdentifier))
         {
             $this->userIdentifier = $this->getRequest()->getFromPostOrUrl(self::PARAM_USER_ID);
@@ -166,7 +169,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     {
         $presence = $this->get_root_content_object();
 
-        if (! $presence instanceof Presence)
+        if (!$presence instanceof Presence)
         {
             $this->throwUserException('PresenceNotFound');
         }
@@ -183,7 +186,6 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         {
             $this->throwUserException('UserIdNotProvided');
         }
-
         /*$userIds = $this->getPresenceServiceBridge()->getTargetUserIds();
 
         if (! in_array($userId, $userIds))
@@ -194,6 +196,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * @param string $key
+     *
      * @throws UserException
      */
     public function throwUserException(string $key = '')
@@ -205,21 +208,20 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     /**
      * @return string
+     * @throws UserException
      */
     protected function getRegisterPresenceUrl($qr = false): string
     {
-        $url = $this->get_url(
-            [
-                Application::PARAM_CONTEXT => \Chamilo\Application\Presence\Manager::context(),
-                Manager::PARAM_ACTION => \Chamilo\Application\Presence\Manager::ACTION_PRESENCE_REGISTRATION,
-                \Chamilo\Application\Presence\Manager::PARAM_PUBLICATION_ID => $this->getRequest()->getFromUrl(
-                    \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
-                ),
-                \Chamilo\Application\Presence\Manager::PARAM_TREE_NODE_ID => $this->getRequest()->getFromUrl(
-                    \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-                )
-            ],
-            [Application::PARAM_ACTION]
+        $publicationId = $this->getRequest()->getFromUrl(
+            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION
+        );
+
+        $treeNodeId = $this->getRequest()->getFromUrl(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
+        );
+
+        $url = $this->getPresenceRegistrationService()->getPresenceRegistrationUrl(
+            $this->getPresence(), $publicationId, $treeNodeId
         );
 
         if ($qr)
@@ -228,5 +230,13 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         }
 
         return $url;
+    }
+
+    /**
+     * @return PresenceRegistrationService
+     */
+    protected function getPresenceRegistrationService()
+    {
+        return $this->getService(PresenceRegistrationService::class);
     }
 }

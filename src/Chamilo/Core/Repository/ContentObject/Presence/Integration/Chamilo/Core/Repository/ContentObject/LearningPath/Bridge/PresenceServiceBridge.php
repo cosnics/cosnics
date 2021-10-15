@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge;
 
+use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService;
 use Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathPresenceServiceBridgeInterface;
@@ -39,6 +40,11 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     protected $treeNode;
 
     /**
+     * @var LearningPath
+     */
+    protected $learningPath;
+
+    /**
      * @var TreeNodeAttempt
      */
     protected $treeNodeAttempt;
@@ -72,6 +78,12 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
         $this->treeNode = $treeNode;
     }
 
+    public function setLearningPath(LearningPath $learningPath)
+    {
+        $this->learningPath = $learningPath;
+        return $this;
+    }
+
     /**
      * @param TreeNodeAttempt $treeNodeAttempt
      */
@@ -103,5 +115,11 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {
         return $this->learningPathPresenceServiceBridge->getTargetUserIds($filterParameters);
+    }
+
+    public function getContextTitle(): string
+    {
+        return $this->learningPathPresenceServiceBridge->getContextTitle() . '<div style="margin-top: 10px;">' .
+            ($this->learningPath instanceof LearningPath ? $this->learningPath->get_title() : '') . '</div>';
     }
 }

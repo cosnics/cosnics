@@ -58,9 +58,8 @@
             <presence-entry :api-config="apiConfig" :load-index="updateCount" can-edit-presence="true"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+            <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
             {{ CONTENT_OBJECT_RENDITION|raw }}
-            <button class="btn btn-default" onclick="window.open('{{ PRINT_QR_CODE_URL|raw }}')">Print QR</button>
-            <img alt="qr-code" src="{{ SELF_SERVICE_QR_CODE|raw }}" style="display: block;margin-left: -30px" />
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
             <presence-builder :api-config="apiConfig" :load-index="updateCount" @presence-data-changed="$emit('presence-data-changed')"></presence-builder>

@@ -197,6 +197,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $learningPathPresenceServiceBridge = $this->getService(LearningPathPresenceServiceBridge::class);
             $learningPathPresenceServiceBridge->setContentObjectPublication($this->publication);
             $learningPathPresenceServiceBridge->setCanEditPresence($hasEditRight);
+            $learningPathPresenceServiceBridge->setCourse($this->get_course());
             $this->getBridgeManager()->addBridge($learningPathPresenceServiceBridge);
         }
 

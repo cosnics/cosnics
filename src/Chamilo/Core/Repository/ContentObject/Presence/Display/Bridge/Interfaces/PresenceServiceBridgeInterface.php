@@ -28,4 +28,6 @@ interface PresenceServiceBridgeInterface
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array;
 
+    public function getContextTitle(): string;
+
 }

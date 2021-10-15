@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Presence;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\DataClass\Publication as PresencePublication;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
@@ -28,6 +29,11 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     protected $contentObjectPublication;
 
     /**
+     * @var Course
+     */
+    protected $course;
+
+    /**
      * @var PresencePublication
      */
     protected $presencePublication;
@@ -51,6 +57,18 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     public function setContentObjectPublication(ContentObjectPublication $contentObjectPublication)
     {
         $this->contentObjectPublication = $contentObjectPublication;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return PresenceServiceBridge
+     */
+    public function setCourse(Course $course): PresenceServiceBridge
+    {
+        $this->course = $course;
+
+        return $this;
     }
 
     /**
@@ -92,5 +110,10 @@ class PresenceServiceBridge implements PresenceServiceBridgeInterface
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {
         return $this->publicationService->getTargetUserIds($this->contentObjectPublication, $filterParameters);
+    }
+
+    public function getContextTitle(): string
+    {
+        return $this->course instanceof Course ? $this->course->get_title() : '';
     }
 }

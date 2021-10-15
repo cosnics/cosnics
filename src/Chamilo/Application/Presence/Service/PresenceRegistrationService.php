@@ -15,7 +15,10 @@ use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
+use Chamilo\Libraries\File\Redirect;
 
 /**
  * @package Chamilo\Application\Presence\Service
@@ -56,6 +59,7 @@ class PresenceRegistrationService
      *
      * @return PresenceResultEntry
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
+     * @throws NotAllowedException
      *
      * @TODO create a system to validate the security of the parameters so the presence list is protected for unauthorized access?
      */
@@ -84,6 +88,12 @@ class PresenceRegistrationService
         }
 
         $presence = $this->getPresenceById($presenceId, $publicationId, $treeNodeId);
+
+        $calculatedSecurityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId);
+        if($calculatedSecurityKey != $securityKey)
+        {
+            throw new NotAllowedException();
+        }
 
         $periods = $this->resultPeriodService->getResultPeriodsForPresence($presence, $contextIdentifier, true);
         $lastPeriod = array_pop($periods);
@@ -136,7 +146,7 @@ class PresenceRegistrationService
     ): TreeNodeData
     {
         $treeNode = $this->treeNodeDataService->getTreeNodeDataById($treeNodeId);
-        if ($treeNode->getLearningPathId() != $publication->getId())
+        if ($treeNode->getLearningPathId() != $publication->get_content_object_id())
         {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -170,6 +180,35 @@ class PresenceRegistrationService
         }
 
         return $presence;
+    }
+
+    public function getPresenceRegistrationUrl(Presence $presence, int $publicationId, int $treeNodeId = null): string
+    {
+        $securityKey = $this->calculateSecurityKey($presence, $publicationId, $treeNodeId);
+
+        $redirect = new Redirect(
+            [
+                Application::PARAM_CONTEXT => \Chamilo\Application\Presence\Manager::context(),
+                Application::PARAM_ACTION => \Chamilo\Application\Presence\Manager::ACTION_PRESENCE_REGISTRATION,
+                \Chamilo\Application\Presence\Manager::PARAM_PUBLICATION_ID => $publicationId,
+                \Chamilo\Application\Presence\Manager::PARAM_TREE_NODE_ID => $treeNodeId,
+                \Chamilo\Application\Presence\Manager::PARAM_SECURITY_KEY => $securityKey
+            ]
+        );
+
+        return $redirect->getUrl();
+    }
+
+    /**
+     * @param Presence $presence
+     * @param int $publicationId
+     * @param int|null $treeNodeId
+     *
+     * @return string
+     */
+    protected function calculateSecurityKey(Presence $presence, int $publicationId, int $treeNodeId = null): string
+    {
+        return md5($publicationId . ':' . $treeNodeId . ':' . $presence->get_object_number());
     }
 
 }

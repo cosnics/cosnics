@@ -81,6 +81,7 @@ class DisplayComponent extends Manager implements DelegateComponent
         $presencePublication = $this->getPresencePublication($contentObjectPublication);
         $presenceServiceBridge->setContentObjectPublication($contentObjectPublication);
         $presenceServiceBridge->setPresencePublication($presencePublication);
+        $presenceServiceBridge->setCourse($this->get_course());
 
         $this->getBridgeManager()->addBridge($presenceServiceBridge);
     }

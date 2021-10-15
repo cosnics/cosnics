@@ -62,6 +62,7 @@ class Embedder extends ContentObjectEmbedder
         $presenceServiceBridge = new PresenceServiceBridge($learningPathPresenceServiceBridge, $this->getService(PresenceService::class), $this->getService(TreeNodeDataService::class));
         $presenceServiceBridge->setTreeNode($this->treeNode);
         $presenceServiceBridge->setTreeNodeAttempt($activeAttempt);
+        $presenceServiceBridge->setLearningPath($this->learningPath);
 
         $this->getBridgeManager()->addBridge($presenceServiceBridge);
     }

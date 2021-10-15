@@ -23,4 +23,6 @@ interface LearningPathPresenceServiceBridgeInterface
      * @return int[]
      */
     public function getTargetUserIds(FilterParameters $filterParameters = null): array;
+
+    public function getContextTitle(): string;
 }

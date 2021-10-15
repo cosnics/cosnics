@@ -30,7 +30,7 @@ class PresenceRegistrationComponent extends Manager
 
         $securityKey = $this->getRequest()->getFromUrl(self::PARAM_SECURITY_KEY);
 
-        if (empty($publicationId)) // || empty($securityKey))
+        if (empty($publicationId) || empty($securityKey))
         {
             throw new NotAllowedException();
         }
@@ -38,7 +38,7 @@ class PresenceRegistrationComponent extends Manager
         try
         {
             $userRegistrationEntry = $this->getPresenceRegistrationService()->registerUserInPresence(
-                $this->getUser(), $publicationId, $treeNodeId
+                $this->getUser(), $publicationId, $treeNodeId, $securityKey
             );
 
             $isUserInPresenceList =
@@ -55,7 +55,6 @@ class PresenceRegistrationComponent extends Manager
         }
         catch (\Exception $exception)
         {
-            var_dump($exception);
             $this->getExceptionLogger()->logException($exception);
             throw new NotAllowedException();
         }

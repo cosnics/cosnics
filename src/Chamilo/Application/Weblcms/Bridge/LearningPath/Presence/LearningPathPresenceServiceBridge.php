@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Presence;
 
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Presence\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Interfaces\LearningPathPresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathStepContextService;
@@ -33,6 +34,11 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
     protected $contentObjectPublication;
 
     /**
+     * @var Course
+     */
+    protected $course;
+
+    /**
      * @var bool
      */
     protected $canEditPresence;
@@ -53,6 +59,18 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
     public function setContentObjectPublication(ContentObjectPublication $publication)
     {
         $this->contentObjectPublication = $publication;
+    }
+
+    /**
+     * @param Course $course
+     *
+     * @return LearningPathPresenceServiceBridge
+     */
+    public function setCourse(Course $course)
+    {
+        $this->course = $course;
+
+        return $this;
     }
 
     /**
@@ -90,5 +108,10 @@ class LearningPathPresenceServiceBridge implements LearningPathPresenceServiceBr
     public function getTargetUserIds(FilterParameters $filterParameters = null): array
     {
         return $this->publicationService->getTargetUserIds($this->contentObjectPublication, $filterParameters);
+    }
+
+    public function getContextTitle(): string
+    {
+        return $this->course instanceof Course ? $this->course->get_title() : '';
     }
 }
