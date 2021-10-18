@@ -21,24 +21,30 @@ class LoadPresenceEntriesComponent extends Manager
             $presence = $this->getPresence();
             $canEditPresence = $this->canUserEditPresence();
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-            $filterParameters = $this->createFilterParameters(true);
-            $userIds = $this->getTargetUserIds();
 
             $periods = $this->getPresenceResultPeriodService()->getResultPeriodsForPresence($presence, $contextIdentifier, $canEditPresence);
             $presenceResultEntryService = $this->getPresenceResultEntryService();
 
             $statusFilters =  $this->getRequest()->getFromPostOrUrl('status_filters');
             $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
+            $withoutStatusSelected = $this->getRequest()->getFromPostOrUrl('without_status') == 'true';
 
-            $options = array();
-            $useFilters = !empty($statusFilters) && isset($periodId);
+            $useFilters = isset($periodId) && ($withoutStatusSelected || !empty($statusFilters));
+
             if ($useFilters)
             {
+                $options = array();
                 $options['statusFilters'] = $statusFilters;
                 $options['periodId'] = $periodId;
+                $options['withoutStatus'] = $withoutStatusSelected;
+                $userIds = $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters(true));
+                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(), $options);
             }
-
-            $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $filterParameters, $options);
+            else
+            {
+                $userIds = $this->getTargetUserIds();
+                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(true));
+            }
 
             $resultData = ['students' => $users, 'periods' => $periods];
 
@@ -51,7 +57,8 @@ class LoadPresenceEntriesComponent extends Manager
                 // $allTargetUserIds will only be effectively all users if no global query filter is set.
                 // If $requestNonRegisteredUsers is set then the results in $resultData['non_course_students'] will likely be incorrect.
                 // However this shouldn't be a problem because $requestNonRegisteredUsers is normally only true the first time around when no global query filter is set.
-                $allTargetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds($filterParameters);
+
+                $allTargetUserIds = $useFilters ? $userIds : $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters(true));
 
                 if ($requestCount) // todo: count will be wrong when status filters are set
                 {
@@ -73,7 +80,7 @@ class LoadPresenceEntriesComponent extends Manager
                     $hasNonRegisteredUsers = count($nonRegisteredUserIds) > 0;
                     if ($hasNonRegisteredUsers)
                     {
-                        $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters(), $options);
+                        $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters());
                         $resultData['non_course_students'] = $nonRegisteredUsers;
                     }
                 }

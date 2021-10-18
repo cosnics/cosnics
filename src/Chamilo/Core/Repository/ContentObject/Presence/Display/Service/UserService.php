@@ -12,7 +12,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -59,24 +61,13 @@ class UserService
         $condition = null;
         if (isset($options['periodId']))
         {
-            $condition = new AndCondition([
-                new EqualityCondition(
-                    new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
-                    new StaticConditionVariable($options['periodId'])
-                ),
-                new InCondition(new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $options['statusFilters'])
-            ]);
-            /*$condition = new AndCondition([
-                        new EqualityCondition(
-                            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_ID),
-                            new StaticConditionVariable(275)
-                        ),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID),
-                            NULL
-                        )
-                        //new InCondition(new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), [1,2])
-                    ]);*/        }
+            $periodCondition = new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
+                new StaticConditionVariable($options['periodId'])
+            );
+            $subCondition = $this->createFilterCondition($options);
+            $condition = isset($subCondition) ? new AndCondition([$periodCondition, $subCondition]) : $periodCondition;
+        }
 
         $selectedUsers = $this->userRepository->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $condition);
 
@@ -141,5 +132,43 @@ class UserService
             $this->fieldMapper->addFieldMapping('official_code', $class_name, User::PROPERTY_OFFICIAL_CODE);
         }
         return $this->fieldMapper;
+    }
+
+    /**
+     * @param array $options
+     * @return Condition|null
+     */
+    protected function createFilterCondition(array $options): ?Condition
+    {
+        $withoutStatus = $options['withoutStatus'] == true;
+        $hasStatusFilters = !empty($options['statusFilters']);
+
+        if ($withoutStatus)
+        {
+            $withoutStatusCondition = new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID),
+                NULL
+            );
+            if (!$hasStatusFilters)
+            {
+                return $withoutStatusCondition;
+            }
+        }
+
+        if ($hasStatusFilters)
+        {
+            $filtersCondition = new InCondition(
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $options['statusFilters']);
+            if (!$withoutStatus)
+            {
+                return $filtersCondition;
+            }
+        }
+
+        if ($withoutStatus && $hasStatusFilters)
+        {
+            return new OrCondition([$filtersCondition, $withoutStatusCondition]);
+        }
+        return null;
     }
 }

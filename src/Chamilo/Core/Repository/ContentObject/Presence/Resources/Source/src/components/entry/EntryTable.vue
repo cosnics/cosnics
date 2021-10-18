@@ -9,7 +9,8 @@
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
-        "stop-edit-mode": "Stop editing"
+        "stop-edit-mode": "Stop editing",
+        "no-students-found": "No students found"
     },
     "nl": {
         "last-name": "Familienaam",
@@ -20,16 +21,16 @@
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
-        "stop-edit-mode": "Sluit editeren af"
+        "stop-edit-mode": "Sluit editeren af",
+        "no-students-found": "Geen studenten gevonden"
     }
 }
 </i18n>
 
 <template>
-    <b-table v-if="items.length" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
-             :filter="globalSearchQuery" no-sort-reset>
-
+             :filter="globalSearchQuery" no-sort-reset :show-empty="!isBusy">
         <!-- COLUMNS -->
         <template slot="table-colgroup" v-if="canEditPresence">
             <col>
@@ -41,6 +42,10 @@
                 <col v-if="!isCreatingNewPeriod && period === selectedPeriod" class="bd-selected-period">
                 <col v-else>
             </template>
+        </template>
+
+        <template #empty="">
+            {{ $t('no-students-found') }}
         </template>
 
         <!-- PICTURE -->
@@ -166,10 +171,11 @@ export default class EntryTable extends Vue {
     sortDesc = false;
     selectedPeriod: PresencePeriod | null = null;
     checkoutMode = false;
+    isBusy = false;
 
     @Prop({type: String, default: '' }) readonly id!: string;
-    @Prop() readonly items!: any;
-    @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0})}) readonly pagination!: any;
+    @Prop() readonly items!: any[];
+    @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0, total: 0})}) readonly pagination!: any;
     @Prop({type: Boolean, default: false}) readonly isSaving!: boolean;
     @Prop({type: String, default: ''}) readonly globalSearchQuery!: string;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
@@ -179,6 +185,10 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
     @Prop({type: Object, default: null }) readonly toRemovePeriod!: PresencePeriod|null;
+
+    get hasResults() {
+        return this.pagination.total !== 0;
+    }
 
     get isFullyEditable() {
         return this.canEditPresence && !this.hasNonCourseStudents;
@@ -288,21 +298,34 @@ export default class EntryTable extends Vue {
         return status ? this.getPresenceStatusTitle(status) : '';
     }
 
-    get fields() {
+    get userFields() {
+        return [
+            this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
+            {key: 'fullname', sortable: false, label: 'Student'},
+            {key: 'official_code', sortable: false}
+        ];
+    }
+
+    get periodFields() {
         const periodFields = this.periods.map(period => {
             const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
             const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
             return {key, sortable: false, label: period.label, variant};
         });
         periodFields.reverse();
+        return periodFields;
+    }
+
+    get fields() {
+        if (!this.hasNonCourseStudents && this.pagination.total === 0) {
+            return this.userFields;
+        }
 
         return [
-            this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
-            {key: 'fullname', sortable: false, label: 'Student'},
-            {key: 'official_code', sortable: false},
+            ...this.userFields,
             this.canEditPresence && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
             this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
-            ...periodFields
+            ...this.periodFields
         ];
     }
 

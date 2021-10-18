@@ -7,7 +7,8 @@
         "error-Unknown": "An unknown error occurred. Your changes have possibly not been saved. You can try again later.",
         "export": "Export",
         "legend": "Legend",
-        "students-not-in-course": "Students not in course"
+        "students-not-in-course": "Students not in course",
+        "without-status": "Without status"
     },
     "nl": {
         "total": "Totaal",
@@ -16,14 +17,15 @@
         "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "export": "Exporteer",
         "legend": "Legende",
-        "students-not-in-course": "Studenten niet in cursus"
+        "students-not-in-course": "Studenten niet in cursus",
+        "without-status": "Zonder status"
     }
 }
 </i18n>
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x u-max-w-fit m-controls">
+        <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x m-controls"><!-- u-max-w-fit -->
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div v-if="!!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
@@ -32,6 +34,9 @@
                         :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
                         @click="toggleStatusFilters(status)"
                         :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
+                <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
+                        :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
+                        @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
             </div>
             <div v-else>
                 <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
@@ -55,11 +60,14 @@
                              @period-change="onPeriodChanged" />
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
-            <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
-                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+            <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end">
+                <b-pagination v-if="!changeAfterStatusFilters" v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                               aria-controls="data-table"></b-pagination>
                 <ul class="pagination">
-                    <li class="page-item active"><a class="page-link">{{ $t('total') }} {{ pagination.total }}</a></li>
+                    <li class="page-item active">
+                        <a class="page-link" v-if="!changeAfterStatusFilters">{{ $t('total') }} {{ pagination.total }}</a>
+                        <a class="page-link" v-else @click="refreshFilters" style="cursor: pointer">Refresh</a>
+                    </li>
                 </ul>
             </div>
             <div v-if="errorData" class="alert alert-danger m-errors">
@@ -67,7 +75,7 @@
                 <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
             </div>
             <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
-            <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
+            <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
                          :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
                          :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
                          @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
@@ -104,6 +112,7 @@ export default class Entry extends Vue {
     pageLoaded = false;
     errorData: string|null = null;
     statusFilters: PresenceStatus[] = [];
+    withoutStatusSelected = false;
 
     pagination = {
         currentPage: 1,
@@ -117,6 +126,7 @@ export default class Entry extends Vue {
     requestCount = true;
     requestNonCourseStudents = true;
     selectedPeriod: PresencePeriod|null = null;
+    changeAfterStatusFilters = false;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
@@ -138,6 +148,17 @@ export default class Entry extends Vue {
         } else {
             this.statusFilters = statusFilters.slice(0, index).concat(statusFilters.slice(index + 1));
         }
+        this.requestCount = true;
+        this.$emit('filters-changed');
+    }
+
+    refreshFilters() {
+        this.requestCount = true;
+        this.$emit('filters-changed');
+    }
+
+    toggleWithoutStatus() {
+        this.withoutStatusSelected = !this.withoutStatusSelected;
         this.requestCount = true;
         this.$emit('filters-changed');
     }
@@ -186,11 +207,13 @@ export default class Entry extends Vue {
             request_count: this.requestCount,
             request_non_course_students: this.requestNonCourseStudents
         };
-        if (!!this.selectedPeriod && this.statusFilters.length) {
+        if (!!this.selectedPeriod && (this.statusFilters.length || this.withoutStatusSelected)) {
             parameters['period_id'] = this.selectedPeriod.id;
             parameters['status_filters'] = this.statusFilters.map(status => status.id);
+            parameters['without_status'] = this.withoutStatusSelected;
         }
         const data = await this.connector?.loadPresenceEntries(parameters);
+        this.changeAfterStatusFilters = false;
         const {periods, students} = data;
         this.periods = periods;
         this.students = students;
@@ -270,6 +293,9 @@ export default class Entry extends Vue {
         this.errorData = null;
         const periodId = selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
+        if (!hasNonCourseStudents && (this.statusFilters.length || this.withoutStatusSelected)) {
+            this.changeAfterStatusFilters = true;
+        }
         const connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
         connector?.savePresenceEntry(periodId, student.id, status, function(data: any) {
             if (data?.status === 'ok') {
