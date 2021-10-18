@@ -973,7 +973,7 @@ exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
 
 module.exports = function (Component) {
   Component.options.__i18n = Component.options.__i18n || []
-  Component.options.__i18n.push('{"en":{"last-name":"Last name","first-name":"First name","official-code":"Official code","total":"Total","stop-edit-mode":"Stop editing","new-period":"New period","remove-period":"Remove period","error-Timeout":"The server took too long to respond. Your changes have possibly not been saved. You can try again later.","error-LoggedOut":"It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.","error-Unknown":"An unknown error occurred. Your changes have possibly not been saved. You can try again later.","checked-out":"Checked out","not-checked-out":"Not checked out","checkout-mode":"Checkout mode","export":"Export","legend":"Legend"},"nl":{"last-name":"Familienaam","first-name":"Voornaam","official-code":"Officiële code","total":"Totaal","stop-edit-mode":"Sluit editeren af","new-period":"Nieuwe periode","remove-period":"Verwijder periode","error-LoggedOut":"Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.","error-Timeout":"De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","error-Unknown":"Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","checked-out":"Uitgechecked","not-checked-out":"Niet uitgechecked","checkout-mode":"Uitcheckmodus","export":"Exporteer","legend":"Legende"}}')
+  Component.options.__i18n.push('{"en":{"total":"Total","error-Timeout":"The server took too long to respond. Your changes have possibly not been saved. You can try again later.","error-LoggedOut":"It looks like you have been logged out. Your changes have not been saved. Please reload the page after logging in and try again.","error-Unknown":"An unknown error occurred. Your changes have possibly not been saved. You can try again later.","export":"Export","legend":"Legend","students-not-in-course":"Students not in course"},"nl":{"total":"Totaal","error-LoggedOut":"Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.","error-Timeout":"De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","error-Unknown":"Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.","export":"Exporteer","legend":"Legende","students-not-in-course":"Studenten niet in cursus"}}')
   delete Component.options._Ctor
 }
 
@@ -2094,13 +2094,6 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "1fe8":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "2060":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2720,17 +2713,6 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
-/***/ "3561":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_15143a98_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4119");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_15143a98_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_15143a98_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_15143a98_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "370b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3087,13 +3069,6 @@ $({ target: 'Array', proto: true, forced: String(test) === String(test.reverse()
 
 /***/ }),
 
-/***/ "4119":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "43e9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3325,6 +3300,16 @@ module.exports = function (argument) {
 
 /***/ }),
 
+/***/ "5091":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8938");
+/* harmony import */ var _node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0__);
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_kazupon_vue_i18n_loader_lib_index_js_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_custom_index_0_blockType_i18n__WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "5270":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3493,6 +3478,13 @@ function lowerBound(array, value, comparator) {
 }
 exports.default = lowerBound;
 
+
+/***/ }),
+
+/***/ "5650":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -3683,6 +3675,17 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ "6354":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_39509358_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b6e5");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_39509358_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_39509358_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_39509358_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "6373":
 /***/ (function(module, exports) {
 
@@ -3706,6 +3709,13 @@ module.exports = function (argument) {
   return Object(requireObjectCoercible(argument));
 };
 
+
+/***/ }),
+
+/***/ "6752":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -5129,6 +5139,18 @@ $({ target: PROMISE, stat: true, forced: INCORRECT_ITERATION }, {
 
 /***/ }),
 
+/***/ "8938":
+/***/ (function(module, exports) {
+
+module.exports = function (Component) {
+  Component.options.__i18n = Component.options.__i18n || []
+  Component.options.__i18n.push('{"en":{"last-name":"Last name","first-name":"First name","official-code":"Official code","new-period":"New period","remove-period":"Remove period","checked-out":"Checked out","not-checked-out":"Not checked out","checkout-mode":"Checkout mode","stop-edit-mode":"Stop editing"},"nl":{"last-name":"Familienaam","first-name":"Voornaam","official-code":"Officiële code","new-period":"Nieuwe periode","remove-period":"Verwijder periode","checked-out":"Uitgechecked","not-checked-out":"Niet uitgechecked","checkout-mode":"Uitcheckmodus","stop-edit-mode":"Sluit editeren af"}}')
+  delete Component.options._Ctor
+}
+
+
+/***/ }),
+
 /***/ "893b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5211,17 +5233,6 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     : (result = classofRaw(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : result;
 };
 
-
-/***/ }),
-
-/***/ "8b17":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_1bd69efb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1fe8");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_1bd69efb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_1bd69efb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Entry_vue_vue_type_style_index_0_id_1bd69efb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -6472,6 +6483,13 @@ module.exports =
 
 /***/ }),
 
+/***/ "b6e5":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "b7cf":
 /***/ (function(module, exports) {
 
@@ -6892,6 +6910,17 @@ exports.default = PQueue;
 
 /***/ }),
 
+/***/ "ba00":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_2be2ae92_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("5650");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_2be2ae92_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_2be2ae92_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Builder_vue_vue_type_style_index_1_id_2be2ae92_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "badb":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7012,6 +7041,17 @@ module.exports.f = function (C) {
 
 /***/ }),
 
+/***/ "c677":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_style_index_0_id_643f70c2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6752");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_style_index_0_id_643f70c2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_style_index_0_id_643f70c2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntryTable_vue_vue_type_style_index_0_id_643f70c2_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "c790":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7127,7 +7167,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Builder.vue?vue&type=template&id=15143a98&scoped=true&
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Builder.vue?vue&type=template&id=2be2ae92&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.presence)?_c('div',{staticClass:"presence-builder",on:{"click":function($event){$event.stopPropagation();_vm.selectedStatus = null}}},[_c('b-table',{staticClass:"mod-presence mod-builder",class:{'is-changes-disabled': _vm.createNew},attrs:{"bordered":"","foot-clone":_vm.createNew,"items":_vm.presenceStatuses,"fields":_vm.fields,"tbody-tr-class":_vm.rowClass},scopedSlots:_vm._u([{key:"thead-top",fn:function(){return [_c('selection-preview',{attrs:{"presence-statuses":_vm.presenceStatuses}})]},proxy:true},{key:"head(label)",fn:function(){return [_vm._v(_vm._s(_vm.$t('label')))]},proxy:true},{key:"head(title)",fn:function(){return [_vm._v(_vm._s(_vm.$t('title')))]},proxy:true},{key:"head(aliasses)",fn:function(){return [_vm._v(_vm._s(_vm.$t('aliasses')))]},proxy:true},{key:"head(color)",fn:function(){return [_vm._v(_vm._s(_vm.$t('color')))]},proxy:true},{key:"cell(label)",fn:function(ref){
 var item = ref.item;
 return [_c('div',{staticClass:"cell-pad",on:{"click":function($event){$event.stopPropagation();return _vm.onSelectStatus(item)}}},[_c('b-input',{staticClass:"mod-input mod-pad mod-small",attrs:{"type":"text","required":"","autocomplete":"off","disabled":_vm.createNew},on:{"focus":function($event){return _vm.onSelectStatus(item)}},model:{value:(item.code),callback:function ($$v) {_vm.$set(item, "code", $$v)},expression:"item.code"}})],1)]}},{key:"cell(title)",fn:function(ref){
@@ -7144,7 +7184,7 @@ return [_c('selection-controls',{staticClass:"cell-pad-x",attrs:{"id":item.id,"i
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Builder.vue?vue&type=template&id=15143a98&scoped=true&
+// CONCATENATED MODULE: ./src/components/Builder.vue?vue&type=template&id=2be2ae92&scoped=true&
 
 // EXTERNAL MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("236c");
@@ -10274,8 +10314,8 @@ Buildervue_type_script_lang_ts_Builder = __decorate([vue_class_component_esm({
 // EXTERNAL MODULE: ./src/components/Builder.vue?vue&type=style&index=0&lang=css&
 var Buildervue_type_style_index_0_lang_css_ = __webpack_require__("df7c");
 
-// EXTERNAL MODULE: ./src/components/Builder.vue?vue&type=style&index=1&id=15143a98&scoped=true&lang=css&
-var Buildervue_type_style_index_1_id_15143a98_scoped_true_lang_css_ = __webpack_require__("3561");
+// EXTERNAL MODULE: ./src/components/Builder.vue?vue&type=style&index=1&id=2be2ae92&scoped=true&lang=css&
+var Buildervue_type_style_index_1_id_2be2ae92_scoped_true_lang_css_ = __webpack_require__("ba00");
 
 // EXTERNAL MODULE: ./src/components/Builder.vue?vue&type=style&index=2&lang=css&
 var Buildervue_type_style_index_2_lang_css_ = __webpack_require__("4dfb");
@@ -10316,7 +10356,7 @@ var Builder_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "15143a98",
+  "2be2ae92",
   null
   
 )
@@ -10326,22 +10366,12 @@ var Builder_component = normalizeComponent(
 if (typeof Buildervue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(Buildervue_type_custom_index_0_blockType_i18n["default"])(Builder_component)
 
 /* harmony default export */ var components_Builder = (Builder_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Entry.vue?vue&type=template&id=1bd69efb&scoped=true&
-var Entryvue_type_template_id_1bd69efb_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.canEditPresence)?_c('div',{staticClass:"u-flex u-align-items-center u-gap-small-3x u-max-w-fit m-controls"},[_c('search-bar',{attrs:{"search-options":_vm.searchOptions},on:{"filter-changed":_vm.onFilterChanged,"filter-cleared":_vm.onFilterCleared}}),_c('div',[_c('a',{staticClass:"btn btn-default btn-sm",attrs:{"href":_vm.apiConfig.exportURL}},[_vm._v(_vm._s(_vm.$t('export')))])])],1):_vm._e(),_c('div',[_c('div',{staticClass:"u-relative"},[(!_vm.canEditPresence)?_c('div',{staticClass:"u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend"},[_c('span',{staticStyle:{"color":"#507177"}},[_vm._v(_vm._s(_vm.$t('legend'))+":")]),_vm._l((_vm.presenceStatuses),function(status){return _c('legend-item',{attrs:{"title":_vm.getPresenceStatusTitle(status),"label":status.code,"color":status.color}})})],2):_vm._e(),_c('b-table',{ref:"table",staticClass:"mod-presence mod-entry",attrs:{"foot-clone":_vm.canEditPresence && !!_vm.selectedPeriod && !_vm.checkoutMode,"bordered":"","items":_vm.itemsProvider,"fields":_vm.fields,"sort-by":_vm.sortBy,"sort-desc":_vm.sortDesc,"per-page":_vm.pagination.perPage,"current-page":_vm.pagination.currentPage,"filter":_vm.globalSearchQuery,"no-sort-reset":""},on:{"update:sortBy":function($event){_vm.sortBy=$event},"update:sort-by":function($event){_vm.sortBy=$event},"update:sortDesc":function($event){_vm.sortDesc=$event},"update:sort-desc":function($event){_vm.sortDesc=$event}},scopedSlots:_vm._u([(_vm.canEditPresence)?{key:"cell(photo)",fn:function(ref){
-var item = ref.item;
-return [_c('img',{attrs:{"src":item.photo}})]}}:null,(_vm.canEditPresence)?{key:"head(fullname)",fn:function(){return [_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('lastname')},on:{"click":function($event){return _vm.sortByNameField('lastname')}}},[_vm._v(_vm._s(_vm.$t('last-name')))]),_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('firstname')},on:{"click":function($event){return _vm.sortByNameField('firstname')}}},[_vm._v(_vm._s(_vm.$t('first-name')))])]},proxy:true}:{key:"head(fullname)",fn:function(){return [_vm._v("Student")]},proxy:true},{key:"foot(fullname)",fn:function(){return [_c('span')]},proxy:true},(_vm.canEditPresence)?{key:"head(official_code)",fn:function(){return [_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('official_code')},on:{"click":function($event){return _vm.sortByNameField('official_code')}}},[_vm._v(_vm._s(_vm.$t('official-code')))])]},proxy:true}:{key:"head(official_code)",fn:function(){return [_vm._v(_vm._s(_vm.$t('official-code')))]},proxy:true},{key:"head(new_period)",fn:function(){return [_c('div',{staticClass:"select-period-btn mod-new",attrs:{"role":"button","tabindex":"0","title":_vm.$t('new-period')},on:{"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.createResultPeriod('')},"click":function($event){return _vm.createResultPeriod('')}}},[_c('i',{staticClass:"fa fa-plus",staticStyle:{"color":"#337ab7"},attrs:{"aria-hidden":"true"}}),_vm._v(" "),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('new-period')))])])]},proxy:true},{key:"foot(new_period)",fn:function(){return [_c('span')]},proxy:true},{key:"foot(official_code)",fn:function(){return [_c('span')]},proxy:true},{key:"cell(fullname)",fn:function(ref){
-var item = ref.item;
-return [_vm._v(" "+_vm._s(item.lastname.toUpperCase())+", "+_vm._s(item.firstname)+" ")]}},_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("head(" + (fieldKey.key) + ")"),fn:function(ref){
-var label = ref.label;
-return [_c('dynamic-field-key',{class:[{'select-period-btn' : _vm.canEditPresence}, 'u-txt-truncate'],attrs:{"is-editable":_vm.canEditPresence,"title":label},on:{"select":function($event){return _vm.setSelectedPeriod(fieldKey.id)}},scopedSlots:_vm._u([{key:"default",fn:function(){return [(label)?_c('span',[_vm._v(_vm._s(label))]):_c('span',{staticClass:"u-font-italic"},[_vm._v(_vm._s(_vm.getPlaceHolder(fieldKey.id)))])]},proxy:true}],null,true)})]}}}),_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("cell(" + (fieldKey.key) + ")"),fn:function(ref){
-var item = ref.item;
-return [_c('div',{staticClass:"result-wrap"},[_c('div',{staticClass:"color-code u-cursor-default",class:[_vm.getStatusColorForStudent(item, fieldKey.id) || 'mod-none'],attrs:{"title":_vm.getStatusTitleForStudent(item, fieldKey.id)}},[_c('span',[_vm._v(_vm._s(_vm.getStatusCodeForStudent(item, fieldKey.id)))])])])]}}}),_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("foot(" + (fieldKey.key) + ")"),fn:function(){return [_c('span')]},proxy:true}}),{key:"head(period-entry-plh)",fn:function(){return [_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[_c('b-input',{staticClass:"u-bg-none u-font-normal u-font-italic u-pointer-events-none ti-label mod-border",attrs:{"type":"text","autocomplete":"off","placeholder":_vm.$t('new-period') + '...'}}),_c('div',{staticClass:"spin"},[(_vm.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin"}):_vm._e()])],1)]},proxy:true},{key:"cell(period-entry-plh)",fn:function(){return [_c('div',{staticClass:"u-flex u-gap-small u-flex-wrap u-pointer-events-none"},_vm._l((_vm.presenceStatuses),function(status,index){return _c('button',{key:("status-" + index),staticClass:"color-code mod-plh",class:[status.color]},[_c('span',[_vm._v(_vm._s(status.code))])])}),0)]},proxy:true},{key:"head(period-entry)",fn:function(){return [_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[_c('b-input',{staticClass:"u-font-normal ti-label",attrs:{"type":"text","debounce":"750","autocomplete":"off","placeholder":_vm.getPlaceHolder(_vm.selectedPeriod.id)},model:{value:(_vm.selectedPeriodLabel),callback:function ($$v) {_vm.selectedPeriodLabel=$$v},expression:"selectedPeriodLabel"}}),_c('div',{staticClass:"spin"},[(_vm.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin"}):_vm._e()])],1),(_vm.presence && _vm.presence.has_checkout)?_c('div',{staticClass:"selected-period-controls"},[_c('on-off-switch',{attrs:{"id":"checkout","switch-class":"mod-checkout-choice","on-text":_vm.$t('checkout-mode'),"off-text":_vm.$t('checkout-mode'),"checked":_vm.checkoutMode},on:{"toggle":function($event){_vm.checkoutMode = !_vm.checkoutMode}}})],1):_vm._e(),_c('button',{staticClass:"btn btn-default btn-sm selected-period-close-btn",attrs:{"title":_vm.$t('stop-edit-mode')},on:{"click":function($event){_vm.selectedPeriod = null}}},[_c('i',{staticClass:"fa fa-close",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('stop-edit-mode')))])])]},proxy:true},{key:"cell(period-entry)",fn:function(ref){
-var item = ref.item;
-return [(_vm.presence && _vm.presence.has_checkout && _vm.checkoutMode)?[(item[("period#" + (_vm.selectedPeriod.id) + "-checked_in_date")])?_c('on-off-switch',{attrs:{"id":item.id,"on-text":_vm.$t('checked-out'),"off-text":_vm.$t('not-checked-out'),"checked":item[("period#" + (_vm.selectedPeriod.id) + "-checked_out_date")] > item[("period#" + (_vm.selectedPeriod.id) + "-checked_in_date")],"switch-class":"mod-checkout"},on:{"toggle":function($event){return _vm.toggleCheckout(item)}}}):_c('div',{staticClass:"color-code u-cursor-default",class:[_vm.getStatusColorForStudent(item, _vm.selectedPeriod.id) || 'mod-none'],attrs:{"title":_vm.getStatusTitleForStudent(item, _vm.selectedPeriod.id)}},[_c('span',[_vm._v(_vm._s(_vm.getStatusCodeForStudent(item, _vm.selectedPeriod.id)))])])]:_c('div',{staticClass:"u-flex u-gap-small u-flex-wrap"},_vm._l((_vm.presenceStatuses),function(status,index){return _c('button',{key:("status-" + index),staticClass:"color-code mod-selectable",class:[status.color, { 'is-selected': _vm.hasSelectedStudentStatus(item, status.id) }],attrs:{"title":_vm.getPresenceStatusTitle(status),"aria-pressed":_vm.hasSelectedStudentStatus(item, status.id) ? 'true': 'false'},on:{"click":function($event){!_vm.hasSelectedStudentStatus(item, status.id) ? _vm.setSelectedStudentStatus(item, status.id) : null}}},[_c('span',[_vm._v(_vm._s(status.code))])])}),0)]}},{key:"foot(period-entry)",fn:function(){return [_c('button',{staticClass:"btn-remove",attrs:{"disabled":_vm.toRemovePeriod === _vm.selectedPeriod},on:{"click":_vm.removeSelectedPeriod}},[_vm._v(_vm._s(_vm.$t('remove-period')))])]},proxy:true}],null,true)},[(_vm.canEditPresence)?_c('template',{slot:"table-colgroup"},[_c('col'),_c('col'),_c('col'),(!!_vm.selectedPeriod && !_vm.creatingNew)?_c('col'):(_vm.creatingNew)?_c('col',{staticClass:"bd-selected-period"}):_vm._e(),_vm._l((_vm.periodsReversed),function(period){return (!!_vm.selectedPeriod || _vm.creatingNew)?[(!_vm.creatingNew && period === _vm.selectedPeriod)?_c('col',{staticClass:"bd-selected-period"}):_c('col')]:_vm._e()})],2):_vm._e()],2),(!_vm.creatingNew)?_c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')]):_vm._e()],1),(_vm.canEditPresence && _vm.pageLoaded)?_c('div',{staticClass:"pagination-container u-flex u-justify-content-end"},[_c('b-pagination',{attrs:{"total-rows":_vm.pagination.total,"per-page":_vm.pagination.perPage,"aria-controls":"data-table"},model:{value:(_vm.pagination.currentPage),callback:function ($$v) {_vm.$set(_vm.pagination, "currentPage", $$v)},expression:"pagination.currentPage"}}),_c('ul',{staticClass:"pagination"},[_c('li',{staticClass:"page-item active"},[_c('a',{staticClass:"page-link"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.pagination.total))])])])],1):_vm._e(),(_vm.errorData)?_c('div',{staticClass:"alert alert-danger m-errors"},[(_vm.errorData.code === 500)?_c('span',[_vm._v(_vm._s(_vm.errorData.message))]):(!!_vm.errorData.type)?_c('span',[_vm._v(_vm._s(_vm.$t(("error-" + (_vm.errorData.type)))))]):_vm._e()]):_vm._e()])])}
-var Entryvue_type_template_id_1bd69efb_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Entry.vue?vue&type=template&id=39509358&scoped=true&
+var Entryvue_type_template_id_39509358_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.canEditPresence)?_c('div',{staticClass:"u-flex u-align-items-center u-gap-small-3x u-max-w-fit m-controls"},[_c('search-bar',{attrs:{"search-options":_vm.searchOptions},on:{"filter-changed":_vm.onFilterChanged,"filter-cleared":_vm.onFilterCleared}}),_c('div',[_c('a',{staticClass:"btn btn-default btn-sm",attrs:{"href":_vm.apiConfig.exportURL}},[_vm._v(_vm._s(_vm.$t('export')))])])],1):_vm._e(),_c('div',[_c('div',{staticClass:"u-relative"},[(!_vm.canEditPresence)?_c('div',{staticClass:"u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend"},[_c('span',{staticStyle:{"color":"#507177"}},[_vm._v(_vm._s(_vm.$t('legend'))+":")]),_vm._l((_vm.presenceStatuses),function(status){return _c('legend-item',{attrs:{"title":_vm.getPresenceStatusTitle(status),"label":status.code,"color":status.color}})})],2):_vm._e(),_c('entry-table',{attrs:{"id":"course-students","items":_vm.itemsProvider,"periods":_vm.periods,"status-defaults":_vm.statusDefaults,"presence":_vm.presence,"can-edit-presence":_vm.canEditPresence,"global-search-query":_vm.globalSearchQuery,"pagination":_vm.pagination,"is-saving":_vm.isSaving,"is-creating-new-period":_vm.creatingNew,"to-remove-period":_vm.toRemovePeriod},on:{"create-period":_vm.createResultPeriod,"remove-selected-period":_vm.removeSelectedPeriod,"period-label-changed":_vm.setSelectedPeriodLabel,"select-student-status":_vm.setSelectedStudentStatus,"toggle-checkout":_vm.toggleCheckout}}),(!_vm.creatingNew)?_c('div',{staticClass:"lds-ellipsis",attrs:{"aria-hidden":"true"}},[_c('div'),_c('div'),_c('div'),_c('div')]):_vm._e()],1),(_vm.canEditPresence && _vm.pageLoaded)?_c('div',{staticClass:"pagination-container u-flex u-justify-content-end"},[_c('b-pagination',{attrs:{"total-rows":_vm.pagination.total,"per-page":_vm.pagination.perPage,"aria-controls":"data-table"},model:{value:(_vm.pagination.currentPage),callback:function ($$v) {_vm.$set(_vm.pagination, "currentPage", $$v)},expression:"pagination.currentPage"}}),_c('ul',{staticClass:"pagination"},[_c('li',{staticClass:"page-item active"},[_c('a',{staticClass:"page-link"},[_vm._v(_vm._s(_vm.$t('total'))+" "+_vm._s(_vm.pagination.total))])])])],1):_vm._e(),(_vm.errorData)?_c('div',{staticClass:"alert alert-danger m-errors"},[(_vm.errorData.code === 500)?_c('span',[_vm._v(_vm._s(_vm.errorData.message))]):(!!_vm.errorData.type)?_c('span',[_vm._v(_vm._s(_vm.$t(("error-" + (_vm.errorData.type)))))]):_vm._e()]):_vm._e(),(_vm.nonCourseStudents.length)?_c('b',{staticStyle:{"color":"#507177","font-size":"14px","font-weight":"500"}},[_vm._v(_vm._s(_vm.$t('students-not-in-course')))]):_vm._e(),_c('entry-table',{staticStyle:{"margin-top":"20px"},attrs:{"id":"non-course-students","items":_vm.nonCourseStudents,"periods":_vm.periods,"status-defaults":_vm.statusDefaults,"presence":_vm.presence,"can-edit-presence":_vm.canEditPresence,"has-non-course-students":true,"is-saving":_vm.isSavingNonCourse,"is-creating-new-period":_vm.creatingNew},on:{"select-student-status":_vm.setSelectedStudentStatus,"toggle-checkout":_vm.toggleCheckout}})],1)])}
+var Entryvue_type_template_id_39509358_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Entry.vue?vue&type=template&id=1bd69efb&scoped=true&
+// CONCATENATED MODULE: ./src/components/Entry.vue?vue&type=template&id=39509358&scoped=true&
 
 // CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/entry/LegendItem.vue?vue&type=template&id=128fddd8&
 var LegendItemvue_type_template_id_128fddd8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"u-flex u-align-items-baseline u-gap-small"},[_c('div',{class:['color-code', _vm.color],staticStyle:{"height":"20px","padding":"2px 4px"}},[_c('span',[_vm._v(_vm._s(_vm.label))])]),_c('span',[_vm._v(_vm._s(_vm.title))])])}
@@ -10542,7 +10572,24 @@ var DynamicFieldKey_component = normalizeComponent(
 )
 
 /* harmony default export */ var DynamicFieldKey = (DynamicFieldKey_component.exports);
-// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Entry.vue?vue&type=script&lang=ts&
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"3905bc8e-vue-loader-template"}!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/entry/EntryTable.vue?vue&type=template&id=643f70c2&scoped=true&
+var EntryTablevue_type_template_id_643f70c2_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.items.length)?_c('b-table',{ref:"table",staticClass:"mod-presence mod-entry",attrs:{"foot-clone":_vm.isRemovePeriodButtonShown,"bordered":"","items":_vm.items,"fields":_vm.fields,"sort-by":_vm.sortBy,"sort-desc":_vm.sortDesc,"per-page":_vm.pagination.perPage,"current-page":_vm.pagination.currentPage,"filter":_vm.globalSearchQuery,"no-sort-reset":""},on:{"update:sortBy":function($event){_vm.sortBy=$event},"update:sort-by":function($event){_vm.sortBy=$event},"update:sortDesc":function($event){_vm.sortDesc=$event},"update:sort-desc":function($event){_vm.sortDesc=$event}},scopedSlots:_vm._u([(_vm.canEditPresence)?{key:"cell(photo)",fn:function(ref){
+var item = ref.item;
+return [_c('img',{attrs:{"src":item.photo}})]}}:null,(_vm.isFullyEditable)?{key:"head(fullname)",fn:function(){return [_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('lastname')},on:{"click":function($event){return _vm.sortByNameField('lastname')}}},[_vm._v(_vm._s(_vm.$t('last-name')))]),_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('firstname')},on:{"click":function($event){return _vm.sortByNameField('firstname')}}},[_vm._v(_vm._s(_vm.$t('first-name')))])]},proxy:true}:(_vm.canEditPresence)?{key:"head(fullname)",fn:function(){return [_vm._v(_vm._s(_vm.$t('last-name'))+", "+_vm._s(_vm.$t('first-name')))]},proxy:true}:{key:"head(fullname)",fn:function(){return [_vm._v("Student")]},proxy:true},{key:"foot(fullname)",fn:function(){return [_c('span')]},proxy:true},{key:"cell(fullname)",fn:function(ref){
+var item = ref.item;
+return [_vm._v(" "+_vm._s(item.lastname.toUpperCase())+", "+_vm._s(item.firstname)+" ")]}},(_vm.isFullyEditable)?{key:"head(official_code)",fn:function(){return [_c('a',{staticClass:"tbl-sort-option",attrs:{"aria-sort":_vm.getSortStatus('official_code')},on:{"click":function($event){return _vm.sortByNameField('official_code')}}},[_vm._v(_vm._s(_vm.$t('official-code')))])]},proxy:true}:{key:"head(official_code)",fn:function(){return [_vm._v(_vm._s(_vm.$t('official-code')))]},proxy:true},{key:"foot(official_code)",fn:function(){return [_c('span')]},proxy:true},{key:"head(new_period)",fn:function(){return [_c('div',{staticClass:"select-period-btn mod-new",attrs:{"role":"button","tabindex":"0","title":_vm.$t('new-period')},on:{"keyup":function($event){if(!$event.type.indexOf('key')&&_vm._k($event.keyCode,"enter",13,$event.key,"Enter")){ return null; }return _vm.createPeriod($event)},"click":_vm.createPeriod}},[_c('i',{staticClass:"fa fa-plus",staticStyle:{"color":"#337ab7"},attrs:{"aria-hidden":"true"}}),_vm._v(" "),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('new-period')))])])]},proxy:true},{key:"foot(new_period)",fn:function(){return [_c('span')]},proxy:true},{key:"head(period-entry-plh)",fn:function(){return [_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[_c('b-input',{staticClass:"u-bg-none u-font-normal u-font-italic u-pointer-events-none ti-label mod-border",attrs:{"type":"text","autocomplete":"off","placeholder":_vm.$t('new-period') + '...'}}),_c('div',{staticClass:"spin"},[(_vm.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin"}):_vm._e()])],1)]},proxy:true},{key:"cell(period-entry-plh)",fn:function(){return [_c('div',{staticClass:"u-flex u-gap-small u-flex-wrap u-pointer-events-none"},_vm._l((_vm.presenceStatuses),function(status,index){return _c('button',{key:("status-" + index),staticClass:"color-code mod-plh",class:[status.color]},[_c('span',[_vm._v(_vm._s(status.code))])])}),0)]},proxy:true},_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("head(" + (fieldKey.key) + ")"),fn:function(ref){
+var label = ref.label;
+return [_c('dynamic-field-key',{class:[{'select-period-btn' : _vm.canEditPresence}, 'u-txt-truncate'],attrs:{"is-editable":_vm.canEditPresence,"title":label},on:{"select":function($event){return _vm.setSelectedPeriod(fieldKey.id)}},scopedSlots:_vm._u([{key:"default",fn:function(){return [(label)?_c('span',[_vm._v(_vm._s(label))]):_c('span',{staticClass:"u-font-italic"},[_vm._v(_vm._s(_vm.getPlaceHolder(fieldKey.id)))])]},proxy:true}],null,true)})]}}}),_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("cell(" + (fieldKey.key) + ")"),fn:function(ref){
+var item = ref.item;
+return [_c('div',{staticClass:"result-wrap"},[_c('div',{staticClass:"color-code u-cursor-default",class:[_vm.getStatusColorForStudent(item, fieldKey.id) || 'mod-none'],attrs:{"title":_vm.getStatusTitleForStudent(item, fieldKey.id)}},[_c('span',[_vm._v(_vm._s(_vm.getStatusCodeForStudent(item, fieldKey.id)))])])])]}}}),_vm._l((_vm.dynamicFieldKeys),function(fieldKey){return {key:("foot(" + (fieldKey.key) + ")"),fn:function(){return [_c('span')]},proxy:true}}),{key:"head(period-entry)",fn:function(){return [_c('div',{staticClass:"u-flex u-align-items-center u-gap-small"},[(_vm.isFullyEditable)?_c('b-input',{staticClass:"u-font-normal ti-label",attrs:{"type":"text","debounce":"750","autocomplete":"off","placeholder":_vm.getPlaceHolder(_vm.selectedPeriod.id)},model:{value:(_vm.selectedPeriodLabel),callback:function ($$v) {_vm.selectedPeriodLabel=$$v},expression:"selectedPeriodLabel"}}):(_vm.selectedPeriodLabel)?_c('span',{staticStyle:{"width":"100%"}},[_vm._v(_vm._s(_vm.selectedPeriodLabel))]):_c('span',{staticClass:"u-font-italic",staticStyle:{"width":"100%"}},[_vm._v(_vm._s(_vm.getPlaceHolder(_vm.selectedPeriod.id)))]),_c('div',{staticClass:"spin"},[(_vm.isSaving)?_c('div',{staticClass:"glyphicon glyphicon-repeat glyphicon-spin"}):_vm._e()])],1),(_vm.presence && _vm.presence.has_checkout)?_c('div',{staticClass:"selected-period-controls"},[_c('on-off-switch',{attrs:{"id":("checkout-" + _vm.id),"switch-class":"mod-checkout-choice","on-text":_vm.$t('checkout-mode'),"off-text":_vm.$t('checkout-mode'),"checked":_vm.checkoutMode},on:{"toggle":function($event){_vm.checkoutMode = !_vm.checkoutMode}}})],1):_vm._e(),_c('button',{staticClass:"btn btn-default btn-sm selected-period-close-btn",attrs:{"title":_vm.$t('stop-edit-mode')},on:{"click":function($event){_vm.selectedPeriod = null}}},[_c('i',{staticClass:"fa fa-close",attrs:{"aria-hidden":"true"}}),_c('span',{staticClass:"sr-only"},[_vm._v(_vm._s(_vm.$t('stop-edit-mode')))])])]},proxy:true},{key:"cell(period-entry)",fn:function(ref){
+var item = ref.item;
+return [(_vm.presence && _vm.presence.has_checkout && _vm.checkoutMode)?[(item[("period#" + (_vm.selectedPeriod.id) + "-checked_in_date")])?_c('on-off-switch',{attrs:{"id":item.id,"on-text":_vm.$t('checked-out'),"off-text":_vm.$t('not-checked-out'),"checked":item[("period#" + (_vm.selectedPeriod.id) + "-checked_out_date")] > item[("period#" + (_vm.selectedPeriod.id) + "-checked_in_date")],"switch-class":"mod-checkout"},on:{"toggle":function($event){return _vm.$emit('toggle-checkout', item, _vm.selectedPeriod, _vm.hasNonCourseStudents)}}}):_c('div',{staticClass:"color-code u-cursor-default",class:[_vm.getStatusColorForStudent(item, _vm.selectedPeriod.id) || 'mod-none'],attrs:{"title":_vm.getStatusTitleForStudent(item, _vm.selectedPeriod.id)}},[_c('span',[_vm._v(_vm._s(_vm.getStatusCodeForStudent(item, _vm.selectedPeriod.id)))])])]:_c('div',{staticClass:"u-flex u-gap-small u-flex-wrap"},_vm._l((_vm.presenceStatuses),function(status,index){return _c('button',{key:("status-" + index),staticClass:"color-code mod-selectable",class:[status.color, { 'is-selected': _vm.hasSelectedStudentStatus(item, status.id) }],attrs:{"title":_vm.getPresenceStatusTitle(status),"aria-pressed":_vm.hasSelectedStudentStatus(item, status.id) ? 'true': 'false'},on:{"click":function($event){!_vm.hasSelectedStudentStatus(item, status.id) ? _vm.$emit('select-student-status', item, _vm.selectedPeriod, status.id, _vm.hasNonCourseStudents) : null}}},[_c('span',[_vm._v(_vm._s(status.code))])])}),0)]}},{key:"foot(period-entry)",fn:function(){return [_c('button',{staticClass:"btn-remove",attrs:{"disabled":_vm.toRemovePeriod === _vm.selectedPeriod},on:{"click":function($event){return _vm.$emit('remove-selected-period', _vm.selectedPeriod)}}},[_vm._v(_vm._s(_vm.$t('remove-period')))])]},proxy:true}],null,true)},[(_vm.canEditPresence)?_c('template',{slot:"table-colgroup"},[_c('col'),_c('col'),_c('col'),(!!_vm.selectedPeriod && !_vm.isCreatingNewPeriod && _vm.isFullyEditable)?_c('col'):(_vm.isCreatingNewPeriod)?_c('col',{staticClass:"bd-selected-period"}):_vm._e(),_vm._l((_vm.periodsReversed),function(period){return (!!_vm.selectedPeriod || _vm.isCreatingNewPeriod)?[(!_vm.isCreatingNewPeriod && period === _vm.selectedPeriod)?_c('col',{staticClass:"bd-selected-period"}):_c('col')]:_vm._e()})],2):_vm._e()],2):_vm._e()}
+var EntryTablevue_type_template_id_643f70c2_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/entry/EntryTable.vue?vue&type=template&id=643f70c2&scoped=true&
+
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/entry/EntryTable.vue?vue&type=script&lang=ts&
 
 
 
@@ -10559,111 +10606,65 @@ var DynamicFieldKey_component = normalizeComponent(
 
 
 
-
-
-
-
-
-
-
-
-
-
-var Entryvue_type_script_lang_ts_Entry =
+var EntryTablevue_type_script_lang_ts_EntryTable =
 /*#__PURE__*/
 function (_Vue) {
-  _inherits(Entry, _Vue);
+  _inherits(EntryTable, _Vue);
 
-  function Entry() {
+  function EntryTable() {
     var _this;
 
-    _classCallCheck(this, Entry);
+    _classCallCheck(this, EntryTable);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Entry).apply(this, arguments));
-    _this.statusDefaults = [];
-    _this.presence = null;
-    _this.connector = null;
-    _this.periods = [];
-    _this.selectedPeriod = null;
-    _this.toRemovePeriod = null;
-    _this.students = [];
-    _this.creatingNew = false;
-    _this.createdId = null;
-    _this.pageLoaded = false;
-    _this.errorData = null;
-    _this.checkoutMode = false;
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EntryTable).apply(this, arguments));
     _this.sortBy = 'lastname';
     _this.sortDesc = false;
-    _this.pagination = {
-      currentPage: 1,
-      perPage: 20,
-      total: 0
-    };
-    _this.searchOptions = {
-      globalSearchQuery: ''
-    };
-    _this.requestCount = true;
+    _this.selectedPeriod = null;
+    _this.checkoutMode = false;
     return _this;
   }
 
-  _createClass(Entry, [{
-    key: "load",
-    value: function () {
-      var _load = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var _this$connector;
-
-        var presenceData;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return (_this$connector = this.connector) === null || _this$connector === void 0 ? void 0 : _this$connector.loadPresence();
-
-              case 2:
-                presenceData = _context.sent;
-
-                if (presenceData) {
-                  this.statusDefaults = presenceData['status-defaults'];
-                  this.presence = presenceData.presence;
-                }
-
-              case 4:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function load() {
-        return _load.apply(this, arguments);
+  _createClass(EntryTable, [{
+    key: "getSortStatus",
+    value: function getSortStatus(name) {
+      if (this.sortBy !== name) {
+        return 'none';
       }
 
-      return load;
-    }()
+      return this.sortDesc ? 'descending' : 'ascending';
+    }
   }, {
-    key: "toggleCheckout",
-    value: function toggleCheckout(student) {
-      var _this$connector2;
-
-      if (!this.selectedPeriod) {
+    key: "sortByNameField",
+    value: function sortByNameField(namefield) {
+      if (this.sortBy === namefield) {
+        this.sortDesc = !this.sortDesc;
         return;
       }
 
-      var periodId = this.selectedPeriod.id;
-
-      if (!student["period#".concat(periodId, "-checked_in_date")]) {
+      this.sortBy = namefield;
+      this.sortDesc = false;
+    }
+  }, {
+    key: "setSelectedPeriod",
+    value: function setSelectedPeriod(periodId) {
+      if (!this.canEditPresence) {
         return;
       }
 
-      (_this$connector2 = this.connector) === null || _this$connector2 === void 0 ? void 0 : _this$connector2.togglePresenceEntryCheckout(periodId, student.id, function (data) {
-        if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
-          student["period#".concat(periodId, "-checked_in_date")] = data.checked_in_date;
-          student["period#".concat(periodId, "-checked_out_date")] = data.checked_out_date;
-        }
+      var selectedPeriod = this.periods.find(function (p) {
+        return p.id === periodId;
+      }) || null;
+      this.selectedPeriod = selectedPeriod || null;
+      this.checkoutMode = false;
+    }
+  }, {
+    key: "createPeriod",
+    value: function createPeriod() {
+      var _this2 = this;
+
+      this.selectedPeriod = null;
+      this.$emit('create-period', function () {
+        _this2.$refs.table.refresh();
       });
     }
   }, {
@@ -10674,221 +10675,10 @@ function (_Vue) {
       }) + 1);
     }
   }, {
-    key: "setSelectedPeriod",
-    value: function setSelectedPeriod(id) {
-      if (!this.canEditPresence) {
-        return;
-      }
-
-      var selectedPeriod = this.periods.find(function (p) {
-        return p.id === id;
-      }) || null;
-      this.selectedPeriod = selectedPeriod || null;
-      this.checkoutMode = false;
-    }
-  }, {
-    key: "removeSelectedPeriod",
-    value: function removeSelectedPeriod() {
-      var _this$connector3,
-          _this2 = this;
-
-      if (!this.selectedPeriod) {
-        return;
-      }
-
-      this.errorData = null;
-      this.toRemovePeriod = this.selectedPeriod;
-      var index = this.periods.indexOf(this.selectedPeriod);
-      (_this$connector3 = this.connector) === null || _this$connector3 === void 0 ? void 0 : _this$connector3.deletePresencePeriod(this.selectedPeriod.id, function (data) {
-        _this2.toRemovePeriod = null;
-
-        if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
-          _this2.selectedPeriod = null;
-
-          _this2.periods.splice(index, 1);
-        }
-      });
-    }
-  }, {
-    key: "setError",
-    value: function setError(data) {
-      this.errorData = data;
-    }
-  }, {
-    key: "itemsProvider",
-    value: function () {
-      var _itemsProvider = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(ctx) {
-        var _this$connector4;
-
-        var selectedPeriod, parameters, data, periods, students;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                selectedPeriod = this.selectedPeriod;
-                parameters = {
-                  global_search_query: ctx.filter,
-                  sort_field: ctx.sortBy,
-                  sort_direction: ctx.sortDesc ? 'desc' : 'asc',
-                  items_per_page: ctx.perPage,
-                  page_number: ctx.currentPage,
-                  request_count: this.requestCount
-                };
-                _context2.next = 4;
-                return (_this$connector4 = this.connector) === null || _this$connector4 === void 0 ? void 0 : _this$connector4.loadPresenceEntries(parameters);
-
-              case 4:
-                data = _context2.sent;
-                periods = data.periods, students = data.students;
-                this.periods = periods;
-                this.students = students;
-
-                if (data.count !== undefined) {
-                  this.pagination.total = data.count;
-                  this.requestCount = false;
-                }
-
-                if (!this.pageLoaded && this.periods.length) {
-                  this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
-                  this.pageLoaded = true;
-                } else if (this.createdId !== null) {
-                  this.setSelectedPeriod(this.createdId);
-                  this.createdId = null;
-                  this.creatingNew = false;
-                } else if (selectedPeriod) {
-                  this.setSelectedPeriod(selectedPeriod.id);
-                }
-
-                return _context2.abrupt("return", students);
-
-              case 11:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function itemsProvider(_x) {
-        return _itemsProvider.apply(this, arguments);
-      }
-
-      return itemsProvider;
-    }()
-  }, {
-    key: "onFilterChanged",
-    value: function onFilterChanged() {
-      this.requestCount = true;
-    }
-  }, {
-    key: "onFilterCleared",
-    value: function onFilterCleared() {
-      if (this.globalSearchQuery !== '') {
-        this.globalSearchQuery = '';
-        this.requestCount = true;
-      }
-    }
-  }, {
     key: "getStudentStatusForPeriod",
     value: function getStudentStatusForPeriod(student, periodId) {
       return student["period#".concat(periodId, "-status")];
     }
-  }, {
-    key: "hasSelectedStudentStatus",
-    value: function hasSelectedStudentStatus(student, status) {
-      if (!this.selectedPeriod) {
-        return false;
-      }
-
-      return this.getStudentStatusForPeriod(student, this.selectedPeriod.id) === status;
-    }
-  }, {
-    key: "createResultPeriod",
-    value: function () {
-      var _createResultPeriod = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3() {
-        var _this$connector5,
-            _this3 = this;
-
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                this.selectedPeriod = null;
-                this.creatingNew = true;
-                this.errorData = null;
-                _context3.next = 5;
-                return (_this$connector5 = this.connector) === null || _this$connector5 === void 0 ? void 0 : _this$connector5.createResultPeriod(function (data) {
-                  if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
-                    _this3.createdId = data.id;
-
-                    _this3.$refs.table.refresh();
-                  }
-                });
-
-              case 5:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function createResultPeriod() {
-        return _createResultPeriod.apply(this, arguments);
-      }
-
-      return createResultPeriod;
-    }()
-  }, {
-    key: "setSelectedStudentStatus",
-    value: function () {
-      var _setSelectedStudentStatus = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee4(student, status) {
-        var _this$connector6;
-
-        var selectedPeriod, periodId;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                if (this.selectedPeriod) {
-                  _context4.next = 2;
-                  break;
-                }
-
-                return _context4.abrupt("return");
-
-              case 2:
-                selectedPeriod = this.selectedPeriod;
-                this.errorData = null;
-                periodId = selectedPeriod.id;
-                student["period#".concat(periodId, "-status")] = status;
-                (_this$connector6 = this.connector) === null || _this$connector6 === void 0 ? void 0 : _this$connector6.savePresenceEntry(periodId, student.id, status, function (data) {
-                  if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
-                    student["period#".concat(periodId, "-checked_in_date")] = data.checked_in_date;
-                    student["period#".concat(periodId, "-checked_out_date")] = data.checked_out_date;
-                  }
-                });
-
-              case 7:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, this);
-      }));
-
-      function setSelectedStudentStatus(_x2, _x3) {
-        return _setSelectedStudentStatus.apply(this, arguments);
-      }
-
-      return setSelectedStudentStatus;
-    }()
   }, {
     key: "getPresenceStatusTitle",
     value: function getPresenceStatusTitle(status) {
@@ -10908,6 +10698,15 @@ function (_Vue) {
       return this.presenceStatuses.find(function (status) {
         return status.id === statusId;
       });
+    }
+  }, {
+    key: "hasSelectedStudentStatus",
+    value: function hasSelectedStudentStatus(student, status) {
+      if (!this.selectedPeriod) {
+        return false;
+      }
+
+      return this.getStudentStatusForPeriod(student, this.selectedPeriod.id) === status;
     }
   }, {
     key: "getStatusCodeForStudent",
@@ -10960,30 +10759,601 @@ function (_Vue) {
       return status ? this.getPresenceStatusTitle(status) : '';
     }
   }, {
-    key: "getSortStatus",
-    value: function getSortStatus(name) {
-      if (this.sortBy !== name) {
-        return 'none';
-      }
+    key: "created",
+    value: function created() {
+      var _this3 = this;
 
-      return this.sortDesc ? 'descending' : 'ascending';
+      this.$parent.$on('selected-period', function (periodId) {
+        _this3.$nextTick(function () {
+          _this3.setSelectedPeriod(periodId);
+        });
+      });
+      this.$parent.$on('selected-period-maybe', function () {
+        _this3.$nextTick(function () {
+          if (_this3.selectedPeriod) {
+            _this3.setSelectedPeriod(_this3.selectedPeriod.id);
+          }
+        });
+      });
+      this.$parent.$on('period-removed', function (periodId) {
+        _this3.$nextTick(function () {
+          var _this3$selectedPeriod;
+
+          if (((_this3$selectedPeriod = _this3.selectedPeriod) === null || _this3$selectedPeriod === void 0 ? void 0 : _this3$selectedPeriod.id) === periodId) {
+            _this3.selectedPeriod = null;
+          }
+        });
+      });
+      this.$parent.$on('creating-new-period', function () {
+        _this3.selectedPeriod = null;
+      });
     }
   }, {
-    key: "sortByNameField",
-    value: function sortByNameField(namefield) {
-      if (this.sortBy === namefield) {
-        this.sortDesc = !this.sortDesc;
+    key: "isFullyEditable",
+    get: function get() {
+      return this.canEditPresence && !this.hasNonCourseStudents;
+    }
+  }, {
+    key: "isRemovePeriodButtonShown",
+    get: function get() {
+      return this.isFullyEditable && !!this.selectedPeriod && !this.checkoutMode;
+    }
+  }, {
+    key: "periodsReversed",
+    get: function get() {
+      var periods = _toConsumableArray(this.periods);
+
+      periods.reverse();
+      return periods;
+    }
+  }, {
+    key: "dynamicFieldKeys",
+    get: function get() {
+      return this.periods.map(function (period) {
+        return {
+          key: "period#".concat(period.id),
+          id: period.id
+        };
+      });
+    }
+  }, {
+    key: "selectedPeriodLabel",
+    get: function get() {
+      var _this$selectedPeriod;
+
+      return ((_this$selectedPeriod = this.selectedPeriod) === null || _this$selectedPeriod === void 0 ? void 0 : _this$selectedPeriod.label) || '';
+    },
+    set: function set(label) {
+      if (!this.selectedPeriod) {
         return;
       }
 
-      this.sortBy = namefield;
-      this.sortDesc = false;
+      this.$emit('period-label-changed', this.selectedPeriod, label);
+    }
+  }, {
+    key: "presenceStatuses",
+    get: function get() {
+      var _this$presence;
+
+      return ((_this$presence = this.presence) === null || _this$presence === void 0 ? void 0 : _this$presence.statuses) || [];
+    }
+  }, {
+    key: "fields",
+    get: function get() {
+      var _this4 = this;
+
+      var periodFields = this.periods.map(function (period) {
+        var key = _this4.canEditPresence && period === _this4.selectedPeriod ? 'period-entry' : "period#".concat(period.id);
+        var variant = _this4.canEditPresence && period === _this4.selectedPeriod ? 'period' : 'result';
+        return {
+          key: key,
+          sortable: false,
+          label: period.label,
+          variant: variant
+        };
+      });
+      periodFields.reverse();
+      return [this.canEditPresence ? {
+        key: 'photo',
+        sortable: false,
+        label: '',
+        variant: 'photo'
+      } : null, {
+        key: 'fullname',
+        sortable: false,
+        label: 'Student'
+      }, {
+        key: 'official_code',
+        sortable: false
+      }, this.canEditPresence && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {
+        key: 'new_period',
+        sortable: false,
+        label: ''
+      } : null, this.isCreatingNewPeriod ? {
+        key: 'period-entry-plh',
+        sortable: false,
+        variant: 'period'
+      } : null].concat(_toConsumableArray(periodFields));
+    }
+  }]);
+
+  return EntryTable;
+}(external_commonjs_vue_commonjs2_vue_root_Vue_default.a);
+
+__decorate([Prop({
+  type: String,
+  "default": ''
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "id", void 0);
+
+__decorate([Prop()], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "items", void 0);
+
+__decorate([Prop({
+  type: Object,
+  "default": function _default() {
+    return {
+      perPage: 0,
+      currentPage: 0
+    };
+  }
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "pagination", void 0);
+
+__decorate([Prop({
+  type: Boolean,
+  "default": false
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "isSaving", void 0);
+
+__decorate([Prop({
+  type: String,
+  "default": ''
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "globalSearchQuery", void 0);
+
+__decorate([Prop({
+  type: Array,
+  "default": function _default() {
+    return [];
+  }
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "statusDefaults", void 0);
+
+__decorate([Prop({
+  type: Array,
+  "default": function _default() {
+    return [];
+  }
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "periods", void 0);
+
+__decorate([Prop({
+  type: Object,
+  "default": null
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "presence", void 0);
+
+__decorate([Prop({
+  type: Boolean,
+  "default": false
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "canEditPresence", void 0);
+
+__decorate([Prop({
+  type: Boolean,
+  "default": false
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "hasNonCourseStudents", void 0);
+
+__decorate([Prop({
+  type: Boolean,
+  "default": false
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "isCreatingNewPeriod", void 0);
+
+__decorate([Prop({
+  type: Object,
+  "default": null
+})], EntryTablevue_type_script_lang_ts_EntryTable.prototype, "toRemovePeriod", void 0);
+
+EntryTablevue_type_script_lang_ts_EntryTable = __decorate([vue_class_component_esm({
+  name: 'entry-table',
+  components: {
+    OnOffSwitch: components_OnOffSwitch,
+    DynamicFieldKey: DynamicFieldKey
+  }
+})], EntryTablevue_type_script_lang_ts_EntryTable);
+/* harmony default export */ var EntryTablevue_type_script_lang_ts_ = (EntryTablevue_type_script_lang_ts_EntryTable);
+// CONCATENATED MODULE: ./src/components/entry/EntryTable.vue?vue&type=script&lang=ts&
+ /* harmony default export */ var entry_EntryTablevue_type_script_lang_ts_ = (EntryTablevue_type_script_lang_ts_); 
+// EXTERNAL MODULE: ./src/components/entry/EntryTable.vue?vue&type=style&index=0&id=643f70c2&scoped=true&lang=css&
+var EntryTablevue_type_style_index_0_id_643f70c2_scoped_true_lang_css_ = __webpack_require__("c677");
+
+// EXTERNAL MODULE: ./src/components/entry/EntryTable.vue?vue&type=custom&index=0&blockType=i18n
+var EntryTablevue_type_custom_index_0_blockType_i18n = __webpack_require__("5091");
+
+// CONCATENATED MODULE: ./src/components/entry/EntryTable.vue
+
+
+
+
+
+
+/* normalize component */
+
+var EntryTable_component = normalizeComponent(
+  entry_EntryTablevue_type_script_lang_ts_,
+  EntryTablevue_type_template_id_643f70c2_scoped_true_render,
+  EntryTablevue_type_template_id_643f70c2_scoped_true_staticRenderFns,
+  false,
+  null,
+  "643f70c2",
+  null
+  
+)
+
+/* custom blocks */
+
+if (typeof EntryTablevue_type_custom_index_0_blockType_i18n["default"] === 'function') Object(EntryTablevue_type_custom_index_0_blockType_i18n["default"])(EntryTable_component)
+
+/* harmony default export */ var entry_EntryTable = (EntryTable_component.exports);
+// CONCATENATED MODULE: /Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--13-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/thread-loader/dist/cjs.js!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/babel-loader/lib!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/ts-loader??ref--13-3!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/cache-loader/dist/cjs.js??ref--0-0!/Users/stefan/dev/vagrantbox/synced_folders/var_www/html/cosnics/node_modules/vue-loader/lib??vue-loader-options!./src/components/Entry.vue?vue&type=script&lang=ts&
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var Entryvue_type_script_lang_ts_Entry =
+/*#__PURE__*/
+function (_Vue) {
+  _inherits(Entry, _Vue);
+
+  function Entry() {
+    var _this;
+
+    _classCallCheck(this, Entry);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Entry).apply(this, arguments));
+    _this.statusDefaults = [];
+    _this.presence = null;
+    _this.connector = null;
+    _this.connectorNonCourse = null;
+    _this.periods = [];
+    _this.toRemovePeriod = null;
+    _this.students = [];
+    _this.nonCourseStudents = [];
+    _this.creatingNew = false;
+    _this.createdId = null;
+    _this.pageLoaded = false;
+    _this.errorData = null;
+    _this.pagination = {
+      currentPage: 1,
+      perPage: 20,
+      total: 0
+    };
+    _this.searchOptions = {
+      globalSearchQuery: ''
+    };
+    _this.requestCount = true;
+    _this.requestNonCourseStudents = true;
+    return _this;
+  }
+
+  _createClass(Entry, [{
+    key: "onFilterChanged",
+    value: function onFilterChanged() {
+      this.requestCount = true;
+    }
+  }, {
+    key: "onFilterCleared",
+    value: function onFilterCleared() {
+      if (this.globalSearchQuery !== '') {
+        this.globalSearchQuery = '';
+        this.requestCount = true;
+      }
+    }
+  }, {
+    key: "getPresenceStatusTitle",
+    value: function getPresenceStatusTitle(status) {
+      if (status.type !== 'custom') {
+        var _this$statusDefaults$;
+
+        return ((_this$statusDefaults$ = this.statusDefaults.find(function (statusDefault) {
+          return statusDefault.id === status.id;
+        })) === null || _this$statusDefaults$ === void 0 ? void 0 : _this$statusDefaults$.title) || '';
+      }
+
+      return status.title || '';
+    }
+  }, {
+    key: "load",
+    value: function () {
+      var _load = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var _this$connector;
+
+        var presenceData;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return (_this$connector = this.connector) === null || _this$connector === void 0 ? void 0 : _this$connector.loadPresence();
+
+              case 2:
+                presenceData = _context.sent;
+
+                if (presenceData) {
+                  this.statusDefaults = presenceData['status-defaults'];
+                  this.presence = presenceData.presence;
+                }
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function load() {
+        return _load.apply(this, arguments);
+      }
+
+      return load;
+    }()
+  }, {
+    key: "itemsProvider",
+    value: function () {
+      var _itemsProvider = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(ctx) {
+        var _this$connector2;
+
+        var parameters, data, periods, students;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                parameters = {
+                  global_search_query: ctx.filter,
+                  sort_field: ctx.sortBy,
+                  sort_direction: ctx.sortDesc ? 'desc' : 'asc',
+                  items_per_page: ctx.perPage,
+                  page_number: ctx.currentPage,
+                  request_count: this.requestCount,
+                  request_non_course_students: this.requestNonCourseStudents
+                };
+                _context2.next = 3;
+                return (_this$connector2 = this.connector) === null || _this$connector2 === void 0 ? void 0 : _this$connector2.loadPresenceEntries(parameters);
+
+              case 3:
+                data = _context2.sent;
+                periods = data.periods, students = data.students;
+                this.periods = periods;
+                this.students = students;
+
+                if (data.count !== undefined) {
+                  this.pagination.total = data.count;
+                  this.requestCount = false;
+                }
+
+                if (this.requestNonCourseStudents) {
+                  if (data['non_course_students'] !== undefined) {
+                    this.nonCourseStudents = data['non_course_students'];
+                  }
+
+                  this.requestNonCourseStudents = false;
+                }
+
+                if (!this.pageLoaded && this.periods.length) {
+                  this.$emit('selected-period', this.periods[this.periods.length - 1].id);
+                  this.pageLoaded = true;
+                } else if (this.createdId !== null) {
+                  this.$emit('selected-period', this.createdId);
+                  this.createdId = null;
+                  this.creatingNew = false;
+                } else {
+                  this.$emit('selected-period-maybe');
+                }
+
+                return _context2.abrupt("return", students);
+
+              case 11:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function itemsProvider(_x) {
+        return _itemsProvider.apply(this, arguments);
+      }
+
+      return itemsProvider;
+    }()
+  }, {
+    key: "setError",
+    value: function setError(data) {
+      this.errorData = data;
+    }
+  }, {
+    key: "createResultPeriod",
+    value: function () {
+      var _createResultPeriod = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee3() {
+        var _this$connector3,
+            _this2 = this;
+
+        var callback,
+            _args3 = arguments;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                callback = _args3.length > 0 && _args3[0] !== undefined ? _args3[0] : undefined;
+
+                if (this.canEditPresence) {
+                  _context3.next = 3;
+                  break;
+                }
+
+                return _context3.abrupt("return");
+
+              case 3:
+                this.$emit('creating-new-period');
+                this.creatingNew = true;
+                this.errorData = null;
+                _context3.next = 8;
+                return (_this$connector3 = this.connector) === null || _this$connector3 === void 0 ? void 0 : _this$connector3.createResultPeriod(function (data) {
+                  if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
+                    _this2.createdId = data.id;
+
+                    if (callback) {
+                      callback(_this2.createdId);
+                    }
+                  }
+                });
+
+              case 8:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function createResultPeriod() {
+        return _createResultPeriod.apply(this, arguments);
+      }
+
+      return createResultPeriod;
+    }()
+  }, {
+    key: "removeSelectedPeriod",
+    value: function removeSelectedPeriod(selectedPeriod) {
+      var _this$connector4,
+          _this3 = this;
+
+      if (!this.canEditPresence) {
+        return;
+      }
+
+      this.errorData = null;
+      this.toRemovePeriod = selectedPeriod;
+      var index = this.periods.indexOf(selectedPeriod);
+      (_this$connector4 = this.connector) === null || _this$connector4 === void 0 ? void 0 : _this$connector4.deletePresencePeriod(selectedPeriod.id, function (data) {
+        _this3.toRemovePeriod = null;
+
+        if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
+          _this3.$emit('period-removed', selectedPeriod.id);
+
+          _this3.periods.splice(index, 1);
+        }
+      });
+    }
+  }, {
+    key: "setSelectedPeriodLabel",
+    value: function setSelectedPeriodLabel(selectedPeriod, label) {
+      var _this$connector5;
+
+      if (!this.canEditPresence) {
+        return;
+      }
+
+      this.errorData = null;
+      selectedPeriod.label = label;
+      (_this$connector5 = this.connector) === null || _this$connector5 === void 0 ? void 0 : _this$connector5.updatePresencePeriod(selectedPeriod.id, label);
+    }
+  }, {
+    key: "setSelectedStudentStatus",
+    value: function () {
+      var _setSelectedStudentStatus = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(student, selectedPeriod, status) {
+        var hasNonCourseStudents,
+            periodId,
+            connector,
+            _args4 = arguments;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                hasNonCourseStudents = _args4.length > 3 && _args4[3] !== undefined ? _args4[3] : false;
+
+                if (this.canEditPresence) {
+                  _context4.next = 3;
+                  break;
+                }
+
+                return _context4.abrupt("return");
+
+              case 3:
+                this.errorData = null;
+                periodId = selectedPeriod.id;
+                student["period#".concat(periodId, "-status")] = status;
+                connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+                connector === null || connector === void 0 ? void 0 : connector.savePresenceEntry(periodId, student.id, status, function (data) {
+                  if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
+                    student["period#".concat(periodId, "-checked_in_date")] = data.checked_in_date;
+                    student["period#".concat(periodId, "-checked_out_date")] = data.checked_out_date;
+                  }
+                });
+
+              case 8:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function setSelectedStudentStatus(_x2, _x3, _x4) {
+        return _setSelectedStudentStatus.apply(this, arguments);
+      }
+
+      return setSelectedStudentStatus;
+    }()
+  }, {
+    key: "toggleCheckout",
+    value: function toggleCheckout(student, selectedPeriod) {
+      var hasNonCourseStudents = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+      if (!this.canEditPresence) {
+        return;
+      }
+
+      var periodId = selectedPeriod.id;
+
+      if (!student["period#".concat(periodId, "-checked_in_date")]) {
+        return;
+      }
+
+      var connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+      connector === null || connector === void 0 ? void 0 : connector.togglePresenceEntryCheckout(periodId, student.id, function (data) {
+        if ((data === null || data === void 0 ? void 0 : data.status) === 'ok') {
+          student["period#".concat(periodId, "-checked_in_date")] = data.checked_in_date;
+          student["period#".concat(periodId, "-checked_out_date")] = data.checked_out_date;
+        }
+      });
     }
   }, {
     key: "mounted",
     value: function mounted() {
       this.connector = new Connector_Connector(this.apiConfig);
       this.connector.addErrorListener(this);
+      this.connectorNonCourse = new Connector_Connector(this.apiConfig);
+      this.connectorNonCourse.addErrorListener(this);
       this.load();
     }
   }, {
@@ -11000,49 +11370,6 @@ function (_Vue) {
       this.searchOptions.globalSearchQuery = query;
     }
   }, {
-    key: "periodsReversed",
-    get: function get() {
-      var periods = _toConsumableArray(this.periods);
-
-      periods.reverse();
-      return periods;
-    }
-  }, {
-    key: "selectedPeriodLabel",
-    get: function get() {
-      var _this$selectedPeriod;
-
-      return ((_this$selectedPeriod = this.selectedPeriod) === null || _this$selectedPeriod === void 0 ? void 0 : _this$selectedPeriod.label) || '';
-    },
-    set: function set(label) {
-      var _this$connector7;
-
-      if (!this.selectedPeriod) {
-        return;
-      }
-
-      this.errorData = null;
-      this.selectedPeriod.label = label;
-      (_this$connector7 = this.connector) === null || _this$connector7 === void 0 ? void 0 : _this$connector7.updatePresencePeriod(this.selectedPeriod.id, label);
-    }
-  }, {
-    key: "isSaving",
-    get: function get() {
-      var _this$connector8;
-
-      return ((_this$connector8 = this.connector) === null || _this$connector8 === void 0 ? void 0 : _this$connector8.isSaving) || false;
-    }
-  }, {
-    key: "dynamicFieldKeys",
-    get: function get() {
-      return this.periods.map(function (period) {
-        return {
-          key: "period#".concat(period.id),
-          id: period.id
-        };
-      });
-    }
-  }, {
     key: "presenceStatuses",
     get: function get() {
       var _this$presence;
@@ -11050,42 +11377,18 @@ function (_Vue) {
       return ((_this$presence = this.presence) === null || _this$presence === void 0 ? void 0 : _this$presence.statuses) || [];
     }
   }, {
-    key: "fields",
+    key: "isSaving",
     get: function get() {
-      var _this4 = this;
+      var _this$connector6;
 
-      var periods = this.periods.map(function (period) {
-        var key = _this4.canEditPresence && period === _this4.selectedPeriod ? 'period-entry' : "period#".concat(period.id);
-        var variant = _this4.canEditPresence && period === _this4.selectedPeriod ? 'period' : 'result';
-        return {
-          key: key,
-          sortable: false,
-          label: period.label,
-          variant: variant
-        };
-      });
-      periods.reverse();
-      return [this.canEditPresence ? {
-        key: 'photo',
-        sortable: false,
-        label: '',
-        variant: 'photo'
-      } : null, {
-        key: 'fullname',
-        sortable: false,
-        label: 'Student'
-      }, {
-        key: 'official_code',
-        sortable: false
-      }, this.canEditPresence && !this.creatingNew ? {
-        key: 'new_period',
-        sortable: false,
-        label: ''
-      } : null, this.creatingNew ? {
-        key: 'period-entry-plh',
-        sortable: false,
-        variant: 'period'
-      } : null].concat(_toConsumableArray(periods));
+      return ((_this$connector6 = this.connector) === null || _this$connector6 === void 0 ? void 0 : _this$connector6.isSaving) || false;
+    }
+  }, {
+    key: "isSavingNonCourse",
+    get: function get() {
+      var _this$connectorNonCou;
+
+      return ((_this$connectorNonCou = this.connectorNonCourse) === null || _this$connectorNonCou === void 0 ? void 0 : _this$connectorNonCou.isSaving) || false;
     }
   }]);
 
@@ -11112,6 +11415,7 @@ __decorate([Watch('loadIndex')], Entryvue_type_script_lang_ts_Entry.prototype, "
 Entryvue_type_script_lang_ts_Entry = __decorate([vue_class_component_esm({
   name: 'entry',
   components: {
+    EntryTable: entry_EntryTable,
     OnOffSwitch: components_OnOffSwitch,
     SearchBar: entry_SearchBar,
     LegendItem: entry_LegendItem,
@@ -11121,8 +11425,8 @@ Entryvue_type_script_lang_ts_Entry = __decorate([vue_class_component_esm({
 /* harmony default export */ var Entryvue_type_script_lang_ts_ = (Entryvue_type_script_lang_ts_Entry);
 // CONCATENATED MODULE: ./src/components/Entry.vue?vue&type=script&lang=ts&
  /* harmony default export */ var components_Entryvue_type_script_lang_ts_ = (Entryvue_type_script_lang_ts_); 
-// EXTERNAL MODULE: ./src/components/Entry.vue?vue&type=style&index=0&id=1bd69efb&scoped=true&lang=css&
-var Entryvue_type_style_index_0_id_1bd69efb_scoped_true_lang_css_ = __webpack_require__("8b17");
+// EXTERNAL MODULE: ./src/components/Entry.vue?vue&type=style&index=0&id=39509358&scoped=true&lang=css&
+var Entryvue_type_style_index_0_id_39509358_scoped_true_lang_css_ = __webpack_require__("6354");
 
 // EXTERNAL MODULE: ./src/components/Entry.vue?vue&type=custom&index=0&blockType=i18n
 var Entryvue_type_custom_index_0_blockType_i18n = __webpack_require__("cd9d");
@@ -11138,11 +11442,11 @@ var Entryvue_type_custom_index_0_blockType_i18n = __webpack_require__("cd9d");
 
 var Entry_component = normalizeComponent(
   components_Entryvue_type_script_lang_ts_,
-  Entryvue_type_template_id_1bd69efb_scoped_true_render,
-  Entryvue_type_template_id_1bd69efb_scoped_true_staticRenderFns,
+  Entryvue_type_template_id_39509358_scoped_true_render,
+  Entryvue_type_template_id_39509358_scoped_true_staticRenderFns,
   false,
   null,
-  "1bd69efb",
+  "39509358",
   null
   
 )
