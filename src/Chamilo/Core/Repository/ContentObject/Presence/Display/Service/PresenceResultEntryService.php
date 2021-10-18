@@ -58,12 +58,13 @@ class PresenceResultEntryService
      * @param array $periods
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
+     * @param array $options
      *
      * @return array
      */
-    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): array
+    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, array $options = array()): array
     {
-        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters);
+        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $options);
 
         foreach ($users as $index => $user)
         {

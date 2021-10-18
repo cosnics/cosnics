@@ -26,7 +26,19 @@ class LoadPresenceEntriesComponent extends Manager
 
             $periods = $this->getPresenceResultPeriodService()->getResultPeriodsForPresence($presence, $contextIdentifier, $canEditPresence);
             $presenceResultEntryService = $this->getPresenceResultEntryService();
-            $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $filterParameters);
+
+            $statusFilters =  $this->getRequest()->getFromPostOrUrl('status_filters');
+            $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
+
+            $options = array();
+            $useFilters = !empty($statusFilters) && isset($periodId);
+            if ($useFilters)
+            {
+                $options['statusFilters'] = $statusFilters;
+                $options['periodId'] = $periodId;
+            }
+
+            $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $filterParameters, $options);
 
             $resultData = ['students' => $users, 'periods' => $periods];
 
@@ -41,9 +53,16 @@ class LoadPresenceEntriesComponent extends Manager
                 // However this shouldn't be a problem because $requestNonRegisteredUsers is normally only true the first time around when no global query filter is set.
                 $allTargetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds($filterParameters);
 
-                if ($requestCount)
+                if ($requestCount) // todo: count will be wrong when status filters are set
                 {
-                    $resultData['count'] = count($allTargetUserIds);
+                    if ($useFilters)
+                    {
+                        $resultData['count'] = count($presenceResultEntryService->getUsers($allTargetUserIds, $periods, $contextIdentifier, $this->createFilterParameters(true), $options));
+                    }
+                    else
+                    {
+                        $resultData['count'] = count($allTargetUserIds);
+                    }
                 }
 
                 if ($requestNonRegisteredUsers)
@@ -54,7 +73,7 @@ class LoadPresenceEntriesComponent extends Manager
                     $hasNonRegisteredUsers = count($nonRegisteredUserIds) > 0;
                     if ($hasNonRegisteredUsers)
                     {
-                        $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters());
+                        $nonRegisteredUsers = $presenceResultEntryService->getUsers($nonRegisteredUserIds, $periods, $contextIdentifier, new FilterParameters(), $options);
                         $resultData['non_course_students'] = $nonRegisteredUsers;
                     }
                 }

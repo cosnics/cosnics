@@ -119,7 +119,7 @@
                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </div>
             </div>
-            <div v-if="presence && presence.has_checkout" class="selected-period-controls">
+            <div v-if="presence && presence.has_checkout" class="selected-period-controls" style="display:none">
                 <on-off-switch :id="`checkout-${id}`" switch-class="mod-checkout-choice"
                                :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
                                @toggle="checkoutMode = !checkoutMode"/>
@@ -152,7 +152,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
 import DynamicFieldKey from './DynamicFieldKey.vue'
 import OnOffSwitch from '../OnOffSwitch.vue'
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../../types';
@@ -329,6 +329,20 @@ export default class EntryTable extends Vue {
         this.$parent.$on('creating-new-period', () => {
             this.selectedPeriod = null;
         });
+        this.$parent.$on('filters-changed', () => {
+            if (this.isFullyEditable) {
+                (this.$refs.table as any).refresh();
+            }
+        });
+    }
+
+    @Watch('selectedPeriod')
+    onSelectedPeriodChange()
+    {
+        if (this.isFullyEditable)
+        {
+            this.$emit('period-change', this.selectedPeriod);
+        }
     }
 }
 </script>
@@ -351,3 +365,4 @@ export default class EntryTable extends Vue {
     border-color: #e9eaea;
 }
 </style>
+

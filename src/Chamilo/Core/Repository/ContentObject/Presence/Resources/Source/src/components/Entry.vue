@@ -25,7 +25,15 @@
     <div>
         <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x u-max-w-fit m-controls">
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
-            <div>
+            <div v-if="!!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
+                <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
+                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
+                        :class="[status.color, {'is-selected': statusFilters.indexOf(status) !== -1}]"
+                        :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
+                        @click="toggleStatusFilters(status)"
+                        :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
+            </div>
+            <div v-else>
                 <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
             </div>
         </div>
@@ -43,7 +51,8 @@
                              @remove-selected-period="removeSelectedPeriod"
                              @period-label-changed="setSelectedPeriodLabel"
                              @select-student-status="setSelectedStudentStatus"
-                             @toggle-checkout="toggleCheckout" />
+                             @toggle-checkout="toggleCheckout"
+                             @period-change="onPeriodChanged" />
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="canEditPresence && pageLoaded" class="pagination-container u-flex u-justify-content-end">
@@ -94,10 +103,11 @@ export default class Entry extends Vue {
     createdId: number | null = null;
     pageLoaded = false;
     errorData: string|null = null;
+    statusFilters: PresenceStatus[] = [];
 
     pagination = {
         currentPage: 1,
-        perPage: 20,
+        perPage: 3,
         total: 0
     };
 
@@ -106,6 +116,7 @@ export default class Entry extends Vue {
     };
     requestCount = true;
     requestNonCourseStudents = true;
+    selectedPeriod: PresencePeriod|null = null;
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
@@ -117,6 +128,22 @@ export default class Entry extends Vue {
 
     set globalSearchQuery(query: string) {
         this.searchOptions.globalSearchQuery = query;
+    }
+
+    toggleStatusFilters(status: PresenceStatus) {
+        const statusFilters = this.statusFilters;
+        const index = statusFilters.indexOf(status);
+        if (index === -1) {
+            this.statusFilters.push(status);
+        } else {
+            this.statusFilters = statusFilters.slice(0, index).concat(statusFilters.slice(index + 1));
+        }
+        this.requestCount = true;
+        this.$emit('filters-changed');
+    }
+
+    onPeriodChanged(period: PresencePeriod|null) {
+        this.selectedPeriod = period;
     }
 
     onFilterChanged() {
@@ -150,7 +177,7 @@ export default class Entry extends Vue {
     }
 
     async itemsProvider(ctx: any) {
-        const parameters = {
+        const parameters: any = {
             global_search_query: ctx.filter,
             sort_field: ctx.sortBy,
             sort_direction: ctx.sortDesc ? 'desc' : 'asc',
@@ -159,6 +186,10 @@ export default class Entry extends Vue {
             request_count: this.requestCount,
             request_non_course_students: this.requestNonCourseStudents
         };
+        if (!!this.selectedPeriod && this.statusFilters.length) {
+            parameters['period_id'] = this.selectedPeriod.id;
+            parameters['status_filters'] = this.statusFilters.map(status => status.id);
+        }
         const data = await this.connector?.loadPresenceEntries(parameters);
         const {periods, students} = data;
         this.periods = periods;

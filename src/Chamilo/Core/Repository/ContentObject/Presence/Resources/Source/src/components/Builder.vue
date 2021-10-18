@@ -495,10 +495,12 @@ td.table-period {
     max-height: 40px;
 }
 
-.table-period .color-code.mod-selectable, .table-period .color-code.mod-plh {
+.table-period .color-code.mod-selectable, .status-filters .color-code.mod-selectable, .table-period .color-code.mod-plh {
     opacity: .42;
 }
 
+.status-filters .color-code.mod-selectable.is-selected,
+.status-filters .color-code:hover,
 .table-period .color-code.mod-selectable.is-selected,
 .table-period .color-code:hover {
     opacity: 1;
