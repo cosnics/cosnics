@@ -62,7 +62,10 @@
         <template #head(fullname) v-else>Student</template>
         <template #foot(fullname)><span></span></template>
         <template #cell(fullname)="{item}">
-            {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
+            <template v-if="!item.tableEmpty">
+                {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
+            </template>
+            <span v-else class="u-font-italic">{{ $t('no-students-found') }}</span>
         </template>
 
         <!-- OFFICIAL CODE -->
@@ -132,7 +135,8 @@
             <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
         </template>
         <template #cell(period-entry)="{item}">
-            <template v-if="presence && presence.has_checkout && checkoutMode">
+            <template v-if="item.tableEmpty"><div class="color-code mod-none"></div></template>
+            <template v-else-if="presence && presence.has_checkout && checkoutMode">
                 <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
                                :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
                                :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
@@ -317,10 +321,6 @@ export default class EntryTable extends Vue {
     }
 
     get fields() {
-        if (!this.hasNonCourseStudents && this.pagination.total === 0) {
-            return this.userFields;
-        }
-
         return [
             ...this.userFields,
             this.canEditPresence && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,

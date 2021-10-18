@@ -8,7 +8,9 @@
         "export": "Export",
         "legend": "Legend",
         "students-not-in-course": "Students not in course",
-        "without-status": "Without status"
+        "without-status": "Without status",
+        "refresh": "Refresh",
+        "changes-filters": "You have made changes so that the shown results possibly no longer reflect the chosen filter criteria. Choose different criteria or click refresh to remedy."
     },
     "nl": {
         "total": "Totaal",
@@ -18,7 +20,9 @@
         "export": "Exporteer",
         "legend": "Legende",
         "students-not-in-course": "Studenten niet in cursus",
-        "without-status": "Zonder status"
+        "without-status": "Zonder status",
+        "refresh": "Verversen",
+        "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op verversen om dit op te lossen."
     }
 }
 </i18n>
@@ -27,20 +31,18 @@
     <div>
         <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x m-controls"><!-- u-max-w-fit -->
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
-            <div v-if="!!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
-                <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
-                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
-                        :class="[status.color, {'is-selected': statusFilters.indexOf(status) !== -1}]"
-                        :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
-                        @click="toggleStatusFilters(status)"
-                        :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
-                <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
-                        :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
-                        @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
-            </div>
-            <div v-else>
-                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
-            </div>
+            <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
+        </div>
+        <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline" style="margin-bottom: 15px">
+            <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
+            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable grey-100"
+                    :class="{'is-selected': statusFilters.indexOf(status) !== -1}"
+                    :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
+                    @click="toggleStatusFilters(status)"
+                    :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
+            <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
+                    :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
+                    @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
         </div>
         <div>
             <div class="u-relative">
@@ -66,7 +68,7 @@
                 <ul class="pagination">
                     <li class="page-item active">
                         <a class="page-link" v-if="!changeAfterStatusFilters">{{ $t('total') }} {{ pagination.total }}</a>
-                        <a class="page-link" v-else @click="refreshFilters" style="cursor: pointer">Refresh</a>
+                        <a class="page-link" v-else v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info"></i></a>
                     </li>
                 </ul>
             </div>
@@ -165,6 +167,16 @@ export default class Entry extends Vue {
 
     onPeriodChanged(period: PresencePeriod|null) {
         this.selectedPeriod = period;
+        const hasFiltersSet = (this.statusFilters.length || this.withoutStatusSelected);
+        if (period === null && hasFiltersSet) {
+            this.statusFilters = [];
+            this.withoutStatusSelected = false;
+            this.requestCount = true;
+            this.$emit('filters-changed');
+        } else if (hasFiltersSet) {
+            this.requestCount = true;
+            this.$emit('filters-changed');
+        }
     }
 
     onFilterChanged() {
@@ -236,6 +248,9 @@ export default class Entry extends Vue {
             this.creatingNew = false;
         } else {
             this.$emit('selected-period-maybe');
+        }
+        if (!students.length) {
+            return [{tableEmpty: true}];
         }
         return students;
     }

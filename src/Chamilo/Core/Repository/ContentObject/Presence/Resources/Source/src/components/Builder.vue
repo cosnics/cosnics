@@ -506,6 +506,11 @@ td.table-period {
     opacity: 1;
 }
 
+.status-filters .color-code.mod-selectable.is-selected {
+    border: 1px solid #b3b3b3;
+    box-shadow: none;
+}
+
 .table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code.mod-selectable:not(.is-selected):hover {
     box-shadow: 1px 1px 2px -1px #673ab7;
 }
