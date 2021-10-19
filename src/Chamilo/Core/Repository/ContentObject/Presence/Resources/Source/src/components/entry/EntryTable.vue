@@ -33,18 +33,14 @@
     <b-table :id="id" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset :show-empty="!isBusy">
+
         <!-- COLUMNS -->
-        <!--<template slot="table-colgroup" v-if="canEditPresence">
+        <template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
             <col>
             <col>
             <col>
-            <col v-if="!!selectedPeriod && !isCreatingNewPeriod && isFullyEditable">
-            <col v-else-if="isCreatingNewPeriod" class="bd-selected-period">
-            <template v-if="!!selectedPeriod || isCreatingNewPeriod" v-for="period in periodsReversed">
-                <col v-if="!isCreatingNewPeriod && period === selectedPeriod" class="bd-selected-period">
-                <col v-else>
-            </template>
-        </template>-->
+            <col class="bd-selected-period">
+        </template>
 
         <template #empty="">
             {{ $t('no-students-found') }}
@@ -101,7 +97,7 @@
 
         <!-- DYNAMIC FIELD KEYS -->
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-            <dynamic-field-key :is-editable="canEditPresence" @select="setSelectedPeriod(fieldKey.id)" :class="[{'select-period-btn' : canEditPresence}, 'u-txt-truncate']" :title="label">
+            <dynamic-field-key :is-editable="isFullyEditable" @select="$emit('change-selected-period', fieldKey.id)" :class="[{'select-period-btn' : isFullyEditable}, 'u-txt-truncate']" :title="label">
                 <template v-slot>
                     <span v-if="label">{{ label }}</span>
                     <span v-else class="u-font-italic">{{ getPlaceHolder(fieldKey.id) }}</span>
@@ -132,10 +128,10 @@
                                :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
                                @toggle="checkoutMode = !checkoutMode"/>
             </div>
-            <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
+            <a v-if="isFullyEditable" :title="$t('stop-edit-mode')" class="show-all-periods-btn" style="text-decoration: none;cursor:pointer" @click="$emit('change-selected-period', null)">Toon alle perioden</a>
         </template>
         <template #cell(period-entry)="{item}">
-            <span v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</span>
+            <div v-if="item.tableEmpty" class="u-font-italic" style="text-align: end">{{ $t('no-results') }}</div>
             <template v-else-if="presence && presence.has_checkout && checkoutMode">
                 <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
                                :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
@@ -161,7 +157,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import DynamicFieldKey from './DynamicFieldKey.vue'
 import OnOffSwitch from '../OnOffSwitch.vue'
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../../types';
@@ -173,12 +169,12 @@ import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '.
 export default class EntryTable extends Vue {
     sortBy = 'lastname';
     sortDesc = false;
-    selectedPeriod: PresencePeriod | null = null;
     checkoutMode = false;
     isBusy = false;
 
     @Prop({type: String, default: '' }) readonly id!: string;
     @Prop() readonly items!: any[];
+    @Prop({type: Object, default: null}) readonly selectedPeriod!: PresencePeriod|null;
     @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0, total: 0})}) readonly pagination!: any;
     @Prop({type: Boolean, default: false}) readonly isSaving!: boolean;
     @Prop({type: String, default: ''}) readonly globalSearchQuery!: string;
@@ -235,15 +231,16 @@ export default class EntryTable extends Vue {
         this.$emit('period-label-changed', this.selectedPeriod, label);
     }
 
-    setSelectedPeriod(periodId: number) {
+    /*setSelectedPeriod(periodId: number) {
+        //this.$emit('period-change', periodId);
         if (!this.canEditPresence) { return; }
         const selectedPeriod = this.periods.find((p: any) => p.id === periodId) || null;
         this.selectedPeriod = selectedPeriod || null;
         this.checkoutMode = false;
-    }
+    }*/
 
     createPeriod() {
-        this.selectedPeriod = null;
+        //this.selectedPeriod = null;
         this.$emit('create-period', () => {
             (this.$refs.table as any).refresh();
         });
@@ -329,28 +326,28 @@ export default class EntryTable extends Vue {
     }
 
     created() {
-        this.$parent.$on('selected-period', (periodId: number) => {
+        /*this.$parent.$on('selected-period', (periodId: number) => {
             this.$nextTick(() => {
                 this.setSelectedPeriod(periodId);
             });
-        });
-        this.$parent.$on('selected-period-maybe', () => {
+        });*/
+        /*this.$parent.$on('selected-period-maybe', () => {
             this.$nextTick(() => {
                 if (this.selectedPeriod) {
                     this.setSelectedPeriod(this.selectedPeriod.id);
                 }
             });
-        });
-        this.$parent.$on('period-removed', (periodId: number) => {
+        });*/
+        /*this.$parent.$on('period-removed', (periodId: number) => {
             this.$nextTick(() => {
                 if (this.selectedPeriod?.id === periodId) {
                     this.selectedPeriod = null;
                 }
             })
-        });
-        this.$parent.$on('creating-new-period', () => {
+        });*/
+        /*this.$parent.$on('creating-new-period', () => {
             this.selectedPeriod = null;
-        });
+        });*/
         this.$parent.$on('filters-changed', () => {
             if (this.isFullyEditable) {
                 (this.$refs.table as any).refresh();
@@ -358,20 +355,21 @@ export default class EntryTable extends Vue {
         });
     }
 
-    @Watch('selectedPeriod')
+    /*@Watch('selectedPeriod')
     onSelectedPeriodChange()
     {
         if (this.isFullyEditable)
         {
             this.$emit('period-change', this.selectedPeriod);
         }
-    }
+    }*/
 }
 </script>
 
 <style scoped>
 .bd-selected-period {
-    border: 1px double #8ea4b3;
+/*    border: 1px double #8ea4b3;*/
+    border: 1px double #ccc;
 }
 
 .spin {

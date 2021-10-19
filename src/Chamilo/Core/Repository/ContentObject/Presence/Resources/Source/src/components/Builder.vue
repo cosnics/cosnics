@@ -347,6 +347,10 @@ export default class Builder extends Vue {
     flex-flow: wrap;
 }
 
+.u-align-items-start {
+    align-items: flex-start;
+}
+
 .u-align-items-baseline {
     align-items: baseline;
 }
@@ -493,6 +497,10 @@ td.table-period {
 
 .table-photo img {
     max-height: 40px;
+}
+
+.status-filters {
+    margin-top: -2px;
 }
 
 .table-period .color-code.mod-selectable, .status-filters .color-code.mod-selectable, .table-period .color-code.mod-plh {
@@ -830,6 +838,16 @@ td.table-period {
 .selected-period-close-btn:hover {
 /*    color: #5a93c4;*/
 }
+.show-all-periods-btn {
+    position: absolute;
+    top: -22px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-weight: 400;
+    right: 5px;
+}
+
 .table.mod-entry th.table-period {
     max-width: 1px;
 }
@@ -877,9 +895,9 @@ td.table-period {
     max-width: fit-content;
 }
 
-/*tfoot .table-period {
+tfoot .table-period {
     text-align: right;
-}*/
+}
 
 /*.table.mod-entry tbody .table-period:after {
     background-color: #ebebeb;

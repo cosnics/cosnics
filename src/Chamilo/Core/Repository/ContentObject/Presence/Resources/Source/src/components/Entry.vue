@@ -29,7 +29,7 @@
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x m-controls"><!-- u-max-w-fit -->
+        <div v-if="canEditPresence" class="u-flex u-gap-small-3x m-controls" :class="[selectedPeriod ? 'u-align-items-start': 'u-align-items-center']"><!-- u-max-w-fit -->
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
@@ -52,15 +52,15 @@
                     <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                 </div>
                 <entry-table id="course-students" :items="itemsProvider" :periods="periods"
-                             :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence"
+                             :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
                              :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving"
-                             :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod"
+                             :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod" style="margin-top: 17px"
                              @create-period="createResultPeriod"
                              @remove-selected-period="removeSelectedPeriod"
                              @period-label-changed="setSelectedPeriodLabel"
                              @select-student-status="setSelectedStudentStatus"
                              @toggle-checkout="toggleCheckout"
-                             @period-change="onPeriodChanged" />
+                             @change-selected-period="setSelectedPeriod" />
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end">
@@ -81,7 +81,7 @@
             <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
         </div>
         <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
-        <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
+        <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
                      :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
                      :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
                      @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
@@ -168,20 +168,6 @@ export default class Entry extends Vue {
         this.$emit('filters-changed');
     }
 
-    onPeriodChanged(period: PresencePeriod|null) {
-        this.selectedPeriod = period;
-        const hasFiltersSet = (this.statusFilters.length || this.withoutStatusSelected);
-        if (period === null && hasFiltersSet) {
-            this.statusFilters = [];
-            this.withoutStatusSelected = false;
-            this.requestCount = true;
-            this.$emit('filters-changed');
-        } else if (hasFiltersSet) {
-            this.requestCount = true;
-            this.$emit('filters-changed');
-        }
-    }
-
     onFilterChanged() {
         this.requestCount = true;
     }
@@ -242,15 +228,19 @@ export default class Entry extends Vue {
             }
             this.requestNonCourseStudents = false;
         }
+        const selectedPeriod = this.selectedPeriod;
         if (!this.pageLoaded && this.periods.length) {
-            this.$emit('selected-period', this.periods[this.periods.length - 1].id);
+            this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
+            //this.$emit('selected-period', this.periods[this.periods.length - 1].id);
             this.pageLoaded = true;
         } else if (this.createdId !== null) {
-            this.$emit('selected-period', this.createdId);
+            this.setSelectedPeriod(this.createdId);
+            //this.$emit('selected-period', this.createdId);
             this.createdId = null;
             this.creatingNew = false;
-        } else {
-            this.$emit('selected-period-maybe');
+        } else if (selectedPeriod) {
+            this.setSelectedPeriod(selectedPeriod.id);
+            //this.$emit('selected-period-maybe');
         }
         if (!students.length) {
             return [{tableEmpty: true}];
@@ -272,7 +262,8 @@ export default class Entry extends Vue {
 
     async createResultPeriod(callback: Function|undefined = undefined) {
         if (!this.canEditPresence) { return; }
-        this.$emit('creating-new-period');
+        this.selectedPeriod = null;
+        //this.$emit('creating-new-period');
         this.creatingNew = true;
         this.errorData = null;
         await this.connector?.createResultPeriod((data: any) => {
@@ -293,10 +284,33 @@ export default class Entry extends Vue {
         this.connector?.deletePresencePeriod(selectedPeriod.id, (data: any) => {
             this.toRemovePeriod = null;
             if (data?.status === 'ok') {
-                this.$emit('period-removed', selectedPeriod.id);
+                //this.$emit('period-removed', selectedPeriod.id);
+                this.selectedPeriod = null;
                 this.periods.splice(index, 1);
             }
         })
+    }
+
+    setSelectedPeriod(periodId: number|null) {
+        if (!this.canEditPresence) { return; }
+        if (periodId === null) {
+            this.selectedPeriod = null;
+        } else {
+            this.selectedPeriod = this.periods.find((p: any) => p.id === periodId) || null;
+        }
+        
+        const hasFiltersSet = (this.statusFilters.length || this.withoutStatusSelected);
+        if (this.selectedPeriod === null && hasFiltersSet) {
+            this.statusFilters = [];
+            this.withoutStatusSelected = false;
+            this.requestCount = true;
+            this.$emit('filters-changed');
+        } else if (hasFiltersSet) {
+            this.requestCount = true;
+            this.$emit('filters-changed');
+        }
+
+        //this.checkoutMode = false;
     }
 
     setSelectedPeriodLabel(selectedPeriod: PresencePeriod, label: string) {
