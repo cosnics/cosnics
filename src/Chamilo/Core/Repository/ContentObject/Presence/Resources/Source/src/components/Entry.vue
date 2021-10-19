@@ -31,20 +31,21 @@
     <div>
         <div v-if="canEditPresence" class="u-flex u-align-items-center u-gap-small-3x m-controls"><!-- u-max-w-fit -->
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
-            <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
+            <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
+                <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
+                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable grey-100"
+                        :class="{'is-selected': statusFilters.indexOf(status) !== -1}"
+                        :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
+                        @click="toggleStatusFilters(status)"
+                        :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
+                <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
+                        :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
+                        @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
+            </div>
+            <a v-else :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
         </div>
-        <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline" style="margin-bottom: 15px">
-            <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
-            <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable grey-100"
-                    :class="{'is-selected': statusFilters.indexOf(status) !== -1}"
-                    :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
-                    @click="toggleStatusFilters(status)"
-                    :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
-            <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
-                    :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
-                    @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
-        </div>
-        <div>
+
+        <div style="width: max-content">
             <div class="u-relative">
                 <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend">
                     <span style="color: #507177">{{ $t('legend') }}:</span>
@@ -74,16 +75,16 @@
                     </li>
                 </ul>
             </div>
-            <div v-if="errorData" class="alert alert-danger m-errors">
-                <span v-if="errorData.code === 500">{{ errorData.message }}</span>
-                <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
-            </div>
-            <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
-            <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
-                         :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
-                         :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
-                         @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
         </div>
+        <div v-if="errorData" class="alert alert-danger m-errors">
+            <span v-if="errorData.code === 500">{{ errorData.message }}</span>
+            <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
+        </div>
+        <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
+        <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :periods="periods"
+                     :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
+                     :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
+                     @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
     </div>
 </template>
 
@@ -120,7 +121,7 @@ export default class Entry extends Vue {
 
     pagination = {
         currentPage: 1,
-        perPage: 15,
+        perPage: 3,
         total: 0
     };
 
