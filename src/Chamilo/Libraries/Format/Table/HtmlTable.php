@@ -156,7 +156,7 @@ abstract class HtmlTable extends HTML_Table
      *
      * @var string
      */
-    private $tableName;
+    protected $tableName;
 
     /**
      *

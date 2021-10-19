@@ -70,7 +70,7 @@ class InConditionTranslator extends ConditionTranslator
         }
         else
         {
-            $value = 'true = false';
+            $value = '1 = 0';
         }
 
         return $value;
