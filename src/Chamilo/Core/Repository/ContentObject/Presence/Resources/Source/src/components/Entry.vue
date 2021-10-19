@@ -21,8 +21,8 @@
         "legend": "Legende",
         "students-not-in-course": "Studenten niet in cursus",
         "without-status": "Zonder status",
-        "refresh": "Verversen",
-        "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op verversen om dit op te lossen."
+        "refresh": "Vernieuwen",
+        "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op Vernieuwen om dit op te lossen."
     }
 }
 </i18n>
@@ -63,12 +63,14 @@
                 <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
             </div>
             <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end">
-                <b-pagination v-if="!changeAfterStatusFilters" v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                              aria-controls="data-table"></b-pagination>
+                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                              aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                 <ul class="pagination">
-                    <li class="page-item active">
-                        <a class="page-link" v-if="!changeAfterStatusFilters">{{ $t('total') }} {{ pagination.total }}</a>
-                        <a class="page-link" v-else v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info"></i></a>
+                    <li class="page-item" :class="{active: !changeAfterStatusFilters, disabled: changeAfterStatusFilters}">
+                        <a class="page-link" :style="changeAfterStatusFilters ? 'text-decoration: line-through' : ''">{{ $t('total') }} {{ pagination.total }}</a>
+                    </li>
+                    <li v-if="changeAfterStatusFilters" class="page-item active">
+                        <a class="page-link" v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info"></i></a>
                     </li>
                 </ul>
             </div>
@@ -118,7 +120,7 @@ export default class Entry extends Vue {
 
     pagination = {
         currentPage: 1,
-        perPage: 3,
+        perPage: 15,
         total: 0
     };
 

@@ -10,7 +10,8 @@
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
         "stop-edit-mode": "Stop editing",
-        "no-students-found": "No students found"
+        "no-students-found": "No students found",
+        "no-results": "No results"
     },
     "nl": {
         "last-name": "Familienaam",
@@ -22,17 +23,18 @@
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
         "stop-edit-mode": "Sluit editeren af",
-        "no-students-found": "Geen studenten gevonden"
+        "no-students-found": "Geen studenten gevonden",
+        "no-results": "Geen resultaten"
     }
 }
 </i18n>
 
 <template>
-    <b-table ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset :show-empty="!isBusy">
         <!-- COLUMNS -->
-        <template slot="table-colgroup" v-if="canEditPresence">
+        <!--<template slot="table-colgroup" v-if="canEditPresence">
             <col>
             <col>
             <col>
@@ -42,7 +44,7 @@
                 <col v-if="!isCreatingNewPeriod && period === selectedPeriod" class="bd-selected-period">
                 <col v-else>
             </template>
-        </template>
+        </template>-->
 
         <template #empty="">
             {{ $t('no-students-found') }}
@@ -62,10 +64,8 @@
         <template #head(fullname) v-else>Student</template>
         <template #foot(fullname)><span></span></template>
         <template #cell(fullname)="{item}">
-            <template v-if="!item.tableEmpty">
-                {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
-            </template>
-            <span v-else class="u-font-italic">{{ $t('no-students-found') }}</span>
+            <span v-if="!item.tableEmpty">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</span>
+            <span v-else></span>
         </template>
 
         <!-- OFFICIAL CODE -->
@@ -135,7 +135,7 @@
             <button :title="$t('stop-edit-mode')" class="btn btn-default btn-sm selected-period-close-btn" @click="selectedPeriod = null"><i aria-hidden="true" class="fa fa-close"></i><span class="sr-only">{{ $t('stop-edit-mode') }}</span></button>
         </template>
         <template #cell(period-entry)="{item}">
-            <template v-if="item.tableEmpty"><div class="color-code mod-none"></div></template>
+            <span v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</span>
             <template v-else-if="presence && presence.has_checkout && checkoutMode">
                 <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
                                :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
@@ -311,11 +311,10 @@ export default class EntryTable extends Vue {
     }
 
     get periodFields() {
-        const periodFields = this.periods.map(period => {
-            const key = this.canEditPresence && period === this.selectedPeriod ? 'period-entry' : `period#${period.id}`;
-            const variant = this.canEditPresence && period === this.selectedPeriod ? 'period' : 'result';
-            return {key, sortable: false, label: period.label, variant};
-        });
+        if (this.canEditPresence && !!this.selectedPeriod) {
+            return [{key: 'period-entry', sortable: false, label: this.selectedPeriod.label, variant: 'period'}];
+        }
+        const periodFields = this.periods.map(period => ({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'}));
         periodFields.reverse();
         return periodFields;
     }
@@ -323,7 +322,7 @@ export default class EntryTable extends Vue {
     get fields() {
         return [
             ...this.userFields,
-            this.canEditPresence && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
+            this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
             this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
             ...this.periodFields
         ];
