@@ -314,7 +314,7 @@ export default class EntryTable extends Vue {
                 this.presence && this.presence.has_checkout && (this.isFullyEditable || this.checkoutMode) ? {key: 'period-checkout', sortable: false, variant: 'checkout'} : null
             ];
         }
-        const periodFields = this.periods.map(period => ({key: `period#${period.id}`, sortable: false, label: period.label, variant: 'result'}));
+        const periodFields = this.periods.map(period => ({key: `period#${period.id}`, sortable: false, label: period.label || '', variant: 'result'}));
         periodFields.reverse();
         return periodFields;
     }
