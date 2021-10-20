@@ -953,6 +953,17 @@ td.table-period {
 .btn-remove:active, .btn-remove:focus {
     color: #ac2925;
 }
+
+.checkout-indicator {
+    color: #3c8640;
+    font-size: 10px;
+    margin-left: -2px;
+    margin-right: -6px;
+    opacity: .2;
+}
+.checkout-indicator.is-checked-out {
+    opacity: 1;
+}
 </style>
 
 <style scoped>

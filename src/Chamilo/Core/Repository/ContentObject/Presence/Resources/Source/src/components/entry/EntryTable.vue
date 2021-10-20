@@ -94,11 +94,13 @@
             </dynamic-field-key>
         </template>
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
-            <div class="result-wrap">
-                <div :title="getStatusTitleForStudent(item, fieldKey.id)" class="color-code u-cursor-default" :class="[getStatusColorForStudent(item, fieldKey.id) || 'mod-none']">
-                    <span>{{ getStatusCodeForStudent(item, fieldKey.id) }}</span>
-                </div>
-            </div>
+            <PresenceStatusDisplay
+                :title="getStatusTitleForStudent(item, fieldKey.id)"
+                :label="getStatusCodeForStudent(item, fieldKey.id)"
+                :color="getStatusColorForStudent(item, fieldKey.id)"
+                :has-checkout="presence && presence.has_checkout"
+                :check-in-date="item[`period#${fieldKey.id}-checked_in_date`]"
+                :check-out-date="item[`period#${fieldKey.id}-checked_out_date`]"/>
         </template>
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
 
@@ -153,10 +155,11 @@ import DynamicFieldKey from './DynamicFieldKey.vue'
 import OnOffSwitch from '../OnOffSwitch.vue'
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../../types';
 import PresenceStatusButton from './PresenceStatusButton.vue';
+import PresenceStatusDisplay from './PresenceStatusDisplay.vue';
 
 @Component({
     name: 'entry-table',
-    components: {PresenceStatusButton, OnOffSwitch, DynamicFieldKey}
+    components: {PresenceStatusDisplay, PresenceStatusButton, OnOffSwitch, DynamicFieldKey}
 })
 export default class EntryTable extends Vue {
     sortBy = 'lastname';
