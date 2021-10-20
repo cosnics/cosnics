@@ -35,14 +35,11 @@
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
-                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
-                        :class="[status.color, {'is-selected': statusFilters.indexOf(status) !== -1}]"
-                        :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
-                        @click="toggleStatusFilters(status)"
-                        :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
-                <button class="color-code mod-selectable grey-100" :class="{'is-selected': withoutStatusSelected }"
-                        :aria-pressed="withoutStatusSelected ? 'true' : 'false'"
-                        @click="toggleWithoutStatus"><span>{{ $t('without-status') }}</span></button>
+                <filter-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
+                                      :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color"
+                                      :is-selected="statusFilters.indexOf(status) !== -1"
+                                      @toggle-filter="toggleStatusFilters(status)"/>
+                <filter-status-button :label="$t('without-status')" color="grey-100" :is-selected="withoutStatusSelected" @toggle-filter="toggleWithoutStatus"/>
             </div>
             <a v-else :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
         </div>
@@ -80,13 +77,6 @@
                     </ul>
                 </div>
             </div>
-            <!--<div v-if="canEditPresence && !!selectedPeriod && presence && presence.has_checkout && !checkoutMode" class="u-flex u-align-items-center" style="margin-top: 5px;height: 44px;">
-                <div>
-                    <on-off-switch :id="`checkout-course-students`" switch-class="mod-checkout-choice"
-                                   :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
-                                   @toggle="checkoutMode = !checkoutMode"/>
-                </div>
-            </div>-->
         </div>
         <div v-if="errorData" class="alert alert-danger m-errors">
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
@@ -109,11 +99,12 @@ import LegendItem from './entry/LegendItem.vue';
 import SearchBar from './entry/SearchBar.vue';
 import DynamicFieldKey from './entry/DynamicFieldKey.vue';
 import EntryTable from './entry/EntryTable.vue';
+import FilterStatusButton from './entry/FilterStatusButton.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
 
 @Component({
     name: 'entry',
-    components: {EntryTable, OnOffSwitch, SearchBar, LegendItem, DynamicFieldKey}
+    components: {EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
