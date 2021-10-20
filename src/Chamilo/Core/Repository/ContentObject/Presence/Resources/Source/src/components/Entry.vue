@@ -9,6 +9,7 @@
         "legend": "Legend",
         "students-not-in-course": "Students not in course",
         "without-status": "Without status",
+        "checkout-mode": "Checkout mode",
         "refresh": "Refresh",
         "changes-filters": "You have made changes so that the shown results possibly no longer reflect the chosen filter criteria. Choose different criteria or click refresh to remedy."
     },
@@ -21,6 +22,7 @@
         "legend": "Legende",
         "students-not-in-course": "Studenten niet in cursus",
         "without-status": "Zonder status",
+        "checkout-mode": "Uitcheckmodus",
         "refresh": "Vernieuwen",
         "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op Vernieuwen om dit op te lossen."
     }
@@ -33,8 +35,8 @@
             <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
-                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable grey-100"
-                        :class="{'is-selected': statusFilters.indexOf(status) !== -1}"
+                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
+                        :class="[status.color, {'is-selected': statusFilters.indexOf(status) !== -1}]"
                         :aria-pressed="statusFilters.indexOf(status) !== -1 ? 'true': 'false'"
                         @click="toggleStatusFilters(status)"
                         :title="getPresenceStatusTitle(status)"><span>{{ status.code }}</span></button>
@@ -45,36 +47,46 @@
             <a v-else :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
         </div>
 
-        <div style="width: max-content">
-            <div class="u-relative">
-                <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend">
-                    <span style="color: #507177">{{ $t('legend') }}:</span>
-                    <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
+        <div class="u-flex" style="gap: 8px">
+            <div style="width: max-content">
+                <div class="u-relative">
+                    <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend">
+                        <span style="color: #507177">{{ $t('legend') }}:</span>
+                        <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
+                    </div>
+                    <entry-table id="course-students" :items="itemsProvider" :periods="periods"
+                                 :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
+                                 :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode"
+                                 :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod" :style="selectedPeriod ? 'margin-top: 3px' : ''"
+                                 @create-period="createResultPeriod"
+                                 @remove-selected-period="removeSelectedPeriod"
+                                 @period-label-changed="setSelectedPeriodLabel"
+                                 @select-student-status="setSelectedStudentStatus"
+                                 @toggle-checkout-mode="checkoutMode = !checkoutMode"
+                                 @toggle-checkout="toggleCheckout"
+                                 @change-selected-period="setSelectedPeriod" />
+                    <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <entry-table id="course-students" :items="itemsProvider" :periods="periods"
-                             :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
-                             :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving"
-                             :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod" style="margin-top: 17px"
-                             @create-period="createResultPeriod"
-                             @remove-selected-period="removeSelectedPeriod"
-                             @period-label-changed="setSelectedPeriodLabel"
-                             @select-student-status="setSelectedStudentStatus"
-                             @toggle-checkout="toggleCheckout"
-                             @change-selected-period="setSelectedPeriod" />
-                <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+                <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
+                    <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
+                                  aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
+                    <ul class="pagination">
+                        <li class="page-item" :class="{active: !changeAfterStatusFilters, disabled: changeAfterStatusFilters}">
+                            <a class="page-link" :style="changeAfterStatusFilters ? 'text-decoration: line-through' : ''">{{ $t('total') }} {{ pagination.total }}</a>
+                        </li>
+                        <li v-if="changeAfterStatusFilters" class="page-item active">
+                            <a class="page-link" v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info-circle"></i></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end">
-                <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
-                              aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
-                <ul class="pagination">
-                    <li class="page-item" :class="{active: !changeAfterStatusFilters, disabled: changeAfterStatusFilters}">
-                        <a class="page-link" :style="changeAfterStatusFilters ? 'text-decoration: line-through' : ''">{{ $t('total') }} {{ pagination.total }}</a>
-                    </li>
-                    <li v-if="changeAfterStatusFilters" class="page-item active">
-                        <a class="page-link" v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info"></i></a>
-                    </li>
-                </ul>
-            </div>
+            <!--<div v-if="canEditPresence && !!selectedPeriod && presence && presence.has_checkout && !checkoutMode" class="u-flex u-align-items-center" style="margin-top: 5px;height: 44px;">
+                <div>
+                    <on-off-switch :id="`checkout-course-students`" switch-class="mod-checkout-choice"
+                                   :on-text="$t('checkout-mode')" :off-text="$t('checkout-mode')" :checked="checkoutMode"
+                                   @toggle="checkoutMode = !checkoutMode"/>
+                </div>
+            </div>-->
         </div>
         <div v-if="errorData" class="alert alert-danger m-errors">
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
@@ -83,7 +95,7 @@
         <b v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;">{{ $t('students-not-in-course') }}</b>
         <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
                      :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
-                     :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew"
+                     :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode"
                      @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
     </div>
 </template>
@@ -118,6 +130,7 @@ export default class Entry extends Vue {
     errorData: string|null = null;
     statusFilters: PresenceStatus[] = [];
     withoutStatusSelected = false;
+    checkoutMode = false;
 
     pagination = {
         currentPage: 1,
@@ -298,7 +311,7 @@ export default class Entry extends Vue {
         } else {
             this.selectedPeriod = this.periods.find((p: any) => p.id === periodId) || null;
         }
-        
+
         const hasFiltersSet = (this.statusFilters.length || this.withoutStatusSelected);
         if (this.selectedPeriod === null && hasFiltersSet) {
             this.statusFilters = [];

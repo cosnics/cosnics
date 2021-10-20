@@ -507,15 +507,23 @@ td.table-period {
     opacity: .42;
 }
 
+.table-period .color-code.mod-selectable:not(.is-selected).is-checkout-mode {
+    opacity: .15;
+}
+
 .status-filters .color-code.mod-selectable.is-selected,
 .status-filters .color-code:hover,
 .table-period .color-code.mod-selectable.is-selected,
-.table-period .color-code:hover {
+.table-period .color-code:not(.is-checkout-mode):hover {
     opacity: 1;
 }
 
+.status-filters .color-code.mod-selectable:not(.is-selected):not(:hover) {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
 .status-filters .color-code.mod-selectable.is-selected {
-    border: 1px solid #b3b3b3;
     box-shadow: none;
 }
 
@@ -776,15 +784,6 @@ td.table-period {
         background-clip: padding-box;
     }
 }
-.selected-period-controls {
-    font-size: 12px;
-    font-weight: normal;
-    height: 32px;
-    left: -1px;
-    position: absolute;
-    right: -1px;
-    top: -31px;
-}
 
 .selected-period-checkinout-btn, .selected-period-close-btn {
     padding: 0 4px;
@@ -840,12 +839,12 @@ td.table-period {
 }
 .show-all-periods-btn {
     position: absolute;
-    top: -22px;
+    top: -23px;
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 400;
-    right: 5px;
+    font-weight: 500;
+    /*right: 5px;*/
 }
 
 .table.mod-entry th.table-period {
@@ -895,9 +894,9 @@ td.table-period {
     max-width: fit-content;
 }
 
-tfoot .table-period {
+/*tfoot .table-period {
     text-align: right;
-}
+}*/
 
 /*.table.mod-entry tbody .table-period:after {
     background-color: #ebebeb;
@@ -1481,7 +1480,7 @@ tfoot .table-period {
 }
 
 .onoffswitch.mod-checkout-choice {
-    width: 116px;
+    width: 136px;
 }
 
 .onoffswitch-checkbox {
