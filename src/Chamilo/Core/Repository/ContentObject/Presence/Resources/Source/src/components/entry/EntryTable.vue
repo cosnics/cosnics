@@ -132,7 +132,7 @@
             <a v-if="isFullyEditable" :title="$t('stop-edit-mode')" class="show-all-periods-btn" style="text-decoration: none;cursor:pointer" @click="$emit('change-selected-period', null)">Toon alle perioden</a>
         </template>
         <template #cell(period-entry)="{item}">
-            <div v-if="item.tableEmpty" class="u-font-italic" style="text-align: end">{{ $t('no-results') }}</div>
+            <div v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</div>
             <div v-else class="u-flex u-gap-small u-flex-wrap">
                 <presence-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
                                         :status="status" :title="getPresenceStatusTitle(status)"
