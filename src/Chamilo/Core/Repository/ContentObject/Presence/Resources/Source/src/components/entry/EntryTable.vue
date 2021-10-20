@@ -134,12 +134,6 @@
         <template #cell(period-entry)="{item}">
             <div v-if="item.tableEmpty" class="u-font-italic" style="text-align: end">{{ $t('no-results') }}</div>
             <div v-else class="u-flex u-gap-small u-flex-wrap">
-                <!--<button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" class="color-code mod-selectable"
-                        :disabled="checkoutMode"
-                        :class="[checkoutMode && !hasSelectedStudentStatus(item, status.id) ? 'grey-100' : status.color, { 'is-selected': hasSelectedStudentStatus(item, status.id), 'is-checkout-mode': checkoutMode }]"
-                        :title="getPresenceStatusTitle(status)"
-                        @click="!hasSelectedStudentStatus(item, status.id) ? $emit('select-student-status', item, selectedPeriod, status.id, hasNonCourseStudents) : null"
-                        :aria-pressed="hasSelectedStudentStatus(item, status.id) ? 'true': 'false'"><span>{{ status.code }}</span></button>-->
                 <presence-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
                                         :status="status" :title="getPresenceStatusTitle(status)"
                                         :is-selected="hasSelectedStudentStatus(item, status.id)" :is-disabled="checkoutMode"
