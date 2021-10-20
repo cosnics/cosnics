@@ -9,7 +9,6 @@
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
-        "no-students-found": "No students found",
         "no-results": "No results",
         "not-applicable": "n/a",
         "show-periods": "Show all periods"
@@ -23,7 +22,6 @@
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
-        "no-students-found": "Geen studenten gevonden",
         "no-results": "Geen resultaten",
         "not-applicable": "n.v.t.",
         "show-periods": "Toon alle perioden"
@@ -34,11 +32,7 @@
 <template>
     <b-table :id="id" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
-             :filter="globalSearchQuery" no-sort-reset :show-empty="!isBusy">
-
-        <template #empty="">
-            {{ $t('no-students-found') }}
-        </template>
+             :filter="globalSearchQuery" no-sort-reset>
 
         <!-- PICTURE -->
         <template #cell(photo)="{item}" v-if="canEditPresence">
