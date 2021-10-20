@@ -6,14 +6,13 @@
         "official-code": "Official code",
         "new-period": "New period",
         "remove-period": "Remove period",
-        "checkout": "Checkout",
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
-        "stop-edit-mode": "Stop editing",
         "no-students-found": "No students found",
         "no-results": "No results",
-        "not-applicable": "n/a"
+        "not-applicable": "n/a",
+        "show-periods": "Show all periods"
     },
     "nl": {
         "last-name": "Familienaam",
@@ -21,14 +20,13 @@
         "official-code": "Officiële code",
         "new-period": "Nieuwe periode",
         "remove-period": "Verwijder periode",
-        "checkout": "Uitchecken",
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
-        "stop-edit-mode": "Sluit editeren af",
         "no-students-found": "Geen studenten gevonden",
         "no-results": "Geen resultaten",
-        "not-applicable": "n.v.t."
+        "not-applicable": "n.v.t.",
+        "show-periods": "Toon alle perioden"
     }
 }
 </i18n>
@@ -37,15 +35,6 @@
     <b-table :id="id" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset :show-empty="!isBusy">
-
-        <!-- COLUMNS -->
-        <!--<template slot="table-colgroup" v-if="canEditPresence && !!selectedPeriod">
-            <col>
-            <col>
-            <col>
-            <col class="bd-selected-period">
-            <col>
-        </template>-->
 
         <template #empty="">
             {{ $t('no-students-found') }}
@@ -129,7 +118,7 @@
                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </div>
             </div>
-            <a v-if="isFullyEditable" :title="$t('stop-edit-mode')" class="show-all-periods-btn" style="text-decoration: none;cursor:pointer" @click="$emit('change-selected-period', null)">Toon alle perioden</a>
+            <a v-if="isFullyEditable" class="show-all-periods-btn" style="text-decoration: none;cursor:pointer" @click="$emit('change-selected-period', null)">{{ $t('show-periods') }}</a>
         </template>
         <template #cell(period-entry)="{item}">
             <div v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</div>
@@ -169,7 +158,7 @@ import {Component, Prop, Vue} from 'vue-property-decorator';
 import DynamicFieldKey from './DynamicFieldKey.vue'
 import OnOffSwitch from '../OnOffSwitch.vue'
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../../types';
-import PresenceStatusButton from "./PresenceStatusButton.vue";
+import PresenceStatusButton from './PresenceStatusButton.vue';
 
 @Component({
     name: 'entry-table',
