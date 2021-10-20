@@ -125,7 +125,7 @@ export default class Entry extends Vue {
 
     pagination = {
         currentPage: 1,
-        perPage: 3,
+        perPage: 15,
         total: 0
     };
 
@@ -267,9 +267,9 @@ export default class Entry extends Vue {
     async createResultPeriod(callback: Function|undefined = undefined) {
         if (!this.canEditPresence) { return; }
         this.selectedPeriod = null;
-        //this.$emit('creating-new-period');
         this.creatingNew = true;
         this.errorData = null;
+        this.checkoutMode = false;
         await this.connector?.createResultPeriod((data: any) => {
             if (data?.status === 'ok') {
                 this.createdId = data.id;
