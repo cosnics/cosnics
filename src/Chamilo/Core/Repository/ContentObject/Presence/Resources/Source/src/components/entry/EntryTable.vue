@@ -38,7 +38,7 @@
         <template #cell(photo)="{item}" v-if="canEditPresence">
             <img :src="item.photo">
         </template>
-        <template #foot(photo)><span></span></template>
+        <template #foot(photo)>{{''}}</template>
 
         <!-- FULLNAME -->
         <template #head(fullname) v-if="isFullyEditable">
@@ -47,7 +47,7 @@
         </template>
         <template #head(fullname) v-else-if="canEditPresence">{{ $t('last-name') }}, {{ $t('first-name') }}</template>
         <template #head(fullname) v-else>Student</template>
-        <template #foot(fullname)><span></span></template>
+        <template #foot(fullname)>{{''}}</template>
         <template #cell(fullname)="{item}">
             <span v-if="!item.tableEmpty">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</span>
             <span v-else></span>
@@ -58,7 +58,7 @@
             <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
         </template>
         <template #head(official_code) v-else>{{ $t('official-code') }}</template>
-        <template #foot(official_code)><span></span></template>
+        <template #foot(official_code)>{{''}}</template>
 
         <!-- CREATE NEW PERIOD BUTTON -->
         <template #head(new_period)>
@@ -66,7 +66,7 @@
                 <i aria-hidden="true" class="fa fa-plus" style="color: #337ab7"></i> <span class="sr-only">{{ $t('new-period') }}</span>
             </div>
         </template>
-        <template #foot(new_period)><span></span></template>
+        <template #foot(new_period)>{{''}}</template>
 
         <!-- CREATE NEW PERIOD PLACEHOLDER -->
         <template #head(period-entry-plh)>
@@ -102,7 +102,7 @@
                 :check-in-date="item[`period#${fieldKey.id}-checked_in_date`]"
                 :check-out-date="item[`period#${fieldKey.id}-checked_out_date`]"/>
         </template>
-        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]><span></span></template>
+        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]>{{''}}</template>
 
         <!-- PRESENCE PERIOD ENTRY -->
         <template #head(period-entry)>
@@ -145,8 +145,8 @@
                            @toggle="$emit('toggle-checkout', item, selectedPeriod, hasNonCourseStudents)"/>
             <span v-else style="color: #999">{{ $t('not-applicable') }}</span>
         </template>
-        <template #cell(period-checkout) v-else><span></span></template>
-        <template #foot(period-checkout)><span></span></template>
+        <template #cell(period-checkout) v-else>{{''}}</template>
+        <template #foot(period-checkout)>{{''}}</template>
     </b-table>
 </template>
 
