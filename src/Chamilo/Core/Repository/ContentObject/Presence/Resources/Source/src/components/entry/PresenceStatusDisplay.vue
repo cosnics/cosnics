@@ -17,7 +17,7 @@
             <span>{{ label }}</span>
         </div>
         <template v-if="showCheckout">
-            <i aria-hidden="true" class="fa fa-arrow-right checkout-indicator" :class="{'is-checked-out': isCheckedOut }" :title="$t(isCheckedOut ? 'checked-out' : 'not-checked-out')"></i>
+            <i aria-hidden="true" class="fa fa-sign-out checkout-indicator" :class="{'is-checked-out': isCheckedOut }" :title="$t(isCheckedOut ? 'checked-out' : 'not-checked-out')"></i>
             <span class="sr-only">{{ $t(isCheckedOut ? 'checked-out' : 'not-checked-out') }}</span>
         </template>
     </div>

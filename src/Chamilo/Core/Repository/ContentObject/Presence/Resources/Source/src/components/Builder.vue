@@ -956,8 +956,8 @@ td.table-period {
 
 .checkout-indicator {
     color: #3c8640;
-    font-size: 10px;
-    margin-left: -2px;
+    font-size: 12px;
+    margin-left: -1px;
     margin-right: -6px;
     opacity: .2;
 }
@@ -1511,6 +1511,10 @@ td.table-period {
     border-color: #d6dee0;
 }
 
+.onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout {
+    border-color: #6dab6f;
+}
+
 .onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout-choice {
     border-color: #91a0b1;
 }
@@ -1545,8 +1549,8 @@ td.table-period {
 }
 
 .onoffswitch-inner-before.mod-checkout {
-    background-color: #f0f3f4;
-    color: #4171b5;
+    background-color: #6dab6f;
+    color: white;
     padding-left: 8px;
 }
 
@@ -1579,6 +1583,10 @@ td.table-period {
 
 .onoffswitch-switch.mod-checkout, .onoffswitch-switch.mod-checkout-choice {
     border-color: #c2ced1;
+}
+
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout {
+    border-color: #6dab6f;
 }
 
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout-choice {

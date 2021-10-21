@@ -137,7 +137,8 @@
             <span v-else></span>
         </template>
         <template #cell(period-checkout)="{item}" v-if="checkoutMode">
-            <on-off-switch v-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
+            <span v-if="item.tableEmpty"></span>
+            <on-off-switch v-else-if="item[`period#${selectedPeriod.id}-checked_in_date`]"
                            :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
                            :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
                            switch-class="mod-checkout"
