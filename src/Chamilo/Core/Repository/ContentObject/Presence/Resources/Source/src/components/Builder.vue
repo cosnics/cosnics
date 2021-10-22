@@ -507,45 +507,37 @@ td.table-period {
     margin-top: -2px;
 }
 
-.table-period .color-code.mod-selectable, .status-filters .color-code.mod-selectable, .table-period .color-code.mod-plh, .bulk-status .color-code.mod-selectable  {
+.color-code.mod-selectable, .color-code.mod-plh {
     opacity: .42;
 }
 
-.table-period .color-code.mod-selectable:not(.is-selected).is-checkout-mode {
-    opacity: .15;
-}
-
-.status-filters .color-code.mod-selectable.is-selected,
-.status-filters .color-code:hover,
-.table-period .color-code.mod-selectable.is-selected,
-.table-period .color-code:not(.is-checkout-mode):hover,
-.bulk-status .color-code.mod-selectable.is-selected,
-.bulk-status .color-code.mod-selectable:hover {
+.color-code.mod-selectable.is-selected,
+.color-code.mod-selectable:hover {
     opacity: 1;
 }
 
-.status-filters .color-code.mod-selectable:not(.is-selected):not(:hover) {
+.color-code.mod-selectable.mod-off:not(:hover) {
     background-color: #f5f5f5;
     color: #333;
 }
 
-.status-filters .color-code.mod-selectable.is-selected {
-    box-shadow: none;
+.color-code.mod-disabled {
+    --color: #f5f5f5;
+    --text-color: var(--text-color-dark);
+    opacity: .15;
 }
 
-.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code.mod-selectable:not(.is-selected):hover {
+.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .color-code.mod-shadow-grey:hover {
     box-shadow: 1px 1px 2px -1px #673ab7;
 }
 
-.color-code.is-selected {
+.color-code.mod-shadow.is-selected {
     box-shadow: 0 0 0 .2rem var(--selected-color);
 }
 
 .color-code.mod-none {
     --color: #deede1;
-    background: none;
-    background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
-    background-size: 7px 7px;
+    background: transparent linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%) 0 0 / 7px 7px;
     border-radius: 5px;
     height: 17px;
 }
@@ -582,22 +574,6 @@ td.table-period {
 .color-code.is-selected {
     position: relative;
 }
-
-/*.color-code.is-selected:after {
-    background-color: inherit;
-    /*  border: 1px solid rgba(255, 255, 255, .92);*/
-    /*border-radius: 50%;
-    bottom: -5px;
-    content: '\f00c';
-    font-family: 'FontAwesome';
-    font-size: 8px;
-    font-weight: 400;
-    line-height: 8px;
-    padding: 2px 1px 1px 2px;
-    position: absolute;
-    right: -5px;
-    z-index: 10;
-}*/
 
 .tbl-no-sort {
     pointer-events: none

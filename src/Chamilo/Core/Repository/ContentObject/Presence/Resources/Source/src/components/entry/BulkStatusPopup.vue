@@ -18,7 +18,7 @@
             <div class="u-flex u-justify-content-center msg-text mb-6">{{ $t('set-students-without-status') }}:</div>
             <div class="u-flex u-gap-small u-flex-wrap mb-12">
                 <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
-                        class="color-code mod-selectable" :class="[status.color, {'is-selected': selectedStatus === status}]" @click="selectedStatus = status">
+                        class="color-code mod-selectable" :class="[status.color, selectedStatus === status ? 'mod-shadow is-selected' : 'mod-shadow-grey']" @click="selectedStatus = status">
                     <span>{{ status.code }}</span></button>
             </div>
             <div class="u-flex u-gap-small u-justify-content-end">

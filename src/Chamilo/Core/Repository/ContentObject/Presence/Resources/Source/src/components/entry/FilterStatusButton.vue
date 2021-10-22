@@ -1,6 +1,6 @@
 <template>
     <button :title="title" :aria-pressed="isSelected ? 'true': 'false'"
-            class="color-code mod-selectable" :class="[color, {'is-selected': isSelected}]"
+            class="color-code mod-selectable" :class="[color, {'mod-off': !isSelected, 'is-selected': isSelected}]"
             @click="$emit('toggle-filter')"><span>{{ label }}</span></button>
 </template>
 
