@@ -287,6 +287,7 @@ export default class EntryTable extends Vue {
     }
 
     get periodFields() {
+        if (this.isCreatingNewPeriod) { return []; }
         if (this.canEditPresence && !!this.selectedPeriod) {
             return [
                 {key: 'period-entry', sortable: false, label: this.selectedPeriod.label, variant: 'period'},
