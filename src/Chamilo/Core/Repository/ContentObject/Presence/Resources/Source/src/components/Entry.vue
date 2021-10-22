@@ -11,7 +11,10 @@
         "without-status": "Without status",
         "checkout-mode": "Checkout mode",
         "refresh": "Refresh",
-        "changes-filters": "You have made changes so that the shown results possibly no longer reflect the chosen filter criteria. Choose different criteria or click refresh to remedy."
+        "changes-filters": "You have made changes so that the shown results possibly no longer reflect the chosen filter criteria. Choose different criteria or click refresh to remedy.",
+        "remove-period": "Remove period",
+        "show-periods": "Show all periods",
+        "more": "More"
     },
     "nl": {
         "total": "Totaal",
@@ -24,7 +27,10 @@
         "without-status": "Zonder status",
         "checkout-mode": "Uitcheckmodus",
         "refresh": "Vernieuwen",
-        "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op Vernieuwen om dit op te lossen."
+        "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op Vernieuwen om dit op te lossen.",
+        "remove-period": "Verwijder periode",
+        "show-periods": "Toon alle perioden",
+        "more": "Meer"
     }
 }
 </i18n>
@@ -53,15 +59,26 @@
                     </div>
                     <entry-table id="course-students" :items="itemsProvider" :periods="periods"
                                  :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
-                                 :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode"
-                                 :is-creating-new-period="creatingNew" :to-remove-period="toRemovePeriod" :style="selectedPeriod ? 'margin-top: 3px' : ''"
+                                 :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode" :foot-clone="canEditPresence && !!selectedPeriod"
+                                 :is-creating-new-period="creatingNew" :style="selectedPeriod ? 'margin-top: 3px' : ''"
                                  @create-period="createResultPeriod"
-                                 @remove-selected-period="removeSelectedPeriod"
                                  @period-label-changed="setSelectedPeriodLabel"
                                  @select-student-status="setSelectedStudentStatus"
                                  @toggle-checkout-mode="checkoutMode = !checkoutMode"
                                  @toggle-checkout="toggleCheckout"
-                                 @change-selected-period="setSelectedPeriod" />
+                                 @change-selected-period="setSelectedPeriod">
+                        <template v-slot:entry-top v-if="canEditPresence">
+                            <div class="extra-actions u-flex u-align-items-baseline" style="gap: 15px;min-width:100%;top:-26px;justify-content: space-between">
+                                <a class="show-periods-btn" @click="setSelectedPeriod(null)">{{ $t('show-periods') }}</a>
+                                <a id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm" style="padding: 1px 4px 0 6px;margin-right:8px">{{ $t('more') }}&hellip;</a>
+                                <bulk-status-popup :is-visible="showMore" :presence-statuses="presenceStatuses"
+                                                   @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
+                            </div>
+                        </template>
+                        <template v-slot:entry-foot v-if="canEditPresence && !!selectedPeriod">
+                            <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
+                        </template>
+                    </entry-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
                 <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
@@ -101,10 +118,11 @@ import DynamicFieldKey from './entry/DynamicFieldKey.vue';
 import EntryTable from './entry/EntryTable.vue';
 import FilterStatusButton from './entry/FilterStatusButton.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
+import BulkStatusPopup from './entry/BulkStatusPopup.vue';
 
 @Component({
     name: 'entry',
-    components: {EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey}
+    components: {EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -122,6 +140,7 @@ export default class Entry extends Vue {
     statusFilters: PresenceStatus[] = [];
     withoutStatusSelected = false;
     checkoutMode = false;
+    showMore = false;
 
     pagination = {
         currentPage: 1,
@@ -158,18 +177,18 @@ export default class Entry extends Vue {
             this.statusFilters = statusFilters.slice(0, index).concat(statusFilters.slice(index + 1));
         }
         this.requestCount = true;
-        this.$emit('filters-changed');
+        this.$emit('refresh');
     }
 
     refreshFilters() {
         this.requestCount = true;
-        this.$emit('filters-changed');
+        this.$emit('refresh');
     }
 
     toggleWithoutStatus() {
         this.withoutStatusSelected = !this.withoutStatusSelected;
         this.requestCount = true;
-        this.$emit('filters-changed');
+        this.$emit('refresh');
     }
 
     onFilterChanged() {
@@ -192,6 +211,21 @@ export default class Entry extends Vue {
 
     get presenceStatuses(): PresenceStatus[] {
         return this.presence?.statuses || [];
+    }
+
+    applyBulkStatus(status: PresenceStatus) {
+        this.showMore = false;
+        if (!this.canEditPresence || !this.selectedPeriod) { return; }
+        this.errorData = null;
+        this.connector?.bulkSavePresenceEntries(this.selectedPeriod.id, status.id, (data: any) => {
+            if (data?.status === 'ok') {
+                this.$emit('refresh');
+            }
+        });
+    }
+
+    cancelBulkStatus() {
+        this.showMore = false;
     }
 
     async load(): Promise<void> {
@@ -280,15 +314,15 @@ export default class Entry extends Vue {
         });
     }
 
-    removeSelectedPeriod(selectedPeriod: PresencePeriod) {
-        if (!this.canEditPresence) { return; }
+    removeSelectedPeriod() {
+        if (!this.canEditPresence || !this.selectedPeriod) { return; }
         this.errorData = null;
+        const selectedPeriod = this.selectedPeriod;
         this.toRemovePeriod = selectedPeriod;
         const index = this.periods.indexOf(selectedPeriod);
         this.connector?.deletePresencePeriod(selectedPeriod.id, (data: any) => {
             this.toRemovePeriod = null;
             if (data?.status === 'ok') {
-                //this.$emit('period-removed', selectedPeriod.id);
                 this.selectedPeriod = null;
                 this.periods.splice(index, 1);
             }
@@ -308,10 +342,10 @@ export default class Entry extends Vue {
             this.statusFilters = [];
             this.withoutStatusSelected = false;
             this.requestCount = true;
-            this.$emit('filters-changed');
+            this.$emit('refresh');
         } else if (hasFiltersSet) {
             this.requestCount = true;
-            this.$emit('filters-changed');
+            this.$emit('refresh');
         }
 
         //this.checkoutMode = false;
@@ -379,5 +413,12 @@ export default class Entry extends Vue {
 .m-errors {
     margin: 10px 0;
     max-width: 85ch;
+}
+.show-periods-btn {
+    cursor: pointer;
+    font-weight: 500;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
+    text-decoration: none;
 }
 </style>

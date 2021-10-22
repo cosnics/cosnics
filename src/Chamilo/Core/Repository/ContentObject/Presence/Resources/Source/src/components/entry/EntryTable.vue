@@ -5,32 +5,28 @@
         "first-name": "First name",
         "official-code": "Official code",
         "new-period": "New period",
-        "remove-period": "Remove period",
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
         "no-results": "No results",
-        "not-applicable": "n/a",
-        "show-periods": "Show all periods"
+        "not-applicable": "n/a"
     },
     "nl": {
         "last-name": "Familienaam",
         "first-name": "Voornaam",
         "official-code": "Officiële code",
         "new-period": "Nieuwe periode",
-        "remove-period": "Verwijder periode",
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
         "no-results": "Geen resultaten",
-        "not-applicable": "n.v.t.",
-        "show-periods": "Toon alle perioden"
+        "not-applicable": "n.v.t."
     }
 }
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" :foot-clone="isRemovePeriodButtonShown" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
@@ -114,7 +110,7 @@
                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </div>
             </div>
-            <a v-if="isFullyEditable" class="show-all-periods-btn" style="text-decoration: none;cursor:pointer" @click="$emit('change-selected-period', null)">{{ $t('show-periods') }}</a>
+            <slot name="entry-top"></slot>
         </template>
         <template #cell(period-entry)="{item}">
             <div v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</div>
@@ -126,7 +122,7 @@
             </div>
         </template>
         <template #foot(period-entry)>
-            <button class="btn-remove" @click="$emit('remove-selected-period', selectedPeriod)" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
+            <slot name="entry-foot"></slot>
         </template>
 
         <!-- PRESENCE PERIOD CHECKOUT -->
@@ -172,6 +168,7 @@ export default class EntryTable extends Vue {
     @Prop({type: Object, default: null}) readonly selectedPeriod!: PresencePeriod|null;
     @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0, total: 0})}) readonly pagination!: any;
     @Prop({type: Boolean, default: false}) readonly isSaving!: boolean;
+    @Prop({type: Boolean, default: false}) readonly footClone!: boolean;
     @Prop({type: Boolean, default: false}) readonly checkoutMode!: boolean;
     @Prop({type: String, default: ''}) readonly globalSearchQuery!: string;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
@@ -180,7 +177,6 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
-    @Prop({type: Object, default: null }) readonly toRemovePeriod!: PresencePeriod|null;
 
     get hasResults() {
         return this.pagination.total !== 0;
@@ -188,10 +184,6 @@ export default class EntryTable extends Vue {
 
     get isFullyEditable() {
         return this.canEditPresence && !this.hasNonCourseStudents;
-    }
-
-    get isRemovePeriodButtonShown() {
-        return this.isFullyEditable && !!this.selectedPeriod;
     }
 
     getSortStatus(name: string) {
@@ -316,43 +308,12 @@ export default class EntryTable extends Vue {
     }
 
     created() {
-        /*this.$parent.$on('selected-period', (periodId: number) => {
-            this.$nextTick(() => {
-                this.setSelectedPeriod(periodId);
-            });
-        });*/
-        /*this.$parent.$on('selected-period-maybe', () => {
-            this.$nextTick(() => {
-                if (this.selectedPeriod) {
-                    this.setSelectedPeriod(this.selectedPeriod.id);
-                }
-            });
-        });*/
-        /*this.$parent.$on('period-removed', (periodId: number) => {
-            this.$nextTick(() => {
-                if (this.selectedPeriod?.id === periodId) {
-                    this.selectedPeriod = null;
-                }
-            })
-        });*/
-        /*this.$parent.$on('creating-new-period', () => {
-            this.selectedPeriod = null;
-        });*/
-        this.$parent.$on('filters-changed', () => {
+        this.$parent.$on('refresh', () => {
             if (this.isFullyEditable) {
                 (this.$refs.table as any).refresh();
             }
         });
     }
-
-    /*@Watch('selectedPeriod')
-    onSelectedPeriodChange()
-    {
-        if (this.isFullyEditable)
-        {
-            this.$emit('period-change', this.selectedPeriod);
-        }
-    }*/
 }
 </script>
 
@@ -375,4 +336,3 @@ export default class EntryTable extends Vue {
     border-color: #e9eaea;
 }
 </style>
-

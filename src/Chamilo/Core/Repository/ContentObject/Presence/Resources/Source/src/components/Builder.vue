@@ -359,6 +359,10 @@ export default class Builder extends Vue {
     align-items: center;
 }
 
+.u-justify-content-center {
+    justify-content: center;
+}
+
 .u-justify-content-end {
     justify-content: flex-end;
 }
@@ -503,7 +507,7 @@ td.table-period {
     margin-top: -2px;
 }
 
-.table-period .color-code.mod-selectable, .status-filters .color-code.mod-selectable, .table-period .color-code.mod-plh {
+.table-period .color-code.mod-selectable, .status-filters .color-code.mod-selectable, .table-period .color-code.mod-plh, .bulk-status .color-code.mod-selectable  {
     opacity: .42;
 }
 
@@ -514,7 +518,9 @@ td.table-period {
 .status-filters .color-code.mod-selectable.is-selected,
 .status-filters .color-code:hover,
 .table-period .color-code.mod-selectable.is-selected,
-.table-period .color-code:not(.is-checkout-mode):hover {
+.table-period .color-code:not(.is-checkout-mode):hover,
+.bulk-status .color-code.mod-selectable.is-selected,
+.bulk-status .color-code.mod-selectable:hover {
     opacity: 1;
 }
 
@@ -837,14 +843,13 @@ td.table-period {
 .selected-period-close-btn:hover {
 /*    color: #5a93c4;*/
 }
-.show-all-periods-btn {
+.extra-actions {
     position: absolute;
     top: -23px;
     padding: 0;
     background: transparent;
     border: none;
-    font-weight: 500;
-    /*right: 5px;*/
+    font-weight: 400;
 }
 
 .table.mod-entry th.table-period {

@@ -14,6 +14,7 @@
         border-radius: 4px;
         border-top-color: #f0f0f0;
         display: flex;
+        max-width: -moz-fit-content;
         max-width: fit-content;
         padding: 0 2px;
     }
@@ -87,6 +88,7 @@
         loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
         updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}',
         savePresenceEntryURL: '{{ SAVE_PRESENCE_ENTRY_URL|raw }}',
+        bulkSavePresenceEntriesURL: '{{ BULK_SAVE_PRESENCE_ENTRIES_URL|raw }}',
         createPresencePeriodURL: '{{ CREATE_PRESENCE_PERIOD_URL|raw }}',
         updatePresencePeriodURL: '{{ UPDATE_PRESENCE_PERIOD_URL|raw }}',
         deletePresencePeriodURL: '{{ DELETE_PRESENCE_PERIOD_URL|raw }}',

@@ -134,6 +134,24 @@ class PresenceResultEntryService
     }
 
     /**
+     * @param Presence $presence
+     * @param int $periodId
+     * @param array $users
+     * @param int $statusId
+     *
+     * @return PresenceResultEntry[]
+     */
+    public function createOrUpdatePresenceResultEntries(Presence $presence, int $periodId, array $users, int $statusId): array
+    {
+        $presenceResultEntries = array();
+        foreach ($users as $user)
+        {
+            $presenceResultEntries[] = $this->createOrUpdatePresenceResultEntry($presence, $periodId, $user['id'], $statusId);
+        }
+        return $presenceResultEntries;
+    }
+
+    /**
      * @param int $periodId
      * @param int $userId
      * @return PresenceResultEntry

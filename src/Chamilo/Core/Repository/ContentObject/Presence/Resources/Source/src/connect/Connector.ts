@@ -119,6 +119,17 @@ export default class Connector {
         });
     }
 
+    async bulkSavePresenceEntries(periodId: number, statusId: number, callback: Function|undefined = undefined) {
+        this.addToQueue(async () => {
+            const parameters = { 'period_id': periodId, 'status_id': statusId };
+            const data = await this.executeAPIRequest(this.apiConfig.bulkSavePresenceEntriesURL, parameters);
+            if (callback) {
+                callback(data);
+            }
+            return data;
+        });
+    }
+
     async togglePresenceEntryCheckout(periodId: number, userId: number, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
             const parameters = { 'period_id': periodId, 'user_id': userId };
