@@ -6,7 +6,7 @@
         "error-InvalidType": "The status '{title}' has a wrong type set.",
         "error-PresenceStatusMissing": "The status '{title}' can no longer be removed.",
         "error-InvalidAlias": "The status with title '{title}' has a wrong mapping set.",
-        "error-AliasUpdateForbiddene": "The mapping of the status '{title}' can no longer be changed.",
+        "error-AliasUpdateForbidden": "The mapping of the status '{title}' can no longer be changed.",
         "error-NoCodeGiven": "You haven't given a label for the status '{title}'.",
         "error-NoColorGiven": "You haven't given a color for the status '{title}'.",
         "error-InvalidColor": "You have given the status '{title}' an invalid color.",
@@ -25,7 +25,7 @@
         "error-NoCodeGiven": "Je hebt geen label opgegeven voor de status '{title}'.",
         "error-NoColorGiven": "Je hebt geen kleur opgegeven voor de status '{title}'.",
         "error-InvalidColor": "Je hebt de status '{title}' een verkeerde kleur toegewezen.",
-        "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
+        "error-LoggedOut": "Het lijkt erop dat je uitgelogd bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "changes-not-saved": "Je wijzigingen werden niet opgeslagen."
@@ -38,8 +38,8 @@
         <template v-if="errorData.type === 'NoTitleGiven'">
             {{ $t('error-NoTitleGiven') }} <span class="u-block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
         </template>
-        <span v-else-if="!!errorData.status">{{ $t(`error-${errorData.type}`, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
-        <span v-else>{{ $t(`error-${errorData.type}`) }}</span>
+        <span v-else-if="!!errorData.status">{{ $t('error-' + errorData.type, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
+        <span v-else>{{ $t('error-' + errorData.type) }}</span>
     </div>
 </template>
 

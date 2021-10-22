@@ -163,7 +163,7 @@ export default class Connector {
             const res = await axios.post(apiURL, formData, {timeout: TIMEOUT_SEC * 1000});
             if (typeof res.data === 'object') {
                 return res.data;
-            } else if (typeof res.data === 'string' && res.data.indexOf('formLogin') !== -1) {
+            } else if (typeof (res.data as unknown) === 'string' && res.data.indexOf('formLogin') !== -1) {
                 throw { 'type': 'LoggedOut' };
             } else {
                 throw { 'type': 'Unknown' };

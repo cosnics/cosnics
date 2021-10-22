@@ -18,7 +18,7 @@
     },
     "nl": {
         "total": "Totaal",
-        "error-LoggedOut": "Het lijkt erop dat je uitgelogt bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
+        "error-LoggedOut": "Het lijkt erop dat je uitgelogd bent. Je wijzigingen werden niet opgeslagen. Herlaad deze pagina nadat je opnieuw ingelogd bent en probeer het opnieuw.",
         "error-Timeout": "De server deed er te lang over om te antwoorden. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "error-Unknown": "Er deed zich een onbekende fout voor. Je wijzigingen werden mogelijk niet opgeslagen. Probeer het later opnieuw.",
         "export": "Exporteer",
@@ -97,7 +97,7 @@
         </div>
         <div v-if="errorData" class="alert alert-danger m-errors">
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
-            <span v-else-if="!!errorData.type">{{ $t(`error-${errorData.type}`) }}</span>
+            <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
         </div>
         <h4 v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;margin-top:-5px;margin-bottom:-10px">{{ $t('students-not-in-course') }}</h4>
         <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
