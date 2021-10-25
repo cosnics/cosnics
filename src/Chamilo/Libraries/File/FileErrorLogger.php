@@ -20,12 +20,6 @@ class FileErrorLogger
     const PROPERTY_PATH = 'path';
 
     /**
-     *
-     * @var resource
-     */
-    private $logHandle;
-
-    /**
      * @var resource
      */
     private $errorLogHandle;
@@ -34,6 +28,12 @@ class FileErrorLogger
      * @var string[]
      */
     private $logConfiguration;
+
+    /**
+     *
+     * @var resource
+     */
+    private $logHandle;
 
     /**
      *
@@ -88,6 +88,11 @@ class FileErrorLogger
         return strftime("[%d/%m/%Y - %H:%M:%S] ", time());
     }
 
+    public function getErrorLogFileContent(): string
+    {
+        return $this->getFileContent($this->getErrorLogFilePath());
+    }
+
     /**
      * @return string
      */
@@ -99,12 +104,22 @@ class FileErrorLogger
             $configuration[self::PROPERTY_EXTENSION];
     }
 
+    protected function getFileContent(string $path): string
+    {
+        return file_get_contents($path);
+    }
+
     /**
      * @return string[]
      */
     protected function getLogConfiguration()
     {
         return $this->logConfiguration;
+    }
+
+    public function getLogFileContent(): string
+    {
+        return $this->getFileContent($this->getLogFilePath());
     }
 
     /**
@@ -157,6 +172,16 @@ class FileErrorLogger
     }
 
     /**
+     * @param string $message
+     * @param boolean $includeTimestamp
+     */
+    public function mark(string $message, bool $includeTimestamp = true)
+    {
+        $this->log($message, $includeTimestamp);
+        $this->logError($message, $includeTimestamp);
+    }
+
+    /**
      * @param string $action
      * @param string $message
      * @param boolean $includeTimestamp
@@ -165,16 +190,6 @@ class FileErrorLogger
     {
         $this->logAction($action, $includeTimestamp);
         $this->logActionError($action, $message, $includeTimestamp);
-    }
-
-    /**
-     * @param string $message
-     * @param boolean $includeTimestamp
-     */
-    public function mark(string $message, bool $includeTimestamp = true)
-    {
-        $this->log($message, $includeTimestamp);
-        $this->logError($message, $includeTimestamp);
     }
 
     /**
