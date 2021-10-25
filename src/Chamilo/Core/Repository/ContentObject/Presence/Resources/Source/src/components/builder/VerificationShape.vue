@@ -23,9 +23,11 @@ export default class VerificationShape extends Vue {
     color: #d6dee0;
     cursor: pointer;
     height: 60px;
+    transition: color 150ms ease;
 }
 .shape:hover, .shape.is-selected {
     color: #869898;
     --fillcolor: #869898;
 }
+rect, circle, g polygon { transition: fill 150ms ease; }
 </style>

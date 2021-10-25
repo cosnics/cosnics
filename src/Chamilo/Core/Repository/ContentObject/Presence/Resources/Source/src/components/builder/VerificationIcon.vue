@@ -134,6 +134,7 @@ export default class VerificationIcon extends Vue {
     color: #d6dee0;
     cursor: pointer;
     height: 36px;
+    transition: color 150ms ease;
 }
 .shapestyle:hover, .shapestyle.is-selected {
     color: #869898;
@@ -162,4 +163,5 @@ export default class VerificationIcon extends Vue {
     position: absolute;
     top: 1px;
 }
+rect, circle, polygon { transition: fill 150ms ease; }
 </style>
