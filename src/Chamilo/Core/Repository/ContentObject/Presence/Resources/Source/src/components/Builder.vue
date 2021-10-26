@@ -1,104 +1,113 @@
 <i18n>
 {
     "en": {
-        "new-presence-status": "New presence status",
+        "new-presence-status": "New status",
         "label": "Label",
         "title": "Title",
         "aliasses": "Corresponds to",
         "color": "Color",
         "checkout": "Checkout possible",
-        "no-checkout": "No checkout"
+        "no-checkout": "No checkout",
+        "verification-icon": "Verification icon for self registration"
     },
     "nl": {
-        "new-presence-status": "Nieuwe aanwezigheidsstatus",
+        "new-presence-status": "Nieuwe status",
         "label": "Label",
         "title": "Titel",
         "aliasses": "Komt overeen met",
         "color": "Kleur",
         "checkout": "Checkout mogelijk",
-        "no-checkout": "Geen checkout"
+        "no-checkout": "Geen checkout",
+        "verification-icon": "Verificatie-icoon voor zelfregistratie"
     }
 }
 </i18n>
 
 <template>
-    <div v-if="presence" class="u-flex u-flex-wrap u-gap-small-3x">
-        <div class="presence-builder" @click.stop="selectedStatus = null">
-            <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields"
-                     class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}"
-                     :tbody-tr-class="rowClass">
-                <template #thead-top="">
-                    <selection-preview :presence-statuses="presenceStatuses" />
-                </template>
-                <template #head(label)>{{ $t('label') }}</template>
-                <template #head(title)>{{ $t('title') }}</template>
-                <template #head(aliasses)>{{ $t('aliasses') }}</template>
-                <template #head(color)>{{ $t('color') }}</template>
-                <template #cell(label)="{item}">
-                    <div class="cell-pad" @click.stop="onSelectStatus(item)">
-                        <b-input type="text" required v-model="item.code" autocomplete="off" :disabled="createNew"
-                                 class="mod-input mod-pad mod-small" @focus="onSelectStatus(item)"/>
-                    </div>
-                </template>
-                <template #cell(title)="{item}">
-                    <title-control :status="item" :status-title="getStatusTitle(item)"
-                                   :is-editable="isStatusEditable(item)" :disabled="createNew"
-                                   class="cell-pad mod-lh" @select="onSelectStatus(item)" />
-                </template>
-                <template #cell(aliasses)="{item}">
-                    <alias-control :status="item" :alias-title="getAliasedTitle(item)" :fixed-status-defaults="fixedStatusDefaults"
-                                   :is-editable="isStatusEditable(item)" :is-select-disabled="createNew"
-                                   class="cell-pad mod-lh" @select="onSelectStatus(item)"/>
-                </template>
-                <template #cell(color)="{item, index}">
-                    <color-control :id="index" :disabled="createNew" :color="item.color" :selected="item === selectedStatus"
-                                   class="u-flex u-align-items-center cell-pad mod-h"
-                                   @select="onSelectStatus(item)"
-                                   @color-selected="setStatusColor(item, $event)"/>
-                </template>
-                <template #cell(actions)="{item, index}">
-                    <selection-controls
-                        :id="item.id"
-                        :is-up-disabled="createNew || index === 0"
-                        :is-down-disabled="createNew || index >= presenceStatuses.length - 1"
-                        :is-remove-disabled="createNew || item.type === 'fixed' || savedEntryStatuses.includes(item.id)"
-                        class="cell-pad-x"
-                        @move-down="onMoveDown(item.id, index)" @move-up="onMoveUp(item.id, index)"
-                        @remove="onRemove(item)" @select="onSelectStatus(item)"/>
-                </template>
-                <template #foot(label)="">
-                    <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew"/>
-                </template>
-                <template #foot(title)="">
-                    <b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/>
-                </template>
-                <template #foot(aliasses)="">
-                    <alias-control :status="aliasNew" :fixed-status-defaults="fixedStatusDefaults"/>
-                </template>
-                <template #foot(color)="">
-                    <color-control id="999" :color="colorNew" class="u-flex" @color-selected="colorNew = $event"/>
-                </template>
-                <template #foot(actions)="">
-                    <new-status-controls :isSavingDisabled="!(codeNew && titleNew && aliasNew.aliasses > 0)"
-                                         class="u-flex u-gap-small presence-actions"
-                                         @save="onSaveNew" @cancel="onCancelNew" />
-                </template>
-            </b-table>
-            <div class="m-new" v-if="!createNew">
-                <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
-                    {{ $t('new-presence-status') }}</a>
+    <div v-if="presence">
+        <div class="u-flex u-flex-wrap u-gap-small-3x">
+            <div class="presence-builder" @click.stop="selectedStatus = null">
+                <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields"
+                         class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}"
+                         :tbody-tr-class="rowClass">
+                    <template #thead-top="">
+                        <selection-preview :presence-statuses="presenceStatuses" />
+                    </template>
+                    <template #head(label)>{{ $t('label') }}</template>
+                    <template #head(title)>{{ $t('title') }}</template>
+                    <template #head(aliasses)>{{ $t('aliasses') }}</template>
+                    <template #head(color)>{{ $t('color') }}</template>
+                    <template #cell(label)="{item}">
+                        <div class="cell-pad" @click.stop="onSelectStatus(item)">
+                            <b-input type="text" required v-model="item.code" autocomplete="off" :disabled="createNew"
+                                     class="mod-input mod-pad mod-small" @focus="onSelectStatus(item)"/>
+                        </div>
+                    </template>
+                    <template #cell(title)="{item}">
+                        <title-control :status="item" :status-title="getStatusTitle(item)"
+                                       :is-editable="isStatusEditable(item)" :disabled="createNew"
+                                       class="cell-pad mod-lh" @select="onSelectStatus(item)" />
+                    </template>
+                    <template #cell(aliasses)="{item}">
+                        <alias-control :status="item" :alias-title="getAliasedTitle(item)" :fixed-status-defaults="fixedStatusDefaults"
+                                       :is-editable="isStatusEditable(item)" :is-select-disabled="createNew"
+                                       class="cell-pad mod-lh" @select="onSelectStatus(item)"/>
+                    </template>
+                    <template #cell(color)="{item, index}">
+                        <color-control :id="index" :disabled="createNew" :color="item.color" :selected="item === selectedStatus"
+                                       class="u-flex u-align-items-center cell-pad mod-h"
+                                       @select="onSelectStatus(item)"
+                                       @color-selected="setStatusColor(item, $event)"/>
+                    </template>
+                    <template #cell(actions)="{item, index}">
+                        <selection-controls
+                            :id="item.id"
+                            :is-up-disabled="createNew || index === 0"
+                            :is-down-disabled="createNew || index >= presenceStatuses.length - 1"
+                            :is-remove-disabled="createNew || item.type === 'fixed' || savedEntryStatuses.includes(item.id)"
+                            class="cell-pad-x"
+                            @move-down="onMoveDown(item.id, index)" @move-up="onMoveUp(item.id, index)"
+                            @remove="onRemove(item)" @select="onSelectStatus(item)"/>
+                    </template>
+                    <template #foot(label)="">
+                        <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew"/>
+                    </template>
+                    <template #foot(title)="">
+                        <b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/>
+                    </template>
+                    <template #foot(aliasses)="">
+                        <alias-control :status="aliasNew" :fixed-status-defaults="fixedStatusDefaults"/>
+                    </template>
+                    <template #foot(color)="">
+                        <color-control id="999" :color="colorNew" class="u-flex" @color-selected="colorNew = $event"/>
+                    </template>
+                    <template #foot(actions)="">
+                        <new-status-controls :isSavingDisabled="!(codeNew && titleNew && aliasNew.aliasses > 0)"
+                                             class="u-flex u-gap-small presence-actions"
+                                             @save="onSaveNew" @cancel="onCancelNew" />
+                    </template>
+                </b-table>
+                <div class="m-new" v-if="!createNew">
+                    <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
+                        {{ $t('new-presence-status') }}</a>
+                </div>
+                <error-display v-if="errorData" :error-data="errorData" class="m-errors" />
             </div>
-            <error-display v-if="errorData" :error-data="errorData" class="m-errors" />
-            <save-control v-if="!createNew" :is-saving="isSaving" @save="onSave()" class="m-save" />
-        </div>
-        <div>
-            <div class="m-checkout">
-                <on-off-switch id="allow-checkout" :checked="presence.has_checkout" :on-text="$t('checkout')" :off-text="$t('no-checkout')"
-                               switch-class="mod-checkout-choice" style="width: 136px"
-                               @toggle="presence.has_checkout = !presence.has_checkout"/>
+            <div style="align-self: flex-start;">
+                <div style="margin-bottom: 15px">
+                    <on-off-switch id="allow-checkout" :checked="presence.has_checkout" :on-text="$t('checkout')" :off-text="$t('no-checkout')"
+                                   switch-class="mod-checkout-choice" style="width: 136px"
+                                   @toggle="presence.has_checkout = !presence.has_checkout"/>
+                </div>
+                <div :style="useVerificationIcon ? 'margin-bottom: 10px' : ''">
+                    <button class="btn-check" :class="{ 'checked': useVerificationIcon }" @click="useVerificationIcon = !useVerificationIcon">
+                        <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('verification-icon') }}</span>
+                    </button>
+                </div>
+                <verification-icon ref="verification-icon" v-show="useVerificationIcon" :icon-data="presence.verification_icon_data || null"></verification-icon>
             </div>
-            <verification-icon></verification-icon>
         </div>
+        <save-control :is-disabled="createNew" :is-saving="isSaving" @save="onSave()" class="m-save" />
     </div>
 </template>
 
@@ -139,6 +148,7 @@ export default class Builder extends Vue {
     presence: Presence | null = null;
     selectedStatus: PresenceStatus|null = null;
     savedEntryStatuses: number[] = [];
+    useVerificationIcon = false;
 
     connector: Connector | null = null;
     errorData: string|null = null;
@@ -156,6 +166,9 @@ export default class Builder extends Vue {
         const presenceData : any = await this.connector?.loadPresence();
         this.statusDefaults = presenceData?.['status-defaults'] || [];
         this.presence = presenceData?.presence || null;
+        if (this.presence?.verification_icon_data) {
+            this.useVerificationIcon = true;
+        }
     }
 
     async loadSavedEntryStatuses(): Promise<void> {
@@ -312,7 +325,12 @@ export default class Builder extends Vue {
         if (!this.presence) { return; }
         if (this.hasEmptyFields()) { return; }
         this.setError(null);
-        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, this.presence.has_checkout, (data: any) => {
+        if (!this.useVerificationIcon) {
+            this.presence.verification_icon_data = null;
+        } else {
+            this.presence.verification_icon_data = {version: 1, result: (this.$refs['verification-icon'] as unknown as any).verificationIconCode};
+        }
+        this.connector?.updatePresence(this.presence.id, this.presenceStatuses, this.presence.has_checkout, this.presence.verification_icon_data, (data: any) => {
             if (data?.status === 'ok') {
                 this.$emit('presence-data-changed', {statusDefaults: this.statusDefaults, presence: this.presence});
             }
@@ -417,6 +435,11 @@ export default class Builder extends Vue {
 
 .u-cursor-default {
     cursor: default;
+}
+
+.btn.mod-presence-save {
+    font-size: 1.7rem;
+    line-height: 1.6;
 }
 
 .btn.mod-presence-save:focus {
@@ -969,7 +992,10 @@ td.table-period {
     max-width: 85ch;
 }
 .m-save {
-    margin: 16px 0 0 8px;
+    margin: 20px 0 0 8px;
+}
+.btn-check.checked {
+    color: #526060;
 }
 </style>
 

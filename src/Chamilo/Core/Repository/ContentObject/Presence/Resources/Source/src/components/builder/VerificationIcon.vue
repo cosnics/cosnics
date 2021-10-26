@@ -1,57 +1,52 @@
 <template>
-    <div>
-        <h4 style="font-size: 16px;color: #507177;margin-top:20px">Verificatie-icoon</h4>
-        <div>
-            <div class="u-flex u-gap-small-2x" style="--fillcolor: hsl(180, 15%, 87%);">
-                <div class="u-flex u-gap-small-2x u-flex-wrap" style="max-width: 130px;">
-                    <verification-shape @click="shape = 'r'" :selected="isRect"><rect x="-25" y="-25" width="50" height="50" fill="var(--fillcolor)"></rect></verification-shape>
-                    <verification-shape @click="shape = 'c'" :selected="isCircle"><circle cx="0" cy="0" r="25" fill="var(--fillcolor)"></circle></verification-shape>
-                    <verification-shape @click="shape = 'p11'" :selected="shape === 'p11'"><polygon points="25,-25 25,25 -25,25" fill="var(--fillcolor)"></polygon></verification-shape>
-                    <verification-shape @click="shape = 'p01'" :selected="shape === 'p01'"><polygon points="-25,-25 25,25 -25,25" fill="var(--fillcolor)"></polygon></verification-shape>
-                    <verification-shape @click="shape = 'p10'" :selected="shape === 'p10'"><polygon points="25,-25 25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
-                    <verification-shape @click="shape = 'p00'" :selected="shape === 'p00'"><polygon points="25,-25 -25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
-                </div>
-                <div class="u-flex u-gap-small-2x u-flex-wrap u-justify-content-space-between" style="max-width: 82px">
-                    <div @click="colorIndex = index" v-for="(color, index) in colors" class="verification-color u-flex u-align-items-center u-justify-content-center" :style="`--color: ${color}`" :key="`vc-${index}`">
-                        <span v-if="index === colorIndex" class="verification-color-check"><i class="fa fa-check"></i></span>
-                    </div><div v-if="colors.length % 2"></div>
-                    <div class="shapestyle" :class="{'is-selected': hasFill }" @click="stroked = false">
-                        <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="36" height="36" fill="white" stroke="currentColor" stroke-width="1"></rect>
-                            <g transform="translate(18, 18)">
-                                <rect x="-12.5" y="-12.5" width="25" height="25" fill="var(--fillcolor)"></rect>
-                            </g>
-                        </svg>
-                    </div>
-                    <div class="shapestyle" :class="{'is-selected': hasStroke }" @click="stroked = true">
-                        <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="0" y="0" width="36" height="36" fill="white" stroke="currentColor" stroke-width="1"></rect>
-                            <g transform="translate(18, 18)">
-                                <rect x="-12.5" y="-12.5" width="25" height="25" fill="none" stroke-width="3" stroke="currentColor"></rect>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-                <div style="margin-left: 30px">
-                    <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="0" y="0" width="120" height="120" fill="white" stroke="currentColor" stroke-width="1"></rect>
-                        <g transform="translate(60, 60)">
-                            <rect v-if="isRect && hasFill" x="-50" y="-50" width="100" height="100" :fill="hexColor"></rect>
-                            <rect v-else-if="isRect && hasStroke" x="-50" y="-50" width="100" height="100" fill="white" :stroke="hexColor" stroke-width="5"></rect>
-                            <circle v-else-if="isCircle && hasFill" cx="0" cy="0" r="50" :fill="hexColor"></circle>
-                            <circle v-else-if="isCircle && hasStroke" cx="0" cy="0" r="50" fill="white" :stroke="hexColor" stroke-width="5"></circle>
-                            <polygon v-else-if="isPolygon && hasFill" :points="points" :fill="hexColor"></polygon>
-                            <polygon v-else-if="isPolygon && hasStroke" :points="points" fill="white" :stroke="hexColor" stroke-width="5"></polygon>
-                        </g>
-                    </svg>
-                </div>
+    <div class="u-flex u-gap-small-2x" style="--fillcolor: hsl(180, 15%, 87%);">
+        <div class="u-flex u-gap-small-2x u-flex-wrap" style="max-width: 130px;">
+            <verification-shape @click="shape = 'r'" :selected="isRect"><rect x="-25" y="-25" width="50" height="50" fill="var(--fillcolor)"></rect></verification-shape>
+            <verification-shape @click="shape = 'c'" :selected="isCircle"><circle cx="0" cy="0" r="25" fill="var(--fillcolor)"></circle></verification-shape>
+            <verification-shape @click="shape = 'p11'" :selected="shape === 'p11'"><polygon points="25,-25 25,25 -25,25" fill="var(--fillcolor)"></polygon></verification-shape>
+            <verification-shape @click="shape = 'p01'" :selected="shape === 'p01'"><polygon points="-25,-25 25,25 -25,25" fill="var(--fillcolor)"></polygon></verification-shape>
+            <verification-shape @click="shape = 'p10'" :selected="shape === 'p10'"><polygon points="25,-25 25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
+            <verification-shape @click="shape = 'p00'" :selected="shape === 'p00'"><polygon points="25,-25 -25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
+        </div>
+        <div class="u-flex u-gap-small-2x u-flex-wrap u-justify-content-space-between" style="max-width: 82px">
+            <div @click="colorIndex = index" v-for="(color, index) in colors" class="verification-color u-flex u-align-items-center u-justify-content-center" :style="`--color: ${color}`" :key="`vc-${index}`">
+                <span v-if="index === colorIndex" class="verification-color-check"><i class="fa fa-check"></i></span>
+            </div><div v-if="colors.length % 2"></div>
+            <div class="shapestyle" :class="{'is-selected': hasFill }" @click="stroked = false">
+                <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="36" height="36" fill="white" stroke="#e6e6e6" stroke-width="1"></rect>
+                    <g transform="translate(18, 18)">
+                        <rect x="-12.5" y="-12.5" width="25" height="25" fill="var(--fillcolor)"></rect>
+                    </g>
+                </svg>
             </div>
+            <div class="shapestyle" :class="{'is-selected': hasStroke }" @click="stroked = true">
+                <svg width="36" height="36" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="36" height="36" fill="white" stroke="#e6e6e6" stroke-width="1"></rect>
+                    <g transform="translate(18, 18)">
+                        <rect x="-12.5" y="-12.5" width="25" height="25" fill="none" stroke-width="3" stroke="currentColor"></rect>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div style="margin-left: 30px">
+            <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0" y="0" width="120" height="120" fill="white" stroke="currentColor" stroke-width="1"></rect>
+                <g transform="translate(60, 60)">
+                    <rect v-if="isRect && hasFill" x="-50" y="-50" width="100" height="100" :fill="hexColor"></rect>
+                    <rect v-else-if="isRect && hasStroke" x="-50" y="-50" width="100" height="100" fill="white" :stroke="hexColor" stroke-width="5"></rect>
+                    <circle v-else-if="isCircle && hasFill" cx="0" cy="0" r="50" :fill="hexColor"></circle>
+                    <circle v-else-if="isCircle && hasStroke" cx="0" cy="0" r="50" fill="white" :stroke="hexColor" stroke-width="5"></circle>
+                    <polygon v-else-if="isPolygon && hasFill" :points="points" :fill="hexColor"></polygon>
+                    <polygon v-else-if="isPolygon && hasStroke" :points="points" fill="white" :stroke="hexColor" stroke-width="5"></polygon>
+                </g>
+            </svg>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
 import VerificationShape from './VerificationShape.vue';
 
 @Component({
@@ -68,6 +63,8 @@ export default class VerificationIcon extends Vue {
     shapeMeta = '00';
     colorIndex = 0;
     stroked = false;
+
+    @Prop({type: Object, default: () => null}) readonly iconData!: any|null;
 
     get verificationIconCode() {
         const colorMeta = this.padIndex(this.colorIndex);;
@@ -126,6 +123,33 @@ export default class VerificationIcon extends Vue {
     get hasStroke() {
         return this.stroked;
     }
+
+    mounted() {
+        this.parseIconData();
+    }
+
+    @Watch('iconData')
+    parseIconData() {
+        if (this.iconData) {
+            const result = this.iconData.result;
+            if (result) {
+                this.position = result.slice(0, 2);
+                this.shape = result.slice(2, 5);
+                if (result.slice(5,8) !== 'fxx') {
+                    this.stroked = false;
+                    this.colorIndex = parseInt(result.slice(6,8));
+                } else {
+                    this.stroked = true;
+                    this.colorIndex = parseInt(result.slice(9,11));
+                }
+                return;
+            }
+        }
+        this.position = 'q0';
+        this.shape = 'r00';
+        this.colorIndex = 0;
+        this.stroked = false;
+    }
 }
 </script>
 
@@ -136,7 +160,11 @@ export default class VerificationIcon extends Vue {
     height: 36px;
     transition: color 150ms ease;
 }
-.shapestyle:hover, .shapestyle.is-selected {
+.shapestyle:hover {
+    color: #acb9b9;
+    --fillcolor: #acb9b9;
+}
+.shapestyle.is-selected {
     color: #869898;
     --fillcolor: #869898;
 }

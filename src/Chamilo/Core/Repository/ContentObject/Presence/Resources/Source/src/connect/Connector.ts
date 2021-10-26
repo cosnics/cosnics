@@ -70,9 +70,9 @@ export default class Connector {
         return res.data;
     }
 
-    async updatePresence(id: number, statuses: PresenceStatus[], has_checkout: boolean, callback: Function|undefined = undefined) {
+    async updatePresence(id: number, statuses: PresenceStatus[], has_checkout: boolean, verification_icon_data: any|null, callback: Function|undefined = undefined) {
         this.addToQueue(async () => {
-            const parameters = { data: JSON.stringify({id, statuses, has_checkout}) };
+            const parameters = { data: JSON.stringify({id, statuses, has_checkout, verification_icon_data}) };
             const data = await this.executeAPIRequest(this.apiConfig.updatePresenceURL, parameters);
             if (callback) {
                 callback(data);

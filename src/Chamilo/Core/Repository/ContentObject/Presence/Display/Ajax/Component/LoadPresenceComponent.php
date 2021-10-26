@@ -25,6 +25,7 @@ class LoadPresenceComponent extends Manager
             }
 
             $statusDefaults = $this->getTranslator()->getLocale() == 'nl' ? Presence::FIXED_STATUS_DEFAULTS_NL : Presence::FIXED_STATUS_DEFAULTS_EN;
+            $verifyIcon = $presence->getVerifyIcon();
 
             $resultData = [
                 'status-defaults' => $this->deserialize($statusDefaults),
@@ -32,8 +33,9 @@ class LoadPresenceComponent extends Manager
                     'id' => (int) $presence->getId(),
                     'title' => $presence->get_title(),
                     'statuses' => $this->deserialize($presence->getOptions()),
-                    'has_checkout' => $presence->hasCheckout()
-                ]
+                    'has_checkout' => $presence->hasCheckout(),
+                    'verification_icon_data' => !empty($verifyIcon) ? $this->deserialize($verifyIcon) : null
+                ],
             ];
             return new JsonResponse($this->serialize($resultData), 200, [], true);
         }
