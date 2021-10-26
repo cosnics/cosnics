@@ -1,9 +1,9 @@
 import { Server } from 'miragejs';
 
 const getStudents = () => ([
-  { "id": 1, "firstname": "Joey", "lastname": "Jefferson" },
-  { "id": 2, "firstname": "Freddy", "lastname": "Firstborn" },
-  { "id": 3, "firstname": "Jane", "lastname": "Elderberry" }
+  { "id": 1, "firstname": "Joey", "lastname": "Jefferson", "photo": "" },
+  { "id": 2, "firstname": "Freddy", "lastname": "Firstborn", "photo": "" },
+  { "id": 3, "firstname": "Jane", "lastname": "Elderberry", "photo": "" }
 ]);
 
 const getStatusDefaults = () => ([
@@ -36,9 +36,8 @@ const getPresenceData = (_: any, request: any) => {
     }
 };
 
-export function makeServer({ environment = 'development' } = {}) {
-  
-    const server = new Server({
+export function makeServer() {
+    return new Server({
         routes() {
             this.namespace = 'api';
 
@@ -50,9 +49,7 @@ export function makeServer({ environment = 'development' } = {}) {
                 return {
                     data: 'ok!'
                 }
-            }, { timing: 500 });
+            }, { timeout: 500 });
         }
     });
-
-    return server;
 }

@@ -84,6 +84,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_SAVE_PRESENCE_ENTRY
                 ]
             ),
+            'BULK_SAVE_PRESENCE_ENTRIES_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_BULK_SAVE_PRESENCE_ENTRIES
+                ]
+            ),
             'CREATE_PRESENCE_PERIOD_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,

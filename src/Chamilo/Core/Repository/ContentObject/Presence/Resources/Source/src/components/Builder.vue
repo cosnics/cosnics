@@ -347,12 +347,20 @@ export default class Builder extends Vue {
     flex-flow: wrap;
 }
 
+.u-align-items-start {
+    align-items: flex-start;
+}
+
 .u-align-items-baseline {
     align-items: baseline;
 }
 
 .u-align-items-center {
     align-items: center;
+}
+
+.u-justify-content-center {
+    justify-content: center;
 }
 
 .u-justify-content-end {
@@ -495,28 +503,41 @@ td.table-period {
     max-height: 40px;
 }
 
-.table-period .color-code.mod-selectable, .table-period .color-code.mod-plh {
+.status-filters {
+    margin-top: -2px;
+}
+
+.color-code.mod-selectable, .color-code.mod-plh {
     opacity: .42;
 }
 
-.table-period .color-code.mod-selectable.is-selected,
-.table-period .color-code:hover {
+.color-code.mod-selectable.is-selected,
+.color-code.mod-selectable:hover {
     opacity: 1;
 }
 
-.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .table-period .color-code.mod-selectable:not(.is-selected):hover {
+.color-code.mod-selectable.mod-off:not(:hover) {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.color-code.mod-disabled {
+    --color: #f5f5f5;
+    --text-color: var(--text-color-dark);
+    opacity: .15;
+}
+
+.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .color-code.mod-shadow-grey:hover {
     box-shadow: 1px 1px 2px -1px #673ab7;
 }
 
-.color-code.is-selected {
+.color-code.mod-shadow.is-selected {
     box-shadow: 0 0 0 .2rem var(--selected-color);
 }
 
 .color-code.mod-none {
     --color: #deede1;
-    background: none;
-    background-image: linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%);
-    background-size: 7px 7px;
+    background: transparent linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%) 0 0 / 7px 7px;
     border-radius: 5px;
     height: 17px;
 }
@@ -553,22 +574,6 @@ td.table-period {
 .color-code.is-selected {
     position: relative;
 }
-
-/*.color-code.is-selected:after {
-    background-color: inherit;
-    /*  border: 1px solid rgba(255, 255, 255, .92);*/
-    /*border-radius: 50%;
-    bottom: -5px;
-    content: '\f00c';
-    font-family: 'FontAwesome';
-    font-size: 8px;
-    font-weight: 400;
-    line-height: 8px;
-    padding: 2px 1px 1px 2px;
-    position: absolute;
-    right: -5px;
-    z-index: 10;
-}*/
 
 .tbl-no-sort {
     pointer-events: none
@@ -761,15 +766,6 @@ td.table-period {
         background-clip: padding-box;
     }
 }
-.selected-period-controls {
-    font-size: 12px;
-    font-weight: normal;
-    height: 32px;
-    left: -1px;
-    position: absolute;
-    right: -1px;
-    top: -31px;
-}
 
 .selected-period-checkinout-btn, .selected-period-close-btn {
     padding: 0 4px;
@@ -823,6 +819,15 @@ td.table-period {
 .selected-period-close-btn:hover {
 /*    color: #5a93c4;*/
 }
+.extra-actions {
+    position: absolute;
+    top: -23px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    font-weight: 400;
+}
+
 .table.mod-entry th.table-period {
     max-width: 1px;
 }
@@ -928,6 +933,17 @@ td.table-period {
 
 .btn-remove:active, .btn-remove:focus {
     color: #ac2925;
+}
+
+.checkout-indicator {
+    color: #3c8640;
+    font-size: 12px;
+    margin-left: -1px;
+    margin-right: -6px;
+    opacity: .2;
+}
+.checkout-indicator.is-checked-out {
+    opacity: 1;
 }
 </style>
 
@@ -1456,7 +1472,7 @@ td.table-period {
 }
 
 .onoffswitch.mod-checkout-choice {
-    width: 116px;
+    width: 136px;
 }
 
 .onoffswitch-checkbox {
@@ -1474,6 +1490,10 @@ td.table-period {
 
 .onoffswitch-label.mod-checkout, .onoffswitch-label.mod-checkout-choice {
     border-color: #d6dee0;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout {
+    border-color: #6dab6f;
 }
 
 .onoffswitch-checkbox:checked + .onoffswitch-label.mod-checkout-choice {
@@ -1510,8 +1530,8 @@ td.table-period {
 }
 
 .onoffswitch-inner-before.mod-checkout {
-    background-color: #f0f3f4;
-    color: #4171b5;
+    background-color: #6dab6f;
+    color: white;
     padding-left: 8px;
 }
 
@@ -1544,6 +1564,10 @@ td.table-period {
 
 .onoffswitch-switch.mod-checkout, .onoffswitch-switch.mod-checkout-choice {
     border-color: #c2ced1;
+}
+
+.onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout {
+    border-color: #6dab6f;
 }
 
 .onoffswitch-checkbox:checked+.onoffswitch-label .onoffswitch-switch.mod-checkout-choice {

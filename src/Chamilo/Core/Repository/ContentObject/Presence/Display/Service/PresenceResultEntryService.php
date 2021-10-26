@@ -58,12 +58,13 @@ class PresenceResultEntryService
      * @param array $periods
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
+     * @param array $options
      *
      * @return array
      */
-    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): array
+    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, array $options = array()): array
     {
-        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters);
+        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $options);
 
         foreach ($users as $index => $user)
         {
@@ -130,6 +131,24 @@ class PresenceResultEntryService
             $this->presenceRepository->updatePresenceResultEntry($presenceResultEntry);
         }
         return $presenceResultEntry;
+    }
+
+    /**
+     * @param Presence $presence
+     * @param int $periodId
+     * @param array $users
+     * @param int $statusId
+     *
+     * @return PresenceResultEntry[]
+     */
+    public function createOrUpdatePresenceResultEntries(Presence $presence, int $periodId, array $users, int $statusId): array
+    {
+        $presenceResultEntries = array();
+        foreach ($users as $user)
+        {
+            $presenceResultEntries[] = $this->createOrUpdatePresenceResultEntry($presence, $periodId, $user['id'], $statusId);
+        }
+        return $presenceResultEntries;
     }
 
     /**

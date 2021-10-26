@@ -21,12 +21,30 @@ class LoadPresenceEntriesComponent extends Manager
             $presence = $this->getPresence();
             $canEditPresence = $this->canUserEditPresence();
             $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
-            $filterParameters = $this->createFilterParameters(true);
-            $userIds = $this->getTargetUserIds();
 
             $periods = $this->getPresenceResultPeriodService()->getResultPeriodsForPresence($presence, $contextIdentifier, $canEditPresence);
             $presenceResultEntryService = $this->getPresenceResultEntryService();
-            $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $filterParameters);
+
+            $statusFilters =  $this->getRequest()->getFromPostOrUrl('status_filters');
+            $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
+            $withoutStatusSelected = $this->getRequest()->getFromPostOrUrl('without_status') == 'true';
+
+            $useFilters = isset($periodId) && ($withoutStatusSelected || !empty($statusFilters));
+
+            if ($useFilters)
+            {
+                $options = array();
+                $options['statusFilters'] = $statusFilters;
+                $options['periodId'] = $periodId;
+                $options['withoutStatus'] = $withoutStatusSelected;
+                $userIds = $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters(true));
+                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(), $options);
+            }
+            else
+            {
+                $userIds = $this->getTargetUserIds();
+                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(true));
+            }
 
             $resultData = ['students' => $users, 'periods' => $periods];
 
@@ -39,11 +57,19 @@ class LoadPresenceEntriesComponent extends Manager
                 // $allTargetUserIds will only be effectively all users if no global query filter is set.
                 // If $requestNonRegisteredUsers is set then the results in $resultData['non_course_students'] will likely be incorrect.
                 // However this shouldn't be a problem because $requestNonRegisteredUsers is normally only true the first time around when no global query filter is set.
-                $allTargetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds($filterParameters);
 
-                if ($requestCount)
+                $allTargetUserIds = $useFilters ? $userIds : $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters(true));
+
+                if ($requestCount) // todo: count will be wrong when status filters are set
                 {
-                    $resultData['count'] = count($allTargetUserIds);
+                    if ($useFilters)
+                    {
+                        $resultData['count'] = count($presenceResultEntryService->getUsers($allTargetUserIds, $periods, $contextIdentifier, $this->createFilterParameters(true), $options));
+                    }
+                    else
+                    {
+                        $resultData['count'] = count($allTargetUserIds);
+                    }
                 }
 
                 if ($requestNonRegisteredUsers)
