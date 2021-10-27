@@ -168,7 +168,7 @@ class ExportService
 
         $statusId = $user[$periodStr . '-status'];
 
-        return $statuses[$statusId]['code'];
+        return !is_null($statuses[$statusId]['code']) ? $statuses[$statusId]['code'] : '';
     }
 
     /**
