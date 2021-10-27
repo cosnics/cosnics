@@ -104,7 +104,7 @@
                         <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('verification-icon') }}</span>
                     </button>
                 </div>
-                <verification-icon ref="verification-icon" v-show="useVerificationIcon" :icon-data="presence.verification_icon_data || null"></verification-icon>
+                <verification-icon ref="verification-icon" v-show="useVerificationIcon" :icon-data="presence.verification_icon_data || null" :use-builder="true"></verification-icon>
             </div>
         </div>
         <save-control :is-disabled="createNew" :is-saving="isSaving" @save="onSave()" class="m-save" />

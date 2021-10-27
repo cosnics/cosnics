@@ -1,6 +1,6 @@
 <template>
-    <div class="u-flex u-gap-small-2x" style="--fillcolor: hsl(180, 15%, 87%);">
-        <div class="u-flex u-gap-small-2x u-flex-wrap" style="max-width: 130px;">
+    <div :class="{'u-flex u-gap-small-2x m-fill': useBuilder}">
+        <div v-if="useBuilder" class="u-flex u-gap-small-2x u-flex-wrap shapes-mw">
             <verification-shape @click="shape = 'r'" :selected="isRect"><rect x="-25" y="-25" width="50" height="50" fill="var(--fillcolor)"></rect></verification-shape>
             <verification-shape @click="shape = 'c'" :selected="isCircle"><circle cx="0" cy="0" r="25" fill="var(--fillcolor)"></circle></verification-shape>
             <verification-shape @click="shape = 'p11'" :selected="shape === 'p11'"><polygon points="25,-25 25,25 -25,25" fill="var(--fillcolor)"></polygon></verification-shape>
@@ -8,7 +8,7 @@
             <verification-shape @click="shape = 'p10'" :selected="shape === 'p10'"><polygon points="25,-25 25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
             <verification-shape @click="shape = 'p00'" :selected="shape === 'p00'"><polygon points="25,-25 -25,25 -25,-25" fill="var(--fillcolor)"></polygon></verification-shape>
         </div>
-        <div class="u-flex u-gap-small-2x u-flex-wrap u-justify-content-space-between" style="max-width: 82px">
+        <div v-if="useBuilder" class="u-flex u-gap-small-2x u-flex-wrap u-justify-content-space-between colors-mw">
             <div @click="colorIndex = index" v-for="(color, index) in colors" class="verification-color u-flex u-align-items-center u-justify-content-center" :style="`--color: ${color}`" :key="`vc-${index}`">
                 <span v-if="index === colorIndex" class="verification-color-check"><i class="fa fa-check"></i></span>
             </div><div v-if="colors.length % 2"></div>
@@ -29,7 +29,7 @@
                 </svg>
             </div>
         </div>
-        <div style="margin-left: 30px">
+        <div :class="{'icon-ml': useBuilder }">
             <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
                 <rect x="0" y="0" width="120" height="120" fill="white" stroke="currentColor" stroke-width="1"></rect>
                 <g transform="translate(60, 60)">
@@ -65,6 +65,7 @@ export default class VerificationIcon extends Vue {
     stroked = false;
 
     @Prop({type: Object, default: () => null}) readonly iconData!: any|null;
+    @Prop({type: Boolean, default: false}) readonly useBuilder!: boolean;
 
     get verificationIconCode() {
         const colorMeta = this.padIndex(this.colorIndex);;
@@ -154,6 +155,18 @@ export default class VerificationIcon extends Vue {
 </script>
 
 <style scoped>
+.m-fill {
+    --fillcolor: hsl(180, 15%, 87%);
+}
+.shapes-mw {
+    max-width: 130px;
+}
+.colors-mw {
+    max-width: 82px;
+}
+.icon-ml {
+    margin-left: 30px;
+}
 .shapestyle {
     color: #d6dee0;
     cursor: pointer;
