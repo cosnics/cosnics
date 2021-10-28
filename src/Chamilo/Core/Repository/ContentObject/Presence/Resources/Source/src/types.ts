@@ -7,7 +7,7 @@ export type PresenceStatus = {
 };
 
 export type Presence = {
-  id: number; title: string; statuses: PresenceStatus[]; has_checkout: boolean;
+  id: number; title: string; statuses: PresenceStatus[]; has_checkout: boolean; verification_icon_data: any|null;
 };
 
 export type PresencePeriod = {

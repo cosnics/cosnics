@@ -9,5 +9,6 @@
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService" autowire="true" />
         <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\VerificationIconService" autowire="true" />
     </services>
 </container>

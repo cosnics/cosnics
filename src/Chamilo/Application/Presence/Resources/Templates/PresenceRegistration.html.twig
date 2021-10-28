@@ -67,6 +67,10 @@
         <div>{{ USER.get_email() }}</div>
         <div>{{ USER.get_official_code() }}</div>
     </div>
+
+    {% if PRESENCE_VERIFICATION_ICON %}
+        <div style="margin: 30px auto 17px;width: fit-content;">{{ PRESENCE_VERIFICATION_ICON|raw }}</div>
+    {% endif %}
 </div>
 
 {{ FOOTER|raw }}
