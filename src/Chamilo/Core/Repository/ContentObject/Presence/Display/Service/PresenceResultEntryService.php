@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\PresenceRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\PresenceResultEntryFilterOptions;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -58,13 +59,13 @@ class PresenceResultEntryService
      * @param array $periods
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
-     * @param array $options
+     * @param PresenceResultEntryFilterOptions|null $filterOptions
      *
      * @return array
      */
-    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, array $options = array()): array
+    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, PresenceResultEntryFilterOptions $filterOptions = null): array
     {
-        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $options);
+        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $filterOptions);
 
         foreach ($users as $index => $user)
         {

@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\UserRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\PresenceResultEntryFilterOptions;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -47,11 +48,11 @@ class UserService
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters|null $filterParameters
-     * @param array $options
+     * @param PresenceResultEntryFilterOptions|null $filterOptions
      *
      * @return array
      */
-    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null, array $options = array()): array
+    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null, PresenceResultEntryFilterOptions $filterOptions = null): array
     {
         if (is_null($filterParameters))
         {
@@ -59,13 +60,13 @@ class UserService
         }
 
         $condition = null;
-        if (isset($options['periodId']))
+        if (!is_null($filterOptions))
         {
             $periodCondition = new EqualityCondition(
                 new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
-                new StaticConditionVariable($options['periodId'])
+                new StaticConditionVariable($filterOptions->periodId)
             );
-            $subCondition = $this->createFilterCondition($options);
+            $subCondition = $this->createFilterCondition($filterOptions);
             $condition = isset($subCondition) ? new AndCondition([$periodCondition, $subCondition]) : $periodCondition;
         }
 
@@ -135,13 +136,13 @@ class UserService
     }
 
     /**
-     * @param array $options
+     * @param PresenceResultEntryFilterOptions $filterOptions
      * @return Condition|null
      */
-    protected function createFilterCondition(array $options): ?Condition
+    protected function createFilterCondition(PresenceResultEntryFilterOptions $filterOptions): ?Condition
     {
-        $withoutStatus = $options['withoutStatus'] == true;
-        $hasStatusFilters = !empty($options['statusFilters']);
+        $withoutStatus = $filterOptions->withoutStatus;
+        $hasStatusFilters = !empty($filterOptions->statusFilters);
 
         if ($withoutStatus)
         {
@@ -158,7 +159,7 @@ class UserService
         if ($hasStatusFilters)
         {
             $filtersCondition = new InCondition(
-                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $options['statusFilters']);
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $filterOptions->statusFilters);
             if (!$withoutStatus)
             {
                 return $filtersCondition;
