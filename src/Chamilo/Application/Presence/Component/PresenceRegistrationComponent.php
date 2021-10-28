@@ -37,19 +37,21 @@ class PresenceRegistrationComponent extends Manager
 
         try
         {
-            $userRegistrationEntry = $this->getPresenceRegistrationService()->registerUserInPresence(
+            list($userRegistrationEntry, $presence) = $this->getPresenceRegistrationService()->registerUserInPresence(
                 $this->getUser(), $publicationId, $treeNodeId, $securityKey
             );
 
             $isUserInPresenceList =
                 $this->getPresenceRegistrationService()->isUserInPresenceList($this->getUser(), $publicationId);
 
+            $verificationIcon = $isUserInPresenceList ? $this->getPresenceRegistrationService()->getPresenceVerificationIcon($presence) : '';
+
             return $this->getTwig()->render(
                 Manager::context() . ':PresenceRegistration.html.twig',
                 [
                     'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
                     'REGISTRATION_ENTRY' => $userRegistrationEntry, 'USER_IN_PRESENCE_LIST' => $isUserInPresenceList,
-                    'USER' => $this->getUser(), 'USER_PICTURE_URL' => $this->getUserPictureUrl()
+                    'USER' => $this->getUser(), 'USER_PICTURE_URL' => $this->getUserPictureUrl(), 'PRESENCE_VERIFICATION_ICON' => $verificationIcon
                 ]
             );
         }

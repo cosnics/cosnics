@@ -11,6 +11,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultEntryService;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\VerificationIconService;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
@@ -33,13 +34,15 @@ class PresenceRegistrationService
     protected ContentObjectService $contentObjectService;
     protected TreeNodeDataService $treeNodeDataService;
     protected LearningPathStepContextService $stepContextService;
+    protected VerificationIconService $verificationIconService;
 
     public function __construct(
         PresenceResultEntryService $resultEntryService, PresenceResultPeriodService $resultPeriodService,
         PublicationService $publicationService,
         \Chamilo\Application\Weblcms\Service\PublicationService $contentObjectPublicationService,
         ContentObjectService $contentObjectService, TreeNodeDataService $treeNodeDataService,
-        LearningPathStepContextService $stepContextService
+        LearningPathStepContextService $stepContextService,
+        VerificationIconService $verificationIconService
     )
     {
         $this->resultEntryService = $resultEntryService;
@@ -49,6 +52,7 @@ class PresenceRegistrationService
         $this->contentObjectService = $contentObjectService;
         $this->treeNodeDataService = $treeNodeDataService;
         $this->stepContextService = $stepContextService;
+        $this->verificationIconService = $verificationIconService;
     }
 
     /**
@@ -57,7 +61,7 @@ class PresenceRegistrationService
      * @param int|null $treeNodeId
      * @param string $securityKey
      *
-     * @return PresenceResultEntry
+     * @return array
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      * @throws NotAllowedException
      *
@@ -106,7 +110,7 @@ class PresenceRegistrationService
             );
         }
 
-        return $result;
+        return array($result, $presence);
     }
 
     public function isUserInPresenceList(User $user, int $publicationId): bool
@@ -180,6 +184,15 @@ class PresenceRegistrationService
         }
 
         return $presence;
+    }
+
+    /**
+     * @param Presence $presence
+     * @return string
+     */
+    public function getPresenceVerificationIcon(Presence $presence): string
+    {
+        return $this->verificationIconService->renderVerificationIconForPresence($presence);
     }
 
     public function getPresenceRegistrationUrl(Presence $presence, int $publicationId, int $treeNodeId = null): string

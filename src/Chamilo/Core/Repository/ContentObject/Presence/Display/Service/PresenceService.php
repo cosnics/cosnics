@@ -135,16 +135,29 @@ class PresenceService
     /**
      * @param Presence $presence
      * @param array $options
+     * @param array $verifyIcon
      * @param bool $hasCheckout
      *
      * @throws \Exception
      */
-    public function setPresenceOptions(Presence $presence, array $options, bool $hasCheckout = false)
+    public function setPresenceOptions(Presence $presence, array $options, array $verifyIcon, bool $hasCheckout = false)
     {
-        $context = new SerializationContext();
-        $context->setSerializeNull(true);
+        $context = $this->createSerializationContext();
         $presence->setOptions($this->serializer->serialize($options, 'json', $context));
+        $context = $this->createSerializationContext();
+        $presence->setVerifyIcon(empty($verifyIcon) ? '' : $this->serializer->serialize($verifyIcon, 'json', $context));
         $presence->setHasCheckout($hasCheckout);
         $presence->update();
     }
+
+    /**
+     * @return SerializationContext
+     */
+    protected function createSerializationContext(): SerializationContext
+    {
+        $context = new SerializationContext();
+        $context->setSerializeNull(true);
+        return $context;
+    }
+
 }
