@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\PresenceResultEntryFilterOptions;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Security\Csrf\CsrfComponentInterface;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -31,8 +32,12 @@ class BulkSavePresenceEntriesComponent extends Manager implements CsrfComponentI
             $statusId = $this->getRequest()->getFromPostOrUrl('status_id');
 
             $targetUserIds = $this->getPresenceServiceBridge()->getTargetUserIds();
-            $options = ['periodId' => $periodId, 'withoutStatus' => true];
-            $users = $this->getUserService()->getUsersFromIds($targetUserIds, $contextIdentifier, new FilterParameters(), $options);
+
+            $filterOptions = new PresenceResultEntryFilterOptions();
+            $filterOptions->periodId = $periodId;
+            $filterOptions->withoutStatus = true;
+
+            $users = $this->getUserService()->getUsersFromIds($targetUserIds, $contextIdentifier, new FilterParameters(), $filterOptions);
 
             $this->getPresenceResultEntryService()->createOrUpdatePresenceResultEntries($this->getPresence(), $periodId, $users, $statusId);
 
