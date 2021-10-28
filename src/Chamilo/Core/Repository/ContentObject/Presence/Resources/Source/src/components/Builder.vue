@@ -787,9 +787,9 @@ td.table-period {
   color: #507177;
 }*/
 
-.table.mod-entry th.table-result {
+/*.table.mod-entry th.table-result {
     max-width: 1px;
-}
+}*/
 .table.mod-entry th.table-result.mod-save {
     position: relative;
     text-align: center;
