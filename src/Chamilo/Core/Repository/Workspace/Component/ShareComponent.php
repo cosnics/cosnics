@@ -1,13 +1,17 @@
 <?php
 namespace Chamilo\Core\Repository\Workspace\Component;
 
+use Chamilo\Core\Repository\Component\WorkspaceComponent;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Table\Share\ShareTable;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -59,25 +63,32 @@ class ShareComponent extends Manager implements TableSupport
                 \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID,
                 array());
 
-            $selectedContentObjectNumbers = DataManager::distinct(
-                ContentObject::class_name(),
-                new DataClassDistinctParameters(
-                    new InCondition(
-                        new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_ID),
-                        $selectedContentObjectIdentifiers),
-                    new DataClassProperties(
-                        array(
-                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER)))));
+            $contentObjects = [];
+            foreach($selectedContentObjectIdentifiers as $contentObjectIdentifier)
+            {
+                $contentObject = $this->getContentObjectService()->findById($contentObjectIdentifier);
+
+                if (!RightsService::getInstance()->canUseContentObject(
+                    $this->getUser(),
+                    $contentObject,
+                    $this->getWorkspaceComponent()->getWorkspace()
+                ))
+                {
+                    throw new NotAllowedException();
+                }
+
+                $contentObjects[] = $contentObject;
+            }
 
             $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
 
             foreach ($selectedWorkspaceIdentifiers as $selectedWorkspaceIdentifier)
             {
-                foreach ($selectedContentObjectNumbers as $selectedContentObjectNumber)
+                foreach ($contentObjects as $contentObject)
                 {
                     $contentObjectRelationService->createContentObjectRelation(
                         $selectedWorkspaceIdentifier,
-                        $selectedContentObjectNumber,
+                        $contentObject->get_object_number(),
                         0);
                 }
             }
@@ -106,6 +117,15 @@ class ShareComponent extends Manager implements TableSupport
 
                 while ($contentObject = $contentObjects->next_result())
                 {
+                    if (!RightsService::getInstance()->canUseContentObject(
+                        $this->getUser(),
+                        $contentObject,
+                        $this->getWorkspaceComponent()->getWorkspace()
+                    ))
+                    {
+                        throw new NotAllowedException();
+                    }
+
                     $viewUrl = new Redirect(
                         array(
                             Application::PARAM_CONTEXT => \Chamilo\Core\Repository\Manager::context(),
@@ -224,5 +244,21 @@ class ShareComponent extends Manager implements TableSupport
     protected function getTranslation($variable, $parameters = array())
     {
         return Translation::getInstance()->getTranslation($variable, $parameters, Manager::context());
+    }
+
+    /**
+     * @return ContentObjectService
+     */
+    protected function getContentObjectService()
+    {
+        return $this->getService(ContentObjectService::class);
+    }
+
+    /**
+     * @return Application|WorkspaceComponent
+     */
+    protected function getWorkspaceComponent()
+    {
+        return $this->get_application();
     }
 }
