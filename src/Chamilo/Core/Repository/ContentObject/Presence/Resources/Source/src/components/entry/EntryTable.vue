@@ -45,7 +45,21 @@
         <template #head(fullname) v-else>Student</template>
         <template #foot(fullname)>{{''}}</template>
         <template #cell(fullname)="{item}">
-            <span v-if="!item.tableEmpty">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</span>
+            <span v-if="!item.tableEmpty">
+                {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
+                <template v-if="canEditPresence && !selectedPeriod">
+                    <span class="fa fa-info" :id="`student-${item.id}`"></span>
+                    <b-popover :target="`student-${item.id}`" placement="right" triggers="click" offset="10">
+                        <div style="margin: 10px; flex-direction: column; " class="u-flex u-gap-small">
+                            <div v-for="{status, count} in getStudentStats(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
+                                <div v-if="status" class="color-code" :class="[status.color]"><span>{{ status.code }}</span></div>
+                                <div v-else class="color-code mod-none"></div>
+                                {{ count }}
+                            </div>
+                        </div>
+                    </b-popover>
+                </template>
+            </span>
             <span v-else></span>
         </template>
 
@@ -177,6 +191,23 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
+
+    getStudentStats(studentItem: any) {
+        const studentStats = [null, ...this.presenceStatuses].map(status => ({status, count: 0}));
+        this.periods.forEach(p => {
+            const statusId = studentItem[`period#${p.id}-status`];
+            let stat;
+            if (statusId) {
+                stat = studentStats.find(stat => stat.status?.id === statusId) || null;
+            } else {
+                stat = studentStats[0];
+            }
+            if (stat) {
+                stat.count++;
+            }
+        });
+        return studentStats;
+    }
 
     get hasResults() {
         return this.pagination.total !== 0;
