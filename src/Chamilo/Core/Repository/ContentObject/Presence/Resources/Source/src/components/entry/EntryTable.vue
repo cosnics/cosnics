@@ -45,21 +45,9 @@
         <template #head(fullname) v-else>Student</template>
         <template #foot(fullname)>{{''}}</template>
         <template #cell(fullname)="{item}">
-            <span v-if="!item.tableEmpty">
+            <template v-if="!item.tableEmpty">
                 {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
-                <template v-if="canEditPresence && !selectedPeriod">
-                    <span class="fa fa-info" :id="`student-${item.id}`"></span>
-                    <b-popover :target="`student-${item.id}`" placement="right" triggers="click" offset="10">
-                        <div style="margin: 10px; flex-direction: column; " class="u-flex u-gap-small">
-                            <div v-for="{status, count} in getStudentStats(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
-                                <div v-if="status" class="color-code" :class="[status.color]"><span>{{ status.code }}</span></div>
-                                <div v-else class="color-code mod-none"></div>
-                                {{ count }}
-                            </div>
-                        </div>
-                    </b-popover>
-                </template>
-            </span>
+            </template>
             <span v-else></span>
         </template>
 
@@ -94,7 +82,24 @@
             </div>
         </template>
 
-        <!-- DYNAMIC FIELD KEYS -->
+        <!-- PRESENCE STATUSES -->
+        <template v-for="status in presenceStatuses" v-slot:[`head(status-${status.id})`]="">
+            <div class="color-code" :class="[status.color]" :title="getPresenceStatusTitle(status)" style="width:fit-content"><span>{{ status.code }}</span></div>
+        </template>
+        <template #head(status-none)>
+            <div class="color-code grey-100"><span>Zonder status</span></div>
+        </template>
+        <template v-for="status in [...presenceStatuses, null]" v-slot:[`cell(status-${status && status.id || 'none'})`]="{item}">
+            <template v-for="count in [getStudentStats(item, status)]">
+                <div v-if="count" class="color-code" :class="[status && status.color || 'grey-100']" style="width:fit-content;margin: 0 auto">
+                    <span style="font-variant: initial;font-size:13px">{{ count }}</span>
+                </div>
+                <span v-else style="text-align:center;display:block;color:#a9b9bc">0</span>
+            </template>
+        </template>
+        <template v-for="status in [...presenceStatuses, null]" v-slot:[`foot(status-${status && status.id || 'none'})`]="{item}">{{''}}</template>
+
+        <!-- DYNAMIC FIELD KEYS (PERIODS) -->
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
             <dynamic-field-key :is-editable="isFullyEditable" @select="$emit('change-selected-period', fieldKey.id)" :class="[{'select-period-btn' : isFullyEditable}, 'u-txt-truncate']" :title="label">
                 <template v-slot>
@@ -192,21 +197,15 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
 
-    getStudentStats(studentItem: any) {
-        const studentStats = [null, ...this.presenceStatuses].map(status => ({status, count: 0}));
+    getStudentStats(studentItem: any, status: PresenceStatus|null) {
+        let count = 0;
         this.periods.forEach(p => {
             const statusId = studentItem[`period#${p.id}-status`];
-            let stat;
-            if (statusId) {
-                stat = studentStats.find(stat => stat.status?.id === statusId) || null;
-            } else {
-                stat = studentStats[0];
-            }
-            if (stat) {
-                stat.count++;
+            if ((statusId && status?.id === statusId) || !(statusId || status)) {
+                count++;
             }
         });
-        return studentStats;
+        return count;
     }
 
     get hasResults() {
@@ -328,6 +327,12 @@ export default class EntryTable extends Vue {
         const periodFields = this.periods.map(period => ({key: `period#${period.id}`, sortable: false, label: period.label || '', variant: 'result'}));
         periodFields.reverse();
         return periodFields;
+    }
+
+    get statusFields() {
+        const statusFields = this.presenceStatuses.map(status => ({key: 'status-' + status.id, sortable: false}));
+        statusFields.push({key: 'status-none', sortable: false});
+        return statusFields;
     }
 
     get fields() {
