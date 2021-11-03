@@ -296,4 +296,27 @@ class PresenceResultEntryService
         }
         return $nonRegisteredUsers;
     }
+
+    /**
+     * @param Presence $presence
+     * @param array $userIds
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return array
+     */
+    public function getResultPeriodStats(Presence $presence, array $userIds, ContextIdentifier $contextIdentifier): array
+    {
+        $statusIds = array_column($this->presenceService->getPresenceOptions($presence), 'id');
+        $choicesStats = $this->presenceRepository->getPresenceResultPeriodChoicesStats($statusIds, $contextIdentifier);
+        $nullChoicesStats = $this->presenceRepository->getPresenceResultPeriodNullChoicesStats($userIds, $contextIdentifier);
+        $stats = array_merge(iterator_to_array($choicesStats), iterator_to_array($nullChoicesStats));
+        foreach ($stats as $index => $stat)
+        {
+            $stat['period_id'] = (int) $stat['period_id'];
+            $stat['choice_id'] = is_null($stat['choice_id']) ? null : (int) $stat['choice_id'];
+            $stat['count'] = (int) $stat['count'];
+            $stats[$index] = $stat;
+        }
+        return $stats;
+    }
 }

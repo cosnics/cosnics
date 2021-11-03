@@ -47,7 +47,11 @@
                                       @toggle-filter="toggleStatusFilters(status)"/>
                 <filter-status-button :label="$t('without-status')" color="grey-100" :is-selected="withoutStatusSelected" @toggle-filter="toggleWithoutStatus"/>
             </div>
-            <a v-else :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
+            <template v-else>
+                <b-form-select v-model="statMode" :options="statOptions" class="form-control" style="padding: 5px;width: initial">
+                </b-form-select>
+                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
+            </template>
         </div>
 
         <div class="u-flex" style="gap: 8px">
@@ -60,7 +64,7 @@
                     <entry-table id="course-students" :items="itemsProvider" :periods="periods"
                                  :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
                                  :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode" :foot-clone="canEditPresence && !!selectedPeriod"
-                                 :is-creating-new-period="creatingNew" :style="selectedPeriod ? 'margin-top: 3px' : ''"
+                                 :is-creating-new-period="creatingNew" :stat-mode="statMode" :statistics="statistics" :style="selectedPeriod ? 'margin-top: 3px' : ''"
                                  @create-period="createResultPeriod"
                                  @period-label-changed="setSelectedPeriodLabel"
                                  @select-student-status="setSelectedStudentStatus"
@@ -81,7 +85,7 @@
                     </entry-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="canEditPresence && pageLoaded && pagination.total > 0" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
+                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (statMode === 0 || statMode === 1)" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                     <ul class="pagination">
@@ -99,11 +103,13 @@
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
             <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
         </div>
-        <h4 v-if="nonCourseStudents.length" style="color: #507177;font-size: 14px;font-weight: 500;margin-top:-5px;margin-bottom:-10px">{{ $t('students-not-in-course') }}</h4>
-        <entry-table v-if="nonCourseStudents.length" id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
-                     :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
-                     :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode"
-                     @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
+        <template v-if="nonCourseStudents.length && (statMode === 0 || statMode === 1)">
+            <h4 style="color: #507177;font-size: 14px;font-weight: 500;margin-top:-5px;margin-bottom:-10px">{{ $t('students-not-in-course') }}</h4>
+            <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
+                         :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
+                         :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode" :stat-mode="statMode"
+                         @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
+        </template>
     </div>
 </template>
 
@@ -141,6 +147,15 @@ export default class Entry extends Vue {
     withoutStatusSelected = false;
     checkoutMode = false;
     showMore = false;
+    statMode = 0;
+    statistics: any[] = [];
+
+    statOptions = [
+        {text: 'Geen statistiek', value: 0},
+        {text: 'Student/Status', value: 1},
+        {text: 'Status/Periode', value: 2},
+        {text: 'Status/Alle perioden', value: 3}
+    ];
 
     pagination = {
         currentPage: 1,
@@ -399,6 +414,14 @@ export default class Entry extends Vue {
     @Watch('loadIndex')
     _loadIndex() {
         this.load();
+    }
+
+    @Watch('statMode')
+    async _statMode() {
+        if (this.statMode === 2 || this.statMode === 3) {
+            const data = await this.connector?.loadStatistics() || null;
+            this.statistics = data?.statistics || [];
+        }
     }
 }
 </script>

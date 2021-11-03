@@ -26,7 +26,7 @@
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="table_items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
@@ -82,6 +82,11 @@
             </div>
         </template>
 
+        <template #head(period-stats)>Periode</template>
+        <template #cell(period-stats)="{item}">
+            {{item.label || getPlaceHolder(item.id)}}
+        </template>
+
         <!-- PRESENCE STATUSES -->
         <template v-for="status in presenceStatuses" v-slot:[`head(status-${status.id})`]="">
             <div class="color-code" :class="[status.color]" :title="getPresenceStatusTitle(status)" style="width:fit-content"><span>{{ status.code }}</span></div>
@@ -90,7 +95,7 @@
             <div class="color-code grey-100"><span>Zonder status</span></div>
         </template>
         <template v-for="status in [...presenceStatuses, null]" v-slot:[`cell(status-${status && status.id || 'none'})`]="{item}">
-            <template v-for="count in [getStudentStats(item, status)]">
+            <template v-for="count in [getStats(item, status)]">
                 <div v-if="count" class="color-code" :class="[status && status.color || 'grey-100']" style="width:fit-content;margin: 0 auto">
                     <span style="font-variant: initial;font-size:13px">{{ count }}</span>
                 </div>
@@ -196,6 +201,17 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
+    @Prop({type: Number, default: 0}) readonly statMode!: number;
+    @Prop({type: Array, default: () => []}) readonly statistics!: any[];
+
+    getStats(item: any, status: PresenceStatus|null) {
+        if (this.statMode === 1) {
+            return this.getStudentStats(item, status);
+        }
+        if (this.statMode === 2) {
+            return this.getPeriodStats(item, status);
+        }
+    }
 
     getStudentStats(studentItem: any, status: PresenceStatus|null) {
         let count = 0;
@@ -206,6 +222,18 @@ export default class EntryTable extends Vue {
             }
         });
         return count;
+    }
+
+    getPeriodStats(periodItem: any, status: PresenceStatus|null) {
+        const stat = this.statistics.find(s => s.period_id === periodItem.id && s.choice_id === (status?.id || null));
+        return stat?.count || 0;
+    }
+
+    get table_items() {
+        if (this.statMode === 2) {
+            return this.periods;
+        }
+        return this.items;
     }
 
     get hasResults() {
@@ -336,11 +364,26 @@ export default class EntryTable extends Vue {
     }
 
     get fields() {
+        let fixedFields: any = [];
+        if (this.statMode === 0 || this.statMode === 1) {
+            fixedFields = this.userFields;
+        } else {
+            fixedFields = [{key: 'period-stats', sortable: false}];
+        }
+        let extraFields: any = [];
+        if (this.statMode === 0) {
+            extraFields = [
+                this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
+                this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
+                ...this.periodFields
+            ];
+        }
+        if (this.statMode === 1 || this.statMode === 2) {
+            extraFields = this.statusFields;
+        }
         return [
-            ...this.userFields,
-            this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
-            this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
-            ...this.periodFields
+            ...fixedFields,
+            ...extraFields
         ];
     }
 
