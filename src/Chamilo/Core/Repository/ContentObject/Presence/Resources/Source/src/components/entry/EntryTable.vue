@@ -44,11 +44,20 @@
         <template #head(fullname) v-else-if="canEditPresence">{{ $t('last-name') }}, {{ $t('first-name') }}</template>
         <template #head(fullname) v-else>Student</template>
         <template #foot(fullname)>{{''}}</template>
-        <template #cell(fullname)="{item}">
+        <template #cell(fullname)="{item, toggleDetails, detailsShowing}">
             <template v-if="!item.tableEmpty">
-                {{ item.lastname.toUpperCase() }}, {{ item.firstname }}
+                <a v-if="!selectedPeriod && statMode === 0" @click="toggleDetails" style="cursor:pointer;text-decoration:none" :style="detailsShowing ? 'font-weight: 700' : ''">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
+                <template v-else>{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</template>
             </template>
             <span v-else></span>
+        </template>
+        <template #row-details="{item}" v-if="!selectedPeriod">
+            <div class="u-flex u-gap-small-3x u-align-items-center" style="justify-content: flex-start;padding-left: 40px">
+                <span style="color:#507177">Stats:</span>
+                <div v-for="{status, count} in getStudentStats2(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
+                    <div class="color-code" :class="[status ? status.color : 'grey-100']"><span>{{ status ? status.code : 'Zonder status' }} <span style="margin-left: 5px;font-variant: initial;font-size:13px">{{ count }}</span></span></div>
+                </div>
+            </div>
         </template>
 
         <!-- OFFICIAL CODE -->
@@ -96,7 +105,7 @@
         </template>
         <template v-for="status in [...presenceStatuses, null]" v-slot:[`cell(status-${status && status.id || 'none'})`]="{item}">
             <template v-for="count in [getStats(item, status)]">
-                <div v-if="count" class="color-code" :class="[status && status.color || 'grey-100']" style="width:fit-content;margin: 0 auto">
+                <div v-if="count" class="color-code grey-100" style="width:fit-content;margin: 0 auto">
                     <span style="font-variant: initial;font-size:13px">{{ count }}</span>
                 </div>
                 <span v-else style="text-align:center;display:block;color:#a9b9bc">0</span>
@@ -213,7 +222,7 @@ export default class EntryTable extends Vue {
         }
     }
 
-    getStudentStats(studentItem: any, status: PresenceStatus|null) {
+    getStudentStats(studentItem: any, status: PresenceStatus|null): number {
         let count = 0;
         this.periods.forEach(p => {
             const statusId = studentItem[`period#${p.id}-status`];
@@ -224,14 +233,38 @@ export default class EntryTable extends Vue {
         return count;
     }
 
+    getStudentStats2(studentItem: any) {
+        const studentStats = [...this.presenceStatuses, null].map(status => ({status, count: 0}));
+        this.periods.forEach(p => {
+            const statusId = studentItem[`period#${p.id}-status`];
+            let stat;
+            if (statusId) {
+                stat = studentStats.find(stat => stat.status?.id === statusId) || null;
+            } else {
+                stat = studentStats[studentStats.length - 1];
+            }
+            if (stat) {
+                stat.count++;
+            }
+        });
+        return studentStats;
+    }
+
+
     getPeriodStats(periodItem: any, status: PresenceStatus|null) {
+        if (!this.periods.length) { return 0; }
+        if (periodItem.id === null) {
+            const sum: number = this.periods.map(p => this.getPeriodStats(p, status)).reduce((v1, v2) => v1 + v2, 0);
+            const avg = parseFloat((sum / this.periods.length).toFixed(1));
+            return avg;
+        }
         const stat = this.statistics.find(s => s.period_id === periodItem.id && s.choice_id === (status?.id || null));
         return stat?.count || 0;
     }
 
     get table_items() {
         if (this.statMode === 2) {
-            return this.periods;
+            return [...this.periods, {id: null, label: 'Gem./periode'}];
         }
         return this.items;
     }

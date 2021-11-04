@@ -153,8 +153,7 @@ export default class Entry extends Vue {
     statOptions = [
         {text: 'Geen statistiek', value: 0},
         {text: 'Student/Status', value: 1},
-        {text: 'Status/Periode', value: 2},
-        {text: 'Status/Alle perioden', value: 3}
+        {text: 'Status/Periode', value: 2}
     ];
 
     pagination = {
