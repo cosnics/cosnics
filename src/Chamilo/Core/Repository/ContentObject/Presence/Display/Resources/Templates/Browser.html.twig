@@ -6,7 +6,7 @@
 {{ getJavascript('cosnics-presence.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 {{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 
-<style type="text/css">
+<style>
     .nav.nav-buttons {
         align-items: baseline;
         background-color: #f7f7f7;
@@ -45,19 +45,25 @@
     }
 </style>
 
-<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ CONTENT_OBJECT_TITLE }}</h3>
 <div id="main-content">
-    <div style="margin: 15px 0 5px 8px">
+    <div style="margin: 15px 0 5px 8px" class="u-flex u-align-items-center u-gap-small-3x">
         <ul class="nav nav-buttons" role="tablist">
-            <li role="presentation" :class="{'active': activeTab === 'entry'}"><a href="#presence-entry" role="tab" @click="activeTab = 'entry'">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
-            <li role="presentation" :class="{'active': activeTab === 'properties'}"><a href="#properties" role="tab" @click="activeTab = 'properties'">{{ 'Properties'|trans({}, appContext) }}</a></li>
-            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#presence-entry" role="tab" @click="activeTab = 'statistics'">Statistieken</a></li>
-            <li role="presentation" :class="{'active': activeTab === 'builder'}"><a href="#presence-builder" role="tab" @click="showBuilder">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'entry'}"><a href="#" role="tab" @click="activeTab = 'entry'">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'properties'}"><a href="#" role="tab" @click="activeTab = 'properties'">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#" role="tab" @click="showStats">Statistieken</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'builder'}"><a href="#" role="tab" @click="showBuilder">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
+        <div class="u-flex u-gap-small" v-if="activeTab === 'statistics'">
+            <span v-if="statMode === 'period'" style="padding: 3px 5px;background: #f5f5f5;color: #507177;border-radius: 3px;box-shadow:inset 0 0 2px #e8e8e8;">Periode</span>
+            <a v-else style="cursor: pointer;text-decoration:none;padding: 3px 5px;" @click="statMode = 'period'">Periode</a>
+            <span v-if="statMode === 'student'" style="padding: 3px 5px;background: #f5f5f5;color: #507177;border-radius: 3px;box-shadow:inset 0 0 2px #e8e8e8;">Student</span>
+            <a v-else style="cursor: pointer;text-decoration:none;padding: 3px 5px;" @click="statMode = 'student'">Student</a>
+        </div>
     </div>
     <div class="dynamic-visual-tab-content tab-content">
-        <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics'}" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" can-edit-presence="true"></presence-entry>
+        <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics', 'js-statistics': activeTab === 'statistics' }" id="presence-entry" style="width: max-content; margin-top: 10px">
+            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode" can-edit-presence="true"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
             <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
@@ -107,13 +113,23 @@
             apiConfig,
             updateCountEntry: 0,
             updateCountBuilder: 0,
-            activeTab: 'entry'
+            activeTab: 'entry',
+            statMode: 'period'
         },
         methods: {
             showBuilder() {
                 if (this.activeTab !== 'builder') {
                     this.activeTab = 'builder';
                     this.updateCountBuilder += 1;
+                }
+            },
+            showStats() {
+                this.activeTab = 'statistics';
+                if (this.statMode === 'period') {
+                    this.statMode = '';
+                    this.$nextTick(() => {
+                        this.statMode = 'period';
+                    });
                 }
             }
         }

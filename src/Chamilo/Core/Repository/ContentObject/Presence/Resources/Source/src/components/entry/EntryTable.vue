@@ -26,7 +26,7 @@
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="table_items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
@@ -46,15 +46,15 @@
         <template #foot(fullname)>{{''}}</template>
         <template #cell(fullname)="{item, toggleDetails, detailsShowing}">
             <template v-if="!item.tableEmpty">
-                <a v-if="!selectedPeriod && statMode === 0" @click="toggleDetails" style="cursor:pointer;text-decoration:none" :style="detailsShowing ? 'font-weight: 700' : ''">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
+                <a v-if="!selectedPeriod && !useStatistics" @click="toggleDetails" style="cursor:pointer;text-decoration:none" :style="detailsShowing ? 'font-weight: 700' : ''">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
                 <template v-else>{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</template>
             </template>
             <span v-else></span>
         </template>
-        <template #row-details="{item}" v-if="!selectedPeriod">
+        <template #row-details="{item}" v-if="!selectedPeriod && !useStatistics">
             <div class="u-flex u-gap-small-3x u-align-items-center" style="justify-content: flex-start;padding-left: 40px">
                 <span style="color:#507177">Stats:</span>
-                <div v-for="{status, count} in getStudentStats2(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
+                <div v-for="{status, count} in getStudentAllStats(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
                     <div class="color-code" :class="[status ? status.color : 'grey-100']"><span>{{ status ? status.code : 'Zonder status' }} <span style="margin-left: 5px;font-variant: initial;font-size:13px">{{ count }}</span></span></div>
                 </div>
             </div>
@@ -91,11 +91,6 @@
             </div>
         </template>
 
-        <template #head(period-stats)>Periode</template>
-        <template #cell(period-stats)="{item}">
-            {{item.label || getPlaceHolder(item.id)}}
-        </template>
-
         <!-- PRESENCE STATUSES -->
         <template v-for="status in presenceStatuses" v-slot:[`head(status-${status.id})`]="">
             <div class="color-code" :class="[status.color]" :title="getPresenceStatusTitle(status)" style="width:fit-content"><span>{{ status.code }}</span></div>
@@ -104,7 +99,7 @@
             <div class="color-code grey-100"><span>Zonder status</span></div>
         </template>
         <template v-for="status in [...presenceStatuses, null]" v-slot:[`cell(status-${status && status.id || 'none'})`]="{item}">
-            <template v-for="count in [getStats(item, status)]">
+            <template v-for="count in [getStudentStats(item, status)]">
                 <div v-if="count" class="color-code grey-100" style="width:fit-content;margin: 0 auto">
                     <span style="font-variant: initial;font-size:13px">{{ count }}</span>
                 </div>
@@ -210,17 +205,8 @@ export default class EntryTable extends Vue {
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
     @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
-    @Prop({type: Number, default: 0}) readonly statMode!: number;
     @Prop({type: Array, default: () => []}) readonly statistics!: any[];
-
-    getStats(item: any, status: PresenceStatus|null) {
-        if (this.statMode === 1) {
-            return this.getStudentStats(item, status);
-        }
-        if (this.statMode === 2) {
-            return this.getPeriodStats(item, status);
-        }
-    }
+    @Prop({type: Boolean, default: false}) readonly useStatistics!: boolean;
 
     getStudentStats(studentItem: any, status: PresenceStatus|null): number {
         let count = 0;
@@ -233,7 +219,7 @@ export default class EntryTable extends Vue {
         return count;
     }
 
-    getStudentStats2(studentItem: any) {
+    getStudentAllStats(studentItem: any) {
         const studentStats = [...this.presenceStatuses, null].map(status => ({status, count: 0}));
         this.periods.forEach(p => {
             const statusId = studentItem[`period#${p.id}-status`];
@@ -248,25 +234,6 @@ export default class EntryTable extends Vue {
             }
         });
         return studentStats;
-    }
-
-
-    getPeriodStats(periodItem: any, status: PresenceStatus|null) {
-        if (!this.periods.length) { return 0; }
-        if (periodItem.id === null) {
-            const sum: number = this.periods.map(p => this.getPeriodStats(p, status)).reduce((v1, v2) => v1 + v2, 0);
-            const avg = parseFloat((sum / this.periods.length).toFixed(1));
-            return avg;
-        }
-        const stat = this.statistics.find(s => s.period_id === periodItem.id && s.choice_id === (status?.id || null));
-        return stat?.count || 0;
-    }
-
-    get table_items() {
-        if (this.statMode === 2) {
-            return [...this.periods, {id: null, label: 'Gem./periode'}];
-        }
-        return this.items;
     }
 
     get hasResults() {
@@ -397,26 +364,13 @@ export default class EntryTable extends Vue {
     }
 
     get fields() {
-        let fixedFields: any = [];
-        if (this.statMode === 0 || this.statMode === 1) {
-            fixedFields = this.userFields;
-        } else {
-            fixedFields = [{key: 'period-stats', sortable: false}];
-        }
-        let extraFields: any = [];
-        if (this.statMode === 0) {
-            extraFields = [
+        return [
+            ...this.userFields,
+            ...(this.useStatistics ? this.statusFields : [
                 this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
                 this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
                 ...this.periodFields
-            ];
-        }
-        if (this.statMode === 1 || this.statMode === 2) {
-            extraFields = this.statusFields;
-        }
-        return [
-            ...fixedFields,
-            ...extraFields
+            ])
         ];
     }
 

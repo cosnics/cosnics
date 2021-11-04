@@ -37,9 +37,9 @@
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex u-gap-small-3x m-controls" :class="[selectedPeriod ? 'u-align-items-start': 'u-align-items-center']"><!-- u-max-w-fit -->
-            <search-bar :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
-            <div v-if="canEditPresence && !!selectedPeriod" class="status-filters u-flex u-gap-small u-align-items-baseline">
+        <div v-if="canEditPresence" class="u-flex u-gap-small-3x" :class="[selectedPeriod ? 'u-align-items-start': 'u-align-items-center', {'m-controls': !useStatistics || (useStatistics && statMode === 'student')}]"><!-- u-max-w-fit -->
+            <search-bar v-if="!useStatistics || (useStatistics && statMode === 'student')" :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
+            <div v-if="!!selectedPeriod && !useStatistics" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
                 <filter-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
                                       :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color"
@@ -47,11 +47,7 @@
                                       @toggle-filter="toggleStatusFilters(status)"/>
                 <filter-status-button :label="$t('without-status')" color="grey-100" :is-selected="withoutStatusSelected" @toggle-filter="toggleWithoutStatus"/>
             </div>
-            <template v-else>
-                <b-form-select v-model="statMode" :options="statOptions" class="form-control" style="padding: 5px;width: initial">
-                </b-form-select>
-                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
-            </template>
+            <a v-else-if="!useStatistics" :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
         </div>
 
         <div class="u-flex" style="gap: 8px">
@@ -61,10 +57,10 @@
                         <span style="color: #507177">{{ $t('legend') }}:</span>
                         <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
                     </div>
-                    <entry-table id="course-students" :items="itemsProvider" :periods="periods"
+                    <entry-table v-show="!useStatistics || (useStatistics && statMode === 'student')" id="course-students" :items="itemsProvider" :periods="periods"
                                  :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
                                  :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode" :foot-clone="canEditPresence && !!selectedPeriod"
-                                 :is-creating-new-period="creatingNew" :stat-mode="statMode" :statistics="statistics" :style="selectedPeriod ? 'margin-top: 3px' : ''"
+                                 :is-creating-new-period="creatingNew" :statistics="statistics" :style="selectedPeriod ? 'margin-top: 3px' : ''" :use-statistics="useStatistics"
                                  @create-period="createResultPeriod"
                                  @period-label-changed="setSelectedPeriodLabel"
                                  @select-student-status="setSelectedStudentStatus"
@@ -83,9 +79,12 @@
                             <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
                         </template>
                     </entry-table>
+                    <periods-stats-table v-if="useStatistics && statMode === 'period'" id="course-students" :periods="periods" :is-busy="loadingStatistics"
+                                         :status-defaults="statusDefaults" :presence="presence"
+                                         :statistics="statistics"></periods-stats-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (statMode === 0 || statMode === 1)" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
+                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (!useStatistics || (useStatistics && statMode === 'student'))" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                     <ul class="pagination">
@@ -103,11 +102,11 @@
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
             <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
         </div>
-        <template v-if="nonCourseStudents.length && (statMode === 0 || statMode === 1)">
+        <template v-if="nonCourseStudents.length && (!useStatistics || (useStatistics && statMode === 'student'))">
             <h4 style="color: #507177;font-size: 14px;font-weight: 500;margin-top:-5px;margin-bottom:-10px">{{ $t('students-not-in-course') }}</h4>
             <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
                          :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
-                         :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode" :stat-mode="statMode"
+                         :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode" :use-statistics="useStatistics"
                          @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
         </template>
     </div>
@@ -125,10 +124,11 @@ import EntryTable from './entry/EntryTable.vue';
 import FilterStatusButton from './entry/FilterStatusButton.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
 import BulkStatusPopup from './entry/BulkStatusPopup.vue';
+import PeriodsStatsTable from './entry/PeriodsStatsTable.vue';
 
 @Component({
     name: 'entry',
-    components: {EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup}
+    components: {PeriodsStatsTable, EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -147,8 +147,8 @@ export default class Entry extends Vue {
     withoutStatusSelected = false;
     checkoutMode = false;
     showMore = false;
-    statMode = 0;
     statistics: any[] = [];
+    loadingStatistics = false;
 
     statOptions = [
         {text: 'Geen statistiek', value: 0},
@@ -173,6 +173,8 @@ export default class Entry extends Vue {
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
     @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
+    @Prop({type: Boolean, default: false}) readonly useStatistics!: boolean;
+    @Prop({type: String, default: ''}) readonly statMode!: string;
 
     get globalSearchQuery() {
         return this.searchOptions.globalSearchQuery;
@@ -417,8 +419,11 @@ export default class Entry extends Vue {
 
     @Watch('statMode')
     async _statMode() {
-        if (this.statMode === 2 || this.statMode === 3) {
+        if (this.statMode === 'period') {
+            this.loadingStatistics = true;
+            this.statistics = [];
             const data = await this.connector?.loadStatistics() || null;
+            this.loadingStatistics = false;
             this.statistics = data?.statistics || [];
         }
     }
