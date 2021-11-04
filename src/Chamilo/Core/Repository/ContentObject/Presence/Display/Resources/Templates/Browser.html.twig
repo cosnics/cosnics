@@ -49,21 +49,22 @@
 <div id="main-content">
     <div style="margin: 15px 0 5px 8px">
         <ul class="nav nav-buttons" role="tablist">
-            <li role="presentation" class="active"><a href="#presence-entry" aria-controls="entities" role="tab" data-toggle="tab">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
-            <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
-            <li role="presentation"><a href="#presence-builder" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'entry'}"><a href="#presence-entry" role="tab" @click="activeTab = 'entry'">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'properties'}"><a href="#properties" role="tab" @click="activeTab = 'properties'">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#presence-entry" role="tab" @click="activeTab = 'statistics'">Statistieken</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'builder'}"><a href="#presence-builder" role="tab" @click="showBuilder">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
     </div>
     <div class="dynamic-visual-tab-content tab-content">
-        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :load-index="updateCount" can-edit-presence="true"></presence-entry>
+        <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics'}" id="presence-entry" style="width: max-content; margin-top: 10px">
+            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" can-edit-presence="true"></presence-entry>
         </div>
-        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
             <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
-        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
-            <presence-builder :api-config="apiConfig" :load-index="updateCount" @presence-data-changed="$emit('presence-data-changed')"></presence-builder>
+        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" :class="{'active': activeTab === 'builder'}" style="margin-top: 10px">
+            <presence-builder :api-config="apiConfig" :load-index="updateCountBuilder" @presence-data-changed="updateCountEntry += 1"></presence-builder>
         </div>
     </div>
 </div>
@@ -98,50 +99,23 @@
         csrfToken: '{{ csrf_token('ComponentToken') }}'
     };
 
-    const presenceBuilder = new Vue({
+    new Vue({
         i18n: new VueI18n({ locale: lang, messages }),
-        el: '#presence-builder',
+        el: '#main-content',
         delimiters: ['${', '}'],
         data: {
             apiConfig,
-            updateCount: 0
-        },
-        mounted() {
-            const elemToObserve = document.getElementById('presence-builder');
-            let prevClassState = elemToObserve.classList.contains('active');
-
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    if (mutation.attributeName === 'class'){
-                        const currentClassState = mutation.target.classList.contains('active');
-                        if (prevClassState !== currentClassState)    {
-                            prevClassState = currentClassState;
-                            if (currentClassState) {
-                                this.updateCount++;
-                            }
-                        }
-                    }
-                });
-            });
-            observer.observe(elemToObserve, {attributes: true});
-        }
-    });
-
-    const presenceEntry = new Vue({
-        i18n: new VueI18n({ locale: lang, messages }),
-        el: '#presence-entry',
-        delimiters: ['${', '}'],
-        data: {
-            apiConfig,
-            updateCount: 0
+            updateCountEntry: 0,
+            updateCountBuilder: 0,
+            activeTab: 'entry'
         },
         methods: {
-            updatePresenceData: function() {
-                this.updateCount++;
+            showBuilder() {
+                if (this.activeTab !== 'builder') {
+                    this.activeTab = 'builder';
+                    this.updateCountBuilder += 1;
+                }
             }
-        },
-        mounted() {
-            presenceBuilder.$on('presence-data-changed', this.updatePresenceData);
         }
     });
 </script>
