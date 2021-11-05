@@ -10,10 +10,11 @@
         "students-not-in-course": "Students not in course",
         "without-status": "Without status",
         "checkout-mode": "Checkout mode",
+        "show-all-periods": "Show all periods",
+        "new-period": "New period",
         "refresh": "Refresh",
         "changes-filters": "You have made changes so that the shown results possibly no longer reflect the chosen filter criteria. Choose different criteria or click refresh to remedy.",
         "remove-period": "Remove period",
-        "show-periods": "Show all periods",
         "more": "More"
     },
     "nl": {
@@ -26,10 +27,11 @@
         "students-not-in-course": "Studenten niet in cursus",
         "without-status": "Zonder status",
         "checkout-mode": "Uitcheckmodus",
+        "show-all-periods": "Toon alle perioden",
+        "new-period": "Nieuwe periode",
         "refresh": "Vernieuwen",
         "changes-filters": "Je hebt een wijziging gedaan waardoor de getoonde resultaten mogelijk niet meer overeenkomen met de gekozen filtercriteria. Kies andere criteria of klik op Vernieuwen om dit op te lossen.",
         "remove-period": "Verwijder periode",
-        "show-periods": "Toon alle perioden",
         "more": "Meer"
     }
 }
@@ -37,7 +39,7 @@
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex u-gap-small-3x" :class="[selectedPeriod ? 'u-align-items-start': 'u-align-items-center', {'m-controls': !useStatistics || (useStatistics && statMode === 'student')}]"><!-- u-max-w-fit -->
+        <div v-if="canEditPresence" class="u-flex u-gap-small-3x u-align-items-center" :class="[{'m-controls': !useStatistics || (useStatistics && statMode === 'student')}]"><!-- u-max-w-fit -->
             <search-bar v-if="!useStatistics || (useStatistics && statMode === 'student')" :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
             <div v-if="!!selectedPeriod && !useStatistics" class="status-filters u-flex u-gap-small u-align-items-baseline">
                 <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
@@ -47,7 +49,10 @@
                                       @toggle-filter="toggleStatusFilters(status)"/>
                 <filter-status-button :label="$t('without-status')" color="grey-100" :is-selected="withoutStatusSelected" @toggle-filter="toggleWithoutStatus"/>
             </div>
-            <a v-else-if="!useStatistics" :href="apiConfig.exportURL" class="btn btn-default btn-sm">{{ $t('export') }}</a>
+            <template v-else-if="!useStatistics">
+                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm" style="padding: 3px 6px">{{ $t('export') }}</a>
+                <button class="btn btn-default btn-sm" @click="createResultPeriod" style="padding: 3px 6px 3px 4px"><i aria-hidden="true" class="fa fa-plus" style="color: #406e8e; margin-right:5px"></i>{{ $t('new-period') }}</button>
+            </template>
         </div>
 
         <div class="u-flex" style="gap: 8px">
@@ -67,16 +72,16 @@
                                  @toggle-checkout-mode="checkoutMode = !checkoutMode"
                                  @toggle-checkout="toggleCheckout"
                                  @change-selected-period="setSelectedPeriod">
-                        <template v-slot:entry-top v-if="canEditPresence">
-                            <div class="extra-actions u-flex u-align-items-baseline" style="gap: 15px;min-width:100%;top:-26px;justify-content: space-between">
-                                <a class="show-periods-btn" @click="setSelectedPeriod(null)">{{ $t('show-periods') }}</a>
-                                <a id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm" style="padding: 1px 4px 0 6px;margin-right:8px">{{ $t('more') }}&hellip;</a>
+                        <template v-slot:slot-top v-if="canEditPresence && !!selectedPeriod">
+                            <div class="u-flex u-align-items-baseline" style="gap: 15px;min-width:100%;justify-content: space-between">
+                                <button class="btn btn-sm btn-show-periods" @click="setSelectedPeriod(null)">{{ $t('show-all-periods') }}</button>
+                                <button id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm" style="padding: 1px 4px 0 6px;">{{ $t('more') }}&hellip;</button>
                                 <bulk-status-popup :is-visible="showMore" :presence-statuses="presenceStatuses"
                                                    @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
                             </div>
                         </template>
-                        <template v-slot:entry-foot v-if="canEditPresence && !!selectedPeriod">
-                            <button class="btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
+                        <template v-slot:slot-bottom v-if="canEditPresence && !!selectedPeriod">
+                            <button class="btn btn-sm btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
                         </template>
                     </entry-table>
                     <periods-stats-table v-if="useStatistics && statMode === 'period'" id="course-students" :periods="periods" :is-busy="loadingStatistics"
@@ -84,7 +89,7 @@
                                          :statistics="statistics"></periods-stats-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (!useStatistics || (useStatistics && statMode === 'student'))" class="pagination-container u-flex u-justify-content-end" :style="!!selectedPeriod ? 'margin-top: -20px': ''">
+                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (!useStatistics || (useStatistics && statMode === 'student'))" class="pagination-container u-flex u-justify-content-end" style="margin-top: -10px">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                     <ul class="pagination">
@@ -225,6 +230,10 @@ export default class Entry extends Vue {
         return status.title || '';
     }
 
+    getPlaceHolder(periodId: number) {
+        return `P${this.periods.findIndex(p => p.id === periodId) + 1}`;
+    }
+
     get presenceStatuses(): PresenceStatus[] {
         return this.presence?.statuses || [];
     }
@@ -314,7 +323,7 @@ export default class Entry extends Vue {
         this.errorData = data;
     }
 
-    async createResultPeriod(callback: Function|undefined = undefined) {
+    async createResultPeriod() {
         if (!this.canEditPresence) { return; }
         this.selectedPeriod = null;
         this.creatingNew = true;
@@ -323,9 +332,7 @@ export default class Entry extends Vue {
         await this.connector?.createResultPeriod((data: any) => {
             if (data?.status === 'ok') {
                 this.createdId = data.id;
-                if (callback) {
-                    callback(this.createdId);
-                }
+                this.$emit('refresh');
             }
         });
     }
@@ -339,8 +346,8 @@ export default class Entry extends Vue {
         this.connector?.deletePresencePeriod(selectedPeriod.id, (data: any) => {
             this.toRemovePeriod = null;
             if (data?.status === 'ok') {
-                this.selectedPeriod = null;
                 this.periods.splice(index, 1);
+                this.setSelectedPeriod(null);
             }
         })
     }
@@ -432,7 +439,7 @@ export default class Entry extends Vue {
 
 <style scoped>
 .m-controls {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .m-legend {
     margin: 20px 8px 15px;
@@ -440,12 +447,5 @@ export default class Entry extends Vue {
 .m-errors {
     margin: 10px 0;
     max-width: 85ch;
-}
-.show-periods-btn {
-    cursor: pointer;
-    font-weight: 500;
-    min-width: -moz-fit-content;
-    min-width: fit-content;
-    text-decoration: none;
 }
 </style>

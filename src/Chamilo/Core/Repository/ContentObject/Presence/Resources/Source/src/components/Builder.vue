@@ -536,9 +536,9 @@ td.table-period {
     max-height: 40px;
 }
 
-.status-filters {
+/*.status-filters {
     margin-top: -2px;
-}
+}*/
 
 .color-code.mod-selectable, .color-code.mod-plh {
     opacity: .42;
@@ -950,10 +950,9 @@ td.table-period {
 
 .btn-remove {
     background: none;
-    border: none;
-    color: #d9534f;
-    cursor: pointer;
-    padding: 0;
+    border-color: #f8dfdf;
+    color: #c9605d;
+    padding: 1px 4px 0;
 }
 
 .btn-remove[disabled] {
@@ -961,11 +960,42 @@ td.table-period {
 }
 
 .btn-remove:hover {
+    border-color: #e48380;
     color: #b72d2a;
 }
 
 .btn-remove:active, .btn-remove:focus {
+    border-color: #ac2925;
+    box-shadow: none;
     color: #ac2925;
+    outline: none;
+}
+
+.btn-remove:active:focus {
+    outline: none;
+}
+
+.btn-show-periods {
+    background: none;
+    border-color: #e1ebf4;
+    color: #337ab7;
+    padding: 1px 4px 0;
+}
+
+.btn-show-periods:hover {
+    border-color: #95acc0;
+    color: #23527c;
+}
+
+.btn-show-periods:active, .btn-show-periods:focus {
+    border-color: #95acc0;
+    box-shadow: none;
+    color: #23527c;
+    outline: none;
+}
+
+.btn-show-periods:active:focus {
+    outline: none;
 }
 
 .checkout-indicator {

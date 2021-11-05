@@ -26,7 +26,7 @@
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" :foot-clone="footClone" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
@@ -34,7 +34,6 @@
         <template #cell(photo)="{item}" v-if="canEditPresence">
             <img :src="item.photo">
         </template>
-        <template #foot(photo)>{{''}}</template>
 
         <!-- FULLNAME -->
         <template #head(fullname) v-if="isFullyEditable">
@@ -43,7 +42,6 @@
         </template>
         <template #head(fullname) v-else-if="canEditPresence">{{ $t('last-name') }}, {{ $t('first-name') }}</template>
         <template #head(fullname) v-else>Student</template>
-        <template #foot(fullname)>{{''}}</template>
         <template #cell(fullname)="{item, toggleDetails, detailsShowing}">
             <template v-if="!item.tableEmpty">
                 <a v-if="!selectedPeriod && !useStatistics" @click="toggleDetails" style="cursor:pointer;text-decoration:none" :style="detailsShowing ? 'font-weight: 700' : ''">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
@@ -65,15 +63,6 @@
             <a class="tbl-sort-option" :aria-sort="getSortStatus('official_code')" @click="sortByNameField('official_code')">{{ $t('official-code') }}</a>
         </template>
         <template #head(official_code) v-else>{{ $t('official-code') }}</template>
-        <template #foot(official_code)>{{''}}</template>
-
-        <!-- CREATE NEW PERIOD BUTTON -->
-        <template #head(new_period)>
-            <div role="button" tabindex="0" class="select-period-btn mod-new" @keyup.enter="createPeriod" @click="createPeriod" :title="$t('new-period')">
-                <i aria-hidden="true" class="fa fa-plus" style="color: #337ab7"></i> <span class="sr-only">{{ $t('new-period') }}</span>
-            </div>
-        </template>
-        <template #foot(new_period)>{{''}}</template>
 
         <!-- CREATE NEW PERIOD PLACEHOLDER -->
         <template #head(period-entry-plh)>
@@ -106,7 +95,6 @@
                 <span v-else style="text-align:center;display:block;color:#a9b9bc">0</span>
             </template>
         </template>
-        <template v-for="status in [...presenceStatuses, null]" v-slot:[`foot(status-${status && status.id || 'none'})`]="{item}">{{''}}</template>
 
         <!-- DYNAMIC FIELD KEYS (PERIODS) -->
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
@@ -126,7 +114,6 @@
                 :check-in-date="item[`period#${fieldKey.id}-checked_in_date`]"
                 :check-out-date="item[`period#${fieldKey.id}-checked_out_date`]"/>
         </template>
-        <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`foot(${fieldKey.key})`]>{{''}}</template>
 
         <!-- PRESENCE PERIOD ENTRY -->
         <template #head(period-entry)>
@@ -138,7 +125,19 @@
                     <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
                 </div>
             </div>
-            <slot name="entry-top"></slot>
+        </template>
+        <template #thead-top="data" v-if="isFullyEditable && selectedPeriod && !useStatistics">
+            <b-tr>
+                <b-td></b-td>
+                <b-td colspan="2"><span style="color: #47686b;font-size: 14px;font-weight: 500;">{{ selectedPeriod.label || getPlaceHolder(selectedPeriod.id) }}</span></b-td>
+                <b-td><slot name="slot-top"></slot></b-td>
+                <b-td v-if="checkoutMode"></b-td>
+            </b-tr>
+        </template>
+        <template #bottom-row v-if="isFullyEditable && selectedPeriod && !useStatistics">
+            <b-td colspan="3"></b-td>
+            <b-td><slot name="slot-bottom"></slot></b-td>
+            <b-td v-if="checkoutMode"></b-td>
         </template>
         <template #cell(period-entry)="{item}">
             <div v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</div>
@@ -148,9 +147,6 @@
                                         :is-selected="hasSelectedStudentStatus(item, status.id)" :is-disabled="checkoutMode"
                                         @select="$emit('select-student-status', item, selectedPeriod, status.id, hasNonCourseStudents)"/>
             </div>
-        </template>
-        <template #foot(period-entry)>
-            <slot name="entry-foot"></slot>
         </template>
 
         <!-- PRESENCE PERIOD CHECKOUT -->
@@ -170,7 +166,6 @@
             <span v-else style="color: #999">{{ $t('not-applicable') }}</span>
         </template>
         <template #cell(period-checkout) v-else>{{''}}</template>
-        <template #foot(period-checkout)>{{''}}</template>
     </b-table>
 </template>
 
@@ -196,7 +191,6 @@ export default class EntryTable extends Vue {
     @Prop({type: Object, default: null}) readonly selectedPeriod!: PresencePeriod|null;
     @Prop({type: Object, default: () => ({perPage: 0, currentPage: 0, total: 0})}) readonly pagination!: any;
     @Prop({type: Boolean, default: false}) readonly isSaving!: boolean;
-    @Prop({type: Boolean, default: false}) readonly footClone!: boolean;
     @Prop({type: Boolean, default: false}) readonly checkoutMode!: boolean;
     @Prop({type: String, default: ''}) readonly globalSearchQuery!: string;
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
@@ -275,12 +269,6 @@ export default class EntryTable extends Vue {
     set selectedPeriodLabel(label: string) {
         if (!this.selectedPeriod) { return; }
         this.$emit('period-label-changed', this.selectedPeriod, label);
-    }
-
-    createPeriod() {
-        this.$emit('create-period', () => {
-            (this.$refs.table as any).refresh();
-        });
     }
 
     getPlaceHolder(periodId: number) {
@@ -367,7 +355,7 @@ export default class EntryTable extends Vue {
         return [
             ...this.userFields,
             ...(this.useStatistics ? this.statusFields : [
-                this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
+                //this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
                 this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
                 ...this.periodFields
             ])
