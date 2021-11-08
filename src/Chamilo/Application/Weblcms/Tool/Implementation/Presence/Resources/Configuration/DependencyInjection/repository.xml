@@ -7,9 +7,7 @@
 
         <service
                 id="chamilo.application.weblcms.tool.implementation.presence.storage.repository.publication_repository"
-                class="Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository">
-            <argument type="service" id="chamilo.libraries.storage.data_manager.doctrine.data_class_repository" />
-        </service>
+                class="Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository\PublicationRepository" autowire="true" />
 
     </services>
 </container>

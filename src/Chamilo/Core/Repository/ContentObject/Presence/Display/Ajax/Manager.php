@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax;
 
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component\BulkSavePresenceEntriesComponent;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Bridge\Interfaces\PresenceServiceBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Component\AjaxComponent;
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService;
@@ -29,6 +30,7 @@ abstract class Manager extends AjaxManager
     const ACTION_LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES = 'LoadRegisteredPresenceEntryStatuses';
     const ACTION_LOAD_PRESENCE_ENTRIES = 'LoadPresenceEntries';
     const ACTION_SAVE_PRESENCE_ENTRY = 'SavePresenceEntry';
+    const ACTION_BULK_SAVE_PRESENCE_ENTRIES = 'BulkSavePresenceEntries';
     const ACTION_CREATE_PRESENCE_PERIOD = 'CreatePresencePeriod';
     const ACTION_UPDATE_PRESENCE_PERIOD = 'UpdatePresencePeriod';
     const ACTION_DELETE_PRESENCE_PERIOD = 'DeletePresencePeriod';
@@ -182,5 +184,26 @@ abstract class Manager extends AjaxManager
     protected function throwUserException(string $key)
     {
         $this->ajaxComponent->throwUserException($key);
+    }
+
+    /**
+     * @throws NotAllowedException
+     * @throws UserException
+     */
+    protected function validatePresenceResultEntryInput()
+    {
+        $this->validatePresenceUserInput();
+
+        $periodId = $this->getRequest()->getFromPostOrUrl('period_id');
+        $contextIdentifier = $this->getPresenceServiceBridge()->getContextIdentifier();
+        $period = $this->getPresenceResultPeriodService()->findResultPeriodForPresence($this->getPresence(), $periodId, $contextIdentifier);
+        if (empty($period)) {
+            $this->throwUserException('PresenceResultPeriodNotFound');
+        }
+
+        $statusId = $this->getRequest()->getFromPostOrUrl('status_id');
+        if (!$this->getPresenceService()->isValidStatusId($this->getPresence(), $statusId)) {
+            $this->throwUserException('InvalidStatus');
+        }
     }
 }

@@ -1,18 +1,25 @@
 <?php
+
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Presence\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\FilterParameters\DataClassSearchQuery;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
+use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -23,6 +30,19 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class PublicationRepository extends CommonDataClassRepository
 {
+    protected \Chamilo\Core\User\Service\UserService $userService;
+    protected FilterParametersTranslator $filterParametersTranslator;
+
+    public function __construct(
+        DataClassRepository $dataClassRepository, \Chamilo\Core\User\Service\UserService $userService,
+        FilterParametersTranslator $filterParametersTranslator
+    )
+    {
+        parent::__construct($dataClassRepository);
+        $this->userService = $userService;
+        $this->filterParametersTranslator = $filterParametersTranslator;
+    }
+
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
@@ -71,29 +91,50 @@ class PublicationRepository extends CommonDataClassRepository
     /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param FilterParameters|null $filterParameters
+     *
      * @return array
      */
-    public function getTargetUserIds(ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null): array
+    public function getTargetUserIds(
+        ContentObjectPublication $contentObjectPublication, FilterParameters $filterParameters = null
+    ): array
     {
+        $ids = DataManager::getPublicationTargetUserIds(
+            $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
+        );
+
+        if (count($ids) <= 0)
+        {
+            return [];
+        }
+
         if (is_null($filterParameters))
         {
-            return DataManager::getPublicationTargetUserIds($contentObjectPublication->getId(), $contentObjectPublication->get_course_id());
+            return $ids;
         }
 
-        $condition = null;
-        $searchQuery = $filterParameters->getGlobalSearchQuery();
+        $searchProperties = new DataClassProperties([
+            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME),
+            new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),
+        ]);
 
-        if (!empty($searchQuery))
+        $dataClassParameters = new DataClassRetrievesParameters();
+        $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $ids);
+        $this->filterParametersTranslator->translateFilterParameters(
+            $filterParameters, $searchProperties, $dataClassParameters, $condition
+        );
+
+        $users = $this->userService->findUsers(
+            $dataClassParameters->getCondition(), $dataClassParameters->getOffset(), $dataClassParameters->getCount(),
+            $dataClassParameters->getOrderBy()
+        );
+
+        $filteredUserIds = [];
+        foreach($users as $user)
         {
-            $class_name = User::class_name();
-            $searchPattern = '*' . $searchQuery . '*';
-            $searchPartConditions = array();
-            $searchPartConditions[] = new PatternMatchCondition(new PropertyConditionVariable($class_name, User::PROPERTY_LASTNAME), $searchPattern);
-            $searchPartConditions[] = new PatternMatchCondition(new PropertyConditionVariable($class_name, User::PROPERTY_FIRSTNAME), $searchPattern);
-            $searchPartConditions[] = new PatternMatchCondition(new PropertyConditionVariable($class_name, User::PROPERTY_OFFICIAL_CODE), $searchPattern);
-            $condition = new OrCondition($searchPartConditions);
+            $filteredUserIds[] = $user->getId();
         }
 
-        return DataManager::getPublicationTargetUserIds($contentObjectPublication->getId(), $contentObjectPublication->get_course_id(), $filterParameters->getOffset(), $filterParameters->getCount(), $filterParameters->getOrderBy(), $condition);
+        return $filteredUserIds;
     }
 }

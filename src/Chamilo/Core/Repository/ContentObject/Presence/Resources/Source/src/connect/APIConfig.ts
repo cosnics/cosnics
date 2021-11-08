@@ -3,6 +3,7 @@ export default class APIConfig {
     public readonly loadPresenceURL = '';
     public readonly updatePresenceURL = '';
     public readonly savePresenceEntryURL = '';
+    public readonly bulkSavePresenceEntriesURL = '';
     public readonly createPresencePeriodURL = '';
     public readonly updatePresencePeriodURL = '';
     public readonly deletePresencePeriodURL = '';

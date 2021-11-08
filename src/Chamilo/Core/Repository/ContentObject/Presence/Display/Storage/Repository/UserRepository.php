@@ -12,7 +12,9 @@ use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Chamilo\Libraries\Storage\Iterator\RecordIterator;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
@@ -82,26 +84,23 @@ class UserRepository
             new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_USER_ID),
             new PropertyConditionVariable($class::class_name(), $class::PROPERTY_ID)
         );
-
-        $periodJoinConditions = array();
-        $periodJoinConditions[] = new EqualityCondition(
-            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_ID),
-            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID)
+        $entryJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID),
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID)
         );
 
+        $periodJoinConditions = array();
         $periodJoinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_CLASS),
             new StaticConditionVariable($contextIdentifier->getContextClass())
         );
-
         $periodJoinConditions[] = new EqualityCondition(
             new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_ID),
             new StaticConditionVariable($contextIdentifier->getContextId())
         );
 
-
-        $joins->add(new Join(PresenceResultEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
         $joins->add(new Join(PresenceResultPeriod::class_name(), new AndCondition($periodJoinConditions), Join::TYPE_LEFT));
+        $joins->add(new Join(PresenceResultEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
 
         return $joins;
     }
@@ -125,12 +124,14 @@ class UserRepository
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
+     * @param Condition|null $condition
      *
      * @return RecordIterator
      */
-    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters): RecordIterator
+    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, Condition $condition = null): RecordIterator
     {
-        $condition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
+        $usersCondition = new InCondition(new PropertyConditionVariable(User::class_name(), DataClass::PROPERTY_ID), $userIds);
+        $condition = empty($condition) ? $usersCondition : new AndCondition([$usersCondition, $condition]);
 
         $searchProperties = $this->getUserEntityDataClassProperties();
         $retrieveProperties = $this->getRetrieveProperties($this->getUserEntityDataClassProperties());

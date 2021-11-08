@@ -263,6 +263,14 @@
                                 {{ FEEDBACK_MANAGER|raw }}
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12" id="feedback">
+                                <h3 class="title-underlined">{{ 'QRCODE'|trans({}, appContext) }}</h3>
+                                <div class="text-center">
+                                    <img src="{{ QR_CODE|raw }}" alt="qr-code">
+                                </div>
+                            </div>
+                        </div>
                         <script type="text/javascript">
                             $(document).ready(function () {
 

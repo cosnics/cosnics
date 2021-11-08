@@ -3,12 +3,22 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\UserRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
+use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\File\Redirect;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\FilterParameters\FieldMapper;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Presence\Display\Service
@@ -37,17 +47,29 @@ class UserService
      * @param int[] $userIds
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters|null $filterParameters
+     * @param array $options
      *
      * @return array
      */
-    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null): array
+    public function getUsersFromIds(array $userIds, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters = null, array $options = array()): array
     {
         if (is_null($filterParameters))
         {
             $filterParameters = new FilterParameters();
         }
 
-        $selectedUsers = $this->userRepository->getUsersFromIds($userIds, $contextIdentifier, $filterParameters);
+        $condition = null;
+        if (isset($options['periodId']))
+        {
+            $periodCondition = new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
+                new StaticConditionVariable($options['periodId'])
+            );
+            $subCondition = $this->createFilterCondition($options);
+            $condition = isset($subCondition) ? new AndCondition([$periodCondition, $subCondition]) : $periodCondition;
+        }
+
+        $selectedUsers = $this->userRepository->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $condition);
 
         $users = [];
 
@@ -110,5 +132,43 @@ class UserService
             $this->fieldMapper->addFieldMapping('official_code', $class_name, User::PROPERTY_OFFICIAL_CODE);
         }
         return $this->fieldMapper;
+    }
+
+    /**
+     * @param array $options
+     * @return Condition|null
+     */
+    protected function createFilterCondition(array $options): ?Condition
+    {
+        $withoutStatus = $options['withoutStatus'] == true;
+        $hasStatusFilters = !empty($options['statusFilters']);
+
+        if ($withoutStatus)
+        {
+            $withoutStatusCondition = new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID),
+                NULL
+            );
+            if (!$hasStatusFilters)
+            {
+                return $withoutStatusCondition;
+            }
+        }
+
+        if ($hasStatusFilters)
+        {
+            $filtersCondition = new InCondition(
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $options['statusFilters']);
+            if (!$withoutStatus)
+            {
+                return $filtersCondition;
+            }
+        }
+
+        if ($withoutStatus && $hasStatusFilters)
+        {
+            return new OrCondition([$filtersCondition, $withoutStatusCondition]);
+        }
+        return null;
     }
 }
