@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -22,6 +23,14 @@ class UpdaterComponent extends Manager
 
     public function run()
     {
+        $rightsService = RightsService::getInstance();
+        $workspace = $this->getCurrentWorkspace();
+
+        if(!$rightsService->canManageWorkspace($this->getUser(), $workspace))
+        {
+            throw new NotAllowedException();
+        }
+
         $entityRelation = $this->getCurrentEntityRelation();
         
         if (! $entityRelation instanceof WorkspaceEntityRelation)

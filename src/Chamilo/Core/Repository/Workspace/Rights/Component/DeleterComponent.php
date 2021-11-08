@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
@@ -24,6 +25,14 @@ class DeleterComponent extends Manager
      */
     public function run()
     {
+        $rightsService = RightsService::getInstance();
+        $workspace = $this->getCurrentWorkspace();
+
+        if(!$rightsService->canManageWorkspace($this->getUser(), $workspace))
+        {
+            throw new NotAllowedException();
+        }
+
         $entityRelationIdentifiers = $this->getRequest()->get(self::PARAM_ENTITY_RELATION_ID);
         
         try
