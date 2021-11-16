@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\presence
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Announcement"
+InstallTypeName = "Announcement Tool"
+BrowserComponent = "Browse announcements"
+ViewerComponent = "View announcement"
+PublisherComponent = "Publish announcement"
+UpdaterComponent = "Edit announcement"
+IntroductionPublisherComponent = "Publish introduction"

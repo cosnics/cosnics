@@ -68,7 +68,15 @@ class CacheManager
 
         foreach ($cacheServices as $cacheService)
         {
-            $cacheService->clear();
+            try
+            {
+                $cacheService->clear();
+            }
+            catch(\Exception $ex)
+            {
+                echo 'Something went wrong while clearing the cache for service ' . get_class($cacheService);
+            }
+
         }
     }
 
@@ -85,7 +93,14 @@ class CacheManager
         {
             if (! $cacheService instanceof UserBasedCacheInterface)
             {
-                $cacheService->warmUp();
+                try
+                {
+                    $cacheService->warmUp();
+                }
+                catch(\Exception $ex)
+                {
+                    echo 'Something went wrong while warming up the cache for service ' . get_class($cacheService);
+                }
             }
         }
     }

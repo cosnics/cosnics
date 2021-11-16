@@ -76,8 +76,6 @@ class EntryFormHandler extends FormHandler
 
         $data = $form->getData();
 
-//        $data[EntryFormType::ELEMENT_RUBRIC_RESULTS] = '[{"criterium_tree_node_id": 50, "level_id": 7, "comment": "meh"}]';
-
         $resultJSONModels = $this->serializer->deserialize(
             $data[EntryFormType::ELEMENT_RUBRIC_RESULTS], 'array<' . TreeNodeResultJSONModel::class . '>', 'json'
         );
@@ -89,7 +87,7 @@ class EntryFormHandler extends FormHandler
             $this->parameters->getContextIdentifier(), $resultJSONModels, $currentTime
         );
 
-        if($this->parameters->getRubricData()->useScores())
+        if ($this->parameters->getRubricData()->useScores())
         {
             $this->parameters->getRubricBridge()->saveScore(
                 $this->parameters->getUser(), $totalScore,

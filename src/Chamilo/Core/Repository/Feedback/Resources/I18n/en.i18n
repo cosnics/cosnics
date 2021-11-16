@@ -5,6 +5,7 @@
 
 TypeName = "Feedback"
 BrowserComponent = "Feedback"
+UpdaterComponent = "Update feedback"
 AddFeedback = "Add feedback"
 Feedback = "Feedback"
 Comment = "Comment"
@@ -12,3 +13,5 @@ NoFeedbackYet = "No feedback available yet"
 StopReceivingNotifications = "Stop receiving feedback notifications by email"
 ReceiveNotifications = "Receive feedback notifications by email"
 FeedbackNotificationAdded = "Notification added"
+IsPrivate = "Visible to teachers only"
+Private = "Private"

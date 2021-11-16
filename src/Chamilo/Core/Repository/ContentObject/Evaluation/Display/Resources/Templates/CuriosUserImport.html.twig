@@ -1,0 +1,506 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display' %}
+{% set commonContext = 'Chamilo\\Libraries' %}
+<style type="text/css">
+    .u-block {
+        display: block;
+    }
+    .u-inline-block {
+        display: inline-block;
+    }
+    .u-flex {
+        display: flex;
+    }
+    .u-flex-column {
+        flex-direction: column;
+    }
+    .u-align-items-start {
+        align-items: flex-start;
+    }
+    .u-align-items-baseline {
+        align-items: baseline;
+    }
+    .u-gap-small {
+        gap: 5px;
+    }
+    .u-gap-small-2x {
+        gap: 10px;
+    }
+    .u-muted {
+        color: #636363;
+        font-style: oblique;
+    }
+    .u-fw-normal {
+        font-weight: 400;
+    }
+    .u-fw-semibold {
+        font-weight: 500;
+    }
+    .nav.nav-tabs.mod-steps {
+        border: 0;
+        border-radius: 0 5px 0 0;
+        list-style: none;
+        margin-bottom: 15px;
+        overflow: hidden;
+        padding: 0;
+    }
+    .nav.nav-tabs.mod-steps > li:first-child {
+        cursor: default;
+    }
+    .nav.mod-imports > li:last-child > a {
+        display: flex;
+    }
+    .nav.nav-tabs.mod-steps > li > a, .nav.nav-tabs.mod-steps > li > a:hover {
+        background: #f3f3f3;
+        border: 0;
+        border-radius: 0;
+        color: #999;
+        outline-style: none;
+        padding: 10px 10px 10px 50px;
+        position: relative;
+        text-decoration: none;
+    }
+    .nav.nav-tabs.mod-steps > li:first-child > a {
+        padding-left: 20px;
+    }
+    .nav.nav-tabs.mod-steps > li > a:before {
+        border-bottom: 50px solid transparent;
+        border-left: 30px solid #fff;
+        border-top: 50px solid transparent;
+        content: '';
+        display: block;
+        height: 0;
+        left: 100%;
+        margin-left: 3px;
+        margin-top: -50px;
+        position: absolute;
+        top: 50%;
+        width: 0;
+        z-index: 1;
+    }
+    .nav.nav-tabs.mod-steps > li > a:after {
+        border-bottom: 50px solid transparent;
+        border-left: 30px solid #f3f3f3;
+        border-top: 50px solid transparent;
+        content: '';
+        display: block;
+        height: 0;
+        left: 100%;
+        margin-top: -50px;
+        position: absolute;
+        top: 50%;
+        width: 0;
+        z-index: 2;
+    }
+    .nav.nav-tabs.mod-steps > li.done > a {
+        background: #e8edf3;
+        color: #1c303f;
+    }
+    .nav.nav-tabs.mod-steps > li.done > a:after {
+        border-left: 30px solid #e8edf3;
+    }
+    .nav.nav-tabs.mod-steps > li.active > a {
+        color: #fff;
+        background: #6192b8;
+    }
+    .nav.nav-tabs.mod-steps > li.active > a:after {
+        border-left: 30px solid #6192b8;
+    }
+    .nav.nav-tabs.mod-steps > li .step {
+        background-color: hsla(0, 0%, 100%, .75);
+        border-radius: 50%;
+        box-shadow: 1px 1px 1px #c4c4c4;
+        color: #919191;
+        font-size: 12px;
+        height: 18px;
+        line-height: 18px;
+        margin: 0 7px 0 auto;
+        padding: 0;
+        text-align: center;
+        width: 18px;
+    }
+    .nav.nav-tabs.mod-steps > li.done .step {
+        background-color: hsla(0, 0%, 100%, .55);
+        box-shadow: 1px 1px 1px #a4c0d6;
+        color: #1c303f;
+    }
+    .nav.nav-tabs.mod-steps > li.active .step {
+        background-color: hsla(0, 0%, 0%, .1);
+        box-shadow: 1px 1px 1px #3a6c92;
+        color: #fff;
+    }
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+    .lbl-input-file.mod-selected {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none;
+    }
+    .lbl-input-file.mod-selected:not(:hover):not(:active) {
+        background-color: #fcfcfc;
+    }
+    .lbl-input-file.mod-selected + button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+    .lbl-input-file svg, #uploadbutton svg {
+        width: 1em;
+        height: 1em;
+        vertical-align: middle;
+        fill: currentColor;
+        margin-top: -0.25em;
+        margin-right: 0.25em;
+    }
+    .curios-import-info {
+        color: #31708f;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+        max-width: 90ch;
+        padding: 10px;
+    }
+    .curios-import-title label {
+        color: #507177;
+    }
+    .curios-import-title .form-control {
+        width: 360px;
+    }
+    input.form-control[type="text"].input_warning {
+        background-image: url(Chamilo/Configuration/Resources/Images/Aqua/Status/WarningMini.png);
+        border: 1px solid #ffd89b !important;
+        background-color: #fff8aa !important;
+        color: #996900 !important;
+        padding-left: 24px;
+        background-repeat: no-repeat;
+        background-position: 4px 50%;
+    }
+    .nav.mod-imports {
+        margin-bottom: 3px;
+    }
+    .nav.mod-imports > li:not(:last-child) {
+        border-right: 1px solid #b6dbf1;
+    }
+    .nav.mod-imports > li > a {
+        padding: 4px 8px;
+    }
+    .nav.mod-imports > li > a:hover, .nav.mod-imports > li > a:focus {
+        background-color: initial;
+        color: #143b5d;
+        cursor: pointer;
+    }
+    .nav.mod-imports > li.active a {
+        color: #1c5282;
+        font-weight: 500;
+    }
+    .badge.mod-invalid {
+        background-color: transparent;
+        box-shadow: 1px 1px 1px hsla(207, 38%, 75%, .58);
+        color: #e44a28;
+    }
+    .curios-table {
+        margin-bottom: 20px;
+    }
+    .tbl-curios-col.mod-selected {
+        border: 1px double #0075ff;
+    }
+    .tbl-curios-thead {
+        background-color: #f8fbfb;
+        border-bottom: 1px solid #ebebeb;
+        border-top: 1px solid #ebebeb;
+    }
+    .tbl-curios-tbody tr:first-child {
+        background: linear-gradient(to bottom, #dde5e9 0, rgba(255, 255, 255, 0) 3px);
+    }
+    .tbl-curios-row {
+        border-bottom: 1px solid #ebebeb;
+        border-left: 1px solid #ebebeb;
+    }
+    .tbl-curios-row.mod-invalid {
+        color: #e44a28;
+    }
+    .tbl-curios-row.mod-stats {
+        background: hsl(139, 63%, 96%);
+    }
+    .tbl-curios-row.mod-bl {
+        border-bottom-color: transparent;
+    }
+    .tbl-curios-cell {
+        border-right: 1px solid #ebebeb;
+        padding: 5px;
+    }
+    .tbl-curios-thead .tbl-curios-cell {
+        color: #727879;
+    }
+    .tbl-curios-cell:nth-child(n+4) {
+        text-align: right;
+        width: 132px;
+        word-break: break-word;
+    }
+    .tbl-curios-cell.mod-bl {
+        border-right-color: transparent;
+    }
+    .tbl-curios-cell .fa {
+        margin-left: 3px;
+    }
+    .tbl-curios-cell .fa-check-circle {
+        color: limegreen;
+    }
+    .curios-import-errors {
+        margin-top: 15px;
+        max-width: 90ch;
+    }
+    .curios-errors {
+        margin-bottom: 20px;
+    }
+    .curios-errors > :first-child {
+        border-bottom: 1px dotted hsla(0, 45%, 45%, .33);
+        border-radius: 3px;
+        color: #944646;
+        font-weight: bold;
+    }
+    .curios-errors > :nth-child(n+2) {
+        border-bottom: 1px dotted hsla(0, 45%, 45%, .33);
+        background-color: hsla(0, 0%, 100%, .20);
+        border-radius: 3px;
+        color: #944646;
+        padding: 1px 3px;
+    }
+    .curios-error-filename {
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+    .alert.mod-import-completed {
+        margin-top: 15px;
+        max-width: 90ch;
+    }
+</style>
+<div id="curios-import">
+    <ul class="nav nav-tabs mod-steps">
+        <li class="nav-item" @click="document.location.reload()" :class="{'active': !(imported || resultsLoaded), 'done': imported || resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">1</span>{{ 'ChooseFile'|trans({}, appContext) }}</a></li>
+        <li class="nav-item" :class="{'active': !imported && resultsLoaded, 'done': resultsLoaded}"><a class="nav-link u-block"><span class="step u-inline-block">2</span>{{ 'ImportPreview'|trans({}, appContext) }}</a></li>
+        <li class="nav-item" :class="{'active': imported}"><a class="nav-link u-block"><span class="step u-inline-block">3</span>{{ 'ImportComplete'|trans({}, appContext) }}</a></li>
+    </ul>
+    <div v-if="imported" class="alert alert-info mod-import-completed">
+        <p>{{ 'ImportSuccessful'|trans({}, appContext) }}</p>
+        <p v-if="missingUsers.length > 0">{{ 'NoResultsSomeStudents'|trans({}, appContext)|raw }}</p>
+        <p><a :href="evaluationUrl" class="u-fw-semibold"><i class="fa fa-arrow-right"></i> {{ 'GoToEvaluation'|trans({}, appContext) }}</a></p>
+    </div>
+    <template v-else-if="resultsLoaded">
+    <div class="curios-import-info u-flex u-align-items-start">
+        <div v-if="needsTitle" class="curios-import-title u-flex u-align-items-baseline u-gap-small">
+            <label for="import-title">Titel:</label>
+            <input id="import-title" class="form-control" :class="{'input_warning': titleExists}" autocomplete="off" name="title" type="text" v-model="title" />
+        </div>
+        <div>{{ 'ImportResultsOverview'|trans({}, appContext)|raw }} <span v-if="selectableFields.length === 1">{{ 'RememberToImport'|trans({}, appContext)|raw }}</span><span v-else>{{ 'SelectDifferentColumn'|trans({}, appContext)|raw }}</span> <span v-if="hasInvalidResults">{{ 'ImportOnlyValidResults'|trans({}, appContext) }}</span></div>
+        <div class="u-flex" v-if="selectableFields.length > 1" :class="selectableFields.length > 2 ? 'u-flex-column' : 'u-gap-small-2x'">
+            <div v-for="(field, col_index) in fields" v-if="col_index > 2">
+                <input type="radio" name="col_select" :id="'col_select_' + col_index" :checked="selected_col === col_index" @change="selectCol(col_index)" />
+                <label :for="'col_select_' + col_index">${field.label}</label>
+            </div>
+        </div>
+        <div class="u-flex u-align-items-baseline u-gap-small-2x">
+            <button class="btn btn-primary" @click="uploadResults" :disabled="selected_col === -1" :title="selected_col === -1 ? '{{ 'SelectColumn'|trans({}, appContext) }}' : ''"><span v-if="selected_col !== -1" class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> {{ 'Import'|trans({}, appContext) }}</button>
+            <em class="u-muted" v-if="selected_col === -1">{{ 'NoColumnSelected'|trans({}, appContext) }}</em>
+        </div>
+    </div>
+    <ul v-if="hasInvalidResults" class="nav mod-imports u-flex u-align-items-baseline" role="tablist">
+        <li role="presentation" :class="{active: tab === 'all'}" @click="tab = 'all'"><a aria-controls="curios-table" role="tab">{{ 'AllImports'|trans({}, appContext) }}</a></li>
+        <li role="presentation" :class="{active: tab === 'valid'}" @click="tab = 'valid'"><a aria-controls="curios-table" role="tab">{{ 'ValidImports'|trans({}, appContext) }}</a></li>
+        <li role="presentation" :class="{active: tab === 'invalid'}" @click="tab = 'invalid'"><a aria-controls="curios-table" role="tab">{{ 'NotSubscribed'|trans({}, appContext) }}<span class="badge mod-invalid">${invalidResultRows.length}</span></a></li>
+    </ul>
+    <table id="curios-table" class="curios-table" :key="'tbl_' + selected_col">
+        <colgroup>
+            <col v-for="(field, col_index) in fields" :key="'col_' + col_index" class="tbl-curios-col" :class="{'mod-selected': selected_col === col_index}" />
+        </colgroup>
+        <thead class="tbl-curios-thead">
+            <tr class="tbl-curios-row">
+                <th v-for="field in fields" class="tbl-curios-cell">${field.label}</th>
+            </tr>
+        </thead>
+        <tbody class="tbl-curios-tbody" v-if="showAll || !hasInvalidResults">
+            <tr v-for="result in results" class="tbl-curios-row" :class="{ 'mod-invalid': !result.valid }">
+                <td v-for="field in fields" class="tbl-curios-cell" :title="(!result.valid && field.key === 'id') ? '{{ 'UserNotInCourse'|trans({}, appContext) }}' : ''">
+                    ${ result[field.key] }<template v-if="field.key === 'id'">
+                        <i aria-hidden="true" class="fa" :class="result.valid ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+                        <span v-if="!result.valid" class="sr-only">{{ 'UserNotInCourse'|trans({}, appContext) }}</span>
+                    </template>
+                </td>
+            </tr>
+            <tr v-for="(stat, row_index) in stats" class="tbl-curios-row mod-stats" :class="{'mod-bl': row_index < stats.length - 1}">
+                <td v-for="(field, col_index) in fields" class="tbl-curios-cell" :class="{'mod-bl': col_index < 2 }">
+                    ${ stat[field.key] }
+                </td>
+            </tr>
+        </tbody>
+        <tbody class="tbl-curios-tbody" v-else-if="showValid || showInvalid">
+            <tr v-for="result in filteredResultRows" class="tbl-curios-row" :class="{'mod-invalid': showInvalid}">
+                <td v-for="field in fields" class="tbl-curios-cell">${ result[field.key] }</td>
+            </tr>
+        </tbody>
+    </table>
+    </template>
+    <template v-else>
+    <template v-if="!hasError">
+        <input type="file" name="file" id="file" class="inputfile" @change="filename=$event.target.value.split('\\').pop()">
+        <div class="u-flex" style="margin-top: 20px;">
+            <label for="file" class="btn btn-default lbl-input-file u-fw-normal" :class="{'mod-selected': !!filename}" title="{{ 'SelectFile'|trans({}, appContext) }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                <span>${ filename || '{{ 'SelectFile'|trans({}, appContext) }}' }</span></label>
+            <button v-if="filename" id="uploadbutton" type="button" value="Upload" @click="uploadCSV" class="btn btn-primary" :disabled="hasError">{{ 'Upload'|trans({}, commonContext) }}</button>
+        </div>
+    </template>
+    <div v-else class="curios-import-errors alert alert-danger">
+        <span class="curios-error-filename u-inline-block u-fw-semibold">${filename}:</span>
+        <div class="curios-errors" v-html="error"></div>
+        <div class="u-fw-semibold">{{ 'CorrectMistakes'|trans({}, appContext) }} <a href="#" @click.stop="document.location.reload()">{{ 'ReuploadResults'|trans({}, appContext) }}</a>.</div>
+    </div>
+    </template>
+</div>
+<script>
+    $(document).ready(function () {
+        var csrf_token = '{{ csrf_token('ComponentToken') }}';
+
+        new Vue({
+            el: '#curios-import',
+            delimiters: ['${', '}'],
+            data: {
+                tab: 'all',
+                selected_col: 3,
+                filename: '',
+                title: false,
+                titleExists: false,
+                needsTitle: false,
+                results: [],
+                stats: [],
+                fields: [],
+                hasError: false,
+                imported: false,
+                evaluationUrl: '{{ EVALUATION_URL|raw }}',
+                missingUsers: []
+            },
+            computed: {
+                resultsLoaded() {
+                    return this.fields.length > 0;
+                },
+                showValid() {
+                    return this.tab === 'valid';
+                },
+                showInvalid() {
+                    return this.tab === 'invalid';
+                },
+                showAll() {
+                    return this.tab === 'all';
+                },
+                selectableFields() {
+                    return this.fields.slice(3);
+                },
+                validResultRows() {
+                    return this.results.filter(function (v) { return v.valid; });
+                },
+                invalidResultRows() {
+                    return this.results.filter(function (v) { return !v.valid; });
+                },
+                hasInvalidResults() {
+                    return this.invalidResultRows.length > 0;
+                },
+                filteredResultRows() {
+                    if (this.showValid) { return this.validResultRows; }
+                    if (this.showInvalid) { return this.invalidResultRows; }
+                    return this.result_rows;
+                }
+            },
+
+            methods: {
+                selectCol(index) {
+                    if (index > 2) {
+                        this.selected_col = index;
+                    }
+                },
+                handleError(msg) {
+                    this.hasError = true;
+                    this.error = msg;
+                },
+                uploadCSV() {
+                    var file_data = $('#file').prop('files')[0];
+                    var form_data = new FormData();
+                    form_data.append('_csrf_token', csrf_token);
+                    form_data.append('file', file_data);
+
+                    $.ajax({
+                        url: '{{ PROCESS_CSV_URL|raw }}',
+                        type: 'post',
+                        enctype: 'multipart/form-data',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: form_data,
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }).done(function(data) {
+                        if (data.result_code === 200) {
+                            var properties = data.properties;
+                            this.fields = properties.fields;
+                            for (var i = 0; i < this.fields.length; i += 1) {
+                                this.fields[i].variant = 'tbl-curios-cell';
+                                this.fields[i].sortable = true;
+                            }
+                            this.results = properties.results;
+                            this.stats = properties.stats;
+                            this.needsTitle = !!properties['needs_title'];
+                            if (this.needsTitle) {
+                                this.title = properties.title;
+                                this.titleExists = properties.title_exists;
+                            }
+                        } else if (data.result_code === 500) {
+                            this.handleError(data.result_message);
+                        }
+                    }.bind(this)).fail(function (jqXHR) {
+                        this.handleError('Error');
+                    }.bind(this));
+                },
+                uploadResults() {
+                    if (this.selected_col < 3 || this.selected_col >= this.fields.length) { return; }
+                    if (this.needsTitle && !this.title) { return; } // todo: display error
+
+                    var data = {};
+                    data['_csrf_token'] = csrf_token;
+                    var key = this.fields[this.selected_col].key;
+                    data.results = this.validResultRows.map(function(v) {
+                        return {'id': v['user_id'], 'score': v[key]};
+                    });
+                    if (this.needsTitle) {
+                        data.title = this.title;
+                    }
+
+                    $.ajax({
+                        url: '{{ IMPORT_URL|raw }}',
+                        method: 'post',
+                        dataType: 'json',
+                        accepts: {
+                            json: 'application/json'
+                        },
+                        data: data
+                    }).done(function(data) {
+                        this.missingUsers = data.properties.missing_users;
+                        if (data.properties.publicationId !== undefined) {
+                            this.evaluationUrl = this.evaluationUrl.replace('__PUBLICATION_ID__', data.properties.publicationId);
+                        }
+                        this.imported = true;
+                    }.bind(this)).fail(function (jqXHR) {
+                        this.handleError('Error');
+                    }.bind(this));
+                }
+            }
+        });
+    });
+</script>
+{{ FOOTER|raw }}

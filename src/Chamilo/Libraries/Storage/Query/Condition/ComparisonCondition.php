@@ -87,9 +87,9 @@ class ComparisonCondition extends Condition
     /**
      * Constructor
      *
-     * @param $name string
+     * @param $name string|ConditionVariable
      * @param $operator int
-     * @param $value string
+     * @param $value string|ConditionVariable
      * @param $storageUnit string
      * @param $isAlias boolean
      */

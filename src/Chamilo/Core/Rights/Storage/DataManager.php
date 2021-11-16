@@ -200,13 +200,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = new DataClassProperties();
         $properties->add(new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID));
 
-        $conditions[] = $entity_condition;
         $conditions[] = new InCondition(
             new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID),
             $location_ids);
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable($context_class, $context_class::PROPERTY_RIGHT_ID),
             new StaticConditionVariable($right));
+        $conditions[] = $entity_condition;
         $condition = new AndCondition($conditions);
 
         $parameters = new RecordRetrievesParameters($properties, $condition);

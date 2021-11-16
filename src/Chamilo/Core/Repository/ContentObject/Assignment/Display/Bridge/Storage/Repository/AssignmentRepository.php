@@ -23,6 +23,8 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition;
+use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
@@ -302,7 +304,7 @@ abstract class AssignmentRepository
      * @return \Chamilo\Libraries\Storage\Iterator\RecordIterator
      */
     protected function findTargetsForEntityType(
-        $entityType, Condition $condition = null, Condition $joinCondition = null, FilterParameters $filterParameters,
+        $entityType, Condition $entitiesCondition, Condition $contextCondition, FilterParameters $filterParameters,
         DataClassProperties $properties, $baseClass, $baseVariable, Condition $havingCondition = null
     )
     {
@@ -349,7 +351,7 @@ abstract class AssignmentRepository
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_ID)
         );
 
-        ($joinCondition instanceof Condition) ? $joinConditions[] = $joinCondition : null;
+        $joinConditions[] = $contextCondition;
 
         $joinConditions[] = new EqualityCondition(
             new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ENTITY_TYPE),
@@ -367,6 +369,11 @@ abstract class AssignmentRepository
         $parameters->setJoins($joins);
         $parameters->setGroupBy($group_by);
         $parameters->setHavingCondition($havingCondition);
+
+        $conditions = [];
+        $conditions[] = $entitiesCondition;
+//        $conditions[] = $contextCondition;
+        $condition = new OrCondition($conditions);
 
         $this->filterParametersTranslator->translateFilterParameters($filterParameters, $searchProperties, $parameters, $condition);
 

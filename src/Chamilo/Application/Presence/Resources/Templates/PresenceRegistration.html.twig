@@ -1,0 +1,76 @@
+{{ HEADER|raw }}
+
+<style>
+    body {
+        {% if USER_IN_PRESENCE_LIST %}
+        background-color: rgb(165, 202, 114);
+        {% else %}
+        background-color: rgb(239, 135, 103);
+        {% endif %}
+    }
+
+    .presence-registration-container {
+        max-width: 600px;
+        background-color: #f8f8f8;
+        font-size: 15px;
+        border: 1px solid #dddddd;
+    }
+
+    .presence-registration-container h3 {
+        margin-bottom: 30px;
+    }
+
+    .presence-registration-container p {
+        margin-bottom: 17px;
+    }
+
+    .user-identification {
+        margin-bottom: 17px;
+        margin-top: 17px;
+    }
+
+    .user-identification img {
+        max-height: 200px;
+        margin-bottom: 7px;
+    }
+
+    .check-out-confirm {
+        background-color: rgb(165, 202, 114);
+        text-align: center;
+        padding: 7px;
+        color: white;
+    }
+</style>
+
+<div class="container presence-registration-container">
+    <h3>Welkom {{ USER.get_fullname() }}</h3>
+
+    {% if USER_IN_PRESENCE_LIST %}
+        <p>Jouw aanwezigheid werd succesvol geregistreerd op <strong>{{ REGISTRATION_ENTRY.getCheckedInDate|date('d/m/Y - H:i') }}</strong></p>
+    {% else %}
+        <p>
+            We vinden je helaas niet terug in onze lijst van studenten.
+            Voor de zekerheid hebben we je aanwezigheid alsnog geregistreeerd op <strong>{{ REGISTRATION_ENTRY.getCheckedInDate|date('d/m/Y - H:i') }}</strong>
+        </p>
+        <p>Spreek de aanwezige toezichter aan om verdere afspraken te maken over de rechtsgeldigheid van jouw aanwezigheid.</p>
+    {% endif %}
+
+    {% if REGISTRATION_ENTRY.getCheckedOutDate() %}
+        <p class="check-out-confirm"><span class="fa fa-check-circle"></span> <strong>Je bent succesvol uitgecheckt op {{ REGISTRATION_ENTRY.getCheckedOutDate|date('d/m/Y - H:i') }}</strong></p>
+    {% endif %}
+
+    <p>Volg steeds de afspraken van de aanwezige toezichter betreffende de aanwezigheidsregistratie. Indien nodig kan je via onderstaande gegevens jouw identiteit bevestigen aan de toezichter.</p>
+
+    <div class="text-center user-identification">
+        <img src="{{ USER_PICTURE_URL }}"  alt="user_identification_picture"/>
+        <div>{{ USER.get_fullname() }}</div>
+        <div>{{ USER.get_email() }}</div>
+        <div>{{ USER.get_official_code() }}</div>
+    </div>
+
+    {% if PRESENCE_VERIFICATION_ICON %}
+        <div style="margin: 30px auto 17px;width: fit-content;">{{ PRESENCE_VERIFICATION_ICON|raw }}</div>
+    {% endif %}
+</div>
+
+{{ FOOTER|raw }}

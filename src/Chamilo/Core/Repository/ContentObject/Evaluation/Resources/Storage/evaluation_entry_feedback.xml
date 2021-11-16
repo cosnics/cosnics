@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="repository_evaluation_entry_feedback">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+        <property name="entry_id" type="integer" unsigned="1" notnull="1" />
+        <property name="creation_date" type="integer" unsigned="1" notnull="1" />
+        <property name="modification_date" type="integer" unsigned="1" notnull="1" />
+        <property name="user_id" type="integer" unsigned="1" notnull="1" />
+        <property name="feedback_content_object_id" type="integer" unsigned="1" notnull="1" />
+        <property name="is_private" type="boolean" notnull="1" default="0" />
+    </properties>
+    <index name="user_id">
+        <indexproperty name="user_id" />
+    </index>
+    <index name="entry_id">
+        <indexproperty name="entry_id" />
+    </index>
+</object>

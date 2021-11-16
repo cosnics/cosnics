@@ -701,3 +701,4 @@ NotificationFilterCourse = "Verberg alle meldingen van de cursus <b>{COURSE_TITL
 NotificationFilterTool = "Verberg alle meldingen van de <b>{TOOL}</b> tool in de cursus <b>{COURSE_TITLE}</b>"
 SortName = "Sorteernaam"
 Others = "Overige"
+CoursesClosedWarning = "Sommige cursussen hebben een <strong>slot-icoon voor hun titel staan en zijn daardoor niet toegankelijk</strong>. Dit komt omdat de docent deze cursus nog niet beschikbaar heeft gemaakt voor studenten. De docent zal deze cursus op het gepaste moment beschikbaar stellen voor studenten."

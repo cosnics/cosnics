@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Feedback\FeedbackNotificationSupport;
 use Chamilo\Core\Repository\Feedback\Form\FeedbackForm;
 use Chamilo\Core\Repository\Feedback\Generator\ActionsGenerator;
 use Chamilo\Core\Repository\Feedback\Manager;
+use Chamilo\Core\Repository\Feedback\PrivateFeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Notification;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
@@ -44,7 +45,10 @@ class BrowserComponent extends Manager implements DelegateComponent
             throw new NotAllowedException();
         }
 
-        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url());
+        $supportsPrivateFeedback = $this->feedbackServiceBridge->supportsPrivateFeedback();
+        $canViewPrivateFeedback = $supportsPrivateFeedback && $this->feedbackRightsServiceBridge->canViewPrivateFeedback();
+
+        $form = new FeedbackForm($this, $this->getContentObjectRepository(), $this->get_url(), null, $supportsPrivateFeedback, $canViewPrivateFeedback);
 
         if ($form->validate())
         {
@@ -61,13 +65,18 @@ class BrowserComponent extends Manager implements DelegateComponent
             $feedbackContentObject->set_title('Feedback');
             $feedbackContentObject->set_state(ContentObject::STATE_INACTIVE);
             $success = $feedbackContentObject->create();
-
             $this->getContentObjectIncluder()->scanForResourcesAndIncludeContentObjects($feedbackContentObject);
 
-            if($success)
+            $isPrivate = false;
+            if ($supportsPrivateFeedback)
+            {
+                $isPrivate = (bool) $values[PrivateFeedbackSupport::PROPERTY_PRIVATE];
+            }
+
+            if ($success)
             {
                 $feedback =
-                    $this->feedbackServiceBridge->createFeedback($this->getUser(), $feedbackContentObject);
+                    $this->feedbackServiceBridge->createFeedback($this->getUser(), $feedbackContentObject, $isPrivate);
 
                 $success = $feedback instanceof Feedback;
             }
@@ -84,7 +93,6 @@ class BrowserComponent extends Manager implements DelegateComponent
             );
         }
         else
-
         {
             $html = array();
 
@@ -93,7 +101,7 @@ class BrowserComponent extends Manager implements DelegateComponent
                 $this->getPager()->getCurrentRangeOffset()
             );
 
-            $feedbackCount = $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+            $feedbackCount = $this->getFeedbackCount($supportsPrivateFeedback, $canViewPrivateFeedback, $feedbacks);
 
             if ($feedbackCount == 0)
             {
@@ -129,6 +137,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 foreach ($feedbacks as $feedback)
                 {
+                    if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+                    {
+                        if (!$canViewPrivateFeedback)
+                        {
+                            continue;
+                        }
+                    }
                     $html[] = '<div class="list-group-item" id="feedback' . $feedback->getId() . '">';
 
                     $html[] = '<div style="display:flex;">';
@@ -140,12 +155,19 @@ class BrowserComponent extends Manager implements DelegateComponent
                         )
                     );
 
+                    $isPrivateHTML = '';
+                    if ($supportsPrivateFeedback && $feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+                    {
+                        // Todo: Move styling out
+                        $isPrivateHTML = '<div style="margin-top: -2px;"><i class="glyphicon glyphicon-eye-close" style="color: #d35555;font-size: 1.2rem;"></i><em style="font-size: 11px;margin-left: 4px;color: #777;">' . Translation::get('IsPrivate') . '</em></div>';
+                    }
+
                     $html[] = '<img class="panel-feedback-profile" src="' . $profilePhotoUrl->getUrl() . '" />';
 
                     $html[] = '<h4 class="list-group-item-heading" style="flex-grow: 2;">' .
                         $feedback->get_user()->get_fullname() .
                         '<div class="feedback-date">' . $this->format_date($feedback->get_creation_date()) .
-                        '</div></h4>';
+                        '</div>' . $isPrivateHTML . '</h4>';
 
                     $allowedToUpdateFeedback = $this->feedbackRightsServiceBridge->canEditFeedback($feedback);
                     $allowedToDeleteFeedback = $this->feedbackRightsServiceBridge->canDeleteFeedback($feedback);
@@ -422,5 +444,40 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
 
         return $this->pagerRenderer;
+    }
+
+    /**
+     * @param bool $supportsPrivateFeedback
+     * @param bool $canViewPrivateFeedback
+     * @param $feedbacks
+     * @return int
+     */
+    protected function getFeedbackCount(bool $supportsPrivateFeedback, bool $canViewPrivateFeedback, $feedbacks): int
+    {
+        if (!$supportsPrivateFeedback)
+        {
+            return $feedbacks instanceof ResultSet ? $feedbacks->size() : count($feedbacks);
+        }
+
+        if ($feedbacks instanceof ResultSet)
+        {
+            $feedbacks = $feedbacks->as_array();
+        }
+
+        $feedbackCount = 0;
+
+        foreach ($feedbacks as $feedback)
+        {
+            if ($feedback instanceof PrivateFeedbackSupport && $feedback->isPrivate())
+            {
+                $feedbackCount += $canViewPrivateFeedback ? 1 : 0;
+            }
+            else
+            {
+                $feedbackCount += 1;
+            }
+        }
+
+        return $feedbackCount;
     }
 }

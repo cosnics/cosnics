@@ -1,0 +1,7 @@
+Properties = "Properties"
+BrowserComponent = "View Presence"
+UsersEntity = "Students"
+PresenceBuilder = "Builder"
+CheckedOutYes = "yes"
+CheckedOutNo = "no"
+PrintQR = "Display / Print QR code for self registration"

@@ -8,6 +8,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Tabs\DynamicAction;
 use Chamilo\Libraries\Format\Theme;
 use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Utilities\Utilities;
 
 class Manager implements ActionsSupportInterface
 {
@@ -75,6 +76,17 @@ class Manager implements ActionsSupportInterface
             Translation::get('LogsViewer'), 
             Translation::get('LogsViewerDescription'), 
             Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/Information'), 
+            $redirect->getUrl());
+
+        $redirect = new Redirect(
+            array(
+                Application::PARAM_CONTEXT => \Chamilo\Core\Admin\Manager::context(),
+                \Chamilo\Core\Admin\Manager::PARAM_ACTION => \Chamilo\Core\Admin\Manager::ACTION_WHOIS_ONLINE));
+
+        $links[] = new DynamicAction(
+            Translation::get('WhoisOnline', [], Utilities::COMMON_LIBRARIES),
+            Translation::get('WhoisOnlineDescription', [], Utilities::COMMON_LIBRARIES),
+            Theme::getInstance()->getImagePath(__NAMESPACE__, 'Admin/List'),
             $redirect->getUrl());
         
         return new Actions(\Chamilo\Core\Admin\Manager::context(), $links);

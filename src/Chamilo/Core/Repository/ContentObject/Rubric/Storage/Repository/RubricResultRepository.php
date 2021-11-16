@@ -90,4 +90,13 @@ class RubricResultRepository extends CommonEntityRepository
     {
         return $this->count(['rubricData' => $rubricData]);
     }
+
+    /**
+     * @param ContextIdentifier $contextIdentifier
+     * @return int
+     */
+    public function countRubricResultsForContextIdentifier(ContextIdentifier $contextIdentifier)
+    {
+        return $this->count(['contextClass' => $contextIdentifier->getContextClass(), 'contextId' => $contextIdentifier->getContextId()]);
+    }
 }

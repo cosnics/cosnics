@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\UserService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceValidationService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultEntryService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\PresenceResultPeriodService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\ExportService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService" autowire="true" />
+        <service id="Chamilo\Core\Repository\ContentObject\Presence\Display\Service\VerificationIconService" autowire="true" />
+    </services>
+</container>

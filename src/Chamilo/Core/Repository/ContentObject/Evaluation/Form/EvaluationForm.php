@@ -15,7 +15,6 @@ use Chamilo\Core\Repository\Form\ContentObjectForm;
  */
 class EvaluationForm extends ContentObjectForm
 {
-
     // Inherited
     public function create_content_object()
     {

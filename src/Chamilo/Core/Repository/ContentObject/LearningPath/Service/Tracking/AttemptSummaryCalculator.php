@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking;
 
+use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\AttemptService;
@@ -217,6 +218,8 @@ class AttemptSummaryCalculator
         LearningPath $learningPath, User $user, TreeNode $treeNode
     )
     {
+        $isAssignment = $treeNode->getContentObject() instanceof Assignment;
+
         $treeNodeAttempts = $this->attemptService->getTreeNodeAttemptsForTreeNode($learningPath, $user, $treeNode);
 
         do
@@ -225,7 +228,9 @@ class AttemptSummaryCalculator
 
             if ($treeNodeAttempt instanceof TreeNodeAttempt && $treeNodeAttempt->isCompleted())
             {
-                return (int) $treeNodeAttempt->get_score();
+                $score = (int) $treeNodeAttempt->get_score();
+                if(!$isAssignment || $score > 0)
+                    return $score;
             }
         }
         while($treeNodeAttempt instanceof TreeNodeAttempt);

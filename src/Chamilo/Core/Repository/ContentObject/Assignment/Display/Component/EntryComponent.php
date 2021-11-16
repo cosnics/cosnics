@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreServic
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableParameters;
+use Chamilo\Core\Repository\ContentObject\Presence\Display\Service\QRService;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
@@ -289,7 +290,8 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
             'CAN_USE_RUBRIC_EVALUATION' => $canUseRubricEvaluation,
             'IS_LATE_ASSIGNMENT' => $this->getAssignmentServiceBridge()->isDateAfterAssignmentEndTime(
                 $this->getEntry()->getSubmitted()
-            )
+            ),
+            'QR_CODE' => $this->getQrCodeForEntry()
         ];
 
         return array_merge($baseParameters, $extendParameters);
@@ -952,5 +954,18 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         }
 
         return $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
+    }
+
+    protected function getQrCodeForEntry()
+    {
+        return $this->getQRService()->getQRForURL($this->get_url(), 250);
+    }
+
+    /**
+     * @return QRService
+     */
+    protected function getQRService()
+    {
+        return $this->getService(QRService::class);
     }
 }

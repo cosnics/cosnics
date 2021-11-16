@@ -1,0 +1,12 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = application\weblcms\tool\evaluation
+; Language = de
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Bewertungen"
+InstallTypeName = ""
+BrowserComponent = "Bewertungen durchsuchen"
+ViewerComponent = "Bewertung ansehen"
+PublisherComponent = "Bewertung veröffentlichen"
+UpdaterComponent = "Bewertung bearbeiten"
+IntroductionPublisherComponent = "Vorstellung veröffentlichen"

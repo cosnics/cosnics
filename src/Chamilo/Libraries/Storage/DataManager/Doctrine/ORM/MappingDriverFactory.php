@@ -137,7 +137,7 @@ class MappingDriverFactory
         return new AnnotationDriver(
             new CachedReader(
                 new AnnotationReader(),
-                new PhpFileCache(Path::getInstance()->getCachePath(__NAMESPACE__) . '/Annotations')
+                new PhpFileCache(Path::getInstance()->getCachePath(__NAMESPACE__) . 'Annotations')
             ),
             (array) $paths
         );

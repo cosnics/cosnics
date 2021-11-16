@@ -23,7 +23,7 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view">
-            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedCriterium = null">
+            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
                 <!--<div class="rubric-header-fill" aria-hidden="true"></div>-->
                 <ul class="rubric-header mod-res">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
@@ -36,15 +36,15 @@
                     <li v-if="useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
-                    <div class="treenode-title-header-wrap">
+                    <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-title-header mod-res">
                             <div class="treenode-title-header-pre"></div>
                             <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
                         </div>
                     </div>
-                    <div class="treenode-rubric-results">
+                    <div class="treenode-rubric-results" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback}" v-for="evaluation in evaluations">
+                            <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                 {{ useScores ? getClusterScore(cluster, evaluation) : '' }}
                             </div>
@@ -53,15 +53,15 @@
                     </div>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
                         <template v-if="category.title && rubric.getAllCriteria(category).length > 0">
-                            <div class="treenode-title-header-wrap">
+                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-title-header mod-res" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
                                     <div class="treenode-title-header-pre mod-category"></div>
                                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                                 </div>
                             </div>
-                            <div class="treenode-rubric-results">
+                            <div class="treenode-rubric-results" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback}" v-for="evaluation in evaluations">
+                                    <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                         {{ useScores ? getCategoryScore(category, evaluation) : '' }}
                                     </div>
@@ -70,19 +70,19 @@
                             </div>
                         </template>
                         <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
-                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">
+                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-title-header mod-res" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                                     <div class="treenode-title-header-pre mod-criterium"></div>
                                     <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                                 </div>
                             </div>
-                            <div class="treenode-rubric-results" @click.stop="selectedCriterium = criterium" @mouseover="highlightedCriterium = criterium" @mouseout="highlightedCriterium = null">
+                            <div class="treenode-rubric-results" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" v-for="evaluation in evaluations">
+                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                         {{ useScores ? evaluation.score : evaluation.level.title }}
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedCriterium === criterium, 'is-highlighted': highlightedCriterium === criterium}" v-if="useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">{{ maxScore }}</div>
                                 </div>
                             </div>
                         </template>
@@ -99,7 +99,7 @@
                     </div>
                 </template>
             </div>
-            <criterium-results-view v-if="selectedCriterium" :rubric="rubric" :criterium="selectedCriterium" :evaluations="getCriteriumRowData(selectedCriterium).evaluations" @close="selectedCriterium = null"></criterium-results-view>
+            <tree-node-results-view v-if="selectedTreeNode" :rubric="rubric" :tree-node="selectedTreeNode" :evaluations="getTreeNodeRowData(selectedTreeNode).evaluations" @close="selectedTreeNode = null"></tree-node-results-view>
         </div>
     </div>
 </template>
@@ -110,7 +110,7 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
-    import CriteriumResultsView from '../Components/CriteriumResultsView.vue';
+    import TreeNodeResultsView from '../Components/TreeNodeResultsView.vue';
     import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
 
     function add(v1: number, v2: number) {
@@ -122,7 +122,7 @@
     }
 
     @Component({
-        components: { CriteriumResultsView },
+        components: { TreeNodeResultsView },
         filters: {
             capitalize: function (value: any) {
                 if (!value) { return ''; }
@@ -138,8 +138,8 @@
         }
     })
     export default class RubricResult extends Vue {
-        private selectedCriterium: Criterium|null = null;
-        private highlightedCriterium: Criterium|null = null;
+        private selectedTreeNode: Criterium|Category|Cluster|null = null;
+        private highlightedTreeNode: Criterium|Category|Cluster|null = null;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
@@ -163,24 +163,45 @@
             return !this.rubric.useScores;
         }
 
+        getTreeNodeRowData(treeNode: TreeNode) {
+            if (treeNode instanceof Criterium) {
+                return this.getCriteriumRowData(treeNode);
+            }
+            if (treeNode instanceof Category) {
+                return this.getCategoryRowData(treeNode);
+            }
+            if (treeNode instanceof Cluster) {
+                return this.getClusterRowData(treeNode);
+            }
+            return { maxScore: 0, evaluations: [] };
+        }
+
         getClusterRowsData(rubric: Rubric) {
             return rubric.clusters
                 .filter(cluster => cluster.hasChildren())
-                .map(cluster => ({
-                    cluster,
-                    maxScore: this.getClusterMaxScore(cluster),
-                    evaluations: this.getTreeNodeResult(cluster).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
-                }));
+                .map(this.getClusterRowData);
+        }
+
+        getClusterRowData(cluster: Cluster) {
+            return {
+                cluster,
+                maxScore: this.getClusterMaxScore(cluster),
+                evaluations: this.getTreeNodeResult(cluster).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+            };
         }
 
         getCategoryRowsData(cluster: Cluster) {
             return cluster.categories
                 .filter(category => category.hasChildren())
-                .map(category => ({
-                    category,
-                    maxScore: this.getCategoryMaxScore(category),
-                    evaluations: this.getTreeNodeResult(category).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
-                }));
+                .map(this.getCategoryRowData);
+        }
+
+        getCategoryRowData(category: Category) {
+            return {
+                category,
+                maxScore: this.getCategoryMaxScore(category),
+                evaluations: this.getTreeNodeResult(category).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+            };
         }
 
         getCriteriumRowsData(category: Category) {

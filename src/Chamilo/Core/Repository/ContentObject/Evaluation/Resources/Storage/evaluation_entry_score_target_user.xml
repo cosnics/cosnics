@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object name="repository_evaluation_entry_score_target_user">
+    <properties>
+        <property name="id" type="integer" unsigned="1" notnull="1" autoincrement="true" />
+        <property name="score_id" type="integer" unsigned="1" notnull="1" />
+        <property name="target_user_id" type="integer" unsigned="1" notnull="1" />
+    </properties>
+    <index name="score_id">
+        <indexproperty name="score_id" />
+    </index>
+    <index name="target_user_id">
+        <indexproperty name="target_user_id" />
+    </index>
+</object>

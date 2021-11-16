@@ -823,7 +823,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $forever_conditions = array();
 
             $forever_conditions[] = new EqualityCondition($from_date_variable, new StaticConditionVariable(0));
-            $forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
+            //$forever_conditions[] = new EqualityCondition($to_date_variable, new StaticConditionVariable(0));
 
             $between_conditions = array();
 

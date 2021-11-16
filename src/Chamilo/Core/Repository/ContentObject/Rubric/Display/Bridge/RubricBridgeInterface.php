@@ -30,6 +30,12 @@ interface RubricBridgeInterface
     /**
      * @param User $user
      * @param float $totalScore
+     * @param float $maxScore
      */
     public function saveScore(User $user, float $totalScore, float $maxScore);
+
+    /**
+     * @return array|null
+     */
+    public function getPostSaveRedirectParameters();
 }

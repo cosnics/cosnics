@@ -33,6 +33,7 @@ class DownloaderComponent extends Manager
         }
         catch(\Exception $exception)
         {
+            $this->getExceptionLogger()->logException($exception);
             throw new UserException($this->getTranslator()->trans('EntriesNotDownloadable', [], Manager::context()));
         }
     }
