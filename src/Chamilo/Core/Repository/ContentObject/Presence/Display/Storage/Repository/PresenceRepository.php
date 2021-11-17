@@ -5,6 +5,7 @@ namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Reposit
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\Presence;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultPeriod;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
+use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
@@ -15,11 +16,14 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Query\FilterParametersTranslator;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -276,6 +280,121 @@ class PresenceRepository
 
         $parameters = new RecordRetrievesParameters($retrieveProperties, $condition);
         $parameters->setJoins($joins);
+
+        return $this->dataClassRepository->records($class_name, $parameters);
+    }
+
+    /**
+     * @param array $statusIds
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return RecordIterator
+     */
+    public function getPresenceResultPeriodChoicesStats(array $statusIds, ContextIdentifier $contextIdentifier): RecordIterator
+    {
+        $class_name = PresenceResultEntry::class_name();
+
+        $retrieveProperties = new DataClassProperties([
+            new FixedPropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID, 'period_id'),
+            new PropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_CHOICE_ID),
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID),
+                'count'
+            )
+        ]);
+
+        $joins = new Joins();
+        $periodJoinConditions = array();
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable($contextIdentifier->getContextClass())
+        );
+
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_ID),
+            new StaticConditionVariable($contextIdentifier->getContextId())
+        );
+
+        $joins->add(new Join(PresenceResultPeriod::class_name(), new AndCondition($periodJoinConditions), Join::TYPE_LEFT));
+
+        $condition = new AndCondition([
+            new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID)
+            ),
+            new InCondition(new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID), $statusIds)
+        ]);
+
+        $group_by = new GroupBy();
+        $group_by->add(new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID));
+        $group_by->add(new PropertyConditionVariable($class_name, PresenceResultEntry::PROPERTY_CHOICE_ID));
+
+        $parameters = new RecordRetrievesParameters($retrieveProperties, $condition);
+        $parameters->setJoins($joins);
+        $parameters->setGroupBy($group_by);
+
+        return $this->dataClassRepository->records($class_name, $parameters);
+    }
+
+    /**
+     * @param array $userIds
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return RecordIterator
+     */
+    public function getPresenceResultPeriodNullChoicesStats(array $userIds, ContextIdentifier $contextIdentifier): RecordIterator
+    {
+        $class_name = User::class_name();
+
+        $retrieveProperties = new DataClassProperties([
+            new FixedPropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID, 'period_id'),
+            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_CHOICE_ID),
+            new FunctionConditionVariable(
+                FunctionConditionVariable::COUNT,
+                new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID),
+                'count'
+            )
+        ]);
+
+        $joins = new Joins();
+        $periodJoinConditions = array();
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_CLASS),
+            new StaticConditionVariable($contextIdentifier->getContextClass())
+        );
+        $periodJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), PresenceResultPeriod::PROPERTY_CONTEXT_ID),
+            new StaticConditionVariable($contextIdentifier->getContextId())
+        );
+
+        $entryJoinConditions = array();
+        $entryJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_PRESENCE_PERIOD_ID),
+            new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID),
+        );
+        $entryJoinConditions[] = new EqualityCondition(
+            new PropertyConditionVariable(PresenceResultEntry::class_name(), PresenceResultEntry::PROPERTY_USER_ID),
+            new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID)
+        );
+
+        $joins->add(new Join(PresenceResultPeriod::class_name(), new AndCondition($periodJoinConditions), Join::TYPE_LEFT));
+        $joins->add(new Join(PresenceResultEntry::class_name(), new AndCondition($entryJoinConditions), Join::TYPE_LEFT));
+
+        $condition = new AndCondition([
+            new InCondition(new PropertyConditionVariable($class_name, DataClass::PROPERTY_ID), $userIds),
+            new EqualityCondition(
+                new PropertyConditionVariable(PresenceResultEntry::class_name(), DataClass::PROPERTY_ID),
+                NULL
+            )
+        ]);
+
+        $group_by = new GroupBy();
+        $group_by->add(new PropertyConditionVariable(PresenceResultPeriod::class_name(), DataClass::PROPERTY_ID));
+
+        $parameters = new RecordRetrievesParameters($retrieveProperties, $condition);
+        $parameters->setJoins($joins);
+        $parameters->setGroupBy($group_by);
 
         return $this->dataClassRepository->records($class_name, $parameters);
     }

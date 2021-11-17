@@ -13,12 +13,14 @@
 }
 </i18n>
 <template>
-    <b-popover target="show-more" :show.sync="isVisible" triggers="click" placement="bottom" custom-class="bulk-status">
+    <b-popover :target="target" :show.sync="isVisible" triggers="click" placement="bottom" custom-class="bulk-status">
         <div class="p-8">
-            <div class="u-flex u-justify-content-center msg-text mb-6">{{ $t('set-students-without-status') }}:</div>
-            <div class="u-flex u-gap-small u-flex-wrap mb-12">
-                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
-                        class="color-code mod-selectable" :class="[status.color, selectedStatus === status ? 'mod-shadow is-selected' : 'mod-shadow-grey']" @click="selectedStatus = status">
+            <div id="lbl-bulk" class="u-flex u-justify-content-center msg-text mb-6">{{ $t('set-students-without-status') }}:</div>
+            <div class="u-flex u-gap-small u-flex-wrap mb-12" role="radiogroup" aria-labelledby="lbl-bulk">
+                <button v-for="(status, index) in presenceStatuses" :key="`status-${index}`" :title="getPresenceStatusTitle(status)"
+                        class="color-code mod-selectable" :class="[status.color, selectedStatus === status ? 'mod-shadow is-selected' : 'mod-shadow-grey']"
+                        role="radio" :aria-checked="selectedStatus === status"
+                        @click="selectedStatus = status">
                     <span>{{ status.code }}</span></button>
             </div>
             <div class="u-flex u-gap-small u-justify-content-end">
@@ -31,7 +33,7 @@
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
-import {PresenceStatus} from '../../types';
+import {PresenceStatus, PresenceStatusDefault} from '../../types';
 
 @Component({
     name: 'bulk-status-popup'
@@ -39,8 +41,10 @@ import {PresenceStatus} from '../../types';
 export default class BulkStatusPopup extends Vue {
     selectedStatus: PresenceStatus|null = null;
 
+    @Prop({type: String, required: true}) readonly target!: string;
     @Prop({type: Boolean, default: false}) readonly isVisible!: boolean;
     @Prop({type: Array, default: () => []}) readonly presenceStatuses!: PresenceStatus[];
+    @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
 
     apply() {
         this.$emit('apply', this.selectedStatus);
@@ -50,6 +54,13 @@ export default class BulkStatusPopup extends Vue {
     cancel() {
         this.$emit('cancel');
         this.selectedStatus = null;
+    }
+
+    getPresenceStatusTitle(status: PresenceStatus): string {
+        if (status.type !== 'custom') {
+            return this.statusDefaults.find(statusDefault => statusDefault.id === status.id)?.title || '';
+        }
+        return status.title || '';
     }
 }
 </script>

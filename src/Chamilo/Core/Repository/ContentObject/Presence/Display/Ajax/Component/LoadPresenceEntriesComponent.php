@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Component;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Ajax\Manager;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\PresenceResultEntryFilterOptions;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,14 +32,20 @@ class LoadPresenceEntriesComponent extends Manager
 
             $useFilters = isset($periodId) && ($withoutStatusSelected || !empty($statusFilters));
 
+            $filterOptions = null;
+
             if ($useFilters)
             {
-                $options = array();
-                $options['statusFilters'] = $statusFilters;
-                $options['periodId'] = $periodId;
-                $options['withoutStatus'] = $withoutStatusSelected;
+                $filterOptions = new PresenceResultEntryFilterOptions();
+                $filterOptions->periodId = $periodId;
+                if (!empty($statusFilters))
+                {
+                    $filterOptions->statusFilters = $statusFilters;
+                }
+                $filterOptions->withoutStatus = $withoutStatusSelected;
+
                 $userIds = $this->getPresenceServiceBridge()->getTargetUserIds($this->createFilterParameters(true));
-                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(), $options);
+                $users = $presenceResultEntryService->getUsers($userIds, $periods, $contextIdentifier, $this->createFilterParameters(), $filterOptions);
             }
             else
             {
@@ -64,7 +71,7 @@ class LoadPresenceEntriesComponent extends Manager
                 {
                     if ($useFilters)
                     {
-                        $resultData['count'] = count($presenceResultEntryService->getUsers($allTargetUserIds, $periods, $contextIdentifier, $this->createFilterParameters(true), $options));
+                        $resultData['count'] = count($presenceResultEntryService->getUsers($allTargetUserIds, $periods, $contextIdentifier, $this->createFilterParameters(true), $filterOptions));
                     }
                     else
                     {

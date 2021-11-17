@@ -10,12 +10,10 @@
 </i18n>
 
 <template>
-    <div>
-        <button :disabled="isSaving || isDisabled" class="btn btn-primary mod-presence-save" @click="$emit('save')">
-            <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin" style="margin-right: 5px"></div>
-            {{ $t('save') }}
-        </button>
-    </div>
+    <button :disabled="isSaving || isDisabled" class="btn btn-primary mod-presence-save" @click="$emit('save')">
+        <div v-if="isSaving" class="glyphicon glyphicon-repeat glyphicon-spin"></div>
+        {{ $t('save') }}
+    </button>
 </template>
 
 <script lang="ts">
@@ -29,3 +27,18 @@ export default class SaveControl extends Vue {
     @Prop({type: Boolean, default: false}) readonly isDisabled!: boolean;
 }
 </script>
+
+<style>
+.btn.mod-presence-save {
+    font-size: 1.7rem;
+    line-height: 1.6;
+}
+
+.btn.mod-presence-save:focus {
+    color: #fff;
+}
+
+.btn.mod-presence-save > .glyphicon {
+    margin-right: 5px;
+}
+</style>

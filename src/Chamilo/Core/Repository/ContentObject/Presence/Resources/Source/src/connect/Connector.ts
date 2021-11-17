@@ -64,6 +64,11 @@ export default class Connector {
         return res.data;
     }
 
+    async loadStatistics() {
+        const res = await axios.get(this.apiConfig.loadStatisticsURL);
+        return res.data;
+    }
+
     // eslint-disable-next-line
     async loadPresence() {
         const res = await axios.get(this.apiConfig.loadPresenceURL);

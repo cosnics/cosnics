@@ -1,5 +1,5 @@
 <template>
-    <button :title="isActive ? title : ''" :disabled="isDisabled" :aria-pressed="isSelected ? 'true': 'false'"
+    <button :title="isActive ? title : ''" :disabled="isDisabled" role="radio" :aria-checked="isSelected ? 'true': 'false'"
             class="color-code"
             :class="[isActive ? status.color : 'mod-disabled', {'mod-selectable': isActive, 'mod-shadow-grey': isActive && !isSelected, 'mod-shadow is-selected': isSelected}]"
             @click="select">

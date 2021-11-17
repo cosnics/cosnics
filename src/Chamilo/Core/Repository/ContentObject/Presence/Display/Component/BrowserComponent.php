@@ -114,6 +114,12 @@ class BrowserComponent extends Manager
                     AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_REGISTERED_PRESENCE_ENTRY_STATUSES
                 ]
             ),
+            'LOAD_STATISTICS_URL' => $this->get_url(
+                [
+                    self::PARAM_ACTION => self::ACTION_AJAX,
+                    AjaxManager::PARAM_ACTION => AjaxManager::ACTION_LOAD_STATISTICS
+                ]
+            ),
             'TOGGLE_PRESENCE_ENTRY_CHECKOUT_URL' => $this->get_url(
                 [
                     self::PARAM_ACTION => self::ACTION_AJAX,
