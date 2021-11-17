@@ -43,6 +43,41 @@
     .tab-pane.mod-pad {
         padding: 10px 15px;
     }
+
+    .lbl-stat-show {
+        color: #337ab7;
+        cursor: pointer;
+        font-weight: normal;
+        text-decoration: none;
+        margin-bottom: 0;
+        padding: 3px 5px;
+    }
+
+    input[type=radio]:checked + .lbl-stat-show {
+        background: #f5f5f5;
+        border-radius: 3px;
+        box-shadow: inset 0 0 2px #e8e8e8;
+        color: #296265;
+        cursor: default;
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-shadow: 0 2px #fcfcfc;
+    }
+
+    input[type=radio]:not(:checked) + .lbl-stat-show:hover {
+        background: #f9f9f9;
+    }
+
+    input[type=radio]:not(:checked) + .lbl-stat-show:hover,
+    input[type=radio]:not(:checked) + .lbl-stat-show:focus {
+        color: #23527c;
+    }
+    .lbl-stat-show:focus {
+        outline: none!important;
+    }
+    input[type=radio]:focus-visible + .lbl-stat-show {
+        border: 1px solid #d6d6d6;
+    }
 </style>
 
 <h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ CONTENT_OBJECT_TITLE }}</h3>
@@ -50,17 +85,19 @@
     <div style="margin: 15px 0 5px 8px" class="u-flex u-align-items-baseline u-gap-small-3x">
         <ul class="nav nav-buttons" role="tablist">
             <li role="presentation" :class="{'active': activeTab === 'entry'}"><a href="#" role="tab" @click="activeTab = 'entry'">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
-            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#" role="tab" @click="showStats">Statistieken</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#" role="tab" @click="showStats">{{ 'Statistics'|trans({}, appContext) }}</a></li>
             <li role="presentation" :class="{'active': activeTab === 'properties'}"><a href="#" role="tab" @click="activeTab = 'properties'">{{ 'Properties'|trans({}, appContext) }}</a></li>
             <li role="presentation" :class="{'active': activeTab === 'builder'}"><a href="#" role="tab" @click="showBuilder">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
-        <div class="u-flex u-gap-small u-align-items-baseline" v-if="activeTab === 'statistics'">
-            <span style="padding: 3px 0;">${ $t('show-by') }:</span>
-            <span v-if="statMode === 'period'" style="padding: 3px 5px;background: #f5f5f5;color: #507177;border-radius: 3px;box-shadow:inset 0 0 2px #e8e8e8;font-size: 14px;">${ $t('period') }</span>
-            <a v-else style="cursor: pointer;text-decoration:none;padding: 3px 5px;" @click="statMode = 'period'">${ $t('period') }</a>
-            <span v-if="statMode === 'student'" style="padding: 3px 5px;background: #f5f5f5;color: #507177;border-radius: 3px;box-shadow:inset 0 0 2px #e8e8e8;font-size: 14px;">Student</span>
-            <a v-else style="cursor: pointer;text-decoration:none;padding: 3px 5px;" @click="statMode = 'student'">Student</a>
-        </div>
+        <template v-if="activeTab === 'statistics'">
+            <label id="show-by" class="u-font-normal" style="margin-right: -8px">${ $t('show-by') }:</label>
+            <div class="u-flex u-gap-small u-align-items-baseline" role="radiogroup" aria-labelledby="show-by">
+                <input type="radio" name="stat-show" id="stat-by-period" class="sr-only" value="period" v-model="statMode">
+                <label for="stat-by-period" class="lbl-stat-show" tabindex="-1">${ $t('period') }</label>
+                <input type="radio" name="stat-show" id="stat-by-student" class="sr-only" value="student" v-model="statMode">
+                <label for="stat-by-student" class="lbl-stat-show" tabindex="-1">Student</label>
+            </div>
+        </template>
     </div>
     <div class="dynamic-visual-tab-content tab-content">
         <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics', 'js-statistics': activeTab === 'statistics' }" id="presence-entry" style="width: max-content; margin-top: 10px">
