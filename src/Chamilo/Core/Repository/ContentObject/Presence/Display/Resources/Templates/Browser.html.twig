@@ -101,7 +101,7 @@
     </div>
     <div class="dynamic-visual-tab-content tab-content">
         <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics', 'js-statistics': activeTab === 'statistics' }" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode" can-edit-presence="true"></presence-entry>
+            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode"></presence-entry>
         </div>
         <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
             <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>

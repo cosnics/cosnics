@@ -26,88 +26,81 @@
 <template>
     <div v-if="presence">
         <div class="u-flex u-flex-wrap u-gap-small-3x">
-            <div class="presence-builder" @click.stop="selectedStatus = null">
-                <b-table bordered :foot-clone="createNew" :items="presenceStatuses" :fields="fields"
-                         class="mod-presence mod-builder" :class="{'is-changes-disabled': createNew}"
-                         :tbody-tr-class="rowClass">
+            <div class="presence-builder">
+                <b-table ref="builder" bordered :items="presenceStatuses" :fields="fields"
+                         class="mod-presence mod-builder" :class="{'is-enabled': isEditEnabled}" :tbody-tr-class="rowClass"
+                         :selectable="isEditEnabled" select-mode="single" selected-variant="" @row-selected="onRowSelected">
                     <template #thead-top="">
-                        <selection-preview :presence-statuses="presenceStatuses" />
+                        <selection-preview :presence-statuses="presenceStatuses" class="presence-preview-row" />
                     </template>
                     <template #head(label)>{{ $t('label') }}</template>
                     <template #head(title)>{{ $t('title') }}</template>
                     <template #head(aliasses)>{{ $t('aliasses') }}</template>
                     <template #head(color)>{{ $t('color') }}</template>
-                    <template #cell(label)="{item}">
-                        <div class="cell-pad" @click.stop="onSelectStatus(item)">
-                            <b-input type="text" required v-model="item.code" autocomplete="off" :disabled="createNew"
-                                     class="mod-input mod-pad mod-small" @focus="onSelectStatus(item)"/>
-                        </div>
+                    <template #cell(label)="{item, index}">
+                        <b-input type="text" required v-model="item.code" autocomplete="off" :disabled="isEditDisabled"
+                                 class="mod-input mod-trans mod-pad mod-small" @focus="onSelectStatus(item, index)"/>
                     </template>
-                    <template #cell(title)="{item}">
+                    <template #cell(title)="{item, index}">
                         <title-control :status="item" :status-title="getStatusTitle(item)"
-                                       :is-editable="isStatusEditable(item)" :disabled="createNew"
-                                       class="cell-pad mod-lh" @select="onSelectStatus(item)" />
+                                       :is-editable="isStatusEditable(item)" :disabled="isEditDisabled"
+                                       @select="onSelectStatus(item, index)" />
                     </template>
-                    <template #cell(aliasses)="{item}">
+                    <template #cell(aliasses)="{item, index}">
                         <alias-control :status="item" :alias-title="getAliasedTitle(item)" :fixed-status-defaults="fixedStatusDefaults"
-                                       :is-editable="isStatusEditable(item)" :is-select-disabled="createNew"
-                                       class="cell-pad mod-lh" @select="onSelectStatus(item)"/>
+                                       :is-editable="isStatusEditable(item)" :is-select-disabled="isEditDisabled"
+                                       @select="onSelectStatus(item, index)"/>
                     </template>
                     <template #cell(color)="{item, index}">
-                        <color-control :id="index" :disabled="createNew" :color="item.color" :selected="item === selectedStatus"
-                                       class="u-flex u-align-items-center cell-pad mod-h"
-                                       @select="onSelectStatus(item)"
+                        <color-control :id="index" :disabled="isEditDisabled" :color="item.color" :selected="item === selectedStatus"
+                                       class="u-flex u-align-items-center"
+                                       @select="onSelectStatus(item, index)"
                                        @color-selected="setStatusColor(item, $event)"/>
                     </template>
                     <template #cell(actions)="{item, index}">
                         <selection-controls
                             :id="item.id"
-                            :is-up-disabled="createNew || index === 0"
-                            :is-down-disabled="createNew || index >= presenceStatuses.length - 1"
-                            :is-remove-disabled="createNew || item.type === 'fixed' || savedEntryStatuses.includes(item.id)"
-                            class="cell-pad-x"
+                            :is-up-disabled="isEditDisabled || index === 0"
+                            :is-down-disabled="isEditDisabled || index >= presenceStatuses.length - 1"
+                            :is-remove-disabled="isEditDisabled || item.type === 'fixed' || savedEntryStatuses.includes(item.id)"
+                            class="u-flex u-gap-small presence-actions"
                             @move-down="onMoveDown(item.id, index)" @move-up="onMoveUp(item.id, index)"
-                            @remove="onRemove(item)" @select="onSelectStatus(item)"/>
+                            @remove="onRemove(item)" @select="onSelectStatus(item, index)"/>
                     </template>
-                    <template #foot(label)="">
-                        <input required type="text" class="form-control mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew"/>
-                    </template>
-                    <template #foot(title)="">
-                        <b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/>
-                    </template>
-                    <template #foot(aliasses)="">
-                        <alias-control :status="aliasNew" :fixed-status-defaults="fixedStatusDefaults"/>
-                    </template>
-                    <template #foot(color)="">
-                        <color-control id="999" :color="colorNew" class="u-flex" @color-selected="colorNew = $event"/>
-                    </template>
-                    <template #foot(actions)="">
-                        <new-status-controls :isSavingDisabled="!(codeNew && titleNew && aliasNew.aliasses > 0)"
-                                             class="u-flex u-gap-small presence-actions"
-                                             @save="onSaveNew" @cancel="onCancelNew" />
+                    <template #bottom-row v-if="createNew">
+                        <b-td><b-input required type="text" class="mod-input mod-pad mod-small" id="new-presence-code" v-model="codeNew"/></b-td>
+                        <b-td><b-input required type="text" class="mod-input mod-pad" v-model="titleNew"/></b-td>
+                        <b-td><alias-control :status="aliasNew" :fixed-status-defaults="fixedStatusDefaults"/></b-td>
+                        <b-td><color-control id="999" :color="colorNew" class="u-flex u-align-items-center" @color-selected="colorNew = $event"/></b-td>
+                        <b-td class="table-actions"><new-status-controls :isSavingDisabled="!(codeNew && titleNew && aliasNew.aliasses > 0)"
+                                                   class="u-flex u-gap-small presence-actions"
+                                                   @save="onSaveNew" @cancel="onCancelNew" /></b-td>
                     </template>
                 </b-table>
                 <div class="m-new" v-if="!createNew">
-                    <a class="presence-new" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
-                        {{ $t('new-presence-status') }}</a>
+                    <button class="btn-new-status u-text-no-underline" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
+                        {{ $t('new-presence-status') }}</button>
                 </div>
                 <error-display v-if="errorData" :error-data="errorData" class="m-errors" />
             </div>
-            <div style="align-self: flex-start;">
+            <div class="u-align-self-start">
                 <div style="margin-bottom: 15px">
                     <on-off-switch id="allow-checkout" :checked="presence.has_checkout" :on-text="$t('checkout')" :off-text="$t('no-checkout')"
                                    switch-class="mod-checkout-choice" style="width: 136px"
                                    @toggle="presence.has_checkout = !presence.has_checkout"/>
                 </div>
                 <div :style="useVerificationIcon ? 'margin-bottom: 10px' : ''">
-                    <button class="btn-check" :class="{ 'checked': useVerificationIcon }" @click="useVerificationIcon = !useVerificationIcon">
+                    <button :aria-pressed="useVerificationIcon ? 'true' : 'false'" :aria-expanded="useVerificationIcon ? 'true' : 'false'" class="btn-check" :class="{ 'checked': useVerificationIcon }"
+                            @click="useVerificationIcon = !useVerificationIcon">
                         <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('verification-icon') }}</span>
                     </button>
                 </div>
                 <verification-icon ref="verification-icon" v-show="useVerificationIcon" :icon-data="presence.verification_icon_data || null" :use-builder="true"></verification-icon>
             </div>
         </div>
-        <save-control :is-disabled="createNew" :is-saving="isSaving" @save="onSave()" class="m-save" />
+        <div class="m-save">
+            <save-control :is-disabled="isEditDisabled" :is-saving="isSaving" @save="onSave()" />
+        </div>
     </div>
 </template>
 
@@ -182,6 +175,14 @@ export default class Builder extends Vue {
         this.load();
     }
 
+    get isEditEnabled() {
+        return !this.createNew;
+    }
+
+    get isEditDisabled() {
+        return this.createNew;
+    }
+
     get isSaving(): boolean {
         return this.connector?.isSaving || false;
     }
@@ -225,7 +226,7 @@ export default class Builder extends Vue {
     }
 
     rowClass(status: PresenceStatus) : string {
-        return status === this.selectedStatus ? 'is-selected' : '';
+        return `table-body-row presence-builder-row${status === this.selectedStatus ? ' is-selected' : ''}${ this.createNew ? '' : ' is-enabled'}`;
     }
 
     hasEmptyFields(): boolean {
@@ -281,10 +282,15 @@ export default class Builder extends Vue {
         });
     }
 
-    onSelectStatus(status: PresenceStatus) {
+    onSelectStatus(status: PresenceStatus, index: number = 0) {
         if (!this.createNew) {
             this.selectedStatus = status;
+            (this.$refs['builder'] as unknown as any).selectRow(index);
         }
+    }
+
+    onRowSelected(items: PresenceStatus[]) {
+        this.selectedStatus = items[0] || null;
     }
 
     onMoveDown(id: number, index: number) {
@@ -348,9 +354,11 @@ export default class Builder extends Vue {
 .u-relative {
     position: relative;
 }
+
 .u-block {
     display: block;
 }
+
 .u-flex {
     display: flex;
 }
@@ -383,8 +391,16 @@ export default class Builder extends Vue {
     align-items: center;
 }
 
+.u-align-self-start {
+    align-self: flex-start;
+}
+
 .u-justify-content-center {
     justify-content: center;
+}
+
+.u-justify-content-start {
+    justify-content: flex-start;
 }
 
 .u-justify-content-end {
@@ -423,6 +439,14 @@ export default class Builder extends Vue {
     text-align: center;
 }
 
+.u-text-no-underline, .u-text-no-underline:hover, .u-text-no-underline:focus {
+    text-decoration: none;
+}
+
+.u-text-line-through {
+    text-decoration: line-through;
+}
+
 .u-txt-truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -437,39 +461,107 @@ export default class Builder extends Vue {
     cursor: default;
 }
 
-.btn.mod-presence-save {
-    font-size: 1.7rem;
-    line-height: 1.6;
-}
-
-.btn.mod-presence-save:focus {
-    color: #fff;
-}
-
-.presence-new {
-    color: #337ab7;
+.u-cursor-pointer {
     cursor: pointer;
 }
-
-.presence-new:hover, .presence-new:focus {
-    color: #23527c;
-    text-decoration: none;
+</style>
+<style>
+.table.mod-presence {
+    border-top-color: #ebebeb;
 }
 
-.presence-new .fa {
-    font-size: 13px;
-    margin-right: 2px;
+.table.mod-presence th, .table.mod-presence td {
+    border: 1px solid #ebebeb;
+    vertical-align: middle;
 }
 
-.btn.btn-default.mod-presence {
-    color: #4d88b3;
+.table.mod-presence th {
+    background-color: #f8fbfb;
+    border-bottom: 0;
+    color: #727879;
+}
+
+.table-body-row:first-child td {
+    background: linear-gradient(to bottom, #e3eaed 0, rgba(255, 255, 255, 0) 4px);
+    border-top: 0;
+}
+</style>
+<style>
+.table.mod-builder {
+    border: none;
+    position: relative;
+}
+
+.table.mod-builder .table-actions {
+    background: none;
+    border: none;
+}
+
+.table.mod-builder tr:first-child th {
+    background-color: #fff;
+}
+
+.table.mod-builder .presence-preview-row th:not(.table-actions) {
+    border-top: 1px solid #ebebeb;
+}
+
+.presence-builder-row {
+    transition: opacity 200ms linear;
+}
+
+.presence-builder-row:focus {
+    outline: none;
+}
+
+.presence-builder-row:not(.is-enabled) {
+    opacity: .8;
+}
+
+.presence-builder-row:not(.is-selected) .table-actions {
+    pointer-events: none;
+}
+
+.presence-builder-row.is-selected td:not(.table-actions) {
+    background: #ecf4f4;
+    background-clip: padding-box;
+    border-color: #e3e3e3;
+}
+
+.presence-builder-row.is-selected:first-child td:not(.table-actions) {
+    background: linear-gradient(to bottom, #e3eaed 0, #ecf4f4 4px);
+}
+
+@media (pointer: fine) {
+    .presence-builder-row.is-enabled:not(.is-selected):hover td:not(.table-actions) {
+        background: #f4fbfb;
+        border-color: #e3e3e3;
+        cursor: pointer;
+    }
+
+    .presence-builder-row.is-enabled:not(.is-selected):first-child:hover td:not(.table-actions) {
+        background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);
+    }
+}
+</style>
+<style>
+.color-code {
+    background-color: var(--color);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--text-color);
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    min-width: 40px;
+    padding: 4px;
+    transition: background 75ms linear, color 75ms linear, opacity 75ms linear;
+}
+
+.color-code > span {
     font-size: 14px;
-    padding: 2px 5px;
-    width: 25px;
-}
-
-.btn.mod-presence.mod-cancel .fa {
-    color: red;
+    font-variant: all-small-caps;
+    font-weight: 900;
+    line-height: 12px;
 }
 
 .form-control.mod-input.mod-pad {
@@ -484,333 +576,56 @@ export default class Builder extends Vue {
 .form-control.mod-select {
     height: 26px;
     padding: 3px 5px;
-    width: initial;
 }
 
-.presence-swatches {
-    display: grid;
-    grid-gap: 2px;
-    grid-template-columns: repeat(11, 1fr);
-    padding: 2px;
-}
-
-.color, .color-code {
-    background-color: var(--color);
-    border: 1px solid transparent;
-    border-radius: 3px;
-    color: var(--text-color);
-}
-
-.color[disabled] {
-    cursor: not-allowed;
-    opacity: .4;
-}
-
-.color {
-    height: 18px;
-    width: 40px;
-}
-
-.color.mod-swatch {
-    width: 20px;
-    z-index: 1000;
-}
-
-.table.mod-presence .color {
-    transition: opacity 200ms linear, background 75ms linear;
-}
-
-.color-code {
-    transition: background 75ms linear, color 75ms linear, opacity 75ms linear;
-}
-
-td.table-period {
-    min-width: 136px;
-}
-
-.table.mod-entry td.table-photo {
-    padding: 0;
-}
-
-.table-photo img {
-    max-height: 40px;
-}
-
-/*.status-filters {
-    margin-top: -2px;
-}*/
-
-.color-code.mod-selectable, .color-code.mod-plh {
-    opacity: .42;
-}
-
-.color-code.mod-selectable.is-selected,
-.color-code.mod-selectable:hover {
-    opacity: 1;
-}
-
-.color-code.mod-selectable.mod-off:not(:hover) {
-    background-color: #f5f5f5;
-    color: #333;
-}
-
-.color-code.mod-disabled {
-    --color: #f5f5f5;
-    --text-color: var(--text-color-dark);
-    opacity: .15;
-}
-
-.table.mod-builder .color.is-selected, .table.mod-builder .color:hover, .color-code.mod-shadow-grey:hover {
-    box-shadow: 1px 1px 2px -1px #673ab7;
-}
-
-.color-code.mod-shadow.is-selected {
-    box-shadow: 0 0 0 .2rem var(--selected-color);
-}
-
-.color-code.mod-none {
-    --color: #deede1;
-    background: transparent linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%) 0 0 / 7px 7px;
-    border-radius: 5px;
-    height: 17px;
-}
-
-.color.mod-swatch.is-selected {
-    position: relative;
-}
-
-.color.mod-swatch.is-selected:after {
-    content: '\f00c';
-    font-family: 'FontAwesome';
-    font-size: 11px;
-    left: calc(50% - .5em);
-    position: absolute;
-    text-align: center;
-    top: 0;
-}
-
-.color-code {
-    display: flex;
-    height: 24px;
-    min-width: 40px;
-    padding: 4px;
-    justify-content: center;
-}
-
-.color-code > span {
-    font-size: 14px;
-    font-variant: all-small-caps;
-    font-weight: 900;
-    line-height: 12px;
-}
-
-.color-code.is-selected {
-    position: relative;
-}
-
-.tbl-no-sort {
-    pointer-events: none
-}
-
-.table.mod-presence {
-    border-top-color: #ebebeb;
-}
-
-.table.mod-presence thead th:not(.table-actions) {
-    background-color: #f8fbfb;
-}
-
-.table.mod-presence.mod-builder thead tr:first-child th {
-    background-color: #fff;
-}
-
-.table.mod-presence.mod-builder thead th:not(.table-actions) {
-    border-top: 1px solid #ebebeb;
-}
-
-.table.mod-presence thead th {
-    color: #727879;
-}
-
-.table.mod-presence th, .table.mod-presence td {
-    border: 1px solid #ebebeb;
-    vertical-align: middle;
-}
-
-.table.mod-presence .table-actions {
-    border: 0;
-}
-
-.table.mod-builder {
-    border-right: 0;
-    border-bottom: 0;
-    border-top: 0;
-}
-
-.table.mod-presence tbody {
-    transition: opacity 200ms linear;
-}
-
-.table.mod-presence thead th {
-    border-bottom: 0;
-}
-
-.table.mod-presence tbody tr:first-child td:not(.table-actions) {
-    background: linear-gradient(to bottom, #e3eaed 0, rgba(255, 255, 255, 0) 4px);
-    border-top: 0;
-}
-
-.table.mod-builder {
-    margin-bottom: 0;
-    width: fit-content;
-}
-
-.table.mod-builder .form-control {
+.form-control.mod-trans {
     transition: background 200ms linear;
 }
 
-.table.mod-builder.is-changes-disabled tbody {
-    opacity: .8;
-}
-
-.table.mod-builder tfoot th {
-    font-weight: 400;
-}
-
-.table.mod-builder {
-    position: relative;
-}
-
-.table.mod-builder td {
+.btn-new-status {
+    background: none;
+    border: none;
+    color: #337ab7;
     padding: 0;
 }
 
-.table.mod-builder .cell-pad {
-    padding: 8px;
+.btn-new-status:hover,
+.btn-new-status:focus {
+    color: #23527c;
 }
 
-.table.mod-builder .cell-pad.mod-lh {
-    line-height: 26px;
+.btn-new-status > .fa {
+    font-size: 13px;
+    margin-right: 2px;
 }
 
-.table.mod-builder .cell-pad.mod-h {
-    height: 42px;
+.btn.btn-default.mod-status-action {
+    color: #4d88b3;
+    font-size: 14px;
+    padding: 2px 5px;
+    width: 25px;
 }
 
-.table.mod-builder .cell-pad-x {
-    padding: 0 8px;
-}
-
-@media only screen and (max-width: 459px) {
-    .table.mod-builder .presence-actions {
-        position: absolute;
-        right: 17px;
-        bottom: -45px;
-    }
-
-    .table.mod-builder .btn.mod-presence {
-        font-size: 20px;
-        width: unset;
-    }
-}
-
-@media (pointer: fine) {
-    .table.mod-builder tbody tr:hover td:not(.table-actions) {
-        background: #f4fbfb;
-        cursor: pointer;
-    }
-
-    .table.mod-builder tbody tr:first-child:hover td:not(.table-actions) {
-        background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);
-    }
-
-    .table.mod-builder tbody tr:hover td:not(.table-actions) {
-        border-color: #e3e3e3;
-    }
-}
-
-.table.mod-builder tbody tr.is-selected td:not(.table-actions) {
-    background: #ecf4f4;
-}
-
-.table.mod-builder tbody tr.is-selected:first-child td:not(.table-actions) {
-    background: linear-gradient(to bottom, #e3eaed 0, #ecf4f4 4px);
-}
-
-.table.mod-builder tbody tr.is-selected td:not(.table-actions) {
-    border-color: #e3e3e3;
-}
-
-.table.mod-builder.is-changes-disabled tbody tr, .table.mod-builder.is-changes-disabled tbody tr:hover {
-    background: unset;
-    border-color: unset;
-    cursor: unset;
-}
-
-.table.mod-builder tr.is-selected .btn.mod-presence:last-child:not(:disabled) {
+.btn.mod-status-action.mod-remove:not(:disabled),
+.btn.mod-status-action.mod-cancel {
     color: red;
 }
 
-.table.mod-builder tbody tr:not(.is-selected) .table-actions {
-    pointer-events: none;
-}
-
-.table.mod-builder tbody tr:not(.is-selected) .btn.mod-presence {
-    pointer-events: none;
+.presence-builder-row:not(.is-selected) .btn.mod-status-action {
     opacity: 0;
-    box-shadow: none;
 }
 
-/*.radio-tabs-default {
-  background-color: rgba(255, 255, 255, .45);
-  border-radius: 3px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
-  color: #337ab7;
-}
-
-.radio-tabs-default:hover, .radio-tabs-default:focus {
-  background-color: #fff;
-  box-shadow: 0 1px 2px hsla(208, 55%, 25%, .10);
-  color: #507177;
-}
-
-.radio-tabs {
-  cursor: pointer;
-  font-weight: normal;
-  margin: 0;
-  padding: 0 .5em;
-}
-
-.radio-tabs-active, .radio-tabs-active:hover, .radio-tabs-active:focus  {
-  background-color: #fff;
-  box-shadow: 0 1px 2px hsla(208, 55%, 25%, .40);
-  color: #507177;
-}*/
-
-/*.table.mod-entry th.table-result {
-    max-width: 1px;
-}*/
-.table.mod-entry th.table-result.mod-save {
-    position: relative;
-    text-align: center;
-}
-@-moz-document url-prefix() {
-    .table.mod-entry th.table-period {
-        background-clip: padding-box;
+@media only screen and (max-width: 459px) {
+    .presence-actions {
+        bottom: -45px;
+        position: absolute;
+        right: 17px;
     }
-}
 
-.selected-period-checkinout-btn, .selected-period-close-btn {
-    padding: 0 4px;
-    height: 20px;
-}
-
-.selected-period-checkinout-btn.is-active {
-    background: #ddd;
-}
-
-.btn-check, .lbl-check:focus {
-    outline: none;
+    .btn.btn-default.mod-status-action {
+        font-size: 20px;
+        width: 30px;
+    }
 }
 
 .btn-check {
@@ -821,214 +636,53 @@ td.table-period {
     margin: 0;
     padding: 0;
 }
-.btn-check:focus, .btn-check:hover {
+
+.btn-check:focus,
+.btn-check:hover {
     color: #1d4567;
 }
+
 .lbl-check {
     border: 1px solid transparent;
     border-radius: 3px;
 }
+
+.btn-check,
+.lbl-check:focus {
+    outline: none;
+}
+
 .btn-icon-check {
     margin-right: .3em;
     width: 1em;
 }
-.btn-check.checked .btn-icon-check:before {
-    content: "\f046";
-}
+
 .btn-icon-check:before {
-    content: "\f096";
-}
-.selected-period-close-btn {
-    position: absolute;
-    top: -7px;
-    right: -7px;
-    border-radius: 50%;
-    width: 20px;
-    padding: 0;
-    border-color: #8ea4b3;
-    background: #f8fbfb;
-    color: #406e8e;
-}
-.selected-period-close-btn:hover {
-/*    color: #5a93c4;*/
-}
-.extra-actions {
-    position: absolute;
-    top: -23px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    font-weight: 400;
+    content: '\f096';
 }
 
-.table.mod-entry th.table-period {
-    max-width: 1px;
-}
-/*.table.mod-entry th.table-period > div:first-child {*/
-    /*align-items: center;*/
-    /*display: flex;*/
-    /*max-width: fit-content;*/
-    /*gap: 5px;*/
-    /*margin: 0 auto;*/
-/*}*/
-
-.select-period-btn {
-    background: #f7f7f7;
-    border: 1px solid;
-    border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.2);
-    border-radius: 4px;
-    color: #333;
-    font-weight: 400;
-    padding: 1px 4px;
-    text-align: center;
-}
-
-.select-period-btn.mod-new {
-    padding: 2px 4px 0;
-}
-
-.select-period-btn:hover, .select-period-btn:focus {
-    background: #ededed;
-}
-
-/*.table.mod-entry .table-period {
-    border-right: 0;
-}
-
-.table.mod-entry .table-result {
-    border-left: 0;
-}*/
-
-.table-period {
-    position: relative;
-}
-
-.table-result .result-wrap {
-    margin: 0 auto;
-    max-width: fit-content;
-}
-
-/*tfoot .table-period {
-    text-align: right;
-}*/
-
-/*.table.mod-entry tbody .table-period:after {
-    background-color: #ebebeb;
-    bottom: 8px;
-    content: '';
-    display: block;
-    position: absolute;
-    right: -1px;
-    top: 8px;
-    width: 1px;
-}*/
-
-.table.mod-entry {
-    width: max-content;
-}
-
-.table.mod-entry tfoot tr {
-    border: 1px solid transparent;
-}
-
-.table.mod-entry tfoot th {
-    border: none;
-    font-weight: 400;
-    padding: 6px 8px;
-}
-
-.table.mod-entry + .lds-ellipsis {
-    display: none;
-    left: calc(50% - 20px);
-    position: absolute;
-    top: 40px;
-}
-
-.table.mod-entry[aria-busy=true] + .lds-ellipsis {
-    display: inline-block;
-}
-
-.btn-remove {
-    background: none;
-    border-color: #f8dfdf;
-    color: #c9605d;
-    padding: 1px 4px 0;
-}
-
-.btn-remove[disabled] {
-    cursor: not-allowed;
-}
-
-.btn-remove:hover {
-    border-color: #e48380;
-    color: #b72d2a;
-}
-
-.btn-remove:active, .btn-remove:focus {
-    border-color: #ac2925;
-    box-shadow: none;
-    color: #ac2925;
-    outline: none;
-}
-
-.btn-remove:active:focus {
-    outline: none;
-}
-
-.btn-show-periods {
-    background: none;
-    border-color: #e1ebf4;
-    color: #337ab7;
-    padding: 1px 4px 0;
-}
-
-.btn-show-periods:hover {
-    border-color: #95acc0;
-    color: #23527c;
-}
-
-.btn-show-periods:active, .btn-show-periods:focus {
-    border-color: #95acc0;
-    box-shadow: none;
-    color: #23527c;
-    outline: none;
-}
-
-.btn-show-periods:active:focus {
-    outline: none;
-}
-
-.checkout-indicator {
-    color: #3c8640;
-    font-size: 12px;
-    margin-left: -1px;
-    margin-right: -6px;
-    opacity: .2;
-}
-.checkout-indicator.is-checked-out {
-    opacity: 1;
+.btn-check.checked .btn-icon-check:before {
+    content: '\f046';
 }
 </style>
-
 <style scoped>
 .m-new {
     margin: 8px 0 0 8px;
 }
-.m-checkout {
-    /*margin: 10px 0 0 10px;*/
-}
+
 .m-errors {
     margin: 10px 0 0 0;
     max-width: 85ch;
 }
+
 .m-save {
     margin: 20px 0 0 8px;
 }
+
 .btn-check.checked {
     color: #526060;
 }
 </style>
-
 <style>
 .lds-ellipsis {
     display: inline-block;
@@ -1094,7 +748,6 @@ td.table-period {
     }
 }
 </style>
-
 <style lang="scss">
 :root {
     --text-color-dark: #333;
@@ -1519,12 +1172,15 @@ td.table-period {
     padding-right: calc(.75rem + .85em);
     pointer-events: all;
 }
+
 .tbl-sort-option[aria-sort=none] {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22zM51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
 }
+
 .tbl-sort-option[aria-sort=ascending] {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
 }
+
 .tbl-sort-option[aria-sort=descending] {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='101' height='101' view-box='0 0 101 101' preserveAspectRatio='none'%3e%3cpath fill='black' opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/%3e%3cpath fill='black' d='M51 101l25-23 24-22H1l25 22z'/%3e%3c/svg%3e");
 }
@@ -1533,6 +1189,7 @@ td.table-period {
 .onoffswitch {
     position: relative;
 }
+
 .onoffswitch.mod-checkout {
     width: 136px;
 }
@@ -1611,7 +1268,6 @@ td.table-period {
     background-color: #fff;
     color: #919191;
     padding-left: 16px;
-    /*text-align: right;*/
 }
 
 .onoffswitch-switch {
@@ -1643,5 +1299,4 @@ td.table-period {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0;
 }
-
 </style>

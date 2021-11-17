@@ -39,10 +39,10 @@
 
 <template>
     <div>
-        <div v-if="canEditPresence" class="u-flex u-gap-small-3x u-align-items-center" :class="[{'m-controls': !useStatistics || (useStatistics && statMode === 'student')}]"><!-- u-max-w-fit -->
-            <search-bar v-if="!useStatistics || (useStatistics && statMode === 'student')" :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
-            <div v-if="!!selectedPeriod && !useStatistics" class="status-filters u-flex u-gap-small u-align-items-baseline">
-                <span style="color: #666; margin-right: 5px;width:max-content"><i class="fa fa-filter" style="margin-right: 2px"></i>Filters:</span>
+        <div class="u-flex u-gap-small-3x u-align-items-center" :class="[{'m-controls': defaultTableShown}]">
+            <search-bar v-if="defaultTableShown" :search-options="searchOptions" @filter-changed="onFilterChanged" @filter-cleared="onFilterCleared" />
+            <div v-if="statusFiltersShown" class="status-filters u-flex u-gap-small u-align-items-baseline">
+                <span class="lbl-filters"><i class="fa fa-filter"></i>Filters:</span>
                 <filter-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
                                       :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color"
                                       :is-selected="statusFilters.indexOf(status) !== -1"
@@ -50,54 +50,49 @@
                 <filter-status-button :label="$t('without-status')" color="grey-100" :is-selected="withoutStatusSelected" @toggle-filter="toggleWithoutStatus"/>
             </div>
             <template v-else-if="!useStatistics">
-                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm" style="padding: 3px 6px">{{ $t('export') }}</a>
-                <button class="btn btn-default btn-sm" @click="createResultPeriod" style="padding: 3px 6px 3px 4px"><i aria-hidden="true" class="fa fa-plus" style="color: #406e8e; margin-right:5px"></i>{{ $t('new-period') }}</button>
+                <a :href="apiConfig.exportURL" class="btn btn-default btn-sm mod-export">{{ $t('export') }}</a>
+                <button class="btn btn-default btn-sm mod-create-period" @click="createResultPeriod"><i aria-hidden="true" class="fa fa-plus"></i>{{ $t('new-period') }}</button>
             </template>
         </div>
-
-        <div class="u-flex" style="gap: 8px">
-            <div style="width: max-content">
+        <div class="u-flex">
+            <div class="w-max-content">
                 <div class="u-relative">
-                    <div v-if="!canEditPresence" class="u-flex u-align-items-baseline u-flex-wrap u-gap-small-3x m-legend">
-                        <span style="color: #507177">{{ $t('legend') }}:</span>
-                        <legend-item v-for="status in presenceStatuses" :title="getPresenceStatusTitle(status)" :label="status.code" :color="status.color" />
-                    </div>
-                    <entry-table v-show="!useStatistics || (useStatistics && statMode === 'student')" id="course-students" :items="itemsProvider" :periods="periods"
-                                 :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod" :can-edit-presence="canEditPresence"
-                                 :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode" :foot-clone="canEditPresence && !!selectedPeriod"
-                                 :is-creating-new-period="creatingNew" :statistics="statistics" :style="selectedPeriod ? 'margin-top: 3px' : ''" :use-statistics="useStatistics"
+                    <entry-table v-show="defaultTableShown" id="course-students" :items="itemsProvider" :periods="periods"
+                                 :status-defaults="statusDefaults" :presence="presence" :selected-period="selectedPeriod"
+                                 :global-search-query="globalSearchQuery" :pagination="pagination" :is-saving="isSaving" :checkout-mode="checkoutMode"
+                                 :is-creating-new-period="creatingNew" :statistics="statistics" :use-statistics="useStatistics"
                                  @create-period="createResultPeriod"
                                  @period-label-changed="setSelectedPeriodLabel"
                                  @select-student-status="setSelectedStudentStatus"
                                  @toggle-checkout-mode="checkoutMode = !checkoutMode"
                                  @toggle-checkout="toggleCheckout"
                                  @change-selected-period="setSelectedPeriod">
-                        <template v-slot:slot-top v-if="canEditPresence && !!selectedPeriod">
-                            <div class="u-flex u-align-items-baseline" style="gap: 15px;min-width:100%;justify-content: space-between">
-                                <button class="btn btn-sm btn-show-periods" @click="setSelectedPeriod(null)">{{ $t('show-all-periods') }}</button>
-                                <button id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm" style="padding: 1px 4px 0 6px;">{{ $t('more') }}&hellip;</button>
-                                <bulk-status-popup :is-visible="showMore" :presence-statuses="presenceStatuses"
+                        <template v-slot:slot-top v-if="hasSelectedPeriod">
+                            <div class="u-flex u-align-items-baseline u-justify-content-space-between u-gap-small-3x minw-100">
+                                <button class="btn btn-sm mod-period-action mod-show-periods" @click="setSelectedPeriod(null)">{{ $t('show-all-periods') }}</button>
+                                <button id="show-more" @click="showMore = !showMore" class="btn btn-default btn-sm mod-more">{{ $t('more') }}&hellip;</button>
+                                <bulk-status-popup target="show-more" :is-visible="showMore" :presence-statuses="presenceStatuses" :status-defaults="statusDefaults"
                                                    @apply="applyBulkStatus" @cancel="cancelBulkStatus"/>
                             </div>
                         </template>
-                        <template v-slot:slot-bottom v-if="canEditPresence && !!selectedPeriod">
-                            <button class="btn btn-sm btn-remove" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
+                        <template v-slot:slot-bottom v-if="hasSelectedPeriod">
+                            <button class="btn btn-sm mod-period-action mod-remove-period" @click="removeSelectedPeriod" :disabled="toRemovePeriod === selectedPeriod">{{ $t('remove-period') }}</button>
                         </template>
                     </entry-table>
-                    <periods-stats-table v-if="useStatistics && statMode === 'period'" id="course-students" :periods="periods" :is-busy="loadingStatistics"
+                    <periods-stats-table v-if="periodStatsShown" id="course-students" :periods="periods" :is-busy="loadingStatistics"
                                          :status-defaults="statusDefaults" :presence="presence"
                                          :statistics="statistics"></periods-stats-table>
                     <div v-if="!creatingNew" class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div v-if="canEditPresence && pageLoaded && pagination.total > 0 && (!useStatistics || (useStatistics && statMode === 'student'))" class="pagination-container u-flex u-justify-content-end" style="margin-top: -10px">
+                <div v-if="paginationShown" class="pagination-container u-flex u-justify-content-end">
                     <b-pagination v-model="pagination.currentPage" :total-rows="pagination.total" :per-page="pagination.perPage"
                                   aria-controls="course-students" :disabled="changeAfterStatusFilters"></b-pagination>
                     <ul class="pagination">
                         <li class="page-item" :class="{active: !changeAfterStatusFilters, disabled: changeAfterStatusFilters}">
-                            <a class="page-link" :style="changeAfterStatusFilters ? 'text-decoration: line-through' : ''">{{ $t('total') }} {{ pagination.total }}</a>
+                            <a class="page-link" :class="{'u-text-line-through': changeAfterStatusFilters}">{{ $t('total') }} {{ pagination.total }}</a>
                         </li>
                         <li v-if="changeAfterStatusFilters" class="page-item active">
-                            <a class="page-link" v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters" style="cursor: pointer">{{ $t('refresh') }} <i class="fa fa-info-circle"></i></a>
+                            <a class="page-link u-cursor-pointer" v-b-popover.hover.right="$t('changes-filters')" @click="refreshFilters">{{ $t('refresh') }} <i class="fa fa-info-circle"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -107,10 +102,10 @@
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
             <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
         </div>
-        <template v-if="nonCourseStudents.length && (!useStatistics || (useStatistics && statMode === 'student'))">
-            <h4 style="color: #507177;font-size: 14px;font-weight: 500;margin-top:-5px;margin-bottom:-10px">{{ $t('students-not-in-course') }}</h4>
-            <entry-table id="non-course-students" style="margin-top: 20px" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
-                         :status-defaults="statusDefaults" :presence="presence" :can-edit-presence="canEditPresence" :has-non-course-students="true"
+        <template v-if="nonCourseStudentsShown">
+            <h4 class="u-font-medium h-not-in-course">{{ $t('students-not-in-course') }}</h4>
+            <entry-table id="non-course-students" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
+                         :status-defaults="statusDefaults" :presence="presence" :is-fully-editable="false"
                          :is-saving="isSavingNonCourse" :is-creating-new-period="creatingNew" :checkout-mode="checkoutMode" :use-statistics="useStatistics"
                          @select-student-status="setSelectedStudentStatus" @toggle-checkout="toggleCheckout" />
         </template>
@@ -177,7 +172,6 @@ export default class Entry extends Vue {
 
     @Prop({type: APIConfig, required: true}) readonly apiConfig!: APIConfig;
     @Prop({type: Number, default: 0}) readonly loadIndex!: number;
-    @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
     @Prop({type: Boolean, default: false}) readonly useStatistics!: boolean;
     @Prop({type: String, default: ''}) readonly statMode!: string;
 
@@ -187,6 +181,30 @@ export default class Entry extends Vue {
 
     set globalSearchQuery(query: string) {
         this.searchOptions.globalSearchQuery = query;
+    }
+
+    get defaultTableShown() {
+        return !this.useStatistics || (this.useStatistics && this.statMode === 'student');
+    }
+
+    get nonCourseStudentsShown() {
+        return this.defaultTableShown && this.nonCourseStudents.length;
+    }
+
+    get statusFiltersShown() {
+        return this.hasSelectedPeriod && !this.useStatistics;
+    }
+
+    get paginationShown() {
+        return this.defaultTableShown && this.pageLoaded && this.pagination.total > 0;
+    }
+
+    get periodStatsShown() {
+        return this.useStatistics && this.statMode === 'period';
+    }
+
+    get hasSelectedPeriod() {
+        return !!this.selectedPeriod;
     }
 
     toggleStatusFilters(status: PresenceStatus) {
@@ -240,7 +258,7 @@ export default class Entry extends Vue {
 
     applyBulkStatus(status: PresenceStatus) {
         this.showMore = false;
-        if (!this.canEditPresence || !this.selectedPeriod) { return; }
+        if (!this.selectedPeriod) { return; }
         this.errorData = null;
         this.connector?.bulkSavePresenceEntries(this.selectedPeriod.id, status.id, (data: any) => {
             if (data?.status === 'ok') {
@@ -271,7 +289,7 @@ export default class Entry extends Vue {
             request_count: this.requestCount,
             request_non_course_students: this.requestNonCourseStudents
         };
-        if (!!this.selectedPeriod && (this.statusFilters.length || this.withoutStatusSelected)) {
+        if (this.selectedPeriod && (this.statusFilters.length || this.withoutStatusSelected)) {
             parameters['period_id'] = this.selectedPeriod.id;
             parameters['status_filters'] = this.statusFilters.map(status => status.id);
             parameters['without_status'] = this.withoutStatusSelected;
@@ -294,16 +312,13 @@ export default class Entry extends Vue {
         const selectedPeriod = this.selectedPeriod;
         if (!this.pageLoaded && this.periods.length) {
             this.setSelectedPeriod(this.periods[this.periods.length - 1].id);
-            //this.$emit('selected-period', this.periods[this.periods.length - 1].id);
             this.pageLoaded = true;
         } else if (this.createdId !== null) {
             this.setSelectedPeriod(this.createdId);
-            //this.$emit('selected-period', this.createdId);
             this.createdId = null;
             this.creatingNew = false;
         } else if (selectedPeriod) {
             this.setSelectedPeriod(selectedPeriod.id);
-            //this.$emit('selected-period-maybe');
         }
         if (!students.length) {
             return [{tableEmpty: true}];
@@ -324,7 +339,6 @@ export default class Entry extends Vue {
     }
 
     async createResultPeriod() {
-        if (!this.canEditPresence) { return; }
         this.selectedPeriod = null;
         this.creatingNew = true;
         this.errorData = null;
@@ -338,7 +352,7 @@ export default class Entry extends Vue {
     }
 
     removeSelectedPeriod() {
-        if (!this.canEditPresence || !this.selectedPeriod) { return; }
+        if (!this.selectedPeriod) { return; }
         this.errorData = null;
         const selectedPeriod = this.selectedPeriod;
         this.toRemovePeriod = selectedPeriod;
@@ -353,7 +367,6 @@ export default class Entry extends Vue {
     }
 
     setSelectedPeriod(periodId: number|null) {
-        if (!this.canEditPresence) { return; }
         if (periodId === null) {
             this.selectedPeriod = null;
         } else {
@@ -375,21 +388,19 @@ export default class Entry extends Vue {
     }
 
     setSelectedPeriodLabel(selectedPeriod: PresencePeriod, label: string) {
-        if (!this.canEditPresence) { return; }
         this.errorData = null;
         selectedPeriod.label = label;
         this.connector?.updatePresencePeriod(selectedPeriod.id, label);
     }
 
-    async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number, hasNonCourseStudents = false) {
-        if (!this.canEditPresence) { return; }
+    async setSelectedStudentStatus(student: any, selectedPeriod: PresencePeriod, status: number, isFullyEditable = true) {
         this.errorData = null;
         const periodId = selectedPeriod.id;
         student[`period#${periodId}-status`] = status;
-        if (!hasNonCourseStudents && (this.statusFilters.length || this.withoutStatusSelected)) {
+        if (isFullyEditable && (this.statusFilters.length || this.withoutStatusSelected)) {
             this.changeAfterStatusFilters = true;
         }
-        const connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+        const connector = isFullyEditable ? this.connector : this.connectorNonCourse;
         connector?.savePresenceEntry(periodId, student.id, status, function(data: any) {
             if (data?.status === 'ok') {
                 student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
@@ -398,11 +409,10 @@ export default class Entry extends Vue {
         });
     }
 
-    toggleCheckout(student: any, selectedPeriod: PresencePeriod, hasNonCourseStudents = false) {
-        if (!this.canEditPresence) { return; }
+    toggleCheckout(student: any, selectedPeriod: PresencePeriod, isFullyEditable = true) {
         const periodId = selectedPeriod.id;
         if (!student[`period#${periodId}-checked_in_date`]) { return; }
-        const connector = hasNonCourseStudents ? this.connectorNonCourse : this.connector;
+        const connector = isFullyEditable ? this.connector : this.connectorNonCourse;
         connector?.togglePresenceEntryCheckout(periodId, student.id, (data: any) => {
             if (data?.status === 'ok') {
                 student[`period#${periodId}-checked_in_date`] = data.checked_in_date;
@@ -437,15 +447,178 @@ export default class Entry extends Vue {
 }
 </script>
 
+<style>
+.table.mod-entry {
+    width: max-content;
+}
+
+.table.mod-entry .table-photo {
+    padding: 0;
+}
+
+.table.mod-entry .table-period {
+    min-width: 136px;
+}
+
+@-moz-document url-prefix() {
+    .table.mod-entry th.table-period {
+        background-clip: padding-box;
+    }
+}
+
+.table.mod-entry + .lds-ellipsis {
+    display: none;
+    left: calc(50% - 20px);
+    position: absolute;
+    top: 40px;
+}
+
+.table.mod-entry[aria-busy=true] + .lds-ellipsis {
+    display: inline-block;
+}
+
+.color-code.is-selected {
+    position: relative;
+}
+
+.color-code.mod-selectable, .color-code.mod-plh {
+    opacity: .42;
+}
+
+.color-code.mod-selectable.is-selected,
+.color-code.mod-selectable:hover {
+    opacity: 1;
+}
+
+.color-code.mod-selectable.mod-off:not(:hover) {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.color-code.mod-disabled {
+    --color: #f5f5f5;
+    --text-color: var(--text-color-dark);
+    opacity: .15;
+}
+
+.color-code.mod-none {
+    --color: #deede1;
+    background: transparent linear-gradient(135deg, var(--color) 10%, transparent 10%, transparent 50%, var(--color) 50%, var(--color) 60%, transparent 60%, transparent 100%) 0 0 / 7px 7px;
+    border-radius: 5px;
+    height: 17px;
+}
+
+.color-code.mod-shadow.is-selected {
+    box-shadow: 0 0 0 .2rem var(--selected-color);
+}
+
+.color-code.mod-shadow-grey:hover {
+    box-shadow: 1px 1px 2px -1px #673ab7;
+}
+
+.btn.mod-export {
+    padding: 3px 6px;
+}
+
+.btn.mod-create-period {
+    padding: 3px 6px 3px 4px;
+}
+
+.btn.mod-create-period > .fa {
+    color: #406e8e;
+}
+
+.btn.mod-create-period > .fa-plus {
+    margin-right: 5px;
+}
+
+.btn.mod-more {
+    padding: 1px 4px 0 6px;
+}
+
+.btn.mod-period-action {
+    background: none;
+    padding: 1px 4px 0;
+}
+
+.btn.mod-period-action:active, .btn.mod-period-action:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.btn.mod-period-action[disabled] {
+    cursor: not-allowed;
+}
+
+.btn.mod-period-action:active:focus {
+    outline: none;
+}
+
+.btn.mod-show-periods {
+    border-color: #e1ebf4;
+    color: #337ab7;
+}
+
+.btn.mod-show-periods:hover {
+    border-color: #95acc0;
+    color: #23527c;
+}
+
+.btn.mod-show-periods:active, .btn.mod-show-periods:focus {
+    border-color: #95acc0;
+    color: #23527c;
+}
+
+.btn.mod-remove-period {
+    border-color: #f8dfdf;
+    color: #c9605d;
+}
+
+.btn.mod-remove-period:hover {
+    border-color: #e48380;
+    color: #b72d2a;
+}
+
+.btn.mod-remove-period:active, .btn.mod-remove-period:focus {
+    border-color: #ac2925;
+    color: #ac2925;
+}
+</style>
 <style scoped>
+.minw-100 {
+    min-width: 100%;
+}
+
+.w-max-content {
+    width: max-content;
+}
+
 .m-controls {
-    margin-bottom: 10px;
+    margin-bottom: 13px;
 }
-.m-legend {
-    margin: 20px 8px 15px;
-}
+
 .m-errors {
     margin: 10px 0;
     max-width: 85ch;
+}
+
+.lbl-filters {
+    color: #666;
+    margin-right: 5px;
+    width: max-content;
+}
+
+.lbl-filters > .fa-filter {
+    margin-right: 2px;
+}
+
+.pagination-container {
+    margin-top: -10px;
+}
+
+.h-not-in-course {
+    color: #507177;
+    font-size: 14px;
+    margin-top: -5px;
 }
 </style>

@@ -4,7 +4,9 @@
         "last-name": "Last name",
         "first-name": "First name",
         "official-code": "Official code",
+        "period": "Period",
         "new-period": "New period",
+        "checked-in": "Checked in",
         "checked-out": "Checked out",
         "not-checked-out": "Not checked out",
         "checkout-mode": "Checkout mode",
@@ -15,7 +17,9 @@
         "last-name": "Familienaam",
         "first-name": "Voornaam",
         "official-code": "Officiële code",
+        "period": "Periode",
         "new-period": "Nieuwe periode",
+        "checked-in": "Ingechecked",
         "checked-out": "Uitgechecked",
         "not-checked-out": "Niet uitgechecked",
         "checkout-mode": "Uitcheckmodus",
@@ -26,12 +30,12 @@
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry"
+    <b-table :id="id" ref="table" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry" tbody-tr-class="table-body-row"
              :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :per-page="pagination.perPage" :current-page="pagination.currentPage"
              :filter="globalSearchQuery" no-sort-reset>
 
         <!-- PICTURE -->
-        <template #cell(photo)="{item}" v-if="canEditPresence">
+        <template #cell(photo)="{item}">
             <img :src="item.photo">
         </template>
 
@@ -40,8 +44,7 @@
             <a class="tbl-sort-option" :aria-sort="getSortStatus('lastname')" @click="sortByNameField('lastname')">{{ $t('last-name') }}</a>
             <a class="tbl-sort-option" :aria-sort="getSortStatus('firstname')" @click="sortByNameField('firstname')">{{ $t('first-name') }}</a>
         </template>
-        <template #head(fullname) v-else-if="canEditPresence">{{ $t('last-name') }}, {{ $t('first-name') }}</template>
-        <template #head(fullname) v-else>Student</template>
+        <template #head(fullname) v-else>{{ $t('last-name') }}, {{ $t('first-name') }}</template>
         <template #cell(fullname)="{item, toggleDetails, detailsShowing}">
             <template v-if="!item.tableEmpty">
                 <a v-if="!(selectedPeriod || useStatistics)" @click="toggleDetails" class="u-text-no-underline u-cursor-pointer" :class="{'u-font-bold': detailsShowing}">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
@@ -104,13 +107,13 @@
                 <div v-if="count" class="color-code grey-100" style="width:fit-content;margin: 0 auto">
                     <span style="font-variant: initial;font-size:13px">{{ count }}</span>
                 </div>
-                <span v-else style="text-align:center;display:block;color:#a9b9bc">0</span>
+                <span v-else class="u-block u-text-center" style="color:#a9b9bc">0</span>
             </template>
         </template>
 
         <!-- DYNAMIC FIELD KEYS (PERIODS) -->
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`head(${fieldKey.key})`]="{label}">
-            <dynamic-field-key :is-editable="isFullyEditable" @select="$emit('change-selected-period', fieldKey.id)" :class="[{'select-period-btn' : isFullyEditable}, 'u-txt-truncate']" :title="label">
+            <dynamic-field-key :is-editable="isFullyEditable" @select="$emit('change-selected-period', fieldKey.id)" :class="[{'btn-select-period' : isFullyEditable}, 'u-txt-truncate']" :title="label">
                 <template v-slot>
                     <span v-if="label">{{ label }}</span>
                     <span v-else class="u-font-italic">{{ getPlaceHolder(fieldKey.id) }}</span>
@@ -118,7 +121,7 @@
             </dynamic-field-key>
         </template>
         <template v-for="fieldKey in dynamicFieldKeys" v-slot:[`cell(${fieldKey.key})`]="{item}">
-            <PresenceStatusDisplay
+            <presence-status-display
                 :title="getStatusTitleForStudent(item, fieldKey.id)"
                 :label="getStatusCodeForStudent(item, fieldKey.id)"
                 :color="getStatusColorForStudent(item, fieldKey.id)"
@@ -141,7 +144,7 @@
         <template #thead-top="data" v-if="isFullyEditable && selectedPeriod && !useStatistics">
             <b-tr>
                 <b-td></b-td>
-                <b-td colspan="2"><span style="color: #47686b;font-size: 14px;font-weight: 500;">{{ selectedPeriod.label || getPlaceHolder(selectedPeriod.id) }}</span></b-td>
+                <b-td colspan="2"><span class="u-font-medium" style="color: #47686b;font-size: 14px;">{{ selectedPeriod.label || getPlaceHolder(selectedPeriod.id) }}</span></b-td>
                 <b-td><slot name="slot-top"></slot></b-td>
                 <b-td v-if="checkoutMode"></b-td>
             </b-tr>
@@ -153,12 +156,15 @@
         </template>
         <template #cell(period-entry)="{item}">
             <div v-if="item.tableEmpty" class="u-font-italic">{{ $t('no-results') }}</div>
-            <div v-else class="u-flex u-gap-small u-flex-wrap">
-                <presence-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
-                                        :status="status" :title="getPresenceStatusTitle(status)"
-                                        :is-selected="hasSelectedStudentStatus(item, status.id)" :is-disabled="checkoutMode"
-                                        @select="$emit('select-student-status', item, selectedPeriod, status.id, hasNonCourseStudents)"/>
-            </div>
+            <template v-else>
+                <label :id="`lbl-item-${item.id}-status`" class="sr-only">Status</label>
+                <div class="u-flex u-gap-small u-flex-wrap" role="radiogroup" :aria-labelledby="`lbl-item-${item.id}-status`">
+                    <presence-status-button v-for="(status, index) in presenceStatuses" :key="`status-${index}`"
+                                            :status="status" :title="getPresenceStatusTitle(status)"
+                                            :is-selected="hasSelectedStudentStatus(item, status.id)" :is-disabled="checkoutMode"
+                                            @select="$emit('select-student-status', item, selectedPeriod, status.id, isFullyEditable)"/>
+                </div>
+            </template>
         </template>
 
         <!-- PRESENCE PERIOD CHECKOUT -->
@@ -174,7 +180,7 @@
                            :id="item.id" :on-text="$t('checked-out')" :off-text="$t('not-checked-out')"
                            :checked="item[`period#${selectedPeriod.id}-checked_out_date`] > item[`period#${selectedPeriod.id}-checked_in_date`]"
                            switch-class="mod-checkout"
-                           @toggle="$emit('toggle-checkout', item, selectedPeriod, hasNonCourseStudents)"/>
+                           @toggle="$emit('toggle-checkout', item, selectedPeriod, isFullyEditable)"/>
             <span v-else style="color: #999">{{ $t('not-applicable') }}</span>
         </template>
         <template #cell(period-checkout) v-else>{{''}}</template>
@@ -209,8 +215,7 @@ export default class EntryTable extends Vue {
     @Prop({type: Array, default: () => []}) readonly statusDefaults!: PresenceStatusDefault[];
     @Prop({type: Array, default: () => []}) readonly periods!: PresencePeriod[];
     @Prop({type: Object, default: null }) readonly presence!: Presence|null;
-    @Prop({type: Boolean, default: false}) readonly canEditPresence!: boolean;
-    @Prop({type: Boolean, default: false}) readonly hasNonCourseStudents!: boolean;
+    @Prop({type: Boolean, default: true}) readonly isFullyEditable!: boolean;
     @Prop({type: Boolean, default: false}) readonly isCreatingNewPeriod!: boolean;
     @Prop({type: Array, default: () => []}) readonly statistics!: any[];
     @Prop({type: Boolean, default: false}) readonly useStatistics!: boolean;
@@ -245,10 +250,6 @@ export default class EntryTable extends Vue {
 
     get hasResults() {
         return this.pagination.total !== 0;
-    }
-
-    get isFullyEditable() {
-        return this.canEditPresence && !this.hasNonCourseStudents;
     }
 
     getSortStatus(name: string) {
@@ -339,7 +340,7 @@ export default class EntryTable extends Vue {
 
     get userFields() {
         return [
-            this.canEditPresence ? {key: 'photo', sortable: false, label: '', variant: 'photo'} : null,
+            {key: 'photo', sortable: false, label: '', variant: 'photo'},
             {key: 'fullname', sortable: false, label: 'Student'},
             {key: 'official_code', sortable: false}
         ];
@@ -347,7 +348,7 @@ export default class EntryTable extends Vue {
 
     get periodFields() {
         if (this.isCreatingNewPeriod) { return []; }
-        if (this.canEditPresence && !!this.selectedPeriod) {
+        if (this.selectedPeriod) {
             return [
                 {key: 'period-entry', sortable: false, label: this.selectedPeriod.label, variant: 'period'},
                 this.presence && this.presence.has_checkout && (this.isFullyEditable || this.checkoutMode) ? {key: 'period-checkout', sortable: false, variant: 'checkout'} : null
@@ -368,7 +369,6 @@ export default class EntryTable extends Vue {
         return [
             ...this.userFields,
             ...(this.useStatistics ? this.statusFields : [
-                //this.canEditPresence && !this.selectedPeriod && !this.hasNonCourseStudents && !this.isCreatingNewPeriod ? {key: 'new_period', sortable: false, label: ''} : null,
                 this.isCreatingNewPeriod ? {key: 'period-entry-plh', sortable: false, variant: 'period'} : null,
                 ...this.periodFields
             ])
@@ -385,7 +385,38 @@ export default class EntryTable extends Vue {
 }
 </script>
 
+<style>
+.student-checkinout {
+    border: 1px double white;
+}
+.student-checkinout th, .student-checkinout td {
+    width: 150px;
+}
+.btn-select-period {
+    background: #f7f7f7;
+    border: 1px solid;
+    border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.2);
+    border-radius: 4px;
+    color: #333;
+    font-weight: 400;
+    padding: 1px 4px;
+    text-align: center;
+}
+
+.btn-select-period.mod-new {
+    padding: 2px 4px 0;
+}
+
+.btn-select-period:hover, .btn-select-period:focus {
+    background: #ededed;
+}
+</style>
+
 <style scoped>
+.table-photo img {
+    max-height: 40px;
+}
+
 .bd-selected-period {
 /*    border: 1px double #8ea4b3;*/
     border: 1px double #ccc;
@@ -402,5 +433,9 @@ export default class EntryTable extends Vue {
 
 .ti-label.mod-border {
     border-color: #e9eaea;
+}
+
+.table-body-row.b-table-has-details {
+    border-bottom: 1px double white;
 }
 </style>

@@ -12,7 +12,7 @@
 </i18n>
 
 <template>
-    <b-table :id="id" ref="table" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry" no-sort-reset>
+    <b-table :id="id" ref="table" bordered :busy.sync="isBusy" :items="items" :fields="fields" class="mod-presence mod-entry" tbody-tr-class="table-body-row" no-sort-reset>
         <template #head(period-stats)>{{ $t('period') }}</template>
         <template #cell(period-stats)="{item}">
             {{item.label || getPlaceHolder(item.id)}}
@@ -30,7 +30,7 @@
                 <div v-if="count" class="color-code" style="width:fit-content;margin: 0 auto;background:#f9f9f9">
                     <span style="font-variant: initial;font-size:13px">{{ count }}</span>
                 </div>
-                <span v-else style="text-align:center;display:block;color:#a9b9bc">0</span>
+                <span v-else class="u-block u-text-center" style="color:#a9b9bc">0</span>
             </template>
         </template>
     </b-table>
