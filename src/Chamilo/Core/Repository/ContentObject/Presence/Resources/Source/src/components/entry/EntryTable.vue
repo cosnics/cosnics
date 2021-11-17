@@ -44,17 +44,29 @@
         <template #head(fullname) v-else>Student</template>
         <template #cell(fullname)="{item, toggleDetails, detailsShowing}">
             <template v-if="!item.tableEmpty">
-                <a v-if="!selectedPeriod && !useStatistics" @click="toggleDetails" style="cursor:pointer;text-decoration:none" :style="detailsShowing ? 'font-weight: 700' : ''">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
+                <a v-if="!(selectedPeriod || useStatistics)" @click="toggleDetails" class="u-text-no-underline u-cursor-pointer" :class="{'u-font-bold': detailsShowing}">{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</a>
                 <template v-else>{{ item.lastname.toUpperCase() }}, {{ item.firstname }}</template>
             </template>
             <span v-else></span>
         </template>
         <template #row-details="{item}" v-if="!selectedPeriod && !useStatistics">
-            <div class="u-flex u-gap-small-3x u-align-items-center" style="justify-content: flex-start;padding-left: 40px">
-                <span style="color:#507177">Stats:</span>
-                <div v-for="{status, count} in getStudentAllStats(item)" v-if="count > 0" class="u-flex u-align-items-center u-gap-small">
-                    <div class="color-code" :class="[status ? status.color : 'grey-100']"><span>{{ status ? status.code : 'Zonder status' }} <span style="margin-left: 5px;font-variant: initial;font-size:13px">{{ count }}</span></span></div>
-                </div>
+            <div style="margin: 0 auto; max-width: fit-content">
+                <b-table-simple class="student-checkinout">
+                    <b-thead>
+                        <b-tr>
+                            <b-th>{{ $t('period') }}</b-th>
+                            <b-th>{{ $t('checked-in') }}</b-th>
+                            <b-th v-if="presence && presence.has_checkout">{{ $t('checked-out') }}</b-th>
+                        </b-tr>
+                    </b-thead>
+                    <b-tbody>
+                        <student-details v-for="period in periodsReversed"
+                                         :has-checkout="presence && presence.has_checkout"
+                                         :period-title="period.label || getPlaceHolder(period.id)"
+                                         :check-in-date="item[`period#${period.id}-checked_in_date`]"
+                                         :check-out-date="item[`period#${period.id}-checked_out_date`]"/>
+                    </b-tbody>
+                </b-table-simple>
             </div>
         </template>
 
@@ -176,10 +188,11 @@ import OnOffSwitch from '../OnOffSwitch.vue'
 import {Presence, PresencePeriod, PresenceStatus, PresenceStatusDefault} from '../../types';
 import PresenceStatusButton from './PresenceStatusButton.vue';
 import PresenceStatusDisplay from './PresenceStatusDisplay.vue';
+import StudentDetails from './StudentDetails.vue';
 
 @Component({
     name: 'entry-table',
-    components: {PresenceStatusDisplay, PresenceStatusButton, OnOffSwitch, DynamicFieldKey}
+    components: {StudentDetails, PresenceStatusDisplay, PresenceStatusButton, OnOffSwitch, DynamicFieldKey}
 })
 export default class EntryTable extends Vue {
     sortBy = 'lastname';
