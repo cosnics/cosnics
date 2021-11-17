@@ -45,10 +45,10 @@
                     </b-tbody>
                 </b-table-simple>
             </div>
-            <div v-if="errorData" class="alert alert-danger m-errors">
+            <error-display v-if="errorData" @close="errorData = null">
                 <span v-if="errorData.code === 500">{{ errorData.message }}</span>
                 <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
-            </div>
+            </error-display>
         </div>
     </div>
 </template>
@@ -60,10 +60,11 @@ import APIConfig from '../connect/APIConfig';
 import Connector, {ConnectorErrorListener} from '../connect/Connector';
 import LegendItem from './entry/LegendItem.vue';
 import StudentDetails from './entry/StudentDetails.vue';
+import ErrorDisplay from './ErrorDisplay.vue';
 
 @Component({
     name: 'user-entry',
-    components: {StudentDetails, LegendItem}
+    components: {StudentDetails, LegendItem, ErrorDisplay}
 })
 export default class UserEntry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];

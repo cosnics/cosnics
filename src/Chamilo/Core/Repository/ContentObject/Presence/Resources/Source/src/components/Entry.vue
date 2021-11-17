@@ -98,10 +98,10 @@
                 </div>
             </div>
         </div>
-        <div v-if="errorData" class="alert alert-danger m-errors">
+        <error-display v-if="errorData" @close="errorData = null">
             <span v-if="errorData.code === 500">{{ errorData.message }}</span>
             <span v-else-if="!!errorData.type">{{ $t('error-' + errorData.type) }}</span>
-        </div>
+        </error-display>
         <template v-if="nonCourseStudentsShown">
             <h4 class="u-font-medium h-not-in-course">{{ $t('students-not-in-course') }}</h4>
             <entry-table id="non-course-students" :items="nonCourseStudents" :selected-period="selectedPeriod" :periods="periods"
@@ -125,10 +125,11 @@ import FilterStatusButton from './entry/FilterStatusButton.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
 import BulkStatusPopup from './entry/BulkStatusPopup.vue';
 import PeriodsStatsTable from './entry/PeriodsStatsTable.vue';
+import ErrorDisplay from './ErrorDisplay.vue';
 
 @Component({
     name: 'entry',
-    components: {PeriodsStatsTable, EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup}
+    components: {PeriodsStatsTable, EntryTable, OnOffSwitch, FilterStatusButton, SearchBar, LegendItem, DynamicFieldKey, BulkStatusPopup, ErrorDisplay}
 })
 export default class Entry extends Vue {
     statusDefaults: PresenceStatusDefault[] = [];
@@ -336,6 +337,7 @@ export default class Entry extends Vue {
 
     setError(data: any) : void {
         this.errorData = data;
+        console.log(this.errorData);
     }
 
     async createResultPeriod() {

@@ -81,7 +81,7 @@
                     <button class="btn-new-status u-text-no-underline" @click="onCreateNew"><i class="fa fa-plus" aria-hidden="true"></i>
                         {{ $t('new-presence-status') }}</button>
                 </div>
-                <error-display v-if="errorData" :error-data="errorData" class="m-errors" />
+                <error-display v-if="errorData" @close="errorData = null"><error-message :error-data="errorData" /></error-display>
             </div>
             <div class="u-align-self-start">
                 <div style="margin-bottom: 15px">
@@ -116,7 +116,8 @@ import SelectionControls from './builder/SelectionControls.vue';
 import NewStatusControls from './builder/NewStatusControls.vue';
 import SelectionPreview from './builder/SelectionPreview.vue';
 import SaveControl from './builder/SaveControl.vue';
-import ErrorDisplay from './builder/ErrorDisplay.vue';
+import ErrorMessage from './builder/ErrorMessage.vue';
+import ErrorDisplay from './ErrorDisplay.vue';
 import VerificationIcon from './builder/VerificationIcon.vue';
 import OnOffSwitch from './OnOffSwitch.vue';
 
@@ -125,7 +126,7 @@ const CONFLICT_ERRORS = ['PresenceStatusMissing', 'InvalidType', 'NoTitleGiven',
 
 @Component({
     components: {
-        OnOffSwitch, TitleControl, AliasControl, ColorControl, SelectionControls, NewStatusControls, SelectionPreview, SaveControl, ErrorDisplay, VerificationIcon
+        OnOffSwitch, TitleControl, AliasControl, ColorControl, SelectionControls, NewStatusControls, SelectionPreview, SaveControl, ErrorMessage, ErrorDisplay, VerificationIcon
     }
 })
 export default class Builder extends Vue {
