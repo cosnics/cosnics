@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Domain\Exceptions;
 
 /**
- * Class DuplicateFieldsException
+ * Class PresenceValidationException
  * @package Chamilo\Core\Repository\ContentObject\Presence\Domain\Exceptions
  *
  * @author - Stefan Gabriëls - Hogeschool Gent

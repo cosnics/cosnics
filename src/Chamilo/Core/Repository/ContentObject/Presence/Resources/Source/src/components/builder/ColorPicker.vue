@@ -3,7 +3,7 @@
     <div class="presence-swatches">
       <template v-for="variant in variants">
         <template v-for="color in colors">
-          <button :class="[`color mod-swatch ${color}-${variant}`, {'is-selected': selectedColor === `${color}-${variant}`}]" :key="`color-swatch-${color}-${variant}`" @click.stop="$emit('color-selected', `${color}-${variant}`)"></button>
+          <button :class="[`btn-color mod-swatch ${color}-${variant}`, {'is-selected': selectedColor === `${color}-${variant}`}]" :key="`color-swatch-${color}-${variant}`" @click.stop="$emit('color-selected', `${color}-${variant}`)"></button>
         </template>
       </template>
     </div>
@@ -27,3 +27,31 @@ export default class ColorPicker extends Vue {
   @Prop({type: String, default: ''}) readonly selectedColor!: string;
 }
 </script>
+
+<style>
+.presence-swatches {
+    display: grid;
+    grid-gap: 2px;
+    grid-template-columns: repeat(11, 1fr);
+    padding: 2px;
+}
+
+.btn-color.mod-swatch {
+    width: 20px;
+    z-index: 1000;
+}
+
+.btn-color.mod-swatch.is-selected {
+    position: relative;
+}
+
+.btn-color.mod-swatch.is-selected:after {
+    content: '\f00c';
+    font-family: 'FontAwesome';
+    font-size: 11px;
+    left: calc(50% - .5em);
+    position: absolute;
+    text-align: center;
+    top: 0;
+}
+</style>

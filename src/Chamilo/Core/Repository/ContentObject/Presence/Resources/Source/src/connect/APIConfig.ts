@@ -1,5 +1,6 @@
 export default class APIConfig {
     public readonly loadPresenceEntriesURL = '';
+    public readonly loadStatisticsURL = '';
     public readonly loadPresenceURL = '';
     public readonly updatePresenceURL = '';
     public readonly savePresenceEntryURL = '';

@@ -7,12 +7,9 @@
 {{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 
 <h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ PRESENCE_TITLE|raw }}</h3>
-<div>
-
-</div>
 <div id="main-content">
     <div id="user-presences" style="margin: 15px 5px 20px;">
-        <presence-entry :api-config="apiConfig" :can-edit-presence="canEditPresence"></presence-entry>
+        <presence-user-entry :api-config="apiConfig"></presence-user-entry>
     </div>
 </div>
 <script>
@@ -39,10 +36,7 @@
         i18n: new VueI18n({locale: lang, messages}),
         el: '#user-presences',
         delimiters: ['${', '}'],
-        data: {
-            apiConfig,
-            canEditPresence: {{ CAN_EDIT_PRESENCE ? 'true' : 'false' }}
-        }
+        data: { apiConfig }
     });
 </script>
 
