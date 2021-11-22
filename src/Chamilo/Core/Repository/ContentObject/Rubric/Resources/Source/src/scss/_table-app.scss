@@ -88,6 +88,10 @@
       width: 1.3rem;
     }
 
+    &.mod-criterium {
+      width: 1.3rem;
+    }
+
     &.mod-criterium::after {
       border: 1px solid var(--category-color);
       content: '';
@@ -200,6 +204,10 @@
 
     .treenode-title-header {
       cursor: default;
+    }
+
+    .treenode-title-header .criterium-title {
+      max-width: 20.2rem;
     }
   }
 

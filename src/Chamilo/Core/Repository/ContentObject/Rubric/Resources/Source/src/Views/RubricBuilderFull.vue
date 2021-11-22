@@ -182,7 +182,7 @@
 
 <style lang="scss">
     .rubric.mod-bf {
-        grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
     }
 
     .formatting-help.mod-bf {
@@ -243,6 +243,10 @@
     @media only screen and (min-width: 900px) {
         .treenode-title-header.mod-bf {
             padding-top: .6rem;
+        }
+
+        .treenode-title-header.mod-bf .criterium-title {
+            margin-right: 1.5rem;
         }
     }
 
