@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestionOption;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Platform\Security\SerializedDataValidator;
 
 /**
  *
@@ -39,7 +41,11 @@ class HotspotQuestion extends ContentObject implements Versionable
      */
     public function get_answers()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_ANSWERS)))
+        $serializedAnswers = $this->get_additional_property(self::PROPERTY_ANSWERS);
+
+        SerializedDataValidator::validateSerializedData($serializedAnswers, [HotspotQuestionAnswer::class]);
+
+        if ($result = unserialize($serializedAnswers))
         {
             return $result;
         }

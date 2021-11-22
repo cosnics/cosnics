@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestionOption;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Platform\Security\SerializedDataValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -37,7 +39,11 @@ class OrderingQuestion extends ContentObject implements Versionable
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        $serializedOptions = $this->get_additional_property(self::PROPERTY_OPTIONS);
+
+        SerializedDataValidator::validateSerializedData($serializedOptions, [OrderingQuestionOption::class]);
+
+        if ($result = unserialize($serializedOptions))
         {
             return $result;
         }
