@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Presence\Display\Service;
 
 use Chamilo\Core\Repository\ContentObject\Presence\Display\Storage\Repository\PresenceRepository;
+use Chamilo\Core\Repository\ContentObject\Presence\Domain\PresenceResultEntryFilterOptions;
 use Chamilo\Core\Repository\ContentObject\Presence\Storage\DataClass\PresenceResultEntry;
 use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Storage\FilterParameters\FilterParameters;
@@ -58,13 +59,13 @@ class PresenceResultEntryService
      * @param array $periods
      * @param ContextIdentifier $contextIdentifier
      * @param FilterParameters $filterParameters
-     * @param array $options
+     * @param PresenceResultEntryFilterOptions|null $filterOptions
      *
      * @return array
      */
-    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, array $options = array()): array
+    public function getUsers(array $userIds, array $periods, ContextIdentifier $contextIdentifier, FilterParameters $filterParameters, PresenceResultEntryFilterOptions $filterOptions = null): array
     {
-        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $options);
+        $users = $this->userService->getUsersFromIds($userIds, $contextIdentifier, $filterParameters, $filterOptions);
 
         foreach ($users as $index => $user)
         {
@@ -294,5 +295,28 @@ class PresenceResultEntryService
             }
         }
         return $nonRegisteredUsers;
+    }
+
+    /**
+     * @param Presence $presence
+     * @param array $userIds
+     * @param ContextIdentifier $contextIdentifier
+     *
+     * @return array
+     */
+    public function getResultPeriodStats(Presence $presence, array $userIds, ContextIdentifier $contextIdentifier): array
+    {
+        $statusIds = array_column($this->presenceService->getPresenceOptions($presence), 'id');
+        $choicesStats = $this->presenceRepository->getPresenceResultPeriodChoicesStats($statusIds, $contextIdentifier);
+        $nullChoicesStats = $this->presenceRepository->getPresenceResultPeriodNullChoicesStats($userIds, $contextIdentifier);
+        $stats = array_merge(iterator_to_array($choicesStats), iterator_to_array($nullChoicesStats));
+        foreach ($stats as $index => $stat)
+        {
+            $stat['period_id'] = (int) $stat['period_id'];
+            $stat['choice_id'] = is_null($stat['choice_id']) ? null : (int) $stat['choice_id'];
+            $stat['count'] = (int) $stat['count'];
+            $stats[$index] = $stat;
+        }
+        return $stats;
     }
 }

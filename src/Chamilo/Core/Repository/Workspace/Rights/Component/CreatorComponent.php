@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Workspace\Rights\Form\RightsForm;
 use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Service\EntityRelationService;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Translation\Translation;
 
 /**
@@ -20,8 +21,14 @@ class CreatorComponent extends Manager
 
     public function run()
     {
+        $rightsService = RightsService::getInstance();
         $workspace = $this->getCurrentWorkspace();
-        
+
+        if(!$rightsService->canManageWorkspace($this->getUser(), $workspace))
+        {
+            throw new NotAllowedException();
+        }
+
         $form = new RightsForm($this->get_url());
         
         if ($form->validate())
@@ -31,8 +38,7 @@ class CreatorComponent extends Manager
             try
             {
                 $entityRelationService = new EntityRelationService(new EntityRelationRepository());
-                $rightsService = RightsService::getInstance();
-                
+
                 $right = $rightsService->getAggregatedRight(
                     (int) $values[RightsForm::PROPERTY_VIEW], 
                     (int) $values[RightsForm::PROPERTY_USE], 

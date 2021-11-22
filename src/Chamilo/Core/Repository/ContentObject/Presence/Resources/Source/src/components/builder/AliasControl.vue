@@ -1,11 +1,9 @@
 <template>
-    <div @click.stop="$emit('select')">
-        <select v-if="isEditable" class="form-control mod-select" :disabled="isSelectDisabled"
-                @focus="$emit('select')" v-model="status.aliasses">
-            <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`" :value="statusDefault.id">{{ statusDefault.title }}</option>
-        </select>
-        <span v-else>{{ aliasTitle }}</span>
-    </div>
+    <select v-if="isEditable" class="form-control mod-trans mod-select" :disabled="isSelectDisabled"
+            @focus="$emit('select')" v-model="status.aliasses">
+        <option v-for="(statusDefault, index) in fixedStatusDefaults" :key="`fs-${index}`" :value="statusDefault.id">{{ statusDefault.title }}</option>
+    </select>
+    <template v-else>{{ aliasTitle }}</template>
 </template>
 
 <script lang="ts">

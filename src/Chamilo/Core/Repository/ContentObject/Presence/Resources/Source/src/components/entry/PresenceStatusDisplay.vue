@@ -47,3 +47,22 @@ export default class PresenceStatusDisplay extends Vue {
     }
 }
 </script>
+
+<style>
+.checkout-indicator {
+    color: #3c8640;
+    font-size: 12px;
+    margin-left: -1px;
+    margin-right: -6px;
+    opacity: .2;
+}
+.checkout-indicator.is-checked-out {
+    opacity: 1;
+}
+</style>
+<style scoped>
+.result-wrap {
+    margin: 0 auto;
+    max-width: fit-content;
+}
+</style>

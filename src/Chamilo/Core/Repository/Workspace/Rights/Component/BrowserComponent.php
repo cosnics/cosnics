@@ -3,7 +3,9 @@ namespace Chamilo\Core\Repository\Workspace\Rights\Component;
 
 use Chamilo\Core\Repository\Workspace\Rights\Manager;
 use Chamilo\Core\Repository\Workspace\Rights\Table\EntityRelation\EntityRelationTable;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -21,6 +23,14 @@ class BrowserComponent extends Manager implements TableSupport
 
     public function run()
     {
+        $rightsService = RightsService::getInstance();
+        $workspace = $this->getCurrentWorkspace();
+
+        if(!$rightsService->canManageWorkspace($this->getUser(), $workspace))
+        {
+            throw new NotAllowedException();
+        }
+
         $table = new EntityRelationTable($this);
         
         $html = array();

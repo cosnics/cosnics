@@ -6,7 +6,7 @@
 {{ getJavascript('cosnics-presence.umd.min.js', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 {{ getCss('cosnics-presence.css', 'Chamilo\\Core\\Repository\\ContentObject\\Presence') }}
 
-<style type="text/css">
+<style>
     .nav.nav-buttons {
         align-items: baseline;
         background-color: #f7f7f7;
@@ -43,27 +43,72 @@
     .tab-pane.mod-pad {
         padding: 10px 15px;
     }
+
+    .lbl-stat-show {
+        color: #337ab7;
+        cursor: pointer;
+        font-weight: normal;
+        text-decoration: none;
+        margin-bottom: 0;
+        padding: 3px 5px;
+    }
+
+    input[type=radio]:checked + .lbl-stat-show {
+        background: #f5f5f5;
+        border-radius: 3px;
+        box-shadow: inset 0 0 2px #e8e8e8;
+        color: #296265;
+        cursor: default;
+        font-size: 1.4rem;
+        font-weight: 500;
+        text-shadow: 0 2px #fcfcfc;
+    }
+
+    input[type=radio]:not(:checked) + .lbl-stat-show:hover {
+        background: #f9f9f9;
+    }
+
+    input[type=radio]:not(:checked) + .lbl-stat-show:hover,
+    input[type=radio]:not(:checked) + .lbl-stat-show:focus {
+        color: #23527c;
+    }
+    .lbl-stat-show:focus {
+        outline: none!important;
+    }
+    input[type=radio]:focus-visible + .lbl-stat-show {
+        border: 1px solid #d6d6d6;
+    }
 </style>
 
-<h3 style="margin-left: 15px;color: #507177;margin-top: 0px;">{{ CONTENT_OBJECT_TITLE }}</h3>
+<h3 style="margin-left: 15px;color: #507177;margin-top: 0;">{{ CONTENT_OBJECT_TITLE }}</h3>
 <div id="main-content">
-    <div style="margin: 15px 0 5px 8px">
+    <div style="margin: 15px 0 5px 8px" class="u-flex u-align-items-baseline u-gap-small-3x">
         <ul class="nav nav-buttons" role="tablist">
-            <li role="presentation" class="active"><a href="#presence-entry" aria-controls="entities" role="tab" data-toggle="tab">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
-            <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab">{{ 'Properties'|trans({}, appContext) }}</a></li>
-            <li role="presentation"><a href="#presence-builder" aria-controls="properties" role="tab" data-toggle="tab">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'entry'}"><a href="#" role="tab" @click="activeTab = 'entry'">{{ 'UsersEntity'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'statistics'}"><a href="#" role="tab" @click="showStats">{{ 'Statistics'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'properties'}"><a href="#" role="tab" @click="activeTab = 'properties'">{{ 'Properties'|trans({}, appContext) }}</a></li>
+            <li role="presentation" :class="{'active': activeTab === 'builder'}"><a href="#" role="tab" @click="showBuilder">{{ 'PresenceBuilder'|trans({}, appContext) }}</a></li>
         </ul>
+        <template v-if="activeTab === 'statistics'">
+            <label id="show-by" class="u-font-normal" style="margin-right: -8px">${ $t('show-by') }:</label>
+            <div class="u-flex u-gap-small u-align-items-baseline" role="radiogroup" aria-labelledby="show-by">
+                <input type="radio" name="stat-show" id="stat-by-period" class="sr-only" value="period" v-model="statMode">
+                <label for="stat-by-period" class="lbl-stat-show" tabindex="-1">${ $t('period') }</label>
+                <input type="radio" name="stat-show" id="stat-by-student" class="sr-only" value="student" v-model="statMode">
+                <label for="stat-by-student" class="lbl-stat-show" tabindex="-1">Student</label>
+            </div>
+        </template>
     </div>
     <div class="dynamic-visual-tab-content tab-content">
-        <div role="tabpanel" class="tab-pane mod-pad active" id="presence-entry" style="width: max-content; margin-top: 10px">
-            <presence-entry :api-config="apiConfig" :load-index="updateCount" can-edit-presence="true"></presence-entry>
+        <div role="tabpanel" class="tab-pane mod-pad" :class="{'active': activeTab === 'entry' || activeTab === 'statistics', 'js-statistics': activeTab === 'statistics' }" id="presence-entry" style="width: max-content; margin-top: 10px">
+            <presence-entry :api-config="apiConfig" :load-index="updateCountEntry" :use-statistics="activeTab === 'statistics'" :stat-mode="statMode"></presence-entry>
         </div>
-        <div role="tabpanel" class="tab-pane mod-pad" id="properties">
+        <div role="tabpanel" class="tab-pane mod-pad" id="properties" :class="{'active': activeTab === 'properties'}">
             <a class="btn btn-default" style="margin-bottom: 20px;" href="{{ PRINT_QR_CODE_URL|raw }}" target="_blank">{{ 'PrintQR'|trans({}, appContext) }}</a>
             {{ CONTENT_OBJECT_RENDITION|raw }}
         </div>
-        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" style="margin-top: 10px">
-            <presence-builder :api-config="apiConfig" :load-index="updateCount" @presence-data-changed="$emit('presence-data-changed')"></presence-builder>
+        <div role="tabpanel" class="tab-pane mod-pad" id="presence-builder" :class="{'active': activeTab === 'builder'}" style="margin-top: 10px">
+            <presence-builder :api-config="apiConfig" :load-index="updateCountBuilder" @presence-data-changed="updateCountEntry += 1"></presence-builder>
         </div>
     </div>
 </div>
@@ -72,7 +117,16 @@
     Vue.use(VueI18n);
     Vue.use(window['cosnics-presence'].default);
 
-    const messages = { en: [], nl: [] };
+    const messages = {
+        en: {
+            "show-by": "Show by",
+            "period": "Period"
+        },
+        nl: {
+            "show-by": "Toon op",
+            "period": "Periode"
+        }
+    };
 
     let lang;
     try {
@@ -84,6 +138,7 @@
 
     const apiConfig = {
         loadPresenceEntriesURL: '{{ LOAD_PRESENCE_ENTRIES_URL|raw }}',
+        loadStatisticsURL: '{{ LOAD_STATISTICS_URL|raw }}',
         loadPresenceURL: '{{ LOAD_PRESENCE_URL|raw }}',
         updatePresenceURL: '{{ UPDATE_PRESENCE_URL|raw }}',
         savePresenceEntryURL: '{{ SAVE_PRESENCE_ENTRY_URL|raw }}',
@@ -97,50 +152,34 @@
         csrfToken: '{{ csrf_token('ComponentToken') }}'
     };
 
-    const presenceBuilder = new Vue({
+    new Vue({
         i18n: new VueI18n({ locale: lang, messages }),
-        el: '#presence-builder',
+        el: '#main-content',
         delimiters: ['${', '}'],
         data: {
             apiConfig,
-            updateCount: 0
-        },
-        mounted() {
-            const elemToObserve = document.getElementById('presence-builder');
-            let prevClassState = elemToObserve.classList.contains('active');
-
-            const observer = new MutationObserver(mutations => {
-                mutations.forEach(mutation => {
-                    if (mutation.attributeName === 'class'){
-                        const currentClassState = mutation.target.classList.contains('active');
-                        if (prevClassState !== currentClassState)    {
-                            prevClassState = currentClassState;
-                            if (currentClassState) {
-                                this.updateCount++;
-                            }
-                        }
-                    }
-                });
-            });
-            observer.observe(elemToObserve, {attributes: true});
-        }
-    });
-
-    const presenceEntry = new Vue({
-        i18n: new VueI18n({ locale: lang, messages }),
-        el: '#presence-entry',
-        delimiters: ['${', '}'],
-        data: {
-            apiConfig,
-            updateCount: 0
+            updateCountEntry: 0,
+            updateCountBuilder: 0,
+            activeTab: 'entry',
+            statMode: 'period',
+            selectedPeriod: null
         },
         methods: {
-            updatePresenceData: function() {
-                this.updateCount++;
+            showBuilder() {
+                if (this.activeTab !== 'builder') {
+                    this.activeTab = 'builder';
+                    this.updateCountBuilder += 1;
+                }
+            },
+            showStats() {
+                this.activeTab = 'statistics';
+                if (this.statMode === 'period') {
+                    this.statMode = '';
+                    this.$nextTick(() => {
+                        this.statMode = 'period';
+                    });
+                }
             }
-        },
-        mounted() {
-            presenceBuilder.$on('presence-data-changed', this.updatePresenceData);
         }
     });
 </script>
