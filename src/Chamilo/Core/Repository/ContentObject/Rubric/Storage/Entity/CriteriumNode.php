@@ -24,6 +24,13 @@ class CriteriumNode extends TreeNode
     protected $weight = 100;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="rel_weight", type="integer")
+     */
+    protected $rel_weight = 0;
+
+    /**
      * @var Choice[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
@@ -67,6 +74,31 @@ class CriteriumNode extends TreeNode
         }
 
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRelWeight(): ?int
+    {
+        return $this->rel_weight;
+    }
+
+    /**
+     * @param int $weight
+     *
+     * @return CriteriumNode
+     */
+    public function setRelWeight(int $weight): CriteriumNode
+    {
+        if ($weight < 0 || $weight > 100)
+        {
+            throw new OutOfRangeException('Weight must be between 0 and 100');
+        }
+
+        $this->rel_weight = $weight;
 
         return $this;
     }

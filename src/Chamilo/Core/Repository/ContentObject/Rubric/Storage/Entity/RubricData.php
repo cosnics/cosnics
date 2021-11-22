@@ -41,6 +41,13 @@ class RubricData
     protected $useScores;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="use_relative_weights", type="boolean")
+     */
+    protected $useRelativeWeights;
+
+    /**
      * @var int
      *
      * @ORM\Version
@@ -161,6 +168,26 @@ class RubricData
     public function setUseScores(bool $useScores): RubricData
     {
         $this->useScores = $useScores;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function useRelativeWeights(): ?bool
+    {
+        return $this->useRelativeWeights;
+    }
+
+    /**
+     * @param bool $useRelativeWeights
+     *
+     * @return RubricData
+     */
+    public function setUseRelativeWeights(bool $useRelativeWeights): RubricData
+    {
+        $this->useRelativeWeights = $useRelativeWeights;
 
         return $this;
     }
