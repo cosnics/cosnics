@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: space-between;align-items:baseline">
-                        <div v-if="rubric.useScores" class="criterium-weight"><label for="weight">{{ $t('weight') }}:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
+                        <div v-if="rubric.useScores" class="criterium-weight"><label for="weight">{{ $t('weight') }}:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %</div>
                         <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
                     </div>
                     <ul class="b-criterium-levels">
@@ -81,6 +81,7 @@
         constructor() {
             super();
             this.onCriteriumChange = debounce(this.onCriteriumChange, 750);
+            this.onWeightChange = debounce(this.onWeightChange, 750);
         }
 
         updateHeight(e: InputEvent) {
@@ -106,6 +107,15 @@
         }
 
         onCriteriumChange() {
+            this.$emit('change-criterium', this.criterium);
+        }
+
+        onWeightChange(event: InputEvent) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
             this.$emit('change-criterium', this.criterium);
         }
 
