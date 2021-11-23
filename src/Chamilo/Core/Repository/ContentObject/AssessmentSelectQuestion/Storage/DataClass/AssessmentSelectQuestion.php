@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentSelectQuestion\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion\Storage\DataClass\AssessmentMultipleChoiceQuestionOption;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Platform\Security\SerializedDataValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -34,7 +36,11 @@ class AssessmentSelectQuestion extends ContentObject
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        $serializedOptions = $this->get_additional_property(self::PROPERTY_OPTIONS);
+
+        SerializedDataValidator::validateSerializedData($serializedOptions, [AssessmentSelectQuestionOption::class]);
+
+        if ($result = unserialize($serializedOptions))
         {
             return $result;
         }

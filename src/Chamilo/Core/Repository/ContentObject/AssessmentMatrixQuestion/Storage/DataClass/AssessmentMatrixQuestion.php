@@ -1,9 +1,11 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\AssessmentMatrixQuestion\Storage\DataClass;
 
+use Chamilo\Core\Repository\ContentObject\AssessmentMatchNumericQuestion\Storage\DataClass\AssessmentMatchNumericQuestionOption;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Platform\Security\SerializedDataValidator;
 
 /**
  *
@@ -34,10 +36,15 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        $serializedOptions = $this->get_additional_property(self::PROPERTY_OPTIONS);
+
+        SerializedDataValidator::validateSerializedData($serializedOptions, [AssessmentMatrixQuestionOption::class]);
+
+        if ($result = unserialize($serializedOptions))
         {
             return $result;
         }
+
         return array();
     }
 
@@ -60,10 +67,15 @@ class AssessmentMatrixQuestion extends ContentObject implements Versionable
 
     public function get_matches()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_MATCHES)))
+        $serializedMatches = $this->get_additional_property(self::PROPERTY_MATCHES);
+
+        SerializedDataValidator::validateSerializedData($serializedMatches, []);
+
+        if ($result = unserialize($serializedMatches))
         {
             return $result;
         }
+
         return array();
     }
 

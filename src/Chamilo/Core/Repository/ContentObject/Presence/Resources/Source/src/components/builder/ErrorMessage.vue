@@ -34,22 +34,20 @@
 </i18n>
 
 <template>
-    <div class="alert alert-danger">
-        <template v-if="errorData.type === 'NoTitleGiven'">
-            {{ $t('error-NoTitleGiven') }} <span class="u-block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
-        </template>
-        <span v-else-if="!!errorData.status">{{ $t('error-' + errorData.type, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
-        <span v-else>{{ $t('error-' + errorData.type) }}</span>
-    </div>
+    <template v-if="errorData.type === 'NoTitleGiven'">
+        {{ $t('error-NoTitleGiven') }} <span class="u-block">{{ errorData.status }}</span> {{ $t('changes-not-saved') }}
+    </template>
+    <span v-else-if="!!errorData.status">{{ $t('error-' + errorData.type, {title: errorData.status.title}) }} {{ $t('changes-not-saved') }}</span>
+    <span v-else>{{ $t('error-' + errorData.type) }}</span>
 </template>
 
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-property-decorator';
 
 @Component({
-    name: 'error-display'
+    name: 'error-message'
 })
-export default class ErrorDisplay extends Vue {
+export default class ErrorMessage extends Vue {
     @Prop({type: Object, required: true}) readonly errorData!: any;
 }
 </script>

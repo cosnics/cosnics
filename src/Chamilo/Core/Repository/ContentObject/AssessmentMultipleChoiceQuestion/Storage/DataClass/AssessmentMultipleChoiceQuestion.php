@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\AssessmentMultipleChoiceQuestion
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Interfaces\Versionable;
+use Chamilo\Libraries\Platform\Security\SerializedDataValidator;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -36,7 +37,11 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        $serializedOptions = $this->get_additional_property(self::PROPERTY_OPTIONS);
+
+        SerializedDataValidator::validateSerializedData($serializedOptions, [AssessmentMultipleChoiceQuestionOption::class]);
+
+        if ($result = unserialize($serializedOptions))
         {
             return $result;
         }
