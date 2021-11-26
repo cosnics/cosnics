@@ -50,6 +50,7 @@ class RubricForm extends ContentObjectForm
         $rubricData = new RubricData($rubricObject->get_title());
         $rubricData->setContentObjectId($rubricObject->getId());
         $rubricData->setUseScores($useScores);
+        $rubricData->setUseRelativeWeights(true);
 
         $clusterNode = new ClusterNode($rubricObject->get_title(), $rubricData, $rubricData->getRootNode());
         new CategoryNode('', $rubricData, $clusterNode);

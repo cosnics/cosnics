@@ -68,7 +68,7 @@ class CriteriumNode extends TreeNode
      */
     public function setWeight(int $weight): CriteriumNode
     {
-        if($weight < 0 || $weight > 100)
+        if ($weight < 0 || $weight > 100)
         {
             throw new OutOfRangeException('Weight must be between 0 and 100');
         }
@@ -81,17 +81,17 @@ class CriteriumNode extends TreeNode
     /**
      * @return int
      */
-    public function getRelWeight(): ?int
+    public function getRelativeWeight(): ?int
     {
         return $this->rel_weight;
     }
 
     /**
-     * @param int $weight
+     * @param ?int $weight
      *
      * @return CriteriumNode
      */
-    public function setRelWeight(int $weight): CriteriumNode
+    public function setRelativeWeight(?int $weight): CriteriumNode
     {
         if ($weight < 0 || $weight > 100)
         {
@@ -195,7 +195,7 @@ class CriteriumNode extends TreeNode
     {
         return new TreeNodeJSONModel(
             $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_CRITERIUM, $this->getParentNodeId(),
-            null, $this->getWeight()
+            null, $this->getWeight(), $this->getRelativeWeight()
         );
     }
 
@@ -213,6 +213,7 @@ class CriteriumNode extends TreeNode
 
         parent::updateFromJSONModel($treeNodeJSONModel);
         $this->setWeight($treeNodeJSONModel->getWeight());
+        $this->setRelativeWeight($treeNodeJSONModel->getRelativeWeight());
 
         return $this;
     }
