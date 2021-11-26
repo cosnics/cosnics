@@ -708,6 +708,7 @@
         label {
             font-size: 1.3rem;
             font-weight: 400;
+            margin-right: .75rem;
         }
 
         .input-detail {

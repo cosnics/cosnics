@@ -25,12 +25,12 @@
         <div v-if="rubric" class="rubric-results-view">
             <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
                 <!--<div class="rubric-header-fill" aria-hidden="true"></div>-->
-                <ul class="rubric-header mod-res">
+                <ul class="rubric-header mod-res" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
                     <li v-if="useScores" class="rubric-header-title mod-res mod-max">Max.</li>
                 </ul>
-                <ul class="rubric-header mod-res mod-date">
+                <ul class="rubric-header mod-res mod-date" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-date" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
                     <li v-if="useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
@@ -46,9 +46,9 @@
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                {{ useScores ? getClusterScore(cluster, evaluation) : '' }}
+                                {{ useScores ? getClusterScore(cluster, evaluation).toLocaleString() : '' }}
                             </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">{{ maxScore }}</div>
+                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
                         </div>
                     </div>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
@@ -63,9 +63,9 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? getCategoryScore(category, evaluation) : '' }}
+                                        {{ useScores ? getCategoryScore(category, evaluation).toLocaleString() : '' }}
                                     </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
                                 </div>
                             </div>
                         </template>
@@ -80,9 +80,9 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? evaluation.score : evaluation.level.title }}
+                                        {{ useScores ? evaluation.score.toLocaleString() : evaluation.level.title }}
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">{{ maxScore }}</div>
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
                                 </div>
                             </div>
                         </template>
@@ -93,8 +93,8 @@
                     <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">{{ getRubricScore(evaluator) }}</div>
-                            <div class="treenode-evaluation mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
+                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">{{ getRubricScore(evaluator).toLocaleString() }}</div>
+                            <div class="treenode-evaluation mod-rubric-max">{{ rubric.getMaximumScore().toLocaleString() }}</div>
                         </div>
                     </div>
                 </template>
@@ -119,6 +119,10 @@
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;
+    }
+
+    function rounded2dec(v: number) {
+        return Math.round(v * 100) / 100;
     }
 
     @Component({
@@ -185,7 +189,7 @@
         getClusterRowData(cluster: Cluster) {
             return {
                 cluster,
-                maxScore: this.getClusterMaxScore(cluster),
+                maxScore: rounded2dec(this.rubric.getClusterMaxScore(cluster)),
                 evaluations: this.getTreeNodeResult(cluster).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
             };
         }
@@ -199,7 +203,7 @@
         getCategoryRowData(category: Category) {
             return {
                 category,
-                maxScore: this.getCategoryMaxScore(category),
+                maxScore: rounded2dec(this.rubric.getCategoryMaxScore(category)),
                 evaluations: this.getTreeNodeResult(category).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
             };
         }
@@ -211,29 +215,9 @@
         getCriteriumRowData(criterium: Criterium) {
             return {
                 criterium,
-                maxScore: this.getCriteriumMaxScore(criterium),
+                maxScore: rounded2dec(this.rubric.getCriteriumMaxScore(criterium)),
                 evaluations: this.getTreeNodeResult(criterium).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
             };
-        }
-
-        getCriteriumMaxScore(criterium: Criterium) : number {
-            const scores : number[] = [0];
-            const iterator = this.rubric!.choices.get(criterium.id);
-            iterator!.forEach((choice, levelId) => {
-                const level = this.rubric!.levels.find(level => level.id === levelId);
-                scores.push(this.rubric!.getChoiceScore(criterium, level!));
-            })
-            return Math.max.apply(null, scores);
-        }
-
-        getCategoryMaxScore(category: Category) : number {
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
-        }
-
-        getClusterMaxScore(cluster: Cluster) : number {
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
         }
 
         getCriteriumScore(criterium: Criterium, evaluator: any) : number {
@@ -241,22 +225,22 @@
         }
 
         getCategoryScore(category: Category, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return evaluation.score; }
+            if (typeof evaluation?.score === 'number') { return rounded2dec(evaluation.score); }
             if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
+            return rounded2dec(this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0));
         }
 
         getClusterScore(cluster: Cluster, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return evaluation.score; }
+            if (typeof evaluation?.score === 'number') { return rounded2dec(evaluation.score); }
             if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
+            return rounded2dec(this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0));
         }
 
         getRubricScore(evaluator: any) : number {
             const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator).score;
-            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
+            if (typeof treeNodeScore === 'number') { return rounded2dec(treeNodeScore); }
             if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
+            return rounded2dec(this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0));
         }
 
         getTreeNodeResult(treeNode: TreeNode) : TreeNodeResult {
@@ -279,7 +263,7 @@
 
     .rubric.mod-res {
         align-self: flex-start;
-        grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
+        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
     .rubric-header.mod-res {
@@ -339,6 +323,7 @@
         align-items: center;
         display: flex;
         grid-column-start: 1;
+        min-height: 2.7rem;
         position: relative;
 
         &::before, & + .treenode-rubric-results::before {

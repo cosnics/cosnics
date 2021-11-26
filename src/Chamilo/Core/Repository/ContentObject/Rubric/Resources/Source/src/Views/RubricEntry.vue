@@ -49,7 +49,7 @@
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
             </ul>
             <ul class="rubric-header mod-responsive">
-                <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
+                <li class="rubric-header-title" v-for="level in rubric.levels"><span v-if="useScores && rubric.useRelativeWeights" style="background-color: rgba(0, 0, 0, .1); border-radius: 3px; float: right; font-weight: 600; padding: 0 5px">{{level.score}}</span> {{ level.title }}</li>
             </ul>
             <div class="rubric-header-fill"></div>
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
@@ -88,8 +88,11 @@
                                 <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
                                     <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
                                         <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                        <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
-                                        <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
+                                        <span v-if="useScores && !rubric.useRelativeWeights" :aria-label="`${ choice.score.toLocaleString() } ${ $t('points') }`">{{ choice.score.toLocaleString() }}</span>
+                                        <span v-else>
+                                            <span class="score-mod-relative" v-if="useScores && rubric.useRelativeWeights">{{ choice.level.score }}</span>
+                                            <i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected, 'mod-relative': rubric.useRelativeWeights }" />
+                                        </span>
                                     </component>
                                     <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="choice.choice.toMarkdown()"></div>
                                 </div>
@@ -99,22 +102,22 @@
                             </div>
                         </div>
                         <div v-if="useScores" class="treenode-score">
-                            <div class="treenode-score-calc mod-criterium"><span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="sr-only">{{ $t('points') }}</span></div>
+                            <div class="treenode-score-calc mod-criterium"><span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score.toLocaleString() }} <span class="sr-only">{{ $t('points') }}</span></div>
                         </div>
                     </template>
                 </template>
                 <template v-if="useScores">
                     <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
-                    <div class="treenode-score-calc mod-cluster">{{ score }}</div>
+                    <div class="treenode-score-calc mod-cluster">{{ score.toLocaleString() }}</div>
                 </template>
                 <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
             </template>
             <slot name="slot-inner"></slot>
             <template v-if="useScores">
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
-                <div class="treenode-score-calc mod-rubric">{{ getRubricScore() }}</div>
+                <div class="treenode-score-calc mod-rubric">{{ getRubricScoreRounded().toLocaleString() }}</div>
                 <div class="total-title">Maximum:</div>
-                <div class="treenode-score-calc mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
+                <div class="treenode-score-calc mod-rubric-max">{{ rubric.getMaximumScore().toLocaleString() }}</div>
             </template>
         </div>
     </div>
@@ -132,6 +135,10 @@
 
     function add(v1: number, v2: number) {
         return v1 + v2;
+    }
+
+    function rounded2dec(v: number) {
+        return Math.round(v * 100) / 100;
     }
 
     @Component({})
@@ -170,7 +177,7 @@
                 .filter(cluster => cluster.hasChildren())
                 .map(cluster => ({
                     cluster,
-                    score: this.getClusterScore(cluster),
+                    score: rounded2dec(this.getClusterScore(cluster)),
                     ...this.getTreeNodeRowData(cluster)
                 }));
         }
@@ -187,7 +194,7 @@
         getCriteriumRowsData(category: Category) {
             return category.criteria.map(criterium => ({
                 criterium,
-                score: this.getCriteriumScore(criterium),
+                score: rounded2dec(this.getCriteriumScore(criterium)),
                 ...this.getTreeNodeRowData(criterium)
             }));
         }
@@ -230,7 +237,16 @@
         selectLevel(evaluation: TreeNodeEvaluation, level: Level) : void {
             evaluation.level = level;
             // careful: getChoiceScore will fail
-            evaluation.score = this.rubric.getChoiceScore(evaluation.treeNode as Criterium, level);
+            const criterium = evaluation.treeNode as Criterium;
+            if (this.rubric.useScores) {
+                if (this.rubric.useRelativeWeights) {
+                    const ls = level.score / Math.max.apply(null, this.rubric.levels.map(l => l.score));
+                    const relWeight = criterium.rel_weight === null ? this.rubric.eqRestWeightPrecise : criterium.rel_weight;
+                    evaluation.score = relWeight * ls;
+                } else {
+                    evaluation.score = this.rubric.getChoiceScore(criterium, level);
+                }
+            }
             this.$emit('level-selected', evaluation.treeNode, level);
         }
 
@@ -254,6 +270,10 @@
         getRubricScore() : number {
             if (this.preview) { return 0; }
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
+        }
+
+        getRubricScoreRounded() {
+            return rounded2dec(this.getRubricScore());
         }
 
         getTreeNodeData(treeNode: TreeNode) : TreeNodeExt|null {
@@ -284,7 +304,7 @@
 <style lang="scss">
     .rubric {
         &.mod-scores {
-            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5rem;
+            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5.6rem;
         }
 
         &.mod-grades {
@@ -548,7 +568,7 @@
 
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5.6rem;
         }
 
         .rubric.mod-grades {
@@ -578,12 +598,22 @@
         }
     }
 
+    @media only screen and (min-width: 680px) {
+        .score-mod-relative {
+            display: none;
+        }
+    }
+
     @media only screen and (max-width: 679px) {
         .treenode-custom-feedback {
             grid-column: 1 / -1;
         }
 
         .treenode-score {
+            display: none;
+        }
+
+        .treenode-level-icon-check.mod-relative {
             display: none;
         }
     }

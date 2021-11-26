@@ -209,6 +209,22 @@ class RubricData
     }
 
     /**
+     * @return int
+     */
+    public function maxLevelScore(): int
+    {
+        $score = 0;
+        foreach ($this->levels as $level)
+        {
+            if ($level->getScore() > $score)
+            {
+                $score = $level->getScore();
+            }
+        }
+        return $score;
+    }
+
+    /**
      * @return TreeNode
      */
     public function getRootNode(): ?TreeNode
@@ -713,13 +729,17 @@ class RubricData
     /**
      * @return float
      */
-    public function getMaximumScore()
+    public function getMaximumScore(): float
     {
+        if ($this->useRelativeWeights()) {
+            return 100.0;
+        }
+
         $maximumScore = 0.0;
 
-        foreach($this->getTreeNodes() as $treeNode)
+        foreach ($this->getTreeNodes() as $treeNode)
         {
-            if(!$treeNode instanceof CriteriumNode)
+            if (!$treeNode instanceof CriteriumNode)
             {
                 continue;
             }
@@ -730,4 +750,29 @@ class RubricData
         return $maximumScore;
     }
 
+    /**
+     * @return float
+     */
+    public function getEqRestWeight(): float
+    {
+        $criteria = $this->getCriteriumNodes();
+        $countWithout = 0;
+        $sum = 0;
+        foreach($criteria as $criterium)
+        {
+            if (is_null($criterium->getRelativeWeight()))
+            {
+                $countWithout += 1;
+            }
+            else
+            {
+                $sum += $criterium->getRelativeWeight();
+            }
+        }
+        if (empty($countWithout))
+        {
+            return 0;
+        }
+        return (100 - $sum) / $countWithout;
+    }
 }
