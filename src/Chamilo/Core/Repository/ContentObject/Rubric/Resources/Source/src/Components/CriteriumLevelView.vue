@@ -19,7 +19,7 @@
     <div>
         <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
         <div class="criterium-level-input" >
-            <div class="criterium-level-input-area" :class="{ 'is-using-scores': rubric.useScores}">
+            <div class="criterium-level-input-area" :class="{ 'is-using-orig-scores': rubric.useScores && !rubric.useRelativeWeights }">
                 <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
                           :class="{ 'is-input-active': isFeedbackInputActive || !choice.feedback }"
                           :placeholder="$t('enter-level-description')"
@@ -27,11 +27,14 @@
                 </textarea>
                 <div class="criterium-level-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" v-html="marked(choice.feedback)"></div>
             </div>
-            <div v-if="rubric.useScores" class="criterium-level-score">
-                <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore" :title="$t('fixed-score')"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>
-                <input class="fixed-score input-detail" type="number" step="0.1" v-if="choice.hasFixedScore" v-model="choice.fixedScore" @input="onChange" />
-                <input type="number" class="input-detail" step="0.1" v-else v-model="rubric.getChoiceScore(criterium, level)" @input="changeChoiceScore" />
-            </div>
+            <template v-if="rubric.useScores">
+                <div v-if="rubric.useRelativeWeights" style="font-size: 2.1rem; margin-top: .05em; text-align: right; width: 1.5em;">{{ level.score }}</div>
+                <div v-else class="criterium-level-score">
+                    <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore" :title="$t('fixed-score')"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>
+                    <input v-if="choice.hasFixedScore" type="number" required min="0" max="100" class="fixed-score input-detail" v-model.number="choice.fixedScore" @input="onChange" />
+                    <input v-else type="number" required min="0" max="100" class="input-detail" v-model="rubric.getChoiceScore(criterium, level)" @input="changeChoiceScore" />
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -72,27 +75,41 @@
         removeFixedScore() {
             this.choice.hasFixedScore = false;
             this.choice.fixedScore = Choice.FIXED_SCORE;
-            this.onChange();
+            this.emitChange();
             this.$forceUpdate();
         }
 
         changeChoiceScore(event: any) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
             const value = parseFloat(event.target.value);
             if (!isNaN(value)) {
                 this.choice.hasFixedScore = true;
                 this.choice.fixedScore = value;
-                this.onChange();
+                this.emitChange();
                 this.$forceUpdate();
             }
         }
 
-        onChange() {
+        emitChange() {
             this.$emit('change', this.choice);
         }
 
+        onChange(event: InputEvent) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
+            this.emitChange();
+        }
+
         onFeedbackChange(e: InputEvent) {
-            this.$emit("input", e);
-            this.onChange();
+            this.$emit('input', e);
+            this.emitChange();
         }
     }
 </script>
@@ -101,7 +118,7 @@
         flex: 1;
         position: relative;
 
-        &.is-using-scores {
+        &.is-using-orig-scores {
             margin-right: 1.5em;
         }
     }

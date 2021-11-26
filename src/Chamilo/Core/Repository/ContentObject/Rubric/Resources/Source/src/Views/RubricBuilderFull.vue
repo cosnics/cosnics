@@ -37,6 +37,7 @@
                     <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
+                        <div v-if="rubric.useScores && rubric.useRelativeWeights" style="align-self: flex-start;margin-top:-.6rem;margin-right:.5rem;"><input type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" /> %</div>
                     </div>
                     <div class="treenode-rubric-input">
                         <div class="treenode-choices">
@@ -94,6 +95,7 @@
         constructor() {
             super();
             this.onResize = debounce(this.onResize, 200);
+            this.onWeightChange = debounce(this.onWeightChange, 750);
         }
 
         updateHeight(e: InputEvent) {
@@ -110,6 +112,18 @@
             if (elem.target.className === 'default-feedback') {
                 elem.target.querySelector('.ta-default-feedback').focus();
             }
+        }
+
+        onWeightChange(event: InputEvent, criterium: Criterium) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
+            if (typeof criterium.rel_weight !== 'number') {
+                criterium.rel_weight = null;
+            }
+            this.dataConnector?.updateTreeNode(criterium);
         }
 
         get useScores() {
@@ -181,6 +195,46 @@
 </script>
 
 <style lang="scss">
+    .input-detail.rel-weight {
+        width: 3.5em;
+
+        -moz-appearance: textfield;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        &.is-set:not(:focus) {
+            background-color: #d3eee0;
+            color: #4a4a4a;
+        }
+
+        &:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6)
+            /*background-color: #edf8f2;*/
+        }
+
+        &:focus::placeholder {
+            opacity: 0.5;
+        }
+
+        &.is-error {
+            border-color: #ff8080;
+        }
+
+        &.is-error::placeholder {
+            color: #c94949;
+        }
+
+        &.is-set.is-error {
+            background-color: #feecea;
+        }
+    }
+
     .rubric.mod-bf {
         grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
     }

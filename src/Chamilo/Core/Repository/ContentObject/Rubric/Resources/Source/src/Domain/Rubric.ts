@@ -8,6 +8,7 @@ import Category from "./Category";
 export interface RubricJsonObject {
     id: string,
     useScores: boolean,
+    useRelativeWeights: boolean,
     title: string,
     levels: LevelJsonObject[],
     clusters: ClusterJsonObject[],
@@ -16,6 +17,7 @@ export interface RubricJsonObject {
 
 export default class Rubric extends TreeNode {
     public useScores: boolean = true;
+    public useRelativeWeights: boolean = true;
     public levels: Level[] = [];
     public choices: Map<CriteriumId, Map<LevelId, Choice>> = new Map<CriteriumId, Map<LevelId, Choice>>();
 
@@ -74,6 +76,7 @@ export default class Rubric extends TreeNode {
         return {
             id: this.id,
             useScores: this.useScores,
+            useRelativeWeights: this.useRelativeWeights,
             title: this.title,
             levels: this.levels,
             clusters: this._children.map(cluster => (cluster as Cluster).toJSON()),
@@ -120,6 +123,7 @@ export default class Rubric extends TreeNode {
         // Note: Setting children directly loses the notifyAddChild behavior. So we have to perform the actions here.
         newRubric._children = clusters;
         newRubric.useScores = rubricObject.useScores;
+        newRubric.useRelativeWeights = rubricObject.useRelativeWeights;
         newRubric.getAllCriteria().forEach(criterium => newRubric.onCriteriumAdded(criterium));
 
         return newRubric;
