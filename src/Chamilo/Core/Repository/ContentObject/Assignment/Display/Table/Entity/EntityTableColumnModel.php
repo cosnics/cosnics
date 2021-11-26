@@ -25,8 +25,23 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     const PROPERTY_LAST_SCORE = 'last_score';
     const PROPERTY_MEMBERS = 'members';
 
-    const DEFAULT_ORDER_COLUMN_INDEX = 4;
+    const DEFAULT_ORDER_COLUMN_INDEX = 1;
     const DEFAULT_ORDER_COLUMN_DIRECTION = SORT_DESC;
+
+    /**
+     * Constructor
+     *
+     * @param \Chamilo\Libraries\Format\Table\Table $table
+     */
+    public function __construct($table)
+    {
+        parent::__construct($table);
+
+        if($this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            $this->set_default_order_column(4);
+        }
+    }
 
     /**
      * Initializes the columns for the table
@@ -35,11 +50,14 @@ class EntityTableColumnModel extends RecordTableColumnModel implements TableColu
     {
         $this->addEntityColumns();
 
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_FIRST_ENTRY_DATE));
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
-        $this->add_column(new SortableStaticTableColumn(self::PROPERTY_ENTRY_COUNT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
-        $this->add_column(new StaticTableColumn(self::PROPERTY_LAST_SCORE));
+        if($this->getAssignmentServiceBridge()->canEditAssignment())
+        {
+            $this->add_column(new SortableStaticTableColumn(self::PROPERTY_FIRST_ENTRY_DATE));
+            $this->add_column(new SortableStaticTableColumn(self::PROPERTY_LAST_ENTRY_DATE));
+            $this->add_column(new SortableStaticTableColumn(self::PROPERTY_ENTRY_COUNT));
+            $this->add_column(new StaticTableColumn(self::PROPERTY_FEEDBACK_COUNT));
+            $this->add_column(new StaticTableColumn(self::PROPERTY_LAST_SCORE));
+        }
     }
 
     protected function addEntityColumns()
