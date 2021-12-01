@@ -15,12 +15,12 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && rubric.useRelativeWeights}" :style="{'--num-cols': rubric.levels.length}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <ul class="rubric-header mod-responsive">
+        <ul class="rubric-header mod-responsive" :class="{'mod-weight': rubric.useScores && rubric.useRelativeWeights}">
             <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
         </ul>
         <template v-for="cluster in rubric.clusters">
@@ -37,14 +37,16 @@
                     <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
-                        <div v-if="rubric.useScores && rubric.useRelativeWeights" style="align-self: flex-start;margin-top:-.6rem;margin-right:.5rem;"><input type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" /> %</div>
                     </div>
+                    <div v-if="rubric.useScores && rubric.useRelativeWeights" class="treenode-weight">
+                        <input type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        <i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                     <div class="treenode-rubric-input">
                         <div class="treenode-choices">
                             <div class="treenode-choice" v-for="choice in ext.choices">
                                 <div class="treenode-level mod-bf">
                                     <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                    <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                    <span v-if="useScores" :aria-label="`${ rubric.useRelativeWeights ? choice.level.score : choice.score } ${ $t('points') }`">{{ rubric.useRelativeWeights ? choice.level.score : choice.score }}</span>
                                 </div>
                                 <div class="treenode-level-description-input" @click="focusTextField">
                                     <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
@@ -233,10 +235,20 @@
         &.is-set.is-error {
             background-color: #feecea;
         }
+
+        + .fa-percent {
+            color: #999;
+            font-size: 1.1rem;
+            margin: 0 5px 0 2px;
+        }
     }
 
     .rubric.mod-bf {
         grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+    }
+
+    .rubric.mod-bf.mod-weight {
+        grid-template-columns: minmax(max-content, 16.5rem) 6.7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
     }
 
     .formatting-help.mod-bf {
@@ -298,15 +310,21 @@
         .treenode-title-header.mod-bf {
             padding-top: .6rem;
         }
-
-        .treenode-title-header.mod-bf .criterium-title {
-            margin-right: 1.5rem;
-        }
     }
 
     @media only screen and (max-width: 899px) {
-        .rubric.mod-bf {
+        .rubric.mod-bf, .rubric.mod-bf.mod-weight {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+        }
+
+        .treenode-weight {
+            padding-left: 1.8rem;
+        }
+    }
+
+    @media only screen and (min-width: 680px) and (max-width: 899px) {
+        .treenode-weight {
+            grid-column: 1 / -1;
         }
     }
 

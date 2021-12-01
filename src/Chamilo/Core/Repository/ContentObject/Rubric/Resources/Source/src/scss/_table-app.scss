@@ -180,6 +180,7 @@
     border-bottom-color: $score-light;
     border-radius: $border-radius;
     font-size: 1.8rem;
+    height: 2.7rem;
     text-align: center;
     transition: 200ms background;
     width: 100%;
@@ -200,6 +201,10 @@
   @media only screen and (min-width: 900px) {
     .rubric-header {
       grid-column-start: 2;
+    }
+
+    .rubric-header.mod-weight {
+      grid-column-start: 3;
     }
 
     .treenode-title-header {
