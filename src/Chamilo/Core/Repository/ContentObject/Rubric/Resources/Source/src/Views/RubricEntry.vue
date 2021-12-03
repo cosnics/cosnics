@@ -4,6 +4,7 @@
         "expand-all": "Expand all",
         "extra-feedback": "Enter extra feedback",
         "feedback": "Feedback",
+        "no-description": "No description",
         "points": "points",
         "rubric": "Rubric",
         "select-level": "Select a level",
@@ -16,6 +17,7 @@
         "expand-all": "Agrandir tout",
         "extra-feedback": "Feed-back supplémentaire",
         "feedback": "Feed-back",
+        "no-description": "Pas de description",
         "points": "points",
         "rubric": "Rubrique",
         "select-level": "Selectionnez un niveau",
@@ -28,6 +30,7 @@
         "expand-all": "Alles uitklappen",
         "extra-feedback": "Geef bijkomende feedback",
         "feedback": "Feedback",
+        "no-description": "Geen omschrijving",
         "points": "punten",
         "rubric": "Rubric",
         "select-level": "Selecteer een niveau",
@@ -81,7 +84,7 @@
                         <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext), 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div class="treenode-title-header-pre mod-criterium"></div>
                             <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                             <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
@@ -91,7 +94,7 @@
                         <div class="treenode-rubric-input" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>
                             <div class="treenode-choices">
-                                <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
+                                <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback, 'mod-no-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && !choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
                                     <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
                                         <span class="treenode-level-title">{{ choice.level.title }}</span>
                                         <span v-if="useScores && rubric.useRelativeWeights" :aria-label="`${ choice.level.score } ${ $t('points') }`">{{ choice.level.score }}</span>
@@ -100,7 +103,10 @@
                                             <i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" />
                                         </span>
                                     </component>
-                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="choice.choice.toMarkdown()"></div>
+                                    <template v-if="showDefaultFeedbackFields || ext.showDefaultFeedback">
+                                        <div v-if="choice.feedback" class="treenode-level-description is-feedback-visible" v-html="choice.choice.toMarkdown()"></div>
+                                        <div v-else class="treenode-level-description mod-no-default-feedback is-feedback-visible"><em>{{ $t('no-description') }}</em></div>
+                                    </template>
                                 </div>
                             </div>
                             <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
@@ -177,10 +183,6 @@
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
-
-        anyChoicesFeedback(ext: TreeNodeExt) {
-            return ext.choices.filter(choice => !!choice.feedback).length > 0;
-        }
 
         getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
             return ext.choices.map(choice => ({
@@ -440,11 +442,18 @@
         }
     }
 
-    .treenode-choice.mod-has-feedback {
+    .treenode-choice.mod-has-feedback, .treenode-choice.mod-no-feedback {
         background: #fafafa;
-        border-bottom: 1px solid #e0e0e0;
         border-radius: $border-radius;
         margin-bottom: .7rem;
+    }
+
+    .treenode-choice.mod-has-feedback {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .treenode-choice.mod-no-feedback {
+        border-bottom: 1px solid #f0f0f0;
     }
 
     .treenode-level {
@@ -494,8 +503,17 @@
         line-height: 1.8rem;
         padding: .35rem .65rem;
 
+        > p, > em {
+            margin: .2em 0;
+        }
+
         &.is-feedback-visible {
             display: block;
+
+            &.mod-no-default-feedback {
+                opacity: .7;
+                text-align: center;
+            }
         }
 
         ul {
@@ -651,10 +669,6 @@
             &.is-feedback-visible {
                 align-self: initial;
                 padding-top: 3rem;
-
-                &.mod-no-default-feedback {
-                    padding-top: 0;
-                }
             }
         }
     }
