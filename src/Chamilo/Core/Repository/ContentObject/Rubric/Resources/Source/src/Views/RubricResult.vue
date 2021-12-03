@@ -46,9 +46,11 @@
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                {{ useScores ? getClusterScore(cluster, evaluation).toLocaleString() : '' }}
+                                <score-display v-if="useScores && rubric.useRelativeWeights" :score="getClusterScore(cluster, evaluation)" show-percent :mute-fraction="false" />
+                                <template v-else-if="useScores">{{ getClusterScore(cluster, evaluation).toLocaleString() }}</template>
+                                <template v-else></template>
                             </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
+                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent :mute-fraction="false" /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
                         </div>
                     </div>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
@@ -63,9 +65,11 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? getCategoryScore(category, evaluation).toLocaleString() : '' }}
+                                        <score-display v-if="useScores && rubric.useRelativeWeights" :score="getCategoryScore(category, evaluation)" show-percent :mute-fraction="false" />
+                                        <template v-else-if="useScores">{{ getCategoryScore(category, evaluation).toLocaleString() }}</template>
+                                        <template v-else></template>
                                     </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
+                                    <div class="treenode-evaluation mod-category-max" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent :mute-fraction="false" /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
                                 </div>
                             </div>
                         </template>
@@ -80,9 +84,11 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? evaluation.score.toLocaleString() : evaluation.level.title }}
+                                        <score-display v-if="useScores && rubric.useRelativeWeights" :score="evaluation.score" show-percent />
+                                        <template v-else-if="useScores">{{ evaluation.score.toLocaleString() }}</template>
+                                        <template v-else>{{ evaluation.level.title }}</template>
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">{{ maxScore.toLocaleString() }}</div>
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
                                 </div>
                             </div>
                         </template>
@@ -93,8 +99,8 @@
                     <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">{{ getRubricScore(evaluator).toLocaleString() }}</div>
-                            <div class="treenode-evaluation mod-rubric-max">{{ rubric.getMaximumScore().toLocaleString() }}</div>
+                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators"><score-display v-if="rubric.useRelativeWeights" :score="getRubricScore(evaluator)" show-percent :mute-fraction="false" /><template v-else>{{ getRubricScore(evaluator).toLocaleString() }}</template></div>
+                            <div class="treenode-evaluation mod-rubric-max"><score-display v-if="rubric.useRelativeWeights" :score="rubric.getMaximumScore()" show-percent :mute-fraction="false" /><template v-else>{{ rubric.getMaximumScore().toLocaleString() }}</template></div>
                         </div>
                     </div>
                 </template>
@@ -111,6 +117,7 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import TreeNodeResultsView from '../Components/TreeNodeResultsView.vue';
+    import ScoreDisplay from '../Components/ScoreDisplay.vue';
     import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
 
     function add(v1: number, v2: number) {
@@ -126,7 +133,7 @@
     }
 
     @Component({
-        components: { TreeNodeResultsView },
+        components: { TreeNodeResultsView, ScoreDisplay },
         filters: {
             capitalize: function (value: any) {
                 if (!value) { return ''; }

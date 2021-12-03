@@ -109,8 +109,8 @@
                         </div>
                         <div v-if="useScores" class="treenode-score mod-rel-weight">
                             <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-criterium mod-rel-weight">
-                                <div class="treenode-score-rel-total mod-criterium"><span class="sr-only">{{ $t('total') }}:</span><score-display :score="preview ? 0 : score" :show-percent="true" /></div>
-                                <div class="treenode-score-rel-max"><score-display :score="criterium.rel_weight !== null ? criterium.rel_weight : rubric.eqRestWeight" :show-percent="true" /></div>
+                                <div class="treenode-score-rel-total mod-criterium"><span class="sr-only">{{ $t('total') }}:</span><score-display :score="preview ? 0 : score" show-percent /></div>
+                                <div class="treenode-score-rel-max"><score-display :score="criterium.rel_weight !== null ? criterium.rel_weight : rubric.eqRestWeight" show-percent /></div>
                             </div>
                             <div v-else class="treenode-score-calc mod-criterium">
                                 <span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score.toLocaleString() }} <span class="sr-only">{{ $t('points') }}</span>
@@ -121,8 +121,8 @@
                 <template v-if="useScores">
                     <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
                     <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-cluster mod-rel-weight">
-                        <div class="treenode-score-rel-total mod-cluster"><score-display :score="score" :show-percent="true" :mute-fraction="false" /></div>
-                        <div class="treenode-score-rel-max"><score-display :score="rubric.getClusterMaxScore(cluster)" :show-percent="true" :mute-fraction="false" /></div>
+                        <div class="treenode-score-rel-total mod-cluster"><score-display :score="score" show-percent :mute-fraction="false" /></div>
+                        <div class="treenode-score-rel-max"><score-display :score="rubric.getClusterMaxScore(cluster)" show-percent :mute-fraction="false" /></div>
                     </div>
                     <div v-else class="treenode-score-calc mod-cluster">{{ score.toLocaleString() }}</div>
                 </template>
@@ -132,8 +132,8 @@
             <template v-if="useScores">
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-rubric mod-rel-weight">
-                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="getRubricScore()" :show-percent="true" :mute-fraction="false" /></div>
-                    <div class="treenode-score-rel-max"><score-display :score="rubric.getMaximumScore()" :show-percent="true" :mute-fraction="false" /></div>
+                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="getRubricScore()" show-percent :mute-fraction="false" /></div>
+                    <div class="treenode-score-rel-max"><score-display :score="rubric.getMaximumScore()" show-percent :mute-fraction="false" /></div>
                 </div>
                 <div v-else class="treenode-score-calc mod-rubric">{{ getRubricScoreRounded().toLocaleString() }}</div>
                 <template v-if="!rubric.useRelativeWeights">

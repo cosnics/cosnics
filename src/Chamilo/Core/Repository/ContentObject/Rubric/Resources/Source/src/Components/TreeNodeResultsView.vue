@@ -31,7 +31,7 @@
                 <div class="rr-selected-treenode-results-title u-markdown-criterium" v-html="treeNode.toMarkdown()"></div>
                 <div class="rr-selected-result" v-for="{evaluator, score, level, feedback} in evaluations">
                     <p v-if="rubric.useScores">
-                        <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ score || '0' }}</span>
+                        <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ score.toLocaleString() || '0' }}<i class="fa fa-percent" v-if="rubric.useRelativeWeights"></i><span v-if="rubric.useRelativeWeights" class="sr-only">%</span></span>
                         <template v-if="level !== null"> (<span class="score-title">{{ level.title }}</span>)</template>
                     </p>
                     <p v-else-if="level !== null">
@@ -49,7 +49,7 @@
                     <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
                         <div class="levels-list-item-header">
                             <div class="title">{{ level.title }}</div>
-                            <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(treeNode, level) }}</div>
+                            <div class="choice-score" v-if="rubric.useScores">{{ rubric.useRelativeWeights ? level.score : rubric.getChoiceScore(treeNode, level).toLocaleString() }}</div>
                         </div>
                         <div class="choice-feedback" v-html="rubric.getChoice(treeNode, level).toMarkdown()"></div>
                     </li>
@@ -217,6 +217,10 @@
             &.score-title {
                 color: hsla(191, 41%, 33%, 1);
             }
+        }
+
+        .fa-percent {
+            font-size: 1.1rem;
         }
     }
 
