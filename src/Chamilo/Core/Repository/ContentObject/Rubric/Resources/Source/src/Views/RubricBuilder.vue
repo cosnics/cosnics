@@ -53,7 +53,7 @@
             <link rel="stylesheet"
                   href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
             <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
-                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
+                <router-view :rubric="rubric" :data-connector="$route.name !== 'BuilderPreview' && dataConnector" :selected-criterium="$route.name === 'Builder' && selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
