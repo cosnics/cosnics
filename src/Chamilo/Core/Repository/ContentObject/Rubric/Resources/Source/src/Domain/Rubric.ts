@@ -255,6 +255,32 @@ export default class Rubric extends TreeNode {
         return maxScore;
     }
 
+    public getCriteriumMaxScore(criterium: Criterium, precise = false) : number {
+        if (this.useRelativeWeights) {
+            return criterium.rel_weight !== null ? criterium.rel_weight : (precise ? this.eqRestWeightPrecise : this.eqRestWeight);
+        }
+        const scores : number[] = [0];
+        const criteriumChoices = this.choices.get(criterium.id);
+        if (!criteriumChoices) {
+            throw new Error(`No choice data found for: ${criterium}`);
+        }
+        criteriumChoices.forEach((choice, levelId) => {
+            const level = this.levels.find(level => level.id === levelId);
+            scores.push(this.getChoiceScore(criterium, level!));
+        })
+        return Math.max.apply(null, scores);
+    }
+
+    public getCategoryMaxScore(category: Category) : number {
+        const score = this.getAllCriteria(category).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
+        return rounded2dec(score);
+    }
+
+    public getClusterMaxScore(cluster: Cluster) : number {
+        const score = this.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
+        return rounded2dec(score);
+    }
+
     public getAllTreeNodes(treeNode: TreeNode = this) {
         const nodes: TreeNode[] = [];
         this.getChildrenRecursive(treeNode, nodes);
@@ -270,7 +296,7 @@ export default class Rubric extends TreeNode {
 
         treeNode.children.filter(child => child.hasChildren()).forEach(
             child => this.getChildrenRecursive(child, nodes)
-        )
+        );
     }
 
     public getAllCriteria(treeNode: TreeNode = this) {
@@ -298,41 +324,19 @@ export default class Rubric extends TreeNode {
 
         treeNode.children.filter(child => child.hasChildren()).forEach(
             child => this.getCriteriaRecursive(child, criteria)
-        )
+        );
     }
 
     get eqRestWeightPrecise() {
-        const numWithout = this.getAllCriteria().filter(criterium => criterium.rel_weight === null).length;
-        if (!numWithout) { return 0; }
-        const sum = this.getAllCriteria().map(criterium => criterium.rel_weight || 0).reduce((v1, v2) => v1 + v2);
-        return (100 - sum) / numWithout;
+        // n => number of criteria without an explicitly set relative weight (only relevant when useRelativeWeights === true)
+        const n = this.getAllCriteria().filter(criterium => criterium.rel_weight === null).length;
+        if (!n) { return 0; }
+        const sum = this.getAllCriteria().map(criterium => criterium.rel_weight || 0).reduce(add, 0);
+        return (100 - sum) / n;
     }
 
     get eqRestWeight() {
         return rounded2dec(this.eqRestWeightPrecise);
-    }
-
-    public getCriteriumMaxScore(criterium: Criterium, precise = false) : number {
-        if (this.useRelativeWeights) {
-            return criterium.rel_weight !== null ? criterium.rel_weight : (precise ? this.eqRestWeightPrecise : this.eqRestWeight);
-        }
-        const scores : number[] = [0];
-        const iterator = this.choices.get(criterium.id);
-        iterator!.forEach((choice, levelId) => {
-            const level = this.levels.find(level => level.id === levelId);
-            scores.push(this.getChoiceScore(criterium, level!));
-        })
-        return Math.max.apply(null, scores);
-    }
-
-    public getCategoryMaxScore(category: Category) : number {
-        const score = this.getAllCriteria(category).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
-        return rounded2dec(score);
-    }
-
-    public getClusterMaxScore(cluster: Cluster) : number {
-        const score = this.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
-        return rounded2dec(score);
     }
 
     public getMaxDecimals() : number {
