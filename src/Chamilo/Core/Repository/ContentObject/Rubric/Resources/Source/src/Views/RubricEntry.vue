@@ -115,11 +115,11 @@
                         </div>
                         <div v-if="useScores" class="treenode-score mod-rel-weight">
                             <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-criterium mod-rel-weight">
-                                <div class="treenode-score-rel-total mod-criterium"><span class="sr-only">{{ $t('total') }}:</span><score-display :score="preview ? 0 : score" show-percent /></div>
-                                <div class="treenode-score-rel-max"><score-display :score="criterium.rel_weight !== null ? criterium.rel_weight : rubric.eqRestWeight" show-percent /></div>
+                                <div class="treenode-score-rel-total mod-criterium"><span class="sr-only">{{ $t('total') }}:</span><score-display :score="preview ? 0 : score" :options="getScoreDisplayOptions(true)" /></div>
+                                <div class="treenode-score-rel-max"><score-display :score="criterium.rel_weight !== null ? criterium.rel_weight : rubric.eqRestWeight" :options="getScoreDisplayOptions(true)" /></div>
                             </div>
                             <div v-else class="treenode-score-calc mod-criterium">
-                                <span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score.toLocaleString() }} <span class="sr-only">{{ $t('points') }}</span>
+                                <span class="sr-only">{{ $t('total') }}:</span> <score-display :score="preview ? 0 : score" :options="getScoreDisplayOptions(true)" /> <span class="sr-only">{{ $t('points') }}</span>
                             </div>
                         </div>
                     </template>
@@ -127,10 +127,10 @@
                 <template v-if="useScores">
                     <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
                     <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-cluster mod-rel-weight">
-                        <div class="treenode-score-rel-total mod-cluster"><score-display :score="score" show-percent :mute-fraction="false" /></div>
-                        <div class="treenode-score-rel-max"><score-display :score="rubric.getClusterMaxScore(cluster)" show-percent :mute-fraction="false" /></div>
+                        <div class="treenode-score-rel-total mod-cluster"><score-display :score="score" :options="scoreDisplayOptions" /></div>
+                        <div class="treenode-score-rel-max"><score-display :score="rubric.getClusterMaxScore(cluster)" :options="scoreDisplayOptions" /></div>
                     </div>
-                    <div v-else class="treenode-score-calc mod-cluster">{{ score.toLocaleString() }}</div>
+                    <div v-else class="treenode-score-calc mod-cluster"><score-display :score="score" :options="scoreDisplayOptions" /></div>
                 </template>
                 <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
             </template>
@@ -138,13 +138,13 @@
             <template v-if="useScores">
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-rubric mod-rel-weight">
-                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="getRubricScore()" show-percent :mute-fraction="false" /></div>
-                    <div class="treenode-score-rel-max"><score-display :score="rubric.getMaximumScore()" show-percent :mute-fraction="false" /></div>
+                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="getRubricScore()" :options="scoreDisplayOptions" /></div>
+                    <div class="treenode-score-rel-max"><score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" /></div>
                 </div>
-                <div v-else class="treenode-score-calc mod-rubric">{{ getRubricScoreRounded().toLocaleString() }}</div>
+                <div v-else class="treenode-score-calc mod-rubric"><score-display :score="getRubricScore()" :options="scoreDisplayOptions" /></div>
                 <template v-if="!rubric.useRelativeWeights">
                     <div class="total-title">Maximum:</div>
-                    <div class="treenode-score-calc mod-rubric-max">{{ rubric.getMaximumScore().toLocaleString() }}</div>
+                    <div class="treenode-score-calc mod-rubric-max"><score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" /></div>
                 </template>
             </template>
         </div>
@@ -176,6 +176,7 @@
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
         private highlightedTreeNode: TreeNode|null = null;
+        private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
@@ -197,6 +198,19 @@
 
         get useGrades() {
             return !this.rubric.useScores;
+        }
+
+        getScoreDisplayOptions(isCriterium = false) {
+            const useRelative = this.rubric.useRelativeWeights;
+            return {
+                fractionDigits: useRelative ? 2 : this.maxDecimals,
+                muteFraction: isCriterium || !useRelative,
+                showPercent: useRelative
+            };
+        }
+
+        get scoreDisplayOptions() {
+            return this.getScoreDisplayOptions();
         }
 
         getClusterRowsData(rubric: Rubric) {
@@ -299,10 +313,6 @@
             return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
-        getRubricScoreRounded() {
-            return rounded2dec(this.getRubricScore());
-        }
-
         getTreeNodeData(treeNode: TreeNode) : TreeNodeExt|null {
             return this.treeNodeData.find((_ : TreeNodeExt) => _.treeNode === treeNode) || null;
         }
@@ -321,6 +331,9 @@
                 }) : [];
                 return { treeNode, choices, showDefaultFeedback: false };
             });
+            if (rubric.useScores && !rubric.useRelativeWeights) {
+                this.maxDecimals = rubric.getMaxDecimals();
+            }
         }
 
         created() {

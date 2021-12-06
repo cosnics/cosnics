@@ -231,7 +231,7 @@ export default class Rubric extends TreeNode {
         array.splice(to, 0, array.splice(from, 1)[0]);
     }
 
-    public getChoiceScore(criterium: Criterium, level: Level){
+    public getChoiceScore(criterium: Criterium, level: Level) {
         let choice = this.getChoice(criterium, level);
         if (choice.hasFixedScore)
             return choice.fixedScore;
@@ -333,5 +333,24 @@ export default class Rubric extends TreeNode {
     public getClusterMaxScore(cluster: Cluster) : number {
         const score = this.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
         return rounded2dec(score);
+    }
+
+    public getMaxDecimals() : number {
+        let maxDecimals = 0;
+        if (this.useScores && !this.useRelativeWeights) {
+            this.getAllCriteria().forEach(criterium => {
+                this.levels.forEach(level => {
+                    const score = this.getChoiceScore(criterium, level);
+                    const intScore = parseInt(score as any);
+                    if (intScore !== score) {
+                        const decimals = (score - intScore).toLocaleString('en-us').length - 2;
+                        if (decimals > maxDecimals) {
+                            maxDecimals = decimals;
+                        }
+                    }
+                });
+            });
+        }
+        return maxDecimals;
     }
 }

@@ -46,11 +46,11 @@
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                <score-display v-if="useScores && rubric.useRelativeWeights" :score="getClusterScore(cluster, evaluation)" show-percent :mute-fraction="false" />
-                                <template v-else-if="useScores">{{ getClusterScore(cluster, evaluation).toLocaleString() }}</template>
-                                <template v-else></template>
+                                <score-display v-if="useScores" :score="getClusterScore(cluster, evaluation)" :options="scoreDisplayOptions" />
                             </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent :mute-fraction="false" /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
+                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">
+                                <score-display :score="maxScore" :options="scoreDisplayOptions" />
+                            </div>
                         </div>
                     </div>
                     <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
@@ -65,11 +65,11 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        <score-display v-if="useScores && rubric.useRelativeWeights" :score="getCategoryScore(category, evaluation)" show-percent :mute-fraction="false" />
-                                        <template v-else-if="useScores">{{ getCategoryScore(category, evaluation).toLocaleString() }}</template>
-                                        <template v-else></template>
+                                        <score-display v-if="useScores" :score="getCategoryScore(category, evaluation)" :options="scoreDisplayOptions" />
                                     </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent :mute-fraction="false" /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
+                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">
+                                        <score-display :score="maxScore" :options="scoreDisplayOptions" />
+                                    </div>
                                 </div>
                             </div>
                         </template>
@@ -84,11 +84,12 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        <score-display v-if="useScores && rubric.useRelativeWeights" :score="evaluation.score" show-percent />
-                                        <template v-else-if="useScores">{{ evaluation.score.toLocaleString() }}</template>
+                                        <score-display v-if="useScores" :score="evaluation.score" :options="getScoreDisplayOptions(true)" />
                                         <template v-else>{{ evaluation.level.title }}</template>
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores"><score-display v-if="rubric.useRelativeWeights" :score="maxScore" show-percent /><template v-else>{{ maxScore.toLocaleString() }}</template></div>
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">
+                                        <score-display :score="maxScore" :options="getScoreDisplayOptions(true)" />
+                                    </div>
                                 </div>
                             </div>
                         </template>
@@ -99,8 +100,12 @@
                     <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators"><score-display v-if="rubric.useRelativeWeights" :score="getRubricScore(evaluator)" show-percent :mute-fraction="false" /><template v-else>{{ getRubricScore(evaluator).toLocaleString() }}</template></div>
-                            <div class="treenode-evaluation mod-rubric-max"><score-display v-if="rubric.useRelativeWeights" :score="rubric.getMaximumScore()" show-percent :mute-fraction="false" /><template v-else>{{ rubric.getMaximumScore().toLocaleString() }}</template></div>
+                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">
+                                <score-display :score="getRubricScore(evaluator)" :options="scoreDisplayOptions" />
+                            </div>
+                            <div class="treenode-evaluation mod-rubric-max">
+                                <score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" />
+                            </div>
                         </div>
                     </div>
                 </template>
@@ -151,6 +156,7 @@
     export default class RubricResult extends Vue {
         private selectedTreeNode: Criterium|Category|Cluster|null = null;
         private highlightedTreeNode: Criterium|Category|Cluster|null = null;
+        private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
@@ -172,6 +178,19 @@
 
         get useGrades() {
             return !this.rubric.useScores;
+        }
+
+        getScoreDisplayOptions(isCriterium = false) {
+            const useRelative = this.rubric.useRelativeWeights;
+            return {
+                fractionDigits: useRelative ? 2 : this.maxDecimals,
+                muteFraction: isCriterium || !useRelative,
+                showPercent: useRelative
+            };
+        }
+
+        get scoreDisplayOptions() {
+            return this.getScoreDisplayOptions();
         }
 
         getTreeNodeRowData(treeNode: TreeNode) {
@@ -260,6 +279,13 @@
             const evaluatorEvaluation = this.getTreeNodeResult(treeNode).evaluations.find((_ : EvaluatorEvaluation) => _.evaluator === evaluator);
             if (!evaluatorEvaluation) { throw new Error(`No evaluation found for: ${treeNode} and evaluator: ${evaluator && evaluator.name}`); }
             return evaluatorEvaluation.treeNodeEvaluation;
+        }
+
+        created() {
+            const rubric = this.rubric;
+            if (rubric.useScores && !rubric.useRelativeWeights) {
+                this.maxDecimals = rubric.getMaxDecimals();
+            }
         }
     }
 </script>
