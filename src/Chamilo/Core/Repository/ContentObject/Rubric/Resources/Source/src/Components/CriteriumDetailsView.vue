@@ -43,7 +43,7 @@
                             </template>
                             <template v-else>
                                 <label for="weight">{{ $t('weight') }}:</label>
-                                <input id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %
+                                <input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %
                             </template>
                         </div>
                         <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
