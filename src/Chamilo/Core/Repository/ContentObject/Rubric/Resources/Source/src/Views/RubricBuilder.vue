@@ -1180,6 +1180,7 @@
         }
 
         .rubric-actions {
+            align-self: baseline;
             position: relative;
 
             &.is-open {
@@ -1282,7 +1283,7 @@
         }
 
         .clusters-view {
-            align-items: baseline;
+            align-items: center;
             border-bottom: 1px solid transparent;
             display: flex;
             margin-left: -1em;
@@ -1305,10 +1306,11 @@
         }
 
         .b-clusters {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(var(--num-clusters), minmax(0, 180px));
             margin-bottom: -1px;
             margin-left: 1em;
-            max-width: calc(100% - 23em);
+            /*max-width: calc(100% - 23em);*/
 
             .name-input {
                 position: fixed;
@@ -1318,7 +1320,7 @@
         .b-cluster-list-item {
             /* A border is needed here so the ghost item can show the dotted border without flicking the content below */
             border: 1px solid transparent;
-            flex: 1;
+            /*flex: 1;*/
             margin-right: .65em;
             overflow: hidden;
 

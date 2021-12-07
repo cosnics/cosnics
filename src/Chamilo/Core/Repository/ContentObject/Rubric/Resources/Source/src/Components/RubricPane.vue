@@ -23,7 +23,7 @@
         <button class="btn-collapse" :class="{ 'is-open': showClusters }" @click="toggleShowClusters"><i class="fa fa-institution"></i><span>{{ $t('subsections') }}</span></button>
         <div class="clusters-collapse">
             <transition name="clusters-slide">
-                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'is-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'">
+                <div class="clusters-view" @mouseover="dragMouseOver(`${id}_clusters`)" @mouseout="dragMouseOut" :class="{ 'no-drop': clusterDragging && bannedForDrop === `${id}_clusters`, 'is-closed': !showClusters, 'mod-separator': clusterActionsEnabled }" :key="showClusters ? 'open' : 'closed'" :style="'--num-clusters: ' + clusters.length">
                     <split-view-button v-if="id === 'view1'" :show-split-view="showSplitView" @changed="$emit('split-view-changed', $event)"></split-view-button>
                     <draggable handle=".handle" :disabled="draggableDisabled" :id="`${id}_clusters`" tag="ul" group="clusters" class="b-clusters" ghost-class="ghost" :list="clusters" :class="{ 'cluster-dragging': clusterDragging }" :forceFallback="true" :animation="250"
                             :move="onMoveCluster" @start="startDrag($event, 'cluster')" @end="endDrag" @change="onChangeCluster">
