@@ -35,7 +35,8 @@ class BuilderComponent extends Manager implements DelegateComponent
         {
             $html = [];
             $html[] = $this->render_header();
-            $html[] = '<div class="alert alert-warning">' .
+            $html[] = "<style>.rubric-back-to-assignment { display: inline-block; padding: 2px; } .rubric-back-to-assignment .fa { margin-right: 3px; }</style>";
+            $html[] = '<div class="alert-rubric-results">' .
                 $this->getTranslator()->trans('RubricHasResults', [], 'Chamilo\Core\Repository\ContentObject\Rubric') .
                 '</div>';
             $html[] = $this->getTwig()->render(
