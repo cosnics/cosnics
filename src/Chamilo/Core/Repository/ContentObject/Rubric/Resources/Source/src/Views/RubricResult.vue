@@ -24,7 +24,6 @@
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view">
             <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
-                <!--<div class="rubric-header-fill" aria-hidden="true"></div>-->
                 <ul class="rubric-header mod-res" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
@@ -46,7 +45,7 @@
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                <score-display v-if="useScores" :score="getClusterScore(cluster, evaluation)" :options="scoreDisplayOptions" />
+                                <score-display v-if="useScores" :score="rubricEvaluation.getClusterScore(cluster, evaluation)" :options="scoreDisplayOptions" />
                             </div>
                             <div class="treenode-evaluation mod-cluster-max" v-if="useScores">
                                 <score-display :score="maxScore" :options="scoreDisplayOptions" />
@@ -65,7 +64,7 @@
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        <score-display v-if="useScores" :score="getCategoryScore(category, evaluation)" :options="scoreDisplayOptions" />
+                                        <score-display v-if="useScores" :score="rubricEvaluation.getCategoryScore(category, evaluation)" :options="scoreDisplayOptions" />
                                     </div>
                                     <div class="treenode-evaluation mod-category-max" v-if="useScores">
                                         <score-display :score="maxScore" :options="scoreDisplayOptions" />
@@ -101,7 +100,7 @@
                     <div class="treenode-rubric-results">
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">
-                                <score-display :score="getRubricScore(evaluator)" :options="scoreDisplayOptions" />
+                                <score-display :score="rubricEvaluation.getRubricScore(evaluator)" :options="scoreDisplayOptions" />
                             </div>
                             <div class="treenode-evaluation mod-rubric-max">
                                 <score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" />
@@ -121,20 +120,13 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
     import TreeNodeResultsView from '../Components/TreeNodeResultsView.vue';
     import ScoreDisplay from '../Components/ScoreDisplay.vue';
-    import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
-
-    function add(v1: number, v2: number) {
-        return v1 + v2;
-    }
+    import {TreeNodeEvaluation} from '../Util/interfaces';
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;
-    }
-
-    function rounded2dec(v: number) {
-        return Math.round(v * 100) / 100;
     }
 
     @Component({
@@ -159,18 +151,8 @@
         private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
-        @Prop({type: Array, default: () => []}) readonly treeNodeResults!: TreeNodeResult[];
+        @Prop({type: RubricEvaluation, required: true}) readonly rubricEvaluation!: RubricEvaluation;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
-
-        getEvaluationTitleOverlay(evaluation: TreeNodeEvaluation) : string {
-            const extraFeedback = evaluation.feedback ? `${this.$t('extra-feedback')}: ${evaluation.feedback}` : '';
-            if (evaluation.treeNode.getType() === 'criterium') {
-                return this.rubric.useScores ? extraFeedback : `${evaluation.level?.title || ''}${extraFeedback && ('\n' + extraFeedback)}`;
-            } else {
-                return extraFeedback;
-            }
-        }
 
         get useScores() {
             return this.rubric.useScores;
@@ -178,6 +160,10 @@
 
         get useGrades() {
             return !this.rubric.useScores;
+        }
+
+        get evaluators() {
+            return this.rubricEvaluation.getEvaluators();
         }
 
         getScoreDisplayOptions(isCriterium = false) {
@@ -191,6 +177,15 @@
 
         get scoreDisplayOptions() {
             return this.getScoreDisplayOptions();
+        }
+
+        getEvaluationTitleOverlay(evaluation: TreeNodeEvaluation) : string {
+            const extraFeedback = evaluation.feedback ? `${this.$t('extra-feedback')}: ${evaluation.feedback}` : '';
+            if (evaluation.treeNode.getType() === 'criterium') {
+                return this.rubric.useScores ? extraFeedback : `${evaluation.level?.title || ''}${extraFeedback && ('\n' + extraFeedback)}`;
+            } else {
+                return extraFeedback;
+            }
         }
 
         getTreeNodeRowData(treeNode: TreeNode) {
@@ -215,8 +210,8 @@
         getClusterRowData(cluster: Cluster) {
             return {
                 cluster,
-                maxScore: rounded2dec(this.rubric.getClusterMaxScore(cluster)),
-                evaluations: this.getTreeNodeResult(cluster).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getClusterMaxScore(cluster),
+                evaluations: this.rubricEvaluation.getEvaluations(cluster)
             };
         }
 
@@ -229,8 +224,8 @@
         getCategoryRowData(category: Category) {
             return {
                 category,
-                maxScore: rounded2dec(this.rubric.getCategoryMaxScore(category)),
-                evaluations: this.getTreeNodeResult(category).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getCategoryMaxScore(category),
+                evaluations: this.rubricEvaluation.getEvaluations(category)
             };
         }
 
@@ -241,44 +236,9 @@
         getCriteriumRowData(criterium: Criterium) {
             return {
                 criterium,
-                maxScore: rounded2dec(this.rubric.getCriteriumMaxScore(criterium)),
-                evaluations: this.getTreeNodeResult(criterium).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getCriteriumMaxScore(criterium),
+                evaluations: this.rubricEvaluation.getEvaluations(criterium)
             };
-        }
-
-        getCriteriumScore(criterium: Criterium, evaluator: any) : number {
-            return this.getTreeNodeEvaluation(criterium, evaluator).score || 0;
-        }
-
-        getCategoryScore(category: Category, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return rounded2dec(evaluation.score); }
-            if (!this.rubric) { return 0; }
-            return rounded2dec(this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0));
-        }
-
-        getClusterScore(cluster: Cluster, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return rounded2dec(evaluation.score); }
-            if (!this.rubric) { return 0; }
-            return rounded2dec(this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0));
-        }
-
-        getRubricScore(evaluator: any) : number {
-            const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator).score;
-            if (typeof treeNodeScore === 'number') { return rounded2dec(treeNodeScore); }
-            if (!this.rubric) { return 0; }
-            return rounded2dec(this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0));
-        }
-
-        getTreeNodeResult(treeNode: TreeNode) : TreeNodeResult {
-            const treeNodeResult = this.treeNodeResults.find((_ : TreeNodeResult) => _.treeNode === treeNode);
-            if (!treeNodeResult) { throw new Error(`No data found for: ${treeNode}`); }
-            return treeNodeResult;
-        }
-
-        getTreeNodeEvaluation(treeNode: TreeNode, evaluator: any) : TreeNodeEvaluation {
-            const evaluatorEvaluation = this.getTreeNodeResult(treeNode).evaluations.find((_ : EvaluatorEvaluation) => _.evaluator === evaluator);
-            if (!evaluatorEvaluation) { throw new Error(`No evaluation found for: ${treeNode} and evaluator: ${evaluator && evaluator.name}`); }
-            return evaluatorEvaluation.treeNodeEvaluation;
         }
 
         created() {

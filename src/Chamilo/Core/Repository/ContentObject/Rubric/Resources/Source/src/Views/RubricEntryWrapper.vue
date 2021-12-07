@@ -1,5 +1,5 @@
 <template>
-    <rubric-entry v-if="rubric" :rubric="rubric" :tree-node-evaluations="treeNodeEvaluations" :ui-state="uiState" :show-errors="showErrors"
+    <rubric-entry v-if="rubric" :rubric="rubric" :rubric-evaluation="rubricEvaluation" :ui-state="uiState" :show-errors="showErrors"
                   @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
         <template v-slot:slot-inner>
             <slot name="slot-outer"></slot>
@@ -14,6 +14,7 @@
     import RubricEntry from './RubricEntry.vue';
     import {convertRubricData} from '../Util/util';
     import {TreeNodeEvaluation} from '../Util/interfaces';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
 
     @Component({
         components: {
@@ -27,6 +28,7 @@
         };
 
         private treeNodeEvaluations: TreeNodeEvaluation[] = [];
+        private rubricEvaluation: RubricEvaluation|null = null;
 
         @Prop({type: Object, required: true}) readonly rubricData!: object;
         @Prop({type: Object, default: null}) readonly rubricResults!: any|null;
@@ -52,6 +54,7 @@
                    level: treeNode instanceof Criterium ? defaultLevel : null,
                    score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null,
                    feedback: '' }));
+            this.rubricEvaluation = RubricEvaluation.fromEntry(rubric, this.treeNodeEvaluations);
             this.updateRubricResults();
         }
 

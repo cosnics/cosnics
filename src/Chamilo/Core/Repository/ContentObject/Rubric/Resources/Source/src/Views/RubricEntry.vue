@@ -138,10 +138,10 @@
             <template v-if="useScores">
                 <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-rubric mod-rel-weight">
-                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="getRubricScore()" :options="scoreDisplayOptions" /></div>
+                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="preview ? 0 : rubricEvaluation.getRubricScore()" :options="scoreDisplayOptions" /></div>
                     <div class="treenode-score-rel-max"><score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" /></div>
                 </div>
-                <div v-else class="treenode-score-calc mod-rubric"><score-display :score="getRubricScore()" :options="scoreDisplayOptions" /></div>
+                <div v-else class="treenode-score-calc mod-rubric"><score-display :score="preview ? 0 : rubricEvaluation.getRubricScore()" :options="scoreDisplayOptions" /></div>
                 <template v-if="!rubric.useRelativeWeights">
                     <div class="total-title">Maximum:</div>
                     <div class="treenode-score-calc mod-rubric-max"><score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" /></div>
@@ -161,14 +161,7 @@
     import Criterium from '../Domain/Criterium';
     import ScoreDisplay from '../Components/ScoreDisplay.vue';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
-
-    function add(v1: number, v2: number) {
-        return v1 + v2;
-    }
-
-    function rounded2dec(v: number) {
-        return Math.round(v * 100) / 100;
-    }
+    import RubricEvaluation from '../Domain/RubricEvaluation';
 
     @Component({
         components: { ScoreDisplay }
@@ -179,7 +172,7 @@
         private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
+        @Prop({type: RubricEvaluation}) readonly rubricEvaluation!: RubricEvaluation|undefined;
         @Prop({type: Object}) readonly uiState!: any;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
@@ -218,7 +211,7 @@
                 .filter(cluster => cluster.hasChildren())
                 .map(cluster => ({
                     cluster,
-                    score: rounded2dec(this.getClusterScore(cluster)),
+                    score: this.preview ? 0 : this.rubricEvaluation?.getClusterScore(cluster),
                     ...this.getTreeNodeRowData(cluster)
                 }));
         }
@@ -235,7 +228,7 @@
         getCriteriumRowsData(category: Category) {
             return category.criteria.map(criterium => ({
                 criterium,
-                score: rounded2dec(this.getCriteriumScore(criterium)),
+                score: this.preview ? 0 : this.rubricEvaluation?.getCriteriumScore(criterium),
                 ...this.getTreeNodeRowData(criterium)
             }));
         }
@@ -243,7 +236,7 @@
         getTreeNodeRowData(treeNode: TreeNode) {
             return {
                 ext: this.getTreeNodeData(treeNode),
-                evaluation: this.getTreeNodeEvaluation(treeNode),
+                evaluation: this.preview ? null : this.rubricEvaluation?.getTreeNodeEvaluation(treeNode)
             }
         }
 
@@ -267,8 +260,8 @@
 
         isSelected(criterium: Criterium, level: Level) {
             const isDefaultLevel = level.isDefault;
-            if (!this.treeNodeEvaluations) { return isDefaultLevel; }
-            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
+            if (!this.rubricEvaluation) { return isDefaultLevel; }
+            const evaluation = this.rubricEvaluation.getTreeNodeEvaluation(criterium);
             if (!evaluation || !evaluation.level) {
                 return isDefaultLevel;
             }
@@ -291,45 +284,23 @@
             this.$emit('level-selected', evaluation.treeNode, level);
         }
 
-        getCriteriumScore(criterium: Criterium) : number {
-            if (this.preview) { return 0; }
-            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
-            if (!evaluation) { return 0; }
-            return evaluation.score || 0;
-        }
-
-        getCategoryScore(category: Category) : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
-        }
-
-        getClusterScore(cluster: Cluster) : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
-        }
-
-        getRubricScore() : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
-        }
-
         getTreeNodeData(treeNode: TreeNode) : TreeNodeExt|null {
             return this.treeNodeData.find((_ : TreeNodeExt) => _.treeNode === treeNode) || null;
-        }
-
-        getTreeNodeEvaluation(treeNode: TreeNode) : TreeNodeEvaluation|null {
-            return this.treeNodeEvaluations.find((_ : TreeNodeEvaluation) => _.treeNode === treeNode) || null;
         }
 
         private initData() {
             const rubric = this.rubric;
             this.treeNodeData = rubric.getAllTreeNodes().map(treeNode => {
-                const choices = treeNode instanceof Criterium ? rubric.levels.map(level => {
-                    const choice = rubric.getChoice(treeNode, level);
-                    const score = rubric.getChoiceScore(treeNode, level);
-                    return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
-                }) : [];
-                return { treeNode, choices, showDefaultFeedback: false };
+                if (treeNode instanceof Criterium) {
+                    const choices = rubric.levels.map(level => {
+                        const choice = rubric.getChoice(treeNode, level);
+                        const score = rubric.getChoiceScore(treeNode, level);
+                        return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
+                    });
+                    return { treeNode, choices, showDefaultFeedback: false };
+                } else {
+                    return { treeNode, choices: [], showDefaultFeedback: false };
+                }
             });
             if (rubric.useScores && !rubric.useRelativeWeights) {
                 this.maxDecimals = rubric.getMaxDecimals();
