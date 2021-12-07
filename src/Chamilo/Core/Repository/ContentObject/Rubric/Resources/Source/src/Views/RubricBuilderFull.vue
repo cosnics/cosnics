@@ -277,20 +277,26 @@
     }
 
     .treenode-level-description-input {
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: #fafafa;
+        border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         flex: 1;
         line-height: 1.8rem;
         padding: 0;
 
-        &:hover, &:focus-within {
-            border: 1px solid $score-dark;
+        &:hover {
+            background-color: #fff;
+        }
+
+        &:focus-within {
+            background-color: #fff;
+            border: 1px solid #66afe9;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(102, 175, 233, .6);
         }
     }
 
     .ta-default-feedback {
-        /*background: transparent;*/
+        background: transparent;
         border: none;
         overflow: hidden;
         padding: .3em;
