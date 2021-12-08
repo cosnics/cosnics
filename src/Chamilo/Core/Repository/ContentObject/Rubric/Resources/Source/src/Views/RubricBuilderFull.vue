@@ -15,12 +15,12 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && rubric.useRelativeWeights}" :style="{'--num-cols': rubric.levels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores}" :style="{'--num-cols': rubric.levels.length}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <ul class="rubric-header mod-responsive" :class="{'mod-weight': rubric.useScores && rubric.useRelativeWeights}">
+        <ul class="rubric-header mod-responsive" :class="{'mod-weight': rubric.useScores}">
             <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
         </ul>
         <template v-for="cluster in rubric.clusters">
@@ -38,18 +38,21 @@
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
-                    <div v-if="rubric.useScores && rubric.useRelativeWeights" class="treenode-weight">
-                        <input type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                    <div v-if="rubric.useScores" class="treenode-weight">
+                        <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
                         <i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
                     <div class="treenode-rubric-input">
                         <div class="treenode-choices">
                             <div class="treenode-choice" v-for="choice in ext.choices">
                                 <div class="treenode-level mod-bf">
                                     <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                    <span v-if="useScores" :aria-label="`${ rubric.useRelativeWeights ? choice.level.score : choice.score } ${ $t('points') }`">{{ rubric.useRelativeWeights ? choice.level.score : choice.score }}</span>
+                                    <span v-if="useScores" :aria-label="`${ rubric.useRelativeWeights ? choice.level.score : choice.score.toLocaleString() } ${ $t('points') }`">{{ rubric.useRelativeWeights ? choice.level.score : choice.score.toLocaleString() }}</span>
                                 </div>
                                 <div class="treenode-level-description-input" @click="focusTextField">
-                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
+                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)">
+                                        <span v-if="useScores && !rubric.useRelativeWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score.toLocaleString() }}</span>
+                                    </feedback-field>
                                 </div>
                             </div>
                         </div>
@@ -122,8 +125,17 @@
                 el.reportValidity();
                 return;
             }
-            if (typeof criterium.rel_weight !== 'number') {
+            const rubric = this.rubric;
+            if (rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
                 criterium.rel_weight = null;
+            } else if (!rubric.useRelativeWeights) {
+                const criteriumExt = this.getCriteriumData(criterium);
+                criteriumExt.choices = [];
+                rubric.levels.forEach(level => {
+                    const choice = rubric.getChoice(criterium, level);
+                    const score = rubric.getChoiceScore(criterium, level);
+                    criteriumExt.choices.push({ level, choice, score});
+                });
             }
             this.dataConnector?.updateTreeNode(criterium);
         }
@@ -197,7 +209,11 @@
 </script>
 
 <style lang="scss">
-    .input-detail.rel-weight {
+    .input-detail.abs-weight {
+        text-align: right;
+    }
+
+    .input-detail.abs-weight, .input-detail.rel-weight {
         width: 3.5em;
 
         -moz-appearance: textfield;
