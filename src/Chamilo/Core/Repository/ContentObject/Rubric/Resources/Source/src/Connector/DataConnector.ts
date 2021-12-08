@@ -77,7 +77,7 @@ export default class DataConnector {
     updateRubric(rubric: Rubric) {
         this.addToQueue(async () => {
             const parameters = {
-                'rubricData': JSON.stringify({ 'use_scores': rubric.useScores })
+                'rubricData': JSON.stringify({ 'use_scores': rubric.useScores, 'use_relative_weights': rubric.useRelativeWeights })
             };
             await this.executeAPIRequest(this.apiConfiguration.updateRubricURL, parameters);
         });

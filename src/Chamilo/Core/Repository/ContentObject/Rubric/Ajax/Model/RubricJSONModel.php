@@ -39,6 +39,7 @@ class RubricJSONModel
      *
      * @param int $id
      * @param bool $useScores
+     * @param bool $useRelativeWeights
      */
     public function __construct(int $id, bool $useScores, bool $useRelativeWeights)
     {
@@ -64,6 +65,14 @@ class RubricJSONModel
     }
 
     /**
+     * @return bool
+     */
+    public function useRelativeWeights(): ?bool
+    {
+        return $this->useRelativeWeights;
+    }
+
+    /**
      * @param RubricData $rubricData
      *
      * @return RubricData
@@ -71,6 +80,7 @@ class RubricJSONModel
     public function updateRubricData(RubricData $rubricData)
     {
         $rubricData->setUseScores($this->useScores());
+        $rubricData->setUseRelativeWeights($this->useRelativeWeights());
 
         return $rubricData;
     }
