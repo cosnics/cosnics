@@ -287,7 +287,9 @@ class BaseHeader implements HeaderInterface
         $this->addExceptionLogger($fileConfigurationConsulter);
 
         $this->addHtmlHeader(
-            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";</script>'
+            '<script type="text/javascript">var rootWebPath="' . Path::getInstance()->getBasePath(true) . '";' .
+            // Temporary security fix to avoid abuse of the proto exploit in jquery
+            'if(window.location.search.includes("__proto__")){window.location.href = window.location.href.replace("__proto__", "");}</script>'
         );
 
 //        $javascriptCacheService = new JavascriptCacheService($pathBuilder, $configurablePathBuilder);
