@@ -14,8 +14,13 @@ class SerializedDataValidator
      * @param string $serializedData
      * @param array $allowedClasses
      */
-    public static function validateSerializedData(string $serializedData, array $allowedClasses = [])
+    public static function validateSerializedData(string $serializedData = null, array $allowedClasses = [])
     {
+        if(empty($serializedData))
+        {
+            return;
+        }
+
         $matches = [];
         preg_match_all('/O:\d*:"([^"]*)"/', $serializedData, $matches);
 
