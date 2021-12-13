@@ -17,7 +17,7 @@
         <textarea v-model="choice.feedback" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" @input="onFeedbackChange" @focus="isFeedbackInputActive = true" @blur="isFeedbackInputActive = false">></textarea>
         <div class="feedback-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}">
             <slot></slot>
-            <div class="choice-preview" v-html="choice.toMarkdown()"><template>
+            <div class="choice-preview" v-html="choice.toMarkdown()"></div>
         </div>
     </div>
 </template>
