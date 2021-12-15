@@ -77,26 +77,39 @@ export default class RubricEvaluation {
     getCategoryScore(category: Category, evaluation: any|undefined = undefined) : number {
         if (this.mode === EvaluationMode.Result && typeof evaluation?.score === 'number') {
             return evaluation.score;
-        } else {
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
         }
+        return this.getCriteriaScore(this.rubric.getAllCriteria(category), evaluation?.evaluator);
     }
 
     getClusterScore(cluster: Cluster, evaluation: any|undefined = undefined) : number {
         if (this.mode === EvaluationMode.Result && typeof evaluation?.score === 'number') {
             return evaluation.score;
-        } else {
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
         }
+        return this.getCriteriaScore(this.rubric.getAllCriteria(cluster), evaluation?.evaluator);
     }
 
     getRubricScore(evaluator: any|undefined = undefined) : number {
         const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator)?.score;
         if (this.mode === EvaluationMode.Result && typeof treeNodeScore === 'number') {
             return treeNodeScore;
-        } else {
-            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
         }
+        return this.getCriteriaScore(this.rubric.getAllCriteria(), evaluator);
+    }
+
+    getCriteriaScore(criteria: Criterium[], evaluator: any|undefined = undefined): number {
+        if (!criteria.length) { return 0; }
+        if (!this.rubric.useRelativeWeights) {
+            return criteria.map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
+        }
+        const eqRestWeight = this.rubric.eqRestWeightPrecise;
+        const scoreWeights = criteria.map(criterium => {
+            const weight = criterium.rel_weight === null ? eqRestWeight : criterium.rel_weight;
+            return { weight, score: this.getCriteriumScore(criterium, evaluator) * (weight / 100)};
+        });
+        const totWeight = scoreWeights.map(s => s.weight).reduce(add, 0);
+        if (!totWeight) { return 0; }
+        const score = scoreWeights.map(s => s.score).reduce(add, 0);
+        return (score / totWeight) * 100;
     }
 
     private getTreeNodeResult(treeNode: TreeNode) : TreeNodeResult {

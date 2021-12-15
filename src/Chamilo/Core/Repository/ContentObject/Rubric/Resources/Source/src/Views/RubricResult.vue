@@ -23,16 +23,16 @@
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <div v-if="rubric" class="rubric-results-view">
-            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
+            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores && !rubric.useRelativeWeights ? 1 : 0)}" @click.stop="selectedTreeNode = null">
                 <ul class="rubric-header mod-res" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
-                    <li v-if="useScores" class="rubric-header-title mod-res mod-max">Max.</li>
+                    <li v-if="useScores && !rubric.useRelativeWeights" class="rubric-header-title mod-res mod-max">Max.</li>
                 </ul>
                 <ul class="rubric-header mod-res mod-date" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-date" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
-                    <li v-if="useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
+                    <li v-if="useScores && !rubric.useRelativeWeights" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                     <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
@@ -47,7 +47,7 @@
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                 <score-display v-if="useScores" :score="rubricEvaluation.getClusterScore(cluster, evaluation)" :options="scoreDisplayOptions" />
                             </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">
+                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores && !rubric.useRelativeWeights">
                                 <score-display :score="maxScore" :options="scoreDisplayOptions" />
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
                                         <score-display v-if="useScores" :score="rubricEvaluation.getCategoryScore(category, evaluation)" :options="scoreDisplayOptions" />
                                     </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">
+                                    <div class="treenode-evaluation mod-category-max" v-if="useScores && !rubric.useRelativeWeights">
                                         <score-display :score="maxScore" :options="scoreDisplayOptions" />
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                         <score-display v-if="useScores" :score="evaluation.score" :options="getScoreDisplayOptions(true)" />
                                         <template v-else>{{ evaluation.level.title }}</template>
                                     </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">
+                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores && !rubric.useRelativeWeights">
                                         <score-display :score="maxScore" :options="getScoreDisplayOptions(true)" />
                                     </div>
                                 </div>
@@ -102,7 +102,7 @@
                             <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">
                                 <score-display :score="rubricEvaluation.getRubricScore(evaluator)" :options="scoreDisplayOptions" />
                             </div>
-                            <div class="treenode-evaluation mod-rubric-max">
+                            <div class="treenode-evaluation mod-rubric-max" v-if="!rubric.useRelativeWeights">
                                 <score-display :score="rubric.getMaximumScore()" :options="scoreDisplayOptions" />
                             </div>
                         </div>

@@ -21,6 +21,7 @@ export default {
     rubricData: {
         "id": "t9hnqokwvenfdgskc7ykas",
         "useScores": true,
+        "useRelativeWeights": true,
         "title": "Holistisch scoren",
         "levels": [
             {

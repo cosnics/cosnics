@@ -194,14 +194,14 @@
     align-self: center;
     color: darken($score-dark, 20%);
     font-weight: 700;
-    grid-column-start: 2;
+    grid-column-start: 3;
     text-align: right;
   }
 
   @media only screen and (min-width: 900px) {
-    .rubric-header {
-      grid-column-start: 2;
-    }
+    /*.rubric-header {
+      grid-column-start: 3;
+    }*/
 
     .rubric-header.mod-weight {
       grid-column-start: 3;

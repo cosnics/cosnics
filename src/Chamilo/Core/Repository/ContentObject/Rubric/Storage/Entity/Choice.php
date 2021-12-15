@@ -311,23 +311,15 @@ class Choice
 
         if ($this->getRubricData()->useRelativeWeights())
         {
-            $relativeWeight = $this->getCriterium()->getRelativeWeight();
-            if ($relativeWeight === 0)
-            {
-                return 0;
-            }
-            if (is_null($relativeWeight))
-            {
-                $relativeWeight = $this->getRubricData()->getEqRestWeight();
-            }
             if ($this->getRubricData()->maxLevelScore() === 0)
             {
                 return 0;
             }
-            return $relativeWeight * ($this->getLevel()->getScore() / $this->getRubricData()->maxLevelScore());
+
+            return 100 * ($this->getLevel()->getScore() / $this->getRubricData()->maxLevelScore());
         }
 
-        if($this->hasFixedScore())
+        if ($this->hasFixedScore())
         {
             return $this->fixedScore;
         }

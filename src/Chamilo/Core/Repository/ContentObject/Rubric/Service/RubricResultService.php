@@ -3,6 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
 use Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model\TreeNodeResultJSONModel;
+use Chamilo\Core\Repository\ContentObject\Rubric\Domain\RubricTreeNodeScore;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
@@ -28,6 +29,11 @@ class RubricResultService
      * @var RubricResultRepository
      */
     protected $rubricResultRepository;
+
+    /**
+     * @var float
+     */
+    protected $criteriumEqRestWeight;
 
     /**
      * RubricResultService constructor.
@@ -65,10 +71,15 @@ class RubricResultService
             $treeNodeResultJSONModelsById[$treeNodeResultJSONModel->getTreeNodeId()] = $treeNodeResultJSONModel;
         }
 
+        if ($rubricData->useScores() && $rubricData->useRelativeWeights())
+        {
+            $this->criteriumEqRestWeight = $rubricData->getEqRestWeight();
+        }
+
         $totalScore = $this->calculateAndStoreScoreForTreeNode(
             $user, $rubricData, $contextIdentifier, $rubricData->getRootNode(), $uniqueAttemptId,
             $treeNodeResultJSONModelsById, $resultTime
-        );
+        )->getScore();
 
         foreach ($targetUsers as $targetUser)
         {
@@ -89,14 +100,14 @@ class RubricResultService
      * @param TreeNodeResultJSONModel[] $treeNodeResultJSONModelsById
      * @param \DateTime|null $resultTime
      *
-     * @return int
+     * @return RubricTreeNodeScore
      * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws \Doctrine\ORM\ORMException
      */
     protected function calculateAndStoreScoreForTreeNode(
         User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier, TreeNode $treeNode,
         string $uniqueAttemptId, array $treeNodeResultJSONModelsById, \DateTime $resultTime = null
-    )
+    ): RubricTreeNodeScore
     {
         $treeNodeResultJSONModel = $treeNodeResultJSONModelsById[$treeNode->getId()];
 
@@ -130,16 +141,45 @@ class RubricResultService
                 $treeNodeResultJSONModel->getComment(), $choice, $resultTime
             );
 
-            return $calculatedScore;
+            if ($rubricData->useRelativeWeights())
+            {
+                $relativeWeight = $treeNode->getRelativeWeight();
+                if (is_null($relativeWeight))
+                {
+                    $relativeWeight = $this->criteriumEqRestWeight;
+                }
+                return new RubricTreeNodeScore($treeNode, $calculatedScore, $relativeWeight);
+            }
+
+            return new RubricTreeNodeScore($treeNode, $calculatedScore);
         }
 
         $totalScore = 0;
-        foreach ($treeNode->getChildren() as $child)
+        $totalWeight = null;
+        if ($rubricData->useRelativeWeights())
         {
-            $totalScore += $this->calculateAndStoreScoreForTreeNode(
-                $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
-                $treeNodeResultJSONModelsById
-            );
+            $score = 0;
+            $totalWeight = 0;
+            foreach ($treeNode->getChildren() as $child)
+            {
+                $calculatedScore = $this->calculateAndStoreScoreForTreeNode(
+                    $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
+                    $treeNodeResultJSONModelsById
+                );
+                $score += ($calculatedScore->getScore() * ($calculatedScore->getWeight() / 100));
+                $totalWeight += $calculatedScore->getWeight();
+            }
+            $totalScore = $totalWeight === 0 ? 0 : ($score / $totalWeight) * 100;
+        }
+        else
+        {
+            foreach ($treeNode->getChildren() as $child)
+            {
+                $totalScore += $this->calculateAndStoreScoreForTreeNode(
+                    $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
+                    $treeNodeResultJSONModelsById
+                )->getScore();
+            }
         }
 
         $comment = $treeNodeResultJSONModel instanceof TreeNodeResultJSONModel ?
@@ -150,7 +190,7 @@ class RubricResultService
             null, $resultTime
         );
 
-        return $totalScore;
+        return new RubricTreeNodeScore($treeNode, $totalScore, $totalWeight);
     }
 
     /**
