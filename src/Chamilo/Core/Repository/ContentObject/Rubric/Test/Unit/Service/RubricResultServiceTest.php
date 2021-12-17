@@ -60,6 +60,8 @@ class RubricResultServiceTest extends ChamiloTestCase
     public function testResultCalculation()
     {
         $rubricData = new RubricData('My result rubric');
+        $rubricData->setUseScores(true);
+        $rubricData->setUseRelativeWeights(false);
 
         $rubricData->getRootNode()->setId(1);
 
@@ -144,10 +146,10 @@ class RubricResultServiceTest extends ChamiloTestCase
 
         $resultJSONModels = [
             new TreeNodeResultJSONModel(6, 1),
-            new TreeNodeResultJSONModel(7, 7),
-            new TreeNodeResultJSONModel(8, 8),
-            new TreeNodeResultJSONModel(9, 4),
-            new TreeNodeResultJSONModel(10, 5),
+            new TreeNodeResultJSONModel(7, 2),
+            new TreeNodeResultJSONModel(8, 2),
+            new TreeNodeResultJSONModel(9, 1),
+            new TreeNodeResultJSONModel(10, 1)
         ];
 
         $user = new User();
@@ -157,19 +159,19 @@ class RubricResultServiceTest extends ChamiloTestCase
             new ContextIdentifier('Chamilo\\Application\\Weblcms\\Bridge\\Assignment\\Storage\\Entry', 20);
 
         $this->rubricResultService->storeRubricResults(
-            $user, $user, $rubricData, $contextIdentifier, $resultJSONModels
+            $user, [$user], $rubricData, $contextIdentifier, $resultJSONModels
         );
 
-        $this->assertEquals(6.8, $resultsArray[1]);
-        $this->assertEquals(1, $resultsArray[2]);
-        $this->assertEquals(5.8, $resultsArray[3]);
-        $this->assertEquals(0, $resultsArray[4]);
-        $this->assertEquals(5.8, $resultsArray[5]);
-        $this->assertEquals(1, $resultsArray[6]);
-        $this->assertEquals(0, $resultsArray[7]);
-        $this->assertEquals(0, $resultsArray[8]);
-        $this->assertEquals(0.8, $resultsArray[9]);
-        $this->assertEquals(5, $resultsArray[10]);
+        $this->assertEquals(6.8, $resultsArray[1]); // Rubric
+        $this->assertEquals(1, $resultsArray[2]);   // Cluster 1
+        $this->assertEquals(5.8, $resultsArray[3]); // Cluster 2
+        $this->assertEquals(0, $resultsArray[4]);   // Category 1
+        $this->assertEquals(5.8, $resultsArray[5]); // Category 2
+        $this->assertEquals(1, $resultsArray[6]);   // Criterium 1
+        $this->assertEquals(0, $resultsArray[7]);   // Criterium 2
+        $this->assertEquals(0, $resultsArray[8]);   // Criterium 3
+        $this->assertEquals(0.8, $resultsArray[9]); // Criterium 4
+        $this->assertEquals(5, $resultsArray[10]);  // Criterium 5
     }
 
 }
