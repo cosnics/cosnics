@@ -24,11 +24,11 @@ class CriteriumNode extends TreeNode
     protected $weight = 100;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="rel_weight", type="integer")
      */
-    protected $rel_weight = 0;
+    protected $rel_weight = null;
 
     /**
      * @var Choice[] | ArrayCollection
