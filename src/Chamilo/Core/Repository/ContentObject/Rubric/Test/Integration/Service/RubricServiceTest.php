@@ -44,7 +44,7 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
         return [
             'Chamilo\Core\Repository\ContentObject\Rubric' => [
                 'RubricData', 'TreeNode', 'RubricNode', 'ClusterNode', 'CategoryNode', 'CriteriumNode', 'Level',
-                'Choice'
+                'Choice', 'RubricResult'
             ]
         ];
     }
