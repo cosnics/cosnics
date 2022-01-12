@@ -304,4 +304,24 @@ class CourseGroupService
 
         return $courseGroup;
     }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroup[]
+     */
+    public function getDirectChildrenFromGroup(CourseGroup $courseGroup)
+    {
+        return $courseGroup->get_children(false)->as_array();
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroup[]
+     */
+    public function getNestedChildrenFromGroup(CourseGroup $courseGroup)
+    {
+        return $courseGroup->get_children(true)->as_array();
+    }
 }
