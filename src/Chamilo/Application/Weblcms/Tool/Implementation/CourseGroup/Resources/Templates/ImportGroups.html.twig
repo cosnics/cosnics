@@ -1,0 +1,49 @@
+{{ HEADER|raw }}
+
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup' %}
+
+{{ form_start(FORM) }}
+
+<style>
+    .code-example
+    {
+        border: 1px solid #dddddd;
+        background-color: white;
+        padding: 10px 17px;
+        margin: 20px 15px 0;
+    }
+</style>
+
+<div class="row form-row">
+    <div class="col-sm-12">
+        <div class="alert alert-info" style="max-width: 1200px; margin: 0 auto 20px; font-size: 14px;">
+            <div>
+                <span>{{ 'ImportGroupsInfo'|trans({'{COURSE_GROUP_NAME}': COURSE_GROUP_NAME}, appContext)|raw }}</span>
+            </div>
+            <div style="margin-top: 30px;">
+                <div style="margin-bottom: 20px;">
+                    <strong>{{ 'Example1Groups'|trans({}, appContext) }}</strong>
+                    <div class="code-example">
+                        <strong>title;description;maximum_members;self_registration_allowed;self_unregistration_allowed</strong>
+                        <br />"Group 1";"Description 1";20;1;0
+                        <br />"Group 2";"Description 2";40;0;0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_row(FORM.csv_file, {'label': 'SelectGroupsCSVFile'|trans({}, appContext)}) }}
+
+<div class="row form-row">
+    <div class="col-sm-8 col-sm-push-4 col-md-10 col-md-push-2" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-primary">
+            {{ 'ImportGroups'|trans({}, appContext) }}
+        </button>
+    </div>
+</div>
+
+{{ form_end(FORM) }}
+
+{{ FOOTER|raw }}
