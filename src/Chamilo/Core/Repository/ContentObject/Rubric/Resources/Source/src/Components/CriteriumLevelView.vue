@@ -19,7 +19,7 @@
     <div>
         <label :for="`level-${level.id}`" class="b-criterium-level-title">{{ level.title }} <span v-if="level.description" class="fa fa-question-circle criterium-level-description" :title="level.description"></span></label>
         <div class="criterium-level-input" >
-            <div class="criterium-level-input-area" :class="{ 'is-using-orig-scores': rubric.useScores && !rubric.useRelativeWeights }">
+            <div class="criterium-level-input-area" :class="{ 'is-using-orig-scores': rubric.useScores && !rubric.useRelativeWeights && rubric.hasAbsoluteWeights }">
                 <textarea :id="`level-${level.id}`" v-model="choice.feedback" ref="feedbackField" class="criterium-level-feedback input-detail"
                           :class="{ 'is-input-active': isFeedbackInputActive || !choice.feedback }"
                           :placeholder="$t('enter-level-description')"
@@ -28,7 +28,7 @@
                 <div class="criterium-level-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" v-html="marked(choice.feedback)"></div>
             </div>
             <template v-if="rubric.useScores">
-                <div v-if="rubric.useRelativeWeights" style="font-size: 2.1rem; margin-top: .05em; text-align: right; width: 1.5em;">{{ level.score }}</div>
+                <div v-if="rubric.useRelativeWeights || !rubric.hasAbsoluteWeights" style="font-size: 2.1rem; margin-top: .05em; text-align: right; width: 1.5em;">{{ level.score }}</div>
                 <div v-else class="criterium-level-score">
                     <button v-if="choice.hasFixedScore" class="remove-fixed" @click="removeFixedScore" :title="$t('fixed-score')"><i class="fa fa-lock" /><i class="fa fa-unlock" /></button>
                     <input v-if="choice.hasFixedScore" type="number" required min="0" max="100" class="fixed-score input-detail" v-model.number="choice.fixedScore" @input="onChange" />

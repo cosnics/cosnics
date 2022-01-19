@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: space-between;align-items:baseline">
-                        <div v-if="rubric.useScores" class="criterium-weight">
+                        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="criterium-weight">
                             <template v-if="rubric.useRelativeWeights">
                                 {{ $t('weight') }}: <span :style="rubric.eqRestWeight < 0 && 'color: red'">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle" style="color: red;" aria-hidden="true"></i>
                             </template>

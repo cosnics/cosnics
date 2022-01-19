@@ -37,7 +37,7 @@
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1 class="levels-title">{{ $t('levels') }}</h1>
             <on-off-switch id="use-scores-check" class="levels-switch" :value="rubric.useScores" @input="onUseScoresChanged" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch>
-            <div v-if="rubric.useScores" style="margin-left: 1.6em;">
+            <div v-if="rubric.useScores && !rubric.hasAbsoluteWeights" style="margin-left: 1.6em;">
                 <button :aria-pressed="rubric.useRelativeWeights ? 'true' : 'false'" class="btn-check" :class="{ 'checked': rubric.useRelativeWeights }" @click="onUseRelativeWeightsChanged">
                     <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('weights-per-total') }}</span>
                 </button>

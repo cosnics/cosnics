@@ -52,10 +52,9 @@ export default class Rubric extends TreeNode {
     }
 
     protected notifyAddChild(treeNode: TreeNode): void {
-        if(treeNode instanceof Criterium) {
+        if (treeNode instanceof Criterium) {
             this.onCriteriumAdded(treeNode);
         }
-
         else { //if for example a cluster is added, we add any choices from criteria in that cluster. This could happen when bootstrapping from json data model
             let addedCriteria = this.getAllCriteria(treeNode);
             addedCriteria.forEach(criterium => {
@@ -340,7 +339,25 @@ export default class Rubric extends TreeNode {
         return rounded2dec(this.eqRestWeightPrecise);
     }
 
-    public getMaxDecimals() : number {
+    getCriteriumWeight(criterium: Criterium) {
+        if (this.useRelativeWeights) {
+            if (criterium.rel_weight !== null) {
+                return criterium.rel_weight;
+            }
+            return this.eqRestWeightPrecise;
+        }
+        return criterium.weight;
+    }
+
+    getRelativeWeight(treeNode: TreeNode) {
+        if (!this.useRelativeWeights) { return 0; }
+        if (treeNode instanceof Criterium) {
+            return this.getCriteriumWeight(treeNode);
+        }
+        return this.getAllCriteria(treeNode).map(criterium => this.getCriteriumWeight(criterium)).reduce(add, 0);
+    }
+
+    /*public getMaxDecimals() : number {
         let maxDecimals = 0;
         if (this.useScores && !this.useRelativeWeights) {
             this.getAllCriteria().forEach(criterium => {
@@ -357,6 +374,7 @@ export default class Rubric extends TreeNode {
             });
         }
         return maxDecimals;
+    }*/
 
     static resetAbsoluteWeights(rubric: Rubric) {
         const criteria = rubric.getAllCriteria();

@@ -75,6 +75,7 @@
         border: none;
         bottom: .5em;
         left: 0;
+        /*overflow: hidden;*/
         padding: .3em;
         pointer-events: none;
         position: absolute;
