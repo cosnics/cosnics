@@ -10,7 +10,10 @@
         "error-timeout": "The server is taking too long to respond. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
         "preview": "Preview",
-        "use-scores": "Use Scores"
+        "use-scores": "Use Scores",
+        "weights-system-msg": "<p>Beste Gebruiker</p><p>Binnen deze rubric maak je gebruik van het systeem van gewichten om bepaalde criteria een andere score te geven dan de standaardscore.</p><p>Omdat dit systeem van gewichten complex is hebben we ervoor gekozen om een nieuw systeem te ontwikkelen die nauwer aansluit bij de noodzaak om een gewicht van een criteria in te stellen ten opzichte van het eindtotaal in plaats van de standaardscore. (Bijvoorbeeld: criteria A telt mee voor 50% van het eindtotaal). Dit systeem werkt niet langer met absolute scores maar met procentuele scores waardoor de berekening van de scores een pak eenvoudiger wordt.</p><p>Omdat je in deze rubric reeds gebruik maakt van het systeem van gewichten krijg je de keuze tussen het oude of het nieuwe systeem. We raden je aan om gebruik te maken van het nieuwe systeem omdat dit systeem eenvoudiger is in gebruik. We merken hierbij wel op dat je de gewichten opnieuw dient in te stellen wanneer je hiervoor kiest omdat beide systemen niet compatibel zijn met elkaar.</p>",
+        "move-new": "Move to new weights system",
+        "keep-old": "Keep old system"
     },
     "fr": {
         "builder": "Construire",
@@ -29,12 +32,15 @@
         "error-timeout": "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
         "preview": "Preview",
-        "use-scores": "Gebruik Scores"
+        "use-scores": "Gebruik Scores",
+        "move-new": "Overstappen naar het nieuwe systeem",
+        "keep-old": "Bij het oude systeem blijven"
     }
 }
 </i18n>
 <template>
     <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels'}">
+        <div v-if="rubric && rubric.hasAbsoluteWeights" style="margin-bottom: 0;border-radius: 0;padding: 0.25rem 15px;margin-left: 10px; background-color: hsla(15, 65%, 60%, .08);border: 1px solid #f2e3e3;"><a href="#" style="display:block;text-align:center;text-decoration:none" @click="showResettingWeights()"><i class="fa fa-exclamation-circle" aria-hidden="true" style="color: #ff8f03;font-size: 1.4rem;margin-right: .35rem;"></i>Opgelet: Nieuw gewichtensysteem!</a></div>
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-nav">
@@ -44,10 +50,7 @@
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('level-descriptions') }}</span></router-link></li>
                 </ul>
             </nav>
-            <!--<ul class="app-header-tools" v-if="rubric && $route.name !== 'BuilderPreview'" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
-                <li class="app-tool-item"><button class="btn-check" :aria-label="$t('use-scores')" :class="{ checked: rubric.useScores }" @click.prevent="toggleUseScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('use-scores') }}</span></button></li>
-            </ul>-->
-            <save-area v-if="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
+            <save-area :show-save-state="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
         <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
             <link rel="stylesheet"
@@ -58,6 +61,15 @@
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
                 <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+        <div class="modal-bg" v-if="rubric && rubric.hasAbsoluteWeights && showResetWeightsDialog" @click.stop="showResetWeightsDialog = false" style="z-index: 1000">
+            <div class="modal-content" @click.stop="" style="height: auto;width: 640px;max-height:70vh;overflow-y:auto;">
+                <div class="modal-content-title" style="text-align: left" v-html="$t('weights-system-msg')"></div>
+                <div>
+                    <button class="btn-strong mod-confirm" ref="btn-remove-level" @click.stop="resetAbsoluteWeights" style="margin-bottom: .5rem">{{ $t('move-new') }}</button>
+                    <button class="btn-strong" ref="btn-remove-level" @click.stop="showResetWeightsDialog = false">{{ $t('keep-old') }}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -84,6 +96,7 @@
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
         private errorCode: string|null = null;
+        private showResetWeightsDialog = false;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
@@ -111,6 +124,18 @@
             this.uiState.selectedCriterium = criterium ? criterium.id : '';
         }
 
+        showResettingWeights() {
+            if (this.$router.currentRoute.path !== '/levels') {
+                this.$router.push({ path: '/levels' });
+            }
+            this.showResetWeightsDialog = true;
+        }
+
+        resetAbsoluteWeights() {
+            this.dataConnector?.resetRubricAbsoluteWeights();
+            this.showResetWeightsDialog = false;
+        }
+
         get content() {
             return this.uiState.content;
         }
@@ -136,6 +161,9 @@
                 }
                 this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version);
                 this.dataConnector.addErrorListener(this as DataConnectorErrorListener);
+                if (this.rubric.useScores && !this.rubric.useRelativeWeights) {
+                    this.rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(this.rubric);
+                }
             }
         }
 

@@ -83,6 +83,14 @@ export default class DataConnector {
         });
     }
 
+    resetRubricAbsoluteWeights() {
+        this.addToQueue(async () => {
+            const res = await this.executeAPIRequest(this.apiConfiguration.resetRubricAbsoluteWeightsURL, {});
+            if (this.isDummyRequest || this.hasError) { return; }
+            Rubric.resetAbsoluteWeights(this.rubric);
+        });
+    }
+
     addLevel(level: Level, index: number) {
         this.addToQueue(async () => {
             const parameters = {
@@ -206,7 +214,6 @@ export default class DataConnector {
     }
 
     protected async executeAPIRequest(apiURL: string, parameters: any) {
-
         this.beginSaving();
         if (this.isDummyRequest) {
             await timeout(300); // Simulate a save

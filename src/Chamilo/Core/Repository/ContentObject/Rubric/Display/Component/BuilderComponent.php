@@ -130,6 +130,13 @@ class BuilderComponent extends Manager implements DelegateComponent
                         \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
                             \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_UPDATE_RUBRIC
                     ]
+                ),
+                'RESET_RUBRIC_ABSOLUTE_WEIGHTS_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_RESET_ABSOLUTE_WEIGHTS
+                    ]
                 )
             ]
         );

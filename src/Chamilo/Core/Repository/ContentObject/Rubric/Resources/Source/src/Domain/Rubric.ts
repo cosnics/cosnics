@@ -26,6 +26,7 @@ export interface RubricJsonObject {
 export default class Rubric extends TreeNode {
     public useScores: boolean = true;
     public useRelativeWeights: boolean = true;
+    public hasAbsoluteWeights: boolean = false;
     public levels: Level[] = [];
     public choices: Map<CriteriumId, Map<LevelId, Choice>> = new Map<CriteriumId, Map<LevelId, Choice>>();
 
@@ -356,5 +357,39 @@ export default class Rubric extends TreeNode {
             });
         }
         return maxDecimals;
+
+    static resetAbsoluteWeights(rubric: Rubric) {
+        const criteria = rubric.getAllCriteria();
+        const levels = rubric.levels;
+        for (let i = 0; i < criteria.length; i++) {
+            if (criteria[i].weight !== 100) {
+                criteria[i].weight = 100;
+            }
+            for (let j = 0; j < levels.length; j++) {
+                const choice = rubric.findChoice(criteria[i], levels[j]);
+                if (choice?.hasFixedScore) {
+                    choice.fixedScore = 0;
+                    choice.hasFixedScore = false;
+                }
+            }
+        }
+        rubric.hasAbsoluteWeights = false;
+    }
+
+    static usesAbsoluteWeights(rubric: Rubric) {
+        const criteria = rubric.getAllCriteria();
+        const levels = rubric.levels;
+        for (let i = 0; i < criteria.length; i++) {
+            if (criteria[i].weight !== 100) {
+                return true;
+            }
+            for (let j = 0; j < levels.length; j++) {
+                const choice = rubric.findChoice(criteria[i], levels[j]);
+                if (choice?.hasFixedScore) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
