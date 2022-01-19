@@ -28,6 +28,7 @@ class Rubric extends ContentObject
 {
     const PROPERTY_ACTIVE_RUBRIC_DATA_ID = 'active_rubric_data_id';
     const PROPERTY_RUBRIC_USE_SCORES = 'use_scores';
+    const PROPERTY_RUBRIC_USE_RELATIVE_WEIGHTS = 'use_relative_weights';
 
     public static function get_type_name()
     {

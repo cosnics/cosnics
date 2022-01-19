@@ -33,6 +33,11 @@ class RubricForm extends ContentObjectForm
     protected $container;
 
     /**
+     * @var bool
+     */
+    protected $isCreationForm;
+
+    /**
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject|\Chamilo\Libraries\Architecture\Interfaces\AttachmentSupport|mixed|void|null
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      * @throws \Exception
@@ -50,7 +55,12 @@ class RubricForm extends ContentObjectForm
         $rubricData = new RubricData($rubricObject->get_title());
         $rubricData->setContentObjectId($rubricObject->getId());
         $rubricData->setUseScores($useScores);
-        $rubricData->setUseRelativeWeights(true);
+        $useRelativeWeights = false;
+        if ($useScores)
+        {
+            $useRelativeWeights = (bool) $values[Rubric::PROPERTY_RUBRIC_USE_RELATIVE_WEIGHTS];
+            $rubricData->setUseRelativeWeights($useRelativeWeights);
+        }
 
         $clusterNode = new ClusterNode($rubricObject->get_title(), $rubricData, $rubricData->getRootNode());
         new CategoryNode('', $rubricData, $clusterNode);
@@ -61,7 +71,7 @@ class RubricForm extends ContentObjectForm
             Translation::getInstance()->getTranslation('LevelGood', [], 'Chamilo\Core\Repository\ContentObject\Rubric')
         );
 
-        $level->setScore(10);
+        $level->setScore($useRelativeWeights ? 100 : 10);
 
         $level2 = new Level($rubricData);
 
@@ -117,12 +127,14 @@ class RubricForm extends ContentObjectForm
     {
         parent::build_editing_form($htmleditor_options, $in_tab);
         $rubricData = $this->getRubricService()->getRubric($this->get_content_object()->get_additional_properties()['active_rubric_data_id']);
+
         $this->buildRubricForm($rubricData->useScores(), !$this->getRubricService()->canChangeRubric($rubricData));
     }
 
     /**
      * Builds the form for the additional rubric properties
      * @param bool $use_scores
+     * @param bool $has_results
      */
     protected function buildRubricForm($use_scores = false, $has_results = false)
     {
@@ -136,6 +148,39 @@ class RubricForm extends ContentObjectForm
         if ($has_results) {
             $el->setAttribute('disabled', true);
             $this->add_warning_message('', '', $translator->getTranslation('RubricUseScoresDisabled'));
+        }
+
+        if ($this->form_type == self::TYPE_CREATE)
+        {
+            $el = $this->addElement(
+                'checkbox', Rubric::PROPERTY_RUBRIC_USE_RELATIVE_WEIGHTS,
+                $translator->getTranslation('RubricUseRelativeWeights')
+            );
+            $el->setChecked(false);
+            if ($has_results) {
+                $el->setAttribute('disabled', true);
+                $this->add_warning_message('', '', $translator->getTranslation('RubricUseScoresDisabled'));
+            }
+
+            $this->addElement(
+                'html',
+                sprintf("<script type=\"text/javascript\">
+                $(document).ready(function() {
+                    const useScoresInput = $('input[name=%s]');
+                    const useRelativeWeightsRow = $('.form-row:has(input[name=%s])');
+                    useScoresInput.on('click', function() {
+                        if (useScoresInput.is(':checked')) {
+                            useRelativeWeightsRow.show();
+                        } else {
+                            useRelativeWeightsRow.hide();
+                        }
+                    });
+                    if (!useScoresInput.is(':checked')) {
+                        useRelativeWeightsRow.hide();
+                    }
+                });
+            </script>\n",
+                    Rubric::PROPERTY_RUBRIC_USE_SCORES, Rubric::PROPERTY_RUBRIC_USE_RELATIVE_WEIGHTS));
         }
     }
 
