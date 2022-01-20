@@ -133,7 +133,14 @@ class ExportService
         }
 
         $statusId = $user[$periodStr . '-status'];
-        $aliasedId = $this->getAliasedId($statuses[$statusId]);
+
+        $status = $statuses[$statusId];
+        if(empty($status))
+        {
+            return '';
+        }
+
+        $aliasedId = $this->getAliasedId($status);
 
         if ($aliasedId == 3 &&
             array_key_exists($periodStr . '-checked_in_date', $user) &&
