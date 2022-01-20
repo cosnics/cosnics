@@ -40,12 +40,9 @@
                 </ul>
                 <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-date" v-for="evaluator in evaluators"
-                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
+                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
                     <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
-                <!--<ul class="rubric-header mod-res mod-pct" v-if="useScores && rubric.useRelativeWeights" aria-hidden="true">
-                    <li class="rubric-header-pct" v-for="evaluator in evaluators"><i class="fa fa-percent" style="font-size: 1rem"></i></li>
-                </ul>-->
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                     <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-title-header mod-res">
@@ -159,7 +156,8 @@
                 value = value.toString();
                 return value.charAt(0).toUpperCase() + value.slice(1);
             },
-            formatDate: function (date: Date) {
+            formatDate: function (s: string) {
+                const date = new Date(s);
                 if (isNaN(date.getDate())) { // todo: dates with timezone offsets, e.g. +0200 result in NaN data in Safari. For now, return an empty string.
                     return '';
                 }
@@ -174,7 +172,6 @@
         private selectedTreeNode: Criterium|Category|Cluster|null = null;
         private highlightedTreeNode: Criterium|Category|Cluster|null = null;
         private showScores = false;
-        //private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: RubricEvaluation, required: true}) readonly rubricEvaluation!: RubricEvaluation;
@@ -257,13 +254,6 @@
                 evaluations: this.rubricEvaluation.getEvaluations(criterium)
             };
         }
-
-        /*created() {
-            const rubric = this.rubric;
-            if (rubric.useScores && !rubric.useRelativeWeights) {
-                this.maxDecimals = rubric.getMaxDecimals();
-            }
-        }*/
     }
 </script>
 <style lang="scss">
@@ -298,14 +288,6 @@
         z-index: 29;
     }
 
-    .rubric-header.mod-pct {
-        margin-top: -1.5rem;
-        z-index: 29;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 3.4rem;
-    }
-
     .rubric-header-title.mod-res {
         background-color: hsl(203, 38%, 53%);
         box-shadow: none;
@@ -320,7 +302,7 @@
         }
     }
 
-    .rubric-header-date, .rubric-header-pct {
+    .rubric-header-date {
         color: hsla(200, 30%, 40%, 1);
         flex: 1;
         font-size: 1.2rem;
@@ -334,23 +316,6 @@
         &:not(:last-child) {
             margin-right: .7rem;
         }
-
-        &.mod-grades {
-            text-align: left;
-        }
-    }
-
-    .rubric-header-pct {
-        background: #f6f6f6;
-        border-radius: 3px;
-    }
-
-    /* Todo */
-    .evaluator-table-header-date {
-        color: hsla(200, 30%, 40%, 1);
-        font-size: 1.2rem;
-        margin: 0 1em 0 .5em;
-        text-align: right;
 
         &.mod-grades {
             text-align: left;
