@@ -14,7 +14,7 @@
 
 <template>
     <div style="margin-top: -20px">
-        <rubric-entry :rubric="rubric" :tree-node-evaluations="getTreeNodeEvaluations(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
+        <rubric-entry :rubric="rubric" :rubric-evaluation="getRubricEvaluation(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
                       @level-selected="selectLevel" @criterium-feedback-changed="updateFeedback">
             <template v-slot:demoEvaluator>
                 <li class="app-tool-item">Demo:
@@ -34,6 +34,7 @@
     import TreeNode from '../Domain/TreeNode';
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
     import RubricEntry from './RubricEntry.vue';
     import {TreeNodeEvaluation} from '../Util/interfaces';
     import store from '../store';
@@ -59,6 +60,11 @@
             const evaluatorEvaluation = this.evaluatorEvaluations.find(evaluatorEvaluation => evaluatorEvaluation.evaluator.userId === evaluator.userId);
             if (!evaluatorEvaluation) { throw new Error(`No evaluation data found for evaluator: ${evaluator.name}`); }
             return evaluatorEvaluation.treeNodeEvaluations;
+        }
+
+        getRubricEvaluation(evaluator: any): RubricEvaluation {
+            if (!this.rubric) { throw new Error('Rubric hasn\'t fully loaded yet'); }
+            return RubricEvaluation.fromEntry(this.rubric, this.getTreeNodeEvaluations(evaluator));
         }
 
         selectLevel(treeNode: TreeNode, level: Level) {

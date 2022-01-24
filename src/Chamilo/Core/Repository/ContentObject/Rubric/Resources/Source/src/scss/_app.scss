@@ -188,4 +188,26 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  .alert-rubric-results {
+    background-color: hsla(183, 40%, 60%, 0.1);
+    border: 1px solid #e3f0f2;
+    border-left: 5px solid #009c7c;
+    border-radius: 3px;
+    color: hsl(190, 30%, 31%);
+    display: flex;
+    gap: 7px;
+    margin: 12px 0 12px 10px;
+    max-width: fit-content;
+    padding: 10px;
+
+    &:before {
+      content: '\f06a';
+      color: #009c7c;
+      font-family: 'FontAwesome';
+      font-size: 1.8rem;
+      display: inline-block;
+      line-height: normal;
+    }
+  }
 }

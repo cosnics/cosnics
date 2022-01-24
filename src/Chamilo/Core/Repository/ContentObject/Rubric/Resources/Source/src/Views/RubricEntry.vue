@@ -4,37 +4,43 @@
         "expand-all": "Expand all",
         "extra-feedback": "Enter extra feedback",
         "feedback": "Feedback",
+        "no-description": "No description",
         "points": "points",
         "rubric": "Rubric",
         "select-level": "Select a level",
         "show-default-descriptions": "Show all level descriptions and feedback",
         "show-default-description": "Show level descriptions and feedback",
         "subsection": "Subsection",
-        "total": "Total"
+        "total": "Total",
+        "weight": "Weight"
     },
     "fr": {
         "expand-all": "Agrandir tout",
         "extra-feedback": "Feed-back supplémentaire",
         "feedback": "Feed-back",
+        "no-description": "Pas de description",
         "points": "points",
         "rubric": "Rubrique",
         "select-level": "Selectionnez un niveau",
         "show-default-descriptions": "Afficher toutes descriptions de niveau et feed-back",
         "show-default-description": "Afficher descriptions de niveau et feed-back",
         "subsection": "Sous-section",
-        "total": "Total"
+        "total": "Total",
+        "weight": "Poids"
     },
     "nl": {
         "expand-all": "Alles uitklappen",
         "extra-feedback": "Geef bijkomende feedback",
         "feedback": "Feedback",
+        "no-description": "Geen omschrijving",
         "points": "punten",
         "rubric": "Rubric",
         "select-level": "Selecteer een niveau",
         "show-default-descriptions": "Toon alle niveauomschrijvingen en feedback",
         "show-default-description": "Toon niveauomschrijvingen en feedback",
         "subsection": "Onderdeel",
-        "total": "Totaal"
+        "total": "Totaal",
+        "weight": "Gewicht"
     }
 }
 </i18n>
@@ -43,14 +49,22 @@
     <div id="app" :class="{ 'mod-sep': this.options.isDemo || this.options.isPreviewDemo }">
         <link rel="stylesheet"
               href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div class="rubric mod-entry" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades']" :style="{'--num-cols': rubric.levels.length}">
+        <div class="rubric mod-entry" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.levels.length}">
             <ul class="rubric-tools">
                 <slot name="demoEvaluator"></slot>
                 <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
             </ul>
+            <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+                <div style="flex: 1; text-align: center; padding: 0.7rem; font-weight: 600;">{{ $t('weight') }}</div>
+            </div>
             <ul class="rubric-header mod-responsive">
-                <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
+                <li class="rubric-header-title" v-for="level in rubric.levels"><!--<span v-if="useScores && rubric.useRelativeWeights" style="background-color: rgba(0, 0, 0, .1); border-radius: 3px; float: right; font-weight: 600; padding: 0 5px">{{level.score}}</span>-->{{ level.title }}</li>
             </ul>
+            <!--<div v-if="useScores && rubric.useRelativeWeights" class="rubric-relative-weights-header mod-responsive">
+                <div class="rubric-header-title" style="background: white;color: #5f929d;box-shadow: inset 0 0 1px 1px #ecf1f2;display: flex;padding: 0;">
+                    <div style="flex: 1;text-align: center;border-right: 1px inset #ecf1f2;padding: .8rem .7rem;font-weight:600">Tot. <i class="fa fa-percent" style="font-size: 1.1rem;align-self: center;"></i></div>
+                </div>
+            </div>-->
             <div class="rubric-header-fill"></div>
             <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
                 <div class="treenode-title-header mod-responsive mod-entry" :class="{ 'is-highlighted': highlightedTreeNode === cluster }" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
@@ -60,7 +74,7 @@
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
                 </div>
-                <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
@@ -71,50 +85,70 @@
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
-                    <div v-if="!preview && evaluation && category.title && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
+                    <div v-if="!preview && evaluation && category.title && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}">
                         <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                     </div>
                     <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'mod-no-default-feedback': !anyChoicesFeedback(ext), 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                        <div class="treenode-title-header mod-responsive mod-entry" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'is-highlighted': highlightedTreeNode === criterium}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div class="treenode-title-header-pre mod-criterium"></div>
                             <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                             <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                                 <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                             </button>
                         </div>
+                        <div class="treenode-weight mod-responsive mod-entry" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                         <div class="treenode-rubric-input" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                             <div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>
                             <div class="treenode-choices">
-                                <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
+                                <div class="treenode-choice" :class="{'mod-has-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && choice.feedback, 'mod-no-feedback': (showDefaultFeedbackFields || ext.showDefaultFeedback ) && !choice.feedback }" v-for="{choice, isSelected} in getChoicesColumnData(ext, evaluation)">
                                     <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{ 'is-selected': isSelected, 'mod-btn': !preview }" @click="preview ? null : selectLevel(evaluation, choice.level)">
                                         <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                        <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
-                                        <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" /></span>
+                                        <span v-if="useScores && rubric.useRelativeWeights" :aria-label="`${ choice.level.score } %`">{{ choice.level.score }}<span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></span>
+                                        <span v-else-if="useScores" :aria-label="`${ choice.score.toLocaleString() } ${ $t('points') }`">{{ choice.score.toLocaleString() }}</span>
+                                        <span v-else>
+                                            <i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }" />
+                                        </span>
                                     </component>
-                                    <div v-if="choice.feedback && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-level-description" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback }" v-html="choice.choice.toMarkdown()"></div>
+                                    <template v-if="showDefaultFeedbackFields || ext.showDefaultFeedback">
+                                        <div v-if="choice.feedback" class="treenode-level-description is-feedback-visible" v-html="choice.choice.toMarkdown()"></div>
+                                        <div v-else class="treenode-level-description mod-no-default-feedback is-feedback-visible"><em>{{ $t('no-description') }}</em></div>
+                                    </template>
                                 </div>
                             </div>
                             <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback">
                                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                             </div>
                         </div>
-                        <div v-if="useScores" class="treenode-score">
-                            <div class="treenode-score-calc mod-criterium"><span class="sr-only">{{ $t('total') }}:</span> {{ preview ? 0 : score }} <span class="sr-only">{{ $t('points') }}</span></div>
+                        <div v-if="useScores" class="treenode-score mod-rel-weight">
+                            <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-criterium mod-rel-weight">
+                                <div class="treenode-score-rel-total mod-criterium"><span class="sr-only">{{ $t('total') }}:</span><score-display :score="preview ? 0 : score" percent /></div>
+                            </div>
+                            <div v-else class="treenode-score-calc mod-criterium">
+                                <span class="sr-only">{{ $t('total') }}:</span> <score-display :score="preview ? 0 : score" /> <span class="sr-only">{{ $t('points') }}</span>
+                            </div>
                         </div>
                     </template>
                 </template>
                 <template v-if="useScores">
-                    <div class="total-title">{{ $t('total') }} {{ $t('subsection') }}:</div>
-                    <div class="treenode-score-calc mod-cluster">{{ score }}</div>
+                    <div class="total-title" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}">{{ $t('total') }} {{ $t('subsection') }}:</div>
+                    <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-cluster mod-rel-weight">
+                        <div class="treenode-score-rel-total mod-cluster"><score-display :score="score" percent /></div>
+                    </div>
+                    <div v-else class="treenode-score-calc mod-cluster"><score-display :score="score" /></div>
                 </template>
                 <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
             </template>
             <slot name="slot-inner"></slot>
             <template v-if="useScores">
-                <div class="total-title">{{ $t('total') }} {{ $t('rubric') }}:</div>
-                <div class="treenode-score-calc mod-rubric">{{ getRubricScore() }}</div>
-                <div class="total-title">Maximum:</div>
-                <div class="treenode-score-calc mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
+                <div class="total-title" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}">{{ $t('total') }} {{ $t('rubric') }}:</div>
+                <div v-if="rubric.useRelativeWeights" class="treenode-score-calc mod-rubric mod-rel-weight">
+                    <div class="treenode-score-rel-total mod-rubric"><score-display :score="preview ? 0 : rubricEvaluation.getRubricScore()" percent /></div>
+                </div>
+                <div v-else class="treenode-score-calc mod-rubric"><score-display :score="preview ? 0 : rubricEvaluation.getRubricScore()" /></div>
+                <template v-if="!rubric.useRelativeWeights">
+                    <div class="total-title" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}">Maximum:</div>
+                    <div class="treenode-score-calc mod-rubric-max"><score-display :score="rubric.getMaximumScore()"  /></div>
+                </template>
             </template>
         </div>
     </div>
@@ -128,27 +162,29 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import ScoreDisplay from '../Components/ScoreDisplay.vue';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
 
-    function add(v1: number, v2: number) {
-        return v1 + v2;
-    }
-
-    @Component({})
+    @Component({
+        components: { ScoreDisplay },
+        filters: {
+            formatNum: function (v: number) {
+                return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+            }
+        }
+    })
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
         private highlightedTreeNode: TreeNode|null = null;
+        //private maxDecimals = 0;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly treeNodeEvaluations!: TreeNodeEvaluation[];
+        @Prop({type: RubricEvaluation}) readonly rubricEvaluation!: RubricEvaluation|undefined;
         @Prop({type: Object}) readonly uiState!: any;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
-
-        anyChoicesFeedback(ext: TreeNodeExt) {
-            return ext.choices.filter(choice => !!choice.feedback).length > 0;
-        }
 
         getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
             return ext.choices.map(choice => ({
@@ -170,7 +206,7 @@
                 .filter(cluster => cluster.hasChildren())
                 .map(cluster => ({
                     cluster,
-                    score: this.getClusterScore(cluster),
+                    score: this.preview ? 0 : this.rubricEvaluation?.getClusterScore(cluster),
                     ...this.getTreeNodeRowData(cluster)
                 }));
         }
@@ -187,7 +223,7 @@
         getCriteriumRowsData(category: Category) {
             return category.criteria.map(criterium => ({
                 criterium,
-                score: this.getCriteriumScore(criterium),
+                score: this.preview ? 0 : this.rubricEvaluation?.getCriteriumScore(criterium),
                 ...this.getTreeNodeRowData(criterium)
             }));
         }
@@ -195,7 +231,7 @@
         getTreeNodeRowData(treeNode: TreeNode) {
             return {
                 ext: this.getTreeNodeData(treeNode),
-                evaluation: this.getTreeNodeEvaluation(treeNode),
+                evaluation: this.preview ? null : this.rubricEvaluation?.getTreeNodeEvaluation(treeNode)
             }
         }
 
@@ -219,8 +255,8 @@
 
         isSelected(criterium: Criterium, level: Level) {
             const isDefaultLevel = level.isDefault;
-            if (!this.treeNodeEvaluations) { return isDefaultLevel; }
-            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
+            if (!this.rubricEvaluation) { return isDefaultLevel; }
+            const evaluation = this.rubricEvaluation.getTreeNodeEvaluation(criterium);
             if (!evaluation || !evaluation.level) {
                 return isDefaultLevel;
             }
@@ -230,50 +266,39 @@
         selectLevel(evaluation: TreeNodeEvaluation, level: Level) : void {
             evaluation.level = level;
             // careful: getChoiceScore will fail
-            evaluation.score = this.rubric.getChoiceScore(evaluation.treeNode as Criterium, level);
+            const criterium = evaluation.treeNode as Criterium;
+            if (this.rubric.useScores) {
+                if (this.rubric.useRelativeWeights) {
+                    evaluation.score = level.score;
+                } else {
+                    evaluation.score = this.rubric.getChoiceScore(criterium, level);
+                }
+            }
             this.$emit('level-selected', evaluation.treeNode, level);
-        }
-
-        getCriteriumScore(criterium: Criterium) : number {
-            if (this.preview) { return 0; }
-            const evaluation = this.treeNodeEvaluations.find(evaluation => evaluation.treeNode === criterium);
-            if (!evaluation) { return 0; }
-            return evaluation.score || 0;
-        }
-
-        getCategoryScore(category: Category) : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
-        }
-
-        getClusterScore(cluster: Cluster) : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
-        }
-
-        getRubricScore() : number {
-            if (this.preview) { return 0; }
-            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium)).reduce(add, 0);
         }
 
         getTreeNodeData(treeNode: TreeNode) : TreeNodeExt|null {
             return this.treeNodeData.find((_ : TreeNodeExt) => _.treeNode === treeNode) || null;
         }
 
-        getTreeNodeEvaluation(treeNode: TreeNode) : TreeNodeEvaluation|null {
-            return this.treeNodeEvaluations.find((_ : TreeNodeEvaluation) => _.treeNode === treeNode) || null;
-        }
-
         private initData() {
             const rubric = this.rubric;
             this.treeNodeData = rubric.getAllTreeNodes().map(treeNode => {
-                const choices = treeNode instanceof Criterium ? rubric.levels.map(level => {
-                    const choice = rubric.getChoice(treeNode, level);
-                    const score = rubric.getChoiceScore(treeNode, level);
-                    return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
-                }) : [];
-                return { treeNode, choices, showDefaultFeedback: false };
+                if (treeNode instanceof Criterium) {
+                    const choices = rubric.levels.map(level => {
+                        const choice = rubric.getChoice(treeNode, level);
+                        const score = rubric.getChoiceScore(treeNode, level);
+                        return { title: level.title, feedback: choice?.feedback || '', score, choice, level};
+                    });
+                    return { treeNode, choices, showDefaultFeedback: false };
+                } else {
+                    return { treeNode, choices: [], showDefaultFeedback: false };
+                }
             });
+            if (rubric.useScores && !rubric.useRelativeWeights) {
+                //this.maxDecimals = rubric.getMaxDecimals();
+                rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(rubric);
+            }
         }
 
         created() {
@@ -284,11 +309,19 @@
 <style lang="scss">
     .rubric {
         &.mod-scores {
-            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5rem;
+            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 5.6rem;
+        }
+
+        &.mod-scores.mod-abs-weights {
+            grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 6.7rem;
+        }
+
+        &.mod-scores.mod-rel-weights {
+            grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem)) 8.3rem;
         }
 
         &.mod-grades {
-            grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+            grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
 
         &.mod-entry > :not(.rubric-tools) {
@@ -311,8 +344,19 @@
         }
     }
 
+    .rubric-relative-weights-header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+    }
+
     .treenode-header.mod-responsive {
         grid-column-start: 1;
+    }
+
+    .treenode-weight > .fa-percent {
+        color: rgb(129, 169, 177);
+        font-size: 1rem;
     }
 
     .btn-show {
@@ -385,17 +429,36 @@
         }
     }
 
-    .treenode-choice.mod-has-feedback {
+    .treenode-choice.mod-has-feedback, .treenode-choice.mod-no-feedback {
         background: #fafafa;
-        border-bottom: 1px solid #e0e0e0;
         border-radius: $border-radius;
         margin-bottom: .7rem;
     }
 
+    .treenode-choice.mod-has-feedback {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .treenode-choice.mod-no-feedback {
+        border-bottom: 1px solid #f0f0f0;
+    }
+
     .treenode-level {
+        .fa-percent {
+            content: '\f295';
+            font-family: 'FontAwesome';
+            font-size: 1rem;
+            margin-left: 0;
+            opacity: .6;
+        }
+
         &.is-selected {
             background: $level-selected-color;
             color: #fff;
+
+            .fa-percent {
+                opacity: .75;
+            }
         }
 
         &.mod-btn {
@@ -439,8 +502,17 @@
         line-height: 1.8rem;
         padding: .35rem .65rem;
 
+        > p, > em {
+            margin: .2em 0;
+        }
+
         &.is-feedback-visible {
             display: block;
+
+            &.mod-no-default-feedback {
+                opacity: .7;
+                text-align: center;
+            }
         }
 
         ul {
@@ -506,11 +578,12 @@
     .treenode-score-calc {
         border-radius: $border-radius;
         font-size: 1.8rem;
-        line-height: 2.88rem;
+        line-height: 2.75rem;
         padding-right: .5rem;
         text-align: right;
 
         &.mod-criterium {
+            align-items: baseline;
             background: $score-lighter;
             color: #666;
         }
@@ -518,6 +591,15 @@
         &.mod-cluster {
             background: $score-dark;
             color: #fff;
+        }
+
+        &.mod-criterium, &.mod-cluster, &.mod-rubric {
+            &.mod-rel-weight {
+                align-items: baseline;
+                background: none;
+                display: flex;
+                padding-right: 0;
+            }
         }
 
         &.mod-rubric {
@@ -529,26 +611,113 @@
             background: hsla(207, 40%, 35%, 1);
             color: #fff;
         }
+
+        .fa-percent {
+            font-size: 1.1rem;
+            opacity: .65;
+        }
+    }
+
+    .treenode-score-rel-total {
+        border-radius: 3px;
+        flex: 1;
+        padding-right: 0.5rem;
+
+        &.mod-criterium {
+            background: #eaf0f1;
+            color: #36717d;
+        }
+
+        &.mod-cluster {
+            background: hsla(190, 40%, 45%, .75);
+            color: white;
+        }
+
+        &.mod-rubric {
+            background: #36717d;
+            color: white;
+        }
+        /*position: relative;
+
+        &::after {
+            position: absolute;
+            content: '';
+            top: -0.1rem;
+            bottom: -0.1rem;
+            width: 0.4rem;
+            background: white;
+            right: -0.3rem;
+        }*/
+    }
+
+/*    .treenode-score-rel-max {
+        border-bottom-right-radius: 3px;
+        border-top-right-radius: 3px;
+        box-shadow: inset 0 0 1px 1px #eaf0f1;
+        color: #6388a1;
+        flex: 1;
+        padding-right: 0.5rem;
+    } */
+
+    .treenode-weight-header {
+        align-self: start;
+        background: white;
+        color: rgb(95, 146, 157);
+        display: flex;
+        padding: 0;
+        position: sticky;
+        text-align: center;
+        top: 0;
+        z-index: 30;
+    }
+
+    .treenode-weight {
+        color: rgb(95, 146, 157);
     }
 
     @media only screen and (min-width: 900px) {
+        .treenode-weight.mod-entry {
+            padding-top: .25rem;
+            text-align: center;
+        }
+
+        .treenode-weight > .fa-percent {
+            /*color: rgb(129, 169, 177);*/
+        }
+
         .treenode-title-header.mod-entry {
             align-self: center;
 
             &.is-feedback-visible {
                 align-self: initial;
                 padding-top: 3rem;
-
-                &.mod-no-default-feedback {
-                    padding-top: 0;
-                }
             }
+        }
+
+        .treenode-weight-title {
+            display: none;
+        }
+
+        .treenode-custom-feedback.mod-weight {
+            grid-column-start: 3;
+        }
+
+        .total-title.mod-weight {
+            grid-column-start: 3;
         }
     }
 
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
-            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5rem;
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5.6rem;
+        }
+
+        .rubric.mod-scores.mod-abs-weights {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 6.7rem;
+        }
+
+        .rubric.mod-scores.mod-rel-weights {
+            grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 8.3rem;
         }
 
         .rubric.mod-grades {
@@ -569,6 +738,15 @@
             grid-column-start: 1;
             margin-left: 1.8rem;
         }
+
+        .treenode-weight-header {
+            display: none;
+        }
+
+        .treenode-weight-title {
+            color: hsl(180, 17%, 41%);
+            font-weight: 700;
+        }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
@@ -579,6 +757,10 @@
     }
 
     @media only screen and (max-width: 679px) {
+        .rubric-relative-weights-header.mod-responsive {
+            display: none;
+        }
+
         .treenode-custom-feedback {
             grid-column: 1 / -1;
         }
@@ -586,5 +768,14 @@
         .treenode-score {
             display: none;
         }
+
+        .treenode-score.mod-rel-weight {
+            display: block;
+            grid-column-start: 2;
+        }
+
+        /*.treenode-level-icon-check.mod-relative {
+            display: none;
+        }*/
     }
 </style>

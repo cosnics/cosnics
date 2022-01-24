@@ -5,15 +5,17 @@ export type CriteriumId = string;
 export interface CriteriumJsonObject {
     id: string,
     title: string,
-    weight: number
+    weight: number,
+    rel_weight: number|null
 }
 
 export default class Criterium extends TreeNode {
     public weight: number = 100;
+    public rel_weight: number|null = null;
 
-    public weightToString(): string {
+    /*public weightToString(): string {
         return String(this.weight * 100);
-    }
+    }*/
 
     public getType(): string {
         return 'criterium';
@@ -35,11 +37,12 @@ export default class Criterium extends TreeNode {
         return {
             id: this.id,
             title: this.title,
-            weight: this.weight
+            weight: this.weight,
+            rel_weight: this.rel_weight
         }
     }
 
-    static fromJSON(criterium:string|CriteriumJsonObject):Criterium {
+    static fromJSON(criterium: string|CriteriumJsonObject): Criterium {
         let criteriumObject: CriteriumJsonObject;
 
         if (typeof criterium === 'string') {
@@ -54,6 +57,8 @@ export default class Criterium extends TreeNode {
         );
 
         newCriterium.weight = criteriumObject.weight;
+        newCriterium.rel_weight = typeof criteriumObject.rel_weight === 'number' ? criteriumObject.rel_weight : null;
 
         return newCriterium;
-    }}
+    }
+}

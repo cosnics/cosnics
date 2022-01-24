@@ -1,59 +1,29 @@
 <i18n>
 {
     "en": {
-        "chose": "chose",
         "close": "Close",
-        "extra-feedback": "Extra feedback",
-        "gave-score": "gave a score of",
-        "level-descriptions": "Level descriptions"
+        "weight": "Weight"
     },
     "fr": {
-        "chose": "a choisi",
         "close": "Fermer",
-        "extra-feedback": "Feed-back supplémentaire",
-        "gave-score": "a donné le score",
-        "level-descriptions": "Descriptions de niveau"
+        "weight": "Poids"
     },
     "nl": {
-        "chose": "koos",
         "close": "Sluiten",
-        "extra-feedback": "Extra feedback",
-        "gave-score": "gaf score",
-        "level-descriptions": "Niveauomschrijvingen"
+        "weight": "Gewicht"
     }
 }
 </i18n>
 <template>
-    <div class="rr-selected-treenode-wrapper">
-        <div class="rr-selected-treenode">
+    <div class="selected-treenode-container">
+        <div class="selected-treenode-wrapper">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
-            <div class="rr-selected-treenode-results">
-                <div class="rr-selected-treenode-results-title u-markdown-criterium" v-html="treeNode.toMarkdown()"></div>
-                <div class="rr-selected-result" v-for="{evaluator, score, level, feedback} in evaluations">
-                    <p v-if="rubric.useScores">
-                        <span>{{ evaluator.name|capitalize }}</span> {{ $t('gave-score') }} <span>{{ score || '0' }}</span>
-                        <template v-if="level !== null"> (<span class="score-title">{{ level.title }}</span>)</template>
-                    </p>
-                    <p v-else-if="level !== null">
-                        <span>{{ evaluator.name|capitalize }}</span> {{ $t('chose') }}
-                        '<span class="score-title">{{ level.title }}</span>'
-                    </p>
-                    <p v-if="feedback">
-                        {{ $t('extra-feedback') }}: {{ feedback }}
-                    </p>
+            <div class="selected-treenode-results">
+                <div class="selected-treenode-results-title u-markdown-criterium" v-html="treeNode.toMarkdown()"></div>
+                <div class="selected-treenode-results-weight" v-if="rubric.useScores && rubric.useRelativeWeights">{{ $t('weight') }}: {{ relWeight|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
+                <div class="results-details">
+                    <tree-node-evaluator-results v-for="({evaluator, score, level, feedback}, index) in evaluations" :key="`${index}-${treeNode.id}`" :rubric="rubric" :tree-node="treeNode" :evaluator="evaluator" :score="score" :level="level" :feedback="feedback" />
                 </div>
-            </div>
-            <div v-if="isCriterium(treeNode)" class="rr-selected-criterium-levels">
-                <div class="title">{{ $t('level-descriptions') }}:</div>
-                <ul class="levels-list">
-                    <li v-for="level in rubric.levels" :key="level.id" class="levels-list-item">
-                        <div class="levels-list-item-header">
-                            <div class="title">{{ level.title }}</div>
-                            <div class="choice-score" v-if="rubric.useScores">{{ rubric.getChoiceScore(treeNode, level) }}</div>
-                        </div>
-                        <div class="choice-feedback" v-html="rubric.getChoice(treeNode, level).toMarkdown()"></div>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -61,18 +31,22 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import TreeNode from '../Domain/TreeNode';
     import Rubric from '../Domain/Rubric';
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import TreeNodeEvaluatorResults from './TreeNodeEvaluatorResults.vue';
+
+    function pad(num: number) : string {
+        return `${num < 10 ? '0' : ''}${num}`;
+    }
 
     @Component({
+        components: { TreeNodeEvaluatorResults },
         filters: {
-            capitalize: function (value: any) {
-                if (!value) { return ''; }
-                value = value.toString();
-                return value.charAt(0).toUpperCase() + value.slice(1);
+            formatNum: function (v: number|null) {
+                if (v === null) { return '0'; }
+                return v.toLocaleString(undefined, {maximumFractionDigits: 2});
             }
         }
     })
@@ -81,8 +55,12 @@
         @Prop({type: [Cluster, Category, Criterium]}) readonly treeNode!: Cluster|Category|Criterium;
         @Prop({type: Array}) readonly evaluations!: any[];
 
-        isCriterium(treeNode: TreeNode) {
-            return treeNode instanceof Criterium;
+        get isCriterium() {
+            return this.treeNode instanceof Criterium;
+        }
+
+        get relWeight() {
+            return this.rubric.getRelativeWeight(this.treeNode);
         }
     }
 </script>
@@ -115,25 +93,12 @@
         }
     }
 
-    .rr-selected-treenode-wrapper {
+    .selected-treenode-container {
         margin-top: 1em;
     }
 
-    .rr-selected-treenode {
+    .selected-treenode-wrapper {
         max-width: 80ch;
-    }
-
-    .choice-feedback {
-        line-height: 1.5em;
-
-        ul {
-            list-style: disc;
-        }
-
-        ul, ol {
-            margin: 0 0 0 2rem;
-            padding: 0;
-        }
     }
 
     @media only screen and (min-width: 900px) {
@@ -141,7 +106,7 @@
             display: none;
         }
 
-        .rr-selected-treenode-wrapper {
+        .selected-treenode-container {
             border-left: 1px solid hsla(191, 21%, 80%, 1);
             margin-left: 1.5em;
             padding-left: 1.5em;
@@ -149,14 +114,15 @@
             pointer-events: none;
         }
 
-        .rr-selected-treenode {
+        .selected-treenode-wrapper {
             position: -webkit-sticky;
             position: sticky;
             top: 10px;
         }
     }
+
     @media only screen and (max-width: 899px) {
-        .rr-selected-treenode-wrapper {
+        .selected-treenode-container {
             align-items: flex-start;
             background: hsla(0, 0, 0, .15);
             display: flex;
@@ -173,23 +139,25 @@
             z-index: 10000;
         }
 
-        .rr-selected-treenode {
+        .selected-treenode-wrapper {
             background: #fff;
             border-radius: $border-radius;
             box-shadow: 1px 1px 5px #999;
             margin: 0 1em;
+            max-height: 90vh;
             padding: .5em;
+            overflow-y: auto;
             pointer-events: all;
+            width: 500px;
         }
     }
 
-    .rr-selected-treenode-results {
-        /*background: #e4e3e3;*/
+    .selected-treenode-results {
         border-radius: $border-radius;
         padding: .5em;
     }
 
-    .rr-selected-treenode-results-title {
+    .selected-treenode-results-title {
         color: hsla(191, 41%, 38%, 1);
         font-size: 1.4rem;
         font-weight: 700;
@@ -202,69 +170,28 @@
         }
     }
 
-    .rr-selected-result {
-        border-radius: $border-radius;
-        margin-bottom: 1em;
-
-        p {
-            margin: 0;
-            white-space: pre-line;
-        }
-
-        span {
-            font-weight: bold;
-
-            &.score-title {
-                color: hsla(191, 41%, 33%, 1);
-            }
-        }
+    .selected-treenode-results-weight {
+        margin: 15px 0;
     }
 
-    .rr-selected-criterium-levels {
-        /*background: #e4e3e3;*/
-        margin-top: 1.5em;
-        padding: .5em;
+    .results-details  {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-left: -.5rem;
+        margin-top: 20px;
+        max-width: 500px;
+    }
 
-        .title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0;
-            margin-top: 0;
-        }
+    .treenode-evaluator-results:nth-child(odd) {
+        background-color: hsla(210, 11%, 93%, .45);
+    }
+</style>
 
-        > .title {
-            color: hsla(191, 41%, 38%, 1);
-        }
-
-        .levels-list {
-            list-style: none;
-            margin-top: 0;
-            padding: 0;
-        }
-
-        .levels-list-item {
-            margin-bottom: .75em;
-        }
-
-        .levels-list-item-header {
-            align-items: baseline;
-            border-bottom: 1px solid #d8dddf;
-            display: flex;
-            width: 100%;
-
-            .title {
-                flex: 1;
-                font-weight: 700;
-            }
-
-            .choice-score {
-                font-size: 2rem;
-                text-align: right;
-            }
-
-            .choice-feedback {
-                margin: .25em 1.5em 1.25em 0;
-            }
-        }
+<style scoped>
+    .fa-percent {
+        font-size: 1.1rem;
+        color: #777;
+        margin-left: .2rem;
     }
 </style>

@@ -747,7 +747,7 @@
         <div role="tabpanel" class="tab-pane mod-pad" id="rubric">
             {% if HAS_RUBRIC %}
                 {% if not CAN_BUILD_RUBRIC %}
-                <div class="alert alert-warning" style="margin: 0 15px 15px">
+                <div class="alert-rubric-results">
                     {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
                 </div>
                 {% endif %}

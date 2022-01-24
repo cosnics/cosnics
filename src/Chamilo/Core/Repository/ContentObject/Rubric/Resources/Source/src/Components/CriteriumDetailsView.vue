@@ -37,7 +37,15 @@
                         </div>
                     </div>
                     <div style="display: flex;justify-content: space-between;align-items:baseline">
-                        <div v-if="rubric.useScores" class="criterium-weight"><label for="weight">{{ $t('weight') }}:</label> <input type="number" id="weight" v-model="criterium.weight" class="input-detail" @input="onCriteriumChange"/> %</div>
+                        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="criterium-weight">
+                            <template v-if="rubric.useRelativeWeights">
+                                {{ $t('weight') }}: <span :style="rubric.eqRestWeight < 0 && 'color: red'">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle" style="color: red;" aria-hidden="true"></i>
+                            </template>
+                            <template v-else>
+                                <label for="weight">{{ $t('weight') }}:</label>
+                                <input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %
+                            </template>
+                        </div>
                         <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
                     </div>
                     <ul class="b-criterium-levels">
@@ -81,6 +89,7 @@
         constructor() {
             super();
             this.onCriteriumChange = debounce(this.onCriteriumChange, 750);
+            this.onWeightChange = debounce(this.onWeightChange, 750);
         }
 
         updateHeight(e: InputEvent) {
@@ -106,6 +115,18 @@
         }
 
         onCriteriumChange() {
+            this.$emit('change-criterium', this.criterium);
+        }
+
+        onWeightChange(event: InputEvent) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
+            if (this.rubric.useRelativeWeights && (typeof this.criterium?.rel_weight !== 'number')) {
+                this.criterium!.rel_weight = null;
+            }
             this.$emit('change-criterium', this.criterium);
         }
 

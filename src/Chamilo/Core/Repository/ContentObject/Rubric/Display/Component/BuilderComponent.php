@@ -35,7 +35,8 @@ class BuilderComponent extends Manager implements DelegateComponent
         {
             $html = [];
             $html[] = $this->render_header();
-            $html[] = '<div class="alert alert-warning">' .
+            $html[] = "<style>.rubric-back-to-assignment { display: inline-block; padding: 2px; } .rubric-back-to-assignment .fa { margin-right: 3px; }</style>";
+            $html[] = '<div class="alert-rubric-results">' .
                 $this->getTranslator()->trans('RubricHasResults', [], 'Chamilo\Core\Repository\ContentObject\Rubric') .
                 '</div>';
             $html[] = $this->getTwig()->render(
@@ -128,6 +129,13 @@ class BuilderComponent extends Manager implements DelegateComponent
                         self::PARAM_ACTION => self::ACTION_AJAX,
                         \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
                             \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_UPDATE_RUBRIC
+                    ]
+                ),
+                'RESET_RUBRIC_ABSOLUTE_WEIGHTS_AJAX_URL' => $this->get_url(
+                    [
+                        self::PARAM_ACTION => self::ACTION_AJAX,
+                        \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::PARAM_ACTION =>
+                            \Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Manager::ACTION_RESET_ABSOLUTE_WEIGHTS
                     ]
                 )
             ]

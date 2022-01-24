@@ -6,6 +6,7 @@
         "levels": "Levels",
         "remove": "Remove",
         "remove-level": "Remove level {item}",
+        "weights-per-total": "Weights relative to total score",
         "with-scores": "With scores",
         "without-scores": "Without scores"
     },
@@ -24,6 +25,7 @@
         "levels": "Niveaus",
         "remove": "Verwijder",
         "remove-level": "Niveau {item} verwijderen",
+        "weights-per-total": "Gewichten relatief tov. totaalscore",
         "with-scores": "Met scores",
         "without-scores": "Zonder scores"
     }
@@ -35,6 +37,11 @@
         <div class="levels-container" :class="{ 'has-new': !!newLevel/*, 'show-description': showLevelDescriptions */}">
             <h1 class="levels-title">{{ $t('levels') }}</h1>
             <on-off-switch id="use-scores-check" class="levels-switch" :value="rubric.useScores" @input="onUseScoresChanged" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch>
+            <div v-if="rubric.useScores && !rubric.hasAbsoluteWeights" style="margin-left: 1.6em;">
+                <button :aria-pressed="rubric.useRelativeWeights ? 'true' : 'false'" class="btn-check" :class="{ 'checked': rubric.useRelativeWeights }" @click="onUseRelativeWeightsChanged">
+                    <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('weights-per-total') }}</span>
+                </button>
+            </div>
             <ul class="levels-list">
                 <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
                 <li v-if="!newLevel" class="level-new">
@@ -85,6 +92,11 @@
 
         onUseScoresChanged(useScores: boolean) {
             this.rubric.useScores = useScores;
+            this.dataConnector?.updateRubric(this.rubric);
+        }
+
+        onUseRelativeWeightsChanged() {
+            this.rubric.useRelativeWeights = !this.rubric.useRelativeWeights;
             this.dataConnector?.updateRubric(this.rubric);
         }
 

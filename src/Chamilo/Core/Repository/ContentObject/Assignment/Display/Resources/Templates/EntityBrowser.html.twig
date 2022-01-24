@@ -179,7 +179,7 @@
             <a href="{{ BUILD_RUBRIC_URL }}#/builder" class="btn btn-primary">{{ 'BuildRubric'|trans({}, appContext) }}</a>
             <a href="{{ REMOVE_RUBRIC_URL }}" class="btn btn-primary" onclick="return confirm('{{ 'ConfirmRemoveRubric'|trans({}, appContext) }}')">{{ 'RemoveRubric'|trans({}, appContext) }}</a>
             {% else %}
-                <div class="alert alert-warning">
+                <div class="alert-rubric-results">
                     {{ 'RubricHasResults'|trans({}, 'Chamilo\\Core\\Repository\\ContentObject\\Rubric') }}
                 </div>
             {% endif %}
