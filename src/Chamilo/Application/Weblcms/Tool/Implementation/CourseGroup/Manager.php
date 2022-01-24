@@ -30,6 +30,7 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
     const ACTION_SUBSCRIBE = 'SubscribeBrowser';
     const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
     const ACTION_ADD_COURSE_GROUP = 'Creator';
+    const ACTION_IMPORT_COURSE_GROUPS = 'Importer';
     const ACTION_EDIT_COURSE_GROUP = 'Editor';
     const ACTION_DELETE_COURSE_GROUP = 'Deleter';
     const ACTION_USER_SELF_SUBSCRIBE = 'SelfSubscriber';

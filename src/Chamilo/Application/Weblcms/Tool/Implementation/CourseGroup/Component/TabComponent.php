@@ -14,6 +14,8 @@ use Chamilo\Libraries\Format\Structure\ActionBar\Button;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonGroup;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonToolBar;
 use Chamilo\Libraries\Format\Structure\ActionBar\Renderer\ButtonToolBarRenderer;
+use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
+use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
@@ -180,20 +182,34 @@ abstract class TabComponent extends Manager
             $buttonToolbar = new ButtonToolBar($this->get_url());
             $commonActions = new ButtonGroup();
 
+            $param_add_course_group = [];
             $param_add_course_group[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_ADD_COURSE_GROUP;
             $param_add_course_group[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $this->get_group_id();
+
+            $param_import_course_groups = [];
+            $param_import_course_groups[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_IMPORT_COURSE_GROUPS;
+            $param_import_course_groups[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $this->get_group_id();
 
             $param_subscriptions_overview[\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION] = self::ACTION_SUBSCRIPTIONS_OVERVIEW;
             $param_subscriptions_overview[\Chamilo\Application\Weblcms\Manager::PARAM_COURSE_GROUP] = $this->get_group_id();
 
             if ($this->is_allowed(WeblcmsRights::ADD_RIGHT))
             {
-                $commonActions->addButton(
-                    new Button(
-                        Translation::get('Create'),
-                        new FontAwesomeGlyph('plus'),
-                        $this->get_url($param_add_course_group),
-                        ToolbarItem::DISPLAY_ICON_AND_LABEL));
+                $createButton = new SplitDropdownButton(
+                    Translation::get('Create'),
+                    new FontAwesomeGlyph('plus'),
+                    $this->get_url($param_add_course_group),
+                    SplitDropdownButton::DISPLAY_ICON_AND_LABEL
+                );
+
+                $createButton->addSubButton(new SubButton(
+                    Translation::get('Import'),
+                    new FontAwesomeGlyph('upload'),
+                    $this->get_url($param_import_course_groups),
+                    SubButton::DISPLAY_ICON_AND_LABEL
+                ));
+                
+                $commonActions->addButton($createButton);
             }
 
             if (! $this->introduction_text && $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
