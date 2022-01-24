@@ -30,7 +30,7 @@
                 <ul class="rubric-tools" v-if="rubric.useScores && rubric.useRelativeWeights">
                     <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
                 </ul>
-                <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header mod-res-w">
+                <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header rb-col-start-2">
                     <div style="flex: 1; text-align: center; padding: 0.7rem; font-weight: 600;">{{ $t('weight') }}</div>
                 </div>
                 <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" v-if="useScores || (useGrades && evaluators.length)">
@@ -271,10 +271,6 @@
         grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
-    .treenode-weight-header.mod-res-w {
-        grid-column-start: 2;
-    }
-
     .rubric-header.mod-res {
         grid-column-start: 2;
     }
@@ -377,7 +373,6 @@
     }
 
     .treenode-rubric-results {
-        /*align-self: center;*/
         align-items: center;
         display: flex;
         position: relative;
@@ -438,14 +433,6 @@
 
         &:not(:last-child) {
             margin-right: .7rem;
-        }
-
-        &.is-selected {
-            /*box-shadow: 0 1px 2px hsla(236, 25%, 80%, 1);*/
-        }
-
-        &.is-highlighted {
-            /*box-shadow: 0 1px 2px hsla(190, 15%, 80%, 1);*/
         }
 
         &.mod-grades {
@@ -527,66 +514,74 @@
 </style>
 
 <style lang="scss" scoped>
-.treenode-title-header .treenode-title {
-    max-width: 22.2rem;
-}
-.treenode-title-header-wrap.has-category::after {
-    position: absolute;
-    top: -0.5rem;
-    width: 1px;
-    bottom: -0.2rem;
-    left: 0.6rem;
-    background-color: var(--category-color);
-    content: '';
-    opacity: .5;
-}
-.treenode-title-header-wrap.mod-category::after {
-    top: .8rem;
-}
+    .treenode-title-header .treenode-title {
+        max-width: 22.2rem;
+    }
 
-.treenode-title-header-pre.mod-criterium::after {
-    border: 1px solid var(--category-color);
-    content: '';
-    border-radius: 50%;
-    height: 7px;
-    margin-top: 0.3rem;
-    width: 7px;
-    position: absolute;
-    left: 0.3rem;
-    background-color: white;
-}
+    .treenode-title-header-wrap.has-category::after {
+        position: absolute;
+        top: -0.5rem;
+        width: 1px;
+        bottom: -0.2rem;
+        left: 0.6rem;
+        background-color: var(--category-color);
+        content: '';
+        opacity: .5;
+    }
 
-.criterium-title {
-    padding-left: .75rem;
-}
-.criterium-title.mod-no-category {
-    padding-left: .25rem;
-}
+    .treenode-title-header-wrap.mod-category::after {
+        top: .8rem;
+    }
 
-.treenode-title-header-pre.mod-category::after {
-    border-radius: 50%;
-}
-.treenode-title-header-pre.mod-category.mod-no-color::after {
-    border: 1px solid #bbb;
-    background-color: #fff;
-    width: 1.1rem;
-    height: 1.1rem;
-    position: absolute;
-    left: .1rem;
-}
-.treenode-evaluation.mod-criterium {
-    background-color: #fafafa;
-    border: 1px solid #deebee;
-}
-.treenode-title.cluster-title {
-    margin-left: .25rem;
-}
-.treenode-feedback-icon.fa-info {
-    margin-right: .5rem;
-    font-size: 1.4rem;
-}
-.cluster-sep {
-    border-color: #deebee;
-    margin: 1rem 0 1.5rem;
-}
+    .treenode-title-header-pre.mod-criterium::after {
+        border: 1px solid var(--category-color);
+        content: '';
+        border-radius: 50%;
+        height: 7px;
+        margin-top: 0.3rem;
+        width: 7px;
+        position: absolute;
+        left: 0.3rem;
+        background-color: white;
+    }
+
+    .criterium-title {
+        padding-left: .75rem;
+    }
+
+    .criterium-title.mod-no-category {
+        padding-left: .25rem;
+    }
+
+    .treenode-title-header-pre.mod-category::after {
+        border-radius: 50%;
+    }
+
+    .treenode-title-header-pre.mod-category.mod-no-color::after {
+        border: 1px solid #bbb;
+        background-color: #fff;
+        width: 1.1rem;
+        height: 1.1rem;
+        position: absolute;
+        left: .1rem;
+    }
+
+    .treenode-evaluation.mod-criterium {
+        background-color: #fafafa;
+        border: 1px solid #deebee;
+    }
+
+    .treenode-title.cluster-title {
+        margin-left: .25rem;
+    }
+
+    .treenode-feedback-icon.fa-info {
+        margin-right: .5rem;
+        font-size: 1.4rem;
+    }
+
+    .cluster-sep {
+        border-color: #deebee;
+        margin: 1rem 0 1.5rem;
+    }
 </style>

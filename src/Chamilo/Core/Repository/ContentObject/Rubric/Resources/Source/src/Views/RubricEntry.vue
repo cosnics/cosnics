@@ -710,7 +710,6 @@
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5.6rem;
-
         }
 
         .rubric.mod-scores.mod-abs-weights {

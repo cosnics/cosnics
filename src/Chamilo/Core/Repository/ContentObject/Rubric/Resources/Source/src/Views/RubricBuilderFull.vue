@@ -44,7 +44,7 @@
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
-                    <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-responsive">
+                    <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-pad rb-md:col-span-full">
                         <span class="treenode-weight-title">{{ $t('weight') }}: </span>
                         <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
                         <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
@@ -355,14 +355,8 @@
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
         }
 
-        .treenode-weight.mod-responsive {
+        .treenode-weight.mod-pad {
             padding-left: 1.8rem;
-        }
-    }
-
-    @media only screen and (min-width: 680px) and (max-width: 899px) {
-        .treenode-weight.mod-responsive {
-            grid-column: 1 / -1;
         }
     }
 

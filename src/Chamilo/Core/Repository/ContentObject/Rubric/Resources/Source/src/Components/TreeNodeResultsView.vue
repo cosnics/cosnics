@@ -15,7 +15,7 @@
 }
 </i18n>
 <template>
-    <div class="selected-treenode-container" style="pointer-events: all">
+    <div class="selected-treenode-container">
         <div class="selected-treenode-wrapper">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
             <div class="selected-treenode-results">
