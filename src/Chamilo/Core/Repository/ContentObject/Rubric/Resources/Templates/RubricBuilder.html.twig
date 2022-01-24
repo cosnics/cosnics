@@ -4,6 +4,7 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
+
     <style type="text/css">
         /*.col-xs-12 h3#page-title {
             transform: translateY(-15px);
@@ -35,6 +36,7 @@
         Vue.use(BootstrapVue);
         Vue.use(this['cosnics-rubric'].default);
         Vue.use(VueI18n);
+        window.newWeightsImageURL = '{{ getImagePath('rubrics-new-weights', appContext, 'png') }}';
 
         /*var data = JSON.parse(rubricDataJSON);*/
         var data = {{ RUBRIC_DATA_JSON|raw }};
