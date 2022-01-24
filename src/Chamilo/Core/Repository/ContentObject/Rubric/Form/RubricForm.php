@@ -61,6 +61,10 @@ class RubricForm extends ContentObjectForm
             $useRelativeWeights = (bool) $values[Rubric::PROPERTY_RUBRIC_USE_RELATIVE_WEIGHTS];
             $rubricData->setUseRelativeWeights($useRelativeWeights);
         }
+        else
+        {
+            $rubricData->setUseRelativeWeights(false);
+        }
 
         $clusterNode = new ClusterNode($rubricObject->get_title(), $rubricData, $rubricData->getRootNode());
         new CategoryNode('', $rubricData, $clusterNode);
