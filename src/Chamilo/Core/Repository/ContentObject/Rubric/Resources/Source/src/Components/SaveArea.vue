@@ -17,10 +17,10 @@
 
 <template>
     <div class="save-state">
-        <div v-if="dataConnector && dataConnector.isSaving">
+        <div v-if="showSaveState && dataConnector && dataConnector.isSaving">
             {{ $tc('num-changes', dataConnector.processingSize, { 'count': dataConnector.processingSize }) }}...
         </div>
-        <div v-else-if="dataConnector" class="save-state-saved" aria-live="polite">
+        <div v-else-if="showSaveState && dataConnector" class="save-state-saved" aria-live="polite">
             {{ $t('all-saved') }}
         </div>
         <div v-if="error" class="block-ui"></div>
@@ -44,5 +44,6 @@
     export default class SaveArea extends Vue {
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
         @Prop({type: String, default: null}) readonly error!: string|null;
+        @Prop({type: Boolean, default: true}) readonly showSaveState!: boolean;
     }
 </script>

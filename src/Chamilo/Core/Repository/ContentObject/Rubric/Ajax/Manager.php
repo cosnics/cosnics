@@ -28,6 +28,7 @@ abstract class Manager extends AjaxManager
     const ACTION_UPDATE_LEVEL = 'UpdateLevel';
     const ACTION_UPDATE_TREE_NODE = 'UpdateTreeNode';
     const ACTION_UPDATE_RUBRIC = 'UpdateRubric';
+    const ACTION_RESET_ABSOLUTE_WEIGHTS = 'ResetAbsoluteWeights';
 
     const PARAM_RUBRIC_DATA_ID = 'rubricDataId';
     const PARAM_VERSION = 'version';

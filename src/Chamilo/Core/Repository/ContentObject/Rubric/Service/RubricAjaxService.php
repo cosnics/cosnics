@@ -391,6 +391,44 @@ class RubricAjaxService
     }
 
     /**
+     * @param int $rubricDataId
+     * @param int $versionId
+     *
+     * @return array[]
+     *
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricHasResultsException
+     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\RubricStructureException
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function resetRubricAbsoluteWeights(int $rubricDataId, int $versionId)
+    {
+        $rubricData = $this->rubricService->getRubric($rubricDataId, $versionId);
+        $criteria = $rubricData->getCriteriumNodes();
+        foreach ($criteria as $criterium)
+        {
+            if ($criterium->getWeight() != 100)
+            {
+                $criterium->setWeight(100);
+            }
+        }
+        $choices = $rubricData->getChoices();
+        foreach ($choices as $choice)
+        {
+            if ($choice->hasFixedScore())
+            {
+                $choice->setFixedScore(0);
+                $choice->setHasFixedScore(false);
+            }
+        }
+        $this->rubricService->saveRubric($rubricData);
+
+        return [
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()]
+        ];
+    }
+
+    /**
      * @param string $rubricJSONData
      *
      * @return RubricJSONModel

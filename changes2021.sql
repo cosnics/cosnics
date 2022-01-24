@@ -18,3 +18,7 @@ CREATE TABLE `repository_learning_path_step_context` (
  PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
+ALTER TABLE `repository_rubric_data` ADD COLUMN `use_relative_weights` tinyint(1) NOT NULL;
+
+ALTER TABLE `repository_rubric_tree_node` ADD COLUMN `rel_weight` int(11) DEFAULT NULL;

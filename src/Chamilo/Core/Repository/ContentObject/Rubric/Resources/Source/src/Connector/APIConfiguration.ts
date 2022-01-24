@@ -9,4 +9,5 @@ export default interface APIConfiguration {
     readonly updateLevelURL: string;
     readonly updateTreeNodeURL: string;
     readonly updateRubricURL: string;
+    readonly resetRubricAbsoluteWeightsURL: string;
 };

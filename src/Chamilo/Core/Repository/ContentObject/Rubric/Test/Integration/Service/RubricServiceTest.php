@@ -87,6 +87,8 @@ class RubricServiceTest extends DoctrineORMFixturesBasedTestCase
     protected function createTestData()
     {
         $rubricData = new RubricData('TestRubric');
+        $rubricData->setUseScores(true);
+        $rubricData->setUseRelativeWeights(false);
 
         $rootNode = $rubricData->getRootNode();
 

@@ -1,13 +1,22 @@
-import Cluster, {ClusterJsonObject} from "./Cluster";
-import Level, {LevelId, LevelJsonObject} from "./Level";
-import Choice, {ChoiceJsonObject} from "./Choice";
-import Criterium, {CriteriumId} from "./Criterium";
-import TreeNode from "./TreeNode";
-import Category from "./Category";
+import Cluster, {ClusterJsonObject} from './Cluster';
+import Level, {LevelId, LevelJsonObject} from './Level';
+import Choice, {ChoiceJsonObject} from './Choice';
+import Criterium, {CriteriumId} from './Criterium';
+import TreeNode from './TreeNode';
+import Category from './Category';
+
+function add(v1: number, v2: number) {
+    return v1 + v2;
+}
+
+function rounded2dec(v: number) {
+    return Math.round(v * 100) / 100;
+}
 
 export interface RubricJsonObject {
     id: string,
     useScores: boolean,
+    useRelativeWeights: boolean,
     title: string,
     levels: LevelJsonObject[],
     clusters: ClusterJsonObject[],
@@ -16,6 +25,8 @@ export interface RubricJsonObject {
 
 export default class Rubric extends TreeNode {
     public useScores: boolean = true;
+    public useRelativeWeights: boolean = true;
+    public hasAbsoluteWeights: boolean = false;
     public levels: Level[] = [];
     public choices: Map<CriteriumId, Map<LevelId, Choice>> = new Map<CriteriumId, Map<LevelId, Choice>>();
 
@@ -28,7 +39,7 @@ export default class Rubric extends TreeNode {
         return 'rubric';
     }
 
-    get clusters():Cluster[] {
+    get clusters(): Cluster[] {
         return this.children as Cluster[]; //invariant garded at addChild
     }
 
@@ -41,10 +52,9 @@ export default class Rubric extends TreeNode {
     }
 
     protected notifyAddChild(treeNode: TreeNode): void {
-        if(treeNode instanceof Criterium) {
+        if (treeNode instanceof Criterium) {
             this.onCriteriumAdded(treeNode);
         }
-
         else { //if for example a cluster is added, we add any choices from criteria in that cluster. This could happen when bootstrapping from json data model
             let addedCriteria = this.getAllCriteria(treeNode);
             addedCriteria.forEach(criterium => {
@@ -74,6 +84,7 @@ export default class Rubric extends TreeNode {
         return {
             id: this.id,
             useScores: this.useScores,
+            useRelativeWeights: this.useRelativeWeights,
             title: this.title,
             levels: this.levels,
             clusters: this._children.map(cluster => (cluster as Cluster).toJSON()),
@@ -120,6 +131,7 @@ export default class Rubric extends TreeNode {
         // Note: Setting children directly loses the notifyAddChild behavior. So we have to perform the actions here.
         newRubric._children = clusters;
         newRubric.useScores = rubricObject.useScores;
+        newRubric.useRelativeWeights = rubricObject.useRelativeWeights;
         newRubric.getAllCriteria().forEach(criterium => newRubric.onCriteriumAdded(criterium));
 
         return newRubric;
@@ -219,12 +231,12 @@ export default class Rubric extends TreeNode {
         array.splice(to, 0, array.splice(from, 1)[0]);
     }
 
-    public getChoiceScore(criterium: Criterium, level: Level){
+    public getChoiceScore(criterium: Criterium, level: Level) {
         let choice = this.getChoice(criterium, level);
         if (choice.hasFixedScore)
             return choice.fixedScore;
 
-        return Math.round(criterium.weight * level.score / 10) / 10;
+        return Math.round(criterium.weight * level.score) / 100;
     }
 
     public getScore() {
@@ -233,6 +245,7 @@ export default class Rubric extends TreeNode {
     }
 
     public getMaximumScore() : number {
+        if (this.useRelativeWeights) { return 100; }
         let maxScore = 0;
         this.getAllCriteria().forEach(criterium => {
             const levelScores = this.levels.map(level => this.getChoiceScore(criterium, level));
@@ -240,6 +253,32 @@ export default class Rubric extends TreeNode {
             maxScore += max;
         });
         return maxScore;
+    }
+
+    public getCriteriumMaxScore(criterium: Criterium, precise = false) : number {
+        if (this.useRelativeWeights) {
+            return criterium.rel_weight !== null ? criterium.rel_weight : (precise ? this.eqRestWeightPrecise : this.eqRestWeight);
+        }
+        const scores : number[] = [0];
+        const criteriumChoices = this.choices.get(criterium.id);
+        if (!criteriumChoices) {
+            throw new Error(`No choice data found for: ${criterium}`);
+        }
+        criteriumChoices.forEach((choice, levelId) => {
+            const level = this.levels.find(level => level.id === levelId);
+            scores.push(this.getChoiceScore(criterium, level!));
+        })
+        return Math.max.apply(null, scores);
+    }
+
+    public getCategoryMaxScore(category: Category) : number {
+        const score = this.getAllCriteria(category).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
+        return rounded2dec(score);
+    }
+
+    public getClusterMaxScore(cluster: Cluster) : number {
+        const score = this.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium, true)).reduce(add, 0);
+        return rounded2dec(score);
     }
 
     public getAllTreeNodes(treeNode: TreeNode = this) {
@@ -257,7 +296,7 @@ export default class Rubric extends TreeNode {
 
         treeNode.children.filter(child => child.hasChildren()).forEach(
             child => this.getChildrenRecursive(child, nodes)
-        )
+        );
     }
 
     public getAllCriteria(treeNode: TreeNode = this) {
@@ -285,7 +324,90 @@ export default class Rubric extends TreeNode {
 
         treeNode.children.filter(child => child.hasChildren()).forEach(
             child => this.getCriteriaRecursive(child, criteria)
-        )
+        );
     }
 
+    get eqRestWeightPrecise() {
+        // n => number of criteria without an explicitly set relative weight (only relevant when useRelativeWeights === true)
+        const n = this.getAllCriteria().filter(criterium => criterium.rel_weight === null).length;
+        if (!n) { return 0; }
+        const sum = this.getAllCriteria().map(criterium => criterium.rel_weight || 0).reduce(add, 0);
+        return (100 - sum) / n;
+    }
+
+    get eqRestWeight() {
+        return rounded2dec(this.eqRestWeightPrecise);
+    }
+
+    getCriteriumWeight(criterium: Criterium) {
+        if (this.useRelativeWeights) {
+            if (criterium.rel_weight !== null) {
+                return criterium.rel_weight;
+            }
+            return this.eqRestWeightPrecise;
+        }
+        return criterium.weight;
+    }
+
+    getRelativeWeight(treeNode: TreeNode) {
+        if (!this.useRelativeWeights) { return 0; }
+        if (treeNode instanceof Criterium) {
+            return this.getCriteriumWeight(treeNode);
+        }
+        return this.getAllCriteria(treeNode).map(criterium => this.getCriteriumWeight(criterium)).reduce(add, 0);
+    }
+
+    /*public getMaxDecimals() : number {
+        let maxDecimals = 0;
+        if (this.useScores && !this.useRelativeWeights) {
+            this.getAllCriteria().forEach(criterium => {
+                this.levels.forEach(level => {
+                    const score = this.getChoiceScore(criterium, level);
+                    const intScore = parseInt(score as any);
+                    if (intScore !== score) {
+                        const decimals = (score - intScore).toLocaleString('en-us').length - 2;
+                        if (decimals > maxDecimals) {
+                            maxDecimals = decimals;
+                        }
+                    }
+                });
+            });
+        }
+        return maxDecimals;
+    }*/
+
+    static resetAbsoluteWeights(rubric: Rubric) {
+        const criteria = rubric.getAllCriteria();
+        const levels = rubric.levels;
+        for (let i = 0; i < criteria.length; i++) {
+            if (criteria[i].weight !== 100) {
+                criteria[i].weight = 100;
+            }
+            for (let j = 0; j < levels.length; j++) {
+                const choice = rubric.findChoice(criteria[i], levels[j]);
+                if (choice?.hasFixedScore) {
+                    choice.fixedScore = 0;
+                    choice.hasFixedScore = false;
+                }
+            }
+        }
+        rubric.hasAbsoluteWeights = false;
+    }
+
+    static usesAbsoluteWeights(rubric: Rubric) {
+        const criteria = rubric.getAllCriteria();
+        const levels = rubric.levels;
+        for (let i = 0; i < criteria.length; i++) {
+            if (criteria[i].weight !== 100) {
+                return true;
+            }
+            for (let j = 0; j < levels.length; j++) {
+                const choice = rubric.findChoice(criteria[i], levels[j]);
+                if (choice?.hasFixedScore) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

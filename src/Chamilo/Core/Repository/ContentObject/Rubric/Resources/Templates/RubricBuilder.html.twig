@@ -4,6 +4,7 @@
 
     {{ getJavascript('Builder/cosnics-rubric.umd.js', appContext) }}
     {{ getCss('cosnics-rubric.css', appContext) }}
+
     <style type="text/css">
         /*.col-xs-12 h3#page-title {
             transform: translateY(-15px);
@@ -18,14 +19,13 @@
         }
 
         .rubric-back-to-assignment {
-            background: #e0fffd;
             display: inline-block;
             margin-left: 13px;
             padding: 2px;
         }
 
         .rubric-back-to-assignment .fa {
-            margin-right: 2px;
+            margin-right: 3px;
         }
     </style>
     <div id="builder">
@@ -36,6 +36,7 @@
         Vue.use(BootstrapVue);
         Vue.use(this['cosnics-rubric'].default);
         Vue.use(VueI18n);
+        window.newWeightsImageURL = '{{ getImagePath('rubrics-new-weights', appContext, 'png') }}';
 
         /*var data = JSON.parse(rubricDataJSON);*/
         var data = {{ RUBRIC_DATA_JSON|raw }};
@@ -148,7 +149,8 @@
                     'updateChoiceURL': '{{ UPDATE_CHOICE_AJAX_URL|raw }}',
                     'updateLevelURL': '{{ UPDATE_LEVEL_AJAX_URL|raw }}',
                     'updateTreeNodeURL': '{{ UPDATE_TREE_NODE_AJAX_URL|raw }}',
-                    'updateRubricURL': '{{ UPDATE_RUBRIC_AJAX_URL|raw }}'
+                    'updateRubricURL': '{{ UPDATE_RUBRIC_AJAX_URL|raw }}',
+                    'resetRubricAbsoluteWeightsURL': '{{ RESET_RUBRIC_ABSOLUTE_WEIGHTS_AJAX_URL|raw }}',
                 },
                 version: data.version,
                 rubricData: data

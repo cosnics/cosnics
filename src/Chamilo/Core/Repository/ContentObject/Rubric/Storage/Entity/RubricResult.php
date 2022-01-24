@@ -212,7 +212,7 @@ class RubricResult
      */
     public function setScore(float $score): RubricResult
     {
-        $this->score = (int) (round($score, 2) * 100);
+        $this->score = (int) round($score * 100);
 
         return $this;
     }

@@ -54,7 +54,9 @@
     }
     @media only screen and (min-width: 900px) {
         .btn-show-split-view {
+            align-self: baseline;
             display: flex;
+            margin-top: 1px;
         }
     }
     .svg.show-split-view {
