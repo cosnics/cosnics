@@ -33,27 +33,27 @@
                 <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header rb-col-start-2">
                     <div style="flex: 1; text-align: center; padding: 0.7rem; font-weight: 600;">{{ $t('weight') }}</div>
                 </div>
-                <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" v-if="useScores || (useGrades && evaluators.length)">
+                <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
                     <li v-if="useAbsoluteScores" class="rubric-header-title mod-res mod-max">Max.</li>
                 </ul>
-                <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" v-if="useScores || (useGrades && evaluators.length)">
+                <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
                     <li class="rubric-header-date" v-for="evaluator in evaluators"
                         :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
                     <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
                 </ul>
                 <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
-                    <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-title-header-wrap rb-col-start-1" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-title-header mod-res">
                             <!--<div class="treenode-title-header-pre"></div>-->
                             <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
                         </div>
                     </div>
-                    <div class="treenode-weight mod-entry mod-res-w" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <span>{{ rubric.getRelativeWeight(cluster)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
                     </div>
-                    <div class="treenode-rubric-results" :class="{'mod-res-w': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
                                 <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :class="{'mod-cluster': !(useGrades || (useScores && rubric.useRelativeWeights && !showScores)) }" :title="getEvaluationTitleOverlay(evaluation)" />
@@ -72,10 +72,10 @@
                                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                                 </div>
                             </div>
-                            <div class="treenode-weight mod-entry mod-res-w" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                                 <span>{{ rubric.getRelativeWeight(category)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
                             </div>
-                            <div class="treenode-rubric-results" :class="{'mod-res-w': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
@@ -94,10 +94,10 @@
                                     <h3 class="treenode-title criterium-title u-markdown-criterium" :class="{'mod-no-category': !category.title}" v-html="criterium.toMarkdown()"></h3>
                                 </div>
                             </div>
-                            <div class="treenode-weight mod-entry mod-res-w" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                                 <span>{{ rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
                             </div>
-                            <div class="treenode-rubric-results" :class="{'mod-res-w': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                                 <div class="treenode-evaluations">
                                     <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
                                         <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
@@ -115,8 +115,8 @@
                     <div class="cluster-sep" :class="{ 'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores) }"></div>
                 </template>
                 <template v-if="useScores && (!rubric.useRelativeWeights || showScores)">
-                    <div class="total-title" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'">{{ $t('total') }} {{ $t('rubric') }}:</div>
-                    <div class="treenode-rubric-results" :class="{'mod-res-w': useScores && rubric.useRelativeWeights && showScores}">
+                    <div class="total-title" :class="{'mod-res-col': useScores && rubric.useRelativeWeights && showScores}">{{ $t('total') }} {{ $t('rubric') }}:</div>
+                    <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores}">
                         <div class="treenode-evaluations">
                             <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">
                                 <score-display :score="rubricEvaluation.getRubricScore(evaluator)" :percent="rubric.useRelativeWeights" />
@@ -271,14 +271,6 @@
         grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
-    .rubric-header.mod-res {
-        grid-column-start: 2;
-    }
-
-    .rubric-header.mod-res-w {
-        grid-column-start: 3;
-    }
-
     .rubric-header.mod-date {
         margin-top: -1.5rem;
         z-index: 29;
@@ -321,7 +313,6 @@
     .treenode-title-header-wrap {
         align-items: center;
         display: flex;
-        grid-column-start: 1;
         min-height: 2.7rem;
         position: relative;
 
@@ -350,7 +341,9 @@
     }
 
     .treenode-weight.mod-res-w {
+        padding-top: .25rem;
         position: relative;
+        text-align: center;
         z-index: 10;
 
         &::before {
@@ -377,10 +370,6 @@
         display: flex;
         position: relative;
         z-index: 10;
-
-        &.mod-res-w {
-            grid-column-start: 3;
-        }
 
         &.is-highlighted {
             &::before, &::after {
@@ -504,11 +493,7 @@
         }
     }
 
-    .total-title.mod-res {
-        grid-column-start: 1;
-    }
-
-    .total-title.mod-res-w {
+    .total-title.mod-res-col {
         grid-column: 1 / -2;
     }
 </style>

@@ -36,7 +36,6 @@
     align-items: center;
     background: #fff;
     display: flex;
-    grid-column-start: 1;
     height: 100%;
     list-style: none;
     margin: 0;
@@ -83,10 +82,6 @@
 
   .treenode-title-header {
     display: flex;
-
-    &.mod-responsive {
-      grid-column-start: 1;
-    }
   }
 
   .treenode-title-header-pre {
@@ -155,6 +150,10 @@
     }
   }
 
+  .category-sep {
+    grid-column: 1 / -1;
+  }
+
   .treenode-rubric-input {
     z-index: 10;
   }
@@ -210,7 +209,6 @@
     align-self: center;
     color: darken($score-dark, 20%);
     font-weight: 700;
-    grid-column-start: 2;
     text-align: right;
   }
 
@@ -229,10 +227,6 @@
 
     .rb-lg\:col-span-full {
       grid-column: 1 / -1;
-    }
-
-    .rubric-header.mod-weight {
-      grid-column-start: 3;
     }
 
     .treenode-title-header {
@@ -261,16 +255,11 @@
       grid-column: 1 / -1;
     }
 
-    .treenode-title-header.mod-responsive {
-      grid-column: 1 / -1;
-    }
-
     .rubric-header.mod-responsive, .treenode-choices {
       padding-left: 1.8rem;
     }
 
     .total-title {
-      grid-column-start: 1;
       margin-left: 1.8rem;
     }
   }
@@ -316,10 +305,6 @@
 
     .rubric-header.mod-responsive {
       display: none;
-    }
-
-    .treenode-rubric-input {
-      grid-column: 1 / -1;
     }
 
     .treenode-choices {
