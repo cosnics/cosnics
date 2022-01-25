@@ -52,9 +52,7 @@
             </nav>
             <save-area :show-save-state="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
-        <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
-            <link rel="stylesheet"
-                  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <div class="rubrics" :class="{'mod-mg': $route.name === 'Builder' || $route.name === 'BuilderLevels' }">
             <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
                 <router-view :rubric="rubric" :data-connector="$route.name !== 'BuilderPreview' && dataConnector" :selected-criterium="$route.name === 'Builder' && selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
@@ -437,6 +435,11 @@
 
 
     /** Rubric Editor **/
+
+    #app.builder-app {
+        display: flex;
+        flex-direction: column;
+    }
 
     .rubrics {
         * {
@@ -902,7 +905,7 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .rubrics:not(.builder-app-full-view) {
+        .rubrics.mod-mg {
             margin: 0 1.5em;
         }
 

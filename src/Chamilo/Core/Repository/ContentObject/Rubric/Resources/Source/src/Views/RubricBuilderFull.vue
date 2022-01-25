@@ -23,24 +23,24 @@
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-bf">
             <div style="flex: 1; text-align: left; padding: 0.7rem 0; font-weight: 600;">{{ $t('weight') }}</div>
         </div>
-        <div class="rubric-header mod-responsive" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}">
+        <div class="rubric-header mod-responsive">
             <div class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</div>
         </div>
-        <template v-for="cluster in rubric.clusters">
-            <div class="treenode-title-header mod-responsive">
+        <template v-for="(cluster, index) in rubric.clusters">
+            <div class="treenode-title-header mod-responsive rb-lg:col-start-1">
                 <div class="treenode-title-header-pre"></div>
                 <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
             </div>
             <template v-for="category in cluster.categories">
-                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive rb-lg:col-start-1" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
                     <div class="treenode-title-header-pre mod-category"></div>
                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                 </div>
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
-                    <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                    <div class="treenode-title-header mod-responsive rb-lg:col-start-1 mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
@@ -66,7 +66,7 @@
                     </div>
                 </template>
             </template>
-            <div class="cluster-sep mod-bf"></div>
+            <div class="cluster-sep" v-if="index < rubric.clusters.length - 1"></div>
         </template>
     </div>
 </template>
@@ -340,10 +340,6 @@
         }
     }
 
-    .cluster-sep.mod-bf:last-child {
-        display: none;
-    }
-
     @media only screen and (min-width: 900px) {
         .treenode-title-header.mod-bf {
             padding-top: .6rem;
@@ -357,6 +353,10 @@
 
         .treenode-weight.mod-pad {
             padding-left: 1.8rem;
+        }
+
+        .treenode-weight-header.mod-bf {
+            display: none;
         }
     }
 

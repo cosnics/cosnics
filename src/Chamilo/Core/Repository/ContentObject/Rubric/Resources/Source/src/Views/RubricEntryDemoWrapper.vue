@@ -13,7 +13,7 @@
 </i18n>
 
 <template>
-    <div style="margin-top: -20px">
+    <div id="app" style="margin-top: -20px">
         <rubric-entry :rubric="rubric" :rubric-evaluation="getRubricEvaluation(evaluator)" :ui-state="store.uiState.entry" :options="store.uiState.entry.options"
                       @level-selected="selectLevel" @criterium-feedback-changed="updateFeedback">
             <template v-slot:demoEvaluator>

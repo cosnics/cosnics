@@ -1,5 +1,7 @@
 <template>
-    <rubric-result v-if="rubric" :rubric="rubric" :rubric-evaluation="rubricEvaluation"></rubric-result>
+    <div id="app" v-if="rubric">
+        <rubric-result :rubric="rubric" :rubric-evaluation="rubricEvaluation"></rubric-result>
+    </div>
 </template>
 
 <script lang="ts">
