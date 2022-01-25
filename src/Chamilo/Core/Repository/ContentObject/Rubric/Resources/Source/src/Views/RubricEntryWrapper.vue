@@ -1,10 +1,12 @@
 <template>
-    <rubric-entry v-if="rubric" :rubric="rubric" :rubric-evaluation="rubricEvaluation" :ui-state="uiState" :show-errors="showErrors"
-                  @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
-        <template v-slot:slot-inner>
-            <slot name="slot-outer"></slot>
-        </template>
-    </rubric-entry>
+    <div id="app" v-if="rubric">
+        <rubric-entry :rubric="rubric" :rubric-evaluation="rubricEvaluation" :ui-state="uiState" :show-errors="showErrors"
+                      @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
+            <template v-slot:slot-inner>
+                <slot name="slot-outer"></slot>
+            </template>
+        </rubric-entry>
+    </div>
 </template>
 
 <script lang="ts">

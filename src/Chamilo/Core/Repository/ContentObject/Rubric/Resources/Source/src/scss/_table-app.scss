@@ -19,10 +19,6 @@
     grid-column: 1 / -1;
   }
 
-  #app.mod-sep {
-    /*border-top: 1px solid #d6d6d6;*/
-  }
-
   .rubric {
     display: grid;
     grid-column-gap: .7rem;
@@ -145,7 +141,7 @@
     height: 1px;
     margin: .5rem 0 .5rem 1.8rem;
 
-    &.mod-grades:last-child {
+    &.mod-hide-last:last-child {
       display: none;
     }
   }

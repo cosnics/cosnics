@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top: -20px">
+    <div id="app" style="margin-top: -20px">
         <rubric-result v-if="rubric" :rubric="rubric" :rubric-evaluation="rubricEvaluation" :options="{ isDemo: true }"></rubric-result>
     </div>
 </template>

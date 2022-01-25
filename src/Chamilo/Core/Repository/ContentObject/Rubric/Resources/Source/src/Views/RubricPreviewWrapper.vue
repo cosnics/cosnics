@@ -1,5 +1,7 @@
 <template>
-    <rubric-entry v-if="rubric" :rubric="rubric" :preview="true" :ui-state="uiState"></rubric-entry>
+    <div id="app" v-if="rubric">
+        <rubric-entry :rubric="rubric" :preview="true" :ui-state="uiState"></rubric-entry>
+    </div>
 </template>
 
 <script lang="ts">
