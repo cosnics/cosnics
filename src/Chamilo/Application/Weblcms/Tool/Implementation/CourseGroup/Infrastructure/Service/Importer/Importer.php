@@ -47,7 +47,7 @@ class Importer
             if (in_array($parsedGroup->getTitle(), $existingCourseGroupNames))
             {
                 $importGroupStatuses[] =
-                    new ImportGroupStatus($parsedGroup->getTitle(), ImportGroupStatus::STATUS_SKIPPING);
+                    new ImportGroupStatus($parsedGroup, ImportGroupStatus::STATUS_SKIPPING);
 
                 continue;
             }
@@ -62,12 +62,12 @@ class Importer
                 );
 
                 $importGroupStatuses[] =
-                    new ImportGroupStatus($parsedGroup->getTitle(), ImportGroupStatus::STATUS_CREATED);
+                    new ImportGroupStatus($parsedGroup, ImportGroupStatus::STATUS_CREATED);
             }
             catch(\Exception $ex)
             {
                 $importGroupStatuses[] =
-                    new ImportGroupStatus($parsedGroup->getTitle(), ImportGroupStatus::STATUS_FAILED, $ex->getMessage());
+                    new ImportGroupStatus($parsedGroup, ImportGroupStatus::STATUS_FAILED, $ex->getMessage());
             }
         }
 

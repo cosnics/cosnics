@@ -2,6 +2,8 @@
 
 namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Domain;
 
+use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\Importer\ImportedGroup;
+
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Domain
  * @author - Sven Vanpoucke - Hogeschool Gent
@@ -12,23 +14,23 @@ class ImportGroupStatus
     const STATUS_FAILED = 2;
     const STATUS_SKIPPING = 3;
 
-    protected string $groupName;
     protected string $status;
     protected ?string $message;
+    protected ImportedGroup $importedGroup;
 
-    public function __construct(string $groupName, string $status, ?string $message = '')
+    public function __construct(ImportedGroup $importedGroup, string $status, ?string $message = '')
     {
-        $this->groupName = $groupName;
         $this->status = $status;
         $this->message = $message;
+        $this->importedGroup = $importedGroup;
     }
 
     /**
-     * @return string
+     * @return ImportedGroup
      */
-    public function getGroupName(): string
+    public function getImportedGroup(): ImportedGroup
     {
-        return $this->groupName;
+        return $this->importedGroup;
     }
 
     /**

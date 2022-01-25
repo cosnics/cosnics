@@ -1,5 +1,83 @@
 {{ HEADER|raw }}
 
-<div class="alert alert-success">Groups imported</div>
+{% set appContext = 'Chamilo\\Application\\Weblcms\\Tool\\Implementation\\CourseGroup' %}
+
+<style>
+    .label {
+        font-size: 12px;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .fa-checkbox {
+        color: #406e8e;
+    }
+
+    .fa {
+        font-size: 16px;
+    }
+
+    .column-small {
+        width: 50px;
+    }
+</style>
+
+<div class="alert alert-info">{{ 'ImportDescription'|trans({}, appContext) }}</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>{{ 'GroupName'|trans({}, appContext) }}</th>
+        <th>{{ 'Description'|trans({}, appContext) }}</th>
+        <th>{{ 'MaximumMembers'|trans({}, appContext) }}</th>
+        <th>{{ 'SelfRegistrationAllowed'|trans({}, appContext) }}</th>
+        <th>{{ 'SelfUnRegistrationAllowed'|trans({}, appContext) }}</th>
+        <th>{{ 'Status'|trans({}, appContext) }}</th>
+        <th>{{ 'Feedback'|trans({}, appContext) }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for STATUS in STATUSES %}
+    <tr>
+        <td>{{ STATUS.importedGroup.title }}</td>
+        <td>{{ STATUS.importedGroup.description }}</td>
+        <td class="text-center column-small">{{ STATUS.importedGroup.maximumMembers }}</td>
+        <td class="text-center column-small">
+            {% if STATUS.importedGroup.selfRegistrationAllowed  %}
+                <span class="fa fa-checkbox fa-check-circle-o"></span>
+            {% else %}
+                <span class="fa fa-checkbox fa-circle-o"></span>
+            {% endif %}
+        </td>
+        <td class="text-center column-small">
+            {% if STATUS.importedGroup.selfUnregistrationAllowed  %}
+                <span class="fa fa-checkbox fa-check-circle-o"></span>
+            {% else %}
+                <span class="fa fa-checkbox fa-circle-o"></span>
+            {% endif %}
+        </td>
+        {% if STATUS.status == 1 %}
+            <td class="text-center"><span class="label label-success">{{ 'GroupStatusCreated'|trans({}, appContext) }}</span></td>
+            <td>{{ 'GroupStatusCreatedDescription'|trans({}, appContext) }}</td>
+        {% elseif STATUS.status == 2 %}
+            <td class="text-center"><span class="label label-danger">{{ 'GroupStatusError'|trans({}, appContext) }}</span></td>
+            <td>{{ 'GroupStatusErrorDescription'|trans({}, appContext) }} ({{ STATUS.message }})</td>F
+        {% elseif STATUS.status == 3 %}
+            <td class="text-center"><span class="label label-info">{{ 'GroupStatusExists'|trans({}, appContext) }}</span></td>
+            <td>{{ 'GroupStatusExistsDescription'|trans({}, appContext) }}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    {% if not STATUSES %}
+        <tr>
+            <td colspan="4">{{ 'NoGroupsFound'|trans({}, appContext) }}</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>
+
+<div class="text-center" style="margin-top: 30px;"><a class="btn btn-primary" href="{{ DETAILS_URL }}">{{ 'GoBackToCourseGroup'|trans({}, appContext) }}</a></div>
 
 {{ FOOTER|raw }}

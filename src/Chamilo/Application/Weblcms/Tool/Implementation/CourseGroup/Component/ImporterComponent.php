@@ -41,12 +41,12 @@ class ImporterComponent extends Manager
             if ($handler->handle($form, $this->getRequest()))
             {
                 $statuses = $handler->getImportGroupStatuses();
-
+//var_dump($statuses);
                 return $this->getTwig()->render(
                     Manager::context() . ':GroupsImportStatus.html.twig',
                     [
                         'HEADER' => $this->render_header(), 'FOOTER' => $this->render_footer(),
-                        'SUBSCRIBE_STATUSES' => $statuses,
+                        'STATUSES' => $statuses,
                         'DETAILS_URL' => $this->get_url([self::PARAM_ACTION => self::ACTION_GROUP_DETAILS])
                     ]
                 );
