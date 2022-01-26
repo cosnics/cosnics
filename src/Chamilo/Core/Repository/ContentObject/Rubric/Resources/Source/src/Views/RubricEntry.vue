@@ -286,7 +286,6 @@
                 }
             });
             if (rubric.useScores && !rubric.useRelativeWeights) {
-                //this.maxDecimals = rubric.getMaxDecimals();
                 rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(rubric);
             }
         }

@@ -88,6 +88,11 @@ export default class DataConnector {
             const res = await this.executeAPIRequest(this.apiConfiguration.resetRubricAbsoluteWeightsURL, {});
             if (this.isDummyRequest || this.hasError) { return; }
             Rubric.resetAbsoluteWeights(this.rubric);
+            const newLevelScores = Object.fromEntries(res.rubric.levels.map((o: any) => ([o.id, o.score])));
+            this.rubric.levels.forEach(level => {
+                level.score = newLevelScores[level.id];
+            });
+            this.rubric.useRelativeWeights = true;
         });
     }
 

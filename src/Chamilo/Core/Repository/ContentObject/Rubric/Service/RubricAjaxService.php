@@ -421,10 +421,36 @@ class RubricAjaxService
                 $choice->setHasFixedScore(false);
             }
         }
+
+        $levels = $rubricData->getLevels();
+        if (count($levels) > 0)
+        {
+            $maxScore = 0;
+            foreach ($levels as $level)
+            {
+                $score = $level->getScore();
+                if ($score > $maxScore)
+                {
+                    $maxScore = $score;
+                }
+            }
+            if ($maxScore > 0)
+            {
+                $multiplier = 100 / $maxScore;
+                foreach ($levels as $level)
+                {
+                    $score = $level->getScore() * $multiplier;
+                    $score = round($score);
+                    $level->setScore($score);
+                }
+            }
+        }
+
+        $rubricData->setUseRelativeWeights(true);
         $this->rubricService->saveRubric($rubricData);
 
         return [
-            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion()]
+            'rubric' => ['id' => $rubricData->getId(), 'version' => $rubricData->getVersion(), 'levels' => $rubricData->getLevels()]
         ];
     }
 

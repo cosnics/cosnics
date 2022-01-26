@@ -93,6 +93,11 @@
         onUseScoresChanged(useScores: boolean) {
             this.rubric.useScores = useScores;
             this.dataConnector?.updateRubric(this.rubric);
+            if (useScores && !this.rubric.useRelativeWeights) {
+                this.rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(this.rubric);
+            } else if (!useScores) {
+                this.rubric.hasAbsoluteWeights = false;
+            }
         }
 
         onUseRelativeWeightsChanged() {
