@@ -23,8 +23,8 @@
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-bf">
-            <div style="flex: 1; text-align: left; padding: 0.7rem 0; font-weight: 600;">{{ $t('weight') }}</div>
+        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+            <span>{{ $t('weight') }}</span>
         </div>
         <div class="rubric-header mod-responsive">
             <div class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</div>
@@ -354,10 +354,6 @@
         .treenode-weight.mod-pad {
             padding-left: 1.8rem;
         }
-
-        .treenode-weight-header.mod-bf {
-            display: none;
-        }
     }
 
     @media only screen and (min-width: 680px) {
@@ -368,7 +364,18 @@
 </style>
 
 <style scoped>
-.treenode-level-description-input.mod-abs-weights >>> .feedback-markup-preview {
-    overflow: hidden;
-}
+    .treenode-weight-header > span {
+        padding: 0.7rem 0;
+        text-align: left;
+    }
+
+    .treenode-level-description-input.mod-abs-weights >>> .feedback-markup-preview {
+        overflow: hidden;
+    }
+
+    @media only screen and (max-width: 899px) {
+        .treenode-weight-header {
+            display: none;
+        }
+    }
 </style>

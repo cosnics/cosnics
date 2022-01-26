@@ -41,6 +41,25 @@
     z-index: 30;
   }
 
+  .treenode-weight-header {
+    align-self: start;
+    background: white;
+    color: rgb(95, 146, 157);
+    display: flex;
+    padding: 0;
+    position: sticky;
+    text-align: center;
+    top: 0;
+    z-index: 30;
+
+    > span {
+      flex: 1;
+      font-weight: 600;
+      padding: 0.7rem;
+      text-align: center;
+    }
+  }
+
   .rubric-header {
     background: #fff;
     display: flex;
@@ -148,6 +167,7 @@
 
   .category-sep {
     grid-column: 1 / -1;
+    height: .75rem;
   }
 
   .treenode-rubric-input {

@@ -31,7 +31,7 @@
                 <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
             </ul>
             <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header rb-col-start-2">
-                <div style="flex: 1; text-align: center; padding: 0.7rem; font-weight: 600;">{{ $t('weight') }}</div>
+                <span>{{ $t('weight') }}</span>
             </div>
             <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
                 <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
@@ -110,7 +110,7 @@
                             </div>
                         </div>
                     </template>
-                    <div class="category-sep" v-if="index < getCategoryRowsData(cluster).length - 1" style="height: .75rem"></div>
+                    <div class="category-sep" v-if="index < getCategoryRowsData(cluster).length - 1"></div>
                 </template>
                 <div class="cluster-sep" :class="{ 'mod-hide-last': useGrades || (useScores && rubric.useRelativeWeights && !showScores) }"></div>
             </template>

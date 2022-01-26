@@ -51,17 +51,12 @@
             <slot name="demoEvaluator"></slot>
             <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-entry">
-            <div style="flex: 1; text-align: center; padding: 0.7rem; font-weight: 600;">{{ $t('weight') }}</div>
+        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+            <span>{{ $t('weight') }}</span>
         </div>
         <ul class="rubric-header mod-responsive rb-md-max:col-start-1">
             <li class="rubric-header-title" v-for="level in rubric.levels"><!--<span v-if="useScores && rubric.useRelativeWeights" style="background-color: rgba(0, 0, 0, .1); border-radius: 3px; float: right; font-weight: 600; padding: 0 5px">{{level.score}}</span>-->{{ level.title }}</li>
         </ul>
-        <!--<div v-if="useScores && rubric.useRelativeWeights" class="rubric-relative-weights-header mod-responsive">
-            <div class="rubric-header-title" style="background: white;color: #5f929d;box-shadow: inset 0 0 1px 1px #ecf1f2;display: flex;padding: 0;">
-                <div style="flex: 1;text-align: center;border-right: 1px inset #ecf1f2;padding: .8rem .7rem;font-weight:600">Tot. <i class="fa fa-percent" style="font-size: 1.1rem;align-self: center;"></i></div>
-            </div>
-        </div>-->
         <div class="rubric-header-fill"></div>
         <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
             <div class="treenode-title-header mod-responsive mod-entry rb-lg:col-start-1 rb-md-max:col-span-full" :class="{ 'is-highlighted': highlightedTreeNode === cluster }" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
@@ -649,18 +644,6 @@
         padding-right: 0.5rem;
     } */
 
-    .treenode-weight-header {
-        align-self: start;
-        background: white;
-        color: rgb(95, 146, 157);
-        display: flex;
-        padding: 0;
-        position: sticky;
-        text-align: center;
-        top: 0;
-        z-index: 30;
-    }
-
     .treenode-weight {
         color: rgb(95, 146, 157);
     }
@@ -719,10 +702,6 @@
             margin-left: 1.8rem;
         }
 
-        .treenode-weight-header.mod-entry {
-            display: none;
-        }
-
         .treenode-weight-title {
             color: hsl(180, 17%, 41%);
             font-weight: 700;
@@ -756,5 +735,13 @@
         /*.treenode-level-icon-check.mod-relative {
             display: none;
         }*/
+    }
+</style>
+
+<style scoped>
+    @media only screen and (max-width: 899px) {
+        .treenode-weight-header {
+            display: none;
+        }
     }
 </style>
