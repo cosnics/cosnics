@@ -16,6 +16,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\TreeNode;
 use Chamilo\Libraries\Architecture\Traits\DependencyInjectionContainerTrait;
+use JMS\Serializer\DeserializationContext;
 
 class CpoImportImplementation extends ImportImplementation
 {
@@ -58,6 +59,7 @@ class CpoImportImplementation extends ImportImplementation
 
         $rubricData = new RubricData($rubricDataArray['root_node']['title']);
         $rubricData->setUseScores($rubricDataArray['use_scores']);
+        $rubricData->setUseRelativeWeights($rubricDataArray['use_relative_weights']);
         $rubricData->setContentObjectId($contentObject->getId());
 
         $this->createLevels($rubricData, $rubricDataArray['levels']);

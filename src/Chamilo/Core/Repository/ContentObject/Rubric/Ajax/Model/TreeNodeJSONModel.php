@@ -76,7 +76,7 @@ class TreeNodeJSONModel
      *
      * @Type("integer")
      */
-    protected $rel_weight = 0;
+    protected $rel_weight = null;
 
     /**
      * TreeNodeJSONModel constructor.
