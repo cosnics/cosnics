@@ -42,6 +42,11 @@ class CsvImportParser
                 $rowData[$headers[$index]] = (trim($value));
             }
 
+            if(empty($rowData[self::PROPERTY_TITLE]))
+            {
+                continue;
+            }
+
             $importedGroups[] = new ImportedGroup(
                 $rowData[self::PROPERTY_TITLE], $rowData[self::PROPERTY_DESCRIPTION],
                 $rowData[self::PROPERTY_MAX_MEMBERS], boolval($rowData[self::PROPERTY_SELF_REGISTRATION_ALLOWED]),
