@@ -31,16 +31,15 @@
         </div>
         <template v-for="(cluster, index) in rubric.clusters">
             <div class="treenode-title-header mod-responsive rb-lg:col-start-1">
-                <div class="treenode-title-header-pre"></div>
                 <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
             </div>
             <template v-for="category in cluster.categories">
-                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive rb-lg:col-start-1" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
-                    <div class="treenode-title-header-pre mod-category"></div>
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-category has-category mod-responsive rb-lg:col-start-1" :style="`--category-color: ${ category.title && category.color ? category.color : '#999' }`">
+                    <div class="treenode-title-header-pre mod-category" :class="{'mod-no-color': !category.color}"></div>
                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                 </div>
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
-                    <div class="treenode-title-header mod-responsive rb-lg:col-start-1 mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                    <div class="treenode-title-header mod-responsive rb-lg:col-start-1 mod-bf" :class="{'has-category': !!category.title}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
@@ -377,5 +376,70 @@
         .treenode-weight-header {
             display: none;
         }
+    }
+</style>
+
+<style lang="scss" scoped>
+    .treenode-title-header {
+        position: relative;
+    }
+
+    .criterium-title {
+        margin-left: .75rem;
+    }
+
+    @media only screen and (min-width: 900px) {
+        .treenode-title-header.has-category::after {
+            position: absolute;
+            top: -0.5rem;
+            width: 1px;
+            bottom: -0.2rem;
+            left: 0.6rem;
+            background-color: var(--category-color);
+            content: '';
+            opacity: .5;
+        }
+
+        .treenode-title-header.mod-category::after {
+            top: .8rem;
+        }
+
+        .criterium-title.mod-no-category {
+            margin-left: .25rem;
+        }
+    }
+
+    .treenode-title-header-pre.mod-category:after {
+        border-radius: 50%;
+    }
+
+    .treenode-title-header-pre.mod-category.mod-no-color::after {
+        border: 1px solid #bbb;
+        background-color: #fff;
+        width: 1.1rem;
+        height: 1.1rem;
+        position: absolute;
+        left: .1rem;
+    }
+
+    .treenode-title-header-pre.mod-criterium::after {
+        border: 1px solid var(--category-color);
+        content: '';
+        border-radius: 50%;
+        height: 7px;
+        margin-top: 0.3rem;
+        width: 7px;
+        position: absolute;
+        left: 0.3rem;
+        background-color: white;
+    }
+
+    .treenode-title.cluster-title {
+        margin-left: .25rem;
+    }
+
+    .cluster-sep {
+        border-color: #deebee;
+        margin: 1rem 0 1.5rem;
     }
 </style>
