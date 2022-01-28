@@ -130,6 +130,7 @@ class RubricData
         $this->setRootNode($rootNode);
 
         $this->useScores = $useScores;
+        $this->useRelativeWeights = false;
     }
 
     /**
