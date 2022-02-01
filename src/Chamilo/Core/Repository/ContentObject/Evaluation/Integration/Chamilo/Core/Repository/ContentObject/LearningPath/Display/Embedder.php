@@ -23,6 +23,8 @@ use Chamilo\Libraries\Utilities\StringUtilities;
  */
 class Embedder extends ContentObjectEmbedder
 {
+    const PARAM_SELECTED_ENTITY = 'SelectedLPAssignmentEntity';
+
     use DependencyInjectionContainerTrait;
 
     public function run()
@@ -41,10 +43,14 @@ class Embedder extends ContentObjectEmbedder
 
         $this->trackingService->setActiveAttemptCompleted($this->learningPath, $this->treeNode, $this->get_application()->getUser());
 
+        $bridge = $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class);
+
         $applicationFactory = $this->getApplicationFactory();
-        $applicationFactory->setEvaluationServiceBridge(
-            $this->getBridgeManager()->getBridgeByInterface(EvaluationServiceBridgeInterface::class)
-        );
+        $applicationFactory->setEvaluationServiceBridge($bridge);
+
+        $this->addSelectedEntityToApplicationFactory($applicationFactory, $bridge);
+        $this->registerSelectedEntity($bridge);
+
         return $applicationFactory->getApplication(
             \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::context(),
             $configuration
@@ -65,6 +71,71 @@ class Embedder extends ContentObjectEmbedder
         $evaluationServiceBridge->setTreeNodeAttempt($activeAttempt);
 
         $this->getBridgeManager()->addBridge($evaluationServiceBridge);
+    }
+
+    /**
+     * @param ApplicationFactory $applicationFactory
+     */
+    protected function addSelectedEntityToApplicationFactory(
+        ApplicationFactory $applicationFactory, EvaluationServiceBridge $evaluationServiceBridge
+    )
+    {
+        if ($this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::PARAM_ACTION
+            ) == \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::ACTION_ENTRY
+        )
+        {
+            return null;
+        }
+
+        $selectedEntity = $this->getSessionUtilities()->get(self::PARAM_SELECTED_ENTITY);
+        if (!is_array($selectedEntity) || !array_key_exists($this->getLPIdentifier(), $selectedEntity))
+        {
+            return;
+        }
+
+        $entityData = $selectedEntity[$this->getLPIdentifier()];
+        $entityType = $entityData['entity_type'];
+        $entityId = $entityData['entity_id'];
+
+        if (is_null($entityType) || $entityType != $evaluationServiceBridge->getCurrentEntityType() || empty($entityId))
+        {
+            return;
+        }
+
+        $applicationFactory->setViewEntity($entityId);
+    }
+
+    protected function registerSelectedEntity(EvaluationServiceBridge $evaluationServiceBridge): void
+    {
+        if ($this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::PARAM_ACTION
+            ) == \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::ACTION_ENTRY
+        )
+        {
+            $entityId = $this->getRequest()->getFromPostOrUrl(
+                \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Manager::PARAM_ENTITY_ID
+            );
+
+            $entityType = $evaluationServiceBridge->getCurrentEntityType();
+
+            $this->getSessionUtilities()->register(
+                self::PARAM_SELECTED_ENTITY,
+                [$this->getLPIdentifier() => ['entity_type' => $entityType, 'entity_id' => $entityId]]
+            );
+        }
+    }
+
+    public function getLPIdentifier()
+    {
+        $publicationId = $this->getRequest()->getFromPostOrUrl(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
+
+        if($publicationId)
+        {
+            return 'p' . $publicationId;
+        }
+
+        return 'lp' . $this->learningPath->getId();
     }
 
     /**

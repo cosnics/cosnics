@@ -46,6 +46,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
 
     const ACTION_ENTRY = 'Entry';
     const ACTION_SAVE_SCORE = 'SaveScore';
+    const ACTION_BROWSER = 'Browser';
 
     const SESSION_RUBRIC_SCORE = 'RUBRIC_SCORE';
 
