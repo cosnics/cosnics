@@ -24,7 +24,7 @@ class ExportComponent extends Manager
             $evaluation = $this->getEvaluation();
             $userIds = $this->getEvaluationServiceBridge()->getTargetEntityIds();
             $contextIdentifier = $this->getEvaluationServiceBridge()->getContextIdentifier();
-            $selectedUsers = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, EvaluationEntityRetrieveProperties::ALL());
+            $selectedEntities = $this->getEntityService()->getEntitiesFromIds($userIds, $contextIdentifier, EvaluationEntityRetrieveProperties::ALL());
 
             // output headers so that the file is downloaded rather than displayed
             header('Content-Type: text/csv; charset=utf-8');
@@ -34,12 +34,29 @@ class ExportComponent extends Manager
             $output = fopen('php://output', 'w');
 
             // output the column headings
-            fputcsv($output, array('lastname', 'firstname', 'official_code', 'score', 'rubric'), ';');
-
-            // output the rows
-            foreach ($selectedUsers as $user)
+            if ($this->getEvaluationServiceBridge()->getCurrentEntityType() === 0)
             {
-                fputcsv($output, array($user['lastname'], $user['firstname'], $user['official_code'], $user['score'], $user['rubric']), ';');
+                fputcsv($output, array(
+                    $this->getTranslator()->trans('LastName', [], 'Chamilo\Core\User'),
+                    $this->getTranslator()->trans('FirstName', [], 'Chamilo\Core\User'),
+                    $this->getTranslator()->trans('OfficialCode', [], 'Chamilo\Core\User'),
+                    'Score', 'Rubric'), ';');
+
+                // output the rows
+                foreach ($selectedEntities as $entity)
+                {
+                    fputcsv($output, array($entity['lastname'], $entity['firstname'], $entity['official_code'], $entity['score'], $entity['rubric']), ';');
+                }
+            }
+            else
+            {
+                fputcsv($output, array($this->getTranslator()->trans('GroupName', [], 'Chamilo\Core\User'), 'Score', 'Rubric'), ';');
+
+                // output the rows
+                foreach ($selectedEntities as $entity)
+                {
+                    fputcsv($output, array($entity['name'], $entity['score'], $entity['rubric']), ';');
+                }
             }
         } catch (\Exception $ex)
         {
