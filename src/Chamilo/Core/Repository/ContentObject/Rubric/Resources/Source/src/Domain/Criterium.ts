@@ -13,10 +13,6 @@ export default class Criterium extends TreeNode {
     public weight: number = 100;
     public rel_weight: number|null = null;
 
-    /*public weightToString(): string {
-        return String(this.weight * 100);
-    }*/
-
     public getType(): string {
         return 'criterium';
     }

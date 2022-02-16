@@ -1,10 +1,5 @@
-import {RubricJsonObject} from "./Rubric";
-
-export enum Signal {
-    'GREEN',
-    'ORANGE',
-    'RED',
-}
+import {CriteriumId} from './Criterium';
+import {toMarkdown} from '../Util/util';
 
 export type LevelId = string;
 
@@ -13,62 +8,74 @@ export interface LevelJsonObject {
     title: string,
     description: string,
     score: number,
-    is_default: boolean
+    is_default: boolean,
+    criterium_id: string
 }
+
 export default class Level {
     public id: LevelId;
     public title: string;
     public description: string;
     public score: number;
-    public signal: Signal;
     public isDefault: boolean;
+    public criteriumId: CriteriumId = '';
 
-    constructor(title: string, description: string = '', score: number = 10, signal: Signal = Signal.GREEN, isDefault: boolean = false, id?:LevelId) {
+    constructor(title: string, description: string = '', score: number = 10, isDefault: boolean = false, id?: LevelId) {
         this.title = title;
         this.description = description;
         this.score = score;
-        this.signal = signal;
         this.isDefault = isDefault;
-        if(!id)
+        if (!id) {
             this.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15); // GUID
-        else
+        } else {
             this.id = id;
+        }
     }
 
     get is_default() {
         return this.isDefault;
     }
 
+    get criterium_id() {
+        return this.criteriumId;
+    }
+
     public toString(): string {
         return `Level (id: ${this.id}, title: ${this.title})`;
     }
 
-    toJSON():LevelJsonObject {
+    toJSON(): LevelJsonObject {
         return {
             id: this.id,
             title: this.title,
             description: this.description,
             score: this.score,
-            is_default: this.isDefault
+            is_default: this.isDefault,
+            criterium_id: this.criteriumId
         }
     }
 
-    static fromJSON(level:string|LevelJsonObject):Level {
+    toMarkdown(): string {
+        return toMarkdown(this.description);
+    }
+
+    static fromJSON(level: string|LevelJsonObject): Level {
         let levelObject: LevelJsonObject;
-        if(typeof level === 'string') {
+
+        if (typeof level === 'string') {
             levelObject = JSON.parse(level);
         } else {
             levelObject = level;
         }
 
-        let newLevel = new Level(
+        const newLevel = new Level(
             levelObject.title,
             levelObject.description,
             levelObject.score,
-            );
-        newLevel.isDefault = levelObject.is_default;
-        newLevel.id = levelObject.id;
-
+            levelObject.is_default,
+            levelObject.id
+        );
+        newLevel.criteriumId = levelObject.criterium_id;
         return newLevel;
     }
 }

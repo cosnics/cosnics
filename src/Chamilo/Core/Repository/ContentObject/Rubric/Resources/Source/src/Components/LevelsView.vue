@@ -43,7 +43,7 @@
                 </button>
             </div>
             <ul class="levels-list">
-                <level-details v-for="(level, index) in rubric.levels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
+                <level-details v-for="(level, index) in rubric.rubricLevels" :has-new="!!newLevel" :selected-level="selectedLevel" :rubric="rubric" :level="level" tag="li" :key="`level_${index}`" @change="onLevelChange" @level-move-up="moveLevelUp" @level-move-down="moveLevelDown" @level-selected="selectLevel" @level-default="setDefault" @level-remove="showRemoveLevelDialog" :item-index="index + 1"></level-details>
                 <li v-if="!newLevel" class="level-new">
                     <button class="btn-new" @click.stop="createNewLevel">{{ $t('add-level') }}</button>
                 </li>
@@ -130,7 +130,9 @@
         }
 
         onLevelMove(level: Level) {
-            const index = this.rubric.levels.indexOf(level);
+            const levels = this.rubric.getFilteredLevels(level);
+            if (!levels) { return; }
+            const index = levels.indexOf(level);
             this.dataConnector?.moveLevel(level, index);
         }
 

@@ -7,7 +7,6 @@ export interface ClusterJsonObject {
     title: string;
     categories: CategoryJsonObject[];
     criteria: CriteriumJsonObject[];
-
 }
 
 export default class Cluster extends TreeNode {
@@ -57,7 +56,7 @@ export default class Cluster extends TreeNode {
         return {
             id: this.id,
             title: this.title,
-            categories: this.children.filter(child => (child instanceof Category)).map((category) => (category as Category).toJSON()),//todo typeguards?
+            categories: this.children.filter(child => (child instanceof Category)).map((category) => (category as Category).toJSON()), //todo typeguards?
             criteria: this.children.filter(child => (child instanceof Criterium)).map((criterium) => (criterium as Criterium).toJSON())
         }
     }

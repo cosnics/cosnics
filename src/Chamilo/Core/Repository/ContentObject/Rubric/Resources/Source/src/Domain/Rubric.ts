@@ -39,6 +39,18 @@ export default class Rubric extends TreeNode {
         return 'rubric';
     }
 
+    get rubricLevels(): Level[] {
+        return this.levels.filter(level => !level.criteriumId);
+    }
+
+    get hasCustomLevels() {
+        return this.levels.length !== this.rubricLevels.length;
+    }
+
+    public filterLevelsByCriterium(criterium: Criterium): Level[] {
+        return this.levels.filter(level => level.criteriumId === criterium.id);
+    }
+
     get clusters(): Cluster[] {
         return this.children as Cluster[]; //invariant garded at addChild
     }
@@ -64,7 +76,7 @@ export default class Rubric extends TreeNode {
         //no more bubbling
     }
 
-    protected onCriteriumAdded(criterium:Criterium) {
+    protected onCriteriumAdded(criterium: Criterium) {
         this.levels.forEach(level => {
             //choice already exists for criterium? Could be through json bootstrapping.
             let choice = this.findChoice(criterium, level);
@@ -210,15 +222,42 @@ export default class Rubric extends TreeNode {
         this.removeChoicesByLevel(level);
     }
 
+    public getFilteredLevels(level: Level) {
+        if (level.criteriumId) {
+            const criterium = this.getAllCriteria().find(c => c.id === level.criteriumId);
+            if (!criterium) { return null; }
+            return this.filterLevelsByCriterium(criterium);
+        }
+        return this.rubricLevels;
+    }
+
     public moveLevelDown(level: Level) {
+        const levels = this.getFilteredLevels(level);
+        if (!levels) { return; }
+        const levelIndex = levels.indexOf(level);
+        const nextLevel = levels[levelIndex + 1];
+        if (!nextLevel) { return; }
+        console.log('moveleveldown');
+        console.log(this.levels);
+        console.log(nextLevel, this.levels.indexOf(nextLevel));
+
         this.moveItemInArray(
-            this.levels, this.levels.indexOf(level), this.levels.indexOf(level) + 1
+            this.levels, this.levels.indexOf(level), this.levels.indexOf(nextLevel)
         )
     }
 
     public moveLevelUp(level: Level) {
+        const levels = this.getFilteredLevels(level);
+        if (!levels) { return; }
+        const levelIndex = levels.indexOf(level);
+        const nextLevel = levels[levelIndex - 1];
+        if (!nextLevel) { return; }
+        console.log('movelevelup');
+        console.log(this.levels);
+        console.log(nextLevel, this.levels.indexOf(nextLevel));
+
         this.moveItemInArray(
-            this.levels, this.levels.indexOf(level), this.levels.indexOf(level) - 1
+            this.levels, this.levels.indexOf(level), this.levels.indexOf(nextLevel)
         )
     }
 
@@ -356,6 +395,7 @@ export default class Rubric extends TreeNode {
         }
         return this.getAllCriteria(treeNode).map(criterium => this.getCriteriumWeight(criterium)).reduce(add, 0);
     }
+
 
     /*public getMaxDecimals() : number {
         let maxDecimals = 0;

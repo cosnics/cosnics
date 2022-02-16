@@ -18,7 +18,7 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" :style="{'--num-cols': rubric.levels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" :style="{'--num-cols': rubric.rubricLevels.length}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
@@ -26,8 +26,8 @@
         <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
             <span>{{ $t('weight') }}</span>
         </div>
-        <div class="rubric-header mod-responsive">
-            <div class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</div>
+        <div class="rubric-header mod-responsive" v-if="!rubric.hasCustomLevels">
+            <div class="rubric-header-title" v-for="level in rubric.rubricLevels">{{ level.title }}</div>
         </div>
         <template v-for="(cluster, index) in rubric.clusters">
             <div class="treenode-title-header mod-responsive rb-lg:col-start-1">
@@ -47,22 +47,40 @@
                         <span class="treenode-weight-title">{{ $t('weight') }}: </span>
                         <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
                         <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
-                        <span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
-                    <div class="treenode-rubric-input">
-                        <div class="treenode-choices">
+                        <span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
+                    </div>
+                    <tree-node-descriptions :rubric="rubric" :criterium="criterium" :ext="ext"
+                                            @input="updateHeight"
+                                            @update-level-description="updateLevelDescription"
+                                            @update-choice-feedback="updateFeedback"></tree-node-descriptions>
+                    <!--<div class="treenode-rubric-input">
+                        <div class="treenode-choices" v-if="ext.choices.length">
                             <div class="treenode-choice" v-for="choice in ext.choices">
                                 <div class="treenode-level mod-bf">
                                     <span class="treenode-level-title">{{ choice.level.title }}</span>
                                     <span v-if="useScores">{{ getChoiceScore(choice)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                                 </div>
                                 <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
-                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)">
+                                    <description-field :field-item="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)">
                                         <span v-if="useScores && rubric.hasAbsoluteWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score|formatNum }}<span class="sr-only">{{ $t('points') }}</span></span>
-                                    </feedback-field>
+                                    </description-field>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="treenode-choices" v-else-if="ext.levels.length">
+                            <div class="treenode-choice" v-for="level in ext.levels">
+                                <div class="treenode-level" style="text-align: left;padding-left: .7rem;font-size: 1.4rem;">
+                                    <span>{{ level.title }}</span>
+                                    (<span v-if="useScores">{{ level.score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>)
+                                </div>
+                                <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
+                                    <description-field :field-item="level" @input="updateHeight">
+                                        <span v-if="useScores && rubric.hasAbsoluteWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score|formatNum }}<span class="sr-only">{{ $t('points') }}</span></span>
+                                    </description-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
                 </template>
             </template>
             <div class="cluster-sep" v-if="index < rubric.clusters.length - 1"></div>
@@ -77,24 +95,26 @@
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
-    import FeedbackField from '../Components/FeedbackField.vue';
+    import DescriptionField from '../Components/DescriptionField.vue';
     import FormattingHelp from '../Components/FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
+    import TreeNodeDescriptions from '../Components/TreeNodeDescriptions.vue';
     import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {
         elem.style.height = '';
-        elem.style.height = `${elem.scrollHeight}px`;
+        elem.style.height = `${elem.scrollHeight + 14}px`;
     }
 
     interface CriteriumExt {
         criterium: Criterium;
         choices: any[];
+        levels: Level[];
     }
 
     @Component({
         components: {
-            FeedbackField, FormattingHelp
+            DescriptionField, FormattingHelp, TreeNodeDescriptions
         },
         filters: {
             formatNum: function (v: number) {
@@ -120,6 +140,10 @@
             });
         }
 
+        updateLevelDescription(level: Level) {
+            this.dataConnector?.updateLevel(level);
+        }
+
         updateFeedback(choice: Choice, criterium: Criterium, level: Level) {
             this.dataConnector?.updateChoice(choice, criterium, level);
         }
@@ -142,7 +166,7 @@
             } else if (!rubric.useRelativeWeights) {
                 const criteriumExt = this.getCriteriumData(criterium);
                 criteriumExt.choices = [];
-                rubric.levels.forEach(level => {
+                rubric.rubricLevels.forEach(level => {
                     const choice = rubric.getChoice(criterium, level);
                     const score = rubric.getChoiceScore(criterium, level);
                     criteriumExt.choices.push({ level, choice, score});
@@ -174,12 +198,19 @@
 
         private initScores(rubric: Rubric) {
             rubric.getAllCriteria().forEach(criterium => {
-                const criteriumExt: CriteriumExt = { criterium: criterium, choices: [] };
-                rubric.levels.forEach(level => {
-                    const choice = rubric.getChoice(criterium, level);
-                    const score = rubric.getChoiceScore(criterium, level);
-                    criteriumExt.choices.push({ level, choice, score});
-                });
+                const criteriumExt: CriteriumExt = { criterium: criterium, choices: [], levels: [] };
+                const criteriumLevels = rubric.filterLevelsByCriterium(criterium);
+                if (criteriumLevels.length) {
+                    criteriumLevels.forEach(level => {
+                       criteriumExt.levels.push(level);
+                    });
+                } else {
+                    rubric.rubricLevels.forEach(level => {
+                        const choice = rubric.getChoice(criterium, level);
+                        const score = rubric.getChoiceScore(criterium, level);
+                        criteriumExt.choices.push({ level, choice, score});
+                    });
+                }
                 this.criteriaData.push(criteriumExt);
             });
         }
@@ -352,12 +383,6 @@
 
         .treenode-weight.mod-pad {
             padding-left: 1.8rem;
-        }
-    }
-
-    @media only screen and (min-width: 680px) {
-        .treenode-level.mod-bf {
-            display: none;
         }
     }
 </style>

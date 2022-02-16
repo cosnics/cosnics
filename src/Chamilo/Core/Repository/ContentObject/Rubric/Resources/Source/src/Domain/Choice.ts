@@ -35,6 +35,14 @@ export default class Choice {
         }
     }
 
+    get description(): string {
+        return this.feedback;
+    }
+
+    set description(desc: string) {
+        this.feedback = desc;
+    }
+
     toJSON(criteriumId: string, levelId: string): ChoiceJsonObject {
         return {
             selected: this.selected,

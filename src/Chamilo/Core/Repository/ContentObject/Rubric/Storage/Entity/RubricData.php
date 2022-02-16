@@ -268,56 +268,40 @@ class RubricData
      */
     public function addLevel(Level $levelToAdd): self
     {
-        if($this->levels->contains($levelToAdd))
+        if ($this->levels->contains($levelToAdd))
         {
             return $this;
         }
 
-        if($levelToAdd->isDefault())
+        if ($levelToAdd->isDefault())
         {
             $this->setCurrentDefaultLevelNoLongerDefault();
         }
 
         $this->levels->add($levelToAdd);
         $levelToAdd->setRubricData($this);
-        $levelToAdd->setSort(count($this->levels));
 
-        foreach($this->getCriteriumNodes() as $criteriumNode)
+        $levels = $this->filterLevelsByCriterium($levelToAdd->getCriterium());
+
+        $levelToAdd->setSort(count($levels));
+
+        if ($levelToAdd->hasCriterium())
         {
-            $choice = new Choice($this);
-            $choice->setLevel($levelToAdd);
-            $criteriumNode->addChoice($choice);
-        }
+            foreach ($levelToAdd->getCriterium()->getChoices() as $choice)
+            {
+                $this->removeChoice($choice);
+            }
 
-        return $this;
-    }
-
-    /**
-     * @param Level $levelToAdd
-     * @param $sortValue
-     *
-     * @return $this
-     */
-    public function insertLevel(Level $levelToAdd, $sortValue)
-    {
-        if($this->levels->contains($levelToAdd))
-        {
             return $this;
         }
 
-        $this->addLevel($levelToAdd);
-        $levelToAdd->setSort($sortValue);
-
-        foreach ($this->levels as $level)
+        foreach ($this->getCriteriumNodes() as $criteriumNode)
         {
-            if ($level === $levelToAdd)
+            if (!$criteriumNode->hasLevels())
             {
-                continue;
-            }
-
-            if ($level->getSort() >= $sortValue)
-            {
-                $level->setSort($level->getSort() + 1);
+                $choice = new Choice($this);
+                $choice->setLevel($levelToAdd);
+                $criteriumNode->addChoice($choice);
             }
         }
 
@@ -331,28 +315,41 @@ class RubricData
      */
     public function removeLevel(Level $levelToRemove): self
     {
-        if(!$this->levels->contains($levelToRemove))
+        if (!$this->levels->contains($levelToRemove))
         {
             return $this;
         }
 
         $this->levels->removeElement($levelToRemove);
+        $levelCriterium = $levelToRemove->getCriterium();
+        $levelToRemove->setCriterium(null);
         $levelToRemove->setRubricData(null);
 
-        foreach($this->levels as $level)
+        $levels = $this->filterLevelsByCriterium($levelCriterium);
+        foreach ($levels as $level)
         {
-            if($level->getSort() >= $levelToRemove->getSort())
+            if ($level->getSort() >= $levelToRemove->getSort())
             {
                 $level->setSort($level->getSort() - 1);
             }
         }
 
-        foreach($levelToRemove->getChoices() as $choice)
+        foreach ($levelToRemove->getChoices() as $choice)
         {
             $this->removeChoice($choice);
         }
 
         $this->getRemovedEntities()->add($levelToRemove);
+
+        if (!empty($levelCriterium) && !$levelCriterium->hasLevels())
+        {
+            foreach ($this->filterLevelsByCriterium(null) as $level)
+            {
+                $choice = new Choice($this);
+                $choice->setLevel($level);
+                $levelCriterium->addChoice($choice);
+            }
+        }
 
         return $this;
     }
@@ -370,21 +367,23 @@ class RubricData
             );
         }
 
+        $levels = $this->filterLevelsByCriterium($levelToMove->getCriterium());
+
         $oldSort = $levelToMove->getSort();
 
-        foreach($this->levels as $level)
+        foreach ($levels as $level)
         {
-            if($level == $levelToMove)
+            if ($level == $levelToMove)
             {
                 continue;
             }
 
-            if($level->getSort() >= $oldSort)
+            if ($level->getSort() >= $oldSort)
             {
                 $level->decrementSort();
             }
 
-            if($level->getSort() >= $newSort)
+            if ($level->getSort() >= $newSort)
             {
                 $level->incrementSort();
             }
@@ -397,9 +396,9 @@ class RubricData
 
     public function setCurrentDefaultLevelNoLongerDefault()
     {
-        foreach($this->levels as $level)
+        foreach ($this->levels as $level)
         {
-            if($level->isDefault())
+            if ($level->isDefault())
             {
                 $level->setIsDefault(false);
             }
@@ -413,7 +412,7 @@ class RubricData
      */
     public function addChoice(Choice $choice): self
     {
-        if($this->choices->contains($choice))
+        if ($this->choices->contains($choice))
         {
             return $this;
         }
@@ -431,7 +430,7 @@ class RubricData
      */
     public function removeChoice(Choice $choice): self
     {
-        if(!$this->choices->contains($choice))
+        if (!$this->choices->contains($choice))
         {
             return $this;
         }
@@ -454,14 +453,14 @@ class RubricData
      */
     public function addTreeNode(TreeNode $treeNode): self
     {
-        if($this->treeNodes->contains($treeNode))
+        if ($this->treeNodes->contains($treeNode))
         {
             return $this;
         }
 
-        if($treeNode instanceof CriteriumNode)
+        if ($treeNode instanceof CriteriumNode && !$treeNode->hasLevels())
         {
-            foreach($this->levels as $level)
+            foreach ($this->filterLevelsByCriterium(null) as $level)
             {
                 $choice = new Choice($this);
                 $choice->setLevel($level);
@@ -483,7 +482,7 @@ class RubricData
      */
     public function removeTreeNode(TreeNode $treeNode): self
     {
-        if(!$this->treeNodes->contains($treeNode))
+        if (!$this->treeNodes->contains($treeNode))
         {
             return $this;
         }
@@ -492,15 +491,20 @@ class RubricData
         $treeNode->setRubricData(null);
         $treeNode->setParentNode(null);
 
-        if($treeNode instanceof CriteriumNode)
+        if ($treeNode instanceof CriteriumNode)
         {
             foreach ($treeNode->getChoices() as $choice)
             {
                 $this->removeChoice($choice);
             }
+
+            foreach ($treeNode->getLevels() as $level)
+            {
+                $this->removeLevel($level);
+            }
         }
 
-        foreach($treeNode->getChildren() as $child)
+        foreach ($treeNode->getChildren() as $child)
         {
             $this->removeTreeNode($child);
         }
@@ -592,6 +596,35 @@ class RubricData
     }
 
     /**
+     * @param int $criteriumIdentifier
+     *
+     * @return CriteriumNode
+     *
+     * @throws ObjectNotExistException
+     */
+    public function getCriteriumById(int $criteriumIdentifier)
+    {
+        $criterium = $this->getTreeNodeById($criteriumIdentifier);
+
+        if (!$criterium instanceof CriteriumNode)
+        {
+            throw new ObjectNotExistException('criterium', $criteriumIdentifier);
+        }
+
+        return $criterium;
+    }
+
+    /**
+     * @param CriteriumNode $criteriumNode
+     *
+     * @return bool
+     */
+    public function hasCriterium(CriteriumNode $criteriumNode): bool
+    {
+        return $this->getCriteriumNodes()->contains($criteriumNode);
+    }
+
+    /**
      * @param int $levelIdentifier
      *
      * @return Level
@@ -675,13 +708,15 @@ class RubricData
     }
 
     /**
+     * @param Level $level
      * @param int $possibleSort
      *
      * @return bool
      */
-    public function isLevelSortValid(int $possibleSort)
+    public function isLevelSortValid(Level $level, int $possibleSort): bool
     {
-        return $possibleSort > 0 && $possibleSort <= $this->levels->count();
+        $levels = $this->filterLevelsByCriterium($level->getCriterium());
+        return $possibleSort > 0 && $possibleSort <= count($levels);
     }
 
     /**
@@ -775,5 +810,27 @@ class RubricData
             return 0;
         }
         return (100 - $sum) / $countWithout;
+    }
+
+    /**
+     * @param CriteriumNode|null $criterium
+     *
+     * @return array
+     */
+    public function filterLevelsByCriterium(CriteriumNode $criterium = null): array
+    {
+        $levels = array();
+        foreach ($this->levels as $level)
+        {
+            if (!empty($criterium) && $criterium === $level->getCriterium())
+            {
+                $levels[] = $level;
+            }
+            elseif (empty($criterium) && empty($level->getCriterium())) // levels without a criterium
+            {
+                $levels[] = $level;
+            }
+        }
+        return $levels;
     }
 }
