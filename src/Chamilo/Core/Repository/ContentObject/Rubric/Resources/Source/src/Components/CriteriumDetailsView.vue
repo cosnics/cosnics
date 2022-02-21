@@ -27,7 +27,7 @@
 <template>
     <div class="criterium-details-wrapper">
         <transition name="border-flash" mode="out-in">
-            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'is-show-formatting': showFormatting}" v-if="criterium !== null">
+            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'mod-levels': !!criteriumLevels.length || addingLevel,'is-show-formatting': showFormatting}" v-if="criterium !== null">
                 <div v-if="criterium" style="flex: 1">
                     <div class="criterium-details-header">
                         <button class="btn-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i class="fa fa-close" aria-hidden="true" /></button>
@@ -60,7 +60,7 @@
                     </template>
                     <div v-else>
                         <a v-if="!criteriumLevels.length" href="#" @click.prevent="addingLevel = false">Cancel</a>
-                        <levels-view :rubric="rubric" :data-connector="dataConnector"></levels-view>
+                        <levels :rubric="rubric" :data-connector="dataConnector" :criterium="criterium"></levels>
                     </div>
                     <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> {{ $t('back-to-rubric') }}</a>
                 </div>
@@ -80,7 +80,7 @@
     import CriteriumLevelView from './CriteriumLevelView.vue';
     import FormattingHelp from './FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
-    import LevelsView from './LevelsView.vue';
+    import Levels from './Levels.vue';
 
     function updateHeight(elem: HTMLElement, addedPixels: number = 0) {
         elem.style.height = '';
@@ -89,7 +89,7 @@
 
     @Component({
         name: 'criterium-details-view',
-        components: { CriteriumLevelView, FormattingHelp, LevelsView }
+        components: { CriteriumLevelView, FormattingHelp, Levels }
     })
     export default class CriteriumDetailsView extends Vue {
         private showFormatting = false;

@@ -709,6 +709,10 @@
         .input-detail:focus {
             outline: none;
         }
+
+        &.mod-levels {
+            width: 40em;
+        }
     }
 
     .criterium-details-header {

@@ -5,6 +5,8 @@
         "cancel": "Cancel",
         "default": "Default",
         "default-info": "Optional choice field. The level assigned by default to a criterium.",
+        "default-trunc": "Def.",
+        "enter-level-description": "Enter level description",
         "level": "Level",
         "points": "Points",
         "remove": "Remove",
@@ -15,6 +17,8 @@
         "cancel": "Annuler",
         "default": "Norme",
         "default-info": "Contrôle de choix optionnel. Le niveau attribué par défaut à un critère.",
+        "default-trunc": "Nrm.",
+        "enter-level-description": "Entrer une description de niveau",
         "level": "Niveau",
         "points": "Points",
         "remove": "Supprimer",
@@ -25,6 +29,8 @@
         "cancel": "Annuleer",
         "default": "Standaard",
         "default-info": "Optioneel keuzeveld. Het niveau dat standaard wordt toegekend aan een criterium.",
+        "default-trunc": "Std.",
+        "enter-level-description": "Voer een niveauomschrijving in",
         "level": "Niveau",
         "points": "Punten",
         "remove": "Verwijder",
@@ -35,28 +41,37 @@
 <template>
     <div @click.stop="selectedLevel = null">
         <div @click.stop="">
-            <b-table ref="levels" :items="rubric.rubricLevels" :fields="fields" thead-class="table-head" thead-tr-class="table-head-row" :tbody-tr-class="rowClass"
+            <b-table ref="levels" :class="{'mod-rubric': !criterium}" :items="levels" :fields="fields" thead-class="table-head" :thead-tr-class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')" :tbody-tr-class="rowClass"
                      :selectable="true" select-mode="single" selected-variant="" @row-selected="onRowSelected">
                 <template #head(title)>{{ $t('level') }}</template>
                 <template #cell(title)="{item, index}">
                     <div>
                         <span class="level-index">{{ index + 1 }}</span>
-                        <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad" @focus="onSelectLevel(item, index)" />
+                        <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" />
                     </div>
                 </template>
                 <template #head(score)>{{ $t('points') }}</template>
                 <template #cell(score)="{item, index}">
-                    <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num" @focus="onSelectLevel(item, index)" required min="0" step="1" />
+                    <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" required min="0" step="1" />
                 </template>
-                <template #head(is_default)><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t('default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></template>
+                <template #head(is_default)><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></template>
                 <template #cell(is_default)="{item}">
-                    <input type="radio" :checked="item.isDefault" @click="setDefault(item)" class="input-detail" />
+                    <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" />
+                </template>
+                <template #row-details="{item, index}">
+                    <div class="criterium-level-input-area" style="margin: -1rem 9rem 0 2.2rem;">
+                        <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
+                                  :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
+                                  :placeholder="$t('enter-level-description')" @focus="onDescriptionFocus(item, index)" @blur="activeDescriptionInput = null">
+                        </textarea>
+                        <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
+                    </div>
                 </template>
                 <template #cell(actions)="{item, index}">
                     <selection-controls
                         :id="item.id"
                         :is-up-disabled="index === 0"
-                        :is-down-disabled="index >= rubric.rubricLevels.length - 1"
+                        :is-down-disabled="index >= levels.length - 1"
                         :is-remove-disabled="false"
                         class="level-actions-2"
                         @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
@@ -65,7 +80,7 @@
                 <template #bottom-row v-if="newLevel">
                     <b-td class="table-title">
                         <div>
-                            <span class="level-index">{{ rubric.rubricLevels.length + 1 }}</span>
+                            <span class="level-index">{{ levels.length + 1 }}</span>
                             <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad" v-model="newLevel.title" id="level-title-new" />
                         </div>
                     </b-td>
@@ -73,7 +88,7 @@
                         <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num" required min="0" step="1" />
                     </b-td>
                     <b-td class="table-default">
-                        <input type="radio" :checked="newLevel.isDefault" @click="setDefault(newLevel)" class="input-detail" />
+                        <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
                     </b-td>
                     <b-td class="table-actions">
                         <div class="level-actions-2">
@@ -104,12 +119,15 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import SelectionControls from './SelectionControls.vue';
     import Rubric from '../Domain/Rubric';
+    import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import debounce from 'debounce';
     import DataConnector from '../Connector/DataConnector';
+    import DOMPurify from 'dompurify';
+    import * as marked from 'marked';
 
     @Component({
         name: 'levels',
@@ -121,13 +139,31 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         private newLevel: Level|null = null;
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
+        private activeDescriptionInput: Level|null = null;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
+        @Prop({type: Criterium, default: null}) readonly criterium!: Criterium;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         constructor() {
             super();
             this.onLevelMove = debounce(this.onLevelMove, 750);
+            this.onLevelChange = debounce(this.onLevelChange, 750);
+        }
+
+        marked(rawString: string) {
+            return DOMPurify.sanitize(marked(rawString));
+        }
+
+        get levels() {
+            if (this.criterium) {
+                return this.rubric.filterLevelsByCriterium(this.criterium).map(l => { (l as any)._showDetails = true; return l; });
+            }
+            return this.rubric.rubricLevels;
+        }
+
+        onLevelChange(level: Level) {
+            this.dataConnector?.updateLevel(level);
         }
 
         createNewLevel() {
@@ -140,12 +176,12 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 
         addLevel() {
             if (this.newLevel!.isDefault) {
-                this.rubric.levels.forEach(level => {
+                this.levels.forEach(level => {
                     level.isDefault = false;
                 });
             }
             this.rubric.addLevel(this.newLevel!);
-            this.dataConnector?.addLevel(this.newLevel!, this.rubric.levels.length);
+            this.dataConnector?.addLevel(this.newLevel!, this.levels.length);
             this.newLevel = null;
         }
 
@@ -186,17 +222,25 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
         }
 
         setDefault(defaultLevel: Level) {
+            console.log('setDefault');
             if (this.newLevel === defaultLevel) {
                 this.newLevel.isDefault = !this.newLevel.isDefault;
             } else {
-                this.rubric.rubricLevels.forEach(level => {
+                this.levels.forEach(level => {
                     level.isDefault = (defaultLevel === level) ? !level.isDefault : false;
                 });
+                this.onLevelChange(defaultLevel);
             }
         }
 
         getDefaultLevel() {
-            return new Level('');
+            const level = new Level('');
+
+            if (this.criterium) {
+                level.criteriumId = this.criterium.id;
+            }
+
+            return level;
         }
 
         showRemoveLevelDialog(level: Level|null) {
@@ -232,6 +276,11 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             (this.$refs['levels'] as unknown as any).selectRow(index);
         }
 
+        onDescriptionFocus(level: Level, index: number = 0) {
+            this.onSelectLevel(level, index);
+            this.activeDescriptionInput = level;
+        }
+
         onRowSelected(levels: Level[]) {
             this.selectLevel(levels[0] || null);
         }
@@ -256,9 +305,13 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 <style lang="scss" scoped>
     .table {
         border: none;
-        margin-left: .25em;
-        margin-top: 1em;
+        margin-top: 1.5em;
         max-width: fit-content;
+
+        &.mod-rubric {
+            margin-left: .25em;
+            margin-top: 1em;
+        }
 
         >>> th, >>> td {
             border: 1px solid #ebebeb;
@@ -272,8 +325,25 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
             }
         }
 
-        >>> th {
+        >>> .table-head .table-head-row.mod-rubric th {
             background-color: #f8fbfb;
+
+            &.table-actions {
+                background: none;
+            }
+        }
+
+        >>> .table-head .table-head-row.mod-criterium th {
+            background-color: #eff1f3;
+            border-color: #e3eaed;
+
+            &.table-actions {
+                background: none;
+            }
+        }
+
+        >>> th {
+            /*background-color: #f8fbfb;*/
             border-bottom: 0;
             color: #5885a2;
 
@@ -350,17 +420,17 @@ import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     @media (pointer: fine) {
         .table {
             >>> tr:hover td:not(.table-actions) {
-                background: #f4fbfb;
-                border-color: #e3e3e3;
+                /*background: #f4fbfb;*/
+                /*border-color: #e3e3e3;*/
                 cursor: pointer;
             }
 
             >>> tr:hover td:not(.table-default) {
-                border-right-color: transparent;
+                /*border-right-color: transparent;*/
             }
 
             >>> tr:first-child:hover td:not(.table-actions) {
-                background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);
+                /*background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);*/
             }
         }
     }

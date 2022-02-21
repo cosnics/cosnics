@@ -1,42 +1,18 @@
 <i18n>
 {
     "en": {
-        "add-level": "Add Level",
-        "cancel": "Cancel",
-        "default": "Default",
-        "default-info": "Optional choice field. The level assigned by default to a criterium.",
-        "level": "Level",
         "levels": "Levels",
-        "points": "Points",
-        "remove": "Remove",
-        "remove-level": "Remove level {item}",
         "weights-per-total": "Weights relative to total score",
         "with-scores": "With scores",
         "without-scores": "Without scores"
     },
     "fr": {
-        "add-level": "Ajouter un niveau",
-        "cancel": "Annuler",
-        "default": "Norme",
-        "default-info": "Contrôle de choix optionnel. Le niveau attribué par défaut à un critère.",
-        "level": "Niveau",
         "levels": "Niveaux",
-        "points": "Points",
-        "remove": "Supprimer",
-        "remove-level": "Supprimer le niveau {item}",
         "with-scores": "Avec scores",
         "without-scores": "Sans scores"
     },
     "nl": {
-        "add-level": "Niveau toevoegen",
-        "cancel": "Annuleer",
-        "default": "Standaard",
-        "default-info": "Optioneel keuzeveld. Het niveau dat standaard wordt toegekend aan een criterium.",
-        "level": "Niveau",
         "levels": "Niveaus",
-        "points": "Punten",
-        "remove": "Verwijder",
-        "remove-level": "Niveau {item} verwijderen",
         "weights-per-total": "Gewichten relatief tov. totaalscore",
         "with-scores": "Met scores",
         "without-scores": "Zonder scores"
@@ -60,9 +36,8 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
     import Rubric from '../Domain/Rubric';
-    import Level from '../Domain/Level';
     import DataConnector from '../Connector/DataConnector';
     import OnOffSwitch from './OnOffSwitch.vue';
     import Levels from './Levels.vue';
@@ -74,18 +49,9 @@
         },
     })
     export default class LevelsView extends Vue {
-        private newLevel: Level|null = null;
-        private selectedLevel: Level|null = null;
-        private removingLevel: Level|null = null;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
-        /*@Prop({type: Boolean, default: false }) readonly showLevelDescriptions!: boolean;*/
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
-
-/*        constructor() {
-            super();
-            this.onLevelMove = debounce(this.onLevelMove, 750);
-        }*/
 
         onUseScoresChanged(useScores: boolean) {
             this.rubric.useScores = useScores;
@@ -101,134 +67,8 @@
             this.rubric.useRelativeWeights = !this.rubric.useRelativeWeights;
             this.dataConnector?.updateRubric(this.rubric);
         }
-
-/*        createNewLevel() {
-            this.selectLevel(null);
-            this.newLevel = this.getDefaultLevel();
-            this.$nextTick(() => {
-                (document.querySelector(`#level-title-new`)! as HTMLElement).focus();
-            });
-        }
-
-        addLevel() {
-            if (this.newLevel!.isDefault) {
-                this.rubric.levels.forEach(level => {
-                    level.isDefault = false;
-                });
-            }
-            this.rubric.addLevel(this.newLevel!);
-            this.dataConnector?.addLevel(this.newLevel!, this.rubric.levels.length);
-            this.newLevel = null;
-        }
-
-        cancelLevel() {
-            this.newLevel = null;
-            this.selectLevel(null);
-        }*/
-
-        /*onLevelMove(level: Level) {
-            const levels = this.rubric.getFilteredLevels(level);
-            if (!levels) { return; }
-            const index = levels.indexOf(level);
-            this.dataConnector?.moveLevel(level, index);
-        }
-
-        moveLevelUp(level: Level) {
-            this.rubric.moveLevelUp(level);
-            this.onLevelMove(level);
-            this.$nextTick(() => {
-                let el : HTMLButtonElement|null = document.querySelector(`#btn-up-${level.id}`);
-                if (el?.disabled) {
-                    el = el?.nextSibling as HTMLButtonElement;
-                }
-                el?.focus();
-            });
-        }
-
-        moveLevelDown(level: Level) {
-            this.rubric.moveLevelDown(level);
-            this.onLevelMove(level);
-            this.$nextTick(() => {
-                let el : HTMLButtonElement|null = document.querySelector(`#btn-down-${level.id}`);
-                if (el?.disabled) {
-                    el = el?.previousSibling as HTMLButtonElement;
-                }
-                el?.focus();
-            });
-        }*/
-
-        /*onLevelChange(level: Level) {
-            this.dataConnector?.updateLevel(level);
-        }*/
-
-        /*setDefault(defaultLevel: Level) {
-            if (this.newLevel === defaultLevel) {
-                this.newLevel.isDefault = !this.newLevel.isDefault;
-            } else {
-                this.rubric.rubricLevels.forEach(level => {
-                    level.isDefault = (defaultLevel === level) ? !level.isDefault : false;
-                });
-            }
-        }
-
-        getDefaultLevel() {
-            return new Level('');
-        }
-
-        showRemoveLevelDialog(level: Level|null) {
-            this.removingLevel = level;
-        }
-
-        hideRemoveLevelDialog() {
-            this.showRemoveLevelDialog(null);
-        }
-
-        removeLevel(level: Level) {
-            this.removingLevel = null;
-            this.rubric.removeLevel(level);
-            this.dataConnector?.deleteLevel(level);
-            this.selectLevel(null);
-        }
-
-        get fields() {
-            return [
-                { key: 'title', sortable: false, variant: 'title' },
-                this.rubric.useScores ? { key: 'score', sortable: false, variant: 'score' } : null,
-                { key: 'is_default', sortable: false, variant: 'default' },
-                { key: 'actions', sortable: false, label: '', variant: 'actions' }
-            ];
-        }
-
-        rowClass(level: Level) : string {
-            return `table-body-row level-row${level === this.selectedLevel ? ' is-selected' : ''}`;
-        }
-
-        onSelectLevel(level: Level, index: number = 0) {
-            this.selectedLevel = level;
-            (this.$refs['levels'] as unknown as any).selectRow(index);
-        }
-
-        onRowSelected(levels: Level[]) {
-            this.selectLevel(levels[0] || null);
-        }
-
-        selectLevel(level: Level|null) {
-            if (this.newLevel) { return false; }
-            this.selectedLevel = level;
-            return false;
-        }
-
-        @Watch('removingLevel')
-        onRemoveItemChanged() {
-            if (this.removingLevel) {
-                this.$nextTick(() => {
-                    (this.$refs['btn-remove-level'] as HTMLElement).focus();
-                });
-            }
-        }*/
     }
 </script>
-
 
 <style lang="scss">
     .rubrics-wrapper-levels {
