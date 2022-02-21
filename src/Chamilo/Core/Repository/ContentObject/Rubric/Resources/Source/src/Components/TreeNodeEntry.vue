@@ -1,13 +1,16 @@
 <i18n>
 {
     "en": {
-        "no-description": "No description"
+        "no-description": "No description",
+        "points": "points"
     },
     "fr": {
-        "no-description": "Pas de description"
+        "no-description": "Pas de description",
+        "points": "points"
     },
     "nl": {
-        "no-description": "Geen omschrijving"
+        "no-description": "Geen omschrijving",
+        "points": "punten"
     }
 }
 </i18n>

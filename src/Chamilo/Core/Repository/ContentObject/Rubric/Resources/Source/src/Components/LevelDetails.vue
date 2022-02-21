@@ -56,7 +56,7 @@
         </div>
         <div v-if="rubric.useScores" class="ld-score" @click.stop="selectLevel">
             <label :for="`level_score_${index}`" class="level-label label-hidden" :style="rubric.useRelativeWeights ? 'margin-left: 1.5rem' : ''">{{ rubric.useRelativeWeights ? '%' : $t('points') }}</label>
-            <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model="level.score" @keydown.enter="isNew ? addNewLevel() : null" @input="onChange" @focus="selectLevel" class="input-detail">
+            <input :id="`level_score_${index}`" :tabindex="tabIndex" type="number" name="Weight" maxlength="3" v-model.number="level.score" required min="0" step="1" @keydown.enter="isNew ? addNewLevel() : null" @input="onChangeScore" @focus="selectLevel" class="input-detail">
         </div>
         <div class="ld-default" @click.stop="">
             <label :for="`level_default_${index}`" class="level-label label-hidden">{{ $t('default') }} <i class="fa fa-info-circle" :title="$t('default-info')" /></label>
@@ -137,6 +137,15 @@
             this.$emit('change', this.level);
         }
 
+        onChangeScore(event: any) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
+            this.$emit('change', this.level);
+        }
+
         addNewLevel() {
             this.$emit('new-level-added');
         }
@@ -150,3 +159,13 @@
         }
     }
 </script>
+<style lang="scss" scoped>
+    .ld-score .input-detail {
+        -moz-appearance: textfield; /* Firefox */
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+</style>

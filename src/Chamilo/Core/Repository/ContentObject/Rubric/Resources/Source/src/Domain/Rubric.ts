@@ -77,7 +77,9 @@ export default class Rubric extends TreeNode {
     }
 
     protected onCriteriumAdded(criterium: Criterium) {
-        this.levels.forEach(level => {
+        if (this.filterLevelsByCriterium(criterium).length) { return; }
+
+        this.rubricLevels.forEach(level => {
             //choice already exists for criterium? Could be through json bootstrapping.
             let choice = this.findChoice(criterium, level);
             if (!choice) {
@@ -237,9 +239,6 @@ export default class Rubric extends TreeNode {
         const levelIndex = levels.indexOf(level);
         const nextLevel = levels[levelIndex + 1];
         if (!nextLevel) { return; }
-        console.log('moveleveldown');
-        console.log(this.levels);
-        console.log(nextLevel, this.levels.indexOf(nextLevel));
 
         this.moveItemInArray(
             this.levels, this.levels.indexOf(level), this.levels.indexOf(nextLevel)
@@ -252,9 +251,6 @@ export default class Rubric extends TreeNode {
         const levelIndex = levels.indexOf(level);
         const nextLevel = levels[levelIndex - 1];
         if (!nextLevel) { return; }
-        console.log('movelevelup');
-        console.log(this.levels);
-        console.log(nextLevel, this.levels.indexOf(nextLevel));
 
         this.moveItemInArray(
             this.levels, this.levels.indexOf(level), this.levels.indexOf(nextLevel)
@@ -274,7 +270,6 @@ export default class Rubric extends TreeNode {
         let choice = this.getChoice(criterium, level);
         if (choice.hasFixedScore)
             return choice.fixedScore;
-
         return Math.round(criterium.weight * level.score) / 100;
     }
 
@@ -287,7 +282,13 @@ export default class Rubric extends TreeNode {
         if (this.useRelativeWeights) { return 100; }
         let maxScore = 0;
         this.getAllCriteria().forEach(criterium => {
-            const levelScores = this.levels.map(level => this.getChoiceScore(criterium, level));
+            const filteredLevels = this.filterLevelsByCriterium(criterium);
+            let levelScores;
+            if (filteredLevels.length) {
+                levelScores = filteredLevels.map(level => level.score);
+            } else {
+                levelScores = this.rubricLevels.map(level => this.getChoiceScore(criterium, level));
+            }
             const max = levelScores.reduce((curr, score) => Math.max(curr, score), 0);
             maxScore += max;
         });
@@ -299,14 +300,21 @@ export default class Rubric extends TreeNode {
             return criterium.rel_weight !== null ? criterium.rel_weight : (precise ? this.eqRestWeightPrecise : this.eqRestWeight);
         }
         const scores : number[] = [0];
-        const criteriumChoices = this.choices.get(criterium.id);
-        if (!criteriumChoices) {
-            throw new Error(`No choice data found for: ${criterium}`);
+        const filteredLevels = this.filterLevelsByCriterium(criterium);
+        if (filteredLevels.length) {
+            filteredLevels.forEach(level => {
+                scores.push(level.score);
+            });
+        } else {
+            const criteriumChoices = this.choices.get(criterium.id);
+            if (!criteriumChoices) {
+                throw new Error(`No choice data found for: ${criterium}`);
+            }
+            criteriumChoices.forEach((choice, levelId) => {
+                const level = this.rubricLevels.find(level => level.id === levelId);
+                scores.push(this.getChoiceScore(criterium, level!));
+            })
         }
-        criteriumChoices.forEach((choice, levelId) => {
-            const level = this.levels.find(level => level.id === levelId);
-            scores.push(this.getChoiceScore(criterium, level!));
-        })
         return Math.max.apply(null, scores);
     }
 

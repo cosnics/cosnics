@@ -48,69 +48,19 @@
                         </div>
                         <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
                     </div>
-                    <template v-if="!criteriumLevels.length">
-                        <a v-if="!addingLevel" href="#" @click.prevent="createLevel()">Gebruik aangepaste niveaus</a>
-                        <ul class="b-criterium-levels" v-if="!addingLevel">
+                    <template v-if="!criteriumLevels.length && !addingLevel">
+                        <a href="#" @click.prevent="addingLevel = true">Gebruik aangepaste niveaus</a>
+                        <ul class="b-criterium-levels">
                             <li v-for="level in rubric.rubricLevels" :key="level.id" class="b-criterium-level">
                                 <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
                             </li>
                         </ul>
                         <div v-else style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start;">
-                            Maak een aangepast niveau:
-                            <div>
-                                <label for="lvl-title">Titel</label>
-                                <input id="lvl-title" type="text" v-model="addingLevel.title" class="input-detail" />
-                            </div>
-                            <div>
-                                <label for="lvl-score">Score</label>
-                                <input id="lvl-score" type="number" v-model="addingLevel.score" class="input-detail" />
-                            </div>
-                            <div>
-                                <label for="lvl-default">Standaard</label>
-                                <input id="lvl-default" type="radio" v-model="addingLevel.isDefault" />
-                            </div>
-                            <div>
-                                <label for="lvl-descr">Omschrijving</label>
-                                <textarea id="lvl-descr" v-model="addingLevel.description" class="input-detail"></textarea>
-                            </div>
-                            <div>
-                                <button @click.prevent="addLevel">Voeg toe</button><a href="#" @click.prevent="addingLevel = null">Cancel</a>
-                            </div>
                         </div>
                     </template>
-                    <div v-else style="display: flex; flex-direction: column; gap: 15px">
-                        <div v-for="(level, index) in criteriumLevels">
-                            <div>{{level.title}}</div>
-                            <div>{{level.score}}</div>
-                            <div>{{level.isDefault ? 'default' : 'not default'}}</div>
-                            <div>{{level.description}}</div>
-                            <div><button @click="moveLevelUp(level)">Up</button><button @click="moveLevelDown(level)">Down</button></div>
-                        </div>
-                        <div v-if="!addingLevel">
-                            <a href="#" @click.prevent="createLevel">Maak een aangepast niveau:</a>
-                        </div>
-                        <div v-else style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start;">
-                            Maak een aangepast niveau:
-                            <div>
-                                <label for="lvl-title">Titel</label>
-                                <input id="lvl-title" type="text" v-model="addingLevel.title" class="input-detail" />
-                            </div>
-                            <div>
-                                <label for="lvl-score">Score</label>
-                                <input id="lvl-score" type="number" v-model="addingLevel.score" class="input-detail" />
-                            </div>
-                            <div>
-                                <label for="lvl-default">Standaard</label>
-                                <input id="lvl-default" type="radio" v-model="addingLevel.isDefault" />
-                            </div>
-                            <div>
-                                <label for="lvl-descr">Omschrijving</label>
-                                <textarea id="lvl-descr" v-model="addingLevel.description" class="input-detail"></textarea>
-                            </div>
-                            <div>
-                                <button @click.prevent="addLevel">Voeg toe</button><a href="#" @click.prevent="addingLevel = null">Cancel</a>
-                            </div>
-                        </div>
+                    <div v-else>
+                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="addingLevel = false">Cancel</a>
+                        <levels-view :rubric="rubric" :data-connector="dataConnector"></levels-view>
                     </div>
                     <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> {{ $t('back-to-rubric') }}</a>
                 </div>
@@ -130,6 +80,7 @@
     import CriteriumLevelView from './CriteriumLevelView.vue';
     import FormattingHelp from './FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
+    import LevelsView from './LevelsView.vue';
 
     function updateHeight(elem: HTMLElement, addedPixels: number = 0) {
         elem.style.height = '';
@@ -138,11 +89,11 @@
 
     @Component({
         name: 'criterium-details-view',
-        components: { CriteriumLevelView, FormattingHelp }
+        components: { CriteriumLevelView, FormattingHelp, LevelsView }
     })
     export default class CriteriumDetailsView extends Vue {
         private showFormatting = false;
-        private addingLevel: Level|null = null;
+        private addingLevel = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(Criterium) readonly criterium!: Criterium | null;
@@ -198,19 +149,6 @@
             this.updateHeightAll();
         }
 
-        createLevel() {
-            this.addingLevel = new Level('');
-        }
-
-        addLevel() {
-            if (this.addingLevel && this.criterium) {
-                this.addingLevel.criteriumId = this.criterium.id;
-                this.rubric.addLevel(this.addingLevel);
-                this.dataConnector?.addLevel(this.addingLevel, this.rubric.filterLevelsByCriterium(this.criterium).length);
-                this.addingLevel = null;
-            }
-        }
-
         onCriteriumChange() {
             this.$emit('change-criterium', this.criterium);
         }
@@ -240,7 +178,7 @@
 
         @Watch('criterium')
         onDisplayedCriterium() {
-            this.addingLevel = null;
+            this.addingLevel = false;
         }
     }
 </script>

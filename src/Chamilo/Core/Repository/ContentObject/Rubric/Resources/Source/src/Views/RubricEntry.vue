@@ -89,7 +89,7 @@
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
-                    <div class="treenode-weight mod-responsive mod-entry mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
+                    <div class="treenode-weight mod-responsive mod-entry mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                     <div class="treenode-rubric-input rb-md:col-start-1 rb-sm:col-span-full" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                         <div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>
                         <tree-node-entry :rubric="rubric" :ext="ext" :evaluation="evaluation" :preview="preview" :show-default-feedback-fields="showDefaultFeedbackFields" @select="selectLevel"></tree-node-entry>
@@ -263,7 +263,11 @@
                 if (this.rubric.useRelativeWeights) {
                     evaluation.score = level.score;
                 } else {
-                    evaluation.score = this.rubric.getChoiceScore(criterium, level);
+                    if (level.criteriumId === criterium.id) {
+                        evaluation.score = level.score;
+                    } else {
+                        evaluation.score = this.rubric.getChoiceScore(criterium, level);
+                    }
                 }
             }
             this.$emit('level-selected', evaluation.treeNode, level);

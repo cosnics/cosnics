@@ -1,3 +1,17 @@
+<i18n>
+{
+    "en": {
+        "points": "points"
+    },
+    "fr": {
+        "points": "points"
+    },
+    "nl": {
+        "points": "punten"
+    }
+}
+</i18n>
+
 <template>
     <div class="treenode-rubric-input">
         <div class="treenode-choices">

@@ -2,17 +2,14 @@
 {
     "en": {
         "formatting": "Formatting",
-        "points": "points",
         "weight": "Weight"
     },
     "fr": {
         "formatting": "Mise en forme",
-        "points": "points",
         "weight": "Poids"
     },
     "nl": {
         "formatting": "Opmaakhulp",
-        "points": "punten",
         "weight": "Gewicht"
     }
 }
