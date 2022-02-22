@@ -129,8 +129,6 @@ class UserService
     )
     {
         $requiredParameters = [
-            'firstName' => $firstName,
-            'lastName' => $lastName,
             'username' => $username,
             'officialCode' => $officialCode,
             'emailAddress' => $emailAddress,
