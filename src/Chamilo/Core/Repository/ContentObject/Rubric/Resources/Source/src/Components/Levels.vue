@@ -47,12 +47,12 @@
                 <template #cell(title)="{item, index}">
                     <div>
                         <span class="level-index">{{ index + 1 }}</span>
-                        <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" />
+                        <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" />
                     </div>
                 </template>
-                <template #head(score)>{{ $t('points') }}</template>
+                <template #head(score)>{{ rubric.useRelativeWeights ? '%' : $t('points') }}</template>
                 <template #cell(score)="{item, index}">
-                    <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" required min="0" step="1" />
+                    <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" required min="0" step="1" />
                 </template>
                 <template #head(is_default)><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></template>
                 <template #cell(is_default)="{item}">
@@ -81,11 +81,11 @@
                     <b-td class="table-title">
                         <div>
                             <span class="level-index">{{ levels.length + 1 }}</span>
-                            <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad" v-model="newLevel.title" id="level-title-new" />
+                            <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" />
                         </div>
                     </b-td>
-                    <b-td class="table-score">
-                        <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num" required min="0" step="1" />
+                    <b-td class="table-score" v-if="rubric.useScores">
+                        <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" required min="0" step="1" />
                     </b-td>
                     <b-td class="table-default">
                         <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
@@ -183,6 +183,7 @@
             this.rubric.addLevel(this.newLevel!);
             this.dataConnector?.addLevel(this.newLevel!, this.levels.length);
             this.newLevel = null;
+            this.$emit('level-added');
         }
 
         cancelLevel() {
@@ -299,22 +300,36 @@
                 });
             }
         }
+
+        mounted() {
+            if (!this.levels.length) {
+                this.createNewLevel();
+            }
+        }
     }
 </script>
 
 <style lang="scss" scoped>
     .table {
         border: none;
-        margin-top: 1.5em;
+        margin-top: 1em;
         max-width: fit-content;
 
         &.mod-rubric {
             margin-left: .25em;
             margin-top: 1em;
+
+            >>> th, >>> td {
+                border: 1px solid #ebebeb;
+
+                &.table-actions {
+                    border-width: 0;
+                }
+            }
         }
 
         >>> th, >>> td {
-            border: 1px solid #ebebeb;
+            border: 1px solid transparent;
             padding: 10px 8px;
             vertical-align: middle;
         }
@@ -334,7 +349,7 @@
         }
 
         >>> .table-head .table-head-row.mod-criterium th {
-            background-color: #eff1f3;
+            background-color: #edeef0;
             border-color: #e3eaed;
 
             &.table-actions {
@@ -347,6 +362,10 @@
             border-bottom: 0;
             color: #5885a2;
 
+            &.table-score {
+                text-align: center;
+            }
+
             &.table-actions {
                 background: none;
             }
@@ -355,13 +374,20 @@
         >>> .table-head .table-head-row th {
             border-top: 1px solid #ebebeb;
 
+            &:not(.table-actions) {
+                border-bottom: 1px solid transparent;
+            }
+
             &.table-actions {
                 border-top-color: transparent;
             }
         }
 
-        >>> .level-row:first-child td {
+        &.mod-rubric >>> .level-row:first-child td {
             background: linear-gradient(180deg, #e3eaed 0, hsla(0, 0%, 100%, 0) 4px);
+        }
+
+        >>> .level-row:first-child td {
             border-top: 0;
 
             &.table-actions {
@@ -385,7 +411,7 @@
             }
         }
         >>> .table-score {
-            width: 2em;
+            width: 5em;
         }
         >>> .table-default {
             text-align: center;
@@ -451,4 +477,5 @@
             right: 17px;
         }
     }
+
 </style>

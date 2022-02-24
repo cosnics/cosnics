@@ -213,15 +213,31 @@ export default class Rubric extends TreeNode {
 
     public addLevel(level: Level) {
         this.levels.push(level);
+        if (level.criteriumId) {
+            this.choices.delete(level.criteriumId);
+            return;
+        }
         this.getAllCriteria().forEach(criterium => {
-            this.addChoice(new Choice(false, ""), criterium.id, level.id)
-        })
+            if (!this.filterLevelsByCriterium(criterium).length) {
+                this.addChoice(new Choice(false, ""), criterium.id, level.id);
+            }
+        });
     }
 
     public removeLevel(level: Level) {
+        let criterium: Criterium|undefined;
+        if (level.criteriumId) {
+            criterium = this.getAllCriteria().find(criterium => criterium.id === level.criteriumId);
+        }
         const index = this.levels.indexOf(level);
         this.levels.splice(index, 1);
         this.removeChoicesByLevel(level);
+        if (criterium && !this.filterLevelsByCriterium(criterium).length) {
+            const criteriumId = criterium.id;
+            this.rubricLevels.forEach(level => {
+                this.addChoice(new Choice(false, ""), criteriumId, level.id);
+            })
+        }
     }
 
     public getFilteredLevels(level: Level) {

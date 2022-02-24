@@ -43,7 +43,10 @@
                     <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-pad rb-md:col-span-full">
                         <span class="treenode-weight-title">{{ $t('weight') }}: </span>
                         <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
-                        <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        <template v-else>
+                            <span v-if="rubric.filterLevelsByCriterium(criterium).length" style="margin-left: 1em">100</span>
+                            <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        </template>
                         <span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
                     </div>
                     <tree-node-descriptions :rubric="rubric" :criterium="criterium" :ext="ext"

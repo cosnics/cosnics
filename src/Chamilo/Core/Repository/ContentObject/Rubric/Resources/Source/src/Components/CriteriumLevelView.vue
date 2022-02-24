@@ -157,6 +157,7 @@
     }
 
     .criterium-level-input-area:hover .criterium-level-markup-preview {
+        background: white;
         border-color: #aaa;
     }
 </style>

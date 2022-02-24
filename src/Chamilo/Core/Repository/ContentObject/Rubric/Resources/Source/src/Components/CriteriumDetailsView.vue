@@ -2,23 +2,29 @@
 {
     "en": {
         "back-to-rubric": "Back to rubric",
+        "cancel-custom-levels": "Cancel custom levels",
         "close": "Close",
         "criterium": "Criterium",
         "formatting": "Formatting",
+        "use-custom-levels": "Use custom levels",
         "weight": "Weight"
     },
     "fr": {
         "back-to-rubric": "Retour à la rubrique",
+        "cancel-custom-levels": "Annuler niveaux personnalisés",
         "close": "Fermer",
         "criterium": "Critère",
         "formatting": "Mise en forme",
+        "use-custom-levels": "Utiliser des niveaux personnalisés",
         "weight": "Poids"
     },
     "nl": {
         "back-to-rubric": "Terug naar rubric",
+        "cancel-custom-levels": "Annuleer aangepaste niveaus",
         "close": "Sluiten",
         "criterium": "Criterium",
         "formatting": "Opmaakhulp",
+        "use-custom-levels": "Gebruik aangepaste niveaus",
         "weight": "Gewicht"
     }
 }
@@ -27,7 +33,7 @@
 <template>
     <div class="criterium-details-wrapper">
         <transition name="border-flash" mode="out-in">
-            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'mod-levels': !!criteriumLevels.length || addingLevel,'is-show-formatting': showFormatting}" v-if="criterium !== null">
+            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'mod-levels': !!criteriumLevels.length || initCustomLevels,'is-show-formatting': showFormatting}" v-if="criterium !== null">
                 <div v-if="criterium" style="flex: 1">
                     <div class="criterium-details-header">
                         <button class="btn-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i class="fa fa-close" aria-hidden="true" /></button>
@@ -43,24 +49,23 @@
                             </template>
                             <template v-else>
                                 <label for="weight">{{ $t('weight') }}:</label>
-                                <input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %
+                                <template v-if="!criteriumLevels.length && !initCustomLevels"><input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %</template>
+                                <span v-else>100 %</span>
                             </template>
                         </div>
                         <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
                     </div>
-                    <template v-if="!criteriumLevels.length && !addingLevel">
-                        <a href="#" @click.prevent="addingLevel = true">Gebruik aangepaste niveaus</a>
+                    <template v-if="!criteriumLevels.length && !initCustomLevels">
+                        <a href="#" @click.prevent="initCustomLevels = true" style="display: block; text-align: end">{{ $t('use-custom-levels') }}</a>
                         <ul class="b-criterium-levels">
                             <li v-for="level in rubric.rubricLevels" :key="level.id" class="b-criterium-level">
                                 <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
                             </li>
                         </ul>
-                        <div v-else style="display: flex; flex-direction: column; gap: 3px; align-items: flex-start;">
-                        </div>
                     </template>
                     <div v-else>
-                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="addingLevel = false">Cancel</a>
-                        <levels :rubric="rubric" :data-connector="dataConnector" :criterium="criterium"></levels>
+                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="initCustomLevels = false" style="display: block; text-align: end">{{ $t('cancel-custom-levels') }}</a>
+                        <levels :rubric="rubric" :data-connector="dataConnector" :criterium="criterium" @level-added="initCustomLevels = false"></levels>
                     </div>
                     <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> {{ $t('back-to-rubric') }}</a>
                 </div>
@@ -93,7 +98,7 @@
     })
     export default class CriteriumDetailsView extends Vue {
         private showFormatting = false;
-        private addingLevel = false;
+        private initCustomLevels = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(Criterium) readonly criterium!: Criterium | null;
@@ -178,7 +183,7 @@
 
         @Watch('criterium')
         onDisplayedCriterium() {
-            this.addingLevel = false;
+            this.initCustomLevels = false;
         }
     }
 </script>
