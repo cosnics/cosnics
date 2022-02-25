@@ -41,7 +41,82 @@
 <template>
     <div @click.stop="selectedLevel = null">
         <div @click.stop="">
-            <b-table ref="levels" :class="{'mod-rubric': !criterium}" :items="levels" :fields="fields" thead-class="table-head" :thead-tr-class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')" :tbody-tr-class="rowClass"
+            <b-table-simple :class="{'mod-rubric': !criterium, 'mod-criterium': !!criterium}">
+                <b-thead class="table-head">
+                    <b-tr :class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')">
+                        <b-th class="table-title">{{ $t('level') }}</b-th>
+                        <b-th v-if="rubric.useScores" class="table-score">{{ rubric.useRelativeWeights ? '%' : $t('points') }}</b-th>
+                        <b-th class="table-default"><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></b-th>
+                        <b-th class="table-actions"></b-th>
+                    </b-tr>
+                </b-thead>
+                <b-tbody>
+                    <template v-for="(item, index) in levels">
+                        <b-tr :class="rowClass(item)" @click.stop="onSelectLevel(item)" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
+                            <b-td class="table-title">
+                                <div>
+                                    <span class="level-index">{{ index + 1 }}</span>
+                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
+                                </div>
+                            </b-td>
+                            <b-td v-if="rubric.useScores" class="table-score">
+                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
+                            </b-td>
+                            <b-td class="table-default">
+                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" />
+                            </b-td>
+                            <b-td class="table-actions">
+                                <selection-controls
+                                    :id="item.id"
+                                    :is-up-disabled="index === 0"
+                                    :is-down-disabled="index >= levels.length - 1"
+                                    :is-remove-disabled="false"
+                                    class="level-actions-2"
+                                    @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
+                                    @remove="showRemoveLevelDialog(item)" @select="onSelectLevel(item)"/>
+                            </b-td>
+                        </b-tr>
+                        <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
+                            <b-td :colspan="rubric.useScores ? 3 : 2">
+                                <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
+                                    <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
+                                              :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
+                                              :placeholder="$t('enter-level-description')" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
+                                    </textarea>
+                                    <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
+                                </div>
+                            </b-td>
+                        </b-tr>
+                    </template>
+                    <b-tr v-if="newLevel">
+                        <b-td class="table-title">
+                            <div>
+                                <span class="level-index">{{ levels.length + 1 }}</span>
+                                <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" />
+                            </div>
+                        </b-td>
+                        <b-td class="table-score" v-if="rubric.useScores">
+                            <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" required min="0" step="1" />
+                        </b-td>
+                        <b-td class="table-default">
+                            <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
+                        </b-td>
+                        <b-td class="table-actions">
+                            <div class="level-actions-2">
+                                <button class="btn btn-default btn-sm mod-level-action" :title="$t('add')" @click.stop="addLevel">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                    <span class="sr-only">{{ $t('add') }}</span>
+                                </button>
+                                <button class="btn btn-default btn-sm mod-level-action mod-cancel" :title="$t('cancel')" @click.stop="cancelLevel">
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                    <span class="sr-only">{{ $t('cancel') }}</span>
+                                </button>
+                            </div>
+                        </b-td>
+                    </b-tr>
+                </b-tbody>
+            </b-table-simple>
+            <!--<b-table ref="levels" :class="{'mod-rubric': !criterium}" :items="levels" :fields="fields" thead-class="table-head" :thead-tr-class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')" :tbody-tr-class="rowClass"
                      :selectable="true" select-mode="single" selected-variant="" @row-selected="onRowSelected">
                 <template #head(title)>{{ $t('level') }}</template>
                 <template #cell(title)="{item, index}">
@@ -104,6 +179,7 @@
                     </b-td>
                 </template>
             </b-table>
+            -->
         </div>
         <button v-if="!newLevel" class="btn-new" @click.stop="createNewLevel" style="margin-left: .2em">{{ $t('add-level') }}</button>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
@@ -137,6 +213,7 @@
     })
     export default class Levels extends Vue {
         private newLevel: Level|null = null;
+        private hoveredLevel: Level|null = null;
         private selectedLevel: Level|null = null;
         private removingLevel: Level|null = null;
         private activeDescriptionInput: Level|null = null;
@@ -223,7 +300,6 @@
         }
 
         setDefault(defaultLevel: Level) {
-            console.log('setDefault');
             if (this.newLevel === defaultLevel) {
                 this.newLevel.isDefault = !this.newLevel.isDefault;
             } else {
@@ -269,12 +345,12 @@
         }
 
         rowClass(level: Level) : string {
-            return `table-body-row level-row${level === this.selectedLevel ? ' is-selected' : ''}`;
+            return `table-body-row level-row${this.criterium ? ' mod-criterium' : ''}${level === this.selectedLevel ? ' is-selected' : ''}${ this.newLevel ? '' : ' is-enabled'}${level === this.hoveredLevel ? ' is-hovered' : ''}`;
         }
 
         onSelectLevel(level: Level, index: number = 0) {
             this.selectedLevel = level;
-            (this.$refs['levels'] as unknown as any).selectRow(index);
+            /*(this.$refs['levels'] as unknown as any).selectRow(index);*/
         }
 
         onDescriptionFocus(level: Level, index: number = 0) {
@@ -311,6 +387,8 @@
 
 <style lang="scss" scoped>
     .table {
+        --border-color: #ebebeb;
+        --hover-bg: #f4fbfb;
         border: none;
         margin-top: 1em;
         max-width: fit-content;
@@ -318,20 +396,24 @@
         &.mod-rubric {
             margin-left: .25em;
             margin-top: 1em;
+        }
 
-            >>> th, >>> td {
-                border: 1px solid #ebebeb;
-
-                &.table-actions {
-                    border-width: 0;
-                }
+        @media only screen and (min-width: 900px) {
+            &.mod-criterium {
+                --border-color: #d3d8da;
+                --hover-bg: #dfe2e3;
             }
         }
 
         >>> th, >>> td {
-            border: 1px solid transparent;
+            border: 1px solid var(--border-color);
+            /*border: 1px solid transparent;*/
             padding: 10px 8px;
             vertical-align: middle;
+
+            &.table-actions {
+                border-width: 0;
+            }
         }
 
         >>> th, >>> td {
@@ -340,7 +422,7 @@
             }
         }
 
-        >>> .table-head .table-head-row.mod-rubric th {
+        >>> .table-head .table-head-row th {
             background-color: #f8fbfb;
 
             &.table-actions {
@@ -348,14 +430,48 @@
             }
         }
 
-        >>> .table-head .table-head-row.mod-criterium th {
+        @media only screen and (min-width: 900px) {
+            >>> .table-head .table-head-row.mod-criterium th {
+                background-color: #e5e8ea;
+
+                &.table-actions {
+                    background: none;
+                }
+            }
+        }
+
+        @media (pointer: fine) {
+            /*.table-body-row.is-enabled:not(.is-selected).is-hovered {
+                &, & + .table-body-row.details-row {
+                    td:not(.table-actions) {
+                        background: var(--hover-bg);
+                        border-color: #e3e3e3;
+                        cursor: pointer;
+                        border-right-color: transparent;
+                    }
+                }
+            }*/
+/*            .table-body-row.is-enabled:not(.is-selected).is-hovered td:not(.table-actions) {
+                background: #f4fbfb;
+                border-color: #e3e3e3;
+                cursor: pointer;
+                border-right-color: transparent;
+            }*/
+
+            /*.table-body-row.is-enabled:not(.is-selected):first-child:hover td:not(.table-actions) {
+                background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);
+            }*/
+        }
+
+
+       /* >>> .table-head .table-head-row.mod-criterium th {
             background-color: #edeef0;
             border-color: #e3eaed;
 
             &.table-actions {
                 background: none;
             }
-        }
+        }*/
 
         >>> th {
             /*background-color: #f8fbfb;*/
@@ -372,7 +488,7 @@
         }
 
         >>> .table-head .table-head-row th {
-            border-top: 1px solid #ebebeb;
+            border-top: 1px solid var(--border-color);
 
             &:not(.table-actions) {
                 border-bottom: 1px solid transparent;
@@ -383,8 +499,25 @@
             }
         }
 
-        &.mod-rubric >>> .level-row:first-child td {
-            background: linear-gradient(180deg, #e3eaed 0, hsla(0, 0%, 100%, 0) 4px);
+        >>> .level-row:first-child td {
+            background: linear-gradient(to bottom, #e3eaed 0, hsla(0, 0%, 100%, 0) 4px);
+        }
+
+        @media only screen and (min-width: 900px) {
+            >>> .level-row.mod-criterium:first-child td {
+                background: linear-gradient(to bottom, #d5dadd 0, hsla(0, 0%, 100%, 0) 4px);
+                background-origin: border-box;
+            }
+        }
+
+        >>> .table-body-row {
+            &.level-row.mod-criterium td {
+                border-bottom: none;
+            }
+            &.details-row td {
+                border-top: none;
+                border-right: 1px solid var(--border-color);
+            }
         }
 
         >>> .level-row:first-child td {
