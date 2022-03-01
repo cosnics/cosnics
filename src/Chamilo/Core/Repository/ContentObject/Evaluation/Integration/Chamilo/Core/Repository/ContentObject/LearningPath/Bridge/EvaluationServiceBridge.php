@@ -177,6 +177,31 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     }
 
     /**
+     * @param User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser): array
+    {
+        return $this->learningPathEvaluationServiceBridge->getAvailableEntityIdentifiersForUser(
+            $currentUser, $this->getCurrentEntityType()
+        );
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        return $this->learningPathEvaluationServiceBridge->renderEntityNameByEntityTypeAndEntityId(
+            $entityType, $entityId
+        );
+    }
+
+    /**
      * @param int $entityId
      * @return string
      */
@@ -196,5 +221,26 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface, Embed
     public function isUserPartOfEntity(User $user, int $entityType, int $entityId): bool
     {
         return $this->learningPathEvaluationServiceBridge->isUserPartOfEntity($user, $entityType, $entityId);
+    }
+
+    /**
+     *
+     * @param int $entityType
+     *
+     * @return string
+     */
+    public function getPluralEntityNameByType($entityType)
+    {
+        return $this->learningPathEvaluationServiceBridge->getPluralEntityNameByType($entityType);
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
+     */
+    public function getEntityNameByType($entityType)
+    {
+        return $this->learningPathEvaluationServiceBridge->getEntityNameByType($entityType);
     }
 }

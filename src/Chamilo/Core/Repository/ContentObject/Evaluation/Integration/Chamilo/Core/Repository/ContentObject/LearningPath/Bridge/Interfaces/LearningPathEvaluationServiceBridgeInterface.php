@@ -47,9 +47,39 @@ interface LearningPathEvaluationServiceBridgeInterface
     public function getCurrentEntityIdentifier(User $currentUser, int $entityType): ?int;
 
     /**
+     * @param User $currentUser
+     * @param int $entityType
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser, int $entityType);
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
      * @param int $entityType
      * @param int $entityId
      * @return string
      */
     public function getEntityDisplayName(int $entityType, int $entityId): string;
+
+    /**
+     * @param integer $entityType
+     *
+     * @return string
+     */
+    public function getPluralEntityNameByType($entityType);
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
+     */
+    public function getEntityNameByType($entityType);
 }
