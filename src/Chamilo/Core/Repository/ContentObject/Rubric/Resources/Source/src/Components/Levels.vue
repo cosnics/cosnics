@@ -81,18 +81,19 @@
                                 <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
                                     <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
                                               :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
-                                              :placeholder="$t('enter-level-description')" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
+                                              :placeholder="$t('enter-level-description')"
+                                              @input="onLevelChange(item)" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
                                     </textarea>
                                     <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
                                 </div>
                             </b-td>
                         </b-tr>
                     </template>
-                    <b-tr v-if="newLevel">
+                    <b-tr v-if="newLevel" class="table-body-row new-level-row" :class="{'mod-criterium': !!criterium}">
                         <b-td class="table-title">
                             <div>
                                 <span class="level-index">{{ levels.length + 1 }}</span>
-                                <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" />
+                                <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" @keydown.enter="addLevel" @keyup.esc="cancelLevel" />
                             </div>
                         </b-td>
                         <b-td class="table-score" v-if="rubric.useScores">
@@ -114,72 +115,20 @@
                             </div>
                         </b-td>
                     </b-tr>
+                    <b-tr v-if="newLevel && !!criterium" class="table-body-row details-row">
+                        <b-td :colspan="rubric.useScores ? 3 : 2">
+                            <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
+                                <textarea v-model="newLevel.description" ref="feedbackField" class="criterium-level-feedback input-detail"
+                                          :class="{ 'is-input-active': activeDescriptionInput === newLevel || !newLevel.description }"
+                                          :placeholder="$t('enter-level-description')"
+                                          @focus="onDescriptionFocus(newLevel)" @blur="activeDescriptionInput = null">
+                                </textarea>
+                                <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === newLevel || !newLevel.description}" v-html="marked(newLevel.description)"></div>
+                            </div>
+                        </b-td>
+                    </b-tr>
                 </b-tbody>
             </b-table-simple>
-            <!--<b-table ref="levels" :class="{'mod-rubric': !criterium}" :items="levels" :fields="fields" thead-class="table-head" :thead-tr-class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')" :tbody-tr-class="rowClass"
-                     :selectable="true" select-mode="single" selected-variant="" @row-selected="onRowSelected">
-                <template #head(title)>{{ $t('level') }}</template>
-                <template #cell(title)="{item, index}">
-                    <div>
-                        <span class="level-index">{{ index + 1 }}</span>
-                        <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" />
-                    </div>
-                </template>
-                <template #head(score)>{{ rubric.useRelativeWeights ? '%' : $t('points') }}</template>
-                <template #cell(score)="{item, index}">
-                    <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item, index)" required min="0" step="1" />
-                </template>
-                <template #head(is_default)><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></template>
-                <template #cell(is_default)="{item}">
-                    <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" />
-                </template>
-                <template #row-details="{item, index}">
-                    <div class="criterium-level-input-area" style="margin: -1rem 9rem 0 2.2rem;">
-                        <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
-                                  :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
-                                  :placeholder="$t('enter-level-description')" @focus="onDescriptionFocus(item, index)" @blur="activeDescriptionInput = null">
-                        </textarea>
-                        <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
-                    </div>
-                </template>
-                <template #cell(actions)="{item, index}">
-                    <selection-controls
-                        :id="item.id"
-                        :is-up-disabled="index === 0"
-                        :is-down-disabled="index >= levels.length - 1"
-                        :is-remove-disabled="false"
-                        class="level-actions-2"
-                        @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
-                        @remove="showRemoveLevelDialog(item)" @select="onSelectLevel(item, index)"/>
-                </template>
-                <template #bottom-row v-if="newLevel">
-                    <b-td class="table-title">
-                        <div>
-                            <span class="level-index">{{ levels.length + 1 }}</span>
-                            <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" />
-                        </div>
-                    </b-td>
-                    <b-td class="table-score" v-if="rubric.useScores">
-                        <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" required min="0" step="1" />
-                    </b-td>
-                    <b-td class="table-default">
-                        <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
-                    </b-td>
-                    <b-td class="table-actions">
-                        <div class="level-actions-2">
-                            <button class="btn btn-default btn-sm mod-level-action" :title="$t('add')" @click.stop="addLevel">
-                                <i class="fa fa-check-circle" aria-hidden="true"></i>
-                                <span class="sr-only">{{ $t('add') }}</span>
-                            </button>
-                            <button class="btn btn-default btn-sm mod-level-action mod-cancel" :title="$t('cancel')" @click.stop="cancelLevel">
-                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                                <span class="sr-only">{{ $t('cancel') }}</span>
-                            </button>
-                        </div>
-                    </b-td>
-                </template>
-            </b-table>
-            -->
         </div>
         <button v-if="!newLevel" class="btn-new" @click.stop="createNewLevel" style="margin-left: .2em">{{ $t('add-level') }}</button>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
@@ -261,6 +210,7 @@
             this.dataConnector?.addLevel(this.newLevel!, this.levels.length);
             this.newLevel = null;
             this.$emit('level-added');
+            this.createNewLevel();
         }
 
         cancelLevel() {
@@ -512,6 +462,9 @@
 
         >>> .table-body-row {
             &.level-row.mod-criterium td {
+                border-bottom: none;
+            }
+            &.new-level-row.mod-criterium td {
                 border-bottom: none;
             }
             &.details-row td {

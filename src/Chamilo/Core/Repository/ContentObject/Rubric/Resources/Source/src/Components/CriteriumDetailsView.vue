@@ -108,6 +108,7 @@
             super();
             this.onCriteriumChange = debounce(this.onCriteriumChange, 750);
             this.onWeightChange = debounce(this.onWeightChange, 750);
+            this.onChoiceChange = debounce(this.onChoiceChange, 750);
         }
 
         get criteriumLevels() {
