@@ -2,106 +2,135 @@
 {
     "en": {
         "extra-feedback": "Extra feedback",
+        "no-results-available": "There are no results yet for this rubric.",
         "rubric": "Rubric",
-        "total": "Total"
+        "total": "Total",
+        "weight": "Weight"
     },
     "fr": {
         "extra-feedback": "Feed-back supplémentaire",
+        "no-results-available": "Aucun résultat trouvé pour ce rubric.",
         "rubric": "Rubrique",
-        "total": "Total"
+        "total": "Total",
+        "weight": "Poids"
     },
     "nl": {
         "extra-feedback": "Extra feedback",
+        "no-results-available": "Er zijn nog geen resultaten voor deze rubric beschikbaar.",
         "rubric": "Rubric",
-        "total": "Totaal"
+        "total": "Totaal",
+        "weight": "Gewicht"
     }
 }
 </i18n>
 
 <template>
-    <div id="app" :class="{ 'mod-sep': this.options.isDemo }">
-        <link rel="stylesheet"
-              href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <div v-if="rubric" class="rubric-results-view">
-            <div class="rubric mod-res" :style="{'--num-cols': evaluators.length + (useScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
-                <!--<div class="rubric-header-fill" aria-hidden="true"></div>-->
-                <ul class="rubric-header mod-res">
-                    <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
-                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
-                    <li v-if="useScores" class="rubric-header-title mod-res mod-max">Max.</li>
-                </ul>
-                <ul class="rubric-header mod-res mod-date">
-                    <li class="rubric-header-date" v-for="evaluator in evaluators"
-                        :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ new Date(evaluator.date)|formatDate }}</li>
-                    <li v-if="useScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
-                </ul>
-                <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
-                    <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
-                        <div class="treenode-title-header mod-res">
-                            <div class="treenode-title-header-pre"></div>
-                            <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
-                        </div>
-                    </div>
-                    <div class="treenode-rubric-results" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
-                        <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
-                                <i v-if="evaluation.feedback" class="treenode-feedback-icon mod-cluster fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                {{ useScores ? getClusterScore(cluster, evaluation) : '' }}
-                            </div>
-                            <div class="treenode-evaluation mod-cluster-max" v-if="useScores">{{ maxScore }}</div>
-                        </div>
-                    </div>
-                    <template v-for="{category, maxScore, evaluations} in getCategoryRowsData(cluster)">
-                        <template v-if="category.title && rubric.getAllCriteria(category).length > 0">
-                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
-                                <div class="treenode-title-header mod-res" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
-                                    <div class="treenode-title-header-pre mod-category"></div>
-                                    <h2 class="treenode-title category-title">{{ category.title }}</h2>
-                                </div>
-                            </div>
-                            <div class="treenode-rubric-results" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
-                                <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades, 'mod-hide': useGrades && !evaluation.feedback, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
-                                        <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? getCategoryScore(category, evaluation) : '' }}
-                                    </div>
-                                    <div class="treenode-evaluation mod-category-max" v-if="useScores">{{ maxScore }}</div>
-                                </div>
-                            </div>
-                        </template>
-                        <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
-                            <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
-                                <div class="treenode-title-header mod-res" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
-                                    <div class="treenode-title-header-pre mod-criterium"></div>
-                                    <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
-                                </div>
-                            </div>
-                            <div class="treenode-rubric-results" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
-                                <div class="treenode-evaluations">
-                                    <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
-                                        <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
-                                        {{ useScores ? evaluation.score : evaluation.level.title }}
-                                    </div>
-                                    <div class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores">{{ maxScore }}</div>
-                                </div>
-                            </div>
-                        </template>
-                    </template>
-                    <div class="cluster-sep" :class="{ 'mod-grades': useGrades }"></div>
-                </template>
-                <template v-if="useScores">
-                    <div class="total-title mod-res">{{ $t('total') }} {{ $t('rubric') }}:</div>
-                    <div class="treenode-rubric-results">
-                        <div class="treenode-evaluations">
-                            <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">{{ getRubricScore(evaluator) }}</div>
-                            <div class="treenode-evaluation mod-rubric-max">{{ rubric.getMaximumScore() }}</div>
-                        </div>
-                    </div>
-                </template>
+    <div v-if="rubric && evaluators.length" class="rubric-results-view">
+        <div class="rubric" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
+            <ul class="rubric-tools" v-if="rubric.useScores && rubric.useRelativeWeights">
+                <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
+            </ul>
+            <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header rb-col-start-2">
+                <span>{{ $t('weight') }}</span>
             </div>
-            <tree-node-results-view v-if="selectedTreeNode" :rubric="rubric" :tree-node="selectedTreeNode" :evaluations="getTreeNodeRowData(selectedTreeNode).evaluations" @close="selectedTreeNode = null"></tree-node-results-view>
+            <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
+                <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
+                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
+                <li v-if="useAbsoluteScores" class="rubric-header-title mod-res mod-max">Max.</li>
+            </ul>
+            <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
+                <li class="rubric-header-date" v-for="evaluator in evaluators"
+                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
+                <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
+            </ul>
+            <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
+                <div class="treenode-title-header-wrap rb-col-start-1" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-title-header mod-res">
+                        <!--<div class="treenode-title-header-pre"></div>-->
+                        <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
+                    </div>
+                </div>
+                <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <span>{{ rubric.getRelativeWeight(cluster)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
+                </div>
+                <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" @click.stop="selectedTreeNode = cluster" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-evaluations">
+                        <div class="treenode-evaluation mod-cluster" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === cluster, 'is-highlighted': highlightedTreeNode === cluster}" v-for="evaluation in evaluations">
+                            <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :class="{'mod-cluster': !(useGrades || (useScores && rubric.useRelativeWeights && !showScores)) }" :title="getEvaluationTitleOverlay(evaluation)" />
+                            <score-display v-if="useScores && (!rubric.useRelativeWeights || showScores)" :score="rubricEvaluation.getClusterScore(cluster, evaluation)" :percent="rubric.useRelativeWeights" />
+                        </div>
+                        <div v-if="useAbsoluteScores" class="treenode-evaluation mod-cluster-max">
+                            <score-display :score="maxScore" />
+                        </div>
+                    </div>
+                </div>
+                <template v-for="({category, maxScore, evaluations}, index) in getCategoryRowsData(cluster)">
+                    <template v-if="category.title && rubric.getAllCriteria(category).length > 0">
+                        <div class="treenode-title-header-wrap mod-category" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category, 'has-category': !!category.title}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null" :style="`--category-color: ${ category.title && category.color ? category.color : '#999' }`">
+                            <div class="treenode-title-header mod-res">
+                                <div class="treenode-title-header-pre mod-category" :class="{'mod-no-color': !category.color}"></div>
+                                <h2 class="treenode-title category-title">{{ category.title }}</h2>
+                            </div>
+                        </div>
+                        <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
+                            <span>{{ rubric.getRelativeWeight(category)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
+                        </div>
+                        <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" @click.stop="selectedTreeNode = category" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-evaluations">
+                                <div class="treenode-evaluation mod-category" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === category, 'is-highlighted': highlightedTreeNode === category}" v-for="evaluation in evaluations">
+                                    <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
+                                    <score-display v-if="useScores && (!rubric.useRelativeWeights || showScores)" :score="rubricEvaluation.getCategoryScore(category, evaluation)" :percent="rubric.useRelativeWeights" />
+                                </div>
+                                <div v-if="useAbsoluteScores" class="treenode-evaluation mod-category-max">
+                                    <score-display :score="maxScore" />
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-for="{criterium, maxScore, evaluations} in getCriteriumRowsData(category)">
+                        <div class="treenode-title-header-wrap" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium, 'has-category':  category.title }" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                            <div class="treenode-title-header mod-res">
+                                <div class="treenode-title-header-pre mod-criterium"></div>
+                                <h3 class="treenode-title criterium-title u-markdown-criterium" :class="{'mod-no-category': !category.title}" v-html="criterium.toMarkdown()"></h3>
+                            </div>
+                        </div>
+                        <div class="treenode-weight mod-res-w" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-if="useScores && rubric.useRelativeWeights && showScores" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                            <span>{{ rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i>
+                        </div>
+                        <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" @click.stop="selectedTreeNode = criterium" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                            <div class="treenode-evaluations">
+                                <div class="treenode-evaluation mod-criterium" :class="{'mod-grades': useGrades || (useScores && rubric.useRelativeWeights && !showScores), 'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}" v-for="evaluation in evaluations">
+                                    <i v-if="evaluation.feedback" class="treenode-feedback-icon fa fa-info" :title="getEvaluationTitleOverlay(evaluation)" />
+                                    <score-display v-if="useScores && (!rubric.useRelativeWeights || showScores)" :score="evaluation.score" :percent="rubric.useRelativeWeights" />
+                                    <template v-else>{{ evaluation.level.title }}</template>
+                                </div>
+                                <div v-if="useAbsoluteScores" class="treenode-evaluation mod-criterium-max" :class="{'is-selected': selectedTreeNode === criterium, 'is-highlighted': highlightedTreeNode === criterium}">
+                                    <score-display :score="maxScore" />
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <div class="category-sep" v-if="index < getCategoryRowsData(cluster).length - 1"></div>
+                </template>
+                <div class="cluster-sep" :class="{ 'mod-hide-last': useGrades || (useScores && rubric.useRelativeWeights && !showScores) }"></div>
+            </template>
+            <template v-if="useScores && (!rubric.useRelativeWeights || showScores)">
+                <div class="total-title" :class="{'mod-res-col': useScores && rubric.useRelativeWeights && showScores}">{{ $t('total') }} {{ $t('rubric') }}:</div>
+                <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores}">
+                    <div class="treenode-evaluations">
+                        <div class="treenode-evaluation mod-rubric" v-for="evaluator in evaluators">
+                            <score-display :score="rubricEvaluation.getRubricScore(evaluator)" :percent="rubric.useRelativeWeights" />
+                        </div>
+                        <div class="treenode-evaluation mod-rubric-max" v-if="!rubric.useRelativeWeights">
+                            <score-display :score="rubric.getMaximumScore()" />
+                        </div>
+                    </div>
+                </div>
+            </template>
         </div>
+        <tree-node-results-view v-if="selectedTreeNode" :rubric="rubric" :tree-node="selectedTreeNode" :evaluations="getTreeNodeRowData(selectedTreeNode).evaluations" @close="selectedTreeNode = null"></tree-node-results-view>
     </div>
+    <div v-else class="alert-rubric-results">{{ $t('no-results-available') }}</div>
 </template>
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
@@ -110,41 +139,59 @@
     import Cluster from '../Domain/Cluster';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
     import TreeNodeResultsView from '../Components/TreeNodeResultsView.vue';
-    import {TreeNodeEvaluation, TreeNodeResult, EvaluatorEvaluation} from '../Util/interfaces';
-
-    function add(v1: number, v2: number) {
-        return v1 + v2;
-    }
+    import ScoreDisplay from '../Components/ScoreDisplay.vue';
+    import {TreeNodeEvaluation} from '../Util/interfaces';
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;
     }
 
     @Component({
-        components: { TreeNodeResultsView },
+        components: { TreeNodeResultsView, ScoreDisplay },
         filters: {
             capitalize: function (value: any) {
                 if (!value) { return ''; }
                 value = value.toString();
                 return value.charAt(0).toUpperCase() + value.slice(1);
             },
-            formatDate: function (date: Date) {
+            formatDate: function (s: string) {
+                const date = new Date(s);
                 if (isNaN(date.getDate())) { // todo: dates with timezone offsets, e.g. +0200 result in NaN data in Safari. For now, return an empty string.
                     return '';
                 }
-                return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+                return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear().toString().substr(-2)} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            },
+            formatNum: function (v: number) {
+                return v.toLocaleString(undefined, {maximumFractionDigits: 2});
             }
         }
     })
     export default class RubricResult extends Vue {
         private selectedTreeNode: Criterium|Category|Cluster|null = null;
         private highlightedTreeNode: Criterium|Category|Cluster|null = null;
+        private showScores = false;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
-        @Prop({type: Array, default: () => []}) readonly evaluators!: any[];
-        @Prop({type: Array, default: () => []}) readonly treeNodeResults!: TreeNodeResult[];
+        @Prop({type: RubricEvaluation, required: true}) readonly rubricEvaluation!: RubricEvaluation;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
+
+        get useScores() {
+            return this.rubric.useScores;
+        }
+
+        get useAbsoluteScores() {
+            return this.rubric.useScores && !this.rubric.useRelativeWeights;
+        }
+
+        get useGrades() {
+            return !this.rubric.useScores;
+        }
+
+        get evaluators() {
+            return this.rubricEvaluation.getEvaluators();
+        }
 
         getEvaluationTitleOverlay(evaluation: TreeNodeEvaluation) : string {
             const extraFeedback = evaluation.feedback ? `${this.$t('extra-feedback')}: ${evaluation.feedback}` : '';
@@ -153,14 +200,6 @@
             } else {
                 return extraFeedback;
             }
-        }
-
-        get useScores() {
-            return this.rubric.useScores;
-        }
-
-        get useGrades() {
-            return !this.rubric.useScores;
         }
 
         getTreeNodeRowData(treeNode: TreeNode) {
@@ -185,8 +224,8 @@
         getClusterRowData(cluster: Cluster) {
             return {
                 cluster,
-                maxScore: this.getClusterMaxScore(cluster),
-                evaluations: this.getTreeNodeResult(cluster).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getClusterMaxScore(cluster),
+                evaluations: this.rubricEvaluation.getEvaluations(cluster)
             };
         }
 
@@ -199,8 +238,8 @@
         getCategoryRowData(category: Category) {
             return {
                 category,
-                maxScore: this.getCategoryMaxScore(category),
-                evaluations: this.getTreeNodeResult(category).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getCategoryMaxScore(category),
+                evaluations: this.rubricEvaluation.getEvaluations(category)
             };
         }
 
@@ -211,64 +250,9 @@
         getCriteriumRowData(criterium: Criterium) {
             return {
                 criterium,
-                maxScore: this.getCriteriumMaxScore(criterium),
-                evaluations: this.getTreeNodeResult(criterium).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}))
+                maxScore: this.rubric.getCriteriumMaxScore(criterium),
+                evaluations: this.rubricEvaluation.getEvaluations(criterium)
             };
-        }
-
-        getCriteriumMaxScore(criterium: Criterium) : number {
-            const scores : number[] = [0];
-            const iterator = this.rubric!.choices.get(criterium.id);
-            iterator!.forEach((choice, levelId) => {
-                const level = this.rubric!.levels.find(level => level.id === levelId);
-                scores.push(this.rubric!.getChoiceScore(criterium, level!));
-            })
-            return Math.max.apply(null, scores);
-        }
-
-        getCategoryMaxScore(category: Category) : number {
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
-        }
-
-        getClusterMaxScore(cluster: Cluster) : number {
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumMaxScore(criterium)).reduce(add, 0);
-        }
-
-        getCriteriumScore(criterium: Criterium, evaluator: any) : number {
-            return this.getTreeNodeEvaluation(criterium, evaluator).score || 0;
-        }
-
-        getCategoryScore(category: Category, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return evaluation.score; }
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(category).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
-        }
-
-        getClusterScore(cluster: Cluster, evaluation: any) : number {
-            if (typeof evaluation?.score === 'number') { return evaluation.score; }
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria(cluster).map(criterium => this.getCriteriumScore(criterium, evaluation?.evaluator)).reduce(add, 0);
-        }
-
-        getRubricScore(evaluator: any) : number {
-            const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator).score;
-            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
-            if (!this.rubric) { return 0; }
-            return this.rubric.getAllCriteria().map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
-        }
-
-        getTreeNodeResult(treeNode: TreeNode) : TreeNodeResult {
-            const treeNodeResult = this.treeNodeResults.find((_ : TreeNodeResult) => _.treeNode === treeNode);
-            if (!treeNodeResult) { throw new Error(`No data found for: ${treeNode}`); }
-            return treeNodeResult;
-        }
-
-        getTreeNodeEvaluation(treeNode: TreeNode, evaluator: any) : TreeNodeEvaluation {
-            const evaluatorEvaluation = this.getTreeNodeResult(treeNode).evaluations.find((_ : EvaluatorEvaluation) => _.evaluator === evaluator);
-            if (!evaluatorEvaluation) { throw new Error(`No evaluation found for: ${treeNode} and evaluator: ${evaluator && evaluator.name}`); }
-            return evaluatorEvaluation.treeNodeEvaluation;
         }
     }
 </script>
@@ -279,11 +263,12 @@
 
     .rubric.mod-res {
         align-self: flex-start;
-        grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
+        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
-    .rubric-header.mod-res {
-        grid-column-start: 2;
+    .rubric.mod-res-w {
+        align-self: flex-start;
+        grid-template-columns: minmax(max-content, 23rem) 7rem minmax(calc(var(--num-cols) * 6rem), calc(var(--num-cols) * 12rem));
     }
 
     .rubric-header.mod-date {
@@ -292,6 +277,8 @@
     }
 
     .rubric-header-title.mod-res {
+        background-color: hsl(203, 38%, 53%);
+        box-shadow: none;
         text-align: right;
 
         &.mod-grades {
@@ -323,62 +310,29 @@
         }
     }
 
-    /* Todo */
-    .evaluator-table-header-date {
-        color: hsla(200, 30%, 40%, 1);
-        font-size: 1.2rem;
-        margin: 0 1em 0 .5em;
-        text-align: right;
-
-        &.mod-grades {
-            text-align: left;
-        }
-    }
-
     .treenode-title-header-wrap {
         align-items: center;
         display: flex;
-        grid-column-start: 1;
+        min-height: 2.7rem;
         position: relative;
 
-        &::before, & + .treenode-rubric-results::before {
+        &::before {
             bottom: -.5rem;
+            border-left: .5rem solid transparent;
             content: '';
+            left: -1rem;
             position: absolute;
             right: -.7rem;
             top: -.5rem;
-        }
-
-        &::before {
-            border-left: .5rem solid transparent;
-            left: -1rem;
             transition: 200ms border;
         }
 
-        & + .treenode-rubric-results::before {
-            left: 0;
-            z-index: 10;
+        &.is-highlighted::before {
+            background: hsla(230, 15%, 97%, 1);
         }
 
-        &.is-highlighted {
-            &::before, & + .treenode-rubric-results::before {
-                background: hsla(130, 6%, 91%, 1);
-                background: hsla(230, 15%, 91%, 1);
-            }
-
-            &::before {
-                border-color: hsla(215, 45%, 60%, 1);
-            }
-        }
-
-        &.is-selected {
-            &::before, & + .treenode-rubric-results::before {
-                background: hsla(235, 25%, 88%, 1);
-            }
-
-            &::before {
-                border-color: hsla(215, 45%, 55%, 1);
-            }
+        &.is-selected::before {
+            background: hsla(230, 15%, 94%, 1);
         }
     }
 
@@ -386,12 +340,70 @@
         flex: 1;
     }
 
+    .treenode-weight.mod-res-w {
+        padding-top: .25rem;
+        position: relative;
+        text-align: center;
+        z-index: 10;
+
+        &::before {
+            bottom: -.5rem;
+            content: '';
+            left: 0;
+            position: absolute;
+            right: -.7rem;
+            top: -.5rem;
+            z-index: -1;
+        }
+
+        &.is-highlighted::before {
+            background: hsla(230, 15%, 97%, 1);
+        }
+
+        &.is-selected::before {
+            background: hsla(230, 15%, 94%, 1);
+        }
+    }
+
     .treenode-rubric-results {
-        /*align-self: center;*/
         align-items: center;
         display: flex;
         position: relative;
         z-index: 10;
+
+        &.is-highlighted {
+            &::before, &::after {
+                background: hsla(230, 15%, 97%, 1);
+            }
+        }
+
+        &.is-selected {
+            &::before, &::after {
+                background: hsla(230, 15%, 94%, 1);
+            }
+
+            &::after {
+                border-right: .5rem solid hsla(215, 45%, 55%, 1);
+            }
+        }
+
+        &::before, &::after {
+            bottom: -.5rem;
+            content: '';
+            position: absolute;
+            top: -.5rem;
+        }
+
+        &::before {
+            right: -.7rem;
+            left: 0;
+            z-index: 10;
+        }
+
+        &::after {
+            right: -3rem;
+            width: 3rem;
+        }
     }
 
     .treenode-evaluations {
@@ -412,20 +424,17 @@
             margin-right: .7rem;
         }
 
-        &.is-selected {
-            box-shadow: 0 1px 2px hsla(236, 25%, 80%, 1);
-        }
-
-        &.is-highlighted {
-            box-shadow: 0 1px 2px hsla(190, 15%, 80%, 1);
-        }
-
         &.mod-grades {
             font-size: 1.2rem;
             overflow: hidden;
             text-align: left;
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            &::after {
+                content: '';
+                display: inline-block;
+            }
         }
 
         &.mod-rubric {
@@ -433,12 +442,22 @@
             color: #fff;
         }
 
-        &.mod-cluster {
+        &.mod-cluster.mod-grades {
+            background: #fff;
+            border: 1px solid hsla(190, 30%, 95%, 1);
+        }
+
+        &.mod-cluster:not(.mod-grades) {
             background: $score-dark;
             color: #fff;
         }
 
-        &.mod-category {
+        &.mod-category.mod-grades {
+            background: #fff;
+            border: 1px solid hsla(190, 30%, 95%, 1);
+        }
+
+        &.mod-category:not(.mod-grades) {
             background: $score-light;
         }
 
@@ -464,12 +483,90 @@
             background: hsla(213, 30%, 93%, 1);
         }
 
-        &.mod-hide {
-            background: none;
+        .fa-percent {
+            font-size: 1rem;
+            opacity: .75;
+        }
+
+        > span {
+            white-space: nowrap;
         }
     }
 
-    .total-title.mod-res {
-        grid-column-start: 1;
+    .total-title.mod-res-col {
+        grid-column: 1 / -2;
+    }
+</style>
+
+<style lang="scss" scoped>
+    .treenode-title-header .treenode-title {
+        max-width: 22.2rem;
+    }
+
+    .treenode-title-header-wrap.has-category::after {
+        position: absolute;
+        top: -0.5rem;
+        width: 1px;
+        bottom: -0.2rem;
+        left: 0.6rem;
+        background-color: var(--category-color);
+        content: '';
+        opacity: .5;
+    }
+
+    .treenode-title-header-wrap.mod-category::after {
+        top: .8rem;
+    }
+
+    .treenode-title-header-pre.mod-criterium::after {
+        border: 1px solid var(--category-color);
+        content: '';
+        border-radius: 50%;
+        height: 7px;
+        margin-top: 0.3rem;
+        width: 7px;
+        position: absolute;
+        left: 0.3rem;
+        background-color: white;
+    }
+
+    .criterium-title {
+        padding-left: .75rem;
+    }
+
+    .criterium-title.mod-no-category {
+        padding-left: .25rem;
+    }
+
+    .treenode-title-header-pre.mod-category::after {
+        border-radius: 50%;
+    }
+
+    .treenode-title-header-pre.mod-category.mod-no-color::after {
+        border: 1px solid #bbb;
+        background-color: #fff;
+        width: 1.1rem;
+        height: 1.1rem;
+        position: absolute;
+        left: .1rem;
+    }
+
+    .treenode-evaluation.mod-criterium {
+        background-color: #fafafa;
+        border: 1px solid #deebee;
+    }
+
+    .treenode-title.cluster-title {
+        margin-left: .25rem;
+    }
+
+    .treenode-feedback-icon.fa-info {
+        margin-right: .5rem;
+        font-size: 1.4rem;
+    }
+
+    .cluster-sep {
+        border-color: #deebee;
+        margin: 1rem 0 1.5rem;
     }
 </style>

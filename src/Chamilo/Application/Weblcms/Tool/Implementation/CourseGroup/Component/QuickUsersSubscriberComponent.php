@@ -45,10 +45,6 @@ class QuickUsersSubscriberComponent extends Manager
             if ($handler->handle($form, $this->getRequest()))
             {
                 $statuses = $handler->getStatuses();
-//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_USER_NOT_FOUND, null, $courseGroup);
-//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_USER_NOT_SUBSCRIBED_IN_COURSE, $this->getUser(), $courseGroup);
-//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_COURSE_GROUP_NOT_FOUND, $this->getUser());
-//                $statuses[] = new QuickUserSubscriberStatus('admin', QuickUserSubscriberStatus::STATUS_UNKNOWN_ERROR, $this->getUser(), $courseGroup);
 
                 return $this->getTwig()->render(
                     Manager::context() . ':UserSubscriberStatus.html.twig',

@@ -66,5 +66,7 @@
                 class="Chamilo\Libraries\Platform\Configuration\LocalSetting"
                 method="getInstance" />
         </service>
+
+        <service id="Chamilo\Libraries\Platform\IpResolver" autowire="true" />
     </services>
 </container>

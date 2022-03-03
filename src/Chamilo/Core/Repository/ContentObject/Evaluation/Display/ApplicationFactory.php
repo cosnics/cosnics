@@ -1,6 +1,7 @@
 <?php
 
 namespace Chamilo\Core\Repository\ContentObject\Evaluation\Display;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface;
 
 
@@ -17,6 +18,8 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
      */
     protected $evaluationServiceBridge;
 
+    protected int $viewEntityId;
+
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Evaluation\Display\Bridge\Interfaces\EvaluationServiceBridgeInterface $evaluationServiceBridge
      */
@@ -27,10 +30,23 @@ class ApplicationFactory extends \Chamilo\Libraries\Architecture\Factory\Applica
 
     public function getDefaultAction($context)
     {
-        if ($this->evaluationServiceBridge->canEditEvaluation()) {
-            return 'Browser';
+        if(!empty($this->viewEntityId))
+        {
+            $this->getRequest()->query->set(Manager::PARAM_ENTITY_ID, $this->viewEntityId);
+
+            return Manager::ACTION_ENTRY;
         }
+
+        if ($this->evaluationServiceBridge->canEditEvaluation()) {
+            return Manager::ACTION_BROWSE;
+        }
+
         return Manager::ACTION_ENTRY;
+    }
+
+    public function setViewEntity(int $entityId)
+    {
+        $this->viewEntityId = $entityId;
     }
 
 }

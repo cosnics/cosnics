@@ -26,7 +26,8 @@
             'updateChoiceURL': 'https://test',
             'updateLevelURL': 'https://test',
             'updateTreeNodeURL': 'https://test',
-            'updateRubricURL': 'https://test'
+            'updateRubricURL': 'https://test',
+            'resetRubricAbsoluteWeightsURL': 'https://test'
         };
         private store: any = store;
 

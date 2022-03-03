@@ -226,11 +226,18 @@ class RightsLocation extends NestedTreeNode
         return DataManager::delete_rights_location_entity_rights($this, null, null, $right_id);
     }
 
+    public function clearRightForEntity($right_id, $entity_id, $entity_type)
+    {
+        return DataManager::delete_rights_location_entity_rights($this, $entity_type, $entity_id, $right_id);
+    }
+
     /**
      * Retrieves the rights entities linked to this location
      *
      * @param int $right_id - [OPTIONAL] default null
-     * @return ResultSet
+     *
+     * @return array
+     * @throws \Exception
      */
     public function get_rights_entities($right_id = null)
     {

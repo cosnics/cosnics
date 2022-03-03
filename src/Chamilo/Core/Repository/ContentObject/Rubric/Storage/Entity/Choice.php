@@ -304,12 +304,23 @@ class Choice
      */
     public function calculateScore(): float
     {
-        if(!$this->getRubricData()->useScores())
+        if (!$this->getRubricData()->useScores())
         {
             return 0;
         }
 
-        if($this->hasFixedScore())
+        if ($this->getRubricData()->useRelativeWeights())
+        {
+            /*if ($this->getRubricData()->maxLevelScore() === 0)
+            {
+                return 0;
+            }
+
+            return 100 * ($this->getLevel()->getScore() / $this->getRubricData()->maxLevelScore());*/
+            return $this->getLevel()->getScore();
+        }
+
+        if ($this->hasFixedScore())
         {
             return $this->fixedScore;
         }

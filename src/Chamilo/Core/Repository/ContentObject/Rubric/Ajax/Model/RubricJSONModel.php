@@ -28,15 +28,24 @@ class RubricJSONModel
     protected $useScores = true;
 
     /**
+     * @var bool
+     *
+     * @Type("bool")
+     */
+    protected $useRelativeWeights = true;
+
+    /**
      * RubricJSONModel constructor.
      *
      * @param int $id
      * @param bool $useScores
+     * @param bool $useRelativeWeights
      */
-    public function __construct(int $id, bool $useScores)
+    public function __construct(int $id, bool $useScores, bool $useRelativeWeights)
     {
         $this->id = $id;
         $this->useScores = $useScores;
+        $this->useRelativeWeights = $useRelativeWeights;
     }
 
     /**
@@ -56,6 +65,14 @@ class RubricJSONModel
     }
 
     /**
+     * @return bool
+     */
+    public function useRelativeWeights(): ?bool
+    {
+        return $this->useRelativeWeights;
+    }
+
+    /**
      * @param RubricData $rubricData
      *
      * @return RubricData
@@ -63,6 +80,7 @@ class RubricJSONModel
     public function updateRubricData(RubricData $rubricData)
     {
         $rubricData->setUseScores($this->useScores());
+        $rubricData->setUseRelativeWeights($this->useRelativeWeights());
 
         return $rubricData;
     }
@@ -75,7 +93,7 @@ class RubricJSONModel
     public static function fromRubricData(RubricData $rubricData)
     {
         return new self(
-            $rubricData->getId(), $rubricData->useScores()
+            $rubricData->getId(), $rubricData->useScores(), $rubricData->useRelativeWeights()
         );
     }
 }

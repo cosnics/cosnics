@@ -267,7 +267,11 @@ class CourseGroupService
      *
      * @return CourseGroup
      */
-    public function createCourseGroup(string $courseGroupName, int $courseId, int $parentGroupId = 0)
+    public function createCourseGroup(
+        string $courseGroupName, int $courseId, int $parentGroupId = 0,
+        string $description = '', int $maxMembers = 0, bool $selfRegistrationAllowed = false,
+        bool $selfUnregistrationAllowed = false
+    )
     {
         $courseGroup = new CourseGroup();
         $courseGroup->set_course_code($courseId);
@@ -279,6 +283,10 @@ class CourseGroupService
 
         $courseGroup->set_parent_id($parentGroupId);
         $courseGroup->set_name($courseGroupName);
+        $courseGroup->set_description($description);
+        $courseGroup->set_max_number_of_members($maxMembers);
+        $courseGroup->set_self_registration_allowed($selfRegistrationAllowed);
+        $courseGroup->set_self_unregistration_allowed($selfUnregistrationAllowed);
 
         if (!$this->courseGroupRepository->createCourseGroup($courseGroup))
         {
@@ -303,5 +311,25 @@ class CourseGroupService
         }
 
         return $courseGroup;
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroup[]
+     */
+    public function getDirectChildrenFromGroup(CourseGroup $courseGroup)
+    {
+        return $courseGroup->get_children(false)->as_array();
+    }
+
+    /**
+     * @param CourseGroup $courseGroup
+     *
+     * @return CourseGroup[]
+     */
+    public function getNestedChildrenFromGroup(CourseGroup $courseGroup)
+    {
+        return $courseGroup->get_children(true)->as_array();
     }
 }

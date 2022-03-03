@@ -10,6 +10,7 @@ use Chamilo\Core\Repository\Viewer\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
+use Chamilo\Libraries\Platform\IpResolver;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -60,7 +61,7 @@ class CreatorComponent extends Manager
                 $this->getEntityIdentifier(),
                 $this->getUser()->getId(),
                 $objects,
-                $this->getRequest()->server->get('REMOTE_ADDR')
+                $this->getIpResolver()->resolveIpFromRequest($this->getRequest())
             );
 
             if ($entry instanceof Entry)
@@ -220,5 +221,13 @@ class CreatorComponent extends Manager
     protected function getTemplateService()
     {
         return $this->getService(TemplateService::class);
+    }
+
+    /**
+     * @return IpResolver
+     */
+    protected function getIpResolver()
+    {
+        return $this->getService(IpResolver::class);
     }
 }

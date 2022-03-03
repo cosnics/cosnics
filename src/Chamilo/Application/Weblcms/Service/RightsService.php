@@ -3,11 +3,14 @@
 namespace Chamilo\Application\Weblcms\Service;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Manager;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\CourseSettingsServiceInterface;
 use Chamilo\Application\Weblcms\Service\Interfaces\PublicationServiceInterface;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory;
+use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocation;
+use Chamilo\Application\Weblcms\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Application\Weblcms\Service\Interfaces\RightsServiceInterface;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
@@ -240,17 +243,17 @@ class RightsService implements RightsServiceInterface
      */
     public function canUserEditPublication(User $user, ContentObjectPublication $publication, Course $course)
     {
-        if($user->is_platform_admin())
+        if ($user->is_platform_admin())
         {
             return true;
         }
 
-        if($this->courseService->isUserTeacherInCourse($user, $course))
+        if ($this->courseService->isUserTeacherInCourse($user, $course))
         {
             return true;
         }
 
-        if($publication->is_identified())
+        if ($publication->is_identified())
         {
             return $this->weblcmsRights->is_allowed_in_courses_subtree(
                 WeblcmsRights::EDIT_RIGHT,
@@ -394,11 +397,78 @@ class RightsService implements RightsServiceInterface
         );
     }
 
+    public function disableInheritanceForContentObjectPublication(ContentObjectPublication $contentObjectPublication)
+    {
+        $location = $this->getLocationForPublication($contentObjectPublication);
+        $location->disinherit();
+        $location->update();
+    }
+
+    public function setRightForPublication(
+        ContentObjectPublication $contentObjectPublication, int $rightId, array $entities = []
+    )
+    {
+        $location = $this->getLocationForPublication($contentObjectPublication);
+        $location->clear_right($rightId);
+
+        foreach ($entities as $entityType => $entityIds)
+        {
+            foreach ($entityIds as $entityId)
+            {
+                $this->weblcmsRights->invert_location_entity_right(
+                    $rightId, $entityId, $entityType, $location->getId()
+                );
+            }
+        }
+    }
+
+    public function invertRightForPublicationAndEntity(
+        ContentObjectPublication $contentObjectPublication, int $rightId, int $entityId, int $entityType
+    )
+    {
+        $location = $this->getLocationForPublication($contentObjectPublication);
+        $this->weblcmsRights->invert_location_entity_right($rightId, $entityId, $entityType, $location->getId());
+    }
+
+    /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int|null $rightId
+     *
+     * @return RightsLocationEntityRight[]
+     *
+     * @throws \Exception
+     */
+    public function getRightEntitiesForPublication(
+        ContentObjectPublication $contentObjectPublication, int $rightId = null
+    )
+    {
+        $location = $this->getLocationForPublication($contentObjectPublication);
+
+        return $location->get_rights_entities($rightId);
+    }
+
     /**
      * **************************************************************************************************************
      * Rights Calculation Functionality *
      * **************************************************************************************************************
      */
+
+    protected function getLocationForPublication(ContentObjectPublication $contentObjectPublication): RightsLocation
+    {
+        $location = $this->weblcmsRights->get_weblcms_location_by_identifier_from_courses_subtree(
+            WeblcmsRights::TYPE_PUBLICATION, $contentObjectPublication->getId(),
+            $contentObjectPublication->get_course_id()
+        );
+
+        if (!$location instanceof RightsLocation)
+        {
+            throw new \RuntimeException(
+                'Rights location not found for publication ' . $contentObjectPublication->getId()
+            );
+        }
+
+        return $location;
+    }
 
     /**
      * Checks if a user can view a publication in a given course

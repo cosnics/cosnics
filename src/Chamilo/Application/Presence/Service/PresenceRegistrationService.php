@@ -64,8 +64,6 @@ class PresenceRegistrationService
      * @return array
      * @throws \Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException
      * @throws NotAllowedException
-     *
-     * @TODO create a system to validate the security of the parameters so the presence list is protected for unauthorized access?
      */
     public function registerUserInPresence(
         User $user, int $publicationId, int $treeNodeId = null, string $securityKey = ''
@@ -103,7 +101,7 @@ class PresenceRegistrationService
         $lastPeriod = array_pop($periods);
 
         $result = $this->resultEntryService->getPresenceResultEntry($lastPeriod['id'], $user->getId());
-        if (!$result instanceof PresenceResultEntry)
+        if (!$result instanceof PresenceResultEntry || $result->getChoiceId() != Presence::STATUS_PRESENT)
         {
             $result = $this->resultEntryService->createOrUpdatePresenceResultEntry(
                 $presence, $lastPeriod['id'], $user->getId(), Presence::STATUS_PRESENT

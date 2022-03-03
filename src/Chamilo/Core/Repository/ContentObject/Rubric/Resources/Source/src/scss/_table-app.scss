@@ -3,8 +3,20 @@
     outline-width: thin;
   }
 
-  #app.mod-sep {
-    /*border-top: 1px solid #d6d6d6;*/
+  .rb-col-start-1 {
+    grid-column-start: 1;
+  }
+
+  .rb-col-start-2 {
+    grid-column-start: 2;
+  }
+
+  .rb-col-start-3 {
+    grid-column-start: 3;
+  }
+
+  .rb-col-span-full {
+    grid-column: 1 / -1;
   }
 
   .rubric {
@@ -20,7 +32,6 @@
     align-items: center;
     background: #fff;
     display: flex;
-    grid-column-start: 1;
     height: 100%;
     list-style: none;
     margin: 0;
@@ -28,6 +39,25 @@
     position: sticky;
     top: 0;
     z-index: 30;
+  }
+
+  .treenode-weight-header {
+    align-self: start;
+    background: white;
+    color: rgb(95, 146, 157);
+    display: flex;
+    padding: 0;
+    position: sticky;
+    text-align: center;
+    top: 0;
+    z-index: 30;
+
+    > span {
+      flex: 1;
+      font-weight: 600;
+      padding: 0.7rem;
+      text-align: center;
+    }
   }
 
   .rubric-header {
@@ -67,10 +97,6 @@
 
   .treenode-title-header {
     display: flex;
-
-    &.mod-responsive {
-      grid-column-start: 1;
-    }
   }
 
   .treenode-title-header-pre {
@@ -85,6 +111,10 @@
       content: '';
       height: 1.3rem;
       margin-top: .15rem;
+      width: 1.3rem;
+    }
+
+    &.mod-criterium {
       width: 1.3rem;
     }
 
@@ -130,9 +160,14 @@
     height: 1px;
     margin: .5rem 0 .5rem 1.8rem;
 
-    &.mod-grades:last-child {
+    &.mod-hide-last:last-child {
       display: none;
     }
+  }
+
+  .category-sep {
+    grid-column: 1 / -1;
+    height: .75rem;
   }
 
   .treenode-rubric-input {
@@ -176,6 +211,7 @@
     border-bottom-color: $score-light;
     border-radius: $border-radius;
     font-size: 1.8rem;
+    height: 2.7rem;
     text-align: center;
     transition: 200ms background;
     width: 100%;
@@ -189,22 +225,49 @@
     align-self: center;
     color: darken($score-dark, 20%);
     font-weight: 700;
-    grid-column-start: 2;
     text-align: right;
   }
 
   @media only screen and (min-width: 900px) {
-    .rubric-header {
+    .rb-lg\:col-start-1 {
+      grid-column-start: 1;
+    }
+
+    .rb-lg\:col-start-2 {
       grid-column-start: 2;
+    }
+
+    .rb-lg\:col-start-3 {
+      grid-column-start: 3;
+    }
+
+    .rb-lg\:col-span-full {
+      grid-column: 1 / -1;
     }
 
     .treenode-title-header {
       cursor: default;
     }
+
+    .treenode-title-header .treenode-title {
+      max-width: 20.2rem;
+    }
   }
 
   @media only screen and (max-width: 899px) {
-    .treenode-title-header.mod-responsive {
+    .rb-md-max\:col-start-1 {
+      grid-column-start: 1;
+    }
+
+    .rb-md-max\:col-start-2 {
+      grid-column-start: 2;
+    }
+
+    .rb-md-max\:col-start-3 {
+      grid-column-start: 3;
+    }
+
+    .rb-md-max\:col-span-full {
       grid-column: 1 / -1;
     }
 
@@ -213,24 +276,51 @@
     }
 
     .total-title {
-      grid-column-start: 1;
       margin-left: 1.8rem;
     }
   }
 
   @media only screen and (min-width: 680px) and (max-width: 899px) {
+    .rb-md\:col-start-1 {
+      grid-column-start: 1;
+    }
+
+    .rb-md\:col-start-2 {
+      grid-column-start: 2;
+    }
+
+    .rb-md\:col-start-3 {
+      grid-column-start: 3;
+    }
+
+    .rb-md\:col-span-full {
+      grid-column: 1 / -1;
+    }
+
     .treenode-title-header.mod-responsive {
       max-width: 75ch; // todo: preserve max-width on size below 680px;
     }
   }
 
   @media only screen and (max-width: 679px) {
-    .rubric-header.mod-responsive {
-      display: none;
+    .rb-sm\:col-start-1 {
+      grid-column-start: 1;
     }
 
-    .treenode-rubric-input {
+    .rb-sm\:col-start-2 {
+      grid-column-start: 2;
+    }
+
+    .rb-sm\:col-start-3 {
+      grid-column-start: 3;
+    }
+
+    .rb-sm\:col-span-full {
       grid-column: 1 / -1;
+    }
+
+    .rubric-header.mod-responsive {
+      display: none;
     }
 
     .treenode-choices {

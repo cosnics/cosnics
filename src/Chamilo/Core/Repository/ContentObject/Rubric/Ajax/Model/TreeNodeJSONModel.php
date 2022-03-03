@@ -72,6 +72,13 @@ class TreeNodeJSONModel
     protected $weight = 100;
 
     /**
+     * @var int
+     *
+     * @Type("integer")
+     */
+    protected $rel_weight = null;
+
+    /**
      * TreeNodeJSONModel constructor.
      *
      * @param int $id
@@ -80,11 +87,12 @@ class TreeNodeJSONModel
      * @param string $type
      * @param string $color
      * @param int $weight
+     * @param int $rel_weight
      *
      * @throws \Exception
      */
     public function __construct(
-        int $id, string $title, string $type, int $parentId = null, string $color = null, int $weight = null
+        int $id, string $title, string $type, int $parentId = null, string $color = null, int $weight = null, int $rel_weight = null
     )
     {
         $this->id = $id;
@@ -93,6 +101,7 @@ class TreeNodeJSONModel
         $this->type = $type;
         $this->color = $color;
         $this->weight = $weight;
+        $this->rel_weight = $rel_weight;
 
         $this->validate();
     }
@@ -146,6 +155,14 @@ class TreeNodeJSONModel
     }
 
     /**
+     * @return int
+     */
+    public function getRelativeWeight(): ?int
+    {
+        return $this->rel_weight;
+    }
+
+    /**
      * @throws \Exception
      */
     public function validate()
@@ -157,6 +174,11 @@ class TreeNodeJSONModel
         }
 
         if (!empty($this->weight) && ($this->weight < 0 || $this->weight > 100))
+        {
+            throw new OutOfRangeException('Weight must be between 0 and 100');
+        }
+
+        if (!empty($this->rel_weight) && ($this->rel_weight < 0 || $this->rel_weight > 100))
         {
             throw new OutOfRangeException('Weight must be between 0 and 100');
         }

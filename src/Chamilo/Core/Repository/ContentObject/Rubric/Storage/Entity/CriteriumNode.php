@@ -24,6 +24,13 @@ class CriteriumNode extends TreeNode
     protected $weight = 100;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="rel_weight", type="integer")
+     */
+    protected $rel_weight = null;
+
+    /**
      * @var Choice[] | ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="Choice", mappedBy="criterium")
@@ -61,12 +68,37 @@ class CriteriumNode extends TreeNode
      */
     public function setWeight(int $weight): CriteriumNode
     {
-        if($weight < 0 || $weight > 100)
+        if ($weight < 0 || $weight > 100)
         {
             throw new OutOfRangeException('Weight must be between 0 and 100');
         }
 
         $this->weight = $weight;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRelativeWeight(): ?int
+    {
+        return $this->rel_weight;
+    }
+
+    /**
+     * @param ?int $weight
+     *
+     * @return CriteriumNode
+     */
+    public function setRelativeWeight(?int $weight): CriteriumNode
+    {
+        if ($weight < 0 || $weight > 100)
+        {
+            throw new OutOfRangeException('Weight must be between 0 and 100');
+        }
+
+        $this->rel_weight = $weight;
 
         return $this;
     }
@@ -163,7 +195,7 @@ class CriteriumNode extends TreeNode
     {
         return new TreeNodeJSONModel(
             $this->getId(), $this->getTitle(), TreeNodeJSONModel::TYPE_CRITERIUM, $this->getParentNodeId(),
-            null, $this->getWeight()
+            null, $this->getWeight(), $this->getRelativeWeight()
         );
     }
 
@@ -181,6 +213,7 @@ class CriteriumNode extends TreeNode
 
         parent::updateFromJSONModel($treeNodeJSONModel);
         $this->setWeight($treeNodeJSONModel->getWeight());
+        $this->setRelativeWeight($treeNodeJSONModel->getRelativeWeight());
 
         return $this;
     }

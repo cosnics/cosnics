@@ -10,7 +10,11 @@
         "error-timeout": "The server is taking too long to respond. Possibly your last change(s) haven't been saved correctly. Please refresh the page and try again.",
         "error-unknown": "An unknown error happened. Possibly your last change(s) haven't been saved. Please refresh the page and try again.",
         "preview": "Preview",
-        "use-scores": "Use Scores"
+        "use-scores": "Use Scores",
+        "weights-system-msg": "<p>Beste Gebruiker</p><p>We ontwikkelden een nieuwe manier van werken met de gewichten binnen een rubric. Lees onderstaande informatie en maak je keuze.</p><table style=\"border: 1px solid #cbcbcb;margin-bottom: 16px;\"><thead style=\"border-bottom: 1px solid #cbcbcb\"><tr><th style=\"padding: .5rem\">Oude gewichtensysteem</th><th style=\"padding: .5rem;border-left: 1px solid #cbcbcb;\">Nieuwe gewichtensysteem</th></tr></thead><tbody><tr><td style=\"padding: .5rem;vertical-align:top;\"><p>Je gebruikt een gewicht om een bepaald criterium een andere score te geven dan de standaardscore.</p><br><p>Bijvoorbeeld:</p></td><td style=\"padding: .5rem;vertical-align:top;border-left: 1px solid #cbcbcb;\"><p>Je gebruikt een gewicht om aan te duiden hoeveel een bepaald criterium meetelt op het eindtotaal.</p><br><p>Bijvoorbeeld: Criterium A telt mee voor 50% van het eindtotaal.</p></td></tr></tbody></table><p>Het nieuwe systeem werkt niet langer met absolute scores maar met procentuele scores waardoor de berekening van de scores een pak eenvoudiger wordt.</p><img style=\"width:100%;margin: 0 0 10px;\" src=\"{imgurl}\" alt=\"Nieuwe gewichtensysteem\" /><p>Omdat je in deze rubric reeds gebruik maakt van het oude systeem van gewichten kan je ervoor kiezen om het oude systeem te blijven gebruiken of over te stappen op het nieuwe systeem. We raden je aan om gebruik te maken van het nieuwe systeem omdat dit systeem eenvoudiger is in gebruik.</p><p>Belangrijk!<br>- Wanneer je hier kiest voor het nieuwe gewichtensysteem dien je de gewichten opnieuw in te stellen.<br>- Bij het maken van een nieuwe rubric is er geen mogelijkheid om het oude gewichtensysteem te gebruiken en zal je dus automatisch in het nieuwe systeem werken.</p><p>Maak hier je keuze:</p>",
+        "move-new": "Move to new weights system",
+        "keep-old": "Keep old system",
+        "new-weights-system": "Attention! New weights system!"
     },
     "fr": {
         "builder": "Construire",
@@ -29,12 +33,18 @@
         "error-timeout": "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de pagina te herladen en opnieuw te proberen.",
         "error-unknown": "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de pagina te herladen en opnieuw te proberen.",
         "preview": "Preview",
-        "use-scores": "Gebruik Scores"
+        "use-scores": "Gebruik Scores",
+        "move-new": "Overstappen naar het nieuwe systeem",
+        "keep-old": "Bij het oude systeem blijven",
+        "new-weights-system": "Opgelet! Nieuw gewichtensysteem!"
     }
 }
 </i18n>
 <template>
     <div id="app" :class="{'builder-app': $route.name === 'Builder', 'builder-app-levels': $route.name === 'BuilderLevels'}">
+        <div v-if="rubric && rubric.hasAbsoluteWeights" class="alert-new-weights-system">
+            <a href="#" @click="showResettingWeights()"><i class="fa fa-exclamation-circle" aria-hidden="true"></i>{{ $t('new-weights-system') }}</a>
+        </div>
         <div class="app-header">
             <nav role="navigation">
                 <ul class="app-header-nav">
@@ -44,20 +54,26 @@
                     <li class="app-nav-item"><router-link class="app-link" :to="{ name: 'BuilderFull' }"><span class="link-text" tabindex="-1">{{ $t('level-descriptions') }}</span></router-link></li>
                 </ul>
             </nav>
-            <!--<ul class="app-header-tools" v-if="rubric && $route.name !== 'BuilderPreview'" :class="{'builder-app-full-view': $route.name === 'BuilderFull', 'mod-hide': $route.name === 'Builder' && !selectedCriterium}">
-                <li class="app-tool-item"><button class="btn-check" :aria-label="$t('use-scores')" :class="{ checked: rubric.useScores }" @click.prevent="toggleUseScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('use-scores') }}</span></button></li>
-            </ul>-->
-            <save-area v-if="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
+            <save-area :show-save-state="$route.name !== 'BuilderPreview'" :data-connector="dataConnector" :error="errorCode ? $t(`error-${errorCode}`) : null"></save-area>
         </div>
-        <div class="rubrics" :class="{'builder-app-full-view': $route.name === 'BuilderFull'}">
-            <link rel="stylesheet"
-                  href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <div class="rubrics" :class="{'mod-mg': $route.name === 'Builder' || $route.name === 'BuilderLevels' }">
             <div v-if="rubric" :class="{ 'rubrics-wrapper': $route.name === 'Builder', 'rubrics-wrapper-levels': $route.name === 'BuilderLevels' }">
-                <router-view :rubric="rubric" :data-connector="dataConnector" :selected-criterium="selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
+                <router-view :rubric="rubric" :data-connector="$route.name !== 'BuilderPreview' && dataConnector" :selected-criterium="$route.name === 'Builder' && selectedCriterium" :ui-state="($route.name === 'Builder' || $route.name === 'BuilderPreview') ? uiState : null" @criterium-selected="selectCriterium"></router-view>
             </div>
             <div v-else class="app-container-loading">
                 <p>Loading Rubrics...</p>
                 <div class="lds-ellipsis" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+        <div class="modal-bg" v-if="rubric && rubric.hasAbsoluteWeights && showResetWeightsDialog" @click.stop="showResetWeightsDialog = false">
+            <div class="modal-content" @click.stop="">
+                <div class="modal-content-wrapper">
+                    <div class="modal-content-msg" v-html="$t('weights-system-msg', { imgurl: newWeightsImageURL })"></div>
+                    <div>
+                        <button class="btn-strong mod-confirm" @click.stop="resetAbsoluteWeights">{{ $t('move-new') }}</button>
+                        <button class="btn-strong" @click.stop="showResetWeightsDialog = false">{{ $t('keep-old') }}</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -84,11 +100,16 @@
         private dataConnector: DataConnector|null = null;
         private rubric: Rubric|null = null;
         private errorCode: string|null = null;
+        private showResetWeightsDialog = false;
 
         @Prop({type: Object, default: null}) readonly rubricData!: object|null;
         @Prop({type: Object, default: null}) readonly apiConfig!: object|null;
         @Prop({type: Number, default: null}) readonly version!: number|null;
         @Prop({type: Object}) readonly uiState!: any;
+
+        get newWeightsImageURL() {
+            return (window as any).newWeightsImageURL as string || '';
+        }
 
         get showSplitView() {
             return this.uiState.showSplitView;
@@ -109,6 +130,18 @@
         selectCriterium(criterium: Criterium|null) {
             this.selectedCriterium = criterium;
             this.uiState.selectedCriterium = criterium ? criterium.id : '';
+        }
+
+        showResettingWeights() {
+            if (this.$router.currentRoute.path !== '/levels') {
+                this.$router.push({ path: '/levels' });
+            }
+            this.showResetWeightsDialog = true;
+        }
+
+        resetAbsoluteWeights() {
+            this.dataConnector?.resetRubricAbsoluteWeights();
+            this.showResetWeightsDialog = false;
         }
 
         get content() {
@@ -136,6 +169,9 @@
                 }
                 this.dataConnector = new DataConnector(this.rubric, this.apiConfig as APIConfiguration, (this.rubricData as any).rubric_data_id, this.version);
                 this.dataConnector.addErrorListener(this as DataConnectorErrorListener);
+                if (this.rubric.useScores && !this.rubric.useRelativeWeights) {
+                    this.rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(this.rubric);
+                }
             }
         }
 
@@ -403,6 +439,11 @@
 
 
     /** Rubric Editor **/
+
+    #app.builder-app {
+        display: flex;
+        flex-direction: column;
+    }
 
     .rubrics {
         * {
@@ -708,6 +749,7 @@
         label {
             font-size: 1.3rem;
             font-weight: 400;
+            margin-right: .75rem;
         }
 
         .input-detail {
@@ -867,7 +909,7 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .rubrics:not(.builder-app-full-view) {
+        .rubrics.mod-mg {
             margin: 0 1.5em;
         }
 
@@ -1179,6 +1221,7 @@
         }
 
         .rubric-actions {
+            align-self: baseline;
             position: relative;
 
             &.is-open {
@@ -1281,7 +1324,7 @@
         }
 
         .clusters-view {
-            align-items: baseline;
+            align-items: center;
             border-bottom: 1px solid transparent;
             display: flex;
             margin-left: -1em;
@@ -1304,10 +1347,11 @@
         }
 
         .b-clusters {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(var(--num-clusters), minmax(0, 180px));
             margin-bottom: -1px;
             margin-left: 1em;
-            max-width: calc(100% - 23em);
+            /*max-width: calc(100% - 23em);*/
 
             .name-input {
                 position: fixed;
@@ -1317,7 +1361,7 @@
         .b-cluster-list-item {
             /* A border is needed here so the ghost item can show the dotted border without flicking the content below */
             border: 1px solid transparent;
-            flex: 1;
+            /*flex: 1;*/
             margin-right: .65em;
             overflow: hidden;
 
@@ -1693,5 +1737,53 @@
                 display: none;
             }
         }
+    }
+</style>
+
+<style lang="scss" scoped>
+    .alert-new-weights-system {
+        background-color: hsla(15, 65%, 60%, .08);
+        border: 1px solid #f2e3e3;
+        border-radius: 0;
+        margin-bottom: 0;
+        margin-left: 10px;
+        padding: 0.25rem 15px;
+
+        > a {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+
+            > .fa-exclamation-circle {
+                color: #ff8f03;
+                font-size: 1.4rem;
+                margin-right: .35rem;
+            }
+        }
+    }
+
+    .modal-bg {
+        z-index: 1000;
+    }
+
+    .modal-content {
+        height: auto;
+        padding: 0;
+        width: 640px;
+    }
+
+    .modal-content-wrapper {
+        max-height: 80vh;
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .modal-content-msg {
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    .btn-strong.mod-confirm {
+        margin-bottom: .5rem;
     }
 </style>

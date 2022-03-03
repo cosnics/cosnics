@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Common\Rendition\ContentObjectRenditionImplementatio
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Table\Doubles\DoublesTable;
+use Chamilo\Core\Repository\Workspace\Service\RightsService;
+use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
@@ -46,6 +48,16 @@ class DoublesViewerComponent extends Manager implements TableSupport
         if (isset($id))
         {
             $this->content_object = $content_object = DataManager::retrieve_by_id(ContentObject::class_name(), $id);
+
+            if (!RightsService::getInstance()->canViewContentObject(
+                $this->getUser(),
+                $content_object,
+                $this->getWorkspace()
+            ))
+            {
+                throw new NotAllowedException();
+            }
+
             $html[] = ContentObjectRenditionImplementation::launch(
                 $content_object,
                 ContentObjectRendition::FORMAT_HTML,
@@ -80,7 +92,7 @@ class DoublesViewerComponent extends Manager implements TableSupport
         $conditions = array();
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable($this->get_user_id()));
+            new StaticConditionVariable($this->getUser()->getId()));
         $conditions[] = new NotCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),

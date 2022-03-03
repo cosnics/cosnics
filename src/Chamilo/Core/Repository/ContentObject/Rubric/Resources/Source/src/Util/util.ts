@@ -10,6 +10,7 @@ export function convertRubricData(d: any) {
         "rubric_data_id": d.id,
         "id": String(d.root_node.id),
         "useScores": d.use_scores,
+        "useRelativeWeights": d.use_relative_weights,
         "title": d.root_node.title,
         "choices": [],
         "criteria": []
@@ -44,7 +45,8 @@ export function convertRubricData(d: any) {
                 const criterium = {
                     "id": String(c.id),
                     "title": c.title,
-                    "weight": c.weight
+                    "weight": c.weight,
+                    "rel_weight": c.rel_weight
                 };
                 const choices = c.choices || [];
                 choices.sort(sortFn);

@@ -2,58 +2,71 @@
 {
     "en": {
         "formatting": "Formatting",
-        "points": "points"
+        "points": "points",
+        "weight": "Weight"
     },
     "fr": {
         "formatting": "Mise en forme",
-        "points": "points"
+        "points": "points",
+        "weight": "Poids"
     },
     "nl": {
         "formatting": "Opmaakhulp",
-        "points": "punten"
+        "points": "punten",
+        "weight": "Gewicht"
     }
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :style="{'--num-cols': rubric.levels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" :style="{'--num-cols': rubric.levels.length}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <ul class="rubric-header mod-responsive">
-            <li class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</li>
-        </ul>
-        <template v-for="cluster in rubric.clusters">
-            <div class="treenode-title-header mod-responsive">
+        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+            <span>{{ $t('weight') }}</span>
+        </div>
+        <div class="rubric-header mod-responsive">
+            <div class="rubric-header-title" v-for="level in rubric.levels">{{ level.title }}</div>
+        </div>
+        <template v-for="(cluster, index) in rubric.clusters">
+            <div class="treenode-title-header mod-responsive rb-lg:col-start-1">
                 <div class="treenode-title-header-pre"></div>
                 <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
             </div>
             <template v-for="category in cluster.categories">
-                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
+                <div v-if="category.title && rubric.getAllCriteria(category).length > 0" class="treenode-title-header mod-responsive rb-lg:col-start-1" :style="`--category-color: ${ category.title && category.color ? category.color : 'transparent' }`">
                     <div class="treenode-title-header-pre mod-category"></div>
                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                 </div>
                 <template v-for="{criterium, ext} in getCriteriumRowsData(category)">
-                    <div class="treenode-title-header mod-responsive mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
+                    <div class="treenode-title-header mod-responsive rb-lg:col-start-1 mod-bf" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" v-html="criterium.toMarkdown()"></h3>
                     </div>
+                    <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-pad rb-md:col-span-full">
+                        <span class="treenode-weight-title">{{ $t('weight') }}: </span>
+                        <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        <input v-else type="number" v-model.number="criterium.weight" class="input-detail abs-weight" @input="onWeightChange($event, criterium)" min="0" max="100" />
+                        <span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                     <div class="treenode-rubric-input">
                         <div class="treenode-choices">
                             <div class="treenode-choice" v-for="choice in ext.choices">
                                 <div class="treenode-level mod-bf">
                                     <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                    <span v-if="useScores" :aria-label="`${ choice.score } ${ $t('points') }`">{{ choice.score }}</span>
+                                    <span v-if="useScores">{{ getChoiceScore(choice)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                                 </div>
-                                <div class="treenode-level-description-input" @click="focusTextField">
-                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)"></feedback-field>
+                                <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
+                                    <feedback-field :choice="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)">
+                                        <span v-if="useScores && rubric.hasAbsoluteWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score|formatNum }}<span class="sr-only">{{ $t('points') }}</span></span>
+                                    </feedback-field>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </template>
             </template>
-            <div class="cluster-sep mod-bf"></div>
+            <div class="cluster-sep" v-if="index < rubric.clusters.length - 1"></div>
         </template>
     </div>
 </template>
@@ -84,6 +97,11 @@
         components: {
             FeedbackField, FormattingHelp
         },
+        filters: {
+            formatNum: function (v: number) {
+                return v.toLocaleString(undefined, {maximumFractionDigits: 2});
+            }
+        }
     })
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
@@ -94,6 +112,7 @@
         constructor() {
             super();
             this.onResize = debounce(this.onResize, 200);
+            this.onWeightChange = debounce(this.onWeightChange, 750);
         }
 
         updateHeight(e: InputEvent) {
@@ -110,6 +129,27 @@
             if (elem.target.className === 'default-feedback') {
                 elem.target.querySelector('.ta-default-feedback').focus();
             }
+        }
+
+        onWeightChange(event: InputEvent, criterium: Criterium) {
+            const el = event.target as HTMLInputElement;
+            if (!el.checkValidity()) {
+                el.reportValidity();
+                return;
+            }
+            const rubric = this.rubric;
+            if (rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
+                criterium.rel_weight = null;
+            } else if (!rubric.useRelativeWeights) {
+                const criteriumExt = this.getCriteriumData(criterium);
+                criteriumExt.choices = [];
+                rubric.levels.forEach(level => {
+                    const choice = rubric.getChoice(criterium, level);
+                    const score = rubric.getChoiceScore(criterium, level);
+                    criteriumExt.choices.push({ level, choice, score});
+                });
+            }
+            this.dataConnector?.updateTreeNode(criterium);
         }
 
         get useScores() {
@@ -143,6 +183,10 @@
                 });
                 this.criteriaData.push(criteriumExt);
             });
+        }
+
+        getChoiceScore(choice: any): number {
+            return this.rubric.useRelativeWeights ? choice.level.score : choice.score;
         }
 
         onResize() {
@@ -181,8 +225,62 @@
 </script>
 
 <style lang="scss">
+    .input-detail.abs-weight {
+        text-align: right;
+    }
+
+    .input-detail.abs-weight, .input-detail.rel-weight {
+        width: 3.5em;
+
+        -moz-appearance: textfield;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        &.is-set:not(:focus) {
+            background-color: #d3eee0;
+            color: #4a4a4a;
+        }
+
+        &:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.08), 0 0 8px rgba(102, 175, 233, 0.6)
+            /*background-color: #edf8f2;*/
+        }
+
+        &:focus::placeholder {
+            opacity: 0.5;
+        }
+
+        &.is-error {
+            border-color: #ff8080;
+        }
+
+        &.is-error::placeholder {
+            color: #c94949;
+        }
+
+        &.is-set.is-error {
+            background-color: #feecea;
+        }
+
+        + .fa-percent {
+            color: rgb(129, 169, 177);
+            font-size: 1rem;
+            margin: 0 .15rem;
+        }
+    }
+
     .rubric.mod-bf {
-        grid-template-columns: minmax(20rem, 30rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+        grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
+    }
+
+    .rubric.mod-bf.mod-weight {
+        grid-template-columns: minmax(max-content, 16.5rem) 6.7rem minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
     }
 
     .formatting-help.mod-bf {
@@ -211,20 +309,26 @@
     }
 
     .treenode-level-description-input {
-        background-color: #fff;
-        border: 1px solid #ccc;
+        background-color: #fafafa;
+        border: 1px solid #d4d4d4;
         border-radius: $border-radius;
         flex: 1;
         line-height: 1.8rem;
         padding: 0;
 
-        &:hover, &:focus-within {
-            border: 1px solid $score-dark;
+        &:hover {
+            background-color: #fff;
+        }
+
+        &:focus-within {
+            background-color: #fff;
+            border: 1px solid #66afe9;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(102, 175, 233, .6);
         }
     }
 
     .ta-default-feedback {
-        /*background: transparent;*/
+        background: transparent;
         border: none;
         overflow: hidden;
         padding: .3em;
@@ -236,10 +340,6 @@
         }
     }
 
-    .cluster-sep.mod-bf:last-child {
-        display: none;
-    }
-
     @media only screen and (min-width: 900px) {
         .treenode-title-header.mod-bf {
             padding-top: .6rem;
@@ -247,13 +347,34 @@
     }
 
     @media only screen and (max-width: 899px) {
-        .rubric.mod-bf {
+        .rubric.mod-bf, .rubric.mod-bf.mod-weight {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem));
+        }
+
+        .treenode-weight.mod-pad {
+            padding-left: 1.8rem;
         }
     }
 
     @media only screen and (min-width: 680px) {
         .treenode-level.mod-bf {
+            display: none;
+        }
+    }
+</style>
+
+<style scoped>
+    .treenode-weight-header > span {
+        padding: 0.7rem 0;
+        text-align: left;
+    }
+
+    .treenode-level-description-input.mod-abs-weights >>> .feedback-markup-preview {
+        overflow: hidden;
+    }
+
+    @media only screen and (max-width: 899px) {
+        .treenode-weight-header {
             display: none;
         }
     }

@@ -77,9 +77,22 @@ export default class DataConnector {
     updateRubric(rubric: Rubric) {
         this.addToQueue(async () => {
             const parameters = {
-                'rubricData': JSON.stringify({ 'use_scores': rubric.useScores })
+                'rubricData': JSON.stringify({ 'use_scores': rubric.useScores, 'use_relative_weights': rubric.useRelativeWeights })
             };
             await this.executeAPIRequest(this.apiConfiguration.updateRubricURL, parameters);
+        });
+    }
+
+    resetRubricAbsoluteWeights() {
+        this.addToQueue(async () => {
+            const res = await this.executeAPIRequest(this.apiConfiguration.resetRubricAbsoluteWeightsURL, {});
+            if (this.isDummyRequest || this.hasError) { return; }
+            Rubric.resetAbsoluteWeights(this.rubric);
+            const newLevelScores = Object.fromEntries(res.rubric.levels.map((o: any) => ([o.id, o.score])));
+            this.rubric.levels.forEach(level => {
+                level.score = newLevelScores[level.id];
+            });
+            this.rubric.useRelativeWeights = true;
         });
     }
 
@@ -206,7 +219,6 @@ export default class DataConnector {
     }
 
     protected async executeAPIRequest(apiURL: string, parameters: any) {
-
         this.beginSaving();
         if (this.isDummyRequest) {
             await timeout(300); // Simulate a save

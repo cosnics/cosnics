@@ -142,7 +142,7 @@
     var deleteUserOvertimeUrl = '{{ DELETE_USER_OVERTIME_AJAX_URL|raw }}';
     var setMultipleUsersOvertimeUrl = '{{  SET_MULTIPLE_USERS_OVERTIME_AJAX_URL|raw }}';
 
-    var overtimeUsers = JSON.parse('{{ USERS_OVERTIME|json_encode|raw }}');
+    var overtimeUsers = {{ USERS_OVERTIME|json_encode|raw }};
 
     function fullname(user) {
         return user.lastname.toUpperCase() + ', ' + user.firstname;
