@@ -810,6 +810,10 @@
         padding: .25em .4em .35em;
         resize: none;
         width: 100%;
+
+        &[disabled] {
+            background: transparent;
+        }
     }
 
     .criterium-details .input-detail {
@@ -1721,7 +1725,7 @@
                 /*background-color: rgba(255, 255, 255, 0.35);*/
                 border: 1px solid #ccc;
 
-                &:hover {
+                &:not(:disabled):hover {
                     background-color: rgba(255, 255, 255, 1);
                     border: 1px solid #aaa;
                 }

@@ -56,21 +56,21 @@
                             <b-td class="table-title">
                                 <div>
                                     <span class="level-index">{{ index + 1 }}</span>
-                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
+                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
                                 </div>
                             </b-td>
                             <b-td v-if="rubric.useScores" class="table-score">
-                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
+                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
                             </b-td>
                             <b-td class="table-default">
-                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" />
+                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" :disabled="isEditDisabled" />
                             </b-td>
                             <b-td class="table-actions">
                                 <selection-controls
                                     :id="item.id"
-                                    :is-up-disabled="index === 0"
-                                    :is-down-disabled="index >= levels.length - 1"
-                                    :is-remove-disabled="false"
+                                    :is-up-disabled="isEditDisabled || index === 0"
+                                    :is-down-disabled="isEditDisabled || index >= levels.length - 1"
+                                    :is-remove-disabled="isEditDisabled"
                                     class="level-actions-2"
                                     @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
                                     @remove="showRemoveLevelDialog(item)" @select="onSelectLevel(item)"/>
@@ -81,7 +81,7 @@
                                 <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
                                     <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
                                               :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
-                                              :placeholder="$t('enter-level-description')"
+                                              :placeholder="$t('enter-level-description')" :disabled="isEditDisabled"
                                               @input="onLevelChange(item)" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
                                     </textarea>
                                     <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
@@ -179,6 +179,10 @@
 
         marked(rawString: string) {
             return DOMPurify.sanitize(marked(rawString));
+        }
+
+        get isEditDisabled(): boolean {
+            return !!this.newLevel;
         }
 
         get levels() {
@@ -298,13 +302,13 @@
             return `table-body-row level-row${this.criterium ? ' mod-criterium' : ''}${level === this.selectedLevel ? ' is-selected' : ''}${ this.newLevel ? '' : ' is-enabled'}${level === this.hoveredLevel ? ' is-hovered' : ''}`;
         }
 
-        onSelectLevel(level: Level, index: number = 0) {
+        onSelectLevel(level: Level) {
+            if (this.isEditDisabled) { return; }
             this.selectedLevel = level;
-            /*(this.$refs['levels'] as unknown as any).selectRow(index);*/
         }
 
-        onDescriptionFocus(level: Level, index: number = 0) {
-            this.onSelectLevel(level, index);
+        onDescriptionFocus(level: Level) {
+            this.onSelectLevel(level);
             this.activeDescriptionInput = level;
         }
 
@@ -461,6 +465,9 @@
         }
 
         >>> .table-body-row {
+            &.level-row:not(.is-selected) .table-actions {
+                pointer-events: none;
+            }
             &.level-row.mod-criterium td {
                 border-bottom: none;
             }
@@ -531,10 +538,16 @@
 
     @media (pointer: fine) {
         .table {
-            >>> tr:hover td:not(.table-actions) {
+            >>> tr.is-enabled:hover td:not(.table-actions) {
                 /*background: #f4fbfb;*/
                 /*border-color: #e3e3e3;*/
                 cursor: pointer;
+            }
+
+            >>> tr.level-row:not(.is-enabled) {
+                &, & + tr.details-row {
+                    opacity: .8;
+                }
             }
 
             >>> tr:hover td:not(.table-default) {
@@ -545,6 +558,16 @@
                 /*background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);*/
             }
         }
+    }
+
+    >>> .criterium-level-feedback[disabled] {
+        background: rgb(238, 238, 238);
+        cursor: not-allowed;
+    }
+
+    >>> .criterium-level-feedback[disabled] + .criterium-level-markup-preview {
+        background: rgb(238, 238, 238);
+        border-color: #d2d3d3;
     }
 
     .level-actions-2 {
