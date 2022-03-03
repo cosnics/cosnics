@@ -71,7 +71,7 @@
                                     :is-up-disabled="isEditDisabled || index === 0"
                                     :is-down-disabled="isEditDisabled || index >= levels.length - 1"
                                     :is-remove-disabled="isEditDisabled"
-                                    class="level-actions-2"
+                                    class="level-actions"
                                     @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
                                     @remove="showRemoveLevelDialog(item)" @select="onSelectLevel(item)"/>
                             </b-td>
@@ -103,7 +103,7 @@
                             <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
                         </b-td>
                         <b-td class="table-actions">
-                            <div class="level-actions-2">
+                            <div class="level-actions">
                                 <button class="btn btn-default btn-sm mod-level-action" :title="$t('add')" @click.stop="addLevel">
                                     <i class="fa fa-check-circle" aria-hidden="true"></i>
                                     <span class="sr-only">{{ $t('add') }}</span>
@@ -570,7 +570,7 @@
         border-color: #d2d3d3;
     }
 
-    .level-actions-2 {
+    .level-actions {
         display: flex;
         gap: 5px;
     }
@@ -580,7 +580,7 @@
             position: relative;
         }
 
-        .level-actions-2 {
+        .level-actions {
             bottom: -35px;
             position: absolute;
             right: 17px;
