@@ -11,6 +11,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ContextIdentifier;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceManager;
 use Chamilo\Application\Weblcms\Bridge\Evaluation\Service\Entity\PublicationEntityServiceInterface;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 
 /**
  * @package Chamilo\Application\Weblcms\Bridge\Evaluation
@@ -198,5 +199,55 @@ class EvaluationServiceBridge implements EvaluationServiceBridgeInterface
     {
         $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
         return $publicationEntityService->isUserPartOfEntity($user, $entityId);
+    }
+
+    /**
+     * @param User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser): array
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $publicationEntityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($this->getCurrentEntityType());
+
+        return $publicationEntityService->renderEntityNameById($entityId);
+    }
+
+    /**
+     *
+     * @param integer $entityType
+     *
+     * @return string
+     */
+    public function getPluralEntityNameByType($entityType)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->getPluralEntityName();
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return string
+     */
+    public function getEntityNameByType($entityType)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->getEntityName();
     }
 }

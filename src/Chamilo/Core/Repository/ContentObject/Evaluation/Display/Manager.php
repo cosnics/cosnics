@@ -303,6 +303,48 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     }
 
     /**
+     * @param string[] $parameters
+     *
+     * @return string[]
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     */
+    protected function getAvailableEntitiesParameters($parameters)
+    {
+        $availableEntities = [];
+
+        $availableEntityIds =
+            $this->getEvaluationServiceBridge()->getAvailableEntityIdentifiersForUser($this->getUser());
+
+        foreach ($availableEntityIds as $availableEntityId)
+        {
+            if ($availableEntityId == $this->getEntityIdentifier())
+            {
+                continue;
+            }
+
+            $availableEntities[$availableEntityId] =
+                $this->getEvaluationServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
+                    $this->getEntityType(), $availableEntityId
+                );
+        }
+
+        $parameters['HAS_MULTIPLE_ENTITIES'] = count($availableEntityIds) > 1;
+        $parameters['AVAILABLE_ENTITIES'] = $availableEntities;
+
+        $parameters['ENTITY_NAME'] = $this->getEvaluationServiceBridge()->renderEntityNameByEntityTypeAndEntityId(
+            $this->getEntityType(), $this->getEntityIdentifier()
+        );
+
+        $parameters['ENTITY_TYPE_PLURAL'] =
+            strtolower($this->getEvaluationServiceBridge()->getPluralEntityNameByType($this->getEntityType()));
+
+        $parameters['ENTITY_TYPE_SINGLE'] =
+            strtolower($this->getEvaluationServiceBridge()->getEntityNameByType($this->getEntityType()));
+
+        return $parameters;
+    }
+
+    /**
      * @throws NotAllowedException
      * @throws UserException
      */

@@ -122,6 +122,26 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
         return $publicationEntityService->getCurrentEntityIdentifier($currentUser);
     }
 
+    public function getAvailableEntityIdentifiersForUser(User $currentUser, int $entityType)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->getAvailableEntityIdentifiersForUser($this->contentObjectPublication, $currentUser);
+    }
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->renderEntityNameById($entityId);
+    }
+
     /**
      * @param int $entityType
      * @param int $entityId
@@ -132,4 +152,30 @@ class LearningPathEvaluationServiceBridge implements LearningPathEvaluationServi
         $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
         return $publicationEntityService->getEntityDisplayName($entityId);
     }
+
+    /**
+     *
+     * @param integer $entityType
+     *
+     * @return string
+     */
+    public function getPluralEntityNameByType($entityType)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->getPluralEntityName();
+    }
+
+    /**
+     * @param $entityType
+     *
+     * @return mixed
+     */
+    public function getEntityNameByType($entityType)
+    {
+        $publicationEntityService = $this->publicationEntityServiceManager->getEntityServiceByType($entityType);
+
+        return $publicationEntityService->getEntityName();
+    }
+
 }

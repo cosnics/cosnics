@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -75,6 +76,20 @@ class PublicationUserEntityService implements PublicationEntityServiceInterface
     }
 
     /**
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(
+        ContentObjectPublication $contentObjectPublication, User $currentUser
+    )
+    {
+        return [$currentUser->getId()];
+    }
+
+
+    /**
      * @param User $currentUser
      *
      * @return int|null
@@ -103,5 +118,47 @@ class PublicationUserEntityService implements PublicationEntityServiceInterface
             'UsersEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return $this->translator->trans(
+            'UserEntity', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
+        );
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     *
+     * @return String
+     */
+    public function renderEntityName(DataClass $entity)
+    {
+        if (!$entity instanceof User)
+        {
+            throw new \InvalidArgumentException('The given entity must be of the type ' . User::class);
+        }
+
+        return $entity->get_fullname();
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameById(int $entityId): string
+    {
+        $entity = DataManager::retrieve_by_id(User::class, $entityId);
+        if (!$entity instanceof User)
+        {
+            throw new \InvalidArgumentException('The given user with id ' . $entityId . ' does not exist');
+        }
+
+        return $this->renderEntityName($entity);
     }
 }

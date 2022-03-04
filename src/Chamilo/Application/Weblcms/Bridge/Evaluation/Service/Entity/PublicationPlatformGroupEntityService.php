@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -166,5 +167,48 @@ class PublicationPlatformGroupEntityService implements PublicationEntityServiceI
             'PlatformGroupsEntity', [],
             'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return $this->translator->trans(
+            'PlatformGroupEntity', [],
+            'Chamilo\Application\Weblcms\Tool\Implementation\Evaluation'
+        );
+    }
+
+
+    /**
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $entity
+     *
+     * @return String
+     */
+    public function renderEntityName(DataClass $entity)
+    {
+        if (!$entity instanceof Group)
+        {
+            throw new \InvalidArgumentException('The given entity must be of the type ' . Group::class);
+        }
+
+        return $entity->get_name();
+    }
+
+    /**
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameById(int $entityId): string
+    {
+        $entity = DataManager::retrieve_by_id(Group::class, $entityId);
+        if (!$entity instanceof Group)
+        {
+            throw new \InvalidArgumentException('The given platform group with id ' . $entityId . ' does not exist');
+        }
+
+        return $this->renderEntityName($entity);
     }
 }

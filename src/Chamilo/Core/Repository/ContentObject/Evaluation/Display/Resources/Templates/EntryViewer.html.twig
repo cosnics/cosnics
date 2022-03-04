@@ -356,6 +356,9 @@
     {% set entityType = entityTypes[ENTITY_TYPE] %}
     {% set entityTypeIcons = ['fa-user', 'fa-users', 'fa-users'] %}
     {% set entityTypeIcon = entityTypeIcons[ENTITY_TYPE] %}
+    {% if IS_USER_PART_OF_ENTITY %}
+        {% include 'Chamilo\\Core\\Repository\\ContentObject\\Evaluation\\Display:MultipleEntitiesWarning.html.twig' %}
+    {% endif %}
     {% if CAN_EDIT_EVALUATION %}
     <div class="btn-toolbar btn-action-toolbar mod-entities">
         <div class="btn-group u-flex u-align-items-end u-gap-small">

@@ -59,6 +59,36 @@ interface EvaluationServiceBridgeInterface
     public function getUsersForEntity(int $entityId): array;
 
     /**
+     * @param User $currentUser
+     *
+     * @return int[]
+     */
+    public function getAvailableEntityIdentifiersForUser(User $currentUser): array;
+
+    /**
+     * @param int $entityType
+     * @param int $entityId
+     *
+     * @return String
+     */
+    public function renderEntityNameByEntityTypeAndEntityId($entityType, $entityId);
+
+    /**
+     *
+     * @param integer $entityType
+     *
+     * @return string
+     */
+    public function getPluralEntityNameByType($entityType);
+
+    /**
+     * @param $entityType
+     *
+     * @return string
+     */
+    public function getEntityNameByType($entityType);
+
+    /**
      * @param User $user
      * @param int $entityType
      * @param int $entityId

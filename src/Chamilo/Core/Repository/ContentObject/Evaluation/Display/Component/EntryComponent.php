@@ -198,8 +198,10 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
                 $rubricView = $this->runRubricComponent($rubricAction);
             }
         }
+        $baseParameters = [];
+        $baseParameters = $this->getAvailableEntitiesParameters($baseParameters);
 
-        return [
+        $extendParameters = [
             'HEADER' => $this->render_header(),
             'EVALUATION_TITLE' => $this->getEvaluation()->get_title(),
             'ENTITIES' => $entities,
@@ -208,9 +210,13 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             'NEXT_ENTITY' => $nextEntity,
             'DISPLAY_ALL_ENTITIES_URL' => $this->getEvaluationServiceBridge() instanceof EmbeddedViewSupport,
             'ALL_ENTITIES_URL' => $this->get_url([self::PARAM_ACTION => self::DEFAULT_ACTION, 'entity_id' => null]),
+            'IS_USER_PART_OF_ENTITY' => $this->getEvaluationServiceBridge()->isUserPartOfEntity(
+                $this->getUser(), $this->getEntityType(), $this->getEntityIdentifier()
+            ),
             'ENTITY_COUNT' => $count,
             'ENTITY_INDEX' => $entityIndex,
             'ENTITY_TYPE' => $entityType,
+            'CHANGE_ENTITY_URL' => $this->get_url([self::PARAM_ENTITY_ID => '__ENTITY_ID__']),
             'CAN_EDIT_EVALUATION' => $this->getRightsService()->canUserEditEvaluation(),
             'PRESENCE_STATUS' => $presenceStatus,
             'SCORE' => $score,
@@ -228,6 +234,8 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
             'OPEN_FOR_STUDENTS' => $openForStudents,
             'FOOTER' => $this->render_footer()
         ];
+
+        return array_merge($baseParameters, $extendParameters);
     }
 
     /**

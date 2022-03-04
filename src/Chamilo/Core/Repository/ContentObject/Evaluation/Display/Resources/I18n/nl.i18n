@@ -106,3 +106,5 @@ UnknownError = "Er gebeurde een onbekende fout. Gelieve de <a href=\"#\" onclick
 LoggedOutPostError = "Het lijkt alsof je niet meer bent aangemeld. Je wijzigingen werden mogelijk niet opgeslagen. Gelieve opnieuw <a href=\"#\" onclick=\"window.location.reload()\">aan te melden</a>."
 TimeoutPostError = "De server doet er te lang over om te antwoorden. Mogelijk werden je wijzigingen niet (correct) opgeslagen. Gelieve de <a href=\"#\" onclick=\"window.location.reload()\">pagina te herladen</a> en opnieuw te proberen."
 UnknownPostError = "Je laatste wijzigingen werden mogelijk niet opgeslagen vanwege een onbekende fout. Gelieve de <a href=\"#\" onclick=\"window.location.reload()\">pagina te herladen</a> en opnieuw te proberen."
+MultipleEntitiesWarning = "Je maakt momenteel deel uit van meerdere {ENTITY_TYPE_PLURAL}. Je werkt momenteel in de {ENTITY_TYPE} <b>{ENTITY_NAME}</b>. Klik op de knop hiernaast om een andere {ENTITY_TYPE} te selecteren."
+SelectOtherEntity = "Selecteer een andere {ENTITY_TYPE}"
