@@ -54,16 +54,16 @@
                     <template v-for="(item, index) in levels">
                         <b-tr :class="rowClass(item)" @click.stop="onSelectLevel(item)" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
                             <b-td class="table-title">
-                                <div>
+                                <div class="table-title-wrap">
                                     <span class="level-index">{{ index + 1 }}</span>
-                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad input-detail" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
+                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
                                 </div>
                             </b-td>
                             <b-td v-if="rubric.useScores" class="table-score">
-                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
+                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
                             </b-td>
                             <b-td class="table-default">
-                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" class="input-detail" :disabled="isEditDisabled" />
+                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" />
                             </b-td>
                             <b-td class="table-actions">
                                 <selection-controls
@@ -79,8 +79,8 @@
                         <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
                             <b-td :colspan="rubric.useScores ? 3 : 2">
                                 <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
-                                    <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback input-detail"
-                                              :class="{ 'is-input-active': activeDescriptionInput === item || !item.description }"
+                                    <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback"
+                                              :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === item || !item.description }"
                                               :placeholder="$t('enter-level-description')" :disabled="isEditDisabled"
                                               @input="onLevelChange(item)" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
                                     </textarea>
@@ -91,7 +91,7 @@
                     </template>
                     <b-tr v-if="newLevel" class="table-body-row new-level-row" :class="{'mod-criterium': !!criterium}">
                         <b-td class="table-title">
-                            <div>
+                            <div class="table-title-wrap">
                                 <span class="level-index">{{ levels.length + 1 }}</span>
                                 <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" @keydown.enter="addLevel" @keyup.esc="cancelLevel" />
                             </div>
@@ -342,7 +342,7 @@
 <style lang="scss" scoped>
     .table {
         --border-color: #ebebeb;
-        --hover-bg: #f4fbfb;
+        /*--hover-bg: #f4fbfb;*/
         border: none;
         margin-top: 1em;
         max-width: fit-content;
@@ -352,84 +352,22 @@
             margin-top: 1em;
         }
 
-        @media only screen and (min-width: 900px) {
-            &.mod-criterium {
-                --border-color: #d3d8da;
-                --hover-bg: #dfe2e3;
-            }
-        }
-
-        >>> th, >>> td {
+        th, td {
             border: 1px solid var(--border-color);
-            /*border: 1px solid transparent;*/
             padding: 10px 8px;
             vertical-align: middle;
 
             &.table-actions {
                 border-width: 0;
             }
-        }
 
-        >>> th, >>> td {
             &:not(.table-default) {
                 border-right-color: transparent;
             }
         }
 
-        >>> .table-head .table-head-row th {
+        th {
             background-color: #f8fbfb;
-
-            &.table-actions {
-                background: none;
-            }
-        }
-
-        @media only screen and (min-width: 900px) {
-            >>> .table-head .table-head-row.mod-criterium th {
-                background-color: #e5e8ea;
-
-                &.table-actions {
-                    background: none;
-                }
-            }
-        }
-
-        @media (pointer: fine) {
-            /*.table-body-row.is-enabled:not(.is-selected).is-hovered {
-                &, & + .table-body-row.details-row {
-                    td:not(.table-actions) {
-                        background: var(--hover-bg);
-                        border-color: #e3e3e3;
-                        cursor: pointer;
-                        border-right-color: transparent;
-                    }
-                }
-            }*/
-/*            .table-body-row.is-enabled:not(.is-selected).is-hovered td:not(.table-actions) {
-                background: #f4fbfb;
-                border-color: #e3e3e3;
-                cursor: pointer;
-                border-right-color: transparent;
-            }*/
-
-            /*.table-body-row.is-enabled:not(.is-selected):first-child:hover td:not(.table-actions) {
-                background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);
-            }*/
-        }
-
-
-       /* >>> .table-head .table-head-row.mod-criterium th {
-            background-color: #edeef0;
-            border-color: #e3eaed;
-
-            &.table-actions {
-                background: none;
-            }
-        }*/
-
-        >>> th {
-            /*background-color: #f8fbfb;*/
-            border-bottom: 0;
             color: #5885a2;
 
             &.table-score {
@@ -438,87 +376,106 @@
 
             &.table-actions {
                 background: none;
+                border-bottom: none;
             }
-        }
-
-        >>> .table-head .table-head-row th {
-            border-top: 1px solid var(--border-color);
 
             &:not(.table-actions) {
                 border-bottom: 1px solid transparent;
             }
-
-            &.table-actions {
-                border-top-color: transparent;
-            }
         }
 
-        >>> .level-row:first-child td {
-            background: linear-gradient(to bottom, #e3eaed 0, hsla(0, 0%, 100%, 0) 4px);
+        .table-head .table-head-row th:not(.table-actions) {
+            border-top: 1px solid var(--border-color);
         }
 
-        @media only screen and (min-width: 900px) {
-            >>> .level-row.mod-criterium:first-child td {
-                background: linear-gradient(to bottom, #d5dadd 0, hsla(0, 0%, 100%, 0) 4px);
-                background-origin: border-box;
-            }
-        }
-
-        >>> .table-body-row {
-            &.level-row:not(.is-selected) .table-actions {
+        .level-row {
+            &:not(.is-selected) .table-actions {
                 pointer-events: none;
             }
-            &.level-row.mod-criterium td {
+
+            &.mod-criterium td {
                 border-bottom: none;
             }
-            &.new-level-row.mod-criterium td {
-                border-bottom: none;
-            }
-            &.details-row td {
-                border-top: none;
-                border-right: 1px solid var(--border-color);
+
+            &:first-child td:not(.table-actions) {
+                background: linear-gradient(to bottom, #e3eaed 0, hsla(0, 0%, 100%, 0) 4px);
             }
         }
 
-        >>> .level-row:first-child td {
-            border-top: 0;
-
-            &.table-actions {
-                background: transparent;
-            }
+        .new-level-row.mod-criterium td {
+            border-bottom: none;
         }
 
-        >>> .level-index {
+        .details-row td {
+            border-top: none;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .level-index {
             color: #406e8d;
             font-size: 1.5rem;
             text-align: right;
         }
 
-        >>> .table-title {
+        .table-title {
             width: 25em;
 
-            > div {
+            &-wrap {
                 align-items: baseline;
                 display: flex;
                 gap: .7em;
             }
         }
-        >>> .table-score {
+
+        .table-score {
             width: 5em;
         }
-        >>> .table-default {
+
+        .table-default {
             text-align: center;
         }
-        >>> .table-actions {
+
+        .table-actions {
             border-width: 0;
         }
-    }
-    .form-control {
-        &.mod-input.mod-pad {
-            height: auto;
-            padding: 2px 5px;
+
+        @media only screen and (min-width: 900px) {
+            &.mod-criterium {
+                --border-color: #d3d8da;
+                /*--hover-bg: #dfe2e3;*/
+            }
+
+            .table-head-row.mod-criterium th:not(.table-actions) {
+                background-color: #e5e8ea;
+            }
+
+            .level-row.mod-criterium:first-child td:not(.table-actions) {
+                background: linear-gradient(to bottom, #d5dadd 0, hsla(0, 0%, 100%, 0) 4px);
+                background-origin: border-box;
+            }
         }
 
+        @media only screen and (max-width: 459px) {
+            & {
+                position: relative;
+            }
+        }
+
+        @media (pointer: fine) {
+            .level-row {
+                &.is-enabled:hover td:not(.table-actions) {
+                    cursor: pointer;
+                }
+                &:not(.is-enabled) {
+                    &, & + .details-row {
+                        opacity: .8;
+                    }
+                }
+            }
+        }
+    }
+
+    .form-control {
         &.mod-num {
             text-align: right;
 
@@ -530,44 +487,26 @@
             }
         }
 
-        &.mod-input.mod-pad.mod-num {
-            font-size: 1.7rem;
-            padding: 0 5px;
-        }
-    }
+        &.mod-input.mod-pad {
+            height: auto;
+            padding: 2px 5px;
 
-    @media (pointer: fine) {
-        .table {
-            >>> tr.is-enabled:hover td:not(.table-actions) {
-                /*background: #f4fbfb;*/
-                /*border-color: #e3e3e3;*/
-                cursor: pointer;
-            }
-
-            >>> tr.level-row:not(.is-enabled) {
-                &, & + tr.details-row {
-                    opacity: .8;
-                }
-            }
-
-            >>> tr:hover td:not(.table-default) {
-                /*border-right-color: transparent;*/
-            }
-
-            >>> tr:first-child:hover td:not(.table-actions) {
-                /*background: linear-gradient(to bottom, #e3eaed 0, #f4fbfb 4px);*/
+            &.mod-num {
+                font-size: 1.7rem;
+                padding: 0 5px;
             }
         }
     }
 
-    >>> .criterium-level-feedback[disabled] {
-        background: rgb(238, 238, 238);
+    .criterium-level-feedback[disabled] {
+        background: #eee;
+        border-radius: 3px;
         cursor: not-allowed;
-    }
 
-    >>> .criterium-level-feedback[disabled] + .criterium-level-markup-preview {
-        background: rgb(238, 238, 238);
-        border-color: #d2d3d3;
+        + .criterium-level-markup-preview {
+            background: #eee;
+            border-color: #d2d3d3;
+        }
     }
 
     .level-actions {
@@ -576,15 +515,10 @@
     }
 
     @media only screen and (max-width: 459px) {
-        .table {
-            position: relative;
-        }
-
         .level-actions {
             bottom: -35px;
             position: absolute;
             right: 17px;
         }
     }
-
 </style>
