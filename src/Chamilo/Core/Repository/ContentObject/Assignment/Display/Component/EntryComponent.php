@@ -118,7 +118,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         if (!$this->entry instanceof Entry)
         {
-            if($this->getAssignmentServiceBridge()->canEditAssignment())
+            if ($this->getAssignmentServiceBridge()->canEditAssignment())
             {
                 $this->redirect(null, false, [self::PARAM_ACTION => self::ACTION_VIEW]);
             }
@@ -956,9 +956,19 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
         return $this->getAssignmentRubricService()->isSelfEvaluationAllowed($this->getAssignment());
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function getQrCodeForEntry()
     {
-        return $this->getQRService()->getQRForURL($this->get_url(), 250);
+        $url = $this->get_url(
+            [
+                self::PARAM_ENTITY_TYPE => $this->getEntityType(),
+                self::PARAM_ENTITY_ID => $this->getEntityIdentifier()
+            ]
+        );
+
+        return $this->getQRService()->getQRForURL($url, 250);
     }
 
     /**
