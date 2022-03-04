@@ -46,7 +46,7 @@
                     <b-tr :class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')">
                         <b-th class="table-title">{{ $t('level') }}</b-th>
                         <b-th v-if="rubric.useScores" class="table-score">{{ rubric.useRelativeWeights ? '%' : $t('points') }}</b-th>
-                        <b-th class="table-default"><div style="display: flex; flex-wrap: nowrap; align-items: baseline; gap: .2em">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></b-th>
+                        <b-th class="table-default"><div class="table-default-header-wrap">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></b-th>
                         <b-th class="table-actions"></b-th>
                     </b-tr>
                 </b-thead>
@@ -78,7 +78,7 @@
                         </b-tr>
                         <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
                             <b-td :colspan="rubric.useScores ? 3 : 2">
-                                <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
+                                <div class="criterium-level-input-area">
                                     <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback"
                                               :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === item || !item.description }"
                                               :placeholder="$t('enter-level-description')" :disabled="isEditDisabled"
@@ -117,7 +117,7 @@
                     </b-tr>
                     <b-tr v-if="newLevel && !!criterium" class="table-body-row details-row">
                         <b-td :colspan="rubric.useScores ? 3 : 2">
-                            <div class="criterium-level-input-area" style="margin: -1rem 1rem 0 2.2rem;">
+                            <div class="criterium-level-input-area">
                                 <textarea v-model="newLevel.description" ref="feedbackField" class="criterium-level-feedback input-detail"
                                           :class="{ 'is-input-active': activeDescriptionInput === newLevel || !newLevel.description }"
                                           :placeholder="$t('enter-level-description')"
@@ -130,7 +130,7 @@
                 </b-tbody>
             </b-table-simple>
         </div>
-        <button v-if="!newLevel" class="btn-new" @click.stop="createNewLevel" style="margin-left: .2em">{{ $t('add-level') }}</button>
+        <button v-if="!newLevel" class="btn-new" @click.stop="createNewLevel">{{ $t('add-level') }}</button>
         <div class="modal-bg" v-if="removingLevel !== null" @click.stop="hideRemoveLevelDialog">
             <div class="modal-content" @click.stop="">
                 <div class="modal-content-title">{{ $t('remove-level', {item: `'${removingLevel.title}'`}) }}?</div>
@@ -342,7 +342,6 @@
 <style lang="scss" scoped>
     .table {
         --border-color: #ebebeb;
-        /*--hover-bg: #f4fbfb;*/
         border: none;
         margin-top: 1em;
         max-width: fit-content;
@@ -433,6 +432,13 @@
 
         .table-default {
             text-align: center;
+
+            &-header-wrap {
+                align-items: baseline;
+                display: flex;
+                flex-wrap: nowrap;
+                gap: .2em;
+            }
         }
 
         .table-actions {
@@ -442,7 +448,6 @@
         @media only screen and (min-width: 900px) {
             &.mod-criterium {
                 --border-color: #d3d8da;
-                /*--hover-bg: #dfe2e3;*/
             }
 
             .table-head-row.mod-criterium th:not(.table-actions) {
@@ -520,6 +525,30 @@
         }
     }
 
+    .input-detail {
+        background-color: hsla(190, 50%, 98%, 1);
+        border: 1px solid #d4d4d4;
+        border-radius: $border-radius;
+        padding: 2px 5px;
+
+        &:hover:not(:disabled), &:focus {
+            background-color: #fff;
+        }
+
+        &:hover:not(:disabled) {
+            border: 1px solid #aaa;
+        }
+
+        &:focus {
+            border: 1px solid $input-color-focus;
+            outline: none;
+        }
+    }
+
+    .criterium-level-input-area {
+        margin: -1rem 1rem 0 2.2rem;
+    }
+
     .criterium-level-feedback[disabled] {
         background: #eee;
         border-radius: 3px;
@@ -529,6 +558,10 @@
             background: #eee;
             border-color: #d2d3d3;
         }
+    }
+
+    .btn-new {
+        margin-left: .2em;
     }
 
     .level-actions {

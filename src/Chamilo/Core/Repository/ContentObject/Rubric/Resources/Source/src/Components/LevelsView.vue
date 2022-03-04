@@ -103,26 +103,6 @@
         }
     }
 
-    .input-detail {
-        background-color: hsla(190, 50%, 98%, 1);
-        border: 1px solid #d4d4d4;
-        border-radius: $border-radius;
-        padding: 2px 5px;
-
-        &:hover:not(:disabled), &:focus {
-            background-color: #fff;
-        }
-
-        &:hover:not(:disabled) {
-            border: 1px solid #aaa;
-        }
-
-        &:focus {
-            border: 1px solid $input-color-focus;
-            outline: none;
-        }
-    }
-
     @media only screen and (max-width: 659px) {
         .rubrics-wrapper-levels {
             max-width: initial;
