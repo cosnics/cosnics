@@ -473,6 +473,28 @@
                 }
             }
         }
+
+        .level-row.is-selected, .new-level-row {
+            &, & + .details-row {
+                td:not(.table-actions) {
+                    background: #ecf4f4;
+                }
+            }
+
+            &:first-child td:not(.table-actions) {
+                background: linear-gradient(to bottom, #e3eaed 0, #ecf4f4 4px);
+            }
+        }
+
+        @media only screen and (min-width: 900px) {
+            .level-row.mod-criterium.is-selected, .new-level-row.mod-criterium {
+                &, & + .details-row {
+                    td:not(.table-actions) {
+                        background: #d7dbdf;
+                    }
+                }
+            }
+        }
     }
 
     .form-control {
