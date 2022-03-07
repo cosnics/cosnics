@@ -255,6 +255,13 @@
 </script>
 
 <style lang="scss">
+    .input-detail {
+        background-color: #f7fcfc;
+        border: 1px solid #d4d4d4;
+        border-radius: 3px;
+        padding: 2px 5px;
+    }
+
     .input-detail.abs-weight {
         text-align: right;
     }

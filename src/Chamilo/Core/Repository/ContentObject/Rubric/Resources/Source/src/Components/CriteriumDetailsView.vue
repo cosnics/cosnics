@@ -42,10 +42,10 @@
                             <textarea id="criterium-title" name="title" v-model="criterium.title" ref="criteriumTitleField" class="input-detail" @input="onCriteriumChange"></textarea>
                         </div>
                     </div>
-                    <div style="display: flex;justify-content: space-between;align-items:baseline">
+                    <div class="criterium-details-weight">
                         <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="criterium-weight">
                             <template v-if="rubric.useRelativeWeights">
-                                {{ $t('weight') }}: <span :style="rubric.eqRestWeight < 0 && 'color: red'">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle" style="color: red;" aria-hidden="true"></i>
+                                {{ $t('weight') }}: <span :class="{'m-error': rubric.eqRestWeight < 0}">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle m-error" aria-hidden="true"></i>
                             </template>
                             <template v-else>
                                 <label for="weight">{{ $t('weight') }}:</label>
@@ -53,10 +53,10 @@
                                 <span v-else>100 %</span>
                             </template>
                         </div>
-                        <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
+                        <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" class="m-btn-action">{{ $t('formatting') }}</a></div>
                     </div>
                     <template v-if="!criteriumLevels.length && !initCustomLevels">
-                        <a href="#" @click.prevent="initCustomLevels = true" style="display: block; text-align: end">{{ $t('use-custom-levels') }}</a>
+                        <a href="#" @click.prevent="initCustomLevels = true" class="m-btn-action">{{ $t('use-custom-levels') }}</a>
                         <ul class="b-criterium-levels">
                             <li v-for="level in rubric.rubricLevels" :key="level.id" class="b-criterium-level">
                                 <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
@@ -64,10 +64,10 @@
                         </ul>
                     </template>
                     <div v-else>
-                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="initCustomLevels = false" style="display: block; text-align: end">{{ $t('cancel-custom-levels') }}</a>
+                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="initCustomLevels = false" class="m-btn-action">{{ $t('cancel-custom-levels') }}</a>
                         <levels :rubric="rubric" :data-connector="dataConnector" :criterium="criterium" @level-added="initCustomLevels = false"></levels>
                     </div>
-                    <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> {{ $t('back-to-rubric') }}</a>
+                    <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left" aria-hidden="true"/> {{ $t('back-to-rubric') }}</a>
                 </div>
                 <formatting-help v-if="showFormatting" @close="showFormatting = false"></formatting-help>
             </div>
@@ -194,6 +194,21 @@
         outline: none;
      }
 
+     .m-btn-action {
+         display: block;
+         text-align: end;
+         text-decoration: none;
+     }
+
+     .m-error {
+         color: red;
+     }
+
+     .criterium-details-weight {
+         align-items: baseline;
+         display: flex;
+         justify-content: space-between;
+     }
 
      @media only screen and (min-width: 900px) {
          .criterium-details.is-show-formatting {

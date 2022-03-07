@@ -51,40 +51,40 @@
                     </b-tr>
                 </b-thead>
                 <b-tbody>
-                    <template v-for="(item, index) in levels">
-                        <b-tr :class="rowClass(item)" @click.stop="onSelectLevel(item)" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
+                    <template v-for="(level, index) in levels">
+                        <b-tr :class="rowClass(level)" @click.stop="onSelectLevel(level)" @mouseover="hoveredLevel = level" @mouseout="hoveredLevel = null">
                             <b-td class="table-title">
                                 <div class="table-title-wrap">
                                     <span class="level-index">{{ index + 1 }}</span>
-                                    <b-input type="text" v-model="item.title" autocomplete="off" class="mod-title mod-input mod-pad" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" />
+                                    <b-input type="text" v-model="level.title" autocomplete="off" class="mod-title mod-input mod-pad" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" />
                                 </div>
                             </b-td>
                             <b-td v-if="rubric.useScores" class="table-score">
-                                <b-input type="number" v-model.number="item.score" autocomplete="off" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(item)" @focus="onSelectLevel(item)" required min="0" step="1" />
+                                <b-input type="number" v-model.number="level.score" autocomplete="off" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" required min="0" step="1" />
                             </b-td>
                             <b-td class="table-default">
-                                <input type="radio" :checked="item.isDefault" @keyup.enter="setDefault(item)" @click="setDefault(item)" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" />
+                                <input type="radio" :checked="level.isDefault" @keyup.enter="setDefault(level)" @click="setDefault(level)" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" />
                             </b-td>
                             <b-td class="table-actions">
                                 <selection-controls
-                                    :id="item.id"
+                                    :id="level.id"
                                     :is-up-disabled="isEditDisabled || index === 0"
                                     :is-down-disabled="isEditDisabled || index >= levels.length - 1"
                                     :is-remove-disabled="isEditDisabled"
                                     class="level-actions"
-                                    @move-down="moveLevelDown(item)" @move-up="moveLevelUp(item)"
-                                    @remove="showRemoveLevelDialog(item)" @select="onSelectLevel(item)"/>
+                                    @move-down="moveLevelDown(level)" @move-up="moveLevelUp(level)"
+                                    @remove="showRemoveLevelDialog(level)" @select="onSelectLevel(level)"/>
                             </b-td>
                         </b-tr>
-                        <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = item" @mouseout="hoveredLevel = null">
+                        <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = level" @mouseout="hoveredLevel = null">
                             <b-td :colspan="rubric.useScores ? 3 : 2">
                                 <div class="criterium-level-input-area">
-                                    <textarea v-model="item.description" ref="feedbackField" class="criterium-level-feedback"
-                                              :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === item || !item.description }"
+                                    <textarea v-model="level.description" ref="feedbackField" class="criterium-level-feedback"
+                                              :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === level || !level.description }"
                                               :placeholder="$t('enter-level-description')" :disabled="isEditDisabled"
-                                              @input="onLevelChange(item)" @focus="onDescriptionFocus(item)" @blur="activeDescriptionInput = null">
+                                              @input="onLevelChange(level)" @focus="onDescriptionFocus(level)" @blur="activeDescriptionInput = null">
                                     </textarea>
-                                    <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === item || !item.description}" v-html="marked(item.description)"></div>
+                                    <div class="criterium-level-markup-preview" :class="{'is-input-active': activeDescriptionInput === level || !level.description}" v-html="marked(level.description)"></div>
                                 </div>
                             </b-td>
                         </b-tr>
