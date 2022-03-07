@@ -53,34 +53,6 @@
                                             @input="updateHeight"
                                             @update-level-description="updateLevelDescription"
                                             @update-choice-feedback="updateFeedback"></tree-node-descriptions>
-                    <!--<div class="treenode-rubric-input">
-                        <div class="treenode-choices" v-if="ext.choices.length">
-                            <div class="treenode-choice" v-for="choice in ext.choices">
-                                <div class="treenode-level mod-bf">
-                                    <span class="treenode-level-title">{{ choice.level.title }}</span>
-                                    <span v-if="useScores">{{ getChoiceScore(choice)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
-                                </div>
-                                <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
-                                    <description-field :field-item="choice.choice" @input="updateHeight" @change="updateFeedback(choice.choice, criterium, choice.level)">
-                                        <span v-if="useScores && rubric.hasAbsoluteWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score|formatNum }}<span class="sr-only">{{ $t('points') }}</span></span>
-                                    </description-field>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="treenode-choices" v-else-if="ext.levels.length">
-                            <div class="treenode-choice" v-for="level in ext.levels">
-                                <div class="treenode-level" style="text-align: left;padding-left: .7rem;font-size: 1.4rem;">
-                                    <span>{{ level.title }}</span>
-                                    (<span v-if="useScores">{{ level.score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>)
-                                </div>
-                                <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
-                                    <description-field :field-item="level" @input="updateHeight">
-                                        <span v-if="useScores && rubric.hasAbsoluteWeights" class="level-score" :class="{'mod-fixed': choice.choice.hasFixedScore}">{{ choice.score|formatNum }}<span class="sr-only">{{ $t('points') }}</span></span>
-                                    </description-field>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
                 </template>
             </template>
             <div class="cluster-sep" v-if="index < rubric.clusters.length - 1"></div>

@@ -21,11 +21,11 @@
 </i18n>
 
 <template>
-    <div class="levels-container">
-        <h1 class="levels-title">{{ $t('levels') }}</h1>
-        <div style="display: flex; gap: 1em; margin-left: .25em">
-            <div><on-off-switch id="use-scores-check" class="levels-switch" :value="rubric.useScores" @input="onUseScoresChanged" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch></div>
-            <div v-if="rubric.useScores && !rubric.hasAbsoluteWeights" style="margin-left: 1.6em;">
+    <div class="levels-view">
+        <h1 class="title">{{ $t('levels') }}</h1>
+        <div class="controls">
+            <div><on-off-switch id="use-scores-check" class="switch" :value="rubric.useScores" @input="onUseScoresChanged" :on-value="$t('with-scores')" :off-value="$t('without-scores')"></on-off-switch></div>
+            <div v-if="rubric.useScores && !rubric.hasAbsoluteWeights" class="m-mx">
                 <button :aria-pressed="rubric.useRelativeWeights ? 'true' : 'false'" class="btn-check" :class="{ 'checked': rubric.useRelativeWeights }" @click="onUseRelativeWeightsChanged">
                     <span tabindex="-1" class="lbl-check"><i aria-hidden="true" class="btn-icon-check fa"></i>{{ $t('weights-per-total') }}</span>
                 </button>
@@ -70,6 +70,26 @@
     }
 </script>
 
+<style lang="scss" scoped>
+    .title {
+        color: #666;
+        font-size: 2.2rem;
+        margin-left: .25em;
+        margin-top: .3em;
+    }
+    .controls {
+        display: flex;
+        gap: 1em;
+        margin-left: .25em;
+    }
+    .switch {
+        width: 124px;
+    }
+    .m-mx {
+        margin-left: 1.6em;
+    }
+</style>
+
 <style lang="scss">
     .rubrics-wrapper-levels {
         margin-left: -1.5em;
@@ -77,20 +97,9 @@
         width: 100%;
     }
 
-    .levels-container {
+    .levels-view {
         margin-left: .75em;
         position: relative;
-    }
-
-    .levels-title {
-        color: #666;
-        font-size: 2.2rem;
-        margin-left: .25em;
-        margin-top: .3em;
-    }
-
-    .levels-switch {
-        width: 124px;
     }
 
     @media only screen and (min-width: 900px) {
@@ -98,7 +107,7 @@
             margin-left: 0;
         }
 
-        .levels-container {
+        .levels-view {
             width: 50em;
         }
     }
