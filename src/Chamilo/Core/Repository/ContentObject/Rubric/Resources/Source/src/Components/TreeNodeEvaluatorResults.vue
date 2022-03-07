@@ -95,6 +95,9 @@
 
         get treeNodeLevelDescription() {
             if (this.treeNode instanceof Criterium) {
+                if (this.level.criteriumId === this.treeNode.id) {
+                    return this.level.description;
+                }
                 return this.rubric.getChoice(this.treeNode, this.level).feedback;
             }
             return '';

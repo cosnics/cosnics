@@ -21,7 +21,8 @@ export function convertRubricData(d: any) {
         "title": level.title,
         "description": level.description || '',
         "score": level.score,
-        "is_default": level.is_default
+        "is_default": level.is_default,
+        "criterium_id": level.criterium_id ? String(level.criterium_id) : ''
     }));
     const clusters = (d.root_node.children || []).filter((v: any) => v.type === 'cluster');
     clusters.sort(sortFn);

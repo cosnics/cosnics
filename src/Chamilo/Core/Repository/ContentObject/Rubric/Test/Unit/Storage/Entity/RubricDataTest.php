@@ -55,6 +55,12 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertFalse($this->rubricData->useScores());
     }
 
+    public function testGetSetUseRelativeWeights()
+    {
+        $this->rubricData->setUseRelativeWeights(true);
+        $this->assertTrue($this->rubricData->useRelativeWeights());
+    }
+
     public function testGetSetId()
     {
         $this->rubricData->setId(5);
@@ -238,6 +244,18 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertEquals(2, $level2->getSort());
     }
 
+    public function testAddLevelWithCriteriumSetsCorrectSort()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+
+        new Level($this->rubricData);
+        $level1 = new Level($this->rubricData, $criteriumNode);
+        $level2 = new Level($this->rubricData);
+
+        $this->assertEquals(1, $level1->getSort());
+        $this->assertEquals(2, $level2->getSort());
+    }
+
     public function testRemoveLevelCleansUpSort()
     {
         new Level($this->rubricData); // Level 1
@@ -247,6 +265,23 @@ class RubricDataTest extends ChamiloTestCase
         $this->rubricData->removeLevel($level2);
 
         $this->assertEquals(2, $level3->getSort());
+    }
+
+    public function testRemoveLevelWithCriteriumCleansUpSort()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+
+        new Level($this->rubricData);
+        $level1 = new Level($this->rubricData, $criteriumNode);
+        $level2 = new Level($this->rubricData);
+        $level3 = new Level($this->rubricData, $criteriumNode);
+        $level4 = new Level($this->rubricData);
+
+        $this->rubricData->removeLevel($level1);
+        $this->rubricData->removeLevel($level2);
+
+        $this->assertEquals(1, $level3->getSort());
+        $this->assertEquals(2, $level4->getSort());
     }
 
     public function testMoveLevelSetsCorrectSort()
@@ -277,6 +312,32 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertEquals(4, $level4->getSort());
     }
 
+    public function testMoveLevelWithCriteriumSetsCorrectSort()
+    {
+        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
+
+        new Level($this->rubricData, $criteriumNode);
+        $level1 = new Level($this->rubricData);
+        $levelWithCriterium2 = new Level($this->rubricData, $criteriumNode);
+        $levelWithCriterium3 = new Level($this->rubricData, $criteriumNode);
+        $level2 = new Level($this->rubricData);
+        $levelWithCriterium4 = new Level($this->rubricData, $criteriumNode);
+
+        $this->rubricData->moveLevel($levelWithCriterium2, 3);
+        $this->rubricData->moveLevel($level2, 1);
+
+        $this->assertEquals(3, $levelWithCriterium2->getSort());
+        $this->assertEquals(2, $levelWithCriterium3->getSort());
+        $this->assertEquals(4, $levelWithCriterium4->getSort());
+        $this->assertEquals(1, $level2->getSort());
+        $this->assertEquals(2, $level1->getSort());
+
+        $this->rubricData->moveLevel($levelWithCriterium3, 4);
+        $this->assertEquals(4, $levelWithCriterium3->getSort());
+        $this->assertEquals(2, $levelWithCriterium2->getSort());
+        $this->assertEquals(3, $levelWithCriterium4->getSort());
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -288,14 +349,6 @@ class RubricDataTest extends ChamiloTestCase
         $this->rubricData->moveLevel($level, 2);
     }
 
-    public function testInsertLevelTwice()
-    {
-        $level = new Level($this->rubricData);
-        $this->rubricData->insertLevel($level, 2);
-
-        $this->assertCount(1, $this->rubricData->getLevels());
-    }
-
     /**
      * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
      */
@@ -303,19 +356,6 @@ class RubricDataTest extends ChamiloTestCase
     {
         $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
         $level = new Level($this->rubricData);
-
-        $this->assertEquals($level, $criteriumNode->getChoices()->first()->getLevel());
-    }
-
-    /**
-     * @throws \Chamilo\Core\Repository\ContentObject\Rubric\Domain\Exceptions\InvalidChildTypeException
-     */
-    public function testInsertLevelCreatesNewChoiceInCriteriumNode()
-    {
-        $criteriumNode = new CriteriumNode('test criterium', $this->rubricData);
-        $level = new Level(new RubricData('temp'));
-
-        $this->rubricData->insertLevel($level, 1);
 
         $this->assertEquals($level, $criteriumNode->getChoices()->first()->getLevel());
     }
@@ -466,5 +506,28 @@ class RubricDataTest extends ChamiloTestCase
         $this->assertContains($choice, $this->rubricData->getRemovedEntities());
     }
 
+    public function testChoicesAfterAddingLevelWithCriterium()
+    {
+        $node = new CriteriumNode('Test Criterium 1', $this->rubricData);
+
+        new Level($this->rubricData);
+        new Level($this->rubricData);
+        $this->assertCount(2, $this->rubricData->getChoices());
+        $this->assertCount(2, $node->getChoices());
+        $choice1 = $node->getChoices()->get(0);
+        $choice2 = $node->getChoices()->get(1);
+
+        $addedLevel = new Level($this->rubricData, $node);
+        $this->assertCount(0, $this->rubricData->getChoices());
+        $this->assertCount(0, $node->getChoices());
+
+        $this->assertContains($choice1, $this->rubricData->getRemovedEntities());
+        $this->assertContains($choice2, $this->rubricData->getRemovedEntities());
+
+        $this->rubricData->removeLevel($addedLevel); // Re-adds choices when final custom level is removed
+
+        $this->assertCount(2, $this->rubricData->getChoices());
+        $this->assertCount(2, $node->getChoices());
+    }
 }
 

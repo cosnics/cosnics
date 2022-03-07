@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Service;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Repository\RubricDataRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -43,17 +44,22 @@ class RubricTreeBuilder
         $rubricData = $this->rubricDataRepository->findEntireRubricById($rubricDataId, $expectedVersion);
 
         $treeNodes = $rubricData->getTreeNodes();
-        foreach($treeNodes as $treeNode)
+        foreach ($treeNodes as $treeNode)
         {
             $treeNode->setChildren(new ArrayCollection());
         }
 
-        foreach($treeNodes as $treeNode)
+        foreach ($treeNodes as $treeNode)
         {
-            if($treeNode->hasParentNode())
+            if ($treeNode->hasParentNode())
             {
                 $treeNode->getParentNode()->getChildren()->add($treeNode);
             }
+        }
+
+        foreach ($rubricData->getLevels() as $level)
+        {
+            $level->applyCriteriumId();
         }
 
         return $rubricData;

@@ -1,25 +1,25 @@
-import Rubric from "../../../src/Domain/Rubric";
-import Cluster from "../../../src/Domain/Cluster";
-import Level from "../../../src/Domain/Level";
-import Category from "../../../src/Domain/Category";
-import Criterium from "../../../src/Domain/Criterium";
-import Choice from "../../../src/Domain/Choice";
+import Rubric from '../../../src/Domain/Rubric';
+import Cluster from '../../../src/Domain/Cluster';
+import Level from '../../../src/Domain/Level';
+import Category from '../../../src/Domain/Category';
+import Criterium from '../../../src/Domain/Criterium';
+import Choice from '../../../src/Domain/Choice';
 
 let rubric: Rubric, cluster: Cluster, level1: Level, level2: Level, category: Category, clusterCriterium: Criterium,
     categoryCriterium: Criterium;
 
 beforeEach(() => {
-    rubric = new Rubric("my_rubric");
+    rubric = new Rubric('my_rubric');
     cluster = new Cluster('my cluster');
-    level1 = new Level("level1", "bad");
-    level2 = new Level("level2", "good");
+    level1 = new Level('level1', 'bad');
+    level2 = new Level('level2', 'good');
     rubric.addLevel(level1);
     rubric.addLevel(level2);
-    category = new Category("category1");
-    clusterCriterium = new Criterium("clusterCriterium");
-    categoryCriterium = new Criterium("categoryCriterium");
-    cluster.addCategory(category);
+    category = new Category('category1');
+    clusterCriterium = new Criterium('clusterCriterium');
+    categoryCriterium = new Criterium('categoryCriterium');
     cluster.addCriterium(clusterCriterium);
+    cluster.addCategory(category);
     rubric.addCluster(cluster);
 
     let choice1 = rubric.getChoice(clusterCriterium, level1);
@@ -64,7 +64,7 @@ test('choices', () => {
 test('relations', () => {
     expect(rubric.children).toEqual([cluster]);
     expect(cluster.parent).toEqual(rubric);
-    expect(cluster.children).toEqual([clusterCriterium, category]);
+    expect(cluster.children).toEqual([category, clusterCriterium]);
     expect(category.parent).toEqual(cluster);
     expect(clusterCriterium.parent).toEqual(cluster);
     expect(category.children).toEqual([categoryCriterium]);

@@ -708,6 +708,12 @@
 
         .input-detail:focus {
             outline: none;
+            border: 1px solid #66afe9;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .08), 0 0 8px rgba(102, 175, 233, .6);
+        }
+
+        &.mod-levels {
+            width: 40em;
         }
     }
 
@@ -804,6 +810,10 @@
         padding: .25em .4em .35em;
         resize: none;
         width: 100%;
+
+        &[disabled] {
+            background: transparent;
+        }
     }
 
     .criterium-details .input-detail {
@@ -1715,7 +1725,7 @@
                 /*background-color: rgba(255, 255, 255, 0.35);*/
                 border: 1px solid #ccc;
 
-                &:hover {
+                &:not(:disabled):hover {
                     background-color: rgba(255, 255, 255, 1);
                     border: 1px solid #aaa;
                 }

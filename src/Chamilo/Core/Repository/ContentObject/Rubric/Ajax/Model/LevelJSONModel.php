@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Ajax\Model;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Type;
 
 /**
@@ -49,6 +51,13 @@ class LevelJSONModel
     protected $isDefault = false;
 
     /**
+     * @var int
+     *
+     * @Type("integer")
+     */
+    protected $criteriumId;
+
+    /**
      * LevelJSONModel constructor.
      *
      * @param int $id
@@ -56,14 +65,16 @@ class LevelJSONModel
      * @param int $score
      * @param bool $isDefault
      * @param string|null $description
+     * @param int|null $criteriumId
      */
-    public function __construct(int $id, string $title, int $score, bool $isDefault, string $description = null)
+    public function __construct(int $id, string $title, int $score, bool $isDefault, string $description = null, int $criteriumId = null)
     {
         $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->score = $score;
         $this->isDefault = $isDefault;
+        $this->criteriumId = $criteriumId;
     }
 
     /**
@@ -107,14 +118,24 @@ class LevelJSONModel
     }
 
     /**
+     * @return int|null
+     */
+    public function getCriteriumId(): ?int
+    {
+        return $this->criteriumId;
+    }
+
+    /**
      * @param RubricData $rubricData
      *
      * @return Level
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
     public function toLevel(RubricData $rubricData)
     {
-        $level = new Level($rubricData);
-
+        $criterium = !empty($this->criteriumId) ? $rubricData->getCriteriumById($this->criteriumId) : null;
+        $level = new Level($rubricData, $criterium);
         $this->updateLevel($level);
 
         return $level;
@@ -144,7 +165,7 @@ class LevelJSONModel
     public static function fromLevel(Level $level)
     {
         return new self(
-            $level->getId(), $level->getTitle(), $level->getScore(), $level->isDefault(), $level->getDescription()
+            $level->getId(), $level->getTitle(), $level->getScore(), $level->isDefault(), $level->getDescription(), $level->getCriteriumId()
         );
     }
 }
