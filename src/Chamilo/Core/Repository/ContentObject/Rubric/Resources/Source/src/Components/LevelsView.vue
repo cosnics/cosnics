@@ -13,7 +13,7 @@
     },
     "nl": {
         "levels": "Niveaus",
-        "weights-per-total": "Gewichten relatief tov. totaalscore",
+        "weights-per-total": "Gewichten relatief t.o.v. totaalscore",
         "with-scores": "Met scores",
         "without-scores": "Zonder scores"
     }
