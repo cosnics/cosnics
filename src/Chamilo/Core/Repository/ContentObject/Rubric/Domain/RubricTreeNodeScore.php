@@ -18,9 +18,9 @@ class RubricTreeNodeScore
     private $treeNode;
 
     /**
-     * @var float
+     * @var ?float
      */
-    private float $score;
+    private ?float $score;
 
     /**
      * @var ?float
@@ -29,10 +29,10 @@ class RubricTreeNodeScore
 
     /**
      * @param TreeNode $treeNode
-     * @param float $score
+     * @param float|null $score
      * @param float|null $weight
      */
-    public function __construct(TreeNode $treeNode, float $score, ?float $weight = null)
+    public function __construct(TreeNode $treeNode, ?float $score, ?float $weight = null)
     {
         $this->treeNode = $treeNode;
         $this->score = $score;
@@ -48,9 +48,9 @@ class RubricTreeNodeScore
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getScore(): float
+    public function getScore(): ?float
     {
         return $this->score;
     }
