@@ -55,7 +55,7 @@ export default class RubricEvaluation {
                 if (treeNodeEvaluationInput) {
                     const chosenLevel = rubric.levels.find(level => level.id === String(treeNodeEvaluationInput['level_id']));
                     treeNodeEvaluation.level = chosenLevel || null;
-                    treeNodeEvaluation.score = treeNodeEvaluationInput.score;
+                    treeNodeEvaluation.score = (typeof treeNodeEvaluationInput.score === 'number') ? treeNodeEvaluationInput.score : null;
                     treeNodeEvaluation.feedback = treeNodeEvaluationInput.comment;
                 }
                 return {evaluator, treeNodeEvaluation};
@@ -74,24 +74,27 @@ export default class RubricEvaluation {
         return this.getTreeNodeEvaluation(criterium, evaluator)?.score || 0;
     }
 
-    getCategoryScore(category: Category, evaluation: any|undefined = undefined) : number {
-        if (this.mode === EvaluationMode.Result && typeof evaluation?.score === 'number') {
-            return evaluation.score;
+    getCategoryScore(category: Category, evaluation: any|undefined = undefined) : number|null {
+        if (this.mode === EvaluationMode.Result) {
+            if (typeof evaluation?.score === 'number') { return evaluation.score; }
+            if (evaluation?.score === null) { return null; }
         }
         return this.getCriteriaScore(this.rubric.getAllCriteria(category), evaluation?.evaluator);
     }
 
-    getClusterScore(cluster: Cluster, evaluation: any|undefined = undefined) : number {
-        if (this.mode === EvaluationMode.Result && typeof evaluation?.score === 'number') {
-            return evaluation.score;
+    getClusterScore(cluster: Cluster, evaluation: any|undefined = undefined) : number|null {
+        if (this.mode === EvaluationMode.Result) {
+            if (typeof evaluation?.score === 'number') { return evaluation.score; }
+            if (evaluation?.score === null) { return null; }
         }
         return this.getCriteriaScore(this.rubric.getAllCriteria(cluster), evaluation?.evaluator);
     }
 
-    getRubricScore(evaluator: any|undefined = undefined) : number {
+    getRubricScore(evaluator: any|undefined = undefined) : number|null {
         const treeNodeScore = this.getTreeNodeEvaluation(this.rubric, evaluator)?.score;
-        if (this.mode === EvaluationMode.Result && typeof treeNodeScore === 'number') {
-            return treeNodeScore;
+        if (this.mode === EvaluationMode.Result) {
+            if (typeof treeNodeScore === 'number') { return treeNodeScore; }
+            if (treeNodeScore === null) { return null; }
         }
         return this.getCriteriaScore(this.rubric.getAllCriteria(), evaluator);
     }

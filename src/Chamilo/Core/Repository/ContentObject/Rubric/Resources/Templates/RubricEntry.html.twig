@@ -148,7 +148,7 @@
                 saveRubric: function(event) {
                     event.preventDefault();
                     if (this.isSaving) { return; }
-                    var i, results = this.rubricResults.results;
+                    /*var i, results = this.rubricResults.results;
                     if (results.length === 0) {
                         this.hasErrors = true;
                         this.showErrorMessage = true;
@@ -160,7 +160,7 @@
                             this.showErrorMessage = true;
                             return;
                         }
-                    }
+                    }*/
                     this.hasErrors = false;
                     this.showErrorMessage = false;
                     var form = document.querySelector('[name=entry_form]');
