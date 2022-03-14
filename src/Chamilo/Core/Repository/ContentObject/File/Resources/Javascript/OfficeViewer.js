@@ -36,14 +36,14 @@ $(function()
     $(document).ready(
             function()
             {
-                if (window.matchMedia('(min-width: 768px)').matches)
+                /*if (window.matchMedia('(min-width: 768px)').matches)
                 {
                     $('iframe.office-viewer-frame').each(function(index)
                     {
                         var iframeElement = $(this);
                         iframeElement.attr('src', iframeElement.data('url'));
                     });
-                }
+                }*/
                 
                 $(document).on('click', ".office-viewer-container .btn-office-viewer-full-screen", maximizeViewer);
                 $(document).on('click', ".office-viewer-container .office-viewer-sidebar .btn-office-viewer-minimize",

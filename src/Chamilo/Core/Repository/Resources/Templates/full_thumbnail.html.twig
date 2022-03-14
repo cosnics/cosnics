@@ -37,8 +37,8 @@
                 {{ title|length > 10 ? title|slice(0, 10) ~ '...' : title }}
             </a>
         </div>
-        <b-modal class="thumbnailModal" no-fade ok-only ref="thumbnailModal{{ id }}" title="{{ title }}">
-            <div class="modalContent">
+        <b-modal size="lg" class="thumbnailModal" no-fade ok-only ref="thumbnailModal{{ id }}" title="{{ title }}">
+            <div class="modalContent text-center">
                 {{ full_view | raw }}
             </div>
         </b-modal>
