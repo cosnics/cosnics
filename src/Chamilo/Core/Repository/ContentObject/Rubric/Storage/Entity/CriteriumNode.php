@@ -302,6 +302,18 @@ class CriteriumNode extends TreeNode
     {
         $maximumScore = 0;
 
+        if ($this->hasLevels())
+        {
+            foreach ($this->levels as $level)
+            {
+                if ($level->getScore() > $maximumScore)
+                {
+                    $maximumScore = $level->getScore();
+                }
+            }
+            return $maximumScore;
+        }
+
         foreach ($this->choices as $choice)
         {
             $score = $choice->calculateScore();
