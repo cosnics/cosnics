@@ -35,7 +35,7 @@
             </div>
             <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
                 <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
-                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
+                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name" @click="copyRubricResults(evaluator.resultId)">{{ evaluator.name|capitalize }}</li>
                 <li v-if="useAbsoluteScores" class="rubric-header-title mod-res mod-max">Max.</li>
             </ul>
             <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
@@ -117,6 +117,13 @@
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: RubricEvaluation, required: true}) readonly rubricEvaluation!: RubricEvaluation;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
+        @Prop({type: String, default: ''}) readonly rubricEntryUrl!: string;
+
+        copyRubricResults(resultId: string) {
+            if (this.rubricEntryUrl) {
+                window.open(this.rubricEntryUrl + '&result_id=' + resultId, '_self');
+            }
+        }
 
         get selectedTreeNode(): Criterium|Category|Cluster|null {
             return this.selectOptions.selectedTreeNode;

@@ -92,6 +92,7 @@ class EntryComponent extends Manager implements \Chamilo\Core\Repository\Feedbac
 
         $scoreForm = $this->getScoreForm();
         $this->processSubmittedData($scoreForm);
+        $this->getRubricBridge()->setEntryURL($this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]));
 
         return $this->getTwig()->render(
             Manager::context() . ':EntryViewer.html.twig',

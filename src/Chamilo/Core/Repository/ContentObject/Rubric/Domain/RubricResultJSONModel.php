@@ -11,6 +11,11 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Domain;
 class RubricResultJSONModel
 {
     /**
+     * @var string
+     */
+    protected $resultId;
+
+    /**
      * @var RubricUserJSONModel
      */
     protected $user;
@@ -28,14 +33,16 @@ class RubricResultJSONModel
     /**
      * RubricResultJSONModel constructor.
      *
+     * @param string $resultId
      * @param RubricUserJSONModel $user
      * @param \DateTime $date
      * @param TreeNodeResultJSONModel[] $results
      */
     public function __construct(
-        RubricUserJSONModel $user, \DateTime $date, array $results = []
+        string $resultId, RubricUserJSONModel $user, \DateTime $date, array $results = []
     )
     {
+        $this->resultId = $resultId;
         $this->user = $user;
         $this->date = $date;
         $this->results = $results;
@@ -47,6 +54,14 @@ class RubricResultJSONModel
     public function addTreeNodeResult(TreeNodeResultJSONModel $treeNodeResultJSONModel)
     {
         $this->results[] = $treeNodeResultJSONModel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getResultId(): string
+    {
+        return $this->resultId;
     }
 
 }

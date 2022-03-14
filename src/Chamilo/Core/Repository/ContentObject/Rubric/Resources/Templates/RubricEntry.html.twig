@@ -63,7 +63,7 @@
     <div id="rubric-entry">
         <h4 style="margin: 0 10px 10px 10px">{{ 'RubricEntry'|trans({}, appContext) }}</h4>
 
-        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :existing-result="existingResult" :show-errors="hasErrors" @on-save="saveRubric">
             <template v-slot:slot-outer>
                 <div class="save-rubric-area" :class="useScores ? 'mod-scores' : 'mod-grades'">
                     <div class="save-rubric-area-content">
@@ -106,6 +106,8 @@
         /*var data = JSON.parse(rubricDataJSON);*/
         var data = {{ RUBRIC_DATA_JSON|raw }};
 
+        var existing_result = {{ RUBRIC_EXISTING_RESULT|raw }};
+
         var lang;
         try {
             lang = '{{ LANGUAGE|raw }}';
@@ -124,6 +126,7 @@
                 showErrorMessage: false,
                 rubricResults: { results: [] },
                 isSaving: false,
+                existingResult: existing_result
             },
             computed: {
                 rubricResultsJSON: function() {

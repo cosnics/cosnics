@@ -162,6 +162,7 @@
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
+        @Prop({type: Object, default: null}) readonly existingResult!: any|null;
 
         getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
             if (ext.levels.length) {
@@ -298,6 +299,27 @@
             });
             if (rubric.useScores && !rubric.useRelativeWeights) {
                 rubric.hasAbsoluteWeights = Rubric.usesAbsoluteWeights(rubric);
+            }
+            if (this.existingResult && this.rubricEvaluation) {
+                const existingResults = this.existingResult.results;
+                const rubricEvaluation = this.rubricEvaluation;
+
+                this.rubric.getAllTreeNodes().forEach(treeNode => {
+                    const existingResult = existingResults.find((r: any) => r.tree_node_id === parseInt(treeNode.id));
+                    const evaluation = rubricEvaluation.getTreeNodeEvaluation(treeNode);
+                    if (existingResult && evaluation) {
+                        if (existingResult.comment) {
+                            evaluation.feedback = existingResult.comment;
+                        }
+                        if (treeNode.getType() === 'criterium' && existingResult.level_id) {
+                            const level = rubric.levels.find(l => existingResult.level_id === parseInt(l.id));
+                            if (level) {
+                                this.selectLevel(evaluation, level);
+                            }
+                        }
+                    }
+                });
+                this.$emit('level-selected');
             }
         }
 

@@ -1,6 +1,6 @@
 <template>
     <div id="app" v-if="rubric">
-        <rubric-entry :rubric="rubric" :rubric-evaluation="rubricEvaluation" :ui-state="uiState" :show-errors="showErrors"
+        <rubric-entry :rubric="rubric" :rubric-evaluation="rubricEvaluation" :existing-result="existingResult" :ui-state="uiState" :show-errors="showErrors"
                       @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
             <template v-slot:slot-inner>
                 <slot name="slot-outer"></slot>
@@ -36,6 +36,7 @@
         @Prop({type: Object, required: true}) readonly rubricData!: object;
         @Prop({type: Object, default: null}) readonly rubricResults!: any|null;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
+        @Prop({type: Object, default: null}) readonly existingResult!: any|null;
 
         updateRubricResults() {
             if (this.rubricResults !== null) {

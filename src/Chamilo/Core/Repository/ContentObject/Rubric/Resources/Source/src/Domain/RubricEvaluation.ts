@@ -42,7 +42,7 @@ export default class RubricEvaluation {
 
     static fromRubricResults(rubric: Rubric, rubricResults: any) : RubricEvaluation {
         const evaluators = rubricResults.map((res: any) =>
-            ({userId: res.user.id, name: res.user.name, role: res.user.role, date: res.date})
+            ({resultId: res.result_id, userId: res.user.id, name: res.user.name, role: res.user.role, date: res.date})
         );
 
         const r_evaluations = rubricResults.map((res: any) => res.results);
