@@ -26,19 +26,19 @@
 
 <template>
     <div v-if="rubric && evaluators.length" class="rubric-results-view">
-        <div class="rubric" :class="useScores && rubric.useRelativeWeights && showScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
-            <ul class="rubric-tools" v-if="rubric.useScores && rubric.useRelativeWeights">
+        <div class="rubric" :class="showRelativeScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
+            <ul class="rubric-tools" v-if="useRelativeScores">
                 <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
             </ul>
-            <div v-if="rubric.useScores && rubric.useRelativeWeights && showScores" class="treenode-weight-header rb-col-start-2">
+            <div v-if="showRelativeScores" class="treenode-weight-header rb-col-start-2">
                 <span>{{ $t('weight') }}</span>
             </div>
-            <ul class="rubric-header" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
+            <ul v-if="showRubricHeader" class="rubric-header" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'">
                 <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
                     :class="{ 'mod-grades': useGrades }" :title="evaluator.name" @click="copyRubricResults(evaluator.resultId)">{{ evaluator.name|capitalize }}</li>
                 <li v-if="useAbsoluteScores" class="rubric-header-title mod-res mod-max">Max.</li>
             </ul>
-            <ul class="rubric-header mod-date" :class="useScores && rubric.useRelativeWeights && showScores ? 'rb-col-start-3' : 'rb-col-start-2'" v-if="useScores || (useGrades && evaluators.length)">
+            <ul v-if="showRubricHeader" class="rubric-header mod-date" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'">
                 <li class="rubric-header-date" v-for="evaluator in evaluators"
                     :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
                 <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
@@ -60,10 +60,10 @@
                     </template>
                     <div class="category-sep" v-if="index < getCategoryRowsData(cluster).length - 1"></div>
                 </template>
-                <div class="cluster-sep" :class="{ 'mod-hide-last': useGrades || (useScores && rubric.useRelativeWeights && !showScores) }"></div>
+                <div class="cluster-sep" :class="{ 'mod-hide-last': !showSeparator }"></div>
             </template>
-            <template v-if="useScores && (!rubric.useRelativeWeights || showScores)">
-                <div class="total-title" :class="{'mod-res-col': useScores && rubric.useRelativeWeights && showScores}">{{ $t('total') }} {{ $t('rubric') }}:</div>
+            <template v-if="showTotals">
+                <div class="total-title" :class="{'mod-res-col': showRelativeScores}">{{ $t('total') }} {{ $t('rubric') }}:</div>
                 <tree-node-rubric-results :rubric="rubric" :tree-node="rubric" :rubric-evaluation="rubricEvaluation" :max-score="rubric.getMaximumScore()" :evaluations="evaluators" :show-scores="showScores"></tree-node-rubric-results>
             </template>
         </div>
@@ -145,12 +145,32 @@
             return this.rubric.useScores;
         }
 
+        get useGrades() {
+            return !this.rubric.useScores;
+        }
+
         get useAbsoluteScores() {
             return this.rubric.useScores && !this.rubric.useRelativeWeights;
         }
 
-        get useGrades() {
-            return !this.rubric.useScores;
+        get useRelativeScores() {
+            return this.rubric.useScores && this.rubric.useRelativeWeights;
+        }
+
+        get showRelativeScores() {
+            return this.useRelativeScores && this.showScores;
+        }
+
+        get showRubricHeader() {
+            return this.rubric.useScores || (!this.rubric.useScores && this.evaluators.length)
+        }
+
+        get showTotals() {
+            return this.rubric.useScores && (!this.rubric.useRelativeWeights || this.showScores);
+        }
+
+        get showSeparator() {
+            return !(this.useGrades || (this.useScores && this.rubric.useRelativeWeights && !this.showScores));
         }
 
         get evaluators() {
