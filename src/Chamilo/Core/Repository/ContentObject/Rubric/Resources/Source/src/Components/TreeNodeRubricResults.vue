@@ -1,10 +1,8 @@
 <template>
     <div class="treenode-rubric-results" :class="{'rb-col-start-3': useScores && rubric.useRelativeWeights && showScores, 'is-selected': options.selectedTreeNode === treeNode, 'is-highlighted': options.highlightedTreeNode === treeNode}" @click.stop="options.selectedTreeNode = treeNode" @mouseover="options.highlightedTreeNode = treeNode" @mouseout="options.highlightedTreeNode = null">
-        <div class="treenode-evaluations">
-            <tree-node-evaluation-display v-for="evaluation in evaluations"
-                                          :rubric="rubric" :tree-node="treeNode" :show-scores="showScores" :score="getScore(evaluation)" :feedback="evaluation.feedback" :title-overlay="getEvaluationTitleOverlay(evaluation)" :level="evaluation.level || null"></tree-node-evaluation-display>
-            <tree-node-evaluation-display v-if="useAbsoluteScores" show-max :rubric="rubric" :tree-node="treeNode" :score="maxScore" :class="{'is-selected': isCriterium && options.selectedTreeNode === treeNode}" />
-        </div>
+        <tree-node-evaluation-display v-for="evaluation in evaluations"
+                                      :rubric="rubric" :tree-node="treeNode" :show-scores="showScores" :score="getScore(evaluation)" :feedback="evaluation.feedback" :title-overlay="getEvaluationTitleOverlay(evaluation)" :level="evaluation.level || null"></tree-node-evaluation-display>
+        <tree-node-evaluation-display v-if="useAbsoluteScores" show-max :rubric="rubric" :tree-node="treeNode" :score="maxScore" :class="{'is-selected': isCriterium && options.selectedTreeNode === treeNode}" />
     </div>
 </template>
 
@@ -80,9 +78,10 @@
 <style lang="scss" scoped>
     .treenode-rubric-results {
         align-items: center;
+        cursor: default;
         display: flex;
         position: relative;
-        z-index: 10;
+        z-index: 0;
 
         &.is-highlighted {
             &::before, &::after {
@@ -110,19 +109,13 @@
         &::before {
             right: -.7rem;
             left: 0;
-            z-index: 10;
+            z-index: -1;
         }
 
         &::after {
             right: -3rem;
             width: 3rem;
         }
-    }
-
-    .treenode-evaluations {
-        display: flex;
-        width: 100%;
-        z-index: 20;
     }
 </style>
 

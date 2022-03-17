@@ -61,7 +61,7 @@
             <div class="rubric-header-fill"></div>
         </template>
         <template v-for="{cluster, ext, evaluation, score} in getClusterRowsData(rubric)">
-            <div class="treenode-title-header mod-responsive mod-entry rb-lg:col-start-1 rb-md-max:col-span-full" :class="{ 'is-highlighted': highlightedTreeNode === cluster }" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+            <div class="treenode-title-header rb-lg:col-start-1 rb-md-max:col-span-full" :class="{ 'is-highlighted': highlightedTreeNode === cluster }" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                 <h1 class="treenode-title cluster-title">{{ cluster.title }}</h1>
                 <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
                     <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
@@ -71,7 +71,7 @@
                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
             </div>
             <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
-                <div v-if="category.title" class="treenode-title-header mod-category has-category mod-responsive mod-entry rb-lg:col-start-1 rb-md-max:col-span-full" :class="{ 'is-highlighted': highlightedTreeNode === category }" :style="`--category-color: ${ category.title && category.color ? category.color : '#999' }`" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
+                <div v-if="category.title" class="treenode-title-header mod-category has-category rb-lg:col-start-1 rb-md-max:col-span-full" :class="{ 'is-highlighted': highlightedTreeNode === category }" :style="`--category-color: ${ category.title && category.color ? category.color : '#999' }`" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
                     <div class="treenode-title-header-pre mod-category" :class="{'mod-no-color': !category.color}"></div>
                     <h2 class="treenode-title category-title">{{ category.title }}</h2>
                     <button v-if="!preview && !showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback" @mouseover="highlightedTreeNode = category" @mouseout="highlightedTreeNode = null">
@@ -82,7 +82,7 @@
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
-                    <div class="treenode-title-header mod-responsive mod-entry rb-lg:col-start-1 rb-md-max:col-span-full" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'is-highlighted': highlightedTreeNode === criterium, 'has-category': !!category.title}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
+                    <div class="treenode-title-header rb-lg:col-start-1 rb-md-max:col-span-full" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback, 'is-highlighted': highlightedTreeNode === criterium, 'has-category': !!category.title}" :style="`--category-color: ${ !(category.title && category.color) ? '#999' : category.color }`" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 :id="`criterium-${criterium.id}-title`" class="treenode-title criterium-title u-markdown-criterium" :class="{'mod-no-category': !category.title}" v-html="criterium.toMarkdown()"></h3>
                         <button v-if="!showDefaultFeedbackFields" class="btn-show" :aria-label="$t('show-default-description')" :title="$t('show-default-description')" @click.prevent="ext.showDefaultFeedback = !ext.showDefaultFeedback">
@@ -428,25 +428,6 @@
         color: red;
     }
 
-    .treenode-title-header.mod-entry {
-        position: relative;
-
-        &::before {
-            border-left: .5rem solid transparent;
-            bottom: -.5rem;
-            content: '';
-            left: -1rem;
-            position: absolute;
-            right: -.7rem;
-            top: -.5rem;
-            transition: 200ms border;
-        }
-
-        &.is-highlighted::before {
-            border-color: hsla(204, 45%, 53%, 1);
-        }
-    }
-
     .treenode-level-icon-check.fa {
         font-size: 1.3rem;
         opacity: 0.2;
@@ -610,10 +591,6 @@
             text-align: center;
         }
 
-        .treenode-title-header.mod-entry {
-            padding-top: .6rem;
-        }
-
         .treenode-weight-title {
             display: none;
         }
@@ -681,31 +658,20 @@
     }
 </style>
 
-<style scoped>
-    @media only screen and (max-width: 899px) {
-        .treenode-weight-header {
-            display: none;
+<style lang="scss" scoped>
+    .treenode-title-header {
+        position: relative;
+
+        @include hover-style();
+
+        &.is-highlighted::before {
+            border-color: hsla(204, 45%, 53%, 1);
         }
     }
-</style>
-
-<style lang="scss" scoped>
-
 
     @media only screen and (min-width: 900px) {
-        .treenode-title-header.has-category::after {
-            position: absolute;
-            top: -0.5rem;
-            width: 1px;
-            bottom: -0.2rem;
-            left: 0.6rem;
-            background-color: var(--category-color);
-            content: '';
-            opacity: .5;
-        }
-
-        .treenode-title-header.mod-category::after {
-            top: .8rem;
+        .treenode-title-header {
+            padding-top: .6rem;
         }
 
         .criterium-title {
@@ -718,19 +684,25 @@
     }
 
     @media only screen and (max-width: 899px) {
-        /*.treenode-title-header.has-category:not(.mod-category)::after {
-            bottom: -4.1rem;
-        }*/
+        .treenode-weight-header {
+            display: none;
+        }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
         .criterium-title {
+            margin-left: .75rem;
+        }
+
+        .treenode-title-header:not(.is-feedback-visible) .criterium-title {
             margin-left: -.75rem;
         }
+
         .btn-icon-show-feedback {
             background: white;
             margin-left: .75rem;
         }
+
         .btn-show {
             z-index: 20;
         }
@@ -740,31 +712,6 @@
         .criterium-title {
             margin-left: .75rem;
         }
-    }
-
-    .treenode-title-header-pre.mod-category:after {
-        border-radius: 50%;
-    }
-
-    .treenode-title-header-pre.mod-category.mod-no-color::after {
-        border: 1px solid #bbb;
-        background-color: #fff;
-        width: 1.1rem;
-        height: 1.1rem;
-        position: absolute;
-        left: .1rem;
-    }
-
-    .treenode-title-header-pre.mod-criterium::after {
-        border: 1px solid var(--category-color);
-        content: '';
-        border-radius: 50%;
-        height: 7px;
-        margin-top: 0.3rem;
-        width: 7px;
-        position: absolute;
-        left: 0.3rem;
-        background-color: white;
     }
 
     .treenode-title.cluster-title {

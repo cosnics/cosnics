@@ -1,5 +1,6 @@
 <template>
-    <div class="treenode-title-header-wrap" :class="{'rb-col-start-1': isCluster, 'mod-category': isCategory, 'has-category': (isCategory && !!treeNode.title) || (isCriterium && !!treeNode.parent.title), 'is-selected': options.selectedTreeNode === treeNode, 'is-highlighted': options.highlightedTreeNode === treeNode}" @click.stop="options.selectedTreeNode = treeNode" @mouseover="options.highlightedTreeNode = treeNode" @mouseout="options.highlightedTreeNode = null"
+    <div class="treenode-title-header-wrap" :class="{'rb-col-start-1': isCluster, 'mod-category': isCategory, 'has-category': (isCategory && !!treeNode.title) || (isCriterium && !!treeNode.parent.title), 'is-selected': options.selectedTreeNode === treeNode, 'is-highlighted': options.highlightedTreeNode === treeNode}"
+         @click.stop="options.selectedTreeNode = treeNode" @mouseover="options.highlightedTreeNode = treeNode" @mouseout="options.highlightedTreeNode = null"
          :style="color">
         <div class="treenode-title-header">
             <div v-if="nodeType !== 'cluster'" class="treenode-title-header-pre" :class="[`mod-${nodeType}`, {'mod-no-color': isCategory && !treeNode.color}]"></div>
@@ -81,31 +82,8 @@
         min-height: 2.7rem;
         position: relative;
 
-        &::before {
-            bottom: -.5rem;
-            border-left: .5rem solid transparent;
-            content: '';
-            left: -1rem;
-            position: absolute;
-            right: -.7rem;
-            top: -.5rem;
-            transition: 200ms border;
-        }
-
-        &.has-category::after {
-            position: absolute;
-            top: -0.5rem;
-            width: 1px;
-            bottom: -0.2rem;
-            left: 0.6rem;
-            background-color: var(--category-color);
-            content: '';
-            opacity: .5;
-        }
-
-        &.mod-category::after {
-            top: .8rem;
-        }
+        @include hover-style();
+        @include category-style();
 
         &.is-highlighted::before {
             background: hsla(230, 15%, 97%, 1);
@@ -118,33 +96,6 @@
 
     .treenode-title-header {
         flex: 1;
-    }
-
-    .treenode-title-header-pre {
-        &.mod-criterium::after {
-            border: 1px solid var(--category-color);
-            content: '';
-            border-radius: 50%;
-            height: 7px;
-            margin-top: 0.3rem;
-            width: 7px;
-            position: absolute;
-            left: 0.3rem;
-            background-color: white;
-        }
-
-        &.mod-category::after {
-            border-radius: 50%;
-        }
-
-        &.mod-category.mod-no-color::after {
-            border: 1px solid #bbb;
-            background-color: #fff;
-            width: 1.1rem;
-            height: 1.1rem;
-            position: absolute;
-            left: .1rem;
-        }
     }
 
     .treenode-title {

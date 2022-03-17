@@ -29,16 +29,16 @@
         get useScores() {
             return this.rubric.useScores;
         }
-
     }
 </script>
 
 <style lang="scss" scoped>
     .treenode-weight {
+        cursor: default;
         padding-top: .25rem;
         position: relative;
         text-align: center;
-        z-index: 10;
+        z-index: 0;
 
         &::before {
             bottom: -.5rem;

@@ -67,7 +67,7 @@
                 <tree-node-rubric-results :rubric="rubric" :tree-node="rubric" :rubric-evaluation="rubricEvaluation" :max-score="rubric.getMaximumScore()" :evaluations="evaluators" :show-scores="showScores"></tree-node-rubric-results>
             </template>
         </div>
-        <tree-node-results-view v-if="selectOptions.selectedTreeNode" :rubric="rubric" :tree-node="selectOptions.selectedTreeNode" :evaluations="getTreeNodeRowData(selectOptions.selectedTreeNode).evaluations" @close="selectOptions.selectedTreeNode = null"></tree-node-results-view>
+        <tree-node-results-view v-if="selectedTreeNode" :rubric="rubric" :tree-node="selectedTreeNode" :evaluations="getTreeNodeRowData(selectedTreeNode).evaluations" @close="selectedTreeNode = null"></tree-node-results-view>
     </div>
     <div v-else class="alert-rubric-results">{{ $t('no-results-available') }}</div>
 </template>
@@ -162,7 +162,7 @@
         }
 
         get showRubricHeader() {
-            return this.rubric.useScores || (!this.rubric.useScores && this.evaluators.length)
+            return this.rubric.useScores || (!this.rubric.useScores && this.evaluators.length);
         }
 
         get showTotals() {
