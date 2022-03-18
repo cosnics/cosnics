@@ -46,12 +46,12 @@
 </i18n>
 
 <template>
-    <div class="rubric mod-entry" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.rubricLevels.length}">
         <ul class="rubric-tools">
             <slot name="demoEvaluator"></slot>
             <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header">
+        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-show">
             <span>{{ $t('weight') }}</span>
         </div>
         <template v-if="!rubric.hasCustomLevels">
@@ -89,7 +89,7 @@
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
-                    <div class="treenode-weight mod-responsive mod-entry mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
+                    <div class="treenode-weight mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                     <div class="treenode-rubric-input rb-md:col-start-1 rb-sm:col-span-full" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                         <div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>
                         <tree-node-entry :rubric="rubric" :ext="ext" :evaluation="evaluation" :preview="preview" :show-default-feedback-fields="showDefaultFeedbackFields" @select="selectLevel"></tree-node-entry>
@@ -345,15 +345,6 @@
         &.mod-grades {
             grid-template-columns: minmax(max-content, 23rem) minmax(calc(var(--num-cols) * 15rem), calc(var(--num-cols) * 30rem));
         }
-
-        &.mod-entry > :not(.rubric-tools) {
-            transition: opacity 200ms;
-        }
-
-        &.mod-entry.is-demo-inactive > :not(.rubric-tools) {
-            opacity: 0;
-            pointer-events: none;
-        }
     }
 
     .app-tool-item {
@@ -581,21 +572,6 @@
         }
     }
 
-    .treenode-weight {
-        color: rgb(95, 146, 157);
-    }
-
-    @media only screen and (min-width: 900px) {
-        .treenode-weight.mod-entry {
-            padding-top: .25rem;
-            text-align: center;
-        }
-
-        .treenode-weight-title {
-            display: none;
-        }
-    }
-
     @media only screen and (max-width: 899px) {
         .rubric.mod-scores {
             grid-template-columns: minmax(calc(var(--num-cols) * 5rem), calc(var(--num-cols) * 30rem)) 5.6rem;
@@ -624,11 +600,6 @@
 
         .treenode-custom-feedback {
             margin-left: 1.8rem;
-        }
-
-        .treenode-weight-title {
-            color: hsl(180, 17%, 41%);
-            font-weight: 700;
         }
     }
 
@@ -659,6 +630,15 @@
 </style>
 
 <style lang="scss" scoped>
+    .rubric > :not(.rubric-tools) {
+        transition: opacity 200ms;
+    }
+
+    .rubric.is-demo-inactive > :not(.rubric-tools) {
+        opacity: 0;
+        pointer-events: none;
+    }
+
     .treenode-title-header {
         position: relative;
 
@@ -674,26 +654,13 @@
             padding-top: .6rem;
         }
 
-        .criterium-title {
-            margin-left: .75rem;
-        }
-
-        .criterium-title.mod-no-category {
-            margin-left: .25rem;
-        }
-    }
-
-    @media only screen and (max-width: 899px) {
-        .treenode-weight-header {
-            display: none;
+        .treenode-weight {
+            padding-top: .25rem;
+            text-align: center;
         }
     }
 
     @media only screen and (min-width: 680px) and (max-width: 899px) {
-        .criterium-title {
-            margin-left: .75rem;
-        }
-
         .treenode-title-header:not(.is-feedback-visible) .criterium-title {
             margin-left: -.75rem;
         }
@@ -706,16 +673,6 @@
         .btn-show {
             z-index: 20;
         }
-    }
-
-    @media only screen and (max-width: 679px) {
-        .criterium-title {
-            margin-left: .75rem;
-        }
-    }
-
-    .treenode-title.cluster-title {
-        margin-left: .25rem;
     }
 
     .cluster-sep {

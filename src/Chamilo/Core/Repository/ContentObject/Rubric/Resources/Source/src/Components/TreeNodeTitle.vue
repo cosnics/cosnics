@@ -102,15 +102,7 @@
         max-width: 22.2rem;
     }
 
-    .cluster-title {
+    .criterium-title.mod-no-category {
         margin-left: .25rem;
-    }
-
-    .criterium-title {
-        padding-left: .75rem;
-
-        &.mod-no-category {
-            padding-left: .25rem;
-        }
     }
 </style>

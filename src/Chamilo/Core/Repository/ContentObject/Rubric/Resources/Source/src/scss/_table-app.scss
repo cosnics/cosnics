@@ -90,6 +90,10 @@
     }
   }
 
+  .treenode-weight {
+    color: rgb(95, 146, 157);
+  }
+
   .rubric-header {
     background: #fff;
     display: flex;
@@ -183,6 +187,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
+    margin-left: .25rem;
   }
 
   .category-title {
@@ -196,6 +201,7 @@
   .criterium-title {
     font-size: 1.3rem;
     line-height: 1.69rem;
+    margin-left: .75rem;
   }
 
   .cluster-sep {
@@ -281,6 +287,14 @@
     .treenode-title-header {
       @include category-style();
     }
+
+    .criterium-title.mod-no-category {
+      margin-left: .25rem;
+    }
+
+    .treenode-weight-title {
+      display: none;
+    }
   }
 
   @media only screen and (max-width: 899px) {
@@ -302,6 +316,19 @@
 
     .rubric-header.mod-responsive, .treenode-choices {
       padding-left: 1.8rem;
+    }
+
+    .treenode-weight-header.mod-show {
+      display: none;
+    }
+
+    .treenode-weight.mod-pad {
+      padding-left: 1.8rem;
+    }
+
+    .treenode-weight-title {
+      color: hsl(180, 17%, 41%);
+      font-weight: 700;
     }
 
     .total-title {
