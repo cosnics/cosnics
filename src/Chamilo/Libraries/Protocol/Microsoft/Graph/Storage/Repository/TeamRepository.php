@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Protocol\Microsoft\Graph\Storage\Repository;
 
 use Chamilo\Libraries\Architecture\Exceptions\ValueNotInArrayException;
 use Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException;
-use Microsoft\Graph\Http\GraphResponse;
 use Microsoft\Graph\Model\Team;
 
 /**
@@ -52,7 +51,7 @@ class TeamRepository
      */
     public function createStandardTeam(string $title, string $description, string $ownerAzureId)
     {
-        return $this->createTeam($title, $description, $ownerAzureId, 'standard');
+        return $this->createTeam($title, $description, $ownerAzureId);
     }
 
     /**
@@ -119,7 +118,7 @@ class TeamRepository
     }
 
     /**
-     * @param $groupId
+     * @param string $groupId
      *
      * @return \Microsoft\Graph\Model\Entity | Team
      * @throws \Chamilo\Libraries\Protocol\Microsoft\Graph\Exception\GraphException

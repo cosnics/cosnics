@@ -38,6 +38,13 @@ class CriteriumNode extends TreeNode
     protected $choices;
 
     /**
+     * @var Level[] | ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Level", mappedBy="criterium")
+     */
+    protected $levels;
+
+    /**
      * CriteriumNode constructor.
      *
      * @param string $title
@@ -49,6 +56,7 @@ class CriteriumNode extends TreeNode
     public function __construct(string $title, RubricData $rubricData, TreeNode $parentNode = null)
     {
         $this->choices = new ArrayCollection();
+        $this->levels = new ArrayCollection();
 
         parent::__construct($title, $rubricData, $parentNode);
     }
@@ -165,6 +173,75 @@ class CriteriumNode extends TreeNode
     }
 
     /**
+     * @return bool
+     */
+    public function hasLevels(): bool
+    {
+        return !$this->levels->isEmpty();
+    }
+
+    /**
+     * @return Level[]|ArrayCollection
+     */
+    public function getLevels()
+    {
+        return $this->levels;
+    }
+
+    /**
+     * @param Level[]|ArrayCollection $levels
+     *
+     * @return CriteriumNode
+     */
+    public function setLevels(ArrayCollection $levels)
+    {
+        $this->levels = $levels;
+
+        foreach ($this->levels as $level)
+        {
+            $level->setCriterium($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Level $level
+     *
+     * @return CriteriumNode
+     */
+    public function addLevel(Level $level): self
+    {
+        if ($this->levels->contains($level))
+        {
+            return $this;
+        }
+
+        $this->levels->add($level);
+        $level->setCriterium($this);
+
+        return $this;
+    }
+
+    /**
+     * @param Level $level
+     *
+     * @return CriteriumNode
+     */
+    public function removeLevel(Level $level): self
+    {
+        if (!$this->levels->contains($level))
+        {
+            return $this;
+        }
+
+        $this->levels->removeElement($level);
+        $level->setCriterium(null);
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getAllowedChildTypes()
@@ -225,10 +302,22 @@ class CriteriumNode extends TreeNode
     {
         $maximumScore = 0;
 
-        foreach($this->choices as $choice)
+        if ($this->hasLevels())
+        {
+            foreach ($this->levels as $level)
+            {
+                if ($level->getScore() > $maximumScore)
+                {
+                    $maximumScore = $level->getScore();
+                }
+            }
+            return $maximumScore;
+        }
+
+        foreach ($this->choices as $choice)
         {
             $score = $choice->calculateScore();
-            if($score > $maximumScore)
+            if ($score > $maximumScore)
             {
                 $maximumScore = $score;
             }

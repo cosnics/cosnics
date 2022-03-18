@@ -13,11 +13,11 @@
 </i18n>
 
 <template>
-    <div class="feedback-input-area">
-        <textarea v-model="choice.feedback" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}" @input="onFeedbackChange" @focus="isFeedbackInputActive = true" @blur="isFeedbackInputActive = false">></textarea>
-        <div class="feedback-markup-preview" :class="{'is-input-active': isFeedbackInputActive || !choice.feedback}">
+    <div class="description-input-area">
+        <textarea v-model="description" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isDescriptionInputActive || !description}" @input="onDescriptionChange" @focus="isDescriptionInputActive = true" @blur="isDescriptionInputActive = false"></textarea>
+        <div class="description-markup-preview" :class="{'is-input-active': isDescriptionInputActive || !description}">
             <slot></slot>
-            <div class="choice-preview" v-html="choice.toMarkdown()"></div>
+            <div class="preview" v-html="preview"></div>
         </div>
     </div>
 </template>
@@ -26,16 +26,29 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
     import Choice from '../Domain/Choice';
+    import Level from '../Domain/Level';
 
     @Component({
-        name: 'feedback-field',
+        name: 'description-field',
         components: {
         },
     })
-    export default class FeedbackField extends Vue {
-        private isFeedbackInputActive = false;
+    export default class DescriptionField extends Vue {
+        private isDescriptionInputActive = false;
 
-        @Prop({type: Choice, required: true}) readonly choice!: Choice;
+        @Prop({type: [Choice, Level], required: true}) readonly fieldItem!: Choice|Level;
+
+        set description(desc: string) {
+            this.fieldItem.description = desc;
+        }
+
+        get description(): string {
+            return this.fieldItem.description;
+        }
+
+        get preview() {
+            return this.fieldItem.toMarkdown();
+        }
 
         constructor() {
             super();
@@ -43,10 +56,10 @@
         }
 
         onChange() {
-            this.$emit('change', this.choice);
+            this.$emit('change', this.fieldItem);
         }
 
-        onFeedbackChange(e: InputEvent) {
+        onDescriptionChange(e: InputEvent) {
             this.$emit('input', e);
             this.onChange();
         }
@@ -54,7 +67,7 @@
 </script>
 
 <style lang="scss">
-    .feedback-input-area {
+    .description-input-area {
         position: relative;
     }
 
@@ -63,15 +76,14 @@
 
         &.is-input-active {
             opacity: 1;
-
         }
 
-        &:focus + .feedback-markup-preview.is-input-active .level-score {
+        &:focus + .description-markup-preview.is-input-active .level-score {
             opacity: 0;
         }
     }
 
-    .feedback-markup-preview {
+    .description-markup-preview {
         border: none;
         bottom: .5em;
         left: 0;
@@ -82,7 +94,7 @@
         right: 0;
         top: 0;
 
-        &.is-input-active .choice-preview {
+        &.is-input-active .preview {
             opacity: 0;
         }
 
@@ -98,7 +110,7 @@
     }
 
     @media only screen and (min-width: 680px) {
-        .feedback-markup-preview .level-score {
+        .description-markup-preview .level-score {
             align-items: center;
             float: right;
             background-color: #f7fcfc;
@@ -110,7 +122,7 @@
             font-size: 1.5rem;
             height: 1.75em;
             justify-content: center;
-            margin: -4px -4px .5em .5em;
+            margin: -3px -3px .5em .5em;
             padding-left: 0.5em;
             padding-right: 0.5em;
             text-align: center;

@@ -96,8 +96,8 @@ abstract class HtmlInlineOfficeRenditionImplementation extends HtmlInlineRenditi
             $html[] = implode(' ', $alertText);
             $html[] = '</div>';
 
-            $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" data-url="' .
-                $this->getIFrameSource() . '">';
+            $html[] = '<iframe class="' . implode(' ', $this->getViewerFrameClasses()) . '" src="' .
+                $this->getIFrameSource() . '" style="border: none;">';
             $html[] = '</iframe>';
 
             $html[] = '</div>';

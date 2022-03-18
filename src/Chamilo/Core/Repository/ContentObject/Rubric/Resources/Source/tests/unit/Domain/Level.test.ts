@@ -1,13 +1,12 @@
-import Level, {Signal} from "../../../src/Domain/Level";
+import Level from '../../../src/Domain/Level';
 
 test('json', () => {
-    let level = new Level('My Level', "description", 5, Signal.GREEN, true);
+    let level = new Level('My Level', 'description', 5, true);
     expect(Level.fromJSON(level.toJSON())).toEqual(level);
 });
 
 test('toString', () => {
-    let level = new Level('My Level', "description", 5, Signal.GREEN, true);
-    let id = level.id;
+    const level = new Level('My Level', 'description', 5, true);
 
-    expect(level.toString()).toEqual('Level (id: ' + id + ', title: '+level.title + ')');
+    expect(level.toString()).toEqual(`Level (id: ${level.id}, title: ${level.title})`);
 });
