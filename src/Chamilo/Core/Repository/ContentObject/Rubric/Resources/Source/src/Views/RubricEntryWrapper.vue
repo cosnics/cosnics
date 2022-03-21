@@ -46,6 +46,7 @@
                     'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null,
                     'type': evaluation.treeNode.getType()
                 }));
+                console.log(this.rubricResults.results);
             }
         }
 
