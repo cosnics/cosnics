@@ -23,7 +23,7 @@
         <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-show">
             <span>{{ $t('weight') }}</span>
         </div>
-        <div class="rubric-header mod-responsive" v-if="!rubric.hasCustomLevels">
+        <div class="rubric-header mod-show" v-if="!rubric.hasCustomLevels">
             <div class="rubric-header-title" v-for="level in rubric.rubricLevels">{{ level.title }}</div>
         </div>
         <template v-for="(cluster, index) in rubric.clusters">

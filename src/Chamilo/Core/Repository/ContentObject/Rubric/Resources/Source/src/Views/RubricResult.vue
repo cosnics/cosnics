@@ -27,7 +27,10 @@
 <template>
     <div v-if="rubric && evaluators.length" class="rubric-results-view">
         <div class="rubric" :class="showRelativeScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
-            <ul class="rubric-tools" v-if="useRelativeScores">
+            <div style="grid-column: 1 / -1;white-space: nowrap; background-color: #f4fffc; border-radius: 3px; padding: 1em;">
+                <button class="btn-check" :class="{ checked: createFromExisting }" @click.stop="createFromExisting = !createFromExisting"><span class="lbl-check" tabindex="-1" ><i class="btn-icon-check fa" aria-hidden="true"></i>Nieuwe rubric aanmaken op basis van een bestaand resultaat</span></button>
+            </div>
+            <ul class="rubric-tools" v-if="useRelativeScores" style="padding-left: 1em">
                 <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
             </ul>
             <div v-if="showRelativeScores" class="treenode-weight-header rb-col-start-2">
@@ -35,13 +38,20 @@
             </div>
             <ul v-if="showRubricHeader" class="rubric-header" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'">
                 <li class="rubric-header-title mod-res" v-for="evaluator in evaluators"
-                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name" @click="copyRubricResults(evaluator.resultId)">{{ evaluator.name|capitalize }}</li>
+                    :class="{ 'mod-grades': useGradesMode }" :title="evaluator.name">{{ evaluator.name|capitalize }}</li>
                 <li v-if="useAbsoluteScores" class="rubric-header-title mod-res mod-max">Max.</li>
             </ul>
             <ul v-if="showRubricHeader" class="rubric-header mod-date" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'">
                 <li class="rubric-header-date" v-for="evaluator in evaluators"
-                    :class="{ 'mod-grades': useGrades }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
+                    :class="{ 'mod-grades': useGradesMode }" :title="evaluator.name">{{ evaluator.date|formatDate }}</li>
                 <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
+            </ul>
+            <ul v-if="showRubricHeader && createFromExisting" class="rubric-header" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'"
+                style="margin-top: -1.5rem; margin-bottom: 0; position: static; z-index: 29">
+                <li v-for="evaluator in evaluators" style="flex:1;" :style="'text-align: ' + (useGradesMode ? 'left': 'right')">
+                    <button class="btn btn-sm btn-default" style="padding: 0 4px" @click="copyRubricResults(evaluator.resultId)">Selecteer</button>
+                </li>
+                <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" style="flex:1" aria-hidden="true"></li>
             </ul>
             <template v-for="{cluster, maxScore, evaluations} in getClusterRowsData(rubric)">
                 <tree-node-title :rubric="rubric" :tree-node="cluster" :options="selectOptions"></tree-node-title>
@@ -60,7 +70,7 @@
                     </template>
                     <div class="category-sep" v-if="index < getCategoryRowsData(cluster).length - 1"></div>
                 </template>
-                <div class="cluster-sep" :class="{ 'mod-hide-last': !showSeparator }"></div>
+                <div class="cluster-sep" :class="{ 'mod-hide-last': useGradesMode }"></div>
             </template>
             <template v-if="showTotals">
                 <div class="total-title" :class="{'mod-res-col': showRelativeScores}">{{ $t('total') }} {{ $t('rubric') }}:</div>
@@ -108,6 +118,7 @@
     })
     export default class RubricResult extends Vue {
         private showScores = false;
+        private createFromExisting = false;
 
         private selectOptions: any = {
             selectedTreeNode: null,
@@ -169,8 +180,8 @@
             return this.rubric.useScores && (!this.rubric.useRelativeWeights || this.showScores);
         }
 
-        get showSeparator() {
-            return !(this.useGrades || (this.useScores && this.rubric.useRelativeWeights && !this.showScores));
+        get useGradesMode() {
+            return this.useGrades || (this.useScores && this.rubric.useRelativeWeights && !this.showScores);
         }
 
         get evaluators() {

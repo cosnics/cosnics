@@ -65,7 +65,7 @@
     height: 100%;
     list-style: none;
     margin: 0;
-    padding-left: 1.75rem;
+    padding-left: .5rem;
     position: sticky;
     top: 0;
     z-index: 30;
@@ -314,7 +314,7 @@
       grid-column: 1 / -1;
     }
 
-    .rubric-header.mod-responsive, .treenode-choices {
+    .rubric-header.mod-show, .treenode-choices {
       padding-left: 1.8rem;
     }
 
@@ -375,7 +375,7 @@
       grid-column: 1 / -1;
     }
 
-    .rubric-header.mod-responsive {
+    .rubric-header.mod-show {
       display: none;
     }
 

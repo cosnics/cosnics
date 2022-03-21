@@ -55,7 +55,7 @@
             <span>{{ $t('weight') }}</span>
         </div>
         <template v-if="!rubric.hasCustomLevels">
-            <ul class="rubric-header mod-responsive rb-md-max:col-start-1">
+            <ul class="rubric-header mod-show rb-md-max:col-start-1">
                 <li class="rubric-header-title" v-for="level in rubric.rubricLevels"><!--<span v-if="useScores && rubric.useRelativeWeights" style="background-color: rgba(0, 0, 0, .1); border-radius: 3px; float: right; font-weight: 600; padding: 0 5px">{{level.score}}</span>-->{{ level.title }}</li>
             </ul>
             <div class="rubric-header-fill"></div>
@@ -357,12 +357,6 @@
         }
     }
 
-    .rubric-relative-weights-header {
-        position: sticky;
-        top: 0;
-        z-index: 30;
-    }
-
     .treenode-weight > .fa-percent {
         color: rgb(129, 169, 177);
         font-size: 1rem;
@@ -612,10 +606,6 @@
 
     @media only screen and (max-width: 679px) {
         .rubric-header-fill {
-            display: none;
-        }
-
-        .rubric-relative-weights-header.mod-responsive {
             display: none;
         }
 

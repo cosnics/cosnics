@@ -3,19 +3,22 @@
     "en": {
         "date-time-at": "at",
         "level": "Level",
-        "no-score-given": "No score given",
+        "no-level": "No level given",
+        "no-score": "No score",
         "score-weight": "Score on grand total with the given weight"
     },
     "fr": {
         "date-time-at": "à",
         "level": "Niveau",
-        "no-score-given": "No score given",
+        "no-level": "No level given",
+        "no-score": "No score",
         "score-weight": "Score sur le total général avec le poids donné"
     },
     "nl": {
         "date-time-at": "om",
         "level": "Niveau",
-        "no-score-given": "geen score opgegeven",
+        "no-level": "geen niveau opgegeven",
+        "no-score": "geen score",
         "score-weight": "Score op eindtotaal met het gegeven gewicht"
     }
 }
@@ -33,7 +36,7 @@
                     <span class="treenode-evaluator-score">{{ score|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
                     <span v-if="useRelativeWeights" :title="$t('score-weight')" class="treenode-evaluator-rel-score">{{ weightedScore|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
                 </template>
-                <span v-else class="m-no-score">{{ $t('no-score-given') }}</span>
+                <span v-else class="m-no-score">{{ $t('no-score') }}</span>
             </template>
         </div>
         <template v-if="isCriterium">
@@ -42,6 +45,7 @@
                 <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">{{ level.title }}</div>
                 <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>
             </template>
+            <span v-else class="m-no-score">{{ $t('no-level') }}</span>
         </template>
         <div class="treenode-evaluator-feedback" v-if="feedback"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ feedback }}</div>
     </div>
