@@ -3,16 +3,22 @@
     "en": {
         "date-time-at": "at",
         "level": "Level",
+        "no-level": "No level given",
+        "no-score": "No score",
         "score-weight": "Score on grand total with the given weight"
     },
     "fr": {
         "date-time-at": "à",
         "level": "Niveau",
+        "no-level": "No level given",
+        "no-score": "No score",
         "score-weight": "Score sur le total général avec le poids donné"
     },
     "nl": {
         "date-time-at": "om",
         "level": "Niveau",
+        "no-level": "geen niveau opgegeven",
+        "no-score": "geen score",
         "score-weight": "Score op eindtotaal met het gegeven gewicht"
     }
 }
@@ -26,14 +32,20 @@
                 <time class="treenode-evaluator-date">{{ evaluator.date|formatDate($t('date-time-at')) }}</time>
             </div>
             <template v-if="useScores">
-                <span class="treenode-evaluator-score">{{ score|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
-                <span v-if="useRelativeWeights" :title="$t('score-weight')" class="treenode-evaluator-rel-score">{{ weightedScore|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
+                <template v-if="score !== null">
+                    <span class="treenode-evaluator-score">{{ score|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
+                    <span v-if="useRelativeWeights" :title="$t('score-weight')" class="treenode-evaluator-rel-score">{{ weightedScore|formatNum }}<template v-if="useRelativeWeights"><i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></template></span>
+                </template>
+                <span v-else class="m-no-score">{{ $t('no-score') }}</span>
             </template>
         </div>
         <template v-if="isCriterium">
             <span class="level-txt">{{ $t('level') }}:</span>
-            <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">{{ level.title }}</div>
-            <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>
+            <template v-if="level">
+                <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">{{ level.title }}</div>
+                <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>
+            </template>
+            <span v-else class="m-no-score">{{ $t('no-level') }}</span>
         </template>
         <div class="treenode-evaluator-feedback" v-if="feedback"><i class="fa fa-comment-o" aria-hidden="true"></i>{{ feedback }}</div>
     </div>
@@ -66,7 +78,7 @@
                 return `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear().toString().substr(-2)} ${atStr} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
             },
             formatNum: function (v: number|null) {
-                if (v === null) { return '0'; }
+                if (v === null) { return ''; }
                 return v.toLocaleString(undefined, {maximumFractionDigits: 2});
             }
         }
@@ -78,7 +90,7 @@
         @Prop({type: [Cluster, Category, Criterium]}) readonly treeNode!: Cluster|Category|Criterium;
         @Prop({type: Object}) readonly evaluator!: any;
         @Prop({type: Number, default: null}) readonly score!: number|null;
-        @Prop({type: Level}) readonly level!: Level;
+        @Prop({type: Level}) readonly level!: Level|null;
         @Prop({type: String, default: ''}) readonly feedback!: string;
 
         get useScores() {
@@ -94,7 +106,7 @@
         }
 
         get treeNodeLevelDescription() {
-            if (this.treeNode instanceof Criterium) {
+            if (this.level !== null && this.treeNode instanceof Criterium) {
                 if (this.level.criteriumId === this.treeNode.id) {
                     return this.level.description;
                 }
@@ -204,5 +216,9 @@
     font-size: 1.8rem;
     margin-right: 1rem;
     margin-top: .25rem;
+}
+.m-no-score {
+    font-style: oblique;
+    color: hsl(190, 32%, 39%);
 }
 </style>

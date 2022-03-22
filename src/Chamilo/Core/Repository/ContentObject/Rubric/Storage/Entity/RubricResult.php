@@ -210,18 +210,27 @@ class RubricResult
      */
     public function getScore(): ?float
     {
+        if (is_null($this->score))
+        {
+            return null;
+        }
         return $this->score / 100;
     }
 
     /**
-     * @param float $score
+     * @param float|null $score
      *
      * @return RubricResult
      */
-    public function setScore(float $score): RubricResult
+    public function setScore(?float $score): RubricResult
     {
-        $this->score = (int) round($score * 100);
+        if (is_null($score))
+        {
+            $this->score = null;
+            return $this;
+        }
 
+        $this->score = (int) round($score * 100);
         return $this;
     }
 

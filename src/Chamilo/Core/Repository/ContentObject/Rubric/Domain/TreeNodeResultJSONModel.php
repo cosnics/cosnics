@@ -26,7 +26,7 @@ class TreeNodeResultJSONModel
     protected $comment;
 
     /**
-     * @var float
+     * @var ?float
      */
     protected $score;
 
@@ -34,11 +34,11 @@ class TreeNodeResultJSONModel
      * TreeNodeResultJSONModel constructor.
      *
      * @param int $treeNodeId
-     * @param float $score
+     * @param float|null $score
      * @param int|null $levelId
      * @param string|null $comment
      */
-    public function __construct(int $treeNodeId, float $score, int $levelId = null, string $comment = null)
+    public function __construct(int $treeNodeId, ?float $score, int $levelId = null, string $comment = null)
     {
         $this->treeNodeId = $treeNodeId;
         $this->levelId = $levelId;

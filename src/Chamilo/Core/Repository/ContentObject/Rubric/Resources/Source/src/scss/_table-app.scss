@@ -1,3 +1,33 @@
+@mixin category-style {
+  &.has-category::after {
+    background-color: var(--category-color);
+    bottom: -0.2rem;
+    content: '';
+    left: 0.6rem;
+    opacity: .5;
+    position: absolute;
+    top: -0.5rem;
+    width: 1px;
+  }
+
+  &.mod-category::after {
+    top: .8rem;
+  }
+}
+
+@mixin hover-style {
+  &::before {
+    border-left: .5rem solid transparent;
+    bottom: -.5rem;
+    content: '';
+    left: -1rem;
+    position: absolute;
+    right: -.7rem;
+    top: -.5rem;
+    transition: 200ms border;
+  }
+}
+
 @mixin table-app {
   * {
     outline-width: thin;
@@ -35,7 +65,7 @@
     height: 100%;
     list-style: none;
     margin: 0;
-    padding-left: 1.75rem;
+    padding-left: .5rem;
     position: sticky;
     top: 0;
     z-index: 30;
@@ -58,6 +88,10 @@
       padding: 0.7rem;
       text-align: center;
     }
+  }
+
+  .treenode-weight {
+    color: rgb(95, 146, 157);
   }
 
   .rubric-header {
@@ -96,6 +130,7 @@
   }
 
   .treenode-title-header {
+    cursor: default;
     display: flex;
   }
 
@@ -108,10 +143,20 @@
 
     &.mod-category::after {
       background: var(--category-color);
+      border-radius: 50%;
       content: '';
       height: 1.3rem;
       margin-top: .15rem;
       width: 1.3rem;
+    }
+
+    &.mod-category.mod-no-color::after {
+      background-color: #fff;
+      border: 1px solid #bbb;
+      height: 1.1rem;
+      left: .1rem;
+      position: absolute;
+      width: 1.1rem;
     }
 
     &.mod-criterium {
@@ -119,12 +164,15 @@
     }
 
     &.mod-criterium::after {
+      background-color: #fff;
       border: 1px solid var(--category-color);
-      content: '';
       border-radius: 50%;
-      height: .8rem;
+      content: '';
+      height: .7rem;
+      left: .3rem;
       margin-top: .3rem;
-      width: .8rem;
+      position: absolute;
+      width: .7rem;
     }
   }
 
@@ -139,6 +187,7 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.4rem;
     font-weight: 700;
+    margin-left: .25rem;
   }
 
   .category-title {
@@ -152,6 +201,7 @@
   .criterium-title {
     font-size: 1.3rem;
     line-height: 1.69rem;
+    margin-left: .75rem;
   }
 
   .cluster-sep {
@@ -230,12 +280,20 @@
       grid-column: 1 / -1;
     }
 
-    .treenode-title-header {
-      cursor: default;
-    }
-
     .treenode-title-header .treenode-title {
       max-width: 20.2rem;
+    }
+
+    .treenode-title-header {
+      @include category-style();
+    }
+
+    .criterium-title.mod-no-category {
+      margin-left: .25rem;
+    }
+
+    .treenode-weight-title {
+      display: none;
     }
   }
 
@@ -256,8 +314,21 @@
       grid-column: 1 / -1;
     }
 
-    .rubric-header.mod-responsive, .treenode-choices {
+    .rubric-header.mod-show, .treenode-choices {
       padding-left: 1.8rem;
+    }
+
+    .treenode-weight-header.mod-show {
+      display: none;
+    }
+
+    .treenode-weight.mod-pad {
+      padding-left: 1.8rem;
+    }
+
+    .treenode-weight-title {
+      color: hsl(180, 17%, 41%);
+      font-weight: 700;
     }
 
     .total-title {
@@ -282,8 +353,8 @@
       grid-column: 1 / -1;
     }
 
-    .treenode-title-header.mod-responsive {
-      max-width: 75ch; // todo: preserve max-width on size below 680px;
+    .treenode-title-header {
+      max-width: 75ch;
     }
   }
 
@@ -304,7 +375,7 @@
       grid-column: 1 / -1;
     }
 
-    .rubric-header.mod-responsive {
+    .rubric-header.mod-show {
       display: none;
     }
 

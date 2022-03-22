@@ -14,6 +14,7 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\Extensions\
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\RightsService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Service\ScoreService;
 use Chamilo\Core\Repository\ContentObject\Assignment\Service\AssignmentRubricService;
+use Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\DataClass\Rubric;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -405,6 +406,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected function getEphorusServiceBridge()
     {
         return $this->getBridgeManager()->getBridgeByInterface(EphorusServiceBridgeInterface::class);
+    }
+
+    /**
+     * @return \Chamilo\Core\Repository\ContentObject\Rubric\Display\Bridge\RubricBridgeInterface
+     */
+    protected function getRubricBridge()
+    {
+        return $this->getBridgeManager()->getBridgeByInterface(RubricBridgeInterface::class);
     }
 
     /**

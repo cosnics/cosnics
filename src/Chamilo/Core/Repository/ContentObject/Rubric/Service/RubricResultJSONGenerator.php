@@ -75,6 +75,7 @@ class RubricResultJSONGenerator
                 $user = $this->userService->findUserByIdentifier($rubricResult->getEvaluatorUserId());
 
                 $jsonResults[$rubricResult->getResultId()] = new RubricResultJSONModel(
+                    $rubricResult->getResultId(),
                     new RubricUserJSONModel($user->getId(), $user->get_fullname()),
                     $rubricResult->getTime()
                 );
@@ -100,6 +101,8 @@ class RubricResultJSONGenerator
 
             $jsonResult->addTreeNodeResult($treeNodeResultJsonModel);
         }
+
+
 
         return array_values($jsonResults);
     }

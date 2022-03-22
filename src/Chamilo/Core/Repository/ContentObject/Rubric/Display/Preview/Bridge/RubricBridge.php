@@ -36,4 +36,14 @@ class RubricBridge implements \Chamilo\Core\Repository\ContentObject\Rubric\Disp
     {
         // TODO: Implement getPostSaveRedirectParameters() method.
     }
+
+    public function setEntryURL(string $url)
+    {
+        // TODO: Implement setEntryURL() method.
+    }
+
+    public function getEntryURL(): string
+    {
+        // TODO: Implement getEntryURL() method.
+    }
 }

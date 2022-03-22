@@ -124,7 +124,12 @@ class RubricResultService
             $choice = null;
             $level = null;
 
-            if ($treeNode->hasLevels())
+            $levelId = $treeNodeResultJSONModel->getLevelId();
+            if (is_null($levelId))
+            {
+                $calculatedScore = null;
+            }
+            else if ($treeNode->hasLevels())
             {
                 $level = $rubricData->getLevelById($treeNodeResultJSONModel->getLevelId());
                 if ($treeNode !== $level->getCriterium())
@@ -188,19 +193,44 @@ class RubricResultService
                     $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
                     $treeNodeResultJSONModelsById
                 );
-                $score += ($calculatedScore->getScore() * ($calculatedScore->getWeight() / 100));
+
+                if (is_null($calculatedScore->getScore()))
+                {
+                    $score = null;
+                }
+
+                if (!is_null($score))
+                {
+                    $score += ($calculatedScore->getScore() * ($calculatedScore->getWeight() / 100));
+                }
+
                 $totalWeight += $calculatedScore->getWeight();
             }
-            $totalScore = $totalWeight === 0 ? 0 : ($score / $totalWeight) * 100;
+            if (!is_null($score))
+            {
+                $totalScore = $totalWeight === 0 ? 0 : ($score / $totalWeight) * 100;
+            }
+            else
+            {
+                $totalScore = null;
+            }
         }
         else
         {
             foreach ($treeNode->getChildren() as $child)
             {
-                $totalScore += $this->calculateAndStoreScoreForTreeNode(
+                $calculatedScore = $this->calculateAndStoreScoreForTreeNode(
                     $user, $rubricData, $contextIdentifier, $child, $uniqueAttemptId,
                     $treeNodeResultJSONModelsById
-                )->getScore();
+                );
+                if (is_null($calculatedScore->getScore()))
+                {
+                    $totalScore = null;
+                }
+                if (!is_null($totalScore))
+                {
+                    $totalScore += $calculatedScore->getScore();
+                }
             }
         }
 
@@ -221,7 +251,7 @@ class RubricResultService
      * @param ContextIdentifier $contextIdentifier
      * @param string $uniqueAttemptId
      * @param TreeNode $treeNode
-     * @param float $score
+     * @param float|null $score
      * @param string|null $comment
      * @param Choice|null $choice
      * @param Level|null $level
@@ -233,7 +263,7 @@ class RubricResultService
      */
     protected function createRubricResult(
         User $user, RubricData $rubricData, ContextIdentifier $contextIdentifier,
-        string $uniqueAttemptId, TreeNode $treeNode, float $score, string $comment = null, Choice $choice = null, Level $level = null,
+        string $uniqueAttemptId, TreeNode $treeNode, ?float $score, string $comment = null, Choice $choice = null, Level $level = null,
         \DateTime $resultTime = null
     )
     {

@@ -41,6 +41,7 @@ class EntryComponent extends Manager implements FeedbackSupport, ConfirmRubricSc
     {
         $this->ensureEntityIdentifier();
         $this->getRubricBridge()->setConfirmRubricScore($this);
+        $this->getRubricBridge()->setEntryURL($this->get_url([self::PARAM_RUBRIC_ENTRY => 1], [self::PARAM_RUBRIC_RESULTS]));
         $this->evaluationEntry = $this->ensureEvaluationEntry();
 
         $this->checkAccessRights();
