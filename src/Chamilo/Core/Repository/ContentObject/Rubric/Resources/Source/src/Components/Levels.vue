@@ -61,6 +61,7 @@
                             </b-td>
                             <b-td v-if="rubric.useScores" class="table-score">
                                 <b-input type="number" v-model.number="level.score" autocomplete="off" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" required min="0" step="1" />
+                                <button class="btn btn-sm btn-default" style="padding: 0 4px"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
                             </b-td>
                             <b-td class="table-default">
                                 <input type="radio" :checked="level.isDefault" @keyup.enter="setDefault(level)" @click="setDefault(level)" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" />
@@ -427,7 +428,10 @@
         }
 
         .table-score {
-            width: 5em;
+            /*width: 5em;*/
+            width: 9rem;
+            /*min-width: 6rem;*/
+            display: flex;
         }
 
         .table-default {
