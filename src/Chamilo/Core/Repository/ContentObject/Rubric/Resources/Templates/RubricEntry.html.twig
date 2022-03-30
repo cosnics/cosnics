@@ -63,14 +63,14 @@
     <div id="rubric-entry">
         <h4 style="margin: 0 10px 10px 10px">{{ 'RubricEntry'|trans({}, appContext) }}</h4>
 
-        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :show-errors="hasErrors" @on-save="saveRubric">
+        <rubric-entry-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :existing-result="existingResult" :show-errors="hasErrors" @on-save="saveRubric">
             <template v-slot:slot-outer>
                 <div class="save-rubric-area" :class="useScores ? 'mod-scores' : 'mod-grades'">
                     <div class="save-rubric-area-content">
                         <button class="btn btn-primary" @click="saveRubric" v-html="$t('save')" :disabled="isSaving"></button>
                         <div v-if="showErrorMessage" class="warning-msg">
                             <i class="fa fa-warning"></i><span v-html="$t('error')"></span>
-                            <button @click="showErrorMessage = false">OK</button>
+                            <button @click="showErrorMessage = false" class="btn btn-sm btn-default" style="padding: 2px 4px; margin-left: 2px;"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only">OK</span></button>
                         </div>
                         <div v-if="isSaving" class="info-msg" v-html="$t('is-saving')"></div>
                     </div>
@@ -87,17 +87,17 @@
         Vue.use(this['cosnics-rubric'].default);
         var messages = {
             'en': {
-                'error': 'Attention. There are still a few errors in the rubric form.',
+                'error': 'Attention. You haven\'t selected a level for any criterium.',
                 'is-saving': 'Saving rubric...',
                 'save': 'Save rubric'
             },
             'fr': {
-                'error': 'Attention. Il y a encore quelques erreurs dans la forme.',
+                'error': 'Attention. Aucun criterium a reçu un niveau..',
                 'is-saving': 'En train de sauvegarder la rubrique...',
                 'save': 'Sauvegarder la rubrique'
             },
             'nl': {
-                'error': 'Opgelet, er staan nog enkele fouten in het rubric formulier.',
+                'error': 'Opgelet, voor geen enkel criterium is er een niveau geselecteerd.',
                 'is-saving': 'Rubric aan het oplaan...',
                 'save': 'Rubric opslaan'
             }
@@ -105,6 +105,8 @@
 
         /*var data = JSON.parse(rubricDataJSON);*/
         var data = {{ RUBRIC_DATA_JSON|raw }};
+
+        var existing_result = {{ RUBRIC_EXISTING_RESULT|raw }};
 
         var lang;
         try {
@@ -124,46 +126,27 @@
                 showErrorMessage: false,
                 rubricResults: { results: [] },
                 isSaving: false,
+                existingResult: existing_result
             },
             computed: {
                 rubricResultsJSON: function() {
-                    var res = JSON.stringify(this.rubricResults.results);
-                    if (this.showErrorMessage) {
-                        var i, results = this.rubricResults.results;
-                        if (results.length === 0) {
-                            return;
-                        }
-                        for (i = 0; i < results.length; i++) {
-                            if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
-                                return;
-                            }
-                        }
-                        this.hasErrors = false;
-                        this.showErrorMessage = false;
-                    }
-                    return res;
+                    return JSON.stringify(this.rubricResults.results);
                 }
             },
             methods: {
                 saveRubric: function(event) {
                     event.preventDefault();
                     if (this.isSaving) { return; }
-                    var i, results = this.rubricResults.results;
-                    if (results.length === 0) {
+                    const results = this.rubricResults.results;
+                    const gradedCriteria = results.filter(t => t.type === 'criterium').map(c => c.level_id).filter(l => l !== null);
+                    if (!gradedCriteria.length) {
                         this.hasErrors = true;
                         this.showErrorMessage = true;
                         return;
                     }
-                    for (i = 0; i < results.length; i++) {
-                        if (results[i].type === 'criterium' && typeof results[i].level_id !== 'number') {
-                            this.hasErrors = true;
-                            this.showErrorMessage = true;
-                            return;
-                        }
-                    }
                     this.hasErrors = false;
                     this.showErrorMessage = false;
-                    var form = document.querySelector('[name=entry_form]');
+                    const form = document.querySelector('[name=entry_form]');
                     if (form) {
                         this.isSaving = true;
                         form.submit();

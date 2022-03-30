@@ -2,8 +2,10 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Rubric\Test\Unit\Storage\Entity;
 
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\CriteriumNode;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
+use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 
 /**
@@ -80,7 +82,7 @@ class LevelTest extends ChamiloTestCase
         $this->assertEquals(true, $this->level->isDefault());
     }
 
-    public function testChangeRubricDataRemovesChoiceFromOldRubricData()
+    public function testChangeRubricDataRemovesLevelFromOldRubricData()
     {
         $newRubricData = new RubricData('Rubric 2');
         $this->level->setRubricData($newRubricData);
@@ -105,6 +107,62 @@ class LevelTest extends ChamiloTestCase
     public function testSortSetOnCreation()
     {
         $this->assertEquals(1, $this->level->getSort());
+    }
+
+    public function testLevelWithoutCriterium()
+    {
+        $this->assertFalse($this->level->hasCriterium());
+    }
+
+    public function testLevelWithCriterium()
+    {
+        $criterium = new CriteriumNode('Test criterium 1', $this->rubricData);
+        $criterium->setId(8);
+        $this->rubricData->getRootNode()->addChild($criterium);
+
+        $level = new Level($this->rubricData, $criterium);
+        $this->assertTrue($level->hasCriterium());
+        $this->assertEquals(8, $level->getCriteriumId());
+        $this->assertEquals(1, $criterium->getLevels()->count());
+        $this->assertEquals(2, $this->rubricData->getLevels()->count());
+
+        $criterium->addLevel($level);
+        $this->assertEquals(1, $criterium->getLevels()->count());
+
+        $level->setCriterium(null);
+        $this->assertEquals(0, $criterium->getLevels()->count());
+    }
+
+    public function testCriteriumRemoveLevel()
+    {
+        $criterium = new CriteriumNode('Test criterium 1', $this->rubricData);
+        $this->rubricData->getRootNode()->addChild($criterium);
+
+        $level = new Level($this->rubricData, $criterium);
+        $criterium->removeLevel($level);
+        $this->assertNull($level->getCriterium());
+    }
+
+    public function testLevelWithCriteriumFromDifferentRubric()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $newRubricData = new RubricData('Rubric 2');
+        $criterium = new CriteriumNode('Test criterium 1', $newRubricData);
+        $newRubricData->getRootNode()->addChild($criterium);
+
+        new Level($this->rubricData, $criterium);
+    }
+
+    public function testLevelWithCriteriumSetDifferentRubric()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $criterium = new CriteriumNode('Test criterium 1', $this->rubricData);
+        $this->rubricData->getRootNode()->addChild($criterium);
+        $level = new Level($this->rubricData, $criterium);
+        $newRubricData = new RubricData('Rubric 2');
+        $level->setRubricData($newRubricData);
     }
 }
 

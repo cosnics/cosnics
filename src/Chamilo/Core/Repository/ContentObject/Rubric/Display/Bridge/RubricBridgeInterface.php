@@ -38,4 +38,14 @@ interface RubricBridgeInterface
      * @return array|null
      */
     public function getPostSaveRedirectParameters();
+
+    /**
+     * @param string $url
+     */
+    public function setEntryURL(string $url);
+
+    /**
+     * @return string
+     */
+    public function getEntryURL(): string;
 }

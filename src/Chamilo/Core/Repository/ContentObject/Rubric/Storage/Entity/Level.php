@@ -4,6 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\InvalidArgumentException;
 use JMS\Serializer\Annotation\Exclude;
 
 /**
@@ -83,13 +84,31 @@ class Level
     protected $choices;
 
     /**
+     * @var CriteriumNode
+     *
+     * @ORM\ManyToOne(targetEntity="CriteriumNode")
+     * @ORM\JoinColumn(name="criterium_id", referencedColumnName="id")
+     *
+     * @Exclude
+     */
+    protected $criterium;
+
+    /**
+     * @var int|null
+     */
+    public $criterium_id = null;
+
+    /**
      * Level constructor.
      *
      * @param RubricData $rubricData
+     * @param CriteriumNode|null $criterium
+     *
      */
-    public function __construct(RubricData $rubricData)
+    public function __construct(RubricData $rubricData, CriteriumNode $criterium = null)
     {
         $this->choices = new ArrayCollection();
+        $this->setCriterium($criterium);
         $this->setRubricData($rubricData);
     }
 
@@ -213,12 +232,12 @@ class Level
      */
     public function setSort(int $sort): Level
     {
-        if (!$this->rubricData->isLevelSortValid($sort))
+        if (!$this->rubricData->isLevelSortValid($this, $sort))
         {
             throw new \InvalidArgumentException(
                 sprintf(
                     'The given level sort must be between 1 and %s, %s given',
-                    $this->rubricData->getLevels()->count(), $sort
+                    count($this->rubricData->filterLevelsByCriterium($this->criterium)), $sort
                 )
             );
         }
@@ -257,31 +276,115 @@ class Level
     }
 
     /**
-     * @param RubricData $rubricData
+     * @param RubricData|null $rubricData
      *
      * @return Level
      */
     public function setRubricData(RubricData $rubricData = null): Level
     {
-        if($this->rubricData === $rubricData)
+        if ($this->rubricData === $rubricData)
         {
             return $this;
+        }
+
+        if (!empty($rubricData) && $this->hasCriterium())
+        {
+            if (!$rubricData->hasCriterium($this->criterium))
+            {
+                throw new \InvalidArgumentException('Criterium not part of rubric');
+            }
         }
 
         $oldRubricData = $this->rubricData;
         $this->rubricData = $rubricData;
 
-        if($oldRubricData instanceof RubricData)
+        if ($oldRubricData instanceof RubricData)
         {
             $oldRubricData->removeLevel($this);
         }
 
-        if($rubricData instanceof RubricData)
+        if ($rubricData instanceof RubricData)
         {
             $rubricData->addLevel($this);
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCriterium(): bool
+    {
+        return !(empty($this->criterium));
+    }
+
+    /**
+     * @return CriteriumNode|null
+     */
+    public function getCriterium(): ?CriteriumNode
+    {
+        return $this->criterium;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCriteriumId(): ?int
+    {
+        if (isset($this->criterium))
+        {
+            return $this->criterium->getId();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param CriteriumNode|null $criterium
+     *
+     * @return $this
+     */
+    public function setCriterium(CriteriumNode $criterium = null): Level
+    {
+        if ($criterium === $this->criterium)
+        {
+            return $this;
+        }
+
+        if (isset($this->rubricData) && !empty($criterium))
+        {
+            if (!$this->rubricData->hasCriterium($criterium))
+            {
+                throw new \InvalidArgumentException('Criterium not part of rubric');
+            }
+        }
+
+        if (isset($this->criterium))
+        {
+            $this->criterium->removeLevel($this);
+        }
+
+        $this->criterium = $criterium;
+        $this->applyCriteriumId();
+
+        if (!empty($criterium))
+        {
+            $criterium->addLevel($this);
+        }
+
+        return $this;
+    }
+
+    public function applyCriteriumId()
+    {
+        if ($this->getCriterium() instanceof CriteriumNode)
+        {
+            $this->criterium_id = $this->getCriterium()->getId();
+            return;
+        }
+
+        $this->criterium_id = null;
     }
 
     /**

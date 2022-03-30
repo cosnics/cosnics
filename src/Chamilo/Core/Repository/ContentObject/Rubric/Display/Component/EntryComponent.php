@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\EntryFormType;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler\EntryFormHandler;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Form\Handler\EntryFormHandlerParameters;
 use Chamilo\Core\Repository\ContentObject\Rubric\Display\Manager;
+use Chamilo\Core\Repository\ContentObject\Rubric\Service\RubricResultJSONGenerator;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 
 /**
@@ -66,12 +67,30 @@ class EntryComponent extends Manager implements DelegateComponent
         }
         else
         {
+            $result = null;
+            $resultId = $this->getRequest()->getFromUrl('result_id');
+            if (!is_null($resultId))
+            {
+                $results = $this->getRubricResultJSONGenerator()->generateRubricResultsJSON(
+                    $rubricData, $this->getRubricBridge()->getContextIdentifier()
+                );
+                foreach ($results as $res)
+                {
+                    if ($res->getResultId() === $resultId)
+                    {
+                        $result = $res;
+                        break;
+                    }
+                }
+            }
+
             return $this->getTwig()->render(
                 'Chamilo\Core\Repository\ContentObject\Rubric:RubricEntry.html.twig',
                 [
                     'LANGUAGE' => $this->getTranslator()->getLocale(),
                     'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
-                    'FORM' => $form->createView()
+                    'FORM' => $form->createView(),
+                    'RUBRIC_EXISTING_RESULT' => $this->getSerializer()->serialize($result, 'json')
                 ]
             );
         }
@@ -83,5 +102,13 @@ class EntryComponent extends Manager implements DelegateComponent
     protected function getFormHandler()
     {
         return $this->getService(EntryFormHandler::class);
+    }
+
+    /**
+     * @return RubricResultJSONGenerator
+     */
+    protected function getRubricResultJSONGenerator()
+    {
+        return $this->getService(RubricResultJSONGenerator::class);
     }
 }

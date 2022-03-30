@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\ContentObject\Rubric\Domain\RubricResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Domain\RubricUserJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Domain\TreeNodeResultJSONModel;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Choice;
+use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\Level;
 use Chamilo\Core\Repository\ContentObject\Rubric\Storage\Entity\RubricData;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
@@ -74,6 +75,7 @@ class RubricResultJSONGenerator
                 $user = $this->userService->findUserByIdentifier($rubricResult->getEvaluatorUserId());
 
                 $jsonResults[$rubricResult->getResultId()] = new RubricResultJSONModel(
+                    $rubricResult->getResultId(),
                     new RubricUserJSONModel($user->getId(), $user->get_fullname()),
                     $rubricResult->getTime()
                 );
@@ -86,6 +88,12 @@ class RubricResultJSONGenerator
             $levelId = $rubricResult->getSelectedChoice() instanceof Choice ?
                 $rubricResult->getSelectedChoice()->getLevel()->getId() : null;
 
+            if (empty($levelId))
+            {
+                $levelId = $rubricResult->getSelectedLevel() instanceof Level ?
+                    $rubricResult->getSelectedLevel()->getId() : null;
+            }
+
             $treeNodeResultJsonModel = new TreeNodeResultJSONModel(
                 $rubricResult->getTreeNode()->getId(),
                 $rubricResult->getScore(), $levelId, $rubricResult->getComment()
@@ -93,6 +101,8 @@ class RubricResultJSONGenerator
 
             $jsonResult->addTreeNodeResult($treeNodeResultJsonModel);
         }
+
+
 
         return array_values($jsonResults);
     }

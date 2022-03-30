@@ -2,23 +2,29 @@
 {
     "en": {
         "back-to-rubric": "Back to rubric",
+        "cancel-custom-levels": "Cancel custom levels",
         "close": "Close",
         "criterium": "Criterium",
         "formatting": "Formatting",
+        "use-custom-levels": "Use custom levels",
         "weight": "Weight"
     },
     "fr": {
         "back-to-rubric": "Retour à la rubrique",
+        "cancel-custom-levels": "Annuler niveaux personnalisés",
         "close": "Fermer",
         "criterium": "Critère",
         "formatting": "Mise en forme",
+        "use-custom-levels": "Utiliser des niveaux personnalisés",
         "weight": "Poids"
     },
     "nl": {
         "back-to-rubric": "Terug naar rubric",
+        "cancel-custom-levels": "Annuleer aangepaste niveaus",
         "close": "Sluiten",
         "criterium": "Criterium",
         "formatting": "Opmaakhulp",
+        "use-custom-levels": "Gebruik aangepaste niveaus",
         "weight": "Gewicht"
     }
 }
@@ -27,7 +33,7 @@
 <template>
     <div class="criterium-details-wrapper">
         <transition name="border-flash" mode="out-in">
-            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'is-show-formatting': showFormatting}" v-if="criterium !== null">
+            <div :key="criterium ? criterium.id : 'none'" class="criterium-details" :class="{'mod-levels': !!criteriumLevels.length || initCustomLevels,'is-show-formatting': showFormatting}" v-if="criterium !== null">
                 <div v-if="criterium" style="flex: 1">
                     <div class="criterium-details-header">
                         <button class="btn-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i class="fa fa-close" aria-hidden="true" /></button>
@@ -36,24 +42,32 @@
                             <textarea id="criterium-title" name="title" v-model="criterium.title" ref="criteriumTitleField" class="input-detail" @input="onCriteriumChange"></textarea>
                         </div>
                     </div>
-                    <div style="display: flex;justify-content: space-between;align-items:baseline">
+                    <div class="criterium-details-weight">
                         <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="criterium-weight">
                             <template v-if="rubric.useRelativeWeights">
-                                {{ $t('weight') }}: <span :style="rubric.eqRestWeight < 0 && 'color: red'">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle" style="color: red;" aria-hidden="true"></i>
+                                {{ $t('weight') }}: <span :class="{'m-error': rubric.eqRestWeight < 0}">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle m-error" aria-hidden="true"></i>
                             </template>
                             <template v-else>
                                 <label for="weight">{{ $t('weight') }}:</label>
-                                <input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %
+                                <template v-if="!criteriumLevels.length && !initCustomLevels"><input type="number" id="weight" v-model.number="criterium.weight" class="input-detail" @input="onWeightChange" min="0" max="100" required /> %</template>
+                                <span v-else>100 %</span>
                             </template>
                         </div>
-                        <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" style="text-decoration: none">{{ $t('formatting') }}</a></div>
+                        <div v-if="!showFormatting"><a href="#" @click.prevent="showFormatting=true" class="m-btn-action">{{ $t('formatting') }}</a></div>
                     </div>
-                    <ul class="b-criterium-levels">
-                        <li v-for="level in rubric.levels" :key="level.id" class="b-criterium-level">
-                            <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
-                        </li>
-                    </ul>
-                    <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left"/> {{ $t('back-to-rubric') }}</a>
+                    <template v-if="!criteriumLevels.length && !initCustomLevels">
+                        <a href="#" @click.prevent="initCustomLevels = true" class="m-btn-action">{{ $t('use-custom-levels') }}</a>
+                        <ul class="b-criterium-levels">
+                            <li v-for="level in rubric.rubricLevels" :key="level.id" class="b-criterium-level">
+                                <criterium-level-view :rubric="rubric" :criterium="criterium" :level="level" @input="updateHeight" @change="onChoiceChange($event, criterium, level)"></criterium-level-view>
+                            </li>
+                        </ul>
+                    </template>
+                    <div v-else>
+                        <a v-if="!criteriumLevels.length" href="#" @click.prevent="initCustomLevels = false" class="m-btn-action">{{ $t('cancel-custom-levels') }}</a>
+                        <levels :rubric="rubric" :data-connector="dataConnector" :criterium="criterium" @level-added="initCustomLevels = false"></levels>
+                    </div>
+                    <a href="#" role="button" @click.prevent="$emit('close')" class="rubric-return"><i class="fa fa-arrow-left" aria-hidden="true"/> {{ $t('back-to-rubric') }}</a>
                 </div>
                 <formatting-help v-if="showFormatting" @close="showFormatting = false"></formatting-help>
             </div>
@@ -70,6 +84,8 @@
     import Choice from '../Domain/Choice';
     import CriteriumLevelView from './CriteriumLevelView.vue';
     import FormattingHelp from './FormattingHelp.vue';
+    import DataConnector from '../Connector/DataConnector';
+    import Levels from './Levels.vue';
 
     function updateHeight(elem: HTMLElement, addedPixels: number = 0) {
         elem.style.height = '';
@@ -78,18 +94,43 @@
 
     @Component({
         name: 'criterium-details-view',
-        components: { CriteriumLevelView, FormattingHelp }
+        components: { CriteriumLevelView, FormattingHelp, Levels }
     })
-    export default class ScoreRubricView extends Vue {
+    export default class CriteriumDetailsView extends Vue {
         private showFormatting = false;
+        private initCustomLevels = false;
 
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(Criterium) readonly criterium!: Criterium | null;
+        @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
 
         constructor() {
             super();
             this.onCriteriumChange = debounce(this.onCriteriumChange, 750);
             this.onWeightChange = debounce(this.onWeightChange, 750);
+            this.onChoiceChange = debounce(this.onChoiceChange, 750);
+        }
+
+        get criteriumLevels() {
+            if (!this.criterium) { return []; }
+            return this.rubric.filterLevelsByCriterium(this.criterium);
+        }
+
+        onLevelMove(level: Level) {
+            const levels = this.rubric.getFilteredLevels(level);
+            if (!levels) { return; }
+            const index = levels.indexOf(level);
+            this.dataConnector?.moveLevel(level, index);
+        }
+
+        moveLevelUp(level: Level) {
+            this.rubric.moveLevelUp(level);
+            this.onLevelMove(level);
+        }
+
+        moveLevelDown(level: Level) {
+            this.rubric.moveLevelDown(level);
+            this.onLevelMove(level);
         }
 
         updateHeight(e: InputEvent) {
@@ -140,6 +181,11 @@
                 this.updateHeightAll();
             }, 250);
         }
+
+        @Watch('criterium')
+        onDisplayedCriterium() {
+            this.initCustomLevels = false;
+        }
     }
 </script>
 
@@ -148,6 +194,21 @@
         outline: none;
      }
 
+     .m-btn-action {
+         display: block;
+         text-align: end;
+         text-decoration: none;
+     }
+
+     .m-error {
+         color: red;
+     }
+
+     .criterium-details-weight {
+         align-items: baseline;
+         display: flex;
+         justify-content: space-between;
+     }
 
      @media only screen and (min-width: 900px) {
          .criterium-details.is-show-formatting {

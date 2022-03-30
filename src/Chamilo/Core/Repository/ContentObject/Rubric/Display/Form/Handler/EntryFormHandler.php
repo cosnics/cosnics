@@ -87,7 +87,7 @@ class EntryFormHandler extends FormHandler
             $this->parameters->getContextIdentifier(), $resultJSONModels, $currentTime
         );
 
-        if ($this->parameters->getRubricData()->useScores())
+        if ($totalScore !== null && $this->parameters->getRubricData()->useScores())
         {
             $this->parameters->getRubricBridge()->saveScore(
                 $this->parameters->getUser(), $totalScore,

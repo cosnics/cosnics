@@ -1,6 +1,6 @@
 <template>
     <div id="app" v-if="rubric">
-        <rubric-entry :rubric="rubric" :rubric-evaluation="rubricEvaluation" :ui-state="uiState" :show-errors="showErrors"
+        <rubric-entry :rubric="rubric" :rubric-evaluation="rubricEvaluation" :existing-result="existingResult" :ui-state="uiState" :show-errors="showErrors"
                       @level-selected="updateRubricResults" @criterium-feedback-changed="updateRubricResults">
             <template v-slot:slot-inner>
                 <slot name="slot-outer"></slot>
@@ -17,6 +17,7 @@
     import {convertRubricData} from '../Util/util';
     import {TreeNodeEvaluation} from '../Util/interfaces';
     import RubricEvaluation from '../Domain/RubricEvaluation';
+    import Level from "../Domain/Level";
 
     @Component({
         components: {
@@ -35,6 +36,7 @@
         @Prop({type: Object, required: true}) readonly rubricData!: object;
         @Prop({type: Object, default: null}) readonly rubricResults!: any|null;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
+        @Prop({type: Object, default: null}) readonly existingResult!: any|null;
 
         updateRubricResults() {
             if (this.rubricResults !== null) {
@@ -47,15 +49,29 @@
             }
         }
 
+        getCriteriumDefaultLevel(rubric: Rubric, criterium: Criterium, defaultLevel: Level|null) {
+            const criteriumLevels = rubric.filterLevelsByCriterium(criterium);
+            if (!criteriumLevels.length) { return defaultLevel; }
+            return criteriumLevels.find(level => level.isDefault) || null;
+        }
+
+        getCriteriumDefaultScore(rubric: Rubric, criterium: Criterium, defaultLevel: Level|null) {
+            if (!defaultLevel) { return 0; }
+            return defaultLevel.criteriumId ? defaultLevel.score : rubric.getChoiceScore(criterium, defaultLevel);
+        }
+
         initData() {
             const convertedRubricData = convertRubricData(this.rubricData);
             const rubric = this.rubric = Rubric.fromJSON(convertedRubricData as RubricJsonObject);
-            const defaultLevel = rubric.levels.find(level => level.isDefault) || null;
-            this.treeNodeEvaluations = rubric.getAllTreeNodes().map(treeNode =>
-                ({ treeNode,
-                   level: treeNode instanceof Criterium ? defaultLevel : null,
-                   score: treeNode instanceof Criterium ? (defaultLevel ? rubric.getChoiceScore(treeNode, defaultLevel) : 0) : null,
-                   feedback: '' }));
+            const defaultLevel = rubric.rubricLevels.find(level => level.isDefault) || null;
+            this.treeNodeEvaluations = rubric.getAllTreeNodes().map(treeNode => {
+                if (treeNode instanceof Criterium) {
+                    const level = this.getCriteriumDefaultLevel(rubric, treeNode, defaultLevel);
+                    const score = this.getCriteriumDefaultScore(rubric, treeNode, level);
+                    return { treeNode, level, score, feedback: '' };
+                }
+                return { treeNode, level: null, score: null, feedback: ''};
+            });
             this.rubricEvaluation = RubricEvaluation.fromEntry(rubric, this.treeNodeEvaluations);
             this.updateRubricResults();
         }

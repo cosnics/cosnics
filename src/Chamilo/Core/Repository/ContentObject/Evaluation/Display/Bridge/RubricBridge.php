@@ -45,6 +45,11 @@ class RubricBridge implements RubricBridgeInterface
     protected $postSaveRedirectParameters;
 
     /**
+     * @var string
+     */
+    protected $entryURL;
+
+    /**
      * RubricBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
@@ -147,5 +152,22 @@ class RubricBridge implements RubricBridgeInterface
     public function setPostSaveRedirectParameters(array $postSaveRedirectParameters)
     {
         $this->postSaveRedirectParameters = $postSaveRedirectParameters;
+    }
+
+
+    /**
+     * @param string $url
+     */
+    public function setEntryURL(string $url)
+    {
+        $this->entryURL = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntryURL(): string
+    {
+        return $this->entryURL;
     }
 }

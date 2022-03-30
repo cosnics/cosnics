@@ -13,7 +13,7 @@
     <div id="rubric-result">
         <h4 style="margin: 0 10px 10px 10px">{{ 'RubricResult'|trans({}, appContext) }}</h4>
 
-        <rubric-result-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults"></rubric-result-wrapper>
+        <rubric-result-wrapper v-if="rubricData" :rubric-data="rubricData" :rubric-results="rubricResults" :rubric-entry-url="rubricEntryUrl"></rubric-result-wrapper>
     </div>
 
     <script>
@@ -40,7 +40,8 @@
             el: '#rubric-result',
             data: {
                 rubricData: data,
-                rubricResults: results
+                rubricResults: results,
+                rubricEntryUrl: '{{ RUBRIC_ENTRY_URL|raw }}'
             }
         });
     </script>

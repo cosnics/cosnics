@@ -10,6 +10,7 @@ export interface TreeNodeEvaluation {
 
 export interface TreeNodeExt {
     treeNode: TreeNode;
+    levels: Level[];
     choices: any[];
     showDefaultFeedback: false;
 }

@@ -118,6 +118,14 @@ class RubricResult
     protected $selectedChoice;
 
     /**
+     * @var Level
+     *
+     * @ORM\ManyToOne(targetEntity="Level")
+     * @ORM\JoinColumn(name="level_id", referencedColumnName="id")
+     */
+    protected $selectedLevel;
+
+    /**
      * @return int
      */
     public function getId(): ?int
@@ -202,18 +210,27 @@ class RubricResult
      */
     public function getScore(): ?float
     {
+        if (is_null($this->score))
+        {
+            return null;
+        }
         return $this->score / 100;
     }
 
     /**
-     * @param float $score
+     * @param float|null $score
      *
      * @return RubricResult
      */
-    public function setScore(float $score): RubricResult
+    public function setScore(?float $score): RubricResult
     {
-        $this->score = (int) round($score * 100);
+        if (is_null($score))
+        {
+            $this->score = null;
+            return $this;
+        }
 
+        $this->score = (int) round($score * 100);
         return $this;
     }
 
@@ -233,6 +250,26 @@ class RubricResult
     public function setSelectedChoice(Choice $selectedChoice = null): RubricResult
     {
         $this->selectedChoice = $selectedChoice;
+
+        return $this;
+    }
+
+    /**
+     * @return Level
+     */
+    public function getSelectedLevel(): ?Level
+    {
+        return $this->selectedLevel;
+    }
+
+    /**
+     * @param Level $selectedLevel
+     *
+     * @return RubricResult
+     */
+    public function setSelectedLevel(Level $selectedLevel = null): RubricResult
+    {
+        $this->selectedLevel = $selectedLevel;
 
         return $this;
     }
