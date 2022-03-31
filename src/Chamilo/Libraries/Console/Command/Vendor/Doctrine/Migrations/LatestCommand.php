@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
-class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand
+class LatestCommand extends \Doctrine\Migrations\Tools\Console\Command\LatestCommand
 {
 
     /**
@@ -35,9 +35,9 @@ class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Late
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand::configure()
+     * @see \Doctrine\Migrations\Tools\Console\Command\LatestCommand::configure()
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('package_path', InputArgument::REQUIRED, 'The package path');
         parent::configure();
@@ -46,15 +46,15 @@ class LatestCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Late
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\LatestCommand::execute()
+     * @see \Doctrine\Migrations\Tools\Console\Command\LatestCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $namespace = $input->getArgument('package_path');
 
         $configuration = $this->getMigrationConfiguration($input, $output);
         $this->doctrineMigrationsCommandConfigurator->configure($configuration, $namespace);
 
-        parent::execute($input, $output);
+        return parent::execute($input, $output);
     }
 }

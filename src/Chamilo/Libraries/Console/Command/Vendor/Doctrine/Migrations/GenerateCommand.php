@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
-class GenerateCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand
+class GenerateCommand extends \Doctrine\Migrations\Tools\Console\Command\GenerateCommand
 {
 
     /**
@@ -35,9 +35,9 @@ class GenerateCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Ge
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand::configure()
+     * @see \Doctrine\Migrations\Tools\Console\Command\GenerateCommand::configure()
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('package_path', InputArgument::REQUIRED, 'The package path');
         parent::configure();
@@ -53,20 +53,20 @@ You can optionally specify a <comment>--editor-cmd</comment> option to open the 
 
     <info>%command.full_name% package_path --editor-cmd=mate</info>
 EOT
-);
+        );
     }
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\GenerateCommand::execute()
+     * @see \Doctrine\Migrations\Tools\Console\Command\GenerateCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $namespace = $input->getArgument('package_path');
 
         $configuration = $this->getMigrationConfiguration($input, $output);
         $this->doctrineMigrationsCommandConfigurator->configure($configuration, $namespace);
 
-        parent::execute($input, $output);
+        return parent::execute($input, $output);
     }
 }

@@ -38,14 +38,14 @@ class DoctrineMigrationsCommandConfigurator
      * Configures the doctrine migrations based on the namespace of a package and optionally injects the container
      * where needed
      *
-     * @param \Doctrine\DBAL\Migrations\Configuration\Configuration $configuration
+     * @param \Doctrine\Migrations\Configuration\Configuration $configuration
      * @param string $packagePath
      */
     public function configure(Configuration $configuration, $packagePath)
     {
         $migrationsFolder = $packagePath . '/migrations';
 
-        if (! file_exists($migrationsFolder))
+        if (!file_exists($migrationsFolder))
         {
             Filesystem::create_dir($migrationsFolder);
         }
@@ -62,26 +62,10 @@ class DoctrineMigrationsCommandConfigurator
     }
 
     /**
-     * Injects the container to migrations aware of it
-     *
-     * @param \Doctrine\DBAL\Migrations\Version[] $versions
-     */
-    protected function injectContainerToMigrations(array $versions)
-    {
-        foreach ($versions as $version)
-        {
-            $migration = $version->getMigration();
-            if ($migration instanceof ContainerAwareInterface)
-            {
-                $migration->setContainer($this->container);
-            }
-        }
-    }
-
-    /**
      * Returns the namespace from a given package path
      *
      * @param string $packagePath
+     *
      * @return string
      */
     protected function getNamespaceFromPackagePath($packagePath)
@@ -106,5 +90,22 @@ class DoctrineMigrationsCommandConfigurator
         }
 
         return $namespace;
+    }
+
+    /**
+     * Injects the container to migrations aware of it
+     *
+     * @param \Doctrine\Migrations\Version\Version[] $versions
+     */
+    protected function injectContainerToMigrations(array $versions)
+    {
+        foreach ($versions as $version)
+        {
+            $migration = $version->getMigration();
+            if ($migration instanceof ContainerAwareInterface)
+            {
+                $migration->setContainer($this->container);
+            }
+        }
     }
 }

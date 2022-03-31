@@ -8,7 +8,7 @@ use Chamilo\Libraries\Format\Twig\Extension\ResourceManagementExtension;
 use Chamilo\Libraries\Format\Twig\Extension\UrlGenerationExtension;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig_Environment;
 use Twig_Extension_Debug;
 use Twig_Loader_Chain;
@@ -25,7 +25,7 @@ class TwigEnvironmentFactory
     /**
      * Adds the necessary extensions to twig
      *
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
      * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
      * @param \Twig_Environment $twig
      */
@@ -42,7 +42,7 @@ class TwigEnvironmentFactory
     /**
      * Initializes the twig templating for forms
      *
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
      * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $generator
      *
      * @return \Twig_Environment

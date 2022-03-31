@@ -86,7 +86,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
         );
 
         $this->assertInstanceOf(
-            '\Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
+            '\Doctrine\Persistence\Mapping\Driver\MappingDriverChain',
             $this->mappingDriverFactory->createMappingDriver($mapping)
         );
     }
@@ -163,7 +163,7 @@ class MappingDriverFactoryTest extends DependencyInjectionBasedTestCase
             )
         );
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->mappingDriverFactory->createMappingDriver($mapping);
         $customDrivers = $mappingDriver->getDrivers();
 

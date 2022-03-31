@@ -50,5 +50,7 @@ class GenerateResourcesCommand extends ChamiloCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->resourceGenerator->generateResources();
+
+        return 0;
     }
 }

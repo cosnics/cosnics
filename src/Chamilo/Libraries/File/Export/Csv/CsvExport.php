@@ -33,6 +33,8 @@ class CsvExport extends Export
             $all .= implode(';', $row) . PHP_EOL;
         }
 
+        echo $all;
+
         return ($all);
     }
 }

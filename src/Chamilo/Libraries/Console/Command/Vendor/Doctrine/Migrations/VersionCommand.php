@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
-class VersionCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand
+class VersionCommand extends \Doctrine\Migrations\Tools\Console\Command\VersionCommand
 {
 
     /**
@@ -35,9 +35,9 @@ class VersionCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\Ver
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand::configure()
+     * @see \Doctrine\Migrations\Tools\Console\Command\VersionCommand::configure()
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('package_path', InputArgument::REQUIRED, 'The package path');
         parent::configure();
@@ -53,20 +53,20 @@ If you want to delete a version you can use the <comment>--delete</comment> opti
 
     <info>%command.full_name% package_path YYYYMMDDHHMMSS --delete</info>
 EOT
-);
+        );
     }
 
     /**
      *
-     * @see \Doctrine\DBAL\Migrations\Tools\Console\Command\VersionCommand::execute()
+     * @see \Doctrine\Migrations\Tools\Console\Command\VersionCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $namespace = $input->getArgument('package_path');
 
         $configuration = $this->getMigrationConfiguration($input, $output);
         $this->doctrineMigrationsCommandConfigurator->configure($configuration, $namespace);
 
-        parent::execute($input, $output);
+        return parent::execute($input, $output);
     }
 }

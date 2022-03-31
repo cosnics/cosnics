@@ -5,7 +5,6 @@ use Chamilo\Core\Group\DependencyInjection\CompilerPass\GroupEventListenerCompil
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\Interfaces\ICompilerPassExtension;
 use Chamilo\Libraries\DependencyInjection\Interfaces\IConfigurableExtension;
-use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Config\FileLocator;
@@ -21,9 +20,21 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */
-class DependencyInjectionExtension extends Extension implements ExtensionInterface, ICompilerPassExtension,
-    IConfigurableExtension
+class DependencyInjectionExtension extends Extension
+    implements ExtensionInterface, ICompilerPassExtension, IConfigurableExtension
 {
+
+    /**
+     * Returns the recommended alias to use in XML.
+     * This alias is also the mandatory prefix to use when using YAML.
+     *
+     * @return string The alias
+     * @api
+     */
+    public function getAlias()
+    {
+        return 'chamilo.core.group';
+    }
 
     /**
      * Loads a specific configuration.
@@ -47,15 +58,21 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     }
 
     /**
-     * Returns the recommended alias to use in XML.
-     * This alias is also the mandatory prefix to use when using YAML.
+     * Loads the configuration for this package in the container
      *
-     * @return string The alias
-     * @api
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \Exception
      */
-    public function getAlias()
+    public function loadContainerConfiguration(ContainerBuilder $container)
     {
-        return 'chamilo.core.group';
+        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
+
+        $loader = new YamlFileLoader(
+            $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))
+        );
+
+        $loader->load('config.yml');
     }
 
     /**
@@ -66,22 +83,5 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
     public function registerCompilerPasses(ContainerBuilder $container)
     {
         $container->addCompilerPass(new GroupEventListenerCompilerPass());
-    }
-
-    /**
-     * Loads the configuration for this package in the container
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function loadContainerConfiguration(ContainerBuilder $container)
-    {
-        $pathBuilder = new PathBuilder(new ClassnameUtilities(new StringUtilities()));
-
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))
-        );
-
-        $loader->load('Config.yml');
     }
 }

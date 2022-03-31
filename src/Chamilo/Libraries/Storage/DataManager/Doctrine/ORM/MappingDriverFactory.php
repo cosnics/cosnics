@@ -3,12 +3,12 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\DoctrineORMMappingsConfiguration;
 use Chamilo\Libraries\File\Path;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
-use Doctrine\Common\Persistence\Mapping\Driver\PHPDriver;
-use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Persistence\Mapping\Driver\PHPDriver;
+use Doctrine\Persistence\Mapping\Driver\StaticPHPDriver;
 use InvalidArgumentException;
 
 /**
@@ -36,18 +36,18 @@ class MappingDriverFactory
 {
 
     /**
-     * The doctrine configuration class
-     *
-     * @var \Doctrine\ORM\Configuration
-     */
-    private $doctrineConfiguration;
-
-    /**
      * The root path of chamilo
      *
      * @var string
      */
     private $chamiloRootPath;
+
+    /**
+     * The doctrine configuration class
+     *
+     * @var \Doctrine\ORM\Configuration
+     */
+    private $doctrineConfiguration;
 
     /**
      * Constructor
@@ -94,7 +94,7 @@ class MappingDriverFactory
      *
      * @param string[] $mappingConfiguration
      *
-     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain
+     * @return \Doctrine\Persistence\Mapping\Driver\MappingDriverChain
      */
     public function createMappingDriver(array $mappingConfiguration = [])
     {

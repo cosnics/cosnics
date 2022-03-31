@@ -66,6 +66,6 @@ class PHPUnitGeneratorCommand extends Command
         $includeSource = $input->getOption(self::OPT_INCLUDE_SOURCE);
         $this->phpUnitGenerator->generate($includeSource);
 
-        return null;
+        return 0;
     }
 }

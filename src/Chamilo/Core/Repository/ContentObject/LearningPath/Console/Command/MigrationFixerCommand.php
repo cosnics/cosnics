@@ -56,5 +56,7 @@ class MigrationFixerCommand extends ChamiloCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->migrationFixer->migrateLearningPaths($output);
+
+        return 0;
     }
 }

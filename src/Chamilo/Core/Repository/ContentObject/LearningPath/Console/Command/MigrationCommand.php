@@ -98,6 +98,8 @@ class MigrationCommand extends ChamiloCommand
         );
 
         $migrationService->migrateLearningPaths();
+
+        return 0;
     }
 
 }

@@ -74,6 +74,8 @@ class ContentObjectTemplateSynchronizerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->contentObjectTemplateSynchronizer->synchronize($input->getArgument(self::ARG_CONTENT_OBJECT_TYPE));
+
+        return 0;
     }
 
 }

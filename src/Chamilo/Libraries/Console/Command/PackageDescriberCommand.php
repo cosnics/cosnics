@@ -66,5 +66,7 @@ class PackageDescriberCommand extends ChamiloCommand
         $this->packageDescriber->processPackages($packages, $output);
         // TODO: Check which caches should be cleared?
         $this->cacheManager->clear(['chamilo_stylesheets', 'chamilo_javascript']);
+
+        return 0;
     }
 }

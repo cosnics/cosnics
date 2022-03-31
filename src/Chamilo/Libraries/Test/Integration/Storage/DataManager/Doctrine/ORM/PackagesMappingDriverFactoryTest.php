@@ -46,7 +46,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
         $packages = array('common\libraries\test' => __DIR__ . '/config/config.yml');
 
         $this->assertInstanceOf(
-            '\Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain',
+            '\Doctrine\Persistence\Mapping\Driver\MappingDriverChain',
             $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages)
         );
     }
@@ -61,7 +61,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
             'common\libraries\test2' => __DIR__ . '/config/config2.yml',
         );
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
         /** @var \Doctrine\ORM\Mapping\Driver\AnnotationDriver $defaultDriver */
@@ -77,7 +77,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     {
         $packages = array('common\libraries\test' => __DIR__ . '/config/config.yml');
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
         $this->assertInstanceOf(
@@ -92,7 +92,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     {
         $packages = array('common\libraries\test' => __DIR__ . '/config/config.yml');
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
         /** @var \Doctrine\ORM\Mapping\Driver\AnnotationDriver $defaultMappingDriver */
@@ -108,7 +108,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     {
         $packages = array('common\libraries\test' => __DIR__ . '/config/config.yml');
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages);
         $customDrivers = $mappingDriver->getDrivers();
 
@@ -124,7 +124,7 @@ class PackagesMappingDriverFactoryTest extends DependencyInjectionBasedTestCase
     {
         $packages = array('common\libraries\test' => __DIR__ . '/config/config.yml');
 
-        /** @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
+        /** @var \Doctrine\Persistence\Mapping\Driver\MappingDriverChain $mappingDriver */
         $mappingDriver = $this->packagesMappingDriverFactory->createMappingDriverForPackages($packages);
 
         /** @var \Doctrine\ORM\Mapping\Driver\YamlDriver $customMappingDriver */

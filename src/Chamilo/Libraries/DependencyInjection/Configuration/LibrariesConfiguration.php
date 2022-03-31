@@ -40,10 +40,12 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     protected function addPHPStanNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('phpstan');
+        $builder = new TreeBuilder('phpstan');
+        $node = $builder->getRootNode();
 
-        $node->children()->arrayNode('paths')->requiresAtLeastOneElement()->prototype('scalar')->end()->end();
+        $node->children()->arrayNode('packages')->requiresAtLeastOneElement()->useAttributeAsKey('package')
+            ->arrayPrototype()->children()->scalarNode('level')->end()->arrayNode('paths')->requiresAtLeastOneElement()
+            ->prototype('scalar')->end()->end()->end()->end();
 
         return $node;
     }
@@ -55,8 +57,8 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('chamilo_libraries');
+        $treeBuilder = new TreeBuilder('chamilo_libraries');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode->append($this->addDoctrineNode());
         $rootNode->append($this->addPHPStanNode());

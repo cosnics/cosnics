@@ -51,5 +51,7 @@ class SynchronizeStructureLocationsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->structureLocationsConfigurationSynchronizer->synchronize();
+
+        return 0;
     }
 }

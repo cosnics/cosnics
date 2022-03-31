@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\DependencyInjection;
 
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
+use Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\AuthenticationCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\CacheServicesConstructorCompilerPass;
 use Chamilo\Libraries\DependencyInjection\CompilerPass\ConsoleCompilerPass;
@@ -109,25 +110,35 @@ class DependencyInjectionExtension extends Extension implements ExtensionInterfa
 
                 foreach ($ormConfig['resolve_target_entities'] as $name => $implementation)
                 {
-                    $resolveTargetEntityListenerDef->addMethodCall(
-                        'addResolveTargetEntity', array($name, $implementation, [])
-                    );
+                    $resolveTargetEntityListenerDef->addMethodCall('addResolveTargetEntity',
+                        array($name, $implementation, []));
                 }
 
-                $resolveTargetEntityListenerDef->addTag(
-                    'doctrine.orm.event_listener', array('event' => 'loadClassMetadata')
-                );
+                $resolveTargetEntityListenerDef->addTag('doctrine.orm.event_listener',
+                    array('event' => 'loadClassMetadata'));
             }
         }
 
         $this->processPHPStanConfig($config, $container);
     }
 
+    /**
+     * @param array $configuration
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
     protected function processPHPStanConfig(array $configuration, ContainerBuilder $container)
     {
         if (!array_key_exists('phpstan', $configuration))
         {
             return;
+        }
+
+        $packagesConfiguration = $configuration['phpstan']['packages'];
+
+        if ($container->hasDefinition(PHPStanPackages::class))
+        {
+            $phpStanPackagesDefinition = $container->getDefinition(PHPStanPackages::class);
+            $phpStanPackagesDefinition->addMethodCall('setPackagesFromConfiguration', array($packagesConfiguration));
         }
     }
 

@@ -73,6 +73,8 @@ class ResourceFixerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->resourceFixerDirector->fixResources($input->getOption(self::OPT_FORCE));
+
+        return 0;
     }
 
 }

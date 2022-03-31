@@ -23,7 +23,7 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
 
     public function __construct()
     {
-        $this->treeBuilder = new TreeBuilder();
+        $this->treeBuilder = new TreeBuilder('mappings');
     }
 
     /**
@@ -32,14 +32,14 @@ class DoctrineORMMappingsConfiguration implements ConfigurationInterface
      */
     public function buildRootNode()
     {
-        $rootNode = $this->treeBuilder->root('mappings');
+        $rootNode = $this->treeBuilder->getRootNode();
 
         $rootNode->children()->arrayNode('default')->requiresAtLeastOneElement()->prototype('scalar')->cannotBeEmpty()
             ->end()->end()->arrayNode(
                 'custom'
             )->prototype('array')->children()->enumNode('type')->values(
-                array('annotation', 'xml', 'yaml', 'php', 'staticphp')
-            )->isRequired()->cannotBeEmpty()->end()->scalarNode(
+                array('annotation', 'xml', 'yaml', 'php', 'staticphp'))->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode(
                 'namespace'
             )->isRequired()->cannotBeEmpty()->end()->arrayNode('paths')->requiresAtLeastOneElement()->prototype(
                 'scalar'

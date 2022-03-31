@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
@@ -23,7 +23,7 @@ class DoctrineEntityManagerFactory
     /**
      * The mapping driver for the entity manager
      *
-     * @var \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
+     * @var \Doctrine\Persistence\Mapping\Driver\MappingDriver
      */
     protected $mappingDriver;
 
@@ -43,7 +43,7 @@ class DoctrineEntityManagerFactory
     /**
      * Constructor
      *
-     * @param \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver $mappingDriver
+     * @param \Doctrine\Persistence\Mapping\Driver\MappingDriver $mappingDriver
      * @param \Doctrine\DBAL\Connection $doctrineConnection
      */
     public function __construct(MappingDriver $mappingDriver, Connection $doctrineConnection)

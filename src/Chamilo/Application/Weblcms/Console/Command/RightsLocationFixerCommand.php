@@ -56,6 +56,6 @@ class RightsLocationFixerCommand extends Command
         $logger = new ConsoleOutputLogger($output);
         $this->rightsLocationFixer->fixRightsLocationsForCourseId($input->getArgument(self::ARG_COURSE), $logger);
 
-        return null;
+        return 0;
     }
 }

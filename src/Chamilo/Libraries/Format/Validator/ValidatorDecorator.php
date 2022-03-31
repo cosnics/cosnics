@@ -2,7 +2,7 @@
 
 namespace Chamilo\Libraries\Format\Validator;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -20,7 +20,7 @@ class ValidatorDecorator implements ValidatorInterface
     protected $symfonyValidator;
 
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     protected $translator;
 
@@ -28,7 +28,7 @@ class ValidatorDecorator implements ValidatorInterface
      * ValidatorDecorator constructor.
      *
      * @param ValidatorInterface $symfonyValidator
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
      */
     public function __construct(ValidatorInterface $symfonyValidator, TranslatorInterface $translator)
     {

@@ -111,6 +111,6 @@ class PackagesPHPUnitGeneratorCommand extends Command
             file_put_contents($phpUnitFile, $phpunitContent);
         }
 
-        return null;
+        return 0;
     }
 }

@@ -6,7 +6,6 @@
         "php": ">=7.4.0",
         "ext-zip": "*",
         "phpmailer/phpmailer": "=v6.0.5",
-        "kriswallsmith/assetic": "1.x",
         "voku/stringy": "6.*",
         "spipu/html2pdf": "=5.1.0",
         "phpoffice/phpspreadsheet": "1.8.0",
