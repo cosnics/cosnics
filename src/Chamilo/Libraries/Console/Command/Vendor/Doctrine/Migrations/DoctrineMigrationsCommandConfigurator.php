@@ -4,6 +4,9 @@ namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Doctrine\DBAL\Configuration;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Metadata\AvailableMigrationsSet;
+use Doctrine\Migrations\Metadata\Storage\TableMetadataStorageConfiguration;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -52,13 +55,16 @@ class DoctrineMigrationsCommandConfigurator
 
         $namespace = $this->getNamespaceFromPackagePath($packagePath);
 
-        $configuration->setMigrationsNamespace($namespace);
-        $configuration->setMigrationsDirectory($migrationsFolder);
-        $configuration->registerMigrationsFromDirectory($migrationsFolder);
-        $configuration->setName('Chamilo Migrations for package: ' . $namespace);
-        $configuration->setMigrationsTableName('libraries_migrations');
+        $configuration->addMigrationsDirectory($namespace, $migrationsFolder);
 
-        $this->injectContainerToMigrations($configuration->getMigrations());
+        $tableMetaDataStorageConfiguration = new TableMetadataStorageConfiguration();
+        $tableMetaDataStorageConfiguration->setTableName('libraries_migrations');
+
+        $configuration->setMetadataStorageConfiguration($tableMetaDataStorageConfiguration);
+
+        $migrations = DependencyFactory::fromConnection()->getMigrationRepository()->getMigrations();
+
+        $this->injectContainerToMigrations($migrations);
     }
 
     /**
@@ -95,13 +101,13 @@ class DoctrineMigrationsCommandConfigurator
     /**
      * Injects the container to migrations aware of it
      *
-     * @param \Doctrine\Migrations\Version\Version[] $versions
+     * @param \Doctrine\Migrations\Metadata\AvailableMigrationsSet $availableMigrationsSet
      */
-    protected function injectContainerToMigrations(array $versions)
+    protected function injectContainerToMigrations(AvailableMigrationsSet $availableMigrationsSet)
     {
-        foreach ($versions as $version)
+        foreach ($availableMigrationsSet->getItems() as $availableMigration)
         {
-            $migration = $version->getMigration();
+            $migration = $availableMigration->getMigration();
             if ($migration instanceof ContainerAwareInterface)
             {
                 $migration->setContainer($this->container);

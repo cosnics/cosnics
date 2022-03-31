@@ -4,7 +4,7 @@ namespace Chamilo\Core\Queue\Service;
 
 use Chamilo\Core\Queue\Exceptions\JobNoLongerValidException;
 use Chamilo\Core\Queue\Storage\Entity\Job;
-use Interop\Queue\PsrContext;
+use Interop\Queue\Context;
 use Throwable;
 
 /**
@@ -15,7 +15,7 @@ use Throwable;
 class Worker
 {
     /**
-     * @var PsrContext
+     * @var Context
      */
     protected $psrContext;
 
@@ -32,12 +32,12 @@ class Worker
     /**
      * Worker constructor.
      *
-     * @param PsrContext $psrContext
+     * @param Context $psrContext
      * @param JobProcessorFactory $jobProcessorFactory
      * @param \Chamilo\Core\Queue\Service\JobEntityManager $jobEntityManager
      */
     public function __construct(
-        PsrContext $psrContext, JobProcessorFactory $jobProcessorFactory, JobEntityManager $jobEntityManager
+        Context $psrContext, JobProcessorFactory $jobProcessorFactory, JobEntityManager $jobEntityManager
     )
     {
         $this->psrContext = $psrContext;

@@ -25,19 +25,19 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
                 return 'Doctrine\DBAL\Driver\OCI8\Driver';
                 break;
             case self::DRIVER_PGSQL :
-                return 'Doctrine\DBAL\Driver\PDOPgSql\Driver';
+                return 'Doctrine\DBAL\Driver\PDO\PgSql\Driver';
                 break;
             case self::DRIVER_SQLITE :
-                return 'Doctrine\DBAL\Driver\PDOSqlite\Driver';
+                return 'Doctrine\DBAL\Driver\PDO\Sqlite\Driver';
                 break;
             // Deprecated option for backwards compatibility with older configuration files
             case 'mysqli' :
             case self::DRIVER_MYSQL :
-                return 'Doctrine\DBAL\Driver\PDOMySql\Driver';
+                return 'Doctrine\DBAL\Driver\PDO\MySql\Driver';
                 break;
             case self::DRIVER_MSSQL :
                 //return 'Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrineDriver';
-                return 'Doctrine\DBAL\Driver\PDOSqlsrv\Driver';
+                return 'Doctrine\DBAL\Driver\PDO\Sqlsrv\Driver';
                 break;
             case self::DRIVER_IBM_DB2 :
                 return 'Doctrine\DBAL\Driver\IBMDB2\Driver';

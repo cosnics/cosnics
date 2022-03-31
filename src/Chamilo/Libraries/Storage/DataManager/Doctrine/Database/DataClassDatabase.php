@@ -23,9 +23,8 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Result;
 use Exception;
-use PDO;
 use PDOException;
 
 /**
@@ -165,7 +164,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      *
      * @return integer
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function count($dataClassName, DataClassCountParameters $parameters)
     {
@@ -180,17 +179,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $dataClassName
         );
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
-        if (!$statement instanceof PDOException)
+        if (!$result instanceof PDOException)
         {
-            $record = $statement->fetch(PDO::FETCH_NUM);
+            $record = $result->fetchNumeric();
 
             return (int) $record[0];
         }
         else
         {
-            $this->handleError($statement);
+            $this->handleError($result);
 
             return false;
         }
@@ -202,7 +201,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      *
      * @return integer[]|false
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
     {
@@ -217,13 +216,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $dataClassName
         );
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
-        if (!$statement instanceof PDOException)
+        if (!$result instanceof PDOException)
         {
             $counts = [];
 
-            while ($record = $statement->fetch(PDO::FETCH_NUM))
+            while ($record = $result->fetchNumeric())
             {
                 $counts[$record[0]] = $record[1];
             }
@@ -232,7 +231,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         else
         {
-            $this->handleError($statement);
+            $this->handleError($result);
 
             return false;
         }
@@ -320,7 +319,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function delete($dataClassName, Condition $condition = null)
@@ -333,7 +332,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
         }
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
         if (!$statement instanceof PDOException)
         {
@@ -353,7 +352,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
      * @return string[]|false
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
@@ -368,13 +367,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $dataClassName
         );
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
         if (!$statement instanceof PDOException)
         {
             $distinctElements = [];
 
-            while ($record = $statement->fetch(PDO::FETCH_ASSOC))
+            while ($record = $statement->fetchAssociative())
             {
                 if (count($record) > 1)
                 {
@@ -440,7 +439,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -456,11 +455,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $sqlQuery = $queryBuilder->getSQL();
 
-        $statement = $this->getConnection()->query($sqlQuery);
+        $statement = $this->getConnection()->executeQuery($sqlQuery);
 
         if (!$statement instanceof PDOException)
         {
-            $record = $statement->fetch(PDO::FETCH_ASSOC);
+            $record = $statement->fetchAssociative();
         }
         else
         {
@@ -485,15 +484,16 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Doctrine\DBAL\Driver\Statement $statement
+     * @param \Doctrine\DBAL\Result $result
      *
      * @return string[][]
+     * @throws \Doctrine\DBAL\Exception
      */
-    protected function fetchRecords(Statement $statement)
+    protected function fetchRecords(Result $result)
     {
         $records = [];
 
-        while ($record = $statement->fetch(PDO::FETCH_ASSOC))
+        while ($record = $result->fetchAssociative())
         {
             //$records[] = $this->processRecord($record);
             $records[] = $record;
@@ -608,15 +608,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @return \Doctrine\DBAL\Result
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function getRecordsResult($sql, $dataClassName, $parameters)
     {
         try
         {
-            return $this->getConnection()->query($sql);
+            return $this->getConnection()->executeQuery($sql);
         }
         catch (PDOException $exception)
         {
@@ -730,7 +730,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function record($dataClassName, RecordRetrieveParameters $parameters)
     {
@@ -751,7 +751,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters)
@@ -770,7 +770,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
@@ -788,12 +788,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
      *
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
     {
-
         $statement = $this->getRecordsResult(
             $this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters
         );
@@ -854,7 +853,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param string[] $propertiesToUpdate
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
     {
@@ -868,7 +867,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
         if ($statement instanceof PDOException)
         {
@@ -886,7 +885,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function updates($dataClassName, DataClassProperties $properties, Condition $condition)
     {
@@ -910,7 +909,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             $queryBuilder->where($conditionPartTranslatorService->translate($this, $condition, false));
 
-            $statement = $this->getConnection()->query($queryBuilder->getSQL());
+            $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
             if (!$statement instanceof PDOException)
             {

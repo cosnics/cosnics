@@ -175,7 +175,7 @@ class ChamiloCacheServicesConstructor implements CacheServicesConstructorInterfa
      * @param \Chamilo\Libraries\Cache\CacheManagement\CacheManager $cacheManager
      *
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function createCacheServices(CacheManager $cacheManager)
     {

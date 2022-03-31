@@ -946,7 +946,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public static function retrieve_all_course_users(
         $course_id, $condition = null, $offset = null, $count = null, $order_property = null

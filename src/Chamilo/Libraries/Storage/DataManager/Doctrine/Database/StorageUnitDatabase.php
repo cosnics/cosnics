@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Index;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
@@ -73,7 +74,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         {
             if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
             {
-                $column = new Column($property);
+                $column = new Column($property, Type::getType($this->parsePropertyType($attributes)));
                 $query = 'ALTER TABLE ' . $storageUnitName . ' DROP COLUMN ' .
                     $column->getQuotedName($this->getConnection()->getDatabasePlatform());
             }
@@ -112,7 +113,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 $columnData['version'] =
                     ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
 
-                if (strtolower($columnData['type']) == "string" && $columnData['length'] === null)
+                if (strtolower($columnData['type']->getName()) == "string" && $columnData['length'] === null)
                 {
                     $columnData['length'] = 255;
                 }
@@ -125,7 +126,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 $columnData['autoincrement'] = $column->getAutoincrement();
 
                 $columnData['comment'] = $column->getComment();
-                if ($this->getConnection()->getDatabasePlatform()->isCommentedDoctrineType($column->getType()))
+                if ($column->getType()->requiresSQLCommentHint($this->getConnection()->getDatabasePlatform()))
                 {
                     $columnData['comment'] .= $this->getConnection()->getDatabasePlatform()->getDoctrineTypeComment(
                         $column->getType()
@@ -145,7 +146,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 }
             }
 
-            $statement = $this->getConnection()->query($query);
+            $statement = $this->getConnection()->executeQuery($query);
 
             if (!$statement instanceof PDOException)
             {
@@ -173,7 +174,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string[] $columns
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function alterIndex($type, $storageUnitName, $name = null, $columns = [])
     {
@@ -208,7 +209,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                 break;
         }
 
-        $statement = $this->getConnection()->query($query);
+        $statement = $this->getConnection()->executeQuery($query);
 
         if (!$statement instanceof PDOException)
         {
@@ -233,7 +234,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     {
         try
         {
-            if ($this->getConnection()->getSchemaManager()->tablesExist(array($storageUnitName)))
+            if ($this->getConnection()->createSchemaManager()->tablesExist(array($storageUnitName)))
             {
                 $this->drop($storageUnitName);
             }
@@ -290,7 +291,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
             foreach ($schema->toSql($this->getConnection()->getDatabasePlatform()) as $query)
             {
-                $statement = $this->getConnection()->query($query);
+                $statement = $this->getConnection()->executeQuery($query);
 
                 if ($statement instanceof PDOException)
                 {
@@ -314,7 +315,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string $storageUnitName
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function drop($storageUnitName)
     {
@@ -323,11 +324,13 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         $newSchema = clone $schema;
         $newSchema->dropTable($storageUnitName);
 
-        $sql = $schema->getMigrateToSql($newSchema, $this->getConnection()->getDatabasePlatform());
+        $schemaDiff = (new Comparator())->compareSchemas($schema, $newSchema);
+
+        $sql = $schemaDiff->toSql($this->getConnection()->getDatabasePlatform());
 
         foreach ($sql as $query)
         {
-            $statement = $this->getConnection()->query($query);
+            $statement = $this->getConnection()->executeQuery($query);
 
             if ($statement instanceof PDOException)
             {
@@ -347,7 +350,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      */
     public function exists($storageUnitName)
     {
-        return $this->getConnection()->getSchemaManager()->tablesExist(array($storageUnitName));
+        return $this->getConnection()->createSchemaManager()->tablesExist(array($storageUnitName));
     }
 
     /**
@@ -528,13 +531,13 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string $newStorageUnitName
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function rename($oldStorageUnitName, $newStorageUnitName)
     {
         $query = 'ALTER TABLE ' . $oldStorageUnitName . ' RENAME TO ' . $newStorageUnitName;
 
-        $statement = $this->getConnection()->query($query);
+        $statement = $this->getConnection()->executeQuery($query);
 
         if (!$statement instanceof PDOException)
         {
@@ -553,14 +556,14 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param boolean $optimize
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function truncate($tableName, $optimize = true)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
         $queryBuilder->delete($tableName);
 
-        $statement = $this->getConnection()->query($queryBuilder->getSQL());
+        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
         if (!$statement instanceof PDOException)
         {

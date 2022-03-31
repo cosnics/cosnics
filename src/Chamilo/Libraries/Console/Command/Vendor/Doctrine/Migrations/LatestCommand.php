@@ -48,7 +48,7 @@ class LatestCommand extends \Doctrine\Migrations\Tools\Console\Command\LatestCom
      *
      * @see \Doctrine\Migrations\Tools\Console\Command\LatestCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output): ?int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $namespace = $input->getArgument('package_path');
 

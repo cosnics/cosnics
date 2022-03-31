@@ -10,10 +10,10 @@ use Chamilo\Core\Queue\Service\Worker;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Exception;
-use Interop\Queue\PsrConsumer;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrQueue;
+use Interop\Queue\Consumer;
+use Interop\Queue\Context;
+use Interop\Queue\Message;
+use Interop\Queue\Queue;
 
 /**
  * Tests the Worker
@@ -33,7 +33,7 @@ class WorkerTest extends ChamiloTestCase
     protected $jobProcessorFactoryMock;
 
     /**
-     * @var \Interop\Queue\PsrContext|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Interop\Queue\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $psrContextMock;
 
@@ -50,7 +50,7 @@ class WorkerTest extends ChamiloTestCase
         $this->jobProcessorFactoryMock = $this->getMockBuilder(JobProcessorFactory::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->psrContextMock = $this->getMockBuilder(PsrContext::class)
+        $this->psrContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->jobEntityManagerMock = $this->getMockBuilder(JobEntityManager::class)
@@ -72,14 +72,14 @@ class WorkerTest extends ChamiloTestCase
 
     public function testWaitForJobAndExecute()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrConsumer = $this->getMockBuilder(PsrConsumer::class)
+        $psrConsumer = $this->getMockBuilder(Consumer::class)
             ->disableOriginalConstructor()->getMock();
 
-        /** @var PsrMessage|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
-        $psrMessage = $this->getMockBuilder(PsrMessage::class)
+        /** @var Message|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
+        $psrMessage = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage->expects($this->once())
@@ -142,14 +142,14 @@ class WorkerTest extends ChamiloTestCase
      */
     public function testWaitForJobAndExecuteExceptionBeforeJob()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrConsumer = $this->getMockBuilder(PsrConsumer::class)
+        $psrConsumer = $this->getMockBuilder(Consumer::class)
             ->disableOriginalConstructor()->getMock();
 
-        /** @var PsrMessage|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
-        $psrMessage = $this->getMockBuilder(PsrMessage::class)
+        /** @var Message|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
+        $psrMessage = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage->expects($this->once())
@@ -192,14 +192,14 @@ class WorkerTest extends ChamiloTestCase
      */
     public function testWaitForJobAndExecuteExceptionWithinJob()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrConsumer = $this->getMockBuilder(PsrConsumer::class)
+        $psrConsumer = $this->getMockBuilder(Consumer::class)
             ->disableOriginalConstructor()->getMock();
 
-        /** @var PsrMessage|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
-        $psrMessage = $this->getMockBuilder(PsrMessage::class)
+        /** @var Message|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
+        $psrMessage = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage->expects($this->once())
@@ -258,14 +258,14 @@ class WorkerTest extends ChamiloTestCase
 
     public function testWaitForJobAndExecuteNoLongerValidExceptionWithinJob()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrConsumer = $this->getMockBuilder(PsrConsumer::class)
+        $psrConsumer = $this->getMockBuilder(Consumer::class)
             ->disableOriginalConstructor()->getMock();
 
-        /** @var PsrMessage|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
-        $psrMessage = $this->getMockBuilder(PsrMessage::class)
+        /** @var Message|\PHPUnit\Framework\MockObject\MockObject $psrMessage */
+        $psrMessage = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage->expects($this->once())

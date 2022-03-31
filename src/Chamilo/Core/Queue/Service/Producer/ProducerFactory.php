@@ -6,8 +6,8 @@ use Chamilo\Core\Queue\Service\Producer\BeanstalkProducer;
 use Chamilo\Core\Queue\Service\Producer\DBALProducer;
 use Enqueue\Dbal\DbalContext;
 use Enqueue\Pheanstalk\PheanstalkContext;
-use Gedmo\Exception\RuntimeException;
-use Interop\Queue\PsrContext;
+use RuntimeException;
+use Interop\Queue\Context;
 
 /**
  * @package Chamilo\Core\Queue\Service
@@ -17,16 +17,16 @@ use Interop\Queue\PsrContext;
 class ProducerFactory
 {
     /**
-     * @var \Interop\Queue\PsrContext | PheanstalkContext | DbalContext
+     * @var \Interop\Queue\Context | PheanstalkContext | DbalContext
      */
     protected $psrContext;
 
     /**
      * ProducerFactory constructor.
      *
-     * @param \Interop\Queue\PsrContext $psrContext
+     * @param \Interop\Queue\Context $psrContext
      */
-    public function __construct(PsrContext $psrContext)
+    public function __construct(Context $psrContext)
     {
         $this->psrContext = $psrContext;
     }

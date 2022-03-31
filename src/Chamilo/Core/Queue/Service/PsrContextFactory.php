@@ -39,7 +39,7 @@ class PsrContextFactory
     }
 
     /**
-     * @return \Interop\Queue\PsrContext
+     * @return \Interop\Queue\Context
      */
     public function createContext()
     {

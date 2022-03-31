@@ -22,7 +22,7 @@
     ],
     "require": {
         "league/oauth2-client": "2.*",
-        "microsoft/microsoft-graph": "^1.1",
+        "microsoft/microsoft-graph": "1.*",
         "php": ">=7.4.0"
     },
     "extra": {

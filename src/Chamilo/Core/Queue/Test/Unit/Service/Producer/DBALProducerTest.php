@@ -6,8 +6,8 @@ use Chamilo\Core\Queue\Service\Producer\DBALProducer;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
 use Enqueue\Dbal\DbalContext;
 use Enqueue\Dbal\DbalMessage;
-use Interop\Queue\PsrProducer;
-use Interop\Queue\PsrQueue;
+use Interop\Queue\Producer;
+use Interop\Queue\Queue;
 
 /**
  * Tests the DBALProducer
@@ -48,13 +48,13 @@ class DBALProducerTest extends ChamiloTestCase
 
     public function testProduceMessage()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage = $this->getMockBuilder(DbalMessage::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrProducer = $this->getMockBuilder(PsrProducer::class)
+        $psrProducer = $this->getMockBuilder(Producer::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->dbalContextMock->expects($this->once())

@@ -72,7 +72,7 @@ EOT
      *
      * @see \Doctrine\Migrations\Tools\Console\Command\ExecuteCommand::execute()
      */
-    public function execute(InputInterface $input, OutputInterface $output): ?int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $namespace = $input->getArgument('package_path');
 

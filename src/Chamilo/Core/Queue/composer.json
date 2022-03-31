@@ -20,11 +20,11 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "enqueue/enqueue": "0.8.37",
-        "enqueue/pheanstalk": "0.8.37",
-        "enqueue/dbal": "0.8.37",
-        "enqueue/fs": "0.8.37",
-        "enqueue/redis": "0.8.37"
+        "enqueue/enqueue": "0.10.*",
+        "enqueue/pheanstalk": "0.10.*",
+        "enqueue/dbal": "0.10.*",
+        "enqueue/fs": "0.10.*",
+        "enqueue/redis": "0.10.*"
     },
     "extra": {
         "cosnics": {

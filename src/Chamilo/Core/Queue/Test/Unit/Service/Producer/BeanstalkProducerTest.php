@@ -9,8 +9,8 @@ use Enqueue\Dbal\DbalContext;
 use Enqueue\Dbal\DbalMessage;
 use Enqueue\Pheanstalk\PheanstalkContext;
 use Enqueue\Pheanstalk\PheanstalkMessage;
-use Interop\Queue\PsrProducer;
-use Interop\Queue\PsrQueue;
+use Interop\Queue\Producer;
+use Interop\Queue\Queue;
 
 /**
  * Tests the DBALProducer
@@ -51,13 +51,13 @@ class BeanstalkProducerTest extends ChamiloTestCase
 
     public function testProduceMessage()
     {
-        $psrQueue = $this->getMockBuilder(PsrQueue::class)
+        $psrQueue = $this->getMockBuilder(Queue::class)
             ->disableOriginalConstructor()->getMock();
 
         $psrMessage = $this->getMockBuilder(PheanstalkMessage::class)
             ->disableOriginalConstructor()->getMock();
 
-        $psrProducer = $this->getMockBuilder(PsrProducer::class)
+        $psrProducer = $this->getMockBuilder(Producer::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->pheanstalkContext->expects($this->once())

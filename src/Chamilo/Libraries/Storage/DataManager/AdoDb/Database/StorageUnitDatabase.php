@@ -173,7 +173,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string[] $columns
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function alterIndex($type, $storageUnitName, $name = null, $columns = [])
     {
@@ -311,7 +311,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string $storageUnitName
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function drop($storageUnitName)
     {
@@ -524,7 +524,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param string $newStorageUnitName
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function rename($oldStorageUnitName, $newStorageUnitName)
     {
@@ -549,7 +549,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
      * @param boolean $optimize
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function truncate($tableName, $optimize = true)
     {

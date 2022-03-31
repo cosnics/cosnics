@@ -48,7 +48,7 @@ class Database
      * @param string[] $columns
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function alter_storage_unit_index($type, $table_name, $name = null, $columns = [])
@@ -62,7 +62,7 @@ class Database
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
      *
      * @return integer
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function count($class, $parameters)
@@ -76,7 +76,7 @@ class Database
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      *
      * @return integer[]|false
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function count_grouped($class, $parameters)
@@ -131,7 +131,7 @@ class Database
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function delete($class, $condition)
@@ -145,7 +145,7 @@ class Database
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
      *
      * @return string[]|boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function distinct($class, DataClassDistinctParameters $parameters)
@@ -159,7 +159,7 @@ class Database
      * @param string $table_name
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function drop_storage_unit($table_name)
@@ -266,7 +266,7 @@ class Database
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function record($class, $parameters = null)
@@ -281,7 +281,7 @@ class Database
      *
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function records($class, RecordRetrievesParameters $parameters)
@@ -295,7 +295,7 @@ class Database
      * @param string $new_name
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function rename_storage_unit($old_name, $new_name)
@@ -310,7 +310,7 @@ class Database
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function retrieve($class, $parameters = null)
@@ -325,7 +325,7 @@ class Database
      *
      * @return \string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function retrieves($class, DataClassRetrievesParameters $parameters)
@@ -375,7 +375,7 @@ class Database
      * @param boolean $optimize
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function truncate_storage_unit($table_name, $optimize = true)
@@ -389,7 +389,7 @@ class Database
      * @param string[] $propertiesToUpdate
      *
      * @return boolean
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      * @throws \Exception
      */
     public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)

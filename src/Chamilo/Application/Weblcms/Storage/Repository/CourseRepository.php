@@ -75,7 +75,7 @@ class CourseRepository implements CourseRepositoryInterface
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
     public function findAllUsersFromCourse(Course $course)
     {
