@@ -5,7 +5,6 @@ namespace Chamilo\Core\Queue\Service;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Queue\Storage\Repository\JobEntityRepository;
 use DateTime;
-use JMS\Serializer\Serializer;
 use RuntimeException;
 
 /**
@@ -38,8 +37,7 @@ class JobEntityManager
      */
     public function createJob(Job $job)
     {
-        $job->setDate(new DateTime())
-            ->setStatus(Job::STATUS_CREATED);
+        $job->setDate(new DateTime())->setStatus(Job::STATUS_CREATED);
 
         $this->jobEntityRepository->createJobEntity($job);
     }
@@ -65,7 +63,7 @@ class JobEntityManager
     public function findJob($jobId)
     {
         $job = $this->jobEntityRepository->find($jobId);
-        if(!$job instanceof Job)
+        if (!$job instanceof Job)
         {
             throw new RuntimeException(
                 sprintf('Could not find the job entity with id %s in the database', $jobId)
@@ -74,7 +72,5 @@ class JobEntityManager
 
         return $job;
     }
-
-
 
 }

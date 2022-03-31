@@ -2,8 +2,6 @@
 
 namespace Chamilo\Core\Notification\Domain;
 
-use JMS\Serializer\Annotation\SerializedName;
-
 /**
  * @package Chamilo\Core\Notification\Domain
  *

@@ -32,8 +32,8 @@
 
         "google/apiclient": "1.*",
         "guzzlehttp/guzzle": "7.*",
-        "jms/serializer": "1.12.1",
-        "monolog/monolog": "1.23.0",
+        "jms/serializer": "3.*",
+        "monolog/monolog": "2.*",
 
         "symfony/cache": "5.4.*",
         "symfony/config": "5.4.*",
