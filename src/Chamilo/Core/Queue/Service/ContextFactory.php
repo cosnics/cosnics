@@ -14,7 +14,7 @@ use Enqueue\Pheanstalk\PheanstalkConnectionFactory;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class PsrContextFactory
+class ContextFactory
 {
     /**
      * @var \Chamilo\Configuration\Service\ConfigurationConsulter

@@ -21,8 +21,8 @@ class LibrariesConfiguration implements ConfigurationInterface
      */
     protected function addDoctrineNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('doctrine');
+        $builder = new TreeBuilder('doctrine');
+        $node = $builder->getRootNode();
 
         $mappingsConfiguration = new DoctrineORMMappingsConfiguration();
 

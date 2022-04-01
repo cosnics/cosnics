@@ -24,8 +24,8 @@
                      method="createProducer"/>
         </service>
 
-        <service id="Interop\Queue\PsrContext">
-            <factory service="Chamilo\Core\Queue\Service\PsrContextFactory"
+        <service id="Interop\Queue\Context">
+            <factory service="Chamilo\Core\Queue\Service\ContextFactory"
                      method="createContext"/>
         </service>
 

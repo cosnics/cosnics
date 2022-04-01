@@ -21,20 +21,15 @@
         "ext-curl": "*",
         "ext-gd": "*",
         "ext-pdo": "*",
-
         "chamilo/pear-libraries": "*",
-
         "doctrine/cache": "1.12.*",
         "doctrine/dbal": "3.3.*",
-        "doctrine/migrations": "3.4.*",
         "doctrine/orm": "2.11.*",
         "adodb/adodb-php": "5.*",
-
         "google/apiclient": "1.*",
         "guzzlehttp/guzzle": "7.*",
         "jms/serializer": "3.*",
         "monolog/monolog": "2.*",
-
         "symfony/cache": "5.4.*",
         "symfony/config": "5.4.*",
         "symfony/console": "5.4.*",
@@ -48,7 +43,6 @@
         "symfony/twig-bridge": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/yaml": "5.4.*",
-
         "twig/twig": "2.*"
     },
     "require-dev": {
