@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "mobiledetect/mobiledetectlib": "~2.8.22"
+        "mobiledetect/mobiledetectlib": "2.8.*"
     },
     "extra": {
         "cosnics": {

@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=7.4.0",
-        "phpspec/php-diff": "=v1.0.2"
+        "phpspec/php-diff": "1.1.*"
     },
     "extra": {
         "cosnics": {

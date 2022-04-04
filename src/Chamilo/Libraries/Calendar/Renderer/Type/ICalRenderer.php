@@ -5,10 +5,10 @@ use Chamilo\Libraries\Calendar\Event\Event;
 use Chamilo\Libraries\Calendar\Event\RecurrenceRules\VObjectRecurrenceRulesFormatter;
 use Chamilo\Libraries\Calendar\Renderer\Interfaces\CalendarRendererProviderInterface;
 use Chamilo\Libraries\Calendar\Renderer\Renderer;
-use Chamilo\Libraries\Calendar\TimeZone\TimeZoneCalendarWrapper;
 use DateTime;
 use DateTimeZone;
-use kigkonsult\iCalcreator\timezoneHandler;
+use Exception;
+use Sabre\VObject\Component;
 use Sabre\VObject\Component\VCalendar;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -126,15 +126,89 @@ class ICalRenderer extends Renderer
     }
 
     /**
-     * Add the correct timezone information
+     * @return false|void
+     * @throws \Exception
+     * @author MicroEducate
+     * @url https://microeducate.tech/generating-an-icalender-vtimezone-component-from-phps-timezone-value/
      */
     private function addTimeZone()
     {
-        timezoneHandler::createTimezone(
-            new TimeZoneCalendarWrapper($this->getCalendar()), date_default_timezone_get(), []/*,
-            self::TIMEZONE_START,
-            self::TIMEZONE_END*/
-        );
+        $from = time();
+        $to = $from;
+
+        try
+        {
+            $tz = new DateTimeZone(date_default_timezone_get());
+
+            // get all transitions for one year back/ahead
+            $year = 86400 * 360;
+            $transitions = $tz->getTransitions($from - $year, $to + $year);
+
+            $vt = new Component($this->getCalendar(), 'VTIMEZONE');
+            $vt->TZID = $tz->getName();
+
+            $std = null;
+            $dst = null;
+            foreach ($transitions as $i => $trans)
+            {
+                $cmp = null;
+
+                // skip the first entry...
+                if ($i == 0)
+                {
+                    // ... but remember the offset for the next TZOFFSETFROM value
+                    $tzfrom = $trans['offset'] / 3600;
+                    continue;
+                }
+
+                // daylight saving time definition
+                if ($trans['isdst'])
+                {
+                    $t_dst = $trans['ts'];
+                    $dst = new Component($this->getCalendar(), 'DAYLIGHT');
+                    $cmp = $dst;
+                }
+                // standard time definition
+                else
+                {
+                    $t_std = $trans['ts'];
+                    $std = new Component($this->getCalendar(), 'STANDARD');
+                    $cmp = $std;
+                }
+
+                if ($cmp)
+                {
+                    $dt = new DateTime($trans['time']);
+                    $offset = $trans['offset'] / 3600;
+
+                    $cmp->DTSTART = $dt->format('Ymd\THis');
+                    $cmp->TZOFFSETFROM =
+                        sprintf('%s%02d%02d', $tzfrom >= 0 ? '+' : '', floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
+                    $cmp->TZOFFSETTO =
+                        sprintf('%s%02d%02d', $offset >= 0 ? '+' : '', floor($offset), ($offset - floor($offset)) * 60);
+
+                    // add abbreviated timezone name if available
+                    if (!empty($trans['abbr']))
+                    {
+                        $cmp->TZNAME = $trans['abbr'];
+                    }
+
+                    $tzfrom = $offset;
+                    $vt->add($cmp);
+                }
+
+                // we covered the entire date range
+                if ($std && $dst && min($t_std, $t_dst) < $from && max($t_std, $t_dst) > $to)
+                {
+                    break;
+                }
+            }
+
+            $this->getCalendar()->add($vt);
+        }
+        catch (Exception $e)
+        {
+        }
     }
 
     /**
