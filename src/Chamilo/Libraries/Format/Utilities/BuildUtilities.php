@@ -119,8 +119,6 @@ class BuildUtilities
             }
         }
 
-        var_dump(array_keys($requires));
-
         $package->setRequires($requires);
         $package->setDevRequires($devRequires);
         $package->setAutoload($autoload);
