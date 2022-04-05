@@ -22,13 +22,13 @@
                      method="getHelperSet"/>
         </service>
 
-        <service id="Chamilo\Libraries\Console\Helper\Connection"
+        <!--<service id="Chamilo\Libraries\Console\Helper\Connection"
                  class="Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper">
             <argument type="service"
                       id="Doctrine\DBAL\Connection"/>
             <tag name="chamilo.libraries.console.helper"
                  alias="db"/>
-        </service>
+        </service>-->
 
         <service id="Chamilo\Libraries\Console\Helper\Doctrine\ORM\EntityManager"
                  class="Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper">
