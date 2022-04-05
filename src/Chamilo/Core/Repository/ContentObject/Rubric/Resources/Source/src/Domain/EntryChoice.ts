@@ -40,6 +40,14 @@ export class LevelEntryChoice implements EntryChoice {
         return this.level.score;
     }
 
+    get hasRange(): boolean {
+        return this.level.useRangeScore;
+    }
+
+    get minimumScore(): number|null {
+        return this.level.minimumScore;
+    }
+
     get title(): string {
         return this.level.title;
     }
@@ -66,6 +74,14 @@ export class ChoiceEntryChoice implements EntryChoice {
 
     get score(): number {
         return this.rubric.useRelativeWeights ? this.wChoice.level.score : this.wChoice.score;
+    }
+
+    get hasRange(): boolean {
+        return this.wChoice.level.useRangeScore;
+    }
+
+    get minimumScore(): number|null {
+        return this.wChoice.level.minimumScore;
     }
 
     get title(): string {

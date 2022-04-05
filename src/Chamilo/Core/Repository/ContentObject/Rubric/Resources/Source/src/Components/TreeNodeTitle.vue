@@ -100,6 +100,7 @@
 
     .treenode-title {
         max-width: 22.2rem;
+        z-index: 1;
     }
 
     .criterium-title.mod-no-category {

@@ -18,17 +18,14 @@
             <div class="treenode-choice" v-for="item in items">
                 <div class="treenode-level" :class="{'mod-scores': useScores, 'mod-fixed-levels': !rubric.hasCustomLevels}">
                     <span class="treenode-level-title">{{ getTitle(item) }}</span>
-                    <span v-if="useScores" class="treenode-level-score">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
+                    <!-- todo: <span v-if="useScores" class="treenode-level-score">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>-->
                 </div>
                 <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
                     <description-field :field-item="getFieldItem(item)" @input="$emit('input', $event)" @change="updateDescription(item)">
-                        <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.choice.hasFixedScore}">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>
+                        <!-- todo: <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.choice.hasFixedScore}">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>-->
                     </description-field>
                 </div>
             </div>
-            <!--<template v-if="rubric.rubricLevels.length - items.length > 0">
-                <div style="flex: 1" v-for="index in rubric.rubricLevels.length - items.length"></div>
-            </template>-->
         </div>
     </div>
 </template>

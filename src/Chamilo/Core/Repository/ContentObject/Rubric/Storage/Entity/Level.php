@@ -51,6 +51,20 @@ class Level
     protected $score = 0;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="minimum_score", type="integer", nullable=true)
+     */
+    protected $minimumScore = null;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="use_range_score", type="boolean")
+     */
+    protected $useRangeScore = false;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="is_default", type="boolean")
@@ -188,6 +202,46 @@ class Level
     public function setScore(int $score): Level
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMinimumScore(): ?int
+    {
+        return $this->minimumScore;
+    }
+
+    /**
+     * @param int|null $score
+     *
+     * @return Level
+     */
+    public function setMinimumScore(?int $score): Level
+    {
+        $this->minimumScore = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function usesRangeScore(): bool
+    {
+        return $this->useRangeScore;
+    }
+
+    /**
+     * @param bool $useRangeScore
+     *
+     * @return Level
+     */
+    public function setUsesRangeScore(bool $useRangeScore): Level
+    {
+        $this->useRangeScore = $useRangeScore;
 
         return $this;
     }

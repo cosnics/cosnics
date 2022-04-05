@@ -238,7 +238,7 @@
         text-align: right;
     }
 
-    .input-detail.abs-weight, .input-detail.rel-weight {
+    .input-detail.abs-weight, .input-detail.rel-weight, .input-detail.mod-range {
         width: 3.5em;
 
         -moz-appearance: textfield;

@@ -40,9 +40,12 @@
             </template>
         </div>
         <template v-if="isCriterium">
-            <span class="level-txt">{{ $t('level') }}:</span>
             <template v-if="level">
-                <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">{{ level.title }}</div>
+                <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">
+                    {{ level.title }}
+                    <span v-if="level.useRangeScore" :title="`${level.minimumScore} > ${level.score}`" style="color: #5a92b5"><i class="fa fa-info-circle"></i></span>
+                </div>
+                <!--<div v-if="level.useRangeScore" class="treenode-evaluator-score-range"><span>{{ level.minimumScore}} <i class="fa fa-caret-right"></i> {{ level.score }}<template v-if="useRelativeWeights"><span class="sr-only">%</span><i aria-hidden="true" class="fa fa-percent"></i></template></span></div>-->
                 <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>
             </template>
             <span v-else class="m-no-score">{{ $t('no-level') }}</span>
@@ -177,6 +180,16 @@
 
     &.mod-pointer {
         cursor: pointer;
+    }
+}
+
+.treenode-evaluator-score-range {
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+
+    .fa-caret-right {
+        color: #666;
+        margin: 0 -.25rem;
     }
 }
 

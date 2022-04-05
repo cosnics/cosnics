@@ -93,6 +93,7 @@
 <style lang="scss">
     .rubrics-wrapper-levels {
         margin-left: -1.5em;
+        margin-right: -1.5em;
         max-width: 52em;
         width: 100%;
     }

@@ -1,23 +1,32 @@
 <i18n>
 {
     "en": {
+        "create-from-existing-rubric": "Create a new rubric based on an existing result",
         "extra-feedback": "Extra feedback",
         "no-results-available": "There are no results yet for this rubric.",
+        "numbers-display": "Numbers display",
         "rubric": "Rubric",
+        "select": "Select",
         "total": "Total",
         "weight": "Weight"
     },
     "fr": {
+        "create-from-existing-rubric": "Créer une nouvelle rubrique basée sur un resultat existant",
         "extra-feedback": "Feed-back supplémentaire",
         "no-results-available": "Aucun résultat trouvé pour ce rubric.",
+        "numbers-display": "Affichage des chiffres",
         "rubric": "Rubrique",
+        "select": "Sélectionnez",
         "total": "Total",
         "weight": "Poids"
     },
     "nl": {
+        "create-from-existing-rubric": "Nieuwe rubric aanmaken op basis van een bestaand resultaat",
         "extra-feedback": "Extra feedback",
         "no-results-available": "Er zijn nog geen resultaten voor deze rubric beschikbaar.",
+        "numbers-display": "Cijferweergave",
         "rubric": "Rubric",
+        "select": "Selecteer",
         "total": "Totaal",
         "weight": "Gewicht"
     }
@@ -28,10 +37,10 @@
     <div v-if="rubric && evaluators.length" class="rubric-results-view">
         <div class="rubric" :class="showRelativeScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
             <div style="grid-column: 1 / -1;white-space: nowrap; background-color: #f4fffc; border-radius: 3px; padding: 1em;">
-                <button class="btn-check" :class="{ checked: createFromExisting }" @click.stop="createFromExisting = !createFromExisting"><span class="lbl-check" tabindex="-1" ><i class="btn-icon-check fa" aria-hidden="true"></i>Nieuwe rubric aanmaken op basis van een bestaand resultaat</span></button>
+                <button class="btn-check" :class="{ checked: createFromExisting }" @click.stop="createFromExisting = !createFromExisting"><span class="lbl-check" tabindex="-1" ><i class="btn-icon-check fa" aria-hidden="true"></i>{{ $t('create-from-existing-rubric') }}</span></button>
             </div>
             <ul class="rubric-tools" v-if="useRelativeScores" style="padding-left: 1em">
-                <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />Cijferweergave</span></button></li>
+                <li class="app-tool-item"><button class="btn-check" :class="{ checked: showScores }" @click.stop="showScores = !showScores"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ $t('numbers-display') }}</span></button></li>
             </ul>
             <div v-if="showRelativeScores" class="treenode-weight-header rb-col-start-2">
                 <span>{{ $t('weight') }}</span>
@@ -47,9 +56,9 @@
                 <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" aria-hidden="true"></li>
             </ul>
             <ul v-if="showRubricHeader && createFromExisting" class="rubric-header" :class="showRelativeScores ? 'rb-col-start-3' : 'rb-col-start-2'"
-                style="margin-top: -1.5rem; margin-bottom: 0; position: static; z-index: 29">
+                style="margin-top: -1.5rem; margin-bottom: .5rem; position: static; z-index: 29">
                 <li v-for="evaluator in evaluators" style="flex:1;" :style="'text-align: ' + (useGradesMode ? 'left': 'right')">
-                    <button class="btn btn-sm btn-default" style="padding: 0 4px" @click="copyRubricResults(evaluator.resultId)">Selecteer</button>
+                    <button class="btn btn-sm btn-default" style="padding: 0 4px" @click="copyRubricResults(evaluator.resultId)">{{ $t('select') }}</button>
                 </li>
                 <li v-if="useAbsoluteScores" class="rubric-header-date mod-max" style="flex:1" aria-hidden="true"></li>
             </ul>

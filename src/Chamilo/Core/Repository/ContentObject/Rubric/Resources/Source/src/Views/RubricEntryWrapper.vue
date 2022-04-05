@@ -40,13 +40,22 @@
 
         updateRubricResults() {
             if (this.rubricResults !== null) {
-                this.rubricResults.results = this.treeNodeEvaluations.map(evaluation => ({
-                    'tree_node_id': parseInt(evaluation.treeNode.id),
-                    'level_id': (evaluation.level !== null) ? parseInt(evaluation.level.id) : null,
-                    'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null,
-                    'type': evaluation.treeNode.getType()
-                }));
-                console.log(this.rubricResults.results);
+                this.rubricResults.results = this.treeNodeEvaluations.map(evaluation => {
+                    const node = evaluation.treeNode;
+                    const d : any = {
+                        'tree_node_id': parseInt(node.id),
+                        'level_id': (evaluation.level !== null) ? parseInt(evaluation.level.id) : null,
+                        'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null,
+                        'type': node.getType()
+                    };
+                    if (node.getType() === 'criterium' && evaluation.level?.useRangeScore) {
+                        d.score = evaluation.score;
+                        if (d.score < evaluation.level?.minimumScore! || d.score > evaluation.level?.score ) {
+                            d.error = 'range';
+                        }
+                    }
+                    return d;
+                });
             }
         }
 
@@ -57,7 +66,7 @@
         }
 
         getCriteriumDefaultScore(rubric: Rubric, criterium: Criterium, defaultLevel: Level|null) {
-            if (!defaultLevel) { return 0; }
+            if (!defaultLevel) { return null; }
             return defaultLevel.criteriumId ? defaultLevel.score : rubric.getChoiceScore(criterium, defaultLevel);
         }
 

@@ -17,12 +17,26 @@
 
 <template>
     <div class="treenode-choices">
-        <div class="treenode-choice" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="{ title, description, score, markdown, level, isSelected } in entryChoices">
-            <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{'mod-fixed-levels': !rubric.hasCustomLevels, 'is-selected': isSelected, 'mod-btn': !preview }" @click="onSelect(level)">
+        <div class="treenode-choice" style="position: relative" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="({ title, description, score, markdown, level, isSelected }, index) in entryChoices">
+            <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{'mod-fixed-levels': !rubric.hasCustomLevels, 'is-selected': isSelected, 'mod-btn': !preview, 'mod-error': hasLevelError(level) }" @click.stop="onSelect(level)" :disabled="hasLevelError(level)">
                 <span class="treenode-level-title" :class="{'mod-fixed-levels': !rubric.hasCustomLevels}">{{ title }}</span>
-                <span v-if="useScores" class="treenode-level-score">{{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
+                <span v-if="useScores" class="treenode-level-score">
+                    <template v-if="level.useRangeScore">{{ level.minimumScore|formatNum }} <i class="fa fa-caret-right"></i></template>
+                    {{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                 <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }"></i></span>
             </component>
+            <div v-if="currentEvaluation && evaluation === currentEvaluation && level === currentEvaluation.level && level.useRangeScore"
+                style="position: relative;height:44px;">
+                <div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 260px;left:calc(50% - 130px);gap:.5rem;justify-content: center" v-if="level.score - level.minimumScore <= 6">
+                    <button v-for="(_, i) in (level.score - level.minimumScore + 1)"
+                            @click.stop="() => {currentEvaluation.score = level.minimumScore + i; onUpdateRangeScore(level);}"
+                            class="btn-range" :class="{'is-selected': currentEvaluation.score === level.minimumScore + i}">{{ level.minimumScore + i }}</button>
+                </div>
+                <div v-else @click.stop="" class="score-range" :class="{'mod-first': index === 0}">
+                    <input type="range" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" @input="onUpdateRangeScore(level)">
+                    <input ref="range-input" type="number" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" required step="1" @input="onUpdateRangeScore(level)" class="input-detail mod-range" :class="{'mod-error': hasRangeError}">
+                </div>
+            </div>
             <template v-if="showDescription">
                 <div v-if="description" class="treenode-level-description is-feedback-visible" v-html="markdown"></div>
                 <div v-else class="treenode-level-description mod-no-default-feedback is-feedback-visible"><em>{{ $t('no-description') }}</em></div>
@@ -35,12 +49,14 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
     import Rubric from '../Domain/Rubric';
+    import RubricEvaluation from '../Domain/RubricEvaluation';
     import Level from '../Domain/Level';
     import {LevelEntryChoice, ChoiceEntryChoice} from '../Domain/EntryChoice';
 
     @Component({
         filters: {
-            formatNum: function (v: number) {
+            formatNum: function (v: number|null) {
+                if (v === null) { return ''; }
                 return v.toLocaleString(undefined, {maximumFractionDigits: 2});
             }
         }
@@ -51,6 +67,7 @@
         @Prop({type: Object, default: null}) readonly evaluation!: TreeNodeEvaluation|null;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showDefaultFeedbackFields!: boolean;
+        @Prop({type: Object, default: null}) readonly currentEvaluation!: TreeNodeEvaluation|null;
 
         get hasLevels(): boolean {
             return !!this.ext.levels.length;
@@ -76,9 +93,31 @@
             return this.ext.choices.map(choiceObject => new ChoiceEntryChoice(this.rubric, choiceObject, this.chosenLevel));
         }
 
+        get hasRangeError() {
+            return RubricEvaluation.isInvalidEvaluation(this.evaluation);
+        }
+
+        hasLevelError(level: Level) {
+            if (!level.useRangeScore) { return false; }
+            if (level.minimumScore === null) { return true; }
+            if (level.minimumScore >= level.score) { return true; }
+            return false;
+        }
+
         onSelect(level: Level) {
             if (!this.preview) {
                 this.$emit('select', this.evaluation, level);
+                this.$nextTick(() => {
+                    if (!this.$refs['range-input']) { return; }
+                    const input = this.$refs['range-input'] as HTMLInputElement[];
+                    input[0]?.focus();
+                });
+            }
+        }
+
+        onUpdateRangeScore(level: Level) {
+            if (!this.preview) {
+                this.$emit('range-level-score', this.evaluation, level);
             }
         }
     }
@@ -146,6 +185,15 @@
                 }
             }
         }
+
+        &.mod-error {
+            background: hsl(0, 96%, 91%);
+            cursor: not-allowed;
+
+            &:hover {
+                border-color: transparent;
+            }
+        }
     }
 
     .treenode-level-title {
@@ -158,6 +206,78 @@
     .treenode-level-score {
         font-size: 1.8rem;
         white-space: nowrap;
+    }
+
+    .fa-caret-right {
+        font-size: 1.5rem;
+        margin: 0 -.25rem;
+    }
+
+    .treenode-level:not(.is-selected) .treenode-level-score {
+        color: #36717d;
+
+        .fa-caret-right {
+            color: hsla(190, 18%, 59%, .75);
+        }
+    }
+
+    .treenode-level:not(.is-selected), .treenode-level {
+        &.mod-error .treenode-level-score {
+            color: #e21414;
+
+            .fa-caret-right {
+                color: #e21414;
+            }
+        }
+    }
+
+    .score-range {
+        align-items: center;
+        background: #fff;
+        border-radius: 3px;
+        box-shadow: hsla(204, 38%, 34%, .4) 0 5px 15px;
+        display: flex;
+        gap: 1rem;
+        height: 44px;
+        left: calc(50% - 120px);
+        padding: 1rem;
+        position: absolute;
+        top: 3px;
+        /*top: -50px;*/
+        width: 240px;
+        z-index: 1;
+
+        @media only screen and (min-width: 680px) and (max-width: 899px) {
+            &.mod-first {
+                left: -4rem;
+            }
+        }
+    }
+
+    .btn-range {
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        color: #36717d;
+        flex: 1;
+
+        &:hover {
+            border-color: #6195b8;
+        }
+
+        &.is-selected {
+            background-color: #6195b8;
+            border-color: #6195b8;
+            color: #fff;
+        }
+    }
+
+    .input-detail.mod-error {
+        border: 1px solid #e10505;
+        color: #e10505;
+
+        &:focus {
+            box-shadow: none;
+        }
     }
 
     @media only screen and (min-width: 680px) {
