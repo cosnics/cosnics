@@ -474,7 +474,7 @@ class RemotePackage extends DataClass
      *
      * @return the dependencies.
      */
-    public function get_dependencies()
+    public function get_dependencies($dependencies = array())
     {
         return unserialize($this->get_default_property(self::PROPERTY_DEPENDENCIES));
     }

@@ -109,7 +109,7 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

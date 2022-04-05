@@ -139,7 +139,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Builder\Manager
     /**
      * adds wizard menu to header
      */
-    function render_header()
+    function render_header($pageTitle = null)
     {
         $html = array();
         

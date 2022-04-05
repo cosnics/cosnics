@@ -57,7 +57,7 @@ class GroupForm extends FormValidator
     /**
      * Display the form
      */
-    public function toHtml()
+    public function toHtml($in_data = null)
     {
         $html = array();
         $html[] = '<div>';

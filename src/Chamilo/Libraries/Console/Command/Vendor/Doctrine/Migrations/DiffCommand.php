@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author Sven Vanpoucke - Hogeschool Gent
  * @package Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations
  */
-class DiffCommand extends \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand
+class DiffCommand extends \Doctrine\Migrations\Tools\Console\Command\DiffCommand
 {
 
     /**

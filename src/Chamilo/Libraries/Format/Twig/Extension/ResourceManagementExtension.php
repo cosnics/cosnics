@@ -28,7 +28,7 @@ class ResourceManagementExtension extends AbstractExtension
      *
      * @var string[]
      */
-    protected $usedPaths;
+    protected $usedPaths = [];
 
     /**
      * ResourceManagementExtension constructor.

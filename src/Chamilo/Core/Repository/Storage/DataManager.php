@@ -341,7 +341,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = array();
-        $properties[new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE)] =
+        $properties['state'] =
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::MINUS,
@@ -365,7 +365,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = array();
-        $properties[new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE)] =
+        $properties['state'] =
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class_name(), ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::ADDITION,
@@ -967,7 +967,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     public static function get_number_of_categories($user_id)
     {
-        if (!isset(self::$number_of_categories{$user_id}))
+        if (!isset(self::$number_of_categories[$user_id]))
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(RepositoryCategory::class_name(), RepositoryCategory::PROPERTY_TYPE_ID),
@@ -980,7 +980,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        return self::$number_of_categories{$user_id};
+        return self::$number_of_categories[$user_id];
     }
 
     /**

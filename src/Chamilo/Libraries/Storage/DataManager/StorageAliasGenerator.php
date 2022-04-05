@@ -127,7 +127,7 @@ class StorageAliasGenerator
 
             foreach ($parts as $part)
             {
-                $possible_name .= $part{0};
+                $possible_name .= $part[0];
             }
 
             if (in_array($possible_name, $this->aliases[self::TYPE_TABLE]))
@@ -161,7 +161,7 @@ class StorageAliasGenerator
 
         foreach ($parts as $part)
         {
-            $possible_name .= $part{0};
+            $possible_name .= $part[0];
         }
 
         $possible_name = $possible_name . '_' . $column;

@@ -101,7 +101,7 @@ abstract class Manager extends Application implements NoContextComponent
      *
      * @see \Chamilo\Libraries\Architecture\Application\Application::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $page = $this->getPage();
 

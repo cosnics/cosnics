@@ -155,7 +155,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
      * @return string[string]
      *
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         return array(
             CourseTypeUserCategoryRelCourse::class_name() => new EqualityCondition(

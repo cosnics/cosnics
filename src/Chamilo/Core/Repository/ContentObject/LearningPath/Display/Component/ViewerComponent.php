@@ -122,7 +122,7 @@ class ViewerComponent extends BaseHtmlTreeComponent
         return $embedder->run();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $buttonToolbarRenderer = new ButtonToolBarRenderer($this->getButtonToolbar());
         $translator = Translation::getInstance();

@@ -96,7 +96,7 @@ class InstallerComponent extends Manager implements NoAuthenticationSupport, Ins
      *
      * @see \Chamilo\Core\Install\Manager::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

@@ -1038,7 +1038,7 @@ abstract class Manager extends Application
         );
     }
 
-    public static function get_packages_from_filesystem()
+    public static function get_packages_from_filesystem($type = null)
     {
         $types = array();
 

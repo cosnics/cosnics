@@ -298,7 +298,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      * 
      * @return \libraries\storage\Condition[string]
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         return array(
             PublicationUser::class_name() => new EqualityCondition(

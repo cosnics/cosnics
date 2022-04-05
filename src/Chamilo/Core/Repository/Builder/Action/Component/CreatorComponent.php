@@ -27,7 +27,7 @@ class CreatorComponent extends Manager implements \Chamilo\Core\Repository\Viewe
      */
     private $type_selection;
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

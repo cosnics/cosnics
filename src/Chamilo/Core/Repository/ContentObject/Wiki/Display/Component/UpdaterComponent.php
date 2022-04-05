@@ -20,7 +20,7 @@ class UpdaterComponent extends Manager implements DelegateComponent
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $complex_wiki_page_id = Request::get(self::PARAM_SELECTED_COMPLEX_CONTENT_OBJECT_ITEM_ID);
         $complex_wiki_page = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(

@@ -77,7 +77,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
         return implode(PHP_EOL, $html);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

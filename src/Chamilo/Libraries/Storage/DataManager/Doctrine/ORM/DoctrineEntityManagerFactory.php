@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;

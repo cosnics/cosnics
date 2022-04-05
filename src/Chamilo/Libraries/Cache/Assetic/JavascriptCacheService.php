@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Cache\Assetic;
 
+use Assetic\Filter\JavaScriptMinifierFilter;
 use Chamilo\Libraries\Format\Utilities\FileAsset;
 
 /**
@@ -76,6 +77,6 @@ class JavascriptCacheService extends AsseticCacheService
      */
     protected function getAssetFilters()
     {
-        return array(new \Assetic\Filter\JSMinFilter());
+        return array(new JavaScriptMinifierFilter());
     }
 }

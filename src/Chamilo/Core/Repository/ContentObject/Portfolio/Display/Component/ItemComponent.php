@@ -51,7 +51,7 @@ abstract class ItemComponent extends Manager implements DelegateComponent
      *
      * @see \libraries\SubManager::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
         

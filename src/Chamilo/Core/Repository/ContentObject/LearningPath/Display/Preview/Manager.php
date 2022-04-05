@@ -75,7 +75,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Preview implemen
      *
      * @see \libraries\architecture\application\Application::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         if ($this->is_embedded())
         {

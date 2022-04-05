@@ -111,7 +111,7 @@ class PublisherComponent extends Manager implements \Chamilo\Core\Repository\Vie
      *
      * @return string
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
         $html[] = parent::render_header();

@@ -36,7 +36,7 @@ class Rights extends RightsUtil
         return array('View' => self::VIEW_RIGHT);
     }
 
-    public function set_location_entity_right($right_id, $entity_id, $entity_type, $location_id)
+    public function set_menu_location_entity_right($right_id, $entity_id, $entity_type, $location_id)
     {
         return parent::set_location_entity_right(__NAMESPACE__, $right_id, $entity_id, $entity_type, $location_id);
     }
@@ -55,8 +55,8 @@ class Rights extends RightsUtil
             true);
     }
 
-    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self :: TYPE_ROOT, $tree_identifier = 0, 
-        $tree_type = self :: TREE_TYPE_ROOT)
+    public function is_allowed($right, $context, $user_id, $entities, $identifier = 0, $type = self::TYPE_ROOT, $tree_identifier = 0,
+        $tree_type = self::TREE_TYPE_ROOT)
     {
         $setting = Configuration::getInstance()->get_setting(array(__NAMESPACE__, 'enable_rights'));
         

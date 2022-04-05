@@ -141,7 +141,7 @@ abstract class Manager extends Application implements NoContextComponent
     {
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $action = $this->get_action();
 
@@ -375,7 +375,7 @@ abstract class Manager extends Application implements NoContextComponent
 
     /**
      *
-     * @param $object ExternalObject
+     * @param ExternalObject ExternalObject
      * @return array
      */
     public function get_external_repository_object_actions(ExternalObject $object)
@@ -563,7 +563,7 @@ abstract class Manager extends Application implements NoContextComponent
         return $type;
     }
 
-    public static function get_registered_types($status = Registration :: STATUS_ACTIVE)
+    public static function get_registered_types($status = Registration::STATUS_ACTIVE)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -584,7 +584,7 @@ abstract class Manager extends Application implements NoContextComponent
         return array(self::PARAM_ACTION => self::ACTION_BROWSE_EXTERNAL_REPOSITORY);
     }
 
-    public static function get_packages_from_filesystem()
+    public static function get_packages_from_filesystem($type = null)
     {
         $external_repository_managers = array();
 

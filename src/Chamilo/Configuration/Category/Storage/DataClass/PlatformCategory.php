@@ -76,7 +76,7 @@ abstract class PlatformCategory extends DataClass
      * @return string[string]
      *
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         return array(
             $this->class_name() => new EqualityCondition(

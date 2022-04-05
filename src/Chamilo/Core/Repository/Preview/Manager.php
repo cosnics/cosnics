@@ -76,7 +76,7 @@ abstract class Manager extends Application
     /*
      * (non-PHPdoc) @see \libraries\architecture\application\Application::render_header()
      */
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $page = Page::getInstance();
         $page->setViewMode(Page::VIEW_MODE_HEADERLESS);

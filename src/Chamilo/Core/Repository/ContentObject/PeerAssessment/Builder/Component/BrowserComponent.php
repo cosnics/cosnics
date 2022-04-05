@@ -38,7 +38,7 @@ class BrowserComponent extends Manager
         }
     }
 
-    function render_header()
+    function render_header($pageTitle = null)
     {
         $html = array();
 

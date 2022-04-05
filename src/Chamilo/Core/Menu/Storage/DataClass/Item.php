@@ -206,7 +206,7 @@ class Item extends CompositeDataClass implements DisplayOrderDataClassListenerSu
             return false;
         }
 
-        return Rights::getInstance()->set_location_entity_right(Rights::VIEW_RIGHT, 0, 0, $new_location->get_id());
+        return Rights::getInstance()->set_menu_location_entity_right(Rights::VIEW_RIGHT, 0, 0, $new_location->get_id());
     }
 
     public function update()

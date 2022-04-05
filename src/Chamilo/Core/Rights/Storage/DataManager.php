@@ -281,7 +281,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @deprecated Provided for backwards campatibility towards callers that use methods parametrized with a $context
      * This could be easily replaced with a generic retrieve, as is evidenced from the method body.
      */
-    public function retrieve_rights_location($context, $condition = null)
+    public static function retrieve_rights_location($context, $condition = null)
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocation');
         $context_dm = ($context . '\Storage\DataManager');

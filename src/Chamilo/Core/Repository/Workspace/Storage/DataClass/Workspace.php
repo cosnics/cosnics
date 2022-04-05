@@ -137,7 +137,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      *
      * @see \Chamilo\Libraries\Storage\DataClass\DataClass::get_dependencies()
      */
-    public function get_dependencies()
+    public function get_dependencies($dependencies = array())
     {
         return array(
             WorkspaceEntityRelation::class_name() => new EqualityCondition(

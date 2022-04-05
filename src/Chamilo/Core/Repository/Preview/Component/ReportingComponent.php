@@ -31,7 +31,7 @@ class ReportingComponent extends Manager implements PreviewSupport
             new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

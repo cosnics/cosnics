@@ -251,7 +251,7 @@ class Group extends NestedSet
         return $this->get_subgroups($recursive);
     }
 
-    public function move($new_parent_id, $new_previous_id = 0)
+    public function move($new_parent_id = 0, $new_previous_id = null, $condition = null)
     {
         if ($new_previous_id != 0)
         {
@@ -298,7 +298,7 @@ class Group extends NestedSet
         return DataManager::deletes(GroupRelUser::class_name(), $condition);
     }
 
-    public function create($previous_id = 0)
+    public function create($previous_id = 0, $reference_node = null)
     {
         $parent_id = $this->get_parent_id();
 

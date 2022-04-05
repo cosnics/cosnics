@@ -1259,7 +1259,7 @@ EOT;
      * @return string
      * @deprecated Use render() now
      */
-    public function toHtml()
+    public function toHtml($in_data = null)
     {
         if(!$this->elementExists(self::ELEMENT_CSRF_TOKEN))
         {

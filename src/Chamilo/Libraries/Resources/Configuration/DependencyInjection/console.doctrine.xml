@@ -96,7 +96,7 @@
         <!--<tag name="chamilo.libraries.console.command" />-->
         <!--</service>-->
 
-        <service id="chamilo.libraries.console.command.configurator.doctrine_migrations"
+        <!--<service id="chamilo.libraries.console.command.configurator.doctrine_migrations"
                  class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DoctrineMigrationsCommandConfigurator">
             <argument type="service" id="service_container"/>
         </service>
@@ -141,7 +141,7 @@
                  class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\VersionCommand">
             <argument type="service" id="chamilo.libraries.console.command.configurator.doctrine_migrations"/>
             <tag name="chamilo.libraries.console.command"/>
-        </service>
+        </service>-->
 
     </services>
 </container>

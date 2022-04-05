@@ -117,7 +117,7 @@ class DynamicContentMenu
      *
      * @return string
      */
-    protected function render_header()
+    protected function render_header($pageTitle = null)
     {
         return '<div id="' . $this->get_name() . '" class="dynamic_content_menu_container">';
     }

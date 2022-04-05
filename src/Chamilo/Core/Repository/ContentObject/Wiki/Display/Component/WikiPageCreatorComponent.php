@@ -61,7 +61,7 @@ class WikiPageCreatorComponent extends Manager implements \Chamilo\Core\Reposito
         }
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 

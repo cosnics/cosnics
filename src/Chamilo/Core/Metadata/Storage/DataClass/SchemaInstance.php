@@ -173,7 +173,7 @@ class SchemaInstance extends DataClass
      * 
      * @return string[string]
      */
-    protected function get_dependencies()
+    protected function get_dependencies($dependencies = array())
     {
         $dependencies = array();
         

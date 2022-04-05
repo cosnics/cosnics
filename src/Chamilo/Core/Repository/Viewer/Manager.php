@@ -131,7 +131,7 @@ abstract class Manager extends Application
         return $this->getService(UserService::class);
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         if ($this->areTabsDisabled())
         {

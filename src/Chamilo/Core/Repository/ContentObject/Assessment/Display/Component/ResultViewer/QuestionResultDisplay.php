@@ -128,7 +128,7 @@ class QuestionResultDisplay
         $this->form->addElement('html', $this->render_footer());
     }
 
-    public function render_header()
+    public function render_header($pageTitle = null)
     {
         $html = array();
 
