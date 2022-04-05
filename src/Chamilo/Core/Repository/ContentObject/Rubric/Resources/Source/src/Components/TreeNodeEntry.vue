@@ -1,14 +1,17 @@
 <i18n>
 {
     "en": {
+        "adjusted-score": "Adjusted score",
         "no-description": "No description",
         "points": "points"
     },
     "fr": {
+        "adjusted-score": "Score personnalisé",
         "no-description": "Pas de description",
         "points": "points"
     },
     "nl": {
+        "adjusted-score": "Aangepaste score",
         "no-description": "Geen omschrijving",
         "points": "punten"
     }
@@ -27,15 +30,18 @@
             </component>
             <div v-if="currentEvaluation && evaluation === currentEvaluation && level === currentEvaluation.level && level.useRangeScore"
                 style="position: relative;height:44px;">
-                <div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 260px;left:calc(50% - 130px);gap:.5rem;justify-content: center" v-if="level.score - level.minimumScore <= 6">
+                <div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 220px;left:calc(50% - 110px);gap:.75rem;justify-content: center">
+                    <label for="adjusted-score" style="font-weight: 400;margin-bottom:0">{{ $t('adjusted-score') }}:</label>
+                    <input id="adjusted-score" ref="range-input" type="number" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" required step="1" @input="onUpdateRangeScore(level)" class="input-detail mod-range">
+                </div>
+                <!--<div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 260px;left:calc(50% - 130px);gap:.5rem;justify-content: center" v-if="level.score - level.minimumScore <= 6">
                     <button v-for="(_, i) in (level.score - level.minimumScore + 1)"
                             @click.stop="() => {currentEvaluation.score = level.minimumScore + i; onUpdateRangeScore(level);}"
                             class="btn-range" :class="{'is-selected': currentEvaluation.score === level.minimumScore + i}">{{ level.minimumScore + i }}</button>
                 </div>
                 <div v-else @click.stop="" class="score-range" :class="{'mod-first': index === 0}">
                     <input type="range" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" @input="onUpdateRangeScore(level)">
-                    <input ref="range-input" type="number" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" required step="1" @input="onUpdateRangeScore(level)" class="input-detail mod-range" :class="{'mod-error': hasRangeError}">
-                </div>
+                </div>-->
             </div>
             <template v-if="showDescription">
                 <div v-if="description" class="treenode-level-description is-feedback-visible" v-html="markdown"></div>
@@ -271,7 +277,7 @@
         }
     }
 
-    .input-detail.mod-error {
+    .input-detail:invalid {
         border: 1px solid #e10505;
         color: #e10505;
 
