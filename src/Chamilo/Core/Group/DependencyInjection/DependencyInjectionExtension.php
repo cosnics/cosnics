@@ -72,7 +72,7 @@ class DependencyInjectionExtension extends Extension
             $container, new FileLocator($pathBuilder->getConfigurationPath('Chamilo\Core\Group'))
         );
 
-        $loader->load('config.yml');
+        $loader->load('Config.yml');
     }
 
     /**
