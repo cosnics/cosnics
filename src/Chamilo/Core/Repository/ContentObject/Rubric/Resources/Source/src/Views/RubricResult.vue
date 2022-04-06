@@ -36,7 +36,7 @@
 <template>
     <div v-if="rubric && evaluators.length" class="rubric-results-view">
         <div class="rubric" :class="showRelativeScores ? 'mod-res-w' : 'mod-res'" :style="{'--num-cols': evaluators.length + (useAbsoluteScores ? 1 : 0)}" @click.stop="selectedTreeNode = null">
-            <div style="grid-column: 1 / -1;white-space: nowrap; background-color: #f4fffc; border-radius: 3px; padding: 1em;">
+            <div v-if="canCreateFromExistingRubric" style="grid-column: 1 / -1;white-space: nowrap; background-color: #f4fffc; border-radius: 3px; padding: 1em;">
                 <button class="btn-check" :class="{ checked: createFromExisting }" @click.stop="createFromExisting = !createFromExisting"><span class="lbl-check" tabindex="-1" ><i class="btn-icon-check fa" aria-hidden="true"></i>{{ $t('create-from-existing-rubric') }}</span></button>
             </div>
             <ul class="rubric-tools" v-if="useRelativeScores" style="padding-left: 1em">
@@ -138,6 +138,7 @@
         @Prop({type: RubricEvaluation, required: true}) readonly rubricEvaluation!: RubricEvaluation;
         @Prop({type: Object, default: () => ({})}) readonly options!: any;
         @Prop({type: String, default: ''}) readonly rubricEntryUrl!: string;
+        @Prop({type: Boolean, default: false}) readonly canCreateFromExistingRubric!: boolean;
 
         copyRubricResults(resultId: string) {
             if (this.rubricEntryUrl) {
