@@ -19,10 +19,10 @@ use Chamilo\Libraries\Platform\ChamiloRequest;
 use Chamilo\Libraries\Platform\Session\SessionUtilities;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Doctrine\ORM\EntityManager;
-use JMS\Serializer\Serializer;
 use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Translation\Translator;
 use Twig\Environment;
 
@@ -212,7 +212,7 @@ trait DependencyInjectionContainerTrait
     /**
      * Returns the serializer service
      *
-     * @return \JMS\Serializer\Serializer
+     * @return \Symfony\Component\Serializer\Serializer
      */
     public function getSerializer()
     {

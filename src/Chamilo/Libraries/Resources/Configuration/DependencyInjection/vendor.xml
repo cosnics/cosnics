@@ -55,18 +55,6 @@
 
         <service id="Symfony\Component\Validator\ValidatorBuilder"/>
 
-        <service id="JMS\Serializer\Serializer">
-            <factory method="createSerializer"
-                     service="Chamilo\Libraries\Format\Serializer\SerializerFactory"/>
-        </service>
-
-        <service id="JMS\Serializer\SerializerBuilder"/>
-
-        <service id="Chamilo\Libraries\Format\Serializer\SerializerFactory">
-            <argument type="service"
-                      id="JMS\Serializer\SerializerBuilder"/>
-        </service>
-
         <service id="Monolog\Logger">
             <argument>Chamilo</argument>
         </service>
@@ -74,6 +62,25 @@
         <service id="Symfony\Component\Config\Definition\Processor"/>
         <service id="Symfony\Component\Yaml\Parser"/>
         <service id="Symfony\Component\Filesystem\Filesystem"/>
+
+        <service id="Symfony\Component\Serializer\Normalizer\ObjectNormalizer"/>
+        <service id="Symfony\Component\Serializer\Encoder\XmlEncoder"/>
+        <service id="Symfony\Component\Serializer\Encoder\JsonEncoder"/>
+
+        <service id="Symfony\Component\Serializer\Serializer">
+            <argument key="$normalizers"
+                      type="collection">
+                <argument type="service"
+                          id="Symfony\Component\Serializer\Normalizer\ObjectNormalizer"/>
+            </argument>
+            <argument key="$encoders"
+                      type="collection">
+                <argument type="service"
+                          id="Symfony\Component\Serializer\Encoder\XmlEncoder"/>
+                <argument type="service"
+                          id="Symfony\Component\Serializer\Encoder\JsonEncoder"/>
+            </argument>
+        </service>
 
         <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages"/>
 
