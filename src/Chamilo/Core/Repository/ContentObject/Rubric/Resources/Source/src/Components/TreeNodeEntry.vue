@@ -28,7 +28,7 @@
                     {{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                 <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }"></i></span>
             </component>
-            <div v-if="currentEvaluation && evaluation === currentEvaluation && level === currentEvaluation.level && level.useRangeScore"
+            <div v-if="useScores && currentEvaluation && evaluation === currentEvaluation && level === currentEvaluation.level && level.useRangeScore"
                 style="position: relative;height:44px;">
                 <div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 220px;left:calc(50% - 110px);gap:.75rem;justify-content: center">
                     <label for="adjusted-score" style="font-weight: 400;margin-bottom:0">{{ $t('adjusted-score') }}:</label>

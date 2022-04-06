@@ -132,6 +132,11 @@
                 border-color: #d4d4d4;
                 color: hsl(0, 0%, 20%);
             }
+
+            .fa-caret-right {
+                color: hsla(190, 18%, 59%, .85);
+                font-size: 1.5rem;
+            }
         }
     }
 </style>

@@ -90,7 +90,7 @@
                             </b-td>
                         </b-tr>
                         <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = level" @mouseout="hoveredLevel = null">
-                            <b-td :colspan="rubric.useScores ? 4 : 2">
+                            <b-td :colspan="rubric.useScores ? (rubric.hasAbsoluteWeights ? 3 : 4) : 2">
                                 <div class="criterium-level-input-area">
                                     <textarea v-model="level.description" ref="feedbackField" class="criterium-level-feedback"
                                               :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === level || !level.description }"
@@ -138,7 +138,7 @@
                         </b-td>
                     </b-tr>
                     <b-tr v-if="newLevel && !!criterium" class="table-body-row details-row">
-                        <b-td :colspan="rubric.useScores ? 4 : 2">
+                        <b-td :colspan="rubric.useScores ? (rubric.hasAbsoluteWeights ? 3 : 4) : 2">
                             <div class="criterium-level-input-area">
                                 <textarea v-model="newLevel.description" ref="feedbackField" class="criterium-level-feedback input-detail"
                                           :class="{ 'is-input-active': activeDescriptionInput === newLevel || !newLevel.description }"

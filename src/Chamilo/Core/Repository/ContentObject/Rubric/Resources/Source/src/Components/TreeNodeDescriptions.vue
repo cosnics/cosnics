@@ -18,11 +18,11 @@
             <div class="treenode-choice" v-for="item in items">
                 <div class="treenode-level" :class="{'mod-scores': useScores, 'mod-fixed-levels': !rubric.hasCustomLevels}">
                     <span class="treenode-level-title">{{ getTitle(item) }}</span>
-                    <!-- todo: <span v-if="useScores" class="treenode-level-score">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>-->
+                    <span v-if="useScores" class="treenode-level-score"><template v-if="hasMinimumScore(item)">{{ getMinimumScore(item)|formatNum }}<i class="fa fa-caret-right" aria-hidden="true"></i></template>{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                 </div>
                 <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
                     <description-field :field-item="getFieldItem(item)" @input="$emit('input', $event)" @change="updateDescription(item)">
-                        <!-- todo: <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.choice.hasFixedScore}">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>-->
+                        <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.choice.hasFixedScore}"><template v-if="hasMinimumScore(item)">{{ getMinimumScore(item)|formatNum }}<i class="fa fa-caret-right" aria-hidden="true"></i></template>{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>
                     </description-field>
                 </div>
             </div>
@@ -57,6 +57,20 @@
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
         @Prop({type: Object, required: true}) readonly ext!: CriteriumExt;
+
+        hasMinimumScore(item: any) {
+            if (this.hasChoices) {
+                return item.level.useRangeScore;
+            }
+            return item.useRangeScore;
+        }
+
+        getMinimumScore(item: any) {
+            if (this.hasChoices) {
+                return item.level.minimumScore;
+            }
+            return item.minimumScore;
+        }
 
         get hasLevels(): boolean {
             return !!this.ext.levels.length;
@@ -146,6 +160,11 @@
         display: flex;
         gap: 1rem;
         justify-content: space-between;
+
+        .fa-caret-right {
+            color: #adadad;
+            font-size: 1.5rem;
+        }
     }
 
     /*.treenode-level-title {

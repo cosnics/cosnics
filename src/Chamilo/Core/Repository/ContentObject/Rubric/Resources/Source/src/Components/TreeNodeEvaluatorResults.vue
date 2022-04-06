@@ -43,7 +43,7 @@
             <template v-if="level">
                 <div class="treenode-evaluator-level-title" :class="{'mod-pointer': treeNodeLevelDescription}" @click.stop="descriptionVisible = !descriptionVisible">
                     {{ level.title }}
-                    <span v-if="level.useRangeScore" :title="`${level.minimumScore} > ${level.score}`" style="color: #5a92b5"><i class="fa fa-info-circle"></i></span>
+                    <span v-if="useScores && level.useRangeScore" :title="`${level.minimumScore} > ${level.score}`" style="color: #5a92b5"><i class="fa fa-info-circle"></i></span>
                 </div>
                 <!--<div v-if="level.useRangeScore" class="treenode-evaluator-score-range"><span>{{ level.minimumScore}} <i class="fa fa-caret-right"></i> {{ level.score }}<template v-if="useRelativeWeights"><span class="sr-only">%</span><i aria-hidden="true" class="fa fa-percent"></i></template></span></div>-->
                 <div v-if="descriptionVisible && treeNodeLevelDescription" class="treenode-evaluator-level-description">{{ treeNodeLevelDescription }}</div>

@@ -48,7 +48,7 @@
                         'comment': evaluation.feedback.length > 0 ? evaluation.feedback : null,
                         'type': node.getType()
                     };
-                    if (node.getType() === 'criterium' && evaluation.level?.useRangeScore) {
+                    if (this.rubric!.useScores && node.getType() === 'criterium' && evaluation.level?.useRangeScore) {
                         d.score = evaluation.score;
                         if (d.score < evaluation.level?.minimumScore! || d.score > evaluation.level?.score ) {
                             d.error = 'range';
