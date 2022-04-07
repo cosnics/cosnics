@@ -328,9 +328,11 @@
                             const level = rubric.levels.find(l => existingResult.level_id === parseInt(l.id));
                             if (level) {
                                 this.selectLevel(evaluation, level);
+                                evaluation.score = existingResult.score;
                             }
                         }
                     }
+                    this.currentEvaluation = null;
                 });
                 this.$emit('level-selected');
             }
