@@ -25,8 +25,8 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Choice from '../Domain/Choice';
-    import Level from '../Domain/Level';
+    import Choice from '../../../Domain/Choice';
+    import Level from '../../../Domain/Level';
 
     @Component({
         name: 'description-field',

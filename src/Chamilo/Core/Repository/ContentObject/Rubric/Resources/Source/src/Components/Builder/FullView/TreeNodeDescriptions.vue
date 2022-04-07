@@ -32,10 +32,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-    import DescriptionField from '../Components/DescriptionField.vue';
-    import Rubric from '../Domain/Rubric';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
+    import DescriptionField from './DescriptionField.vue';
+    import Rubric from '../../../Domain/Rubric';
+    import Criterium from '../../../Domain/Criterium';
+    import Level from '../../../Domain/Level';
 
     interface CriteriumExt {
         criterium: Criterium;

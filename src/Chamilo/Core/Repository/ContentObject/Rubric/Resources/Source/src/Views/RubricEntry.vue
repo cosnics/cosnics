@@ -140,7 +140,7 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import ScoreDisplay from '../Components/ScoreDisplay.vue';
-    import TreeNodeEntry from '../Components/TreeNodeEntry.vue';
+    import TreeNodeEntry from '../Components/Entry/TreeNodeEntry.vue';
     import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
     import RubricEvaluation from '../Domain/RubricEvaluation';
 

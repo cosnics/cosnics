@@ -78,14 +78,14 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Rubric from '../Domain/Rubric';
-    import Level from '../Domain/Level';
-    import Criterium from '../Domain/Criterium';
-    import Choice from '../Domain/Choice';
+    import Rubric from '../../../Domain/Rubric';
+    import Level from '../../../Domain/Level';
+    import Criterium from '../../../Domain/Criterium';
+    import Choice from '../../../Domain/Choice';
     import CriteriumLevelView from './CriteriumLevelView.vue';
-    import FormattingHelp from './FormattingHelp.vue';
-    import DataConnector from '../Connector/DataConnector';
-    import Levels from './Levels.vue';
+    import FormattingHelp from '../FormattingHelp.vue';
+    import DataConnector from '../../../Connector/DataConnector';
+    import Levels from '../Levels/Levels.vue';
 
     function updateHeight(elem: HTMLElement, addedPixels: number = 0) {
         elem.style.height = '';

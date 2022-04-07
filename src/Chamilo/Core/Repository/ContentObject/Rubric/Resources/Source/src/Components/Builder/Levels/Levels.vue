@@ -168,11 +168,11 @@
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import SelectionControls from './SelectionControls.vue';
-    import Rubric from '../Domain/Rubric';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
+    import Rubric from '../../../Domain/Rubric';
+    import Criterium from '../../../Domain/Criterium';
+    import Level from '../../../Domain/Level';
     import debounce from 'debounce';
-    import DataConnector from '../Connector/DataConnector';
+    import DataConnector from '../../../Connector/DataConnector';
     import DOMPurify from 'dompurify';
     import * as marked from 'marked';
 

@@ -42,10 +42,10 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Rubric from '../Domain/Rubric';
-    import Level from '../Domain/Level';
-    import Criterium from '../Domain/Criterium';
-    import Choice from '../Domain/Choice';
+    import Rubric from '../../../Domain/Rubric';
+    import Level from '../../../Domain/Level';
+    import Criterium from '../../../Domain/Criterium';
+    import Choice from '../../../Domain/Choice';
     import DOMPurify from 'dompurify';
     import * as marked from 'marked';
 

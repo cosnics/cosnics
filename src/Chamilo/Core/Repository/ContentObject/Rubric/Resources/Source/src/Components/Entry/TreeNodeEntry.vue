@@ -53,11 +53,11 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {TreeNodeEvaluation, TreeNodeExt} from '../Util/interfaces';
-    import Rubric from '../Domain/Rubric';
-    import RubricEvaluation from '../Domain/RubricEvaluation';
-    import Level from '../Domain/Level';
-    import {LevelEntryChoice, ChoiceEntryChoice} from '../Domain/EntryChoice';
+    import {TreeNodeEvaluation, TreeNodeExt} from '../../Util/interfaces';
+    import Rubric from '../../Domain/Rubric';
+    import RubricEvaluation from '../../Domain/RubricEvaluation';
+    import Level from '../../Domain/Level';
+    import {LevelEntryChoice, ChoiceEntryChoice} from '../../Domain/EntryChoice';
 
     @Component({
         filters: {

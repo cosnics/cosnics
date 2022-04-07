@@ -26,12 +26,12 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric from '../Domain/Rubric';
-    import Level from '../Domain/Level';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
-    import ScoreDisplay from './ScoreDisplay.vue';
+    import Rubric from '../../Domain/Rubric';
+    import Level from '../../Domain/Level';
+    import Cluster from '../../Domain/Cluster';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
+    import ScoreDisplay from '../ScoreDisplay.vue';
 
     @Component({
         components: {ScoreDisplay}

@@ -67,10 +67,10 @@
     import Criterium from '../Domain/Criterium';
     import Level from '../Domain/Level';
     import Choice from '../Domain/Choice';
-    import DescriptionField from '../Components/DescriptionField.vue';
-    import FormattingHelp from '../Components/FormattingHelp.vue';
+    import DescriptionField from '../Components/Builder/FullView/DescriptionField.vue';
+    import FormattingHelp from '../Components/Builder/FormattingHelp.vue';
     import DataConnector from '../Connector/DataConnector';
-    import TreeNodeDescriptions from '../Components/TreeNodeDescriptions.vue';
+    import TreeNodeDescriptions from '../Components/Builder/FullView/TreeNodeDescriptions.vue';
     import debounce from 'debounce';
 
     function updateHeight(elem: HTMLElement) {

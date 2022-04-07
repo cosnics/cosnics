@@ -56,11 +56,11 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric from '../Domain/Rubric';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
+    import Rubric from '../../Domain/Rubric';
+    import Cluster from '../../Domain/Cluster';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
+    import Level from '../../Domain/Level';
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;

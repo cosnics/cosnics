@@ -99,10 +99,10 @@
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
     import RubricEvaluation from '../Domain/RubricEvaluation';
-    import TreeNodeResultsView from '../Components/TreeNodeResultsView.vue';
-    import TreeNodeRubricResults from '../Components/TreeNodeRubricResults.vue';
-    import TreeNodeWeight from '../Components/TreeNodeWeight.vue';
-    import TreeNodeTitle from '../Components/TreeNodeTitle.vue';
+    import TreeNodeResultsView from '../Components/Result/TreeNodeResultsView.vue';
+    import TreeNodeRubricResults from '../Components/Result/TreeNodeRubricResults.vue';
+    import TreeNodeWeight from '../Components/Result/TreeNodeWeight.vue';
+    import TreeNodeTitle from '../Components/Result/TreeNodeTitle.vue';
 
     function pad(num: number) : string {
         return `${num < 10 ? '0' : ''}${num}`;
