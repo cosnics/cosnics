@@ -3,8 +3,8 @@ namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use InvalidArgumentException;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\TwigFunction;
 
 /**
  * This class is an extension of twig to support url generation
@@ -12,7 +12,7 @@ use Twig_SimpleFunction;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UrlGenerationExtension extends Twig_Extension
+class UrlGenerationExtension extends CoreExtension
 {
 
     /**
@@ -34,30 +34,14 @@ class UrlGenerationExtension extends Twig_Extension
 
     /**
      *
-     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function setUrlGenerator(UrlGenerator $urlGenerator)
-    {
-        if (! $urlGenerator instanceof UrlGenerator)
-        {
-            throw new InvalidArgumentException(
-                'The given url generator is not an instance of UrlGenerator, instead "' . get_class($urlGenerator) .
-                     '" was given.');
-        }
-        $this->urlGenerator = $urlGenerator;
-    }
-
-    /**
-     *
      * @see Twig_Extension::getFunctions()
      */
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('url', array($this->urlGenerator, 'generateURL')),
-            new Twig_SimpleFunction('context_url', array($this->urlGenerator, 'generateContextURL')));
+            new TwigFunction('url', array($this->urlGenerator, 'generateURL')),
+            new TwigFunction('context_url', array($this->urlGenerator, 'generateContextURL'))
+        );
     }
 
     /**
@@ -67,5 +51,23 @@ class UrlGenerationExtension extends Twig_Extension
     public function getName()
     {
         return 'url_generation';
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator $urlGenerator
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setUrlGenerator(UrlGenerator $urlGenerator)
+    {
+        if (!$urlGenerator instanceof UrlGenerator)
+        {
+            throw new InvalidArgumentException(
+                'The given url generator is not an instance of UrlGenerator, instead "' . get_class($urlGenerator) .
+                '" was given.'
+            );
+        }
+        $this->urlGenerator = $urlGenerator;
     }
 }

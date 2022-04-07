@@ -7,8 +7,8 @@ use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\File\PackagesContentFinder\PackagesFilesFinder;
 use Chamilo\Libraries\File\PathBuilder;
 use Symfony\Component\Form\FormFactoryInterface;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Manages the cache for the twig templates
@@ -21,16 +21,16 @@ class TwigCacheService extends FileBasedCacheService
 
     /**
      *
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $twig;
 
     /**
      *
-     * @param \Twig_Environment $twig
+     * @param Environment $twig
      * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
      */
-    public function __construct(Twig_Environment $twig, FormFactoryInterface $formFactory)
+    public function __construct(Environment $twig, FormFactoryInterface $formFactory)
     {
         $this->twig = $twig;
     }
@@ -66,7 +66,7 @@ class TwigCacheService extends FileBasedCacheService
         $templatesPerPackage = $packagesFilesFinder->findFiles('Resources/Templates', '*.html.twig');
 
         $basePath = Path::getInstance()->getBasePath();
-        $this->twig->getLoader()->addLoader(new Twig_Loader_Filesystem(array($basePath)));
+        $this->twig->getLoader()->addLoader(new FilesystemLoader(array($basePath)));
 
         foreach ($templatesPerPackage as $package => $templates)
         {

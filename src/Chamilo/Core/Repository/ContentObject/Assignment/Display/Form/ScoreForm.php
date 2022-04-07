@@ -2,14 +2,14 @@
 
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Form;
 
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
-use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note;
 use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider;
+use Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Translation\Translation;
-use Twig_Environment;
+use Twig\Environment;
 
 /**
  *
@@ -22,10 +22,9 @@ class ScoreForm extends FormValidator
 {
 
     /**
-     *
-     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
+     * @var \Twig\Environment
      */
-    private $score;
+    protected $twig;
 
     /**
      *
@@ -34,19 +33,20 @@ class ScoreForm extends FormValidator
     private $assignmentDataProvider;
 
     /**
-     * @var \Twig_Environment
+     *
+     * @var \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score
      */
-    protected $twig;
+    private $score;
 
     /**
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Score $score
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Interfaces\AssignmentDataProvider $assignmentDataProvider
      * @param string $postUrl
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
     public function __construct(
-        Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, Twig_Environment $twig
+        Score $score = null, AssignmentDataProvider $assignmentDataProvider, $postUrl, Environment $twig
     )
     {
         parent::__construct('details', self::FORM_METHOD_POST, $postUrl);

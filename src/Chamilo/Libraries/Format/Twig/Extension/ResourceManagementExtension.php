@@ -5,8 +5,8 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\TwigFunction;
 
 /**
  * This class is an extension of twig to support resource management
@@ -14,7 +14,7 @@ use Twig_SimpleFunction;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ResourceManagementExtension extends Twig_Extension
+class ResourceManagementExtension extends CoreExtension
 {
     const DEFAULT_CONTEXT = 'Chamilo\Libraries';
 
@@ -114,17 +114,16 @@ class ResourceManagementExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('getImagePath', array($this, 'getImagePath')),
-            new Twig_SimpleFunction('getImage', array($this, 'getImage'), array('is_safe' => array('html'))),
-            new Twig_SimpleFunction('getCssPath', array($this, 'getCssPath')),
-            new Twig_SimpleFunction('getCss', array($this, 'getCss'), array('is_safe' => array('html'))),
-            new Twig_SimpleFunction('getVendorCss', array($this, 'getVendorCss'), array('is_safe' => array('html'))),
-            new Twig_SimpleFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
-            new Twig_SimpleFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
-            new Twig_SimpleFunction(
-                'getVendorJavascript', array($this, 'getVendorJavascript'), array('is_safe' => array('html'))
-            ),
-            new Twig_SimpleFunction('isUniquePath', array($this, 'isUniquePath'))
+            new TwigFunction('getImagePath', array($this, 'getImagePath')),
+            new TwigFunction('getImage', array($this, 'getImage'), array('is_safe' => array('html'))),
+            new TwigFunction('getCssPath', array($this, 'getCssPath')),
+            new TwigFunction('getCss', array($this, 'getCss'), array('is_safe' => array('html'))),
+            new TwigFunction('getVendorCss', array($this, 'getVendorCss'), array('is_safe' => array('html'))),
+            new TwigFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
+            new TwigFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
+            new TwigFunction('getVendorJavascript', array($this, 'getVendorJavascript'),
+                array('is_safe' => array('html'))),
+            new TwigFunction('isUniquePath', array($this, 'isUniquePath'))
         );
     }
 

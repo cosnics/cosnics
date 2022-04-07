@@ -269,9 +269,9 @@ trait DependencyInjectionContainerTrait
     }
 
     /**
-     * Returns the Twig_Environment
+     * Returns the \Twig\Environment
      *
-     * @return \Twig_Environment
+     * @return \Twig\Environment
      */
     public function getTwig()
     {

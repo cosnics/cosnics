@@ -83,9 +83,9 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
      * @return string
      * @throws NotAllowedException
      * @throws \Exception
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function run()
     {

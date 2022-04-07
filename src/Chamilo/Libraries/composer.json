@@ -5,14 +5,14 @@
     "require": {
         "php": ">=7.4.0",
         "ext-zip": "*",
-        "phpmailer/phpmailer": "6.6.*",
-        "voku/stringy": "6.*",
-        "spipu/html2pdf": "5.2.*",
-        "phpoffice/phpspreadsheet": "1.22.*",
-        "simplepie/simplepie": "1.*",
         "ezyang/htmlpurifier": "4.*",
+        "google/recaptcha": "1.2.*",
+        "phpmailer/phpmailer": "6.6.*",
+        "phpoffice/phpspreadsheet": "1.22.*",
         "sentry/sdk": "3.1.*",
-        "google/recaptcha": "1.2.*"
+        "simplepie/simplepie": "1.*",
+        "spipu/html2pdf": "5.2.*",
+        "voku/stringy": "6.*"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "2.16.*"
