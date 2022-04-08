@@ -31,29 +31,29 @@
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\ClearCacheCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\GenerateResourcesCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\PackageDescriberCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\PHPUnitGeneratorCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
             <argument type="service"
                       id="Chamilo\Libraries\Architecture\Test\PHPUnitGenerator\PHPUnitGenerator"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\PackagesPHPUnitGeneratorCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Vendor\PHPStan\AnalyseCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
     </services>

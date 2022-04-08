@@ -3,7 +3,7 @@ namespace Chamilo\Libraries\Format\Twig\Extension;
 
 use Chamilo\Libraries\Architecture\Application\Routing\UrlGenerator;
 use InvalidArgumentException;
-use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
@@ -12,7 +12,7 @@ use Twig\TwigFunction;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class UrlGenerationExtension extends CoreExtension
+class UrlGenerationExtension extends AbstractExtension
 {
 
     /**

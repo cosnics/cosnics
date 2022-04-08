@@ -31,7 +31,7 @@
 
         <prototype namespace="Chamilo\Core\Queue\Console\Command\"
                    resource="../../../Console/Command/*">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </prototype>
 
     </services>

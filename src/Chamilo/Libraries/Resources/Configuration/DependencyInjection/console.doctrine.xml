@@ -11,7 +11,7 @@
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\RunSql"
                  class="Doctrine\DBAL\Tools\Console\Command\RunSqlCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
             <argument key="$connectionProvider"
                       type="service"
                       id="Chamilo\Libraries\Console\Command\Vendor\Doctrine\ChamiloConnectionProvider"/>
@@ -19,77 +19,77 @@
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Clearcache\Metadata"
                  class="Doctrine\ORM\Tools\Console\Command\ClearCache\MetadataCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Clearcache\Result"
                  class="Doctrine\ORM\Tools\Console\Command\ClearCache\ResultCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Clearcache\Query"
                  class="Doctrine\ORM\Tools\Console\Command\ClearCache\QueryCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Schema\Create"
                  class="Doctrine\ORM\Tools\Console\Command\SchemaTool\CreateCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Schema\Update"
                  class="Doctrine\ORM\Tools\Console\Command\SchemaTool\UpdateCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Schema\Drop"
                  class="Doctrine\ORM\Tools\Console\Command\SchemaTool\DropCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\EnsureProductionSettings"
                  class="Doctrine\ORM\Tools\Console\Command\EnsureProductionSettingsCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\ConvertDoctrine1Schema"
                  class="Doctrine\ORM\Tools\Console\Command\ConvertDoctrine1SchemaCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\GenerateRepositories"
                  class="Doctrine\ORM\Tools\Console\Command\GenerateRepositoriesCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\GenerateEntities"
                  class="Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\GenerateProxies"
                  class="Doctrine\ORM\Tools\Console\Command\GenerateProxiesCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\ConvertMapping"
                  class="Doctrine\ORM\Tools\Console\Command\ConvertMappingCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\RunDql"
                  class="Doctrine\ORM\Tools\Console\Command\RunDqlCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\ValidateSchema"
                  class="Doctrine\ORM\Tools\Console\Command\ValidateSchemaCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Libraries\Console\Command\Doctrine\Info"
                  class="Doctrine\ORM\Tools\Console\Command\InfoCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
         <!--
                 <service id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"
@@ -102,49 +102,49 @@
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\DiffCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Execute"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\ExecuteCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Generate"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\GenerateCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Latest"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\LatestCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Migrate"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\MigrateCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Status"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\StatusCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
                 </service>
 
                 <service id="Chamilo\Libraries\Console\Command\Doctrine\Migrations\Version"
                          class="Chamilo\Libraries\Console\Command\Vendor\Doctrine\Migrations\VersionCommand">
                     <argument type="service"
                               id="Chamilo\Libraries\Console\Command\Configurator\DoctrineMigrations"/>
-                    <tag name="chamilo.libraries.console.command"/>
+                    <tag name="Chamilo\Libraries\Console\Command"/>
     </service>-->
 
     </services>

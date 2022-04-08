@@ -17,11 +17,11 @@
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService"/>
 
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Core\Repository\ContentObject\LearningPath\Console\Command\MigrationFixerCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
     </services>

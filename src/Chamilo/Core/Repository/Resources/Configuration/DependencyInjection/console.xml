@@ -8,11 +8,11 @@
                   public="true"/>
 
         <service id="Chamilo\Core\Repository\Console\Command\ContentObjectTemplateSynchronizerCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Core\Repository\Console\Command\ResourceFixerCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
     </services>
 </container>

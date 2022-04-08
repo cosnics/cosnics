@@ -26,7 +26,7 @@ class ConsoleCompilerPass implements CompilerPassInterface
     {
         if ($container->hasDefinition('Chamilo\Libraries\Console'))
         {
-            $taggedServices = $container->findTaggedServiceIds('chamilo.libraries.console.command');
+            $taggedServices = $container->findTaggedServiceIds('Chamilo\Libraries\Console\Command');
             $consoleDefinition = $container->getDefinition('Chamilo\Libraries\Console');
 
             foreach ($taggedServices as $taggedServiceId => $tags)

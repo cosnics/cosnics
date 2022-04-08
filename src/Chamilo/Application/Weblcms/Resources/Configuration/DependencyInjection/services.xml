@@ -59,7 +59,7 @@
         <service id="Chamilo\Application\Weblcms\Service\RightsLocationFixer\RightsLocationFixer"/>
 
         <service id="Chamilo\Application\Weblcms\Console\Command\RightsLocationFixerCommand">
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
         <service id="Chamilo\Application\Weblcms\Service\CourseUserCategoryService"/>

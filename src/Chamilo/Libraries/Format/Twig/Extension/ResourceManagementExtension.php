@@ -5,7 +5,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
@@ -14,7 +14,7 @@ use Twig\TwigFunction;
  * @package Chamilo\Libraries\Format\Twig\Extension
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class ResourceManagementExtension extends CoreExtension
+class ResourceManagementExtension extends AbstractExtension
 {
     const DEFAULT_CONTEXT = 'Chamilo\Libraries';
 
@@ -122,7 +122,8 @@ class ResourceManagementExtension extends CoreExtension
             new TwigFunction('getJavascriptPath', array($this, 'getJavascriptPath')),
             new TwigFunction('getJavascript', array($this, 'getJavascript'), array('is_safe' => array('html'))),
             new TwigFunction('getVendorJavascript', array($this, 'getVendorJavascript'),
-                array('is_safe' => array('html'))),
+                array('is_safe' => array('html'))
+            ),
             new TwigFunction('isUniquePath', array($this, 'isUniquePath'))
         );
     }

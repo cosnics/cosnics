@@ -10,7 +10,7 @@
         <service id="Chamilo\Core\Rights\Structure\Console\Command\SynchronizeStructureLocationsCommand">
             <argument type="service"
                       id="Chamilo\Core\Rights\Structure\Service\StructureLocationConfiguration\Synchronizer"/>
-            <tag name="chamilo.libraries.console.command"/>
+            <tag name="Chamilo\Libraries\Console\Command"/>
         </service>
 
     </services>

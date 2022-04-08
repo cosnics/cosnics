@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Format\Twig\Extension;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Chamilo\Libraries\Utilities\Utilities;
-use Symfony\Component\Form\Extension\Core\CoreExtension;
+use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 /**
@@ -14,7 +14,7 @@ use Twig\TwigFilter;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class DateExtension extends CoreExtension
+class DateExtension extends AbstractExtension
 {
     /**
      * @param int $timestamp
