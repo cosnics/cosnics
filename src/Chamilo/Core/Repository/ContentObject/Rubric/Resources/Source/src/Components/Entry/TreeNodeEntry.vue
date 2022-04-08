@@ -2,16 +2,19 @@
 {
     "en": {
         "adjusted-score": "Adjusted score",
+        "deselect": "Deselect",
         "no-description": "No description",
         "points": "points"
     },
     "fr": {
         "adjusted-score": "Score personnalisé",
+        "deselect": "Désélectionner",
         "no-description": "Pas de description",
         "points": "points"
     },
     "nl": {
         "adjusted-score": "Aangepaste score",
+        "deselect": "Deselecteer",
         "no-description": "Geen omschrijving",
         "points": "punten"
     }
@@ -20,7 +23,7 @@
 
 <template>
     <div class="treenode-choices">
-        <div class="treenode-choice" style="position: relative" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="({ title, description, score, markdown, level, isSelected }, index) in entryChoices">
+        <div class="treenode-choice" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="({ title, description, score, markdown, level, isSelected }, index) in entryChoices">
             <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{'mod-fixed-levels': !rubric.hasCustomLevels, 'is-selected': isSelected, 'mod-btn': !preview, 'mod-error': hasLevelError(level) }" @click.stop="onSelect(level)" :disabled="hasLevelError(level)">
                 <span class="treenode-level-title" :class="{'mod-fixed-levels': !rubric.hasCustomLevels}">{{ title }}</span>
                 <span v-if="useScores" class="treenode-level-score">
@@ -28,26 +31,18 @@
                     {{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                 <span v-else><i class="treenode-level-icon-check fa fa-check" :class="{ 'is-selected': isSelected }"></i></span>
             </component>
-            <div v-if="useScores && currentEvaluation && evaluation === currentEvaluation && level === currentEvaluation.level && level.useRangeScore"
-                style="position: relative;height:44px;">
-                <div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 220px;left:calc(50% - 110px);gap:.75rem;justify-content: center">
-                    <label for="adjusted-score" style="font-weight: 400;margin-bottom:0">{{ $t('adjusted-score') }}:</label>
-                    <input id="adjusted-score" ref="range-input" type="number" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" required step="1" @input="onUpdateRangeScore(level)" class="input-detail mod-range">
+            <div v-if="!preview && useScores && level.useRangeScore && isSelected" class="manual-score-wrap" :class="{'mod-desc': showDescription}">
+                <div @click.stop="" class="manual-score">
+                    <label for="adjusted-score">{{ $t('adjusted-score') }}:</label>
+                    <input id="adjusted-score" ref="manual-score" type="number" v-model.number="evaluation.score" :min="level.minimumScore" :max="level.score" required step="1" @input="onUpdateRangeScore(level)" class="input-detail mod-range">
                 </div>
-                <!--<div @click.stop="" class="score-range" :class="{'mod-first': index === 0}" style="width: 260px;left:calc(50% - 130px);gap:.5rem;justify-content: center" v-if="level.score - level.minimumScore <= 6">
-                    <button v-for="(_, i) in (level.score - level.minimumScore + 1)"
-                            @click.stop="() => {currentEvaluation.score = level.minimumScore + i; onUpdateRangeScore(level);}"
-                            class="btn-range" :class="{'is-selected': currentEvaluation.score === level.minimumScore + i}">{{ level.minimumScore + i }}</button>
-                </div>
-                <div v-else @click.stop="" class="score-range" :class="{'mod-first': index === 0}">
-                    <input type="range" v-model.number="currentEvaluation.score" :min="level.minimumScore" :max="level.score" @input="onUpdateRangeScore(level)">
-                </div>-->
             </div>
             <template v-if="showDescription">
                 <div v-if="description" class="treenode-level-description is-feedback-visible" v-html="markdown"></div>
                 <div v-else class="treenode-level-description mod-no-default-feedback is-feedback-visible"><em>{{ $t('no-description') }}</em></div>
             </template>
         </div>
+        <button v-if="!preview" class="btn-deselect" :title="$t('deselect')" :disabled="!hasSelection" :class="{'is-active': hasSelection}" @click.stop="onDeselect"><i class="gg-backspace" aria-hidden="true"></i><span class="sr-only">{{ $t('deselect') }}</span></button>
     </div>
 </template>
 
@@ -73,7 +68,6 @@
         @Prop({type: Object, default: null}) readonly evaluation!: TreeNodeEvaluation|null;
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showDefaultFeedbackFields!: boolean;
-        @Prop({type: Object, default: null}) readonly currentEvaluation!: TreeNodeEvaluation|null;
 
         get hasLevels(): boolean {
             return !!this.ext.levels.length;
@@ -103,6 +97,10 @@
             return RubricEvaluation.isInvalidEvaluation(this.evaluation);
         }
 
+        get hasSelection() {
+            return (this.entryChoices as any[]).find(c => c?.isSelected);
+        }
+
         hasLevelError(level: Level) {
             if (!level.useRangeScore) { return false; }
             if (level.minimumScore === null) { return true; }
@@ -114,10 +112,17 @@
             if (!this.preview) {
                 this.$emit('select', this.evaluation, level);
                 this.$nextTick(() => {
-                    if (!this.$refs['range-input']) { return; }
-                    const input = this.$refs['range-input'] as HTMLInputElement[];
+                    if (!this.$refs['manual-score']) { return; }
+                    const input = this.$refs['manual-score'] as HTMLInputElement[];
                     input[0]?.focus();
+                    input[0]?.select();
                 });
+            }
+        }
+
+        onDeselect() {
+            if (!this.preview) {
+                this.$emit('deselect', this.evaluation);
             }
         }
 
@@ -130,6 +135,10 @@
 </script>
 
 <style lang="scss" scoped>
+    .treenode-choice {
+        position: relative;
+    }
+
     .treenode-choice.mod-show-description {
         background: #fafafa;
         border-bottom: 1px solid #e0e0e0;
@@ -237,26 +246,34 @@
         }
     }
 
-    .score-range {
+    .manual-score-wrap {
+        height: 44px;
+        position: relative;
+
+        &.mod-desc {
+            height: 50px;
+        }
+    }
+
+    .manual-score {
         align-items: center;
         background: #fff;
         border-radius: 3px;
-        box-shadow: hsla(204, 38%, 34%, .4) 0 5px 15px;
+        box-shadow: hsla(204, 38%, 34%, .2) 0 5px 15px;
         display: flex;
-        gap: 1rem;
+        gap: .75rem;
         height: 44px;
-        left: calc(50% - 120px);
+        justify-content: center;
+        left: calc(50% - 100px);
         padding: 1rem;
         position: absolute;
         top: 3px;
-        /*top: -50px;*/
-        width: 240px;
+        width: 200px;
         z-index: 1;
 
-        @media only screen and (min-width: 680px) and (max-width: 899px) {
-            &.mod-first {
-                left: -4rem;
-            }
+        > label {
+            font-weight: 400;
+            margin-bottom: 0;
         }
     }
 
@@ -286,6 +303,22 @@
         }
     }
 
+    .btn-deselect {
+        background:none;
+        border: none;
+        color: #dedede;
+        height: 27px;
+        width: 22px;
+
+        &.is-active {
+            color: #6195b8;
+
+            &:hover, &:active {
+                color: #447697;
+            }
+        }
+    }
+
     @media only screen and (min-width: 680px) {
         .treenode-level.mod-fixed-levels {
             height: 2.7rem;
@@ -295,5 +328,59 @@
         .treenode-level-title.mod-fixed-levels {
             display: none;
         }
+    }
+
+    @media only screen and (max-width: 679px) {
+        .manual-score-wrap {
+            height: 52px;
+        }
+        .btn-deselect {
+            align-self: end;
+        }
+    }
+</style>
+<style>
+    .gg-backspace {
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        width: 14px;
+        height: 14px;
+        transform: scale(var(--ggs,1));
+        border: 2px solid;
+        border-left: 0;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px
+    }
+    .gg-backspace::after,
+    .gg-backspace::before {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+        position: absolute
+    }
+    .gg-backspace::before {
+        background:
+            linear-gradient( to left,
+            currentColor 18px,transparent 0)
+            no-repeat center center/10px 2px;
+        border-right: 3px solid transparent;
+        box-shadow: inset 0 0 0 2px;
+        right: 2px;
+        bottom: 1px;
+        width: 8px;
+        height: 8px;
+        border-left: 3px solid transparent;
+        transform: rotate(45deg)
+    }
+    .gg-backspace::after {
+        width: 10px;
+        height: 10px;
+        border-top: 2px solid;
+        border-left: 2px solid;
+        border-top-left-radius: 1px;
+        transform: rotate(-45deg);
+        top: 0;
+        left: -5px;
     }
 </style>

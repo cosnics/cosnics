@@ -1,24 +1,10 @@
-<i18n>
-{
-    "en": {
-        "na": "n/a"
-    },
-    "fr": {
-        "na": "n/a"
-    },
-    "nl": {
-        "na": "n.b."
-    }
-}
-</i18n>
-
 <template>
     <div v-if="showMax" class="treenode-evaluation" :class="['mod-' + nodeType + '-max']">
         <score-display :score="score" />
     </div>
     <div v-else class="treenode-evaluation" :class="['mod-' + nodeType, {'mod-incomplete': isIncomplete, 'mod-grades': isGradeMode, 'mod-feedback': !!feedback}]">
         <i v-if="feedback" :title="titleOverlay" class="treenode-feedback-icon fa fa-info" :class="{'mod-cluster': isCluster && !isGradeMode && !isIncomplete}" />
-        <span v-if="isNA" class="m-not-scored">{{ $t('na') }}</span>
+        <span v-if="isNA" class="m-not-scored">&nbsp;</span>
         <score-display v-if="showScore" :score="score" :percent="rubric.useRelativeWeights" />
         <template v-else-if="isCriterium">{{ levelTitle }}</template>
     </div>
@@ -186,7 +172,8 @@
         &.mod-rubric, &.mod-cluster, &.mod-category, &.mod-criterium {
             &.mod-incomplete:not(.mod-grades), &.mod-incomplete.mod-grades {
                 background: none;
-                border: 1px dashed hsla(190, 33%, 59%, .47);
+                border-color: transparent;
+                border-bottom: 1px dashed hsla(190, 33%, 59%, .47);
                 padding: 0.05rem 0.7rem 0;
             }
         }

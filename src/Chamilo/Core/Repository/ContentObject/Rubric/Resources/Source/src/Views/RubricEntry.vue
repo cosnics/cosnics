@@ -46,7 +46,7 @@
 </i18n>
 
 <template>
-    <div class="rubric" @click.stop="currentEvaluation = null" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric" @click.stop="" :class="[{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }, useScores ? 'mod-scores' : 'mod-grades', { 'mod-rel-weights': useScores && rubric.useRelativeWeights, 'mod-abs-weights': useScores && rubric.hasAbsoluteWeights }]" :style="{'--num-cols': rubric.rubricLevels.length}">
         <ul class="rubric-tools">
             <slot name="demoEvaluator"></slot>
             <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
@@ -92,7 +92,7 @@
                     <div class="treenode-weight mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                     <div class="treenode-rubric-input rb-md:col-start-1 rb-sm:col-span-full" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                         <!--<div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>-->
-                        <tree-node-entry :rubric="rubric" :ext="ext" :evaluation="evaluation" :current-evaluation="currentEvaluation" :preview="preview" :show-default-feedback-fields="showDefaultFeedbackFields" @select="selectLevel" @range-level-score="updateRangeLevelScore"></tree-node-entry>
+                        <tree-node-entry :rubric="rubric" :ext="ext" :evaluation="evaluation" :preview="preview" :show-default-feedback-fields="showDefaultFeedbackFields" @select="selectLevel" @deselect="deselectLevel" @range-level-score="updateRangeLevelScore"></tree-node-entry>
                         <div v-if="evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full">
                             <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                         </div>
@@ -155,7 +155,6 @@
     export default class RubricEntry extends Vue {
         private treeNodeData: TreeNodeExt[] = [];
         private highlightedTreeNode: TreeNode|null = null;
-        private currentEvaluation: TreeNodeEvaluation|null = null;
 
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: RubricEvaluation}) readonly rubricEvaluation!: RubricEvaluation|undefined;
@@ -258,7 +257,6 @@
 
         selectLevel(evaluation: TreeNodeEvaluation, level: Level) : void {
             if (this.preview) { return; }
-            this.currentEvaluation = evaluation;
             if (evaluation.level === level) { return; }
             evaluation.level = level;
             // careful: getChoiceScore will fail
@@ -275,6 +273,14 @@
                 }
             }
             this.$emit('level-selected', evaluation.treeNode, level);
+        }
+
+        deselectLevel(evaluation: TreeNodeEvaluation) : void {
+            if (this.preview) { return; }
+            if (evaluation.level === null) { return; }
+            evaluation.level = null;
+            evaluation.score = null;
+            this.$emit('level-selected', evaluation.treeNode, null);
         }
 
         updateRangeLevelScore(evaluation: TreeNodeEvaluation, level: Level) : void {
@@ -324,15 +330,19 @@
                         if (existingResult.comment) {
                             evaluation.feedback = existingResult.comment;
                         }
-                        if (treeNode.getType() === 'criterium' && existingResult.level_id) {
-                            const level = rubric.levels.find(l => existingResult.level_id === parseInt(l.id));
-                            if (level) {
-                                this.selectLevel(evaluation, level);
-                                evaluation.score = existingResult.score;
+                        if (treeNode.getType() === 'criterium') {
+                            if (existingResult.level_id) {
+                                const level = rubric.levels.find(l => existingResult.level_id === parseInt(l.id));
+                                if (level) {
+                                    this.selectLevel(evaluation, level);
+                                    evaluation.score = existingResult.score;
+                                }
+                            } else {
+                                this.deselectLevel(evaluation);
+                                evaluation.score = null;
                             }
                         }
                     }
-                    this.currentEvaluation = null;
                 });
                 this.$emit('level-selected');
             }

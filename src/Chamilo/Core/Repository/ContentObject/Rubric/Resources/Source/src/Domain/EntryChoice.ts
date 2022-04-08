@@ -22,9 +22,6 @@ export class LevelEntryChoice implements EntryChoice {
     }
 
     get isSelected(): boolean {
-        if (!this.chosenLevel) {
-            return this.level.isDefault;
-        }
         return this.level === this.chosenLevel;
     }
 
@@ -93,10 +90,6 @@ export class ChoiceEntryChoice implements EntryChoice {
     }
 
     get isSelected(): boolean {
-        if (!this.chosenLevel) {
-            return this.wChoice.level.isDefault;
-        }
-
         return this.wChoice.level === this.chosenLevel;
     }
 }
