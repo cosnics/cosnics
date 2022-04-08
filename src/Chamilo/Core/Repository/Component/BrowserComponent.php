@@ -267,7 +267,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $breadcrumbtrail->add_help('repository_browser');
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters($additionalParameters = array())
     {
         return parent::get_additional_parameters(
             array(

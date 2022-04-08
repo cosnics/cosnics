@@ -347,7 +347,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return array The objects.
      */
-    public function get_attached_content_object_ids($type = self :: ATTACHMENT_NORMAL)
+    public function get_attached_content_object_ids($type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($this->attachment_ids[$type]))
         {
@@ -608,7 +608,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $id int The ID of the object to attach.
      */
-    public function attach_content_object($id, $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
         if ($this->is_attached_to($id, $type))
         {
@@ -625,7 +625,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function attach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
+    public function attach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
     {
         if (is_null($ids))
         {
@@ -655,7 +655,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return boolean
      */
-    public function is_attached_to($object_id, $type = ContentObject ::ATTACHMENT_NORMAL)
+    public function is_attached_to($object_id, $type = ContentObject::ATTACHMENT_NORMAL)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -774,7 +774,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return boolean True if the attachment was removed, false if it did not exist.
      */
-    public function detach_content_object($id, $type = self :: ATTACHMENT_NORMAL)
+    public function detach_content_object($id, $type = self::ATTACHMENT_NORMAL)
     {
         $conditions = array();
         $conditions[] = new EqualityCondition(
@@ -814,7 +814,7 @@ class ContentObject extends CompositeDataClass
         }
     }
 
-    public function detach_content_objects($ids = array(), $type = self :: ATTACHMENT_NORMAL)
+    public function detach_content_objects($ids = array(), $type = self::ATTACHMENT_NORMAL)
     {
         if (!is_array($ids))
         {
@@ -832,7 +832,7 @@ class ContentObject extends CompositeDataClass
         return true;
     }
 
-    public function truncate_attachments($type = self :: ATTACHMENT_NORMAL)
+    public function truncate_attachments($type = self::ATTACHMENT_NORMAL)
     {
         // Reset the cache
         $this->truncate_attachment_cache($type);
@@ -871,7 +871,7 @@ class ContentObject extends CompositeDataClass
      *
      * @param $type String
      */
-    public function truncate_attachment_cache($type = self :: ATTACHMENT_NORMAL)
+    public function truncate_attachment_cache($type = self::ATTACHMENT_NORMAL)
     {
         unset($this->attachment_ids[$type]);
         unset($this->attachments[$type]);
@@ -1433,12 +1433,12 @@ class ContentObject extends CompositeDataClass
     /**
      * Gets the name of the icon corresponding to this object.
      */
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         return $size;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         $template_registration = $this->get_template_registration();
 
@@ -1462,7 +1462,7 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $type_string = null)
+    public static function icon_image($context, $size = Theme::ICON_SMALL, $is_current = true, $type_string = null)
     {
         return '<img src="' . static::icon_path($context, $size, $is_current) . '" alt="' . static::type_string(
                 $context,
@@ -1470,7 +1470,7 @@ class ContentObject extends CompositeDataClass
             ) . '" title="' . htmlentities(static::type_string($context, $type_string)) . '"/>';
     }
 
-    public function get_icon_path($size = Theme :: ICON_SMALL)
+    public function get_icon_path($size = Theme::ICON_SMALL)
     {
         return static::icon_path(
             ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
@@ -1479,7 +1479,7 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public static function icon_path($context, $size = Theme :: ICON_SMALL, $is_current = true)
+    public static function icon_path($context, $size = Theme::ICON_SMALL, $is_current = true)
     {
         return Theme::getInstance()->getImagePath($context, 'Logo/' . $size /*. ($is_current ? '' : 'Na')*/);
     }

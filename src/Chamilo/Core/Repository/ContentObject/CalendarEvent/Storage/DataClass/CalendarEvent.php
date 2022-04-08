@@ -306,7 +306,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
             self::PROPERTY_BYMONTHDAY);
     }
 
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         if ($this->has_frequency())
         {
@@ -318,7 +318,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
         }
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         return static::icon_image(
             ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
@@ -327,7 +327,7 @@ class CalendarEvent extends ContentObject implements Versionable, AttachmentSupp
             $this->has_frequency());
     }
 
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $has_frequency = false)
+    public static function icon_image($context, $size = Theme::ICON_SMALL, $is_current = true, $has_frequency = false)
     {
         if ($has_frequency)
         {

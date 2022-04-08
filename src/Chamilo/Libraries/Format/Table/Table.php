@@ -176,7 +176,7 @@ abstract class Table
         }
 
         // refactored the column model out of the loop.
-        $columnModel = &$this->get_column_model();
+        $columnModel = $this->get_column_model();
         $columnCount = $columnModel->get_column_count();
 
         for ($i = 0; $i < $columnCount; $i ++)
@@ -197,9 +197,11 @@ abstract class Table
                 $contentAttributes['class'] = $cssClasses[TableColumn::CSS_CLASSES_COLUMN_CONTENT];
             }
 
+            $security = new Security();
+
             $this->table->setColumnHeader(
                 ($this->has_form_actions() ? $i + 1 : $i),
-                Security::remove_XSS($column->get_title()),
+                $security->removeXSS($column->get_title()),
                 $column->is_sortable(),
                 $headerAttributes,
                 $contentAttributes
@@ -212,7 +214,9 @@ abstract class Table
         $direction = intval($this->table->getOrderDirection());
         $columnModel->set_default_order_direction($direction);
 
-        $columnModel->set_default_order_column($this->table->getOrderColumn());
+        $defaultOrderColumn = $this->table->getOrderColumn();
+        $defaultOrderColumnIndex = is_array($defaultOrderColumn) ? array_pop($defaultOrderColumn) : $defaultOrderColumn;
+        $columnModel->set_default_order_column($defaultOrderColumnIndex);
     }
 
     /**

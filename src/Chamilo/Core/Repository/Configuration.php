@@ -116,7 +116,7 @@ class Configuration
         {
             $common_registrations = $this->registrations[self::REGISTRATION_USER_ID][0][$type];
             
-            if (count($common_registrations) > 0)
+            if (is_array($common_registrations) && count($common_registrations) > 0)
             {
                 $registered_types = array_merge($registered_types, $common_registrations);
             }
@@ -125,7 +125,7 @@ class Configuration
             {
                 $user_registrations = $this->registrations[self::REGISTRATION_USER_ID][$user_id][$type];
                 
-                if (count($user_registrations) > 0)
+                if (is_array($user_registrations) && count($user_registrations) > 0)
                 {
                     $registered_types = array_merge($registered_types, $user_registrations);
                 }

@@ -40,12 +40,12 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return $this->set_additional_property(self::PROPERTY_ICON, $icon);
     }
 
-    public function get_icon_name()
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         return self::icon_name($this->get_icon());
     }
 
-    public static function icon_name($icon, $size = Theme :: ICON_SMALL)
+    public static function icon_name($icon, $size = Theme::ICON_SMALL)
     {
         // if icon is empty: return size as icon apht, to prevent trailing underscore
         if ($icon == "")
@@ -78,7 +78,7 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return $size . $icon;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         return static::icon_image(
             ClassnameUtilities::getInstance()->getNamespaceParent($this->context(), 2),
@@ -87,7 +87,7 @@ class SystemAnnouncement extends ContentObject implements Versionable
             $this->get_icon());
     }
 
-    public static function icon_image($context, $size = Theme :: ICON_SMALL, $is_current = true, $icon = self :: ICON_CONFIRMATION)
+    public static function icon_image($context, $size = Theme::ICON_SMALL, $is_current = true, $icon = self::ICON_CONFIRMATION)
     {
         return parent::icon_image($context, self::icon_name($icon, $size), $is_current);
     }

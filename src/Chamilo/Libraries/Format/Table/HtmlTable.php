@@ -777,9 +777,11 @@ abstract class HtmlTable extends \HTML_Table
     {
         $header = $this->getHeader();
 
-        for ($i = 0; $i < count($headerAttributes); $i ++)
+        if (is_array($headerAttributes))
         {
-            $header->setColAttributes($i, $headerAttributes[$i]);
+            for ($i = 0; $i < count($headerAttributes); $i++) {
+                $header->setColAttributes($i, $headerAttributes[$i]);
+            }
         }
 
         // TODO: Make sure the order column index and direction index match

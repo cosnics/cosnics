@@ -174,7 +174,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return $this->get_storage_path() . $this->get_path();
     }
 
-    public function get_icon_name($size = Theme :: ICON_SMALL)
+    public function get_icon_name($size = Theme::ICON_SMALL)
     {
         $filename = $this->get_filename();
         $parts = explode('.', $filename);
@@ -195,13 +195,13 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return $icon_name;
     }
 
-    public function get_icon_image($size = Theme :: ICON_SMALL, $is_available = true)
+    public function get_icon_image($size = Theme::ICON_SMALL, $is_available = true)
     {
         return '<img src="' . $this->get_icon_path($size) . '" alt="' . $this->get_extension() . '" title="' .
         htmlentities($this->get_extension()) . '"/>';
     }
 
-    public function get_icon_path($size = Theme :: ICON_SMALL)
+    public function get_icon_path($size = Theme::ICON_SMALL)
     {
         $extension = (string) StringUtilities::getInstance()->createString($this->get_extension())->upperCamelize();
 
@@ -376,7 +376,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get extensions for images
      *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_IMAGE) now
+     * @deprecated Use FileType::get_type_extensions(FileType::TYPE_IMAGE) now
      * @return string[]
      */
     public static function get_image_types()
@@ -387,7 +387,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get extensions for flash
      *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_FLASH) now
+     * @deprecated Use FileType::get_type_extensions(FileType::TYPE_FLASH) now
      * @return string[]
      */
     public static function get_flash_types()
@@ -406,7 +406,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get extensions for video
      *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_VIDEO) now
+     * @deprecated Use FileType::get_type_extensions(FileType::TYPE_VIDEO) now
      * @return string[]
      */
     public static function get_video_types()
@@ -417,7 +417,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * Get extensions for audio
      *
-     * @deprecated Use FileType :: get_type_extensions(FileType :: TYPE_AUDIO) now
+     * @deprecated Use FileType::get_type_extensions(FileType::TYPE_AUDIO) now
      * @return string[]
      */
     public static function get_audio_types()
@@ -548,11 +548,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     public static function get_additional_property_names()
     {
         return array(
-            self :: PROPERTY_FILENAME,
-            self :: PROPERTY_FILESIZE,
-            self :: PROPERTY_PATH,
-            self :: PROPERTY_HASH,
-            self :: PROPERTY_STORAGE_PATH,
+            self::PROPERTY_FILENAME,
+            self::PROPERTY_FILESIZE,
+            self::PROPERTY_PATH,
+            self::PROPERTY_HASH,
+            self::PROPERTY_STORAGE_PATH,
             self::PROPERTY_SHOW_INLINE
         );
     }
@@ -798,11 +798,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @see repository/lib/ContentObject#create()
      */
-    public function create()
+    public function create($create_in_batch = false)
     {
         $this->clear_errors();
 
-        return parent::create();
+        return parent::create($create_in_batch);
     }
 
     /**
