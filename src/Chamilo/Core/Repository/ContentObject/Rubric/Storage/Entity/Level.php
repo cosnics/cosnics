@@ -261,9 +261,9 @@ class Level
      */
     public function setIsDefault(bool $isDefault): Level
     {
-        if($isDefault && $this->rubricData instanceof RubricData)
+        if ($isDefault && $this->rubricData instanceof RubricData)
         {
-            $this->rubricData->setCurrentDefaultLevelNoLongerDefault();
+            $this->rubricData->setCurrentDefaultLevelNoLongerDefault($this->getCriterium());
         }
 
         $this->isDefault = $isDefault;

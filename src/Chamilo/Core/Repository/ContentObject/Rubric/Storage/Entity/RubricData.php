@@ -394,9 +394,14 @@ class RubricData
         return $this;
     }
 
-    public function setCurrentDefaultLevelNoLongerDefault()
+    /**
+     * @param CriteriumNode|null $criterium
+     */
+    public function setCurrentDefaultLevelNoLongerDefault(CriteriumNode $criterium = null)
     {
-        foreach ($this->levels as $level)
+        $levels = $this->filterLevelsByCriterium($criterium);
+
+        foreach ($levels as $level)
         {
             if ($level->isDefault())
             {
