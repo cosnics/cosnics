@@ -77,8 +77,8 @@ export default class RubricEvaluation {
     }
 
     getCriteriumScore(criterium: Criterium, evaluator: any|undefined = undefined) : number|null {
-        let score = this.getTreeNodeEvaluation(criterium, evaluator)?.score;
-        if (score === undefined) { score = null; }
+        const score = this.getTreeNodeEvaluation(criterium, evaluator)?.score;
+        if (score === undefined) { return null; }
         return score;
     }
 

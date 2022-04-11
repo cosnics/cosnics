@@ -62,6 +62,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+    import {TreeNodeExt} from '../Util/interfaces';
     import Rubric from '../Domain/Rubric';
     import Category from '../Domain/Category';
     import Criterium from '../Domain/Criterium';
@@ -78,12 +79,6 @@
         elem.style.height = `${elem.scrollHeight + 14}px`;
     }
 
-    interface CriteriumExt {
-        criterium: Criterium;
-        choices: any[];
-        levels: Level[];
-    }
-
     @Component({
         components: {
             DescriptionField, FormattingHelp, TreeNodeDescriptions
@@ -97,7 +92,7 @@
     export default class RubricBuilderFull extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop(DataConnector) readonly dataConnector!: DataConnector|null;
-        private criteriaData: CriteriumExt[] = [];
+        private criteriaData: TreeNodeExt[] = [];
         private showFormatting = false;
 
         constructor() {
@@ -132,19 +127,23 @@
                 el.reportValidity();
                 return;
             }
-            const rubric = this.rubric;
-            if (rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
+            if (this.rubric.useRelativeWeights && typeof criterium.rel_weight !== 'number') {
                 criterium.rel_weight = null;
-            } else if (!rubric.useRelativeWeights) {
+            } else if (!this.rubric.useRelativeWeights) {
                 const criteriumExt = this.getCriteriumData(criterium);
-                criteriumExt.choices = [];
-                rubric.rubricLevels.forEach(level => {
-                    const choice = rubric.getChoice(criterium, level);
-                    const score = rubric.getChoiceScore(criterium, level);
-                    criteriumExt.choices.push({ level, choice, score});
-                });
+                criteriumExt.choices = this.getCriteriumChoices(criterium);
             }
             this.dataConnector?.updateTreeNode(criterium);
+        }
+
+        getCriteriumChoices(criterium: Criterium) {
+            const rubric = this.rubric;
+
+            return rubric.rubricLevels.map(level => ({
+                level,
+                choice: rubric.getChoice(criterium, level),
+                score: rubric.getChoiceScore(criterium, level)
+            }));
         }
 
         get useScores() {
@@ -162,28 +161,19 @@
             }));
         }
 
-        getCriteriumData(criterium: Criterium) : CriteriumExt {
-            const criteriumExt = this.criteriaData.find((_ : CriteriumExt) => _.criterium === criterium);
+        getCriteriumData(criterium: Criterium) : TreeNodeExt {
+            const criteriumExt = this.criteriaData.find((_ : TreeNodeExt) => _.treeNode === criterium);
             if (!criteriumExt) { throw new Error(`No data found for criterium: ${criterium}`); }
             return criteriumExt;
         }
 
         private initScores(rubric: Rubric) {
             rubric.getAllCriteria().forEach(criterium => {
-                const criteriumExt: CriteriumExt = { criterium: criterium, choices: [], levels: [] };
-                const criteriumLevels = rubric.filterLevelsByCriterium(criterium);
-                if (criteriumLevels.length) {
-                    criteriumLevels.forEach(level => {
-                       criteriumExt.levels.push(level);
-                    });
-                } else {
-                    rubric.rubricLevels.forEach(level => {
-                        const choice = rubric.getChoice(criterium, level);
-                        const score = rubric.getChoiceScore(criterium, level);
-                        criteriumExt.choices.push({ level, choice, score});
-                    });
-                }
-                this.criteriaData.push(criteriumExt);
+                const levels = rubric.filterLevelsByCriterium(criterium);
+                const choices = levels.length ? [] : this.getCriteriumChoices(criterium);
+                this.criteriaData.push({
+                    treeNode: criterium, levels, choices, showDefaultFeedback: false
+                });
             });
         }
 

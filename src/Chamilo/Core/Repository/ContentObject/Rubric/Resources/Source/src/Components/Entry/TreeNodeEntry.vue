@@ -23,7 +23,7 @@
 
 <template>
     <div class="treenode-choices">
-        <div class="treenode-choice" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="({ title, description, score, markdown, level, isSelected }, index) in entryChoices">
+        <div class="treenode-choice" :class="{'mod-show-description': showDescription, 'mod-empty-description': showDescription && !description}" v-for="{ level, title, description, score, markdown, isSelected } in entryChoices">
             <component :is="preview ? 'div' : 'button'" class="treenode-level" :class="{'mod-fixed-levels': !rubric.hasCustomLevels, 'is-selected': isSelected, 'mod-btn': !preview, 'mod-error': hasLevelError(level) }" @click.stop="onSelect(level)" :disabled="hasLevelError(level)">
                 <span class="treenode-level-title" :class="{'mod-fixed-levels': !rubric.hasCustomLevels}">{{ title }}</span>
                 <span v-if="useScores" class="treenode-level-score">
@@ -52,7 +52,7 @@
     import Rubric from '../../Domain/Rubric';
     import RubricEvaluation from '../../Domain/RubricEvaluation';
     import Level from '../../Domain/Level';
-    import {LevelEntryChoice, ChoiceEntryChoice} from '../../Domain/EntryChoice';
+    import {EntryChoice, LevelEntryChoice, ChoiceEntryChoice} from '../../Domain/EntryChoice';
 
     @Component({
         filters: {
@@ -86,11 +86,11 @@
             return this.evaluation?.level || null;
         }
 
-        get entryChoices() {
+        get entryChoices(): EntryChoice[] {
             if (this.hasLevels) {
-                return this.ext.levels.map(level => new LevelEntryChoice(this.rubric, level, this.chosenLevel));
+                return this.ext.levels.map(level => new LevelEntryChoice(level, this.chosenLevel));
             }
-            return this.ext.choices.map(choiceObject => new ChoiceEntryChoice(this.rubric, choiceObject, this.chosenLevel));
+            return this.ext.choices.map(choiceObject => new ChoiceEntryChoice(choiceObject, this.chosenLevel, !this.rubric.useRelativeWeights));
         }
 
         get hasRangeError() {

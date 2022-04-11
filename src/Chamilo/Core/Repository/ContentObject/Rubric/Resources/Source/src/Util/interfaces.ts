@@ -12,7 +12,7 @@ export interface TreeNodeExt {
     treeNode: TreeNode;
     levels: Level[];
     choices: any[];
-    showDefaultFeedback: false;
+    showDefaultFeedback: boolean;
 }
 
 export interface EvaluatorEvaluation {

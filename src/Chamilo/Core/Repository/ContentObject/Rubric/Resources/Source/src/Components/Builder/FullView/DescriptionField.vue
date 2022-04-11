@@ -14,8 +14,8 @@
 
 <template>
     <div class="description-input-area">
-        <textarea v-model="description" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isDescriptionInputActive || !description}" @input="onDescriptionChange" @focus="isDescriptionInputActive = true" @blur="isDescriptionInputActive = false"></textarea>
-        <div class="description-markup-preview" :class="{'is-input-active': isDescriptionInputActive || !description}">
+        <textarea v-model="descriptiveItem.description" :placeholder="$t('enter-level-description')" class="ta-default-feedback" :class="{'is-input-active': isInputActive || !descriptiveItem.description}" @input="onDescriptionChange" @focus="isInputActive = true" @blur="isInputActive = false"></textarea>
+        <div class="description-markup-preview" :class="{'is-input-active': isInputActive || !descriptiveItem.description}">
             <slot></slot>
             <div class="preview" v-html="preview"></div>
         </div>
@@ -29,34 +29,24 @@
     import Level from '../../../Domain/Level';
 
     @Component({
-        name: 'description-field',
-        components: {
-        },
+        name: 'description-field'
     })
     export default class DescriptionField extends Vue {
-        private isDescriptionInputActive = false;
+        private isInputActive = false;
 
-        @Prop({type: [Choice, Level], required: true}) readonly fieldItem!: Choice|Level;
-
-        set description(desc: string) {
-            this.fieldItem.description = desc;
-        }
-
-        get description(): string {
-            return this.fieldItem.description;
-        }
-
-        get preview() {
-            return this.fieldItem.toMarkdown();
-        }
+        @Prop({type: [Level, Choice], required: true}) readonly descriptiveItem!: Level|Choice;
 
         constructor() {
             super();
             this.onChange = debounce(this.onChange, 750);
         }
 
+        get preview() {
+            return this.descriptiveItem.toMarkdown();
+        }
+
         onChange() {
-            this.$emit('change', this.fieldItem);
+            this.$emit('change', this.descriptiveItem);
         }
 
         onDescriptionChange(e: InputEvent) {
