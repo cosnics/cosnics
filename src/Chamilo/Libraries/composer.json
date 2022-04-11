@@ -127,7 +127,7 @@
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.vendor.min.css",
                     "input": [
-                        "Resources/Plugin/FontAwesome5/css/all.min.css",
+                        "Resources/Plugin/FontAwesome6/css/all.min.css",
                         "Resources/Plugin/ConnectIdents/ConnectIdents.min.css",
                         "Resources/Plugin/Dropzone/dropzone.min.css",
                         "Resources/Plugin/Highlight/github.min.css",

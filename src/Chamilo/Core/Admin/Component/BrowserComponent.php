@@ -88,6 +88,8 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $managerClass = $package->get_context() . '\Integration\Chamilo\Core\Admin\Manager';
 
+
+
             if (class_exists($managerClass) &&
                 is_subclass_of($managerClass, '\Chamilo\Core\Admin\ActionsSupportInterface'))
             {
@@ -95,6 +97,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                 $index = 0;
                 $index ++;
+
                 $actions_tab = new DynamicActionsTab(
                     ClassnameUtilities::getInstance()->getNamespaceId($package->get_context()),
                     $this->getTranslator()->trans('TypeName', [], $package->get_context()),
