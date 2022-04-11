@@ -5,34 +5,22 @@ namespace Chamilo\Libraries\Utilities;
  * Class to time a script
  *
  * @package Chamilo\Libraries\Utilities
- * @author svenvanpoucke
+ *
+ * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class Timer
 {
 
-    /**
-     *
-     * @var integer
-     */
-    private $start_time;
+    private int $startTime;
 
-    /**
-     *
-     * @var integer
-     */
-    private $stop_time;
+    private int $stopTime;
 
     public function __construct()
     {
         $this->reset();
     }
 
-    /**
-     * function to get the microtime
-     *
-     * @return float
-     */
-    private function get_microtime()
+    private function getMicrotime(): float
     {
         list($usec, $sec) = explode(" ", microtime());
 
@@ -41,22 +29,18 @@ class Timer
 
     /**
      * Returns the difference between the stop and start time in seconds
-     *
-     * @return integer
      */
-    public function get_time()
+    public function getTime(): int
     {
-        return (int) ($this->stop_time - $this->start_time);
+        return (int) ($this->stopTime - $this->startTime);
     }
 
     /**
      * Returns the difference between the stop and start time in hours:minutes:seconds
-     *
-     * @return string
      */
-    public function get_time_in_hours()
+    public function getTimeInHours(): string
     {
-        return DatetimeUtilities::convert_seconds_to_hours($this->get_time());
+        return DatetimeUtilities::convert_seconds_to_hours($this->getTime());
     }
 
     /**
@@ -64,8 +48,8 @@ class Timer
      */
     public function reset()
     {
-        $this->start_time = 0;
-        $this->stop_time = 0;
+        $this->startTime = 0;
+        $this->stopTime = 0;
     }
 
     /**
@@ -73,7 +57,7 @@ class Timer
      */
     public function start()
     {
-        $this->start_time = $this->get_microtime();
+        $this->startTime = $this->getMicrotime();
     }
 
     /**
@@ -81,6 +65,6 @@ class Timer
      */
     public function stop()
     {
-        $this->stop_time = $this->get_microtime();
+        $this->stopTime = $this->getMicrotime();
     }
 }

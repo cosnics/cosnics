@@ -73,6 +73,6 @@ class ResourceFixerDirector
         }
 
         $timer->stop();
-        $this->logger->addInfo(sprintf('Finished fixing resources in %s', $timer->get_time_in_hours()));
+        $this->logger->addInfo(sprintf('Finished fixing resources in %s', $timer->getTimeInHours()));
     }
 }

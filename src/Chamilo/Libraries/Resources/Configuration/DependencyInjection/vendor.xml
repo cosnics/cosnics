@@ -60,6 +60,12 @@
         </service>
 
         <service id="Symfony\Component\Config\Definition\Processor"/>
+
+        <service id="Symfony\Component\EventDispatcher"
+                 class="Symfony\Component\EventDispatcher\EventDispatcher"/>
+        <service id="Symfony\Component\EventDispatcher\EventDispatcherInterface"
+                 alias="Symfony\Component\EventDispatcher"/>
+
         <service id="Symfony\Component\Yaml\Parser"/>
         <service id="Symfony\Component\Filesystem\Filesystem"/>
 
