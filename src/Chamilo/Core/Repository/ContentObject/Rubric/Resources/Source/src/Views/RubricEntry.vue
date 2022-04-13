@@ -51,7 +51,7 @@
             <slot name="demoEvaluator"></slot>
             <li class="app-tool-item" :class="{ 'is-demo-inactive': this.options.isDemo && !this.options.evaluator }"><button class="btn-check" :aria-label="$t('show-default-descriptions')" :aria-expanded="showDefaultFeedbackFields ? 'true' : 'false'" :class="{ checked: showDefaultFeedbackFields }" @click.prevent="toggleDefaultFeedbackFields"><span class="lbl-check" tabindex="-1"><i class="btn-icon-check fa" aria-hidden="true" />{{ options.isDemo ? $t('feedback') : $t('expand-all') }}</span></button></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-show">
+        <div v-if="rubric.useWeights" class="treenode-weight-header mod-show">
             <span>{{ $t('weight') }}</span>
         </div>
         <template v-if="!rubric.hasCustomLevels">
@@ -67,7 +67,7 @@
                     <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                 </button>
             </div>
-            <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full" :class="[rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights) ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2']" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
+            <div v-if="!preview && evaluation && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full" :class="rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'" @mouseover="highlightedTreeNode = cluster" @mouseout="highlightedTreeNode = null">
                 <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
             </div>
             <template v-for="{category, ext, evaluation} in getCategoryRowsData(cluster)">
@@ -78,7 +78,7 @@
                         <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                     </button>
                 </div>
-                <div v-if="!preview && evaluation && category.title && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full" :class="[rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights) ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2']">
+                <div v-if="!preview && evaluation && category.title && (showDefaultFeedbackFields || ext.showDefaultFeedback)" class="treenode-custom-feedback rb-md:col-start-1 rb-sm:col-span-full" :class="rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">
                     <textarea class="ta-custom-feedback" :placeholder="$t('extra-feedback')" v-model="evaluation.feedback" @input="onTreeNodeFeedbackChanged(evaluation)"></textarea>
                 </div>
                 <template v-for="{criterium, ext, evaluation, score} in getCriteriumRowsData(category)">
@@ -89,7 +89,7 @@
                             <i tabindex="-1" class="btn-icon-show-feedback fa" :class="{'is-feedback-visible': showDefaultFeedbackFields || ext.showDefaultFeedback}" aria-hidden="true" />
                         </button>
                     </div>
-                    <div class="treenode-weight mod-pad" v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
+                    <div class="treenode-weight mod-pad" v-if="rubric.useWeights"><span class="treenode-weight-title">{{ $t('weight') }}: </span><span>{{ rubric.hasAbsoluteWeights && rubric.filterLevelsByCriterium(criterium).length ? 100 : rubric.getCriteriumWeight(criterium)|formatNum }}</span><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></div>
                     <div class="treenode-rubric-input rb-md:col-start-1 rb-sm:col-span-full" @mouseover="highlightedTreeNode = criterium" @mouseout="highlightedTreeNode = null">
                         <!--<div v-if="showErrors && !preview && !(evaluation && evaluation.level)" class="rubric-entry-error">{{ $t('select-level') }}</div>-->
                         <tree-node-entry :rubric="rubric" :ext="ext" :evaluation="evaluation" :preview="preview" :show-default-feedback-fields="showDefaultFeedbackFields" @select="selectLevel" @deselect="deselectLevel" @range-level-score="updateRangeLevelScore"></tree-node-entry>
@@ -105,7 +105,7 @@
                 </template>
             </template>
             <template v-if="useScores">
-                <div class="total-title rb-md-max:col-start-1" :class="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights) ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">{{ $t('total') }} {{ $t('subsection') }}:</div>
+                <div class="total-title rb-md-max:col-start-1" :class="rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">{{ $t('total') }} {{ $t('subsection') }}:</div>
                 <div class="treenode-score-calc mod-cluster" :class="{'mod-empty': preview || score === null}">
                     <score-display :score="preview ? null : score" :percent="rubric.useRelativeWeights" /> <span v-if="!rubric.useRelativeWeights" class="sr-only">{{ $t('points') }}</span>
                 </div>
@@ -114,12 +114,12 @@
         </template>
         <slot name="slot-inner"></slot>
         <template v-if="useScores">
-            <div class="total-title rb-md-max:col-start-1" :class="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights) ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">{{ $t('total') }} {{ $t('rubric') }}:</div>
+            <div class="total-title rb-md-max:col-start-1" :class="rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">{{ $t('total') }} {{ $t('rubric') }}:</div>
             <div class="treenode-score-calc mod-rubric" :class="{'mod-empty': preview || rubricEvaluation.getRubricScore() === null}">
                 <score-display :score="preview ? null : rubricEvaluation.getRubricScore()" :percent="rubric.useRelativeWeights" /> <span v-if="!rubric.useRelativeWeights" class="sr-only">{{ $t('points') }}</span>
             </div>
             <template v-if="!rubric.useRelativeWeights">
-                <div class="total-title rb-md-max:col-start-1" :class="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights) ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">Maximum:</div>
+                <div class="total-title rb-md-max:col-start-1" :class="rubric.useWeights ? 'rb-lg:col-start-3' : 'rb-lg:col-start-2'">Maximum:</div>
                 <div class="treenode-score-calc mod-rubric-max"><score-display :score="rubric.getMaximumScore()" /> <span class="sr-only">{{ $t('points') }}</span></div>
             </template>
         </template>
@@ -158,27 +158,6 @@
         @Prop({type: Boolean, default: false}) readonly preview!: boolean;
         @Prop({type: Boolean, default: false}) readonly showErrors!: boolean;
         @Prop({type: Object, default: null}) readonly existingResult!: any|null;
-
-        getChoicesColumnData(ext: TreeNodeExt, evaluation: TreeNodeEvaluation|null) {
-            if (ext.levels.length) {
-                return ext.levels.map(level => ({
-                    choice: null,
-                    level,
-                    isSelected: this.preview || !evaluation ? level.isDefault : level === evaluation.level
-                }));
-            }
-
-            return ext.choices.map(choice => ({
-                choice,
-                level: null,
-                isSelected: this.preview || !evaluation ? choice.level.isDefault : choice.level === evaluation.level
-            }));
-        }
-
-        getItemsLength(ext: TreeNodeExt) {
-            if (ext.levels.length) { return ext.levels.length; }
-            return ext.choices.length;
-        }
 
         get useScores() {
             return this.rubric.useScores;

@@ -15,12 +15,12 @@
 }
 </i18n>
 <template>
-    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)}" :style="{'--num-cols': rubric.rubricLevels.length}">
+    <div class="rubric mod-bf" :class="{'mod-weight': rubric.useWeights}" :style="{'--num-cols': rubric.rubricLevels.length}">
         <formatting-help v-if="showFormatting" @close="showFormatting = false" class="mod-bf"></formatting-help>
         <ul class="rubric-tools">
             <li><a href="#" role="button" class="tools-show-formatting" @click.prevent="showFormatting=!showFormatting">{{ $t('formatting') }}</a></li>
         </ul>
-        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight-header mod-show">
+        <div v-if="rubric.useWeights" class="treenode-weight-header mod-show">
             <span>{{ $t('weight') }}</span>
         </div>
         <div class="rubric-header mod-show" v-if="!rubric.hasCustomLevels">
@@ -40,7 +40,7 @@
                         <div class="treenode-title-header-pre mod-criterium"></div>
                         <h3 class="treenode-title criterium-title u-markdown-criterium" :class="{'mod-no-category': !category.title}" v-html="criterium.toMarkdown()"></h3>
                     </div>
-                    <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="treenode-weight mod-pad rb-md:col-span-full">
+                    <div v-if="rubric.useWeights" class="treenode-weight mod-pad rb-md:col-span-full">
                         <span class="treenode-weight-title">{{ $t('weight') }}: </span>
                         <input v-if="rubric.useRelativeWeights" type="number" :placeholder="rubric.eqRestWeight.toLocaleString()" v-model.number="criterium.rel_weight" class="input-detail rel-weight" :class="{'is-set': criterium.rel_weight !== null, 'is-error': rubric.eqRestWeight < 0}" @input="onWeightChange($event, criterium)" min="0" max="100" />
                         <template v-else>
