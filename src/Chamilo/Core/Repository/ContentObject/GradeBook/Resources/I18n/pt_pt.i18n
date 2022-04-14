@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\gradebook
+; Language = pt_pt
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = ""
+Title = "Subject"
+Description = "Message"
+GradeBookToolBrowserComponent = ""
+GradeBookToolIntroductionPublisherComponent = ""
+GradeBookToolPublisherComponent = ""
+GradeBookToolUpdaterComponent = ""
+GradeBookToolViewerComponent = ""

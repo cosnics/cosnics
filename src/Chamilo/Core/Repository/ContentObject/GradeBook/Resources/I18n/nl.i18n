@@ -1,0 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Package = repository\content_object\gradebook
+; Language = nl
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+TypeName = "Puntenboekje"
+Title = "Onderwerp"
+Description = "Bericht"
+GradeBookToolBrowserComponent = "Puntenboekjes"
+GradeBookToolIntroductionPublisherComponent = "Publiceer introductietekst"
+GradeBookToolPublisherComponent = "Publiceer puntenboekje"
+GradeBookToolUpdaterComponent = "Bewerk puntenboekje"
+GradeBookToolViewerComponent = "Bekijk puntenboekje"
