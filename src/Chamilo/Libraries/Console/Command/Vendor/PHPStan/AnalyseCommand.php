@@ -42,7 +42,7 @@ class AnalyseCommand extends \Symfony\Component\Console\Command\Command
         parent::configure();
 
         $this->setName('phpstan:analyse')
-            ->setDescription('Analyses source code (uses a chamilo extension')
+            ->setDescription('Analyses source code (uses a chamilo extension)')
             ->addArgument(
                 'paths', InputArgument::OPTIONAL | InputArgument::IS_ARRAY, 'Paths with source code to run analysis on'
             )

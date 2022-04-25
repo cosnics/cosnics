@@ -650,7 +650,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     protected function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
-            new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
+            new Exception('[Message: ' . $exception->getMessage() . ']')
         );
     }
 
