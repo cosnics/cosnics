@@ -20,17 +20,10 @@ class Timer
         $this->reset();
     }
 
-    private function getMicrotime(): float
-    {
-        list($usec, $sec) = explode(" ", microtime());
-
-        return ((float) $usec + (float) $sec);
-    }
-
     /**
      * Returns the difference between the stop and start time in seconds
      */
-    public function getTime(): int
+    public function getDurationInSeconds(): int
     {
         return (int) ($this->stopTime - $this->startTime);
     }
@@ -38,9 +31,38 @@ class Timer
     /**
      * Returns the difference between the stop and start time in hours:minutes:seconds
      */
-    public function getTimeInHours(): string
+    public function getHumanReadableDuration(): string
     {
-        return DatetimeUtilities::convert_seconds_to_hours($this->getTime());
+        if ($this->getDurationInSeconds() / 3600 < 1 && $this->getDurationInSeconds() / 60 < 1)
+        {
+            $convertedTime = $this->getDurationInSeconds() . 's';
+        }
+        else
+        {
+            if ($this->getDurationInSeconds() / 3600 < 1)
+            {
+                $minutes = (int) ($this->getDurationInSeconds() / 60);
+                $seconds = $this->getDurationInSeconds() % 60;
+                $convertedTime = $minutes . 'm ' . $seconds . 's';
+            }
+            else
+            {
+                $hours = (int) ($this->getDurationInSeconds() / 3600);
+                $rest = $this->getDurationInSeconds() % 3600;
+                $minutes = (int) ($rest / 60);
+                $seconds = $rest % 60;
+                $convertedTime = $hours . 'h ' . $minutes . 'm ' . $seconds . 's';
+            }
+        }
+
+        return $convertedTime;
+    }
+
+    private function getMicrotime(): float
+    {
+        list($usec, $sec) = explode(" ", microtime());
+
+        return ((float) $usec + (float) $sec);
     }
 
     /**
