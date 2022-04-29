@@ -811,8 +811,7 @@ abstract class Application
      * @param string $anchor
      */
     public function redirect(
-        $message = '', $errorMessage = false, $parameters = [], $filter = [], $encodeEntities = false,
-        $anchor = null
+        $message = '', $errorMessage = false, $parameters = [], $filter = [], $encodeEntities = false, $anchor = null
     )
     {
         if ($message != null)
@@ -828,31 +827,7 @@ abstract class Application
         $this->simple_redirect($parameters, $filter, $encodeEntities, $anchor);
     }
 
-    /**
-     * Renders the page title
-     *
-     * @return string
-     */
-    protected function renderPageTitle()
-    {
-        $breadcrumbTrail = BreadcrumbTrail::getInstance();
-
-        if ($breadcrumbTrail->size() > 0)
-        {
-            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
-
-            return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
-        }
-
-        return '';
-    }
-
-    /**
-     * Displays the footer
-     *
-     * @return string
-     */
-    public function render_footer()
+    public function renderFooter()
     {
         if ($this->get_application())
         {
@@ -884,7 +859,7 @@ abstract class Application
      *
      * @return string
      */
-    public function render_header($pageTitle = '')
+    public function renderHeader($pageTitle = '')
     {
         if (!$pageTitle)
         {
@@ -962,6 +937,41 @@ abstract class Application
         }
 
         return implode(PHP_EOL, $html);
+    }
+
+    /**
+     * Renders the page title
+     *
+     * @return string
+     */
+    protected function renderPageTitle()
+    {
+        $breadcrumbTrail = BreadcrumbTrail::getInstance();
+
+        if ($breadcrumbTrail->size() > 0)
+        {
+            $pageTitle = BreadcrumbTrail::getInstance()->get_last()->get_name();
+
+            return '<h3 id="page-title" title="' . htmlentities(strip_tags($pageTitle)) . '">' . $pageTitle . '</h3>';
+        }
+
+        return '';
+    }
+
+    /**
+     * @deprecated Use renderFooter() now
+     */
+    public function render_footer()
+    {
+        return $this->renderFooter();
+    }
+
+    /**
+     * @deprecated Use renderHeader() now
+     */
+    public function render_header($pageTitle = '')
+    {
+        return $this->renderHeader($pageTitle);
     }
 
     /**
