@@ -125,9 +125,43 @@ class RubricResultService
             $level = null;
 
             $levelId = $treeNodeResultJSONModel->getLevelId();
+            $submittedScore = $treeNodeResultJSONModel->getScore();
+
             if (is_null($levelId))
             {
                 $calculatedScore = null;
+            }
+            else if (!is_null($submittedScore))
+            {
+                $level = $rubricData->getLevelById($treeNodeResultJSONModel->getLevelId());
+                if (!$level->usesRangeScore())
+                {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'The given level %s does not use a range, but a custom score was given.', $level->getId()
+                        )
+                    );
+                }
+                if (is_null($level->getMinimumScore()))
+                {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'The given level %s uses a range, but no minimum score was defined. This is a fault in the rubric.', $level->getId()
+                        )
+                    );
+                }
+                if ($submittedScore <= $level->getScore() && $submittedScore >= $level->getMinimumScore())
+                {
+                    $calculatedScore = $submittedScore;
+                }
+                else
+                {
+                    throw new \InvalidArgumentException(
+                        sprintf(
+                            'Level %s uses a range %s -> %s, but the value submitted was %s.', $level->getId(), $level->getMinimumScore(), $level->getScore(), $submittedScore
+                        )
+                    );
+                }
             }
             else if ($treeNode->hasLevels())
             {
@@ -161,7 +195,6 @@ class RubricResultService
 
                 $calculatedScore = $choice->calculateScore();
             }
-
 
             $this->createRubricResult(
                 $user, $rubricData, $contextIdentifier, $uniqueAttemptId, $treeNode, $calculatedScore,

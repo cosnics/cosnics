@@ -81,18 +81,17 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import ScoreRubricView from '../Components/ScoreRubricView.vue';
-    import CriteriumDetailsView from '../Components/CriteriumDetailsView.vue';
+    import ScoreRubricView from '../Components/Builder/Rubric/ScoreRubricView.vue';
     import Criterium from '../Domain/Criterium';
     import Rubric, {RubricJsonObject} from '../Domain/Rubric';
     import RubricBuilderFull from './RubricBuilderFull.vue';
-    import SaveArea from '../Components/SaveArea.vue';
+    import SaveArea from '../Components/Builder/SaveArea.vue';
     import APIConfiguration from '../Connector/APIConfiguration';
     import DataConnector, {DataConnectorErrorListener} from '../Connector/DataConnector';
 
     @Component({
         components: {
-            ScoreRubricView, CriteriumDetailsView, RubricBuilderFull, SaveArea
+            ScoreRubricView, RubricBuilderFull, SaveArea
         },
     })
     export default class RubricBuilder extends Vue {

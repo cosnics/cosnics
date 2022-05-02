@@ -48,4 +48,14 @@ interface RubricBridgeInterface
      * @return string
      */
     public function getEntryURL(): string;
+
+    /**
+     * @param bool $allow
+     */
+    public function setAllowCreateFromExistingRubric(bool $allow);
+
+    /**
+     * @return bool
+     */
+    public function getAllowCreateFromExistingRubric(): bool;
 }

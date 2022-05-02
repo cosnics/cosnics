@@ -8,13 +8,13 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import TreeNodeEvaluationDisplay from '../Components/TreeNodeEvaluationDisplay.vue';
-    import Rubric from '../Domain/Rubric';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
-    import RubricEvaluation from '../Domain/RubricEvaluation';
-    import {TreeNodeEvaluation} from '../Util/interfaces';
+    import TreeNodeEvaluationDisplay from './TreeNodeEvaluationDisplay.vue';
+    import Rubric from '../../Domain/Rubric';
+    import Cluster from '../../Domain/Cluster';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
+    import RubricEvaluation from '../../Domain/RubricEvaluation';
+    import {TreeNodeEvaluation} from '../../Util/interfaces';
 
     @Component({
         components: {TreeNodeEvaluationDisplay}

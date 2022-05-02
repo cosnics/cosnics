@@ -21,6 +21,8 @@ export function convertRubricData(d: any) {
         "title": level.title,
         "description": level.description || '',
         "score": level.score,
+        "use_range_score": level.use_range_score || false,
+        "minimum_score": typeof level.minimum_score === 'number' ? level.minimum_score : null,
         "is_default": level.is_default,
         "criterium_id": level.criterium_id ? String(level.criterium_id) : ''
     }));

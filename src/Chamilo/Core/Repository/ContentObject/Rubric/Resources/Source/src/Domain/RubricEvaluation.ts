@@ -5,7 +5,13 @@ import Category from './Category';
 import Criterium from './Criterium';
 import {EvaluatorEvaluation, TreeNodeEvaluation, TreeNodeResult} from '../Util/interfaces';
 
-function add(v1: number, v2: number) {
+function add(v1: number|string, v2: number|string) {
+    if (typeof v1 === 'string') {
+        v1 = 0;
+    }
+    if (typeof v2 === 'string') {
+        v2 = 0;
+    }
     return v1 + v2;
 }
 
@@ -70,8 +76,10 @@ export default class RubricEvaluation {
         return this.evaluators;
     }
 
-    getCriteriumScore(criterium: Criterium, evaluator: any|undefined = undefined) : number {
-        return this.getTreeNodeEvaluation(criterium, evaluator)?.score || 0;
+    getCriteriumScore(criterium: Criterium, evaluator: any|undefined = undefined) : number|null {
+        const score = this.getTreeNodeEvaluation(criterium, evaluator)?.score;
+        if (score === undefined) { return null; }
+        return score;
     }
 
     getCategoryScore(category: Category, evaluation: any|undefined = undefined) : number|null {
@@ -99,15 +107,16 @@ export default class RubricEvaluation {
         return this.getCriteriaScore(this.rubric.getAllCriteria(), evaluator);
     }
 
-    getCriteriaScore(criteria: Criterium[], evaluator: any|undefined = undefined): number {
+    getCriteriaScore(criteria: Criterium[], evaluator: any|undefined = undefined): number|null {
         if (!criteria.length) { return 0; }
+        if (criteria.find(criterium => this.getCriteriumScore(criterium, evaluator) === null)) { return null; }
         if (!this.rubric.useRelativeWeights) {
-            return criteria.map(criterium => this.getCriteriumScore(criterium, evaluator)).reduce(add, 0);
+            return criteria.map(criterium => this.getCriteriumScore(criterium, evaluator)!).reduce(add, 0);
         }
         const eqRestWeight = this.rubric.eqRestWeightPrecise;
         const scoreWeights = criteria.map(criterium => {
             const weight = criterium.rel_weight === null ? eqRestWeight : criterium.rel_weight;
-            return { weight, score: this.getCriteriumScore(criterium, evaluator) * (weight / 100)};
+            return { weight, score: this.getCriteriumScore(criterium, evaluator)! * (weight / 100)};
         });
         const totWeight = scoreWeights.map(s => s.weight).reduce(add, 0);
         if (!totWeight) { return 0; }
@@ -133,5 +142,15 @@ export default class RubricEvaluation {
 
     getEvaluations(treeNode: TreeNode): any[] {
         return this.getTreeNodeResult(treeNode).evaluations.map(_ => ({evaluator: _.evaluator, ..._.treeNodeEvaluation}));
+    }
+
+    static isInvalidEvaluation(evaluation: TreeNodeEvaluation|null) {
+        if (!evaluation) { return false; }
+        if (evaluation.score === null) { return false; }
+        const level = evaluation.level;
+        if (!level) { return false; }
+        if (!level.useRangeScore) { return false; }
+        if (level.minimumScore === null) { return true; }
+        return (evaluation.score < level.minimumScore) || (evaluation.score > level.score);
     }
 }
