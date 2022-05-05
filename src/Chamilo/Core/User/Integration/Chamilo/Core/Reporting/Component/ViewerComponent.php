@@ -19,9 +19,12 @@ class ViewerComponent extends Manager
      */
     public function run()
     {
-        $this->set_parameter(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID, $this->get_user_id());
+        $this->set_parameter(
+            \Chamilo\Core\User\Manager::PARAM_USER_USER_ID,
+            $this->getRequest()->query->get(\Chamilo\Core\User\Manager::PARAM_USER_USER_ID)
+        );
 
-        if (! $this->get_user()->is_platform_admin())
+        if (!$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -44,8 +47,10 @@ class ViewerComponent extends Manager
 
         $application = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Reporting\Viewer\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $application->set_template_by_name($class_name);
+
         return $application->run();
     }
 
@@ -54,8 +59,10 @@ class ViewerComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
-                    array(\Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS)),
-                Translation::get('AdminUserBrowserComponent')));
+                    array(\Chamilo\Core\User\Manager::PARAM_ACTION => \Chamilo\Core\User\Manager::ACTION_BROWSE_USERS)
+                ), Translation::get('AdminUserBrowserComponent')
+            )
+        );
         $breadcrumbtrail->add_help('user_reporting');
     }
 }

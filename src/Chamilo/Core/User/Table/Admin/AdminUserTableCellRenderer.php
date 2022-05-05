@@ -84,13 +84,6 @@ class AdminUserTableCellRenderer extends DataClassTableCellRenderer implements T
             }
         }
 
-        $toolbar->add_item(
-            new ToolBarItem(
-                Translation::get('Metadata', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('info-circle'),
-                $this->get_component()->get_edit_metadata_url($user), ToolbarItem::DISPLAY_ICON
-            )
-        );
-
         if ($user->get_id() != Session::get_user_id())
         {
             if ($this->get_component()->get_user()->is_platform_admin())

@@ -79,13 +79,6 @@ class GroupTableCellRenderer extends DataClassTableCellRenderer implements Table
             )
         );
 
-        $toolbar->add_item(
-            new ToolbarItem(
-                Translation::get('Metadata'), new FontAwesomeGlyph('info-circle'),
-                $this->get_component()->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON
-            )
-        );
-
         return $toolbar->as_html();
     }
 
