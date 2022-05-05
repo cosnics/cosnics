@@ -30,14 +30,14 @@ class TypeSelectorFactory
     const MODE_FLAT_LIST = 2;
 
     /**
-     * @var int
-     */
-    protected $mode;
-
-    /**
      * @var bool
      */
     protected $defaultSorting;
+
+    /**
+     * @var int
+     */
+    protected $mode;
 
     /**
      *

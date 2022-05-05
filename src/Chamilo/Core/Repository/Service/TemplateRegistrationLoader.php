@@ -145,7 +145,7 @@ class TemplateRegistrationLoader extends DoctrineFilesystemCacheService implemen
             $userIdentifier = $templateRegistration->get_user_id();
 
             $groupedRegistrations[self::REGISTRATION_ID][$templateRegistration->getId()] = $templateRegistration;
-            $groupedRegistrations[self::REGISTRATION_USER_ID][$contentObjectType][$userIdentifier][] =
+            $groupedRegistrations[self::REGISTRATION_USER_ID][$userIdentifier][$contentObjectType][] =
                 $templateRegistration;
 
             if ($templateRegistration->get_default())
