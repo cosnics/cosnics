@@ -21,9 +21,9 @@ use Symfony\Component\Translation\Translator;
 class ItemForm extends FormValidator
 {
     /**
-     * @var \Symfony\Component\Translation\Translator
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
      */
-    private $translator;
+    private $configurationConsulter;
 
     /**
      * @var \Chamilo\Core\Menu\Service\ItemService
@@ -36,14 +36,14 @@ class ItemForm extends FormValidator
     private $languageConsulter;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
-     */
-    private $configurationConsulter;
-
-    /**
      * @var \Chamilo\Configuration\Service\RegistrationConsulter
      */
     private $registrationConsulter;
+
+    /**
+     * @var \Symfony\Component\Translation\Translator
+     */
+    private $translator;
 
     /**
      * @param \Symfony\Component\Translation\Translator $translator
@@ -213,22 +213,6 @@ class ItemForm extends FormValidator
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    protected function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
-    protected function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
      * @param \Chamilo\Core\Menu\Storage\DataClass\Item $item
      * @param \Chamilo\Core\Menu\Storage\DataClass\ItemTitle[] $itemTitles
      * @param string[] $defaults
@@ -254,5 +238,13 @@ class ItemForm extends FormValidator
         }
 
         parent:: setDefaults($defaults);
+    }
+
+    /**
+     * @param \Symfony\Component\Translation\Translator $translator
+     */
+    protected function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

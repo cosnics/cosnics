@@ -165,8 +165,7 @@ abstract class Table
         $this->table = new SortableTable($this->get_name(), array($this, 'countData'), array($this, 'getData'),
             $this->get_column_model()->get_default_order_column() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(), $this->get_column_model()->get_default_order_direction(),
-            !$this->prohibits_page_selection(), true, $this->get_column_model() instanceof TableMultiColumnSortSupport
-        );
+            !$this->prohibits_page_selection(), true, $this->get_column_model() instanceof TableMultiColumnSortSupport);
 
         $this->table->setAdditionalParameters($this->get_parameters());
     }
@@ -524,7 +523,7 @@ abstract class Table
         $direction = intval($this->table->getOrderDirection());
         $columnModel->set_default_order_direction($direction);
 
-        $columnModel->set_default_order_column($this->table->getOrderColumn());
+        $columnModel->set_default_order_column($this->table->getDefaultOrderColumn());
     }
 
     /**

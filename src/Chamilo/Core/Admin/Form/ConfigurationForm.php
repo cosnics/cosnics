@@ -69,7 +69,7 @@ class ConfigurationForm extends FormValidator
         $context = $this->context;
         $configuration = $this->configuration;
 
-        if (count($configuration['settings']) > 0)
+        if (is_array($configuration['settings']) && count($configuration['settings']) > 0)
         {
             $connector_class = $context . '\SettingsConnector';
 
