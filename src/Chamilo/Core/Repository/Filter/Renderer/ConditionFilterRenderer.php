@@ -15,6 +15,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRe
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -71,18 +72,18 @@ class ConditionFilterRenderer extends FilterRenderer
             $searchable_property_names = $class_name::get_searchable_property_names();
 
             $text_conditions = [];
-            $text_conditions[] = new PatternMatchCondition(
+            $text_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), '*' . $text . '*'
             );
-            $text_conditions[] = new PatternMatchCondition(
+            $text_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
                 '*' . $text . '*'
             );
 
             foreach ($searchable_property_names as $searchable_property_name)
             {
-                $text_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable($class_name, $searchable_property_name), '*' . $text . '*'
+                $text_conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable($class_name, $searchable_property_name), $text
                 );
             }
 
@@ -91,19 +92,19 @@ class ConditionFilterRenderer extends FilterRenderer
             {
                 foreach ($words as $word)
                 {
-                    $text_conditions[] = new PatternMatchCondition(
+                    $text_conditions[] = new ContainsCondition(
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                        '*' . $word . '*'
+                        $word
                     );
-                    $text_conditions[] = new PatternMatchCondition(
+                    $text_conditions[] = new ContainsCondition(
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                        '*' . $word . '*'
+                        $word
                     );
 
                     foreach ($searchable_property_names as $searchable_property_name)
                     {
-                        $text_conditions[] = new PatternMatchCondition(
-                            new PropertyConditionVariable($class_name, $searchable_property_name), '*' . $word . '*'
+                        $text_conditions[] = new ContainsCondition(
+                            new PropertyConditionVariable($class_name, $searchable_property_name),  $word
                         );
                     }
                 }

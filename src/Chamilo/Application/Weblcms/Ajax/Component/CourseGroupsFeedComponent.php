@@ -12,8 +12,8 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -96,7 +96,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         $user_ids = [];
 
-        foreach($relations as $relation)
+        foreach ($relations as $relation)
         {
             $user_ids[] = $relation->get_user();
         }
@@ -115,9 +115,8 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
         $search_query = Request::post(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
-            $query = '*' . $search_query . '*';
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $query
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $search_query
             );
         }
 

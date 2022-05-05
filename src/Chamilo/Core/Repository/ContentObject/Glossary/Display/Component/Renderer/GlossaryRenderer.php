@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -128,13 +129,13 @@ abstract class GlossaryRenderer
         
         if (isset($query) && $query != '')
         {
-            $search_conditions[] = new PatternMatchCondition(
+            $search_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*');
+                $query );
             
-            $search_conditions[] = new PatternMatchCondition(
+            $search_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*');
+                $query);
             
             $conditions[] = new OrCondition($search_conditions);
         }

@@ -15,9 +15,9 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -95,7 +95,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
         $user_ids = [];
 
-        foreach($relations as $relation)
+        foreach ($relations as $relation)
         {
             $user_ids[] = $relation->get_user_id();
         }
@@ -114,9 +114,8 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         $search_query = Request::post(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
-            $query = '*' . $search_query . '*';
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $search_query
             );
         }
 

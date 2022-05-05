@@ -20,6 +20,11 @@ class PatternMatchConditionTranslator extends ConditionTranslator
         return parent::getCondition();
     }
 
+    protected function getPattern(): string
+    {
+        return $this->searchString($this->getCondition()->get_pattern());
+    }
+
     /**
      * Translates a string with wildcard characters "?" (single character) and "*" (any character sequence) to a SQL
      * pattern for use in a LIKE condition.
@@ -31,15 +36,10 @@ class PatternMatchConditionTranslator extends ConditionTranslator
      */
     public function searchString($string)
     {
-        /*
-         * ====================================================================== A brief explanation of these regexps:
-         * - The first one escapes SQL wildcard characters, thus prefixing %, ', \ and _ with a backslash. - The second
-         * one replaces asterisks that are not prefixed with a backslash (which escapes them) with the SQL equivalent,
-         * namely a percent sign. - The third one is similar to the second: it replaces question marks that are not
-         * escaped with the SQL equivalent _. ======================================================================
-         */
-        $string = preg_replace_callback('/([%\'\\\\_])/e', "'\\\\\\\\' . '\\1'", $string);
+        // Escape SQL wildcard characters, thus prefixing %, ', \ and _ with a backslash
+        $string = preg_replace(['/\\\\/', '/%/', '/\'/', '/_/'], ['\\\\\\\\', '\%', '\\\'', '\_'], $string);
 
+        // Replace asterisks and question marks that are not prefixed with a backslash with the SQL equivalent
         return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $string);
     }
 
@@ -52,7 +52,6 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     {
         return $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
-            ) . ' LIKE ' .
-            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
+            ) . ' LIKE ' . $this->getDataClassDatabase()->quote($this->getPattern());
     }
 }

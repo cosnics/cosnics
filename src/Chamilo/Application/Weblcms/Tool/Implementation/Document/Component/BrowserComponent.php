@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -168,8 +169,8 @@ class BrowserComponent extends Manager
                 $image_conditions = [];
                 foreach ($image_types as $image_type)
                 {
-                    $image_conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable($class, $class::PROPERTY_FILENAME), '*.' . $image_type
+                    $image_conditions[] = new EndsWithCondition(
+                        new PropertyConditionVariable($class, $class::PROPERTY_FILENAME), $image_type
                     );
                 }
 

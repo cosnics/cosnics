@@ -8,6 +8,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -36,12 +37,12 @@ class SearchCompleteComponent extends Manager
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
             new StaticConditionVariable(Session::get_user_id()));
-        $or_conditions[] = new PatternMatchCondition(
+        $or_conditions[] = new ContainsCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-            '*' . $query . '*');
-        $or_conditions[] = new PatternMatchCondition(
+            $query);
+        $or_conditions[] = new ContainsCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-            '*' . $query . '*');
+            $query);
         $conditions[] = new OrCondition($or_conditions);
         $condition = new AndCondition($conditions);
         

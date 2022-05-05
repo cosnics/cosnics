@@ -27,9 +27,9 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -434,15 +434,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
                     );
                     break;
                 case self::TAB_PLATFORM_GROUPS_SUBGROUPS :
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
+                    $conditions[] = new ContainsCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
                     );
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), '*' . $query . '*'
+                    $conditions[] = new ContainsCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $query
                     );
-                    $conditions[] = new PatternMatchCondition(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION),
-                        '*' . $query . '*'
+                    $conditions[] = new ContainsCondition(
+                        new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), $query
                     );
                     break;
                 case self::TAB_PLATFORM_GROUPS_USERS :

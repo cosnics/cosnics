@@ -18,6 +18,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -262,14 +263,14 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport, Deleg
 
         if (isset($query) && $query != '')
         {
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
             );
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
             );
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
             );
 
             return new OrCondition($conditions);

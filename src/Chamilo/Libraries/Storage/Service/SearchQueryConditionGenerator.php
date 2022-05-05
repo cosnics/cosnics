@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Service;
 
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 
@@ -41,7 +42,7 @@ class SearchQueryConditionGenerator
 
             foreach ($properties as $property)
             {
-                $patternMatchConditions[] = new PatternMatchCondition($property, '*' . $searchQueryPart . '*');
+                $patternMatchConditions[] = new ContainsCondition($property, $searchQueryPart);
             }
 
             if (count($patternMatchConditions) > 1)

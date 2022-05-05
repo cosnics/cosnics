@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Format\Structure\ActionBar\ButtonSearchForm;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -60,8 +61,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $image_conditions = [];
         foreach ($image_types as $image_type)
         {
-            $image_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.' . $image_type
+            $image_conditions[] = new EndsWithCondition(
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $image_type
             );
         }
 

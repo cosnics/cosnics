@@ -33,6 +33,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -160,9 +161,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         //
         // foreach ($formats as $format)
         // {
-        // $conditions[] = new PatternMatchCondition(
+        // $conditions[] = new ContainsCondition(
         // new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION),
-        // '*' . $format . '*');
+        // $format);
         // }
         //
         // $condition = new OrCondition($conditions);

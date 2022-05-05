@@ -23,6 +23,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -153,13 +154,13 @@ class AdminRequestBrowserComponent extends Manager implements TableSupport
         if (isset($query) && $query != '')
         {
             $conditions = [];
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_MOTIVATION),
-                '*' . $query . '*'
+                $query
             );
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(CourseRequest::class, CourseRequest::PROPERTY_SUBJECT),
-                '*' . $query . '*'
+                $query
             );
 
             $search_conditions = new OrCondition($conditions);

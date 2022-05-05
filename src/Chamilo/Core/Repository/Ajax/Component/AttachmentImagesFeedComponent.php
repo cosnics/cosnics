@@ -8,6 +8,7 @@ use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -45,8 +46,8 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
 
         foreach ($imageTypes as $type)
         {
-            $imageTypeConditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.' . $type
+            $imageTypeConditions[] = new EndsWithCondition(
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $type
             );
         }
 

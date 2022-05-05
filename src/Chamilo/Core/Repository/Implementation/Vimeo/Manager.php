@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\External\Renderer\Renderer;
 use Chamilo\Core\Repository\Instance\Storage\DataClass\Setting;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -53,8 +54,8 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         $video_conditions = [];
         foreach ($video_types as $video_type)
         {
-            $video_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.' . $video_type,
+            $video_conditions[] = new EndsWithCondition(
+                new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $video_type,
                 File::get_type_name()
             );
         }

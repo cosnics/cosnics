@@ -18,6 +18,7 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -51,17 +52,17 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return ContentObject[] | DataClassIterator
+     * @return ContentObject[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findContentObjectsWithResourceTags($offset = 0)
     {
         $conditions = [
-            new PatternMatchCondition(
+            new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*<resource*'),
-            new PatternMatchCondition(
+                '<resource'),
+            new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*data-co-id*')];
+                'data-co-id')];
 
         $parameters = new DataClassRetrievesParameters(new OrCondition($conditions), 1000, $offset);
 
@@ -76,12 +77,12 @@ class ResourceFixerRepository
     public function countContentObjectsWithResourceTags()
     {
         $conditions = [
-            new PatternMatchCondition(
+            new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*<resource*'),
-            new PatternMatchCondition(
+                '<resource'),
+            new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*data-co-id*')];
+                'data-co-id')];
 
         $parameters = new DataClassCountParameters(new OrCondition($conditions));
 

@@ -5,6 +5,7 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use InvalidArgumentException;
@@ -72,9 +73,9 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     {
         if (!isset($this->implementation_packages))
         {
-            $pattern = '*\\\Integration\\' . $this->context;
+            $pattern = '\\\Integration\\' . $this->context;
 
-            $condition = new PatternMatchCondition(
+            $condition = new EndsWithCondition(
                 new PropertyConditionVariable(Registration::class, Registration::PROPERTY_CONTEXT), $pattern
             );
 

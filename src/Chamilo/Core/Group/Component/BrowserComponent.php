@@ -24,9 +24,9 @@ use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -55,9 +55,9 @@ class BrowserComponent extends Manager implements TableSupport
 
     private $group;
 
-    private $rootGroup;
-
     private $groupIdentifier;
+
+    private $rootGroup;
 
     /**
      * @return string
@@ -161,14 +161,14 @@ class BrowserComponent extends Manager implements TableSupport
     {
         $conditions = [];
 
-        $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
+        $conditions[] = new ContainsCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
         );
-        $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
+        $conditions[] = new ContainsCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), $query
         );
-        $conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), '*' . $query . '*'
+        $conditions[] = new ContainsCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_CODE), $query
         );
 
         return new OrCondition($conditions);
@@ -278,9 +278,8 @@ class BrowserComponent extends Manager implements TableSupport
 
         $toolbar->add_item(
             new ToolbarItem(
-                $translator->trans('Metadata', [], Utilities::COMMON_LIBRARIES),
-                new FontAwesomeGlyph('info-circle'), $this->get_group_metadata_url($group),
-                ToolbarItem::DISPLAY_ICON_AND_LABEL
+                $translator->trans('Metadata', [], Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('info-circle'),
+                $this->get_group_metadata_url($group), ToolbarItem::DISPLAY_ICON_AND_LABEL
             )
         );
 
@@ -290,8 +289,9 @@ class BrowserComponent extends Manager implements TableSupport
 
         if ($description)
         {
-            $html[] = '<b>' . $translator->trans('Description', [], Utilities::COMMON_LIBRARIES) . '</b>: ' .
-                $description . '<br />';
+            $html[] =
+                '<b>' . $translator->trans('Description', [], Utilities::COMMON_LIBRARIES) . '</b>: ' . $description .
+                '<br />';
         }
 
         $html[] = '<br />';
@@ -418,14 +418,14 @@ class BrowserComponent extends Manager implements TableSupport
 
         if (isset($query) && $query != '')
         {
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
             );
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
             );
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
             );
             $condition = new OrCondition($or_conditions);
 

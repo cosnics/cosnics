@@ -20,6 +20,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -278,11 +279,11 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), '*' . $query . '*'
+            $conditions2[] = new ContainsCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME), $query
             );
-            $conditions2[] = new PatternMatchCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), '*' . $query . '*'
+            $conditions2[] = new ContainsCondition(
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_DESCRIPTION), $query
             );
             $conditions[] = new OrCondition($conditions2);
         }

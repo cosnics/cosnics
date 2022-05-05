@@ -101,7 +101,7 @@ class TemplateRegistrationConsulter extends DataConsulter
 
         foreach ($types as $type)
         {
-            $commonTemplateRegistrations =
+            $commonTemplateRegistrations = (array)
                 $templateRegistrations[TemplateRegistrationLoader::REGISTRATION_USER_ID][0][$type];
 
             if (count($commonTemplateRegistrations) > 0)
@@ -112,7 +112,7 @@ class TemplateRegistrationConsulter extends DataConsulter
 
             if ($user_id)
             {
-                $userTemplateRegistrations =
+                $userTemplateRegistrations = (array)
                     $templateRegistrations[TemplateRegistrationLoader::REGISTRATION_USER_ID][$user_id][$type];
 
                 if (count($userTemplateRegistrations) > 0)

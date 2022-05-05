@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Tabs\DynamicContentTab;
 use Chamilo\Libraries\Format\Tabs\DynamicTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -205,12 +206,12 @@ class SearcherComponent extends Manager
         
         if (isset($query) && $query != '')
         {
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), 
-                '*' . $query . '*');
-            $conditions[] = new PatternMatchCondition(
+                 $query );
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), 
-                '*' . $query . '*');
+                $query );
             return new OrCondition($conditions);
         }
         

@@ -15,9 +15,9 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -131,8 +131,8 @@ class BrowserComponent extends Manager implements TableSupport
         if (isset($search) && ($search != ''))
         {
             $conditions = [];
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME), '*' . $search . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME), $search
             );
             $orcondition = new OrCondition($conditions);
 

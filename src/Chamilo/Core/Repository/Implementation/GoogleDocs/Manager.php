@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Implementation\GoogleDocs\Menu\CategoryTreeMenu;
 use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -39,14 +40,14 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
     public function get_content_object_type_conditions()
     {
         $document_conditions = [];
-        $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.doc', File::get_type_name()
+        $document_conditions[] = new EndsWithCondition(
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '.doc', File::get_type_name()
         );
-        $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.xls', File::get_type_name()
+        $document_conditions[] = new EndsWithCondition(
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '.xls', File::get_type_name()
         );
-        $document_conditions[] = new PatternMatchCondition(
-            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '*.ppt', File::get_type_name()
+        $document_conditions[] = new EndsWithCondition(
+            new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), '.ppt', File::get_type_name()
         );
 
         return new OrCondition($document_conditions);

@@ -15,11 +15,11 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -28,13 +28,13 @@ use Chamilo\Libraries\Translation\Translation;
 class XmlCourseUserGroupFeedComponent extends Manager
 {
 
-    private $courseIdentifier;
-
     private $course;
 
-    private $show_groups;
+    private $courseIdentifier;
 
     private $group_users;
+
+    private $show_groups;
 
     public function run()
     {
@@ -55,22 +55,20 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
             if ($query)
             {
-                $q = '*' . $query . '*';
-
                 $userCondition = [];
-                $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $q
+                $userCondition[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
                 );
-                $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $q
+                $userCondition[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
                 );
-                $userCondition[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $q
+                $userCondition[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
                 );
                 $user_conditions[] = new OrCondition($userCondition);
 
-                $group_conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $q
+                $group_conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME), $query
                 );
             }
 
@@ -224,7 +222,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             );
 
             $users = [];
-            foreach($user_result_set as $user)
+            foreach ($user_result_set as $user)
             {
                 $users[] = $user;
             }
@@ -243,7 +241,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
                     )
                 );
 
-                foreach($group_result_set as $group)
+                foreach ($group_result_set as $group)
                 {
 
                     $group_parent_id = $group->get_parent_id();

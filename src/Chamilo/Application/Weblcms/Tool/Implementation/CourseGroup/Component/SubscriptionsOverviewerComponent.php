@@ -23,6 +23,7 @@ use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -186,20 +187,20 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             {
                 $conditions = [];
 
-                $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), '*' . $query . '*'
+                $conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE), $query
                 );
-                $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
+                $conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
                 );
-                $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+                $conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
                 );
-                $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
+                $conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
                 );
-                $conditions[] = new PatternMatchCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), '*' . $query . '*'
+                $conditions[] = new ContainsCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL), $query
                 );
 
                 return new OrCondition($conditions);

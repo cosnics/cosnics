@@ -7,6 +7,7 @@ use Chamilo\Libraries\File\FileType;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -66,9 +67,9 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
         
         if ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION))
         {
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new EndsWithCondition(
                 new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
-                '*.' . $filter_data->get_filter_property(FilterData::FILTER_EXTENSION));
+                $filter_data->get_filter_property(FilterData::FILTER_EXTENSION));
         }
         elseif ($filter_data->has_filter_property(FilterData::FILTER_EXTENSION_TYPE))
         {
@@ -78,9 +79,9 @@ class ConditionFilterRenderer extends \Chamilo\Core\Repository\Filter\Renderer\C
             
             foreach ($extensions as $extension)
             {
-                $extension_conditions[] = new PatternMatchCondition(
+                $extension_conditions[] = new EndsWithCondition(
                     new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME),
-                    '*.' . $extension);
+                    $extension);
             }
             
             if (count($extension_conditions))

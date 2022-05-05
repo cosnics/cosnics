@@ -14,7 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -89,8 +89,8 @@ class BrowserComponent extends Manager implements TableSupport
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $condition = new PatternMatchCondition(
-                new PropertyConditionVariable(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER), '*' . $query . '*'
+            $condition = new ContainsCondition(
+                new PropertyConditionVariable(HelpItem::class, HelpItem::PROPERTY_IDENTIFIER), $query
             );
         }
 

@@ -15,9 +15,9 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -137,7 +137,7 @@ class CourseCategoryFeedComponent extends AjaxManager
             );
             $elements->add_element($course_category_category);
 
-            foreach($course_categories as $course_category)
+            foreach ($course_categories as $course_category)
             {
                 $course_category_category->add_child($this->get_course_category_element($course_category));
             }
@@ -155,7 +155,7 @@ class CourseCategoryFeedComponent extends AjaxManager
             );
             $elements->add_element($course_category);
 
-            foreach($courses as $course)
+            foreach ($courses as $course)
             {
                 $course_category->add_child($this->get_course_element($course));
             }
@@ -201,13 +201,14 @@ class CourseCategoryFeedComponent extends AjaxManager
         $search_query = Request::post(self::PARAM_SEARCH_QUERY);
         if ($search_query && $search_query != '')
         {
-            $q = '*' . $search_query . '*';
-            $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME), $q
+            $name_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME), $search_query
             );
-            $name_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_CODE), $q
+
+            $name_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_CODE), $search_query
             );
+
             $conditions[] = new OrCondition($name_conditions);
         }
 

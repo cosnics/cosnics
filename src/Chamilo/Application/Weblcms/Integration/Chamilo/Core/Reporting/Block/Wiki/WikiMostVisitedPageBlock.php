@@ -9,6 +9,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Tracking\Storage\DataManager;
 use Chamilo\Core\User\Integration\Chamilo\Core\Tracking\Storage\DataClass\Visit;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -52,29 +53,29 @@ class WikiMostVisitedPageBlock extends ToolBlock
             {
                 $conditions = [];
                 
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(
                         Visit::class,
                         Visit::PROPERTY_LOCATION),
-                    '*publication=' . $this->getPublicationId() . '*');
+                    'publication=' . $this->getPublicationId());
                 
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(
                         Visit::class,
                         Visit::PROPERTY_LOCATION),
-                    '*display_action=view_item*');
+                    'display_action=view_item');
                 
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(
                         Visit::class,
                         Visit::PROPERTY_LOCATION),
-                    '*application=weblcms*');
+                    'application=weblcms');
                 
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(
                         Visit::class,
                         Visit::PROPERTY_LOCATION),
-                    '*selected_cloi=' . $complex_content_object_item->get_id() . '*');
+                    'selected_cloi=' . $complex_content_object_item->get_id());
                 
                 $condition = new AndCondition($conditions);
                 

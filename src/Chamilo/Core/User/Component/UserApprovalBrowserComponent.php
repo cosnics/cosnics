@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -90,14 +91,14 @@ class UserApprovalBrowserComponent extends Manager implements TableSupport
 
         if (isset($query) && $query != '')
         {
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), $query
             );
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), $query
             );
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(User::class, User::PROPERTY_USERNAME), $query
             );
 
             return new OrCondition($or_conditions);

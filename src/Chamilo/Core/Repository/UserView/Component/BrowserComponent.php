@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -102,12 +103,12 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         if (isset($query) && $query != '')
         {
             $or_conditions = [];
-            $or_conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_NAME), '*' . $query . '*'
+            $or_conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(UserView::class, UserView::PROPERTY_NAME), $query
             );
-            $or_conditions[] = new PatternMatchCondition(
+            $or_conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(UserView::class, UserView::PROPERTY_DESCRIPTION),
-                '*' . $query . '*'
+                $query
             );
             $or_condition = new OrCondition($or_conditions);
 

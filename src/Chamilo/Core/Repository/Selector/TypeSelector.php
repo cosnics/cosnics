@@ -17,7 +17,7 @@ class TypeSelector
     /**
      * @var TypeSelectorItemInterface[]
      */
-    protected $typeSelectorItems;
+    protected $typeSelectorItems = [];
 
     /**
      *

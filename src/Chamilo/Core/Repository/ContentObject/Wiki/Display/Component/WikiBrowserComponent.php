@@ -9,6 +9,7 @@ use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
@@ -78,13 +79,13 @@ class WikiBrowserComponent extends Manager implements DelegateComponent, TableSu
         $query = $this->getButtonToolBarRenderer()->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*'
+                 $query
             );
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*'
+                 $query
             );
 
             return new OrCondition($conditions);

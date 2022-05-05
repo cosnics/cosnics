@@ -19,6 +19,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Table\Pager;
 use Chamilo\Libraries\Format\Table\PagerRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -253,13 +254,13 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             if (isset($query) && $query != '')
             {
                 $conditions = [];
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE),
-                    '*' . $query . '*', ForumPost::get_table_name(), false
+                     $query , ForumPost::get_table_name(), false
                 );
-                $conditions[] = new PatternMatchCondition(
+                $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CONTENT),
-                    '*' . $query . '*', ForumPost::get_table_name(), false
+                    $query, ForumPost::get_table_name(), false
                 );
 
                 return new OrCondition($conditions);

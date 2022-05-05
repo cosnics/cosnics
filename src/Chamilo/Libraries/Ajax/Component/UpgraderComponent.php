@@ -29,6 +29,7 @@ use Chamilo\Libraries\Ajax\Manager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -256,9 +257,9 @@ class UpgraderComponent extends Manager
 
         foreach ($formats as $format)
         {
-            $conditions[] = new PatternMatchCondition(
+            $conditions[] = new ContainsCondition(
                 new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION),
-                '*' . $format . '*'
+                $format
             );
         }
 

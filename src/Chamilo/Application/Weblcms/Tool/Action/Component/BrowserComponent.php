@@ -35,11 +35,11 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -62,13 +62,13 @@ class BrowserComponent extends Manager implements DelegateComponent
 
     private $introductionText;
 
-    private $publications;
-
     /**
      *
      * @var boolean
      */
     private $isCourseAdmin;
+
+    private $publications;
 
     public function run()
     {
@@ -513,11 +513,9 @@ class BrowserComponent extends Manager implements DelegateComponent
         }
         else
         {
-            $count =
-                DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
-                    $this->get_location(), $this->get_entities(), $this->get_publication_conditions(),
-                    $this->get_user_id()
-                );
+            $count = DataManager::count_content_object_publications_with_view_right_granted_in_category_location(
+                $this->get_location(), $this->get_entities(), $this->get_publication_conditions(), $this->get_user_id()
+            );
         }
 
         return $count;
@@ -565,10 +563,9 @@ class BrowserComponent extends Manager implements DelegateComponent
             }
             elseif ($this->get_publication_type() == \Chamilo\Application\Weblcms\Tool\Manager::PUBLICATION_TYPE_ALL)
             {
-                $publications_resultset =
-                    DataManager::retrieve_content_object_publications(
-                        $this->get_publication_conditions(), $object_table_order, $offset, $max_objects
-                    );
+                $publications_resultset = DataManager::retrieve_content_object_publications(
+                    $this->get_publication_conditions(), $object_table_order, $offset, $max_objects
+                );
             }
             else
             {
@@ -596,14 +593,12 @@ class BrowserComponent extends Manager implements DelegateComponent
         $query = $this->buttonToolbarRenderer->getSearchForm()->getQuery();
         if (isset($query) && $query != '')
         {
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-                '*' . $query . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query
             );
 
-            $conditions[] = new PatternMatchCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-                '*' . $query . '*'
+            $conditions[] = new ContainsCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), $query
             );
 
             return new OrCondition($conditions);
@@ -633,8 +628,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return \Chamilo\Libraries\Storage\DataManager\DataManager::count(
-                ContentObjectPublicationCategory::class,
-                new DataClassCountParameters(new AndCondition($conditions))
+                ContentObjectPublicationCategory::class, new DataClassCountParameters(new AndCondition($conditions))
             ) > 0;
     }
 
