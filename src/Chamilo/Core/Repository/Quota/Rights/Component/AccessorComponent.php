@@ -39,7 +39,7 @@ class AccessorComponent extends Manager
         $postBackUrl = new Redirect($urlParameters);
 
         $rightsForm = new RightsForm(
-            $postBackUrl->getUrl(), $this->getTranslator(), false, $rightsService->getAvailableRights(),
+            $postBackUrl->getUrl(), false, $rightsService->getAvailableRights(),
             $rightsService->getAvailableEntities()
         );
 

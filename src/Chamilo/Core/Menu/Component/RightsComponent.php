@@ -51,7 +51,7 @@ class RightsComponent extends Manager implements DelegateComponent
         $rightsLocation = $rightsService->findRightsLocationForItemIdentifier($itemIdentifier);
 
         $rightsForm = new RightsForm(
-            $postBackUrl->getUrl(), $this->getTranslator(), $itemIdentifier != 0, $rightsService->getAvailableRights(),
+            $postBackUrl->getUrl(), $itemIdentifier != 0, $rightsService->getAvailableRights(),
             $rightsService->getAvailableEntities()
         );
 

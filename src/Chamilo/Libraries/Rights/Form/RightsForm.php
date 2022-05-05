@@ -10,7 +10,6 @@ use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Utilities\Utilities;
-use Symfony\Component\Translation\Translator;
 
 /**
  * @package Chamilo\Libraries\Rights\Form
@@ -34,16 +33,6 @@ class RightsForm extends FormValidator
     const RIGHT_OPTION_SELECT = 2;
 
     /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
-
-    /**
-     * @var boolean
-     */
-    private $isAllowedToInherit;
-
-    /**
      * @var integer[]
      */
     private $availableRights;
@@ -52,6 +41,11 @@ class RightsForm extends FormValidator
      * @var \Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider[]
      */
     private $entities;
+
+    /**
+     * @var boolean
+     */
+    private $isAllowedToInherit;
 
     /**
      * @param string $postBackUrl
@@ -63,12 +57,11 @@ class RightsForm extends FormValidator
      * @throws \Exception
      */
     public function __construct(
-        string $postBackUrl, Translator $translator, bool $isAllowedToInherit, array $availableRights, array $entities
+        string $postBackUrl, bool $isAllowedToInherit, array $availableRights, array $entities
     )
     {
         parent::__construct('simple_rights_editor', self::FORM_METHOD_POST, $postBackUrl);
 
-        $this->translator = $translator;
         $this->isAllowedToInherit = $isAllowedToInherit;
         $this->entities = $entities;
         $this->availableRights = $availableRights;
@@ -234,14 +227,6 @@ class RightsForm extends FormValidator
     }
 
     /**
-     * @return \Symfony\Component\Translation\Translator
-     */
-    public function getTranslator(): Translator
-    {
-        return $this->translator;
-    }
-
-    /**
      * @return bool
      */
     public function isAllowedToInherit(): bool
@@ -287,11 +272,10 @@ class RightsForm extends FormValidator
         else
         {
             $hasUserTargets = key_exists(
-                UserEntityProvider::ENTITY_TYPE,
-                $targetEntities
+                UserEntityProvider::ENTITY_TYPE, $targetEntities
             );
             $hasOnlyOneTargetEntityType = count($targetEntities) == 1;
-            $hasOnlyOneTargetUserEntity = count(
+            $hasOnlyOneTargetUserEntity = is_array($targetEntities[UserEntityProvider::ENTITY_TYPE]) && count(
                     $targetEntities[UserEntityProvider::ENTITY_TYPE]
                 ) == 1;
             $currentUserIsOnlyTargetUserEntity = $targetEntities[UserEntityProvider::ENTITY_TYPE][0] == $user->getId();

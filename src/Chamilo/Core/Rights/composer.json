@@ -29,7 +29,7 @@
             "resources": [
                 {
                     "output": "Chamilo/Core/Rights/Editor/Resources/Javascript/",
-                    "input": "Resources/Javascript/"
+                    "input": "Editor/Resources/Javascript/"
                 },
                 {
                     "output": "Chamilo/Libraries/Resources/Css/cosnics.common.Aqua.min.css",
