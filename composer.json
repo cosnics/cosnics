@@ -21,7 +21,7 @@
         "ext-curl": "*",
         "ext-gd": "*",
         "ext-pdo": "*",
-        "chamilo/pear-libraries": "*",
+        "chamilo/pear-libraries": "dev-php8",
         "doctrine/cache": "1.12.*",
         "doctrine/dbal": "3.3.*",
         "doctrine/orm": "2.11.*",
