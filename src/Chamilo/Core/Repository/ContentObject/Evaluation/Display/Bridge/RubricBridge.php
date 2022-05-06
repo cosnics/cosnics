@@ -50,6 +50,11 @@ class RubricBridge implements RubricBridgeInterface
     protected $entryURL;
 
     /**
+     * @var bool
+     */
+    protected $allowCreateFromExistingRubric = false;
+
+    /**
      * RubricBridge constructor.
      *
      * @param EvaluationServiceBridgeInterface $evaluationServiceBridge
@@ -169,5 +174,21 @@ class RubricBridge implements RubricBridgeInterface
     public function getEntryURL(): string
     {
         return $this->entryURL;
+    }
+
+    /**
+     * @param bool $allow
+     */
+    public function setAllowCreateFromExistingRubric(bool $allow)
+    {
+        $this->allowCreateFromExistingRubric = $allow;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAllowCreateFromExistingRubric(): bool
+    {
+        return $this->allowCreateFromExistingRubric;
     }
 }

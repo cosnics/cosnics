@@ -42,7 +42,8 @@ class ResultComponent extends Manager implements DelegateComponent
                 'LANGUAGE' => $this->getTranslator()->getLocale(),
                 'RUBRIC_DATA_JSON' => $this->getSerializer()->serialize($rubricData, 'json'),
                 'RUBRIC_RESULTS_JSON' => $this->getSerializer()->serialize($results, 'json'),
-                'RUBRIC_ENTRY_URL' => $this->getRubricBridge()->getEntryURL()
+                'RUBRIC_ENTRY_URL' => $this->getRubricBridge()->getEntryURL(),
+                'CAN_CREATE_FROM_EXISTING_RUBRIC' => $this->getRubricBridge()->getAllowCreateFromExistingRubric()
             ]
         );
     }

@@ -15,36 +15,30 @@
 <template>
     <div class="treenode-rubric-input">
         <div class="treenode-choices">
-            <div class="treenode-choice" v-for="item in items">
+            <div class="treenode-choice" v-for="{ item, level, title, score, useRangeScore, minimumScore } in entryChoices">
                 <div class="treenode-level" :class="{'mod-scores': useScores, 'mod-fixed-levels': !rubric.hasCustomLevels}">
-                    <span class="treenode-level-title">{{ getTitle(item) }}</span>
-                    <span v-if="useScores" class="treenode-level-score">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
+                    <span class="treenode-level-title">{{ title }}</span>
+                    <span v-if="useScores" class="treenode-level-score"><template v-if="useRangeScore">{{ minimumScore|formatNum }}<i class="fa fa-caret-right" aria-hidden="true"></i></template>{{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span v-else class="sr-only">{{ $t('points') }}</span></span>
                 </div>
                 <div class="treenode-level-description-input" @click="focusTextField" :class="{'mod-abs-weights': useScores && rubric.hasAbsoluteWeights}">
-                    <description-field :field-item="getFieldItem(item)" @input="$emit('input', $event)" @change="updateDescription(item)">
-                        <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.choice.hasFixedScore}">{{ getScore(item)|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>
+                    <description-field :descriptive-item="item" @input="$emit('input', $event)" @change="updateDescription(item, level)">
+                        <span v-if="useScores && !rubric.hasCustomLevels" class="level-score" :class="{'mod-fixed': hasChoices && item.hasFixedScore}"><template v-if="useRangeScore">{{ minimumScore|formatNum }}<i class="fa fa-caret-right" aria-hidden="true"></i></template>{{ score|formatNum }}<template v-if="rubric.useRelativeWeights"><span class="sr-only">%</span><i class="fa fa-percent" aria-hidden="true"></i></template><span class="sr-only">{{ $t('points') }}</span></span>
                     </description-field>
                 </div>
             </div>
-            <!--<template v-if="rubric.rubricLevels.length - items.length > 0">
-                <div style="flex: 1" v-for="index in rubric.rubricLevels.length - items.length"></div>
-            </template>-->
         </div>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
-    import DescriptionField from '../Components/DescriptionField.vue';
-    import Rubric from '../Domain/Rubric';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
-
-    interface CriteriumExt {
-        criterium: Criterium;
-        choices: any[];
-        levels: Level[];
-    }
+    import {Component, Prop, Vue} from 'vue-property-decorator';
+    import DescriptionField from './DescriptionField.vue';
+    import {TreeNodeExt} from '../../../Util/interfaces';
+    import Rubric from '../../../Domain/Rubric';
+    import Criterium from '../../../Domain/Criterium';
+    import {EntryChoice, ChoiceEntryChoice, LevelEntryChoice} from '../../../Domain/EntryChoice';
+    import Level from '../../../Domain/Level';
+    import Choice from '../../../Domain/Choice';
 
     @Component({
         components: {
@@ -59,7 +53,7 @@
     export default class TreeNodeDescriptions extends Vue {
         @Prop({type: Rubric, required: true}) readonly rubric!: Rubric;
         @Prop({type: Criterium, required: true}) readonly criterium!: Criterium;
-        @Prop({type: Object, required: true}) readonly ext!: CriteriumExt;
+        @Prop({type: Object, required: true}) readonly ext!: TreeNodeExt;
 
         get hasLevels(): boolean {
             return !!this.ext.levels.length;
@@ -79,44 +73,19 @@
             }
         }
 
-        updateDescription(item: any) {
-            if (this.hasLevels) {
-                this.$emit('update-level-description', item);
+        updateDescription(descriptiveItem: Level|Choice, level: Level) {
+            if (descriptiveItem === level) {
+                this.$emit('update-level-description', descriptiveItem);
             } else {
-                this.$emit('update-choice-feedback', item.choice, this.criterium, item.level);
+                this.$emit('update-choice-feedback', descriptiveItem, this.criterium, level);
             }
         }
 
-        get items() {
-            if (this.ext.levels.length) {
-                return this.ext.levels;
+        get entryChoices(): EntryChoice[] {
+            if (this.hasLevels) {
+                return this.ext.levels.map(level => new LevelEntryChoice(level, null));
             }
-            return this.ext.choices;
-        }
-
-        getTitle(item: any) {
-            if (this.hasChoices) {
-                return item.level.title;
-            }
-            return item.title;
-        }
-
-        getScore(item: any) {
-            if (this.hasChoices) {
-                return this.getChoiceScore(item);
-            }
-            return item.score;
-        }
-
-        getFieldItem(item: any) {
-            if (this.hasChoices) {
-                return item.choice;
-            }
-            return item;
-        }
-
-        getChoiceScore(choice: any): number {
-            return this.rubric.useRelativeWeights ? choice.level.score : choice.score;
+            return this.ext.choices.map(choiceObject => new ChoiceEntryChoice(choiceObject, null, !this.rubric.useRelativeWeights));
         }
     }
 </script>
@@ -149,6 +118,11 @@
         display: flex;
         gap: 1rem;
         justify-content: space-between;
+
+        .fa-caret-right {
+            color: #adadad;
+            font-size: 1.5rem;
+        }
     }
 
     /*.treenode-level-title {

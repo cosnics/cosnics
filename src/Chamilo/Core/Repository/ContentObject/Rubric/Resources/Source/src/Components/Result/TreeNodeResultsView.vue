@@ -2,14 +2,20 @@
 {
     "en": {
         "close": "Close",
+        "no-results": "No results to display.",
+        "only-feedback": "Show only results with feedback",
         "weight": "Weight"
     },
     "fr": {
         "close": "Fermer",
+        "no-results": "Aucun résultat à afficher.",
+        "only-feedback": "Seulement des résultats avec feedback",
         "weight": "Poids"
     },
     "nl": {
         "close": "Sluiten",
+        "no-results": "Geen resultaten om weer te geven.",
+        "only-feedback": "Alleen resultaten met feedback",
         "weight": "Gewicht"
     }
 }
@@ -19,11 +25,28 @@
         <div class="selected-treenode-wrapper">
             <button class="btn-info-close" :aria-label="$t('close')" :title="$t('close')" @click="$emit('close')"><i aria-hidden="true" class="fa fa-close"/></button>
             <div class="selected-treenode-results">
+                <div style="display: flex; flex-direction: row-reverse; gap: .75rem; margin-bottom: 1rem;">
+                    <div style="width: 3.5rem;pointer-events:all">
+                        <div class="onoffswitch mod-only-feedback">
+                            <input type="checkbox" v-model="showWithFeedbackOnly" @input="showWithFeedbackOnly = !showWithFeedbackOnly" class="onoffswitch-checkbox" id="onoffswitch-feedback-only">
+                            <label class="onoffswitch-label" for="onoffswitch-feedback-only">
+                        <span class="onoffswitch-inner">
+                            <span class="onoffswitch-inner-before"><span style="opacity:0">Aan</span></span>
+                            <span class="onoffswitch-inner-after"><span style="opacity:0">Uit</span></span>
+                        </span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <span>{{ $t('only-feedback') }}</span>
+                </div>
+                <!--<button class="btn-check" :class="{ checked: showWithFeedbackOnly }" style="margin-bottom: 1rem; pointer-events: all" @click.stop="showWithFeedbackOnly = !showWithFeedbackOnly"><span class="lbl-check" tabindex="-1" ><i class="btn-icon-check fa" aria-hidden="true"></i>{{ $t('only-feedback') }}</span></button>-->
                 <div class="selected-treenode-results-title u-markdown-criterium" v-html="treeNode.toMarkdown()"></div>
                 <div class="selected-treenode-results-weight" v-if="rubric.useScores && rubric.useRelativeWeights">{{ $t('weight') }}: {{ relWeight|formatNum }}<i class="fa fa-percent" aria-hidden="true"></i><span class="sr-only">%</span></div>
-                <div class="results-details">
-                    <tree-node-evaluator-results v-for="({evaluator, score, level, feedback}, index) in evaluations" :key="`${index}-${treeNode.id}`" :rubric="rubric" :tree-node="treeNode" :evaluator="evaluator" :score="score" :level="level" :feedback="feedback" />
+                <div class="results-details" v-if="filteredEvaluations.length">
+                    <tree-node-evaluator-results v-for="({evaluator, score, level, feedback}, index) in filteredEvaluations" :key="`${index}-${treeNode.id}`" :rubric="rubric" :tree-node="treeNode" :evaluator="evaluator" :score="score" :level="level" :feedback="feedback" />
                 </div>
+                <span v-else class="m-no-results">{{ $t('no-results') }}</span>
             </div>
         </div>
     </div>
@@ -31,10 +54,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric from '../Domain/Rubric';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
+    import Rubric from '../../Domain/Rubric';
+    import Cluster from '../../Domain/Cluster';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
     import TreeNodeEvaluatorResults from './TreeNodeEvaluatorResults.vue';
 
     function pad(num: number) : string {
@@ -51,9 +74,16 @@
         }
     })
     export default class TreeNodeResultsView extends Vue {
+        private showWithFeedbackOnly = false;
+
         @Prop({type: Rubric}) readonly rubric!: Rubric;
         @Prop({type: [Cluster, Category, Criterium]}) readonly treeNode!: Cluster|Category|Criterium;
         @Prop({type: Array}) readonly evaluations!: any[];
+
+        get filteredEvaluations() {
+            if (!this.showWithFeedbackOnly) { return this.evaluations; }
+            return this.evaluations.filter(ev => !!ev.feedback);
+        }
 
         get isCriterium() {
             return this.treeNode instanceof Criterium;
@@ -189,6 +219,11 @@
 </style>
 
 <style scoped>
+    .m-no-results {
+        font-style: oblique;
+        color: hsl(190, 32%, 39%);
+    }
+
     .fa-percent {
         font-size: 1.1rem;
         color: #777;

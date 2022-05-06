@@ -6,8 +6,8 @@ import RubricBuilderDemoWrapper from '../Views/RubricBuilderDemoWrapper.vue';
 import RubricPreviewDemoWrapper from '../Views/RubricPreviewDemoWrapper.vue';
 import RubricEntryDemoWrapper from '../Views/RubricEntryDemoWrapper.vue';
 import RubricResultDemoWrapper from '../Views/RubricResultDemoWrapper.vue';
-import ScoreRubricView from '../Components/ScoreRubricView.vue';
-import LevelsView from '../Components/LevelsView.vue';
+import ScoreRubricView from '../Components/Builder/Rubric/ScoreRubricView.vue';
+import LevelsView from '../Components/Builder/Levels/LevelsView.vue';
 import RubricBuilderFull from '../Views/RubricBuilderFull.vue';
 import RubricBuilderPreview from '../Views/RubricBuilderPreview.vue';
 

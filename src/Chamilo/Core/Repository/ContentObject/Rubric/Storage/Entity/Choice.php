@@ -311,12 +311,6 @@ class Choice
 
         if ($this->getRubricData()->useRelativeWeights())
         {
-            /*if ($this->getRubricData()->maxLevelScore() === 0)
-            {
-                return 0;
-            }
-
-            return 100 * ($this->getLevel()->getScore() / $this->getRubricData()->maxLevelScore());*/
             return $this->getLevel()->getScore();
         }
 

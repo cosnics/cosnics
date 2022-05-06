@@ -9,6 +9,7 @@
         "enter-level-description": "Enter level description",
         "level": "Level",
         "points": "Points",
+        "range": "Range",
         "remove": "Remove",
         "remove-level": "Remove level {item}"
     },
@@ -21,6 +22,7 @@
         "enter-level-description": "Entrer une description de niveau",
         "level": "Niveau",
         "points": "Points",
+        "range": "Range",
         "remove": "Supprimer",
         "remove-level": "Supprimer le niveau {item}"
     },
@@ -33,6 +35,7 @@
         "enter-level-description": "Voer een niveauomschrijving in",
         "level": "Niveau",
         "points": "Punten",
+        "range": "Bereik",
         "remove": "Verwijder",
         "remove-level": "Niveau {item} verwijderen"
     }
@@ -45,6 +48,7 @@
                 <b-thead class="table-head">
                     <b-tr :class="'table-head-row' + (!!criterium ? ' mod-criterium': ' mod-rubric')">
                         <b-th class="table-title">{{ $t('level') }}</b-th>
+                        <b-th v-if="rubric.useScores && !rubric.hasAbsoluteWeights" class="table-range">{{ $t('range') }}</b-th>
                         <b-th v-if="rubric.useScores" class="table-score">{{ rubric.useRelativeWeights ? '%' : $t('points') }}</b-th>
                         <b-th class="table-default"><div class="table-default-header-wrap">{{ $t(criterium ? 'default-trunc' : 'default') }} <i class="fa fa-info-circle" :title="$t('default-info')"></i></div></b-th>
                         <b-th class="table-actions"></b-th>
@@ -59,8 +63,17 @@
                                     <b-input type="text" v-model="level.title" autocomplete="off" class="mod-title mod-input mod-pad" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" />
                                 </div>
                             </b-td>
-                            <b-td v-if="rubric.useScores" class="table-score">
-                                <b-input type="number" v-model.number="level.score" autocomplete="off" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" required min="0" step="1" />
+                            <b-td v-if="rubric.useScores && !rubric.hasAbsoluteWeights" class="table-range">
+                                <input type="checkbox" v-model="level.use_range_score" :disabled="isEditDisabled" @input="onLevelChange(level)">
+                            </b-td>
+                            <b-td v-if="rubric.useScores" class="table-score" :class="{'mod-range': hasRangeScores}">
+                                <div class="level-score-container">
+                                    <template v-if="level.useRangeScore">
+                                        <b-input type="number" v-model.number="level.minimum_score" autocomplete="off" required :max="level.score === 0 ? 0 : level.score - 1" min="0" step="1" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled }" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" />
+                                        <i class="fa fa-caret-right range-caret" aria-hidden="true"></i>
+                                    </template>
+                                    <b-input type="number" v-model.number="level.score" autocomplete="off" required min="0" :max="rubric.useRelativeWeights ? 100 : ''" step="1" class="mod-input mod-pad mod-num" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" @input="onLevelChange(level)" @focus="onSelectLevel(level)" />
+                                </div>
                             </b-td>
                             <b-td class="table-default">
                                 <input type="radio" :checked="level.isDefault" @keyup.enter="setDefault(level)" @click="setDefault(level)" :class="{'input-detail': !isEditDisabled}" :disabled="isEditDisabled" />
@@ -77,7 +90,7 @@
                             </b-td>
                         </b-tr>
                         <b-tr v-if="criterium" class="table-body-row details-row" @mouseover="hoveredLevel = level" @mouseout="hoveredLevel = null">
-                            <b-td :colspan="rubric.useScores ? 3 : 2">
+                            <b-td :colspan="rubric.useScores ? (rubric.hasAbsoluteWeights ? 3 : 4) : 2">
                                 <div class="criterium-level-input-area">
                                     <textarea v-model="level.description" ref="feedbackField" class="criterium-level-feedback"
                                               :class="{ 'input-detail': !isEditDisabled, 'is-input-active': activeDescriptionInput === level || !level.description }"
@@ -96,8 +109,17 @@
                                 <b-input type="text" autocomplete="off" class="mod-title mod-input mod-pad input-detail" v-model="newLevel.title" id="level-title-new" @keydown.enter="addLevel" @keyup.esc="cancelLevel" />
                             </div>
                         </b-td>
-                        <b-td class="table-score" v-if="rubric.useScores">
-                            <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" required min="0" step="1" />
+                        <b-td v-if="rubric.useScores && !rubric.hasAbsoluteWeights" class="table-range">
+                            <input type="checkbox" v-model="newLevel.use_range_score">
+                        </b-td>
+                        <b-td v-if="rubric.useScores" class="table-score" :class="{'mod-range': hasRangeScores}">
+                            <div style="display: flex;justify-content: center;">
+                                <template v-if="newLevel.useRangeScore">
+                                    <b-input type="number" v-model.number="newLevel.minimum_score" autocomplete="off" required :max="newLevel.score === 0 ? 0 : newLevel.score - 1" min="0" step="1" class="mod-input mod-pad mod-num" />
+                                    <i class="fa fa-caret-right range-caret" aria-hidden="true"></i>
+                                </template>
+                                <b-input type="number" v-model.number="newLevel.score" autocomplete="off" class="mod-input mod-pad mod-num input-detail" required min="0" :max="rubric.useRelativeWeights ? 100 : ''" step="1" />
+                            </div>
                         </b-td>
                         <b-td class="table-default">
                             <input type="radio" :checked="newLevel.isDefault" @keyup.enter="setDefault(newLevel)" @click="setDefault(newLevel)" class="input-detail" />
@@ -116,7 +138,7 @@
                         </b-td>
                     </b-tr>
                     <b-tr v-if="newLevel && !!criterium" class="table-body-row details-row">
-                        <b-td :colspan="rubric.useScores ? 3 : 2">
+                        <b-td :colspan="rubric.useScores ? (rubric.hasAbsoluteWeights ? 3 : 4) : 2">
                             <div class="criterium-level-input-area">
                                 <textarea v-model="newLevel.description" ref="feedbackField" class="criterium-level-feedback input-detail"
                                           :class="{ 'is-input-active': activeDescriptionInput === newLevel || !newLevel.description }"
@@ -146,11 +168,11 @@
 <script lang="ts">
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import SelectionControls from './SelectionControls.vue';
-    import Rubric from '../Domain/Rubric';
-    import Criterium from '../Domain/Criterium';
-    import Level from '../Domain/Level';
+    import Rubric from '../../../Domain/Rubric';
+    import Criterium from '../../../Domain/Criterium';
+    import Level from '../../../Domain/Level';
     import debounce from 'debounce';
-    import DataConnector from '../Connector/DataConnector';
+    import DataConnector from '../../../Connector/DataConnector';
     import DOMPurify from 'dompurify';
     import * as marked from 'marked';
 
@@ -190,6 +212,10 @@
                 return this.rubric.filterLevelsByCriterium(this.criterium).map(l => { (l as any)._showDetails = true; return l; });
             }
             return this.rubric.rubricLevels;
+        }
+
+        get hasRangeScores() {
+            return !!(this.levels.find(level => level.useRangeScore));
         }
 
         onLevelChange(level: Level) {
@@ -414,6 +440,10 @@
             color: #406e8d;
             font-size: 1.5rem;
             text-align: right;
+
+            @media only screen and (max-width: 490px) {
+                display: none;
+            }
         }
 
         .table-title {
@@ -426,8 +456,34 @@
             }
         }
 
+        .table-range {
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .table-default {
+            padding: 10px 8px 10px 0;
+        }
+
         .table-score {
-            width: 5em;
+            /*width: 5em;*/
+            width: 6rem;
+            /*min-width: 6rem;*/
+
+            &.mod-range {
+                /*width: 14rem;*/
+            }
+        }
+
+        .range-caret {
+            align-self: center;
+            padding: 0 3px 0 4px;
+            color: #5b87a3;
+        }
+
+        .level-score-container {
+            display: flex;
+            justify-content: center;
         }
 
         .table-default {
@@ -457,12 +513,6 @@
             .level-row.mod-criterium:first-child td:not(.table-actions) {
                 background: linear-gradient(to bottom, #d5dadd 0, hsla(0, 0%, 100%, 0) 4px);
                 background-origin: border-box;
-            }
-        }
-
-        @media only screen and (max-width: 459px) {
-            & {
-                position: relative;
             }
         }
 
@@ -521,6 +571,16 @@
             &.mod-num {
                 font-size: 1.7rem;
                 padding: 0 5px;
+                width: 4.5rem;
+
+                &:invalid {
+                    border: 1px solid #e10505;
+                    color: #e10505;
+
+                    &:focus {
+                        box-shadow: none;
+                    }
+                }
             }
         }
     }
@@ -569,11 +629,29 @@
         gap: 5px;
     }
 
-    @media only screen and (max-width: 459px) {
+    @media only screen and (max-width: 550px) {
+        .table {
+            position: relative;
+        }
+
         .level-actions {
             bottom: -35px;
             position: absolute;
             right: 17px;
+        }
+
+        .level-score-container {
+            flex-direction: column;
+        }
+
+        .table .range-caret {
+            align-self: start;
+            margin-left: .2rem;
+            margin-top: .1rem;
+        }
+
+        .range-caret + input {
+            margin-left: 1rem;
         }
     }
 </style>

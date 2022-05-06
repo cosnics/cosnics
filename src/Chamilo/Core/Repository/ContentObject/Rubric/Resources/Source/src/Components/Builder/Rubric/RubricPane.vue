@@ -74,11 +74,11 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import draggable from 'vuedraggable';
-    import TreeNode from '../Domain/TreeNode';
-    import Rubric from '../Domain/Rubric';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
+    import TreeNode from '../../../Domain/TreeNode';
+    import Rubric from '../../../Domain/Rubric';
+    import Cluster from '../../../Domain/Cluster';
+    import Category from '../../../Domain/Category';
+    import Criterium from '../../../Domain/Criterium';
     import ClusterView from './ClusterView.vue';
     import CategoryView from './CategoryView.vue';
     import CriteriumView from './CriteriumView.vue';
@@ -87,7 +87,7 @@
     import NewCriterium from './NewCriterium.vue';
     import NameInput from './NameInput.vue';
     import SplitViewButton from './SplitViewButton.vue';
-    import DataConnector from '../Connector/DataConnector';
+    import DataConnector from '../../../Connector/DataConnector';
 
     @Component({
         name: 'rubric-pane',

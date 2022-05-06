@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="criterium-details-weight">
-                        <div v-if="rubric.useScores && (rubric.useRelativeWeights || rubric.hasAbsoluteWeights)" class="criterium-weight">
+                        <div v-if="rubric.useWeights" class="criterium-weight">
                             <template v-if="rubric.useRelativeWeights">
                                 {{ $t('weight') }}: <span :class="{'m-error': rubric.eqRestWeight < 0}">{{ criterium.rel_weight === null ? rubric.eqRestWeight.toLocaleString() : criterium.rel_weight }} %</span> <i v-if="rubric.eqRestWeight < 0" class="fa fa-exclamation-circle m-error" aria-hidden="true"></i>
                             </template>
@@ -78,14 +78,14 @@
 <script lang="ts">
     import {Component, Prop, Watch, Vue} from 'vue-property-decorator';
     import debounce from 'debounce';
-    import Rubric from '../Domain/Rubric';
-    import Level from '../Domain/Level';
-    import Criterium from '../Domain/Criterium';
-    import Choice from '../Domain/Choice';
+    import Rubric from '../../../Domain/Rubric';
+    import Level from '../../../Domain/Level';
+    import Criterium from '../../../Domain/Criterium';
+    import Choice from '../../../Domain/Choice';
     import CriteriumLevelView from './CriteriumLevelView.vue';
-    import FormattingHelp from './FormattingHelp.vue';
-    import DataConnector from '../Connector/DataConnector';
-    import Levels from './Levels.vue';
+    import FormattingHelp from '../FormattingHelp.vue';
+    import DataConnector from '../../../Connector/DataConnector';
+    import Levels from '../Levels/Levels.vue';
 
     function updateHeight(elem: HTMLElement, addedPixels: number = 0) {
         elem.style.height = '';

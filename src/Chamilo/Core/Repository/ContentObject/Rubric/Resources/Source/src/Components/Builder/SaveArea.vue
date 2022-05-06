@@ -34,7 +34,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import DataConnector from '../Connector/DataConnector';
+    import DataConnector from '../../Connector/DataConnector';
 
     @Component({
         name: 'save-area',
