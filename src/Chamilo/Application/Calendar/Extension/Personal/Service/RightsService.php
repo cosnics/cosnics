@@ -214,11 +214,13 @@ class RightsService
     {
         if (!$this->deletePublicationUsersForPublication($publication))
         {
+            echo 'deletePublicationUsersForPublication';
             return false;
         }
 
         if (!$this->deletePublicationGroupsForPublication($publication))
         {
+            echo 'deletePublicationGroupsForPublication';
             return false;
         }
 

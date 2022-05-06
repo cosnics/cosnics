@@ -113,7 +113,7 @@ class Manager implements PublicationInterface
         {
             case PublicationInterface::ATTRIBUTES_TYPE_OBJECT :
                 return self::getContentObjectPublicationService()->countContentObjectPublicationsByContentObjectIds(
-                    $identifier
+                    [$identifier]
                 );
             case PublicationInterface::ATTRIBUTES_TYPE_USER :
                 return self::getContentObjectPublicationService()->countContentObjectPublicationsByContentObjectOwnerId(

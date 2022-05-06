@@ -16,18 +16,18 @@ class InCondition extends Condition
 {
 
     /**
+     * Is the storage unit name already an alias?
+     *
+     * @var boolean
+     */
+    private $is_alias;
+
+    /**
      * Gets the DataClass property
      *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      */
     private $name;
-
-    /**
-     * The list of values that defines the selection
-     *
-     * @var string[]
-     */
-    private $values;
 
     /**
      * Gets the storage unit of the DataClass
@@ -37,11 +37,11 @@ class InCondition extends Condition
     private $storage_unit;
 
     /**
-     * Is the storage unit name already an alias?
+     * The list of values that defines the selection
      *
-     * @var boolean
+     * @var string[]
      */
-    private $is_alias;
+    private $values;
 
     /**
      *
@@ -70,6 +70,7 @@ class InCondition extends Condition
             $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
 
         $values = $this->get_values();
+
         ksort($values);
         $hashParts[] = $values;
 

@@ -101,6 +101,17 @@ class FileExceptionLogger implements ExceptionLoggerInterface
         {
             $message .= ' - FILE: ' . $file . ' - LINE: ' . $line;
         }
+        elseif ($exception->getFile())
+        {
+            $message .= ' - FILE: ' . $exception->getFile() . ' - LINE: ' . $exception->getLine();
+        }
+
+        $traceString = $exception->getTraceAsString();
+
+        if ($traceString)
+        {
+            $message .= PHP_EOL . $traceString;
+        }
 
         fwrite($fileHandler, $message . PHP_EOL);
         fclose($fileHandler);

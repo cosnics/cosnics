@@ -174,6 +174,18 @@ class GroupService
     }
 
     /**
+     * @param integer $userIdentifier
+     *
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     *
+     * @throws \Exception
+     */
+    public function findAllSubscribedGroupsForUserIdentifier(int $userIdentifier)
+    {
+        return $this->groupsTreeTraverser->findAllSubscribedGroupsForUserIdentifier($userIdentifier);
+    }
+
+    /**
      * @param string $groupCode
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group
@@ -255,7 +267,7 @@ class GroupService
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
-    public function findGroups($condition, $offset = 0, $count = - 1, $orderProperty = null)
+    public function findGroups($condition, $offset = 0, $count = - 1, array $orderProperty = [])
     {
         return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderProperty);
     }

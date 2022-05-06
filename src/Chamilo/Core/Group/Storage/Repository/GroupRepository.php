@@ -248,7 +248,7 @@ class GroupRepository
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroupsForDirectlySubscribedGroupNestingValues(
-        array $directlySubscribedGroupNestingValues = []
+        DataClassIterator $directlySubscribedGroupNestingValues
     )
     {
         $parameters = new DataClassRetrievesParameters(

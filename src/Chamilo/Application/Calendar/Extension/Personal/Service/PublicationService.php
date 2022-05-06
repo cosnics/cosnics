@@ -128,7 +128,7 @@ class PublicationService
      */
     public function deletePublication(Publication $publication)
     {
-        if ($this->getRightsService()->deletePublicationRights($publication))
+        if (!$this->getRightsService()->deletePublicationRights($publication))
         {
             return false;
         }
