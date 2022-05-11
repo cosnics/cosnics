@@ -28,7 +28,7 @@
             "type": "Chamilo\\Application",
             "install": {
                 "core": 0,
-                "default": 0
+                "default": 1
             },
             "dependencies": [
                 {
