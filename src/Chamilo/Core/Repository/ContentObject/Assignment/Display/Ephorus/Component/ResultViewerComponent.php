@@ -98,8 +98,10 @@ class ResultViewerComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return [self::PARAM_ENTRY_ID];
+        $additionalParameters[] = self::PARAM_ENTRY_ID;
+
+        return $additionalParameters;
     }
 }

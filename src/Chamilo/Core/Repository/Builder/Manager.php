@@ -440,8 +440,9 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
         return $this->get_complex_content_object_table_condition();
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+        return $additionalParameters;
     }
 }

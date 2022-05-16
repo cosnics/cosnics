@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\AssignmentService
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\NotificationServiceBridge;
-use Chamilo\Application\Weblcms\CourseSettingsConnector;
 use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiPageTemplate;
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Template\WikiTemplate;
@@ -24,7 +23,6 @@ use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\LearningPathDisplaySupport;
-use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Exception\TreeNodeNotFoundException;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\TrackingService;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
@@ -52,15 +50,10 @@ use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 use Exception;
 
-class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupport, AssessmentDisplaySupport,
-    ForumDisplaySupport, GlossaryDisplaySupport, BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
+class ComplexDisplayComponent extends Manager
+    implements LearningPathDisplaySupport, AssessmentDisplaySupport, ForumDisplaySupport, GlossaryDisplaySupport,
+    BlogDisplaySupport, WikiDisplaySupport, DelegateComponent
 {
-
-    /**
-     *
-     * @var ContentObjectPublication
-     */
-    private $publication;
 
     /**
      *
@@ -68,12 +61,16 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
      */
     protected $trackingService;
 
+    /**
+     *
+     * @var ContentObjectPublication
+     */
+    private $publication;
+
     public function run()
     {
         $contentObjectPublicationTranslation = Translation::getInstance()->getTranslation(
-            'ContentObjectPublication',
-            null,
-            'Chamilo\Application\Weblcms'
+            'ContentObjectPublication', null, 'Chamilo\Application\Weblcms'
         );
 
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
@@ -86,8 +83,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $publication_id
+            ContentObjectPublication::class, $publication_id
         );
 
         if (!$this->publication instanceof ContentObjectPublication)
@@ -100,9 +96,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
-                Translation::getInstance()->getTranslation("NotAllowed", null, Utilities::COMMON_LIBRARIES),
-                true,
-                [],
+                Translation::getInstance()->getTranslation("NotAllowed", null, Utilities::COMMON_LIBRARIES), true, [],
                 array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
@@ -139,8 +133,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $context = $this->get_root_content_object()->package() . '\Display';
 
             return $this->getApplicationFactory()->getApplication(
-                $context,
-                new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+                $context, new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
             )->run();
         }
         catch (TreeNodeNotFoundException $ex)
@@ -150,8 +143,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
                     'TreeNodeNotFound', [
                     '{TREE_NODE_ID}' => $ex->getTreeNodeDataId(),
                     '{LEARNING_PATH}' => $this->get_root_content_object()->get_title()
-                ],
-                    'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath'
+                ], 'Chamilo\Application\Weblcms\Tool\Implementation\LearningPath'
                 )
             );
         }
@@ -199,6 +191,191 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         $this->getBridgeManager()->addBridge($assignmentNotificationServiceBridge);
     }
 
+    /**
+     * Builds the TrackingService
+     *
+     * @return TrackingService
+     */
+    public function buildTrackingService()
+    {
+        if (!isset($this->trackingService))
+        {
+            $this->trackingService = $this->createTrackingServiceForPublicationAndCourse(
+                (int) $this->publication->getId(), (int) $this->get_course_id()
+            );
+        }
+
+        return $this->trackingService;
+    }
+
+    /**
+     * Checks the maximum allowed assessment attempts
+     */
+    protected function checkMaximumAssessmentAttempts()
+    {
+        if ($this->trackingService->isMaximumAttemptsReachedForAssessment(
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode()
+        ))
+        {
+            throw new Exception(
+                Translation::getInstance()->getTranslation(
+                    'YouHaveReachedYourMaximumAttempts', null,
+                    'Chamilo\Application\Weblcms\Tool\Implementation\Assessment'
+                )
+            );
+        }
+    }
+
+    public function create_learning_path_item_tracker($learning_path_tracker, $current_complex_content_object_item)
+    {
+    }
+
+    public function forum_count_topic_views($complex_topic_id)
+    {
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_PUBLICATION_ID),
+            new StaticConditionVariable($this->get_publication()->getId())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
+            new StaticConditionVariable($complex_topic_id)
+        );
+        $condition = new AndCondition($conditions);
+
+        return DataManager::count(ForumTopicView::class, new DataClassCountParameters($condition));
+    }
+
+    public function forum_topic_viewed($complex_topic_id)
+    {
+        $parameters = [];
+        $parameters[ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
+        $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->get_publication()->getId();
+        $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
+
+        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
+    }
+
+    /**
+     * Returns the TreeNode for the current step
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
+     */
+    public function getCurrentTreeNode()
+    {
+        return parent::getCurrentTreeNodeForLearningPath($this->getSelectedLearningPath());
+    }
+
+    /**
+     * Returns the currently selected LearningPath
+     *
+     * @return LearningPath | ContentObject
+     */
+    protected function getSelectedLearningPath()
+    {
+        return $this->publication->getContentObject();
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+        $additionalParameters[] = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP;
+        $additionalParameters[] =
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN;
+
+        return $additionalParameters;
+    }
+
+    public function get_assessment_back_url()
+    {
+    }
+
+    public function get_assessment_configuration()
+    {
+        return $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
+    }
+
+    public function get_assessment_continue_url()
+    {
+    }
+
+    public function get_assessment_current_attempt_id()
+    {
+        return $this->get_parameter(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
+        );
+    }
+
+    public function get_assessment_current_url()
+    {
+        $parameters = [];
+        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
+            $this->getCurrentTreeNodeDataId();
+
+        return $this->get_url($parameters, array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID));
+    }
+
+    public function get_assessment_parameters()
+    {
+        return array(
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
+            \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
+            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
+        );
+    }
+
+    public function get_assessment_question_attempt($complex_question_id)
+    {
+        return $this->retrieve_question_attempts()[$complex_question_id];
+    }
+
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
+    {
+        return $this->retrieve_question_attempts();
+    }
+
+    /**
+     *
+     * @return int
+     */
+    function get_embedded_content_object_id()
+    {
+        return Embedder::get_embedded_content_object_id();
+    }
+
+    public function get_learning_path_content_object_assessment_result_url($complex_content_object_id, $details)
+    {
+        return $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication->getId(),
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_SHOW_PROGRESS => 'true',
+                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
+                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_DETAILS => $details
+            )
+        );
+    }
+
+    public function get_publication()
+    {
+        return $this->publication;
+    }
+
+    /**
+     * Returns the registered question ids
+     *
+     * @return int[] $question_ids
+     */
+    public function get_registered_question_ids()
+    {
+        return array_keys($this->get_assessment_question_attempts());
+    }
+
     public function get_root_content_object()
     {
         if ($this->is_embedded())
@@ -207,8 +384,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             $this->set_parameter(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID, $embedded_content_object_id);
 
             return \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
-                ContentObject::class,
-                $embedded_content_object_id
+                ContentObject::class, $embedded_content_object_id
             );
         }
         else
@@ -226,68 +402,6 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
 
             return $this->getSelectedLearningPath();
         }
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    function is_embedded()
-    {
-        $embedded_content_object_id = $this->get_embedded_content_object_id();
-
-        return isset($embedded_content_object_id);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    function get_embedded_content_object_id()
-    {
-        return Embedder::get_embedded_content_object_id();
-    }
-
-    /**
-     *
-     * @param string $pageTitle
-     *
-     * @return string
-     */
-    public function render_header($pageTitle = '')
-    {
-        if ($this->is_embedded())
-        {
-            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
-
-            return Application::render_header($pageTitle);
-        }
-        else
-        {
-            return parent::render_header($pageTitle);
-        }
-    }
-
-    public function get_publication()
-    {
-        return $this->publication;
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN
-        );
-    }
-
-    public function retrieve_learning_path_tracker()
-    {
-    }
-
-    public function retrieve_learning_path_tracker_items($learning_path_tracker)
-    {
     }
 
     public function get_tree_menu_url()
@@ -317,8 +431,7 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_ACTION
         );
 
-        if (in_array($requestedAction, $reportingActions) ||
-            $this->getRequest()->get(
+        if (in_array($requestedAction, $reportingActions) || $this->getRequest()->get(
                 \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_REPORTING_MODE
             ))
         {
@@ -350,177 +463,9 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return $redirect->getUrl();
     }
 
-    public function create_learning_path_item_tracker($learning_path_tracker, $current_complex_content_object_item)
-    {
-    }
-
-    public function get_learning_path_content_object_assessment_result_url($complex_content_object_id, $details)
-    {
-        return $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY_COMPLEX_CONTENT_OBJECT,
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $this->publication->getId(),
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_SHOW_PROGRESS => 'true',
-                \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $complex_content_object_id,
-                \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_DETAILS => $details
-            )
-        );
-    }
-
-    /**
-     * Returns the TreeNode for the current step
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode
-     */
-    public function getCurrentTreeNode()
-    {
-        return parent::getCurrentTreeNodeForLearningPath($this->getSelectedLearningPath());
-    }
-
-    public function save_assessment_answer($complex_question_id, $answer = '', $score = 0, $hint = '')
-    {
-        $this->trackingService->saveAnswerForQuestion(
-            $this->getSelectedLearningPath(),
-            $this->getUser(),
-            $this->getCurrentTreeNode(),
-            $complex_question_id,
-            $answer,
-            $score,
-            $hint
-        );
-    }
-
-    public function save_assessment_result($total_score)
-    {
-        $this->trackingService->saveAssessmentScore(
-            $this->getSelectedLearningPath(),
-            $this->getUser(),
-            $this->getCurrentTreeNode(),
-            $total_score
-        );
-    }
-
-    public function get_assessment_current_attempt_id()
-    {
-        return $this->get_parameter(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID
-        );
-    }
-
-    public function get_assessment_configuration()
-    {
-        return $this->getCurrentTreeNode()->getTreeNodeData()->getAssessmentConfiguration();
-    }
-
-    public function get_assessment_parameters()
-    {
-        return array(
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_LEARNING_PATH_ITEM_ID,
-            \Chamilo\Core\Repository\Display\Manager::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID,
-            \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID
-        );
-    }
-
-    /**
-     * Returns the assessment question attempts
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
-     */
-    public function get_assessment_question_attempts()
-    {
-        return $this->retrieve_question_attempts();
-    }
-
-    /**
-     * Retrieves the question attempts for the selected assessment attempt
-     *
-     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
-     */
-    protected function retrieve_question_attempts()
-    {
-        return $this->trackingService->getQuestionAttempts(
-            $this->getSelectedLearningPath(),
-            $this->getUser(),
-            $this->getCurrentTreeNode()
-        );
-    }
-
-    /**
-     * Registers the question ids
-     *
-     * @param int[] $question_ids
-     */
-    public function register_question_ids($question_ids)
-    {
-        $this->question_attempts = $this->trackingService->registerQuestionAttempts(
-            $this->getSelectedLearningPath(),
-            $this->getUser(),
-            $this->getCurrentTreeNode(),
-            $question_ids
-        );
-    }
-
-    /**
-     * Returns the registered question ids
-     *
-     * @return int[] $question_ids
-     */
-    public function get_registered_question_ids()
-    {
-        return array_keys($this->get_assessment_question_attempts());
-    }
-
-    public function get_assessment_question_attempt($complex_question_id)
-    {
-        return $this->retrieve_question_attempts()[$complex_question_id];
-    }
-
-    public function forum_topic_viewed($complex_topic_id)
-    {
-        $parameters = [];
-        $parameters[ForumTopicView::PROPERTY_USER_ID] = $this->get_user_id();
-        $parameters[ForumTopicView::PROPERTY_PUBLICATION_ID] = $this->get_publication()->getId();
-        $parameters[ForumTopicView::PROPERTY_FORUM_TOPIC_ID] = $complex_topic_id;
-
-        Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
-    }
-
-    public function forum_count_topic_views($complex_topic_id)
-    {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->get_publication()->getId())
-        );
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumTopicView::class, ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
-            new StaticConditionVariable($complex_topic_id)
-        );
-        $condition = new AndCondition($conditions);
-
-        return DataManager::count(ForumTopicView::class, new DataClassCountParameters($condition));
-    }
-
-    /**
-     * Returns whether or not the logged in user is a forum manager
-     *
-     * @param User $user
-     *
-     * @return bool
-     */
-    public function is_forum_manager($user)
-    {
-        return $this->get_course()->is_course_admin($user);
-    }
-
     public function get_wiki_page_statistics_reporting_template_name()
     {
         return WikiPageTemplate::class;
-    }
-
-    public function get_wiki_statistics_reporting_template_name()
-    {
-        return WikiTemplate::class;
     }
 
     public function get_wiki_publication()
@@ -528,34 +473,29 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         throw new Exception("Unimplemented method : " . __CLASS__ . ':' . __METHOD__);
     }
 
-    public function get_assessment_continue_url()
+    public function get_wiki_statistics_reporting_template_name()
     {
+        return WikiTemplate::class;
     }
 
-    public function get_assessment_back_url()
+    /**
+     * @return null|string
+     */
+    public function isEphorusEnabled()
     {
-    }
+        $ephorusToolRegistration =
+            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name('Ephorus');
 
-    public function get_assessment_current_url()
-    {
-        $parameters = [];
-        $parameters[\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_CHILD_ID] =
-            $this->getCurrentTreeNodeDataId();
+        if (!$ephorusToolRegistration)
+        {
+            return false;
+        }
 
-        return $this->get_url($parameters, array(Embedder::PARAM_EMBEDDED_CONTENT_OBJECT_ID));
-    }
+        $toolActive = CourseSettingsController::getInstance()->get_course_setting(
+            $this->get_course(), CourseSetting::COURSE_SETTING_TOOL_ACTIVE, $ephorusToolRegistration->get_id()
+        );
 
-// METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-            ($this->publication->get_allow_collaboration() ||
-                $this->publication->getContentObject()->get_owner_id() == $this->getUser()->getId());
-    }
-
-    public function is_allowed_to_view_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
+        return $toolActive;
     }
 
     public function is_allowed_to_add_child()
@@ -573,14 +513,83 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
+    public function is_allowed_to_edit_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            ($this->publication->get_allow_collaboration() ||
+                $this->publication->getContentObject()->get_owner_id() == $this->getUser()->getId());
+    }
+
     public function is_allowed_to_edit_feedback()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
+    // METHODS FOR COMPLEX DISPLAY RIGHTS
+
     public function is_allowed_to_edit_learning_path_attempt_data()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_view_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    function is_embedded()
+    {
+        $embedded_content_object_id = $this->get_embedded_content_object_id();
+
+        return isset($embedded_content_object_id);
+    }
+
+    /**
+     * Returns whether or not the logged in user is a forum manager
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function is_forum_manager($user)
+    {
+        return $this->get_course()->is_course_admin($user);
+    }
+
+    /**
+     * Registers the question ids
+     *
+     * @param int[] $question_ids
+     */
+    public function register_question_ids($question_ids)
+    {
+        $this->question_attempts = $this->trackingService->registerQuestionAttempts(
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode(), $question_ids
+        );
+    }
+
+    /**
+     *
+     * @param string $pageTitle
+     *
+     * @return string
+     */
+    public function render_header($pageTitle = '')
+    {
+        if ($this->is_embedded())
+        {
+            Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
+
+            return Application::render_header($pageTitle);
+        }
+        else
+        {
+            return parent::render_header($pageTitle);
+        }
     }
 
     /**
@@ -594,74 +603,38 @@ class ComplexDisplayComponent extends Manager implements LearningPathDisplaySupp
         return DataManager::retrieve_by_id(LearningPathTreeNodeAttempt::class, $learning_path_item_attempt_id);
     }
 
-    /**
-     * Checks the maximum allowed assessment attempts
-     */
-    protected function checkMaximumAssessmentAttempts()
+    public function retrieve_learning_path_tracker()
     {
-        if ($this->trackingService->isMaximumAttemptsReachedForAssessment(
-            $this->getSelectedLearningPath(),
-            $this->getUser(),
-            $this->getCurrentTreeNode()
-        ))
-        {
-            throw new Exception(
-                Translation::getInstance()->getTranslation(
-                    'YouHaveReachedYourMaximumAttempts',
-                    null,
-                    'Chamilo\Application\Weblcms\Tool\Implementation\Assessment'
-                )
-            );
-        }
+    }
+
+    public function retrieve_learning_path_tracker_items($learning_path_tracker)
+    {
     }
 
     /**
-     * Builds the TrackingService
+     * Retrieves the question attempts for the selected assessment attempt
      *
-     * @return TrackingService
+     * @return \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeQuestionAttempt[]
      */
-    public function buildTrackingService()
+    protected function retrieve_question_attempts()
     {
-        if (!isset($this->trackingService))
-        {
-            $this->trackingService = $this->createTrackingServiceForPublicationAndCourse(
-                (int) $this->publication->getId(),
-                (int) $this->get_course_id()
-            );
-        }
-
-        return $this->trackingService;
-    }
-
-    /**
-     * Returns the currently selected LearningPath
-     *
-     * @return LearningPath | ContentObject
-     */
-    protected function getSelectedLearningPath()
-    {
-        return $this->publication->getContentObject();
-    }
-
-    /**
-     * @return null|string
-     */
-    public function isEphorusEnabled()
-    {
-        $ephorusToolRegistration =
-            \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_course_tool_by_name('Ephorus');
-
-        if (!$ephorusToolRegistration)
-        {
-            return false;
-        }
-
-        $toolActive = CourseSettingsController::getInstance()->get_course_setting(
-            $this->get_course(),
-            CourseSetting::COURSE_SETTING_TOOL_ACTIVE,
-            $ephorusToolRegistration->get_id()
+        return $this->trackingService->getQuestionAttempts(
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode()
         );
+    }
 
-        return $toolActive;
+    public function save_assessment_answer($complex_question_id, $answer = '', $score = 0, $hint = '')
+    {
+        $this->trackingService->saveAnswerForQuestion(
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode(), $complex_question_id,
+            $answer, $score, $hint
+        );
+    }
+
+    public function save_assessment_result($total_score)
+    {
+        $this->trackingService->saveAssessmentScore(
+            $this->getSelectedLearningPath(), $this->getUser(), $this->getCurrentTreeNode(), $total_score
+        );
     }
 }

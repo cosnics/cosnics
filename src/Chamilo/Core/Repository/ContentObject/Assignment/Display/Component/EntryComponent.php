@@ -52,9 +52,9 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
 {
 
     /**
-     * @var ScoreService
+     * @var EntryNavigator
      */
-    protected $scoreService;
+    protected $entryNavigator;
 
     /**
      * @var Score
@@ -62,9 +62,9 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
     protected $score;
 
     /**
-     * @var EntryNavigator
+     * @var ScoreService
      */
-    protected $entryNavigator;
+    protected $scoreService;
 
     /**
      *
@@ -679,9 +679,13 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         return $this->getService(UserService::class);
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_ENTRY_ID, self::PARAM_ENTITY_ID, self::PARAM_ENTITY_TYPE);
+        $additionalParameters[] = self::PARAM_ENTRY_ID;
+        $additionalParameters[] = self::PARAM_ENTITY_ID;
+        $additionalParameters[] = self::PARAM_ENTITY_TYPE;
+
+        return $additionalParameters;
     }
 
     /**

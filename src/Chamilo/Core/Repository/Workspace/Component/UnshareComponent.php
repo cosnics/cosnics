@@ -13,8 +13,8 @@ use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException;
 use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -28,76 +28,51 @@ class UnshareComponent extends Manager
 
     /**
      *
-     * @var integer[]
-     */
-    private $selectedContentObjectIdentifiers;
-
-    /**
-     *
      * @var Workspace
      */
     protected $selectedWorkspace;
+
+    /**
+     *
+     * @var integer[]
+     */
+    private $selectedContentObjectIdentifiers;
 
     public function run()
     {
         $rightsService = RightsService::getInstance();
         $canDelete = $rightsService->canDeleteContentObjects($this->getUser(), $this->getCurrentWorkspace());
-        
-        if (! $canDelete)
+
+        if (!$canDelete)
         {
             throw new NotAllowedException();
         }
-        
+
         $selectedContentObjectIdentifiers = $this->getSelectedContentObjectIdentifiers();
-        
+
         if (empty($selectedContentObjectIdentifiers))
         {
             throw new NoObjectSelectedException(Translation::get('ContentObject'));
         }
-        
+
         $contentObjectRelationService = new ContentObjectRelationService(new ContentObjectRelationRepository());
-        
+
         foreach ($selectedContentObjectIdentifiers as $selectedContentObjectIdentifier)
         {
             $contentObject = DataManager::retrieve_by_id(ContentObject::class, $selectedContentObjectIdentifier);
-            
+
             $contentObjectRelationService->deleteContentObjectRelationByWorkspaceAndContentObjectIdentifier(
-                $this->getCurrentWorkspace(), 
-                $contentObject);
+                $this->getCurrentWorkspace(), $contentObject
+            );
         }
-        
+
         $source = Request::get(self::PARAM_BROWSER_SOURCE);
         $returnComponent = isset($source) ? $source : \Chamilo\Core\Repository\Manager::ACTION_BROWSE_CONTENT_OBJECTS;
-        
+
         $this->redirect(
-            Translation::get('ContentObjectsUnshared'), 
-            false, 
-            array(self::PARAM_ACTION => null, \Chamilo\Core\Repository\Manager::PARAM_ACTION => $returnComponent));
-    }
-
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Manager::get_additional_parameters()
-     */
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
-    }
-
-    /**
-     *
-     * @return integer[]
-     */
-    public function getSelectedContentObjectIdentifiers()
-    {
-        if (! isset($this->selectedContentObjectIdentifiers))
-        {
-            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
-                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, 
-                []);
-        }
-        
-        return $this->selectedContentObjectIdentifiers;
+            Translation::get('ContentObjectsUnshared'), false,
+            array(self::PARAM_ACTION => null, \Chamilo\Core\Repository\Manager::PARAM_ACTION => $returnComponent)
+        );
     }
 
     public function getCurrentWorkspace()
@@ -107,8 +82,24 @@ class UnshareComponent extends Manager
         {
             return $selectedWorkspace;
         }
-        
+
         return $this->get_application()->getWorkspace();
+    }
+
+    /**
+     *
+     * @return integer[]
+     */
+    public function getSelectedContentObjectIdentifiers()
+    {
+        if (!isset($this->selectedContentObjectIdentifiers))
+        {
+            $this->selectedContentObjectIdentifiers = (array) $this->getRequest()->get(
+                \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID, []
+            );
+        }
+
+        return $this->selectedContentObjectIdentifiers;
     }
 
     /**
@@ -117,19 +108,30 @@ class UnshareComponent extends Manager
      */
     public function getSelectedWorkspace()
     {
-        if (! isset($selectedWorkspace))
+        if (!isset($selectedWorkspace))
         {
             $workspaceIdentifier = $this->getRequest()->query->get(self::PARAM_SELECTED_WORKSPACE_ID);
             if (isset($workspaceIdentifier))
             {
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
-                
+
                 $this->selectedWorkspace = $workspaceService->determineWorkspaceForUserByIdentifier(
-                    $this->getUser(), 
-                    $workspaceIdentifier);
+                    $this->getUser(), $workspaceIdentifier
+                );
             }
         }
-        
+
         return $this->selectedWorkspace;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Manager::get_additional_parameters()
+     */
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return $additionalParameters;
     }
 }

@@ -11,6 +11,21 @@ use Chamilo\Libraries\Translation\Translation;
 class BrowserComponent extends Manager
 {
 
+    /**
+     *
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return $additionalParameters;
+    }
+
     public function get_tool_actions()
     {
         $tool_actions = [];
@@ -19,29 +34,16 @@ class BrowserComponent extends Manager
         {
 
             $tool_actions[] = new Button(
-                Translation::get('Reporting'),
-                new FontAwesomeGlyph('chart-bar'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'reporting',
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW,
-                        \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2)),
-                Button::DISPLAY_ICON_AND_LABEL);
+                Translation::get('Reporting'), new FontAwesomeGlyph('chart-bar'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => 'reporting',
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW,
+                    \Chamilo\Core\Reporting\Viewer\Manager::PARAM_BLOCK_ID => 2
+                )
+            ), Button::DISPLAY_ICON_AND_LABEL
+            );
         }
 
         return $tool_actions;
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
-    }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
     }
 }

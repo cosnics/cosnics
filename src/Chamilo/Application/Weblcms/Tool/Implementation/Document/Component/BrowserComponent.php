@@ -16,7 +16,6 @@ use Chamilo\Libraries\Format\Table\FormAction\TableFormAction;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -106,9 +105,11 @@ class BrowserComponent extends Manager
         );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return $additionalParameters;
     }
 
     public function get_tool_actions()

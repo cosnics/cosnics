@@ -70,8 +70,10 @@ class UpdateComponent extends Manager
      *
      * @return string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_COURSE_ID);
+        $additionalParameters[] = self::PARAM_COURSE_ID;
+
+        return $additionalParameters;
     }
 }

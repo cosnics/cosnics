@@ -107,8 +107,10 @@ class UpdateComponent extends CourseTypeFormActionComponent
      * 
      * @param string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_COURSE_TYPE_ID);
+        $additionalParameters[] = self::PARAM_COURSE_TYPE_ID;
+
+        return $additionalParameters;
     }
 }

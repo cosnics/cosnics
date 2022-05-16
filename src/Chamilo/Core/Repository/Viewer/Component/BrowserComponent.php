@@ -45,9 +45,9 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @var WorkspaceService
+     * @var FilterData
      */
-    protected $workspaceService;
+    protected $filterData;
 
     /**
      *
@@ -57,9 +57,9 @@ class BrowserComponent extends Manager implements TableSupport
 
     /**
      *
-     * @var FilterData
+     * @var WorkspaceService
      */
-    protected $filterData;
+    protected $workspaceService;
 
     public function run()
     {
@@ -237,9 +237,13 @@ class BrowserComponent extends Manager implements TableSupport
         );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PROPERTY_CATEGORY, self::PARAM_WORKSPACE_ID, self::PARAM_IN_WORKSPACES);
+        $additionalParameters[] = self::PROPERTY_CATEGORY;
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+        $additionalParameters[] = self::PARAM_IN_WORKSPACES;
+
+        return $additionalParameters;
     }
 
     /**

@@ -25,6 +25,23 @@ class UpdaterComponent extends TabComponent
 {
 
     /**
+     * Adds additional breadcrumbs
+     *
+     * @param BreadcrumbTrail $breadcrumb_trail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    {
+        $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
+
+        $breadcrumb_trail->add(
+            new Breadcrumb(
+                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)),
+                Translation::get($browserSource . 'Component')
+            )
+        );
+    }
+
+    /**
      * Executes this controller
      */
     public function build()
@@ -33,9 +50,9 @@ class UpdaterComponent extends TabComponent
 
         /** @var Workspace $workspace */
         $workspace = DataManager::retrieve_by_id(Workspace::class, $workspaceId);
-        
+
         $form = new WorkspaceForm($this->get_url(array(self::PARAM_WORKSPACE_ID => $workspace->getId())), $workspace);
-        
+
         if ($form->validate())
         {
             try
@@ -43,21 +60,20 @@ class UpdaterComponent extends TabComponent
                 $values = $form->exportValues();
                 $values[Workspace::PROPERTY_CREATOR_ID] = $workspace->getCreatorId();
                 $values[Workspace::PROPERTY_CREATION_DATE] = $workspace->getCreationDate();
-                
+
                 $workspaceService = new WorkspaceService(new WorkspaceRepository());
                 $success = $workspaceService->updateWorkspace($workspace, $values);
 
-                if($success)
+                if ($success)
                 {
                     $this->getWorkspaceExtensionManager()->workspaceUpdated($workspace, $this->getUser());
                 }
 
                 $translation = $success ? 'ObjectUpdated' : 'ObjectNotUpdated';
-                
+
                 $message = Translation::get(
-                    $translation, 
-                    array('OBJECT' => Translation::get('Workspace')), 
-                    Utilities::COMMON_LIBRARIES);
+                    $translation, array('OBJECT' => Translation::get('Workspace')), Utilities::COMMON_LIBRARIES
+                );
             }
             catch (Exception $ex)
             {
@@ -68,37 +84,25 @@ class UpdaterComponent extends TabComponent
             $source = $this->getRequest()->get(self::PARAM_BROWSER_SOURCE);
             $returnComponent = isset($source) ? $source : self::ACTION_BROWSE;
 
-            $this->redirect($message, ! $success, array(self::PARAM_ACTION => $returnComponent));
+            $this->redirect($message, !$success, array(self::PARAM_ACTION => $returnComponent));
         }
         else
         {
             $html = [];
-            
+
             $html[] = $this->render_header();
             $html[] = $form->toHtml();
             $html[] = $this->render_footer();
-            
+
             return implode(PHP_EOL, $html);
         }
     }
 
-    /**
-     * Adds additional breadcrumbs
-     * 
-     * @param BreadcrumbTrail $breadcrumb_trail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumb_trail)
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        $browserSource = $this->get_parameter(self::PARAM_BROWSER_SOURCE);
-        
-        $breadcrumb_trail->add(
-            new Breadcrumb(
-                $this->get_url(array(Manager::PARAM_ACTION => $browserSource)), 
-                Translation::get($browserSource . 'Component')));
-    }
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+        $additionalParameters[] = self::PARAM_BROWSER_SOURCE;
 
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_WORKSPACE_ID, self::PARAM_BROWSER_SOURCE);
+        return $additionalParameters;
     }
 }

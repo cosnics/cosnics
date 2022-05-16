@@ -33,16 +33,18 @@ class IntegrationLauncherComponent extends Manager
         $integrationPackage = $baseContext . '\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup';
 
         return $this->getApplicationFactory()->getApplication(
-            $integrationPackage,
-            new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
+            $integrationPackage, new ApplicationConfiguration($this->getRequest(), $this->getUser(), $this)
         )->run();
     }
 
     /**
      * @return array
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return [self::PARAM_BASE_CONTEXT, self::PARAM_COURSE_GROUP];
+        $additionalParameters[] = self::PARAM_BASE_CONTEXT;
+        $additionalParameters[] = self::PARAM_COURSE_GROUP;
+
+        return $additionalParameters;
     }
 }

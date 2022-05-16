@@ -44,9 +44,10 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
      *
      * @see \libraries\SubManager::get_additional_parameters()
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_STEP);
+        $additionalParameters[] = self::PARAM_STEP;
+        return $additionalParameters;
     }
 
     /**

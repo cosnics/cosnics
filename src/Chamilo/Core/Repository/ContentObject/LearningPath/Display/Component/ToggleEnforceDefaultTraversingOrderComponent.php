@@ -34,12 +34,12 @@ class ToggleEnforceDefaultTraversingOrderComponent extends Manager
             $learningPathService->toggleEnforceDefaultTraversingOrder($currentTreeNode);
             $success = true;
         }
-        catch(Exception $ex)
+        catch (Exception $ex)
         {
             $success = false;
         }
 
-        if($currentTreeNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
+        if ($currentTreeNode->getTreeNodeData()->enforcesDefaultTraversingOrder())
         {
             $translation = $success ? 'DefaultTraversingOrderEnforced' : 'DefaultTraversingOrderNotEnforced';
         }
@@ -49,18 +49,17 @@ class ToggleEnforceDefaultTraversingOrderComponent extends Manager
         }
 
         $this->redirect(
-            Translation::getInstance()->getTranslation($translation),
-            !$success,
-            array(
+            Translation::getInstance()->getTranslation($translation), !$success, array(
                 self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
                 self::PARAM_CHILD_ID => $this->getCurrentTreeNodeDataId()
-            ),
-            array(self::PARAM_CONTENT_OBJECT_ID)
+            ), array(self::PARAM_CONTENT_OBJECT_ID)
         );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_CHILD_ID);
+        $additionalParameters[] = self::PARAM_CHILD_ID;
+
+        return $additionalParameters;
     }
 }

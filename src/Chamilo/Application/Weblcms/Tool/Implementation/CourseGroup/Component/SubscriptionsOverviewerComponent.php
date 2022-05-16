@@ -25,7 +25,6 @@ use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -131,9 +130,12 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return $additionalParameters;
     }
 
     public function get_condition()
@@ -297,7 +299,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     {
         $html = [];
 
-        foreach($course_groups as $course_group)
+        foreach ($course_groups as $course_group)
         {
             $this->table_course_group_id = $course_group->get_id();
 

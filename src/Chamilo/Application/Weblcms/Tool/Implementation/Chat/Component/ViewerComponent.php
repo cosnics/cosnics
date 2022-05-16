@@ -26,8 +26,10 @@ class ViewerComponent extends Manager
         $breadcrumbtrail->add_help('weblcms_tool_chat_viewer');
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 }

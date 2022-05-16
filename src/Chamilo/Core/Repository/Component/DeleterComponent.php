@@ -10,14 +10,15 @@ use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
  *
  * @package repository.lib.repository_manager.component
  */
+
 /**
  * Repository manager component which provides functionality to delete a content object from the users repository.
  */
@@ -31,9 +32,9 @@ class DeleterComponent extends Manager
     {
         $ids = $this->getRequest()->get(self::PARAM_CONTENT_OBJECT_ID);
 
-        if (! empty($ids))
+        if (!empty($ids))
         {
-            if (! is_array($ids))
+            if (!is_array($ids))
             {
                 $ids = array($ids);
             }
@@ -49,31 +50,30 @@ class DeleterComponent extends Manager
                 $unlinkAllowed = $this->getPublicationAggregator()->canContentObjectBeUnlinked($object);
 
                 if (RightsService::getInstance()->canDestroyContentObject(
-                    $this->get_user(),
-                    $object,
-                    $this->getWorkspace()))
+                    $this->get_user(), $object, $this->getWorkspace()
+                ))
                 {
                     if ($delete_version)
                     {
                         if (\Chamilo\Core\Repository\Storage\DataManager::content_object_deletion_allowed(
-                            $object,
-                            'version'))
+                            $object, 'version'
+                        ))
                         {
-                            if (! $object->delete(true))
+                            if (!$object->delete(true))
                             {
                                 $failures ++;
                             }
                             else
                             {
                                 Event::trigger(
-                                    'Activity',
-                                    Manager::context(),
-                                    array(
+                                    'Activity', Manager::context(), array(
                                         Activity::PROPERTY_TYPE => Activity::ACTIVITY_DELETED,
                                         Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                         Activity::PROPERTY_DATE => time(),
                                         Activity::PROPERTY_CONTENT_OBJECT_ID => $object->get_id(),
-                                        Activity::PROPERTY_CONTENT => $object->get_title()));
+                                        Activity::PROPERTY_CONTENT => $object->get_title()
+                                    )
+                                );
                             }
                         }
                         else
@@ -90,27 +90,27 @@ class DeleterComponent extends Manager
                                 $versions = $object->get_content_object_versions();
                                 foreach ($versions as $version)
                                 {
-                                    if (! $version->delete())
+                                    if (!$version->delete())
                                     {
                                         $failures ++;
                                     }
                                     else
                                     {
                                         Event::trigger(
-                                            'Activity',
-                                            Manager::context(),
-                                            array(
+                                            'Activity', Manager::context(), array(
                                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_DELETED,
                                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                                 Activity::PROPERTY_DATE => time(),
                                                 Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
-                                                Activity::PROPERTY_CONTENT => $version->get_title()));
+                                                Activity::PROPERTY_CONTENT => $version->get_title()
+                                            )
+                                        );
                                     }
                                 }
                             }
                             elseif ($recycled)
                             {
-                                if(!$unlinkAllowed)
+                                if (!$unlinkAllowed)
                                 {
                                     $failures ++;
                                     continue;
@@ -119,21 +119,21 @@ class DeleterComponent extends Manager
                                 $versions = $object->get_content_object_versions();
                                 foreach ($versions as $version)
                                 {
-                                    if (! $version->recycle())
+                                    if (!$version->recycle())
                                     {
                                         $failures ++;
                                     }
                                     else
                                     {
                                         Event::trigger(
-                                            'Activity',
-                                            Manager::context(),
-                                            array(
+                                            'Activity', Manager::context(), array(
                                                 Activity::PROPERTY_TYPE => Activity::ACTIVITY_RECYCLE,
                                                 Activity::PROPERTY_USER_ID => $this->get_user_id(),
                                                 Activity::PROPERTY_DATE => time(),
                                                 Activity::PROPERTY_CONTENT_OBJECT_ID => $version->get_id(),
-                                                Activity::PROPERTY_CONTENT => $version->get_title()));
+                                                Activity::PROPERTY_CONTENT => $version->get_title()
+                                            )
+                                        );
                                     }
                                 }
                             }
@@ -197,17 +197,18 @@ class DeleterComponent extends Manager
             }
 
             $parameters = [];
-            $parameters[Application::PARAM_ACTION] = ($permanent ? self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS : self::ACTION_BROWSE_CONTENT_OBJECTS);
+            $parameters[Application::PARAM_ACTION] =
+                ($permanent ? self::ACTION_BROWSE_RECYCLED_CONTENT_OBJECTS : self::ACTION_BROWSE_CONTENT_OBJECTS);
 
             $this->redirect(
-                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES),
-                $failures > 0,
-                $parameters);
+                Translation::get($message, $parameter, Utilities::COMMON_LIBRARIES), $failures > 0, $parameters
+            );
         }
         else
         {
             return $this->display_error_page(
-                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES)));
+                htmlentities(Translation::get('NoObjectSelected', null, Utilities::COMMON_LIBRARIES))
+            );
         }
     }
 
@@ -216,17 +217,19 @@ class DeleterComponent extends Manager
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(array(self::PARAM_ACTION => self::ACTION_BROWSE_CONTENT_OBJECTS)),
-                Translation::get('BrowserComponent')));
+                Translation::get('BrowserComponent')
+            )
+        );
         $breadcrumbtrail->add_help('repository_deleter');
     }
 
-    public function get_additional_parameters($additionalParameters = [])
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return parent::get_additional_parameters(
-            array(
-                self::PARAM_CONTENT_OBJECT_ID,
-                self::PARAM_DELETE_VERSION,
-                self::PARAM_DELETE_PERMANENTLY,
-                self::PARAM_DELETE_RECYCLED));
+        $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
+        $additionalParameters[] = self::PARAM_DELETE_VERSION;
+        $additionalParameters[] = self::PARAM_DELETE_PERMANENTLY;
+        $additionalParameters[] = self::PARAM_DELETE_RECYCLED;
+
+        return $additionalParameters;
     }
 }

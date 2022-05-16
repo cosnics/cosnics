@@ -17,9 +17,11 @@ use Chamilo\Libraries\Translation\Translation;
 class ViewerComponent extends Manager
 {
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 
     /**
@@ -33,27 +35,22 @@ class ViewerComponent extends Manager
         $publication_id = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
 
         $actions[] = new Button(
-            Translation::get('BrowseSubmitters'),
-            new FontAwesomeGlyph('folder-open'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
-                )
+            Translation::get('BrowseSubmitters'), new FontAwesomeGlyph('folder-open'), $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id
             )
+        )
         );
 
         $actions[] = new Button(
-            Translation::get('SubmissionSubmit'),
-            new FontAwesomeGlyph('plus'),
-            $this->get_url(
-                array(
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
-                    \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
-                )
-            ),
-            Button::DISPLAY_ICON_AND_LABEL
+            Translation::get('SubmissionSubmit'), new FontAwesomeGlyph('plus'), $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_DISPLAY,
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication_id,
+                \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::PARAM_ACTION => \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::ACTION_CREATE
+            )
+        ), Button::DISPLAY_ICON_AND_LABEL
         );
 
         return $actions;

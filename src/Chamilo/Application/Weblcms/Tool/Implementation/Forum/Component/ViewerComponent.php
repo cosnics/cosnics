@@ -15,13 +15,13 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -36,9 +36,9 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
      */
     protected $publication;
 
-    private $root_content_object;
-
     private $publication_id;
+
+    private $root_content_object;
 
     public function run()
     {
@@ -53,16 +53,16 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
 
         $this->publication = $publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->publication_id);
+            ContentObjectPublication::class, $this->publication_id
+        );
 
-        if (! $this->publication instanceof ContentObjectPublication ||
-             ! $this->publication->getContentObject() instanceof Forum)
+        if (!$this->publication instanceof ContentObjectPublication ||
+            !$this->publication->getContentObject() instanceof Forum)
         {
             throw new ObjectNotExistException($publicationTranslation, $this->publication_id);
         }
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $publication))
         {
             throw new NotAllowedException();
         }
@@ -73,7 +73,8 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         {
             Request::set_get(
                 \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
-                \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM);
+                \Chamilo\Core\Repository\ContentObject\Forum\Display\Manager::ACTION_VIEW_FORUM
+            );
         }
 
         $this->root_content_object = $publication->get_content_object();
@@ -84,26 +85,33 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         }
 
         \Chamilo\Application\Weblcms\Storage\DataManager::log_course_module_access(
-            $this->get_course_id(),
-            $this->get_user_id(),
-            $publication->get_tool(),
-            $publication->get_category_id());
+            $this->get_course_id(), $this->get_user_id(), $publication->get_tool(), $publication->get_category_id()
+        );
 
         $context = Forum::package() . '\Display';
 
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
-    public function get_root_content_object()
+    public function forum_count_topic_views($complex_topic_id)
     {
-        return $this->root_content_object;
-    }
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ForumTopicView::class, ForumTopicView::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($this->publication_id)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                ForumTopicView::class, ForumTopicView::PROPERTY_FORUM_TOPIC_ID
+            ), new StaticConditionVariable($complex_topic_id)
+        );
+        $condition = new AndCondition($conditions);
 
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return DataManager::count(
+            ForumTopicView::class, new DataClassCountParameters($condition)
+        );
     }
 
     public function forum_topic_viewed($complex_topic_id)
@@ -116,23 +124,49 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         Event::trigger('ViewForumTopic', \Chamilo\Application\Weblcms\Manager::context(), $parameters);
     }
 
-    public function forum_count_topic_views($complex_topic_id)
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ForumTopicView::class,
-                ForumTopicView::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($this->publication_id));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                ForumTopicView::class,
-                ForumTopicView::PROPERTY_FORUM_TOPIC_ID),
-            new StaticConditionVariable($complex_topic_id));
-        $condition = new AndCondition($conditions);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
 
-        return DataManager::count(
-            ForumTopicView::class,
-            new DataClassCountParameters($condition));
+        return $additionalParameters;
+    }
+
+    public function get_root_content_object()
+    {
+        return $this->root_content_object;
+    }
+
+    public function is_allowed_to_add_child()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    // METHODS FOR COMPLEX DISPLAY RIGHTS
+
+    public function is_allowed_to_delete_child()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_delete_feedback()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_edit_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            $this->publication->get_allow_collaboration();
+    }
+
+    public function is_allowed_to_edit_feedback()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_view_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
 
     /**
@@ -151,49 +185,17 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
 
             $is_forum_manager = ($course->get_titular_id() == $user->get_id());
 
-            if (! $is_forum_manager)
+            if (!$is_forum_manager)
             {
                 $is_forum_manager = $course->is_course_admin($user);
             }
         }
 
-        if (! $is_forum_manager)
+        if (!$is_forum_manager)
         {
             $is_forum_manager = $this->is_allowed(WeblcmsRights::ADD_RIGHT, $this->publication);
         }
 
         return $is_forum_manager;
-    }
-
-    // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-             $this->publication->get_allow_collaboration();
-    }
-
-    public function is_allowed_to_view_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_add_child()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_delete_child()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_delete_feedback()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
-    }
-
-    public function is_allowed_to_edit_feedback()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 }

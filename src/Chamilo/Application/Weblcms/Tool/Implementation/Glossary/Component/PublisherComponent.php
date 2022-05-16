@@ -15,16 +15,20 @@ class PublisherComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE)), 
-                Translation::get('BrowserComponent')));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE
+                    )
+                ), Translation::get('BrowserComponent')
+            )
+        );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, 
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION, 
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES, 
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_WORKSPACE_ID);
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_WORKSPACE_ID;
+
+        return $additionalParameters;
     }
 }

@@ -13,7 +13,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
 
     public function run()
     {
-        if (! $this->get_course()->is_course_admin($this->get_user()))
+        if (!$this->get_course()->is_course_admin($this->get_user()))
         {
             throw new NotAllowedException();
         }
@@ -21,21 +21,13 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         $request = $this->getRequest();
         $request->query->set(
             \Chamilo\Application\Weblcms\Tool\Action\Manager::PARAM_ACTION,
-            \Chamilo\Application\Weblcms\Tool\Action\Manager::RIGHTS_EDITOR_COMPONENT);
+            \Chamilo\Application\Weblcms\Tool\Action\Manager::RIGHTS_EDITOR_COMPONENT
+        );
 
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Application\Weblcms\Tool\Action\Manager::context(),
-            new ApplicationConfiguration($request, $this->getUser(), $this))->run();
-    }
-
-    public function get_available_rights($location)
-    {
-        return WeblcmsRights::get_available_rights($location);
-    }
-
-    public function get_additional_parameters()
-    {
-        array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+            new ApplicationConfiguration($request, $this->getUser(), $this)
+        )->run();
     }
 
     /**
@@ -44,5 +36,17 @@ class RightsEditorComponent extends Manager implements DelegateComponent
      */
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
+    }
+
+    public function get_available_rights($location)
+    {
+        return WeblcmsRights::get_available_rights($location);
     }
 }

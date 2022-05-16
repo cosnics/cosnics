@@ -15,13 +15,13 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Page;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
 
 /**
@@ -73,38 +73,40 @@ class AttemptResultViewerComponent extends Manager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ID),
-            new StaticConditionVariable($assessment_attempt_id));
+            new StaticConditionVariable($assessment_attempt_id)
+        );
 
         $this->assessment_attempt = DataManager::retrieve(
-            AssessmentAttempt::class,
-            new DataClassRetrieveParameters($condition));
+            AssessmentAttempt::class, new DataClassRetrieveParameters($condition)
+        );
 
-        if (! $this->assessment_attempt)
+        if (!$this->assessment_attempt)
         {
             $this->redirect(
-                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
-                true,
-                [],
-                array(
+                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES), true, [], array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                )
+            );
         }
 
         $this->assessment_publication = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $this->assessment_attempt->get_assessment_id());
+            ContentObjectPublication::class, $this->assessment_attempt->get_assessment_id()
+        );
 
         $parameters = new DataClassRetrieveParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
-                new StaticConditionVariable($this->assessment_publication->get_id())));
+                new StaticConditionVariable($this->assessment_publication->get_id())
+            )
+        );
         $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->assessment_publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->assessment_publication))
         {
             throw new NotAllowedException();
         }
-        elseif (! $this->is_allowed(WeblcmsRights::EDIT_RIGHT))
+        elseif (!$this->is_allowed(WeblcmsRights::EDIT_RIGHT))
         {
             if ($this->get_user_id() != $this->assessment_attempt->get_user_id())
             {
@@ -114,7 +116,7 @@ class AttemptResultViewerComponent extends Manager
             {
                 throw new NotAllowedException();
             }
-            elseif (! $assessment_publication->get_configuration()->show_feedback())
+            elseif (!$assessment_publication->get_configuration()->show_feedback())
             {
                 throw new NotAllowedException();
             }
@@ -127,13 +129,153 @@ class AttemptResultViewerComponent extends Manager
 
         $this->getRequest()->query->set(
             \Chamilo\Core\Repository\Display\Manager::PARAM_ACTION,
-            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT);
+            \Chamilo\Core\Repository\ContentObject\Assessment\Display\Manager::ACTION_VIEW_ASSESSMENT_RESULT
+        );
 
         $context = $assessment->package() . '\Display';
 
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
+    }
+
+    /**
+     * Add a breadcrumb with the title of the assessment
+     *
+     * @param $assessment Assessment
+     */
+    protected function add_assessment_title_breadcrumb($assessment)
+    {
+        $breadcrumb_trail = BreadcrumbTrail::getInstance();
+        $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
+
+        $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
+            $this->get_url(
+                array(self::PARAM_ACTION => self::ACTION_VIEW_RESULTS),
+                array(self::PARAM_USER_ASSESSMENT, self::PARAM_SHOW_FULL)
+            ), Translation::get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title()))
+        );
+
+        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
+
+        $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
+            $this->assessment_attempt->get_user_id()
+        );
+
+        $breadcrumb_trail->add(
+            new Breadcrumb($this->get_url(), Translation::get('ViewResultsForUser', array('USER' => $user_fullname)))
+        );
+    }
+
+    /**
+     * Returns whether or not the answer data can be changed
+     *
+     * @return bool
+     */
+    public function can_change_answer_data()
+    {
+        if (Request::get(self::PARAM_SHOW_FULL))
+        {
+            return $this->assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED &&
+                $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+        }
+
+        return false;
+    }
+
+    /**
+     * Changes the answer data
+     *
+     * @param int $question_cid
+     * @param int $score
+     * @param string $feedback
+     */
+    public function change_answer_data($question_cid, $score, $feedback)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
+            new StaticConditionVariable($this->assessment_attempt->get_id())
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
+            new StaticConditionVariable($question_cid)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $question_attempt = DataManager::retrieve(
+            QuestionAttempt::class, new DataClassRetrieveParameters($condition)
+        );
+
+        $question_attempt->set_score($score);
+        $question_attempt->set_feedback($feedback);
+        $question_attempt->update();
+    }
+
+    /**
+     * Changes the total score
+     *
+     * @param int $total_score
+     */
+    public function change_total_score($total_score)
+    {
+        $this->assessment_attempt->set_total_score($total_score);
+        $this->assessment_attempt->update();
+    }
+
+    /**
+     * Returns the parameters for automatic registration
+     *
+     * @return array
+     */
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_ASSESSMENT;
+        $additionalParameters[] = self::PARAM_USER_ASSESSMENT;
+        $additionalParameters[] = self::PARAM_SHOW_FULL;
+
+        return $additionalParameters;
+    }
+
+    public function get_assessment_configuration()
+    {
+        $parameters = new DataClassRetrieveParameters(
+            new EqualityCondition(
+                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
+                new StaticConditionVariable($this->assessment_publication->get_id())
+            )
+        );
+        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
+
+        return $assessment_publication->get_configuration();
+    }
+
+    /**
+     * Returns the assessment parameters
+     *
+     * @return array
+     */
+    public function get_assessment_parameters()
+    {
+        return [];
+    }
+
+    /**
+     * Returns the assessment question attempts
+     *
+     * @return QuestionAttempt[]
+     */
+    public function get_assessment_question_attempts()
+    {
+        if (is_null($this->question_attempts))
+        {
+            $this->question_attempts = $this->retrieve_question_attempts();
+        }
+
+        return $this->question_attempts;
     }
 
     /**
@@ -155,43 +297,13 @@ class AttemptResultViewerComponent extends Manager
     }
 
     /**
-     * Returns the assessment question attempts
+     * Returns the root content object
      *
-     * @return QuestionAttempt[]
+     * @return Assessment
      */
-    public function get_assessment_question_attempts()
+    public function get_root_content_object()
     {
-        if (is_null($this->question_attempts))
-        {
-            $this->question_attempts = $this->retrieve_question_attempts();
-        }
-
-        return $this->question_attempts;
-    }
-
-    /**
-     * Retrieves the question attempts for the selected assessment attempt
-     *
-     * @return QuestionAttempt[]
-     */
-    protected function retrieve_question_attempts()
-    {
-        $question_attempts = [];
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
-            new StaticConditionVariable($this->assessment_attempt->get_id()));
-
-        $question_attempts_result_set = DataManager::retrieves(
-            QuestionAttempt::class,
-            new DataClassRetrievesParameters($condition));
-
-        foreach($question_attempts_result_set as $question_attempt)
-        {
-            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
-        }
-
-        return $question_attempts;
+        return $this->assessment;
     }
 
     /**
@@ -201,7 +313,7 @@ class AttemptResultViewerComponent extends Manager
     {
         $html = [];
 
-        if (! Request::get(self::PARAM_SHOW_FULL))
+        if (!Request::get(self::PARAM_SHOW_FULL))
         {
             Page::getInstance()->setViewMode(Page::VIEW_MODE_HEADERLESS);
             $html[] = Application::render_header($pageTitle);
@@ -231,155 +343,60 @@ class AttemptResultViewerComponent extends Manager
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ID),
-                new StaticConditionVariable($question_attempt_id));
+                new StaticConditionVariable($question_attempt_id)
+            );
         }
         else
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
-                    QuestionAttempt::class,
-                    QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
-                new StaticConditionVariable($this->assessment_attempt->get_id()));
+                    QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID
+                ), new StaticConditionVariable($this->assessment_attempt->get_id())
+            );
         }
 
         $question_attempts = DataManager::retrieves(
-            QuestionAttempt::class,
-            new DataClassRetrievesParameters($condition));
+            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+        );
 
         $results = [];
 
-        foreach($question_attempts as $question_attempt)
+        foreach ($question_attempts as $question_attempt)
         {
             $results[$question_attempt->get_question_complex_id()] = array(
                 'answer' => $question_attempt->get_answer(),
                 'feedback' => $question_attempt->get_feedback(),
                 'score' => $question_attempt->get_score(),
-                'hint' => $question_attempt->get_hint());
+                'hint' => $question_attempt->get_hint()
+            );
         }
 
         return $results;
     }
 
     /**
-     * Changes the answer data
+     * Retrieves the question attempts for the selected assessment attempt
      *
-     * @param int $question_cid
-     * @param int $score
-     * @param string $feedback
+     * @return QuestionAttempt[]
      */
-    public function change_answer_data($question_cid, $score, $feedback)
+    protected function retrieve_question_attempts()
     {
-        $conditions = [];
+        $question_attempts = [];
 
-        $conditions[] = new EqualityCondition(
+        $condition = new EqualityCondition(
             new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_ASSESSMENT_ATTEMPT_ID),
-            new StaticConditionVariable($this->assessment_attempt->get_id()));
+            new StaticConditionVariable($this->assessment_attempt->get_id())
+        );
 
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID),
-            new StaticConditionVariable($question_cid));
+        $question_attempts_result_set = DataManager::retrieves(
+            QuestionAttempt::class, new DataClassRetrievesParameters($condition)
+        );
 
-        $condition = new AndCondition($conditions);
-
-        $question_attempt = DataManager::retrieve(
-            QuestionAttempt::class,
-            new DataClassRetrieveParameters($condition));
-
-        $question_attempt->set_score($score);
-        $question_attempt->set_feedback($feedback);
-        $question_attempt->update();
-    }
-
-    /**
-     * Changes the total score
-     *
-     * @param int $total_score
-     */
-    public function change_total_score($total_score)
-    {
-        $this->assessment_attempt->set_total_score($total_score);
-        $this->assessment_attempt->update();
-    }
-
-    /**
-     * Returns whether or not the answer data can be changed
-     *
-     * @return bool
-     */
-    public function can_change_answer_data()
-    {
-        if (Request::get(self::PARAM_SHOW_FULL))
+        foreach ($question_attempts_result_set as $question_attempt)
         {
-            return $this->assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED &&
-                 $this->is_allowed(WeblcmsRights::EDIT_RIGHT);
+            $question_attempts[$question_attempt->get_question_complex_id()] = $question_attempt;
         }
 
-        return false;
-    }
-
-    /**
-     * Returns the root content object
-     *
-     * @return Assessment
-     */
-    public function get_root_content_object()
-    {
-        return $this->assessment;
-    }
-
-    /**
-     * Returns the assessment parameters
-     *
-     * @return array
-     */
-    public function get_assessment_parameters()
-    {
-        return [];
-    }
-
-    /**
-     * Returns the parameters for automatic registration
-     *
-     * @return array
-     */
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_ASSESSMENT, self::PARAM_USER_ASSESSMENT, self::PARAM_SHOW_FULL);
-    }
-
-    /**
-     * Add a breadcrumb with the title of the assessment
-     *
-     * @param $assessment Assessment
-     */
-    protected function add_assessment_title_breadcrumb($assessment)
-    {
-        $breadcrumb_trail = BreadcrumbTrail::getInstance();
-        $breadcrumbs = $breadcrumb_trail->get_breadcrumbs();
-
-        $breadcrumbs[$breadcrumb_trail->size() - 1] = new Breadcrumb(
-            $this->get_url(
-                array(self::PARAM_ACTION => self::ACTION_VIEW_RESULTS),
-                array(self::PARAM_USER_ASSESSMENT, self::PARAM_SHOW_FULL)),
-            Translation::get('ViewResultsForAssessment', array('TITLE' => $assessment->get_title())));
-
-        $breadcrumb_trail->set_breadcrumbtrail($breadcrumbs);
-
-        $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user(
-            $this->assessment_attempt->get_user_id());
-
-        $breadcrumb_trail->add(
-            new Breadcrumb($this->get_url(), Translation::get('ViewResultsForUser', array('USER' => $user_fullname))));
-    }
-
-    public function get_assessment_configuration()
-    {
-        $parameters = new DataClassRetrieveParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
-                new StaticConditionVariable($this->assessment_publication->get_id())));
-        $assessment_publication = DataManager::retrieve(Publication::class, $parameters);
-
-        return $assessment_publication->get_configuration();
+        return $question_attempts;
     }
 }

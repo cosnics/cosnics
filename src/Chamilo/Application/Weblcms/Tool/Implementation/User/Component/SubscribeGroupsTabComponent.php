@@ -29,16 +29,11 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
 {
 
     /**
+     * The current selected group
      *
-     * @var ButtonToolBarRenderer
+     * @var Group
      */
-    protected $rootButtonToolbarRenderer;
-
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    protected $tabButtonToolbarRenderer;
+    protected $currentGroup;
 
     /**
      * The currently selected group id
@@ -48,6 +43,12 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     protected $groupId;
 
     /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    protected $rootButtonToolbarRenderer;
+
+    /**
      * The root group
      *
      * @var Group
@@ -55,18 +56,17 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
     protected $rootGroup;
 
     /**
-     * The current selected group
-     *
-     * @var Group
-     */
-    protected $currentGroup;
-
-    /**
      * The subscribed group ids
      *
      * @var int[]
      */
     protected $subscribedGroups;
+
+    /**
+     *
+     * @var ButtonToolBarRenderer
+     */
+    protected $tabButtonToolbarRenderer;
 
     /**
      * The translator service
@@ -242,9 +242,12 @@ abstract class SubscribeGroupsTabComponent extends Manager implements TableSuppo
      *
      * @return array
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return $additionalParameters;
     }
 
     /**

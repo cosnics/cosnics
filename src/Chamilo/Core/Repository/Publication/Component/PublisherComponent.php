@@ -1,16 +1,15 @@
 <?php
 namespace Chamilo\Core\Repository\Publication\Component;
 
-use Chamilo\Core\Repository\Publication\Domain\PublicationResult;
 use Chamilo\Core\Repository\Publication\Form\PublicationTargetForm;
 use Chamilo\Core\Repository\Publication\Manager;
+use Chamilo\Core\Repository\Publication\PublicationProcessor;
 use Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer;
 use Chamilo\Core\Repository\Publication\Service\PublicationTargetProcessor;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
-use Chamilo\Core\Repository\Publication\PublicationProcessor;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -75,12 +74,11 @@ class PublisherComponent extends Manager implements DelegateComponent
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
+     * @return \Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer
      */
-    public function get_additional_parameters()
+    public function getPublicationResultsRenderer()
     {
-        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+        return $this->getService(PublicationResultsRenderer::class);
     }
 
     /**
@@ -89,14 +87,6 @@ class PublisherComponent extends Manager implements DelegateComponent
     public function getPublicationTargetProcessor()
     {
         return $this->getService(PublicationTargetProcessor::class);
-    }
-
-    /**
-     * @return \Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer
-     */
-    public function getPublicationResultsRenderer()
-    {
-        return $this->getService(PublicationResultsRenderer::class);
     }
 
     /**
@@ -125,5 +115,16 @@ class PublisherComponent extends Manager implements DelegateComponent
         return DataManager::retrieve_content_objects(
             ContentObject::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
+     */
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return $additionalParameters;
     }
 }

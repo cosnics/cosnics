@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Bridge\Assignment\AssignmentServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\EphorusServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\FeedbackServiceBridge;
 use Chamilo\Application\Weblcms\Bridge\Assignment\NotificationServiceBridge;
-use Chamilo\Application\Weblcms\CourseSettingsController;
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
@@ -70,10 +69,8 @@ class DisplayComponent extends Manager implements DelegateComponent
         $applicationFactory->setAssignmentDataProvider($assignmentDataProvider);
 
         return $applicationFactory->getApplication(
-            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(),
-            $configuration
+            \Chamilo\Core\Repository\ContentObject\Assignment\Display\Manager::context(), $configuration
         )->run();
-
     }
 
     /**
@@ -114,14 +111,11 @@ class DisplayComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
-     *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory
      */
-    public function get_root_content_object()
+    public function getApplicationFactory()
     {
-        return $this->getContentObjectPublication()->getContentObject();
+        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
     }
 
     /**
@@ -155,18 +149,23 @@ class DisplayComponent extends Manager implements DelegateComponent
     }
 
     /**
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\ApplicationFactory
+     * @return string[]
      */
-    public function getApplicationFactory()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return new ApplicationFactory($this->getRequest(), StringUtilities::getInstance(), Translation::getInstance());
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 
     /**
-     * @return string[]
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject
+     *
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\NoObjectSelectedException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      */
-    public function get_additional_parameters()
+    public function get_root_content_object()
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        return $this->getContentObjectPublication()->getContentObject();
     }
 }

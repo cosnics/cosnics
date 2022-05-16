@@ -13,7 +13,6 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
-use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -109,7 +108,7 @@ class ShareComponent extends Manager implements TableSupport
 
                 $toolbar = new Toolbar(Toolbar::TYPE_VERTICAL);
 
-                foreach($contentObjects as $contentObject)
+                foreach ($contentObjects as $contentObject)
                 {
                     $viewUrl = new Redirect(
                         array(
@@ -218,9 +217,11 @@ class ShareComponent extends Manager implements TableSupport
      *
      * @see \Chamilo\Core\Repository\Manager::get_additional_parameters()
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID);
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return $additionalParameters;
     }
 
     /**

@@ -95,9 +95,12 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_EDIT_ID, self::PARAM_CONTENT_OBJECT_TYPE);
+        $additionalParameters[] = self::PARAM_EDIT_ID;
+        $additionalParameters[] = self::PARAM_CONTENT_OBJECT_TYPE;
+
+        return $additionalParameters;
     }
 
     /**

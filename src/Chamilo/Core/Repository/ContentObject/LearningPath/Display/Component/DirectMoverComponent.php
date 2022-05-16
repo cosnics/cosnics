@@ -70,9 +70,7 @@ class DirectMoverComponent extends Manager
             $content_object = $currentNode->getContentObject();
 
             Event::trigger(
-                'Activity',
-                \Chamilo\Core\Repository\Manager::context(),
-                array(
+                'Activity', \Chamilo\Core\Repository\Manager::context(), array(
                     Activity::PROPERTY_TYPE => Activity::ACTIVITY_UPDATED,
                     Activity::PROPERTY_USER_ID => $this->get_user_id(),
                     Activity::PROPERTY_DATE => time(),
@@ -84,8 +82,7 @@ class DirectMoverComponent extends Manager
 
         $message = htmlentities(
             Translation::get(
-                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                array('OBJECT' => Translation::get('ContentObject')),
+                ($success ? 'ObjectUpdated' : 'ObjectNotUpdated'), array('OBJECT' => Translation::get('ContentObject')),
                 Utilities::COMMON_LIBRARIES
             )
         );
@@ -97,8 +94,11 @@ class DirectMoverComponent extends Manager
         $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
+        $additionalParameters[] = self::PARAM_CHILD_ID;
+        $additionalParameters[] = self::PARAM_FULL_SCREEN;
+
+        return $additionalParameters;
     }
 }

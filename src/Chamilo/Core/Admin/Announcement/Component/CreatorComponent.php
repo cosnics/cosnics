@@ -86,12 +86,12 @@ class CreatorComponent extends Manager implements ViewerInterface
     /**
      * @return string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION
-        );
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION;
+
+        return $additionalParameters;
     }
 
     /**

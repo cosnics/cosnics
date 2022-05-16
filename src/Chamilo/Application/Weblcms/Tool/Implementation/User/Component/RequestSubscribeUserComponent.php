@@ -28,23 +28,18 @@ class RequestSubscribeUserComponent extends Manager
 
         $course_management_rights = CourseManagementRights::getInstance();
 
-        if (! $this->get_user()->is_platform_admin() && ! $course_management_rights->is_allowed_management(
-            CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT,
-            $this->get_course_id(),
-            CourseManagementRights::TYPE_COURSE,
-            Request::get(self::PARAM_OBJECTS)))
+        if (!$this->get_user()->is_platform_admin() && !$course_management_rights->is_allowed_management(
+                CourseManagementRights::TEACHER_REQUEST_SUBSCRIBE_RIGHT, $this->get_course_id(),
+                CourseManagementRights::TYPE_COURSE, Request::get(self::PARAM_OBJECTS)
+            ))
         {
             throw new NotAllowedException();
         }
 
         $form = new CourseRequestForm(
-            CourseRequestForm::TYPE_CREATE,
-            $this->get_url(),
-            $course,
-            $this,
-            $request,
-            false,
-            Request::get(self::PARAM_OBJECTS));
+            CourseRequestForm::TYPE_CREATE, $this->get_url(), $course, $this, $request, false,
+            Request::get(self::PARAM_OBJECTS)
+        );
 
         if ($form->validate())
         {
@@ -52,7 +47,8 @@ class RequestSubscribeUserComponent extends Manager
 
             $this->redirect(
                 Translation::get($success_request ? 'RequestSent' : 'RequestNotSent'), !$success_request,
-                array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER));
+                array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)
+            );
         }
         else
         {
@@ -66,16 +62,6 @@ class RequestSubscribeUserComponent extends Manager
         }
     }
 
-    /**
-     * Returns the available parameters for registration
-     *
-     * @return string[]
-     */
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_OBJECTS);
-    }
-
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add(
@@ -83,14 +69,32 @@ class RequestSubscribeUserComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_UNSUBSCRIBE_BROWSER,
-                        self::PARAM_TAB => Request::get(self::PARAM_TAB))),
-                Translation::get('UserToolUnsubscribeBrowserComponent')));
+                        self::PARAM_TAB => Request::get(self::PARAM_TAB)
+                    )
+                ), Translation::get('UserToolUnsubscribeBrowserComponent')
+            )
+        );
 
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER)),
-                Translation::get('UserToolSubscribeBrowserComponent')));
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_SUBSCRIBE_USER_BROWSER
+                    )
+                ), Translation::get('UserToolSubscribeBrowserComponent')
+            )
+        );
+    }
+
+    /**
+     * Returns the available parameters for registration
+     *
+     * @return string[]
+     */
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_OBJECTS;
+
+        return $additionalParameters;
     }
 }

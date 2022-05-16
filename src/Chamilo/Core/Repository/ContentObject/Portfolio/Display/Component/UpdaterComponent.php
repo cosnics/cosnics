@@ -84,7 +84,7 @@ class UpdaterComponent extends ItemComponent
 
                     $failures = 0;
 
-                    foreach($children as $child)
+                    foreach ($children as $child)
                     {
                         $child->set_parent($new_id);
 
@@ -145,8 +145,10 @@ class UpdaterComponent extends ItemComponent
      *
      * @see \libraries\SubManager::get_additional_parameters()
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_STEP);
+        $additionalParameters[] = self::PARAM_STEP;
+
+        return $additionalParameters;
     }
 }

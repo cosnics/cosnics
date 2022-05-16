@@ -12,8 +12,10 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Manager;
 class ContentObjectUpdaterComponent extends Manager
 {
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 }

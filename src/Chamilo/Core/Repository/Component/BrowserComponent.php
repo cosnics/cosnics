@@ -46,13 +46,13 @@ use Chamilo\Libraries\Utilities\Utilities;
 class BrowserComponent extends Manager implements DelegateComponent
 {
 
-    private $form;
-
     /**
      *
      * @var ButtonToolBarRenderer
      */
     private $buttonToolbarRenderer;
+
+    private $form;
 
     /**
      * @return string
@@ -221,15 +221,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public function get_additional_parameters($additionalParameters = [])
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return parent::get_additional_parameters(
-            array(
-                self::PARAM_RENDERER,
-                ContentObject::PROPERTY_PARENT_ID,
-                \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID
-            )
-        );
+        $additionalParameters[] = self::PARAM_RENDERER;
+        $additionalParameters[] = ContentObject::PROPERTY_PARENT_ID;
+        $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
+
+        return $additionalParameters;
     }
 
     public function get_available_renderers()

@@ -23,11 +23,7 @@ class IndexVisibilityChangerComponent extends Manager
         $failures = $requestManager->changeDocumentsVisibility($requests);
 
         $message = $this->get_result(
-            $failures,
-            count($requests),
-            'VisibilityNotChanged',
-            'VisibilityNotChanged',
-            'VisibilityChanged',
+            $failures, count($requests), 'VisibilityNotChanged', 'VisibilityNotChanged', 'VisibilityChanged',
             'VisibilityChanged'
         );
 
@@ -38,9 +34,11 @@ class IndexVisibilityChangerComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_REQUEST_IDS);
+        $additionalParameters[] = self::PARAM_REQUEST_IDS;
+
+        return $additionalParameters;
     }
 
 }

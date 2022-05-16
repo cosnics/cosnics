@@ -33,18 +33,17 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         $this->set_parameter(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, $publication_id);
 
         $this->publication = DataManager::retrieve_by_id(
-            ContentObjectPublication::class,
-            $publication_id);
+            ContentObjectPublication::class, $publication_id
+        );
 
-        if (! $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
+        if (!$this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication))
         {
             $this->redirect(
-                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES),
-                true,
-                [],
-                array(
+                Translation::get("NotAllowed", null, Utilities::COMMON_LIBRARIES), true, [], array(
                     \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID));
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                )
+            );
         }
 
         $this->getCategoryBreadcrumbsGenerator()->generateBreadcrumbsForContentObjectPublication(
@@ -56,8 +55,15 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         $context = $this->publication->get_content_object()->package() . '\Display';
 
         return $this->getApplicationFactory()->getApplication(
-            $context,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            $context, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 
     public function get_root_content_object()
@@ -65,35 +71,20 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         return $this->publication->get_content_object();
     }
 
-    public function get_additional_parameters()
-    {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
-    }
-
     // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
-             $this->publication->get_allow_collaboration();
-    }
-
-    public function is_allowed_to_view_content_object()
-    {
-        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
-    }
 
     public function is_allowed_to_add_child()
     {
         return RightsService::getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->publication->get_content_object());
+            $this->get_user(), $this->publication->get_content_object()
+        );
     }
 
     public function is_allowed_to_delete_child()
     {
         return RightsService::getInstance()->canEditContentObject(
-            $this->get_user(),
-            $this->publication->get_content_object());
+            $this->get_user(), $this->publication->get_content_object()
+        );
     }
 
     public function is_allowed_to_delete_feedback()
@@ -101,8 +92,19 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
+    public function is_allowed_to_edit_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
+            $this->publication->get_allow_collaboration();
+    }
+
     public function is_allowed_to_edit_feedback()
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
+    }
+
+    public function is_allowed_to_view_content_object()
+    {
+        return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
 }

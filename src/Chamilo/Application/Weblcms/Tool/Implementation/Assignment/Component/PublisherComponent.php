@@ -19,19 +19,9 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
  * @author Joris Willems <joris.willems@gmail.com>
  * @author Alexander Van Paemel
  */
-class PublisherComponent extends Manager implements PublisherCustomPublicationFormInterface,
-    PublisherCustomPublicationFormHandler
+class PublisherComponent extends Manager
+    implements PublisherCustomPublicationFormInterface, PublisherCustomPublicationFormHandler
 {
-
-    public function get_additional_parameters()
-    {
-        return array(
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES,
-            \Chamilo\Core\Repository\Viewer\Manager::PARAM_WORKSPACE_ID
-        );
-    }
 
     /**
      * Constructs the publication form
@@ -47,12 +37,7 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
         $is_course_admin = $course->is_course_admin($this->getUser());
 
         return new PublicationForm(
-            $this->getUser(),
-            PublicationForm::TYPE_CREATE,
-            $publications,
-            $course,
-            $this->get_url(),
-            $is_course_admin,
+            $this->getUser(), PublicationForm::TYPE_CREATE, $publications, $course, $this->get_url(), $is_course_admin,
             $selectedContentObjects, $this->getTranslator(), $this->getPublicationRepository()
         );
     }
@@ -67,11 +52,17 @@ class PublisherComponent extends Manager implements PublisherCustomPublicationFo
     public function getPublicationHandler(ContentObjectPublicationForm $publicationForm)
     {
         return new ContentObjectPublicationHandler(
-            $this->get_course_id(),
-            $this->get_tool_id(),
-            $this->getUser(),
-            $this,
-            $publicationForm
+            $this->get_course_id(), $this->get_tool_id(), $this->getUser(), $this, $publicationForm
         );
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES;
+        $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_WORKSPACE_ID;
+
+        return $additionalParameters;
     }
 }

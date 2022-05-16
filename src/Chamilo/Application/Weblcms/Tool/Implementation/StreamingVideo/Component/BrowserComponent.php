@@ -83,9 +83,11 @@ class BrowserComponent extends Manager
         return $showActions;
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return $additionalParameters;
     }
 
     public function get_tool_conditions()

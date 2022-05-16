@@ -87,8 +87,9 @@ class SetBlockTypeTargetEntitiesComponent extends Manager
      * 
      * @return array
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_BLOCK_TYPE);
+        $additionalParameters[] = self::PARAM_BLOCK_TYPE;
+        return $additionalParameters;
     }
 }

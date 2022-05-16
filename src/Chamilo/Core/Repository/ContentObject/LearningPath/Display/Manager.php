@@ -78,14 +78,14 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
     protected $current_step;
 
     /**
-     * @var TrackingService
-     */
-    protected $trackingService;
-
-    /**
      * @var LearningPath
      */
     protected $learningPath;
+
+    /**
+     * @var TrackingService
+     */
+    protected $trackingService;
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\ApplicationConfigurationInterface $applicationConfiguration
@@ -258,9 +258,12 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_CHILD_ID, self::PARAM_FULL_SCREEN);
+        $additionalParameters[] = self::PARAM_CHILD_ID;
+        $additionalParameters[] = self::PARAM_FULL_SCREEN;
+
+        return $additionalParameters;
     }
 
     /**

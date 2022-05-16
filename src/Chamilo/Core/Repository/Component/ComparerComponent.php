@@ -151,13 +151,12 @@ class ComparerComponent extends Manager
         return $this->getService(ContentObjectDifferenceRenderer::class);
     }
 
-    public function get_additional_parameters($additionalParameters = [])
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            self::PARAM_BASE_CONTENT_OBJECT_ID,
-            self::PARAM_CONTENT_OBJECT_ID,
-            self::PARAM_COMPARE_OBJECT,
-            self::PARAM_COMPARE_VERSION
-        );
+        $additionalParameters[] = self::PARAM_BASE_CONTENT_OBJECT_ID;
+        $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
+        $additionalParameters[] = self::PARAM_COMPARE_OBJECT;
+        $additionalParameters[] = self::PARAM_COMPARE_VERSION;
+        return $additionalParameters;
     }
 }

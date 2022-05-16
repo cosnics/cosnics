@@ -185,9 +185,10 @@ class BrowserComponent extends Manager implements DelegateComponent, TableSuppor
     /**
      * @return string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(Manager::PARAM_ITEM);
+        $additionalParameters[] = Manager::PARAM_ITEM;
+        return $additionalParameters;
     }
 
     /**

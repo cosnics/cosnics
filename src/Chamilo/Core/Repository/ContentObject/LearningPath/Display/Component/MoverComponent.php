@@ -181,9 +181,11 @@ class MoverComponent extends BaseHtmlTreeComponent
      *
      * @see \libraries\SubManager::get_additional_parameters()
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_CHILD_ID);
+        $additionalParameters[] = self::PARAM_CHILD_ID;
+
+        return $additionalParameters;
     }
 
     /**

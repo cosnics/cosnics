@@ -59,8 +59,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'PrintReport', [],
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                        'PrintReport', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ), new FontAwesomeGlyph('item'), '#', ToolbarItem::DISPLAY_ICON_AND_LABEL, false, 'print_button'
                 )
             );
@@ -68,8 +67,7 @@ class ResultViewerComponent extends Manager
             $commonActions->addButton(
                 new Button(
                     Translation::get(
-                        'ExportReport', [],
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
+                        'ExportReport', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
                     ), new FontAwesomeGlyph('download'),
                     $this->get_url(array(self::PARAM_ACTION => self::ACTION_EXPORT_RESULT)),
                     ToolbarItem::DISPLAY_ICON_AND_LABEL, false
@@ -87,8 +85,10 @@ class ResultViewerComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_REQUEST_IDS);
+        $additionalParameters[] = self::PARAM_REQUEST_IDS;
+
+        return $additionalParameters;
     }
 }

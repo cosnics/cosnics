@@ -48,21 +48,21 @@ class SyncCourseGroupComponent extends Manager
             $translator->trans(
                 $message, [],
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
-            ),
-            !$success,
-            [
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION =>
-                    \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_GROUP_DETAILS
-            ],
-            [self::PARAM_ACTION, IntegrationLauncherComponent::PARAM_BASE_CONTEXT]
+            ), !$success, [
+                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_GROUP_DETAILS
+            ], [self::PARAM_ACTION, IntegrationLauncherComponent::PARAM_BASE_CONTEXT]
         );
     }
 
     /**
      * @return array
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return [IntegrationLauncherComponent::PARAM_BASE_CONTEXT, \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_COURSE_GROUP];
+        $additionalParameters[] = IntegrationLauncherComponent::PARAM_BASE_CONTEXT;
+        $additionalParameters[] =
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_COURSE_GROUP;
+
+        return $additionalParameters;
     }
 }

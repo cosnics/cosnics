@@ -16,25 +16,33 @@ class ReportingViewerComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE)), 
-                Translation::get('BrowserComponent')));
-        
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_BROWSE
+                    )
+                ), Translation::get('BrowserComponent')
+            )
+        );
+
         $breadcrumbtrail->add(
             new Breadcrumb(
                 $this->get_url(
                     array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW, 
+                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_VIEW,
                         \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => Request::get(
-                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID))), 
-                Translation::get('ViewerComponent')));
+                            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID
+                        )
+                    )
+                ), Translation::get('ViewerComponent')
+            )
+        );
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, 
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID, 
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME, 
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_COURSE;
+
+        return $additionalParameters;
     }
 }

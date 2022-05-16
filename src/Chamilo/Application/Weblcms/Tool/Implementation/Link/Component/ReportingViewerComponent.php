@@ -6,12 +6,13 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Link\Manager;
 class ReportingViewerComponent extends Manager
 {
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID, 
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID, 
-            \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME, 
-            \Chamilo\Application\Weblcms\Manager::PARAM_COURSE);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_COMPLEX_ID;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_COURSE;
+
+        return $additionalParameters;
     }
 }

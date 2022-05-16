@@ -65,15 +65,8 @@ class PublicationUpdaterComponent extends Manager
         $is_course_admin = $course->is_course_admin($this->get_user());
 
         $publication_form = new PublicationForm(
-            $this->getUser(),
-            PublicationForm::TYPE_UPDATE,
-            array($publication),
-            $course,
-            $this->get_url(),
-            $is_course_admin,
-            [],
-            $this->getTranslator(),
-            $this->getPublicationRepository()
+            $this->getUser(), PublicationForm::TYPE_UPDATE, array($publication), $course, $this->get_url(),
+            $is_course_admin, [], $this->getTranslator(), $this->getPublicationRepository()
         );
 
         if ($publication_form->validate() || $content_object->get_type() == 'introduction')
@@ -83,11 +76,8 @@ class PublicationUpdaterComponent extends Manager
             $message = htmlentities(
                 Translation::get(
                     ($succes ? 'ObjectUpdated' : 'ObjectNotUpdated'),
-                    array('OBJECT' => Translation::get('Publication')),
-                    Utilities::COMMON_LIBRARIES
-                ),
-                ENT_COMPAT | ENT_HTML401,
-                'UTF-8'
+                    array('OBJECT' => Translation::get('Publication')), Utilities::COMMON_LIBRARIES
+                ), ENT_COMPAT | ENT_HTML401, 'UTF-8'
             );
 
             $show_details = $this->getRequest()->getFromUrl('details');
@@ -124,8 +114,10 @@ class PublicationUpdaterComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
+
+        return $additionalParameters;
     }
 }

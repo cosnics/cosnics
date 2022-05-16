@@ -70,9 +70,12 @@ class SubscribeBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_TAB, \Chamilo\Application\Weblcms\Manager::PARAM_GROUP);
+        $additionalParameters[] = self::PARAM_TAB;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+
+        return $additionalParameters;
     }
 
     public function get_condition()

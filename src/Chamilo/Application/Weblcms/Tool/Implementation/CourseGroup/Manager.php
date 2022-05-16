@@ -17,25 +17,58 @@ use Chamilo\Libraries\Platform\Session\Request;
  */
 abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager implements IntroductionTextSupportInterface
 {
-    const TOOL_NAME = 'course_group';
-    const PARAM_COURSE_GROUP_ACTION = 'tool_action';
-    const PARAM_DELETE_COURSE_GROUPS = 'delete_course_groups';
-    const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
-    const PARAM_COURSE_GROUP = 'course_group';
-    const PARAM_TAB = 'tab';
-    const ACTION_SUBSCRIBE = 'SubscribeBrowser';
-    const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
     const ACTION_ADD_COURSE_GROUP = 'Creator';
-    const ACTION_EDIT_COURSE_GROUP = 'Editor';
+
     const ACTION_DELETE_COURSE_GROUP = 'Deleter';
-    const ACTION_USER_SELF_SUBSCRIBE = 'SelfSubscriber';
-    const ACTION_USER_SELF_UNSUBSCRIBE = 'SelfUnsubscriber';
-    const ACTION_VIEW_GROUPS = 'Browser';
-    const ACTION_MANAGE_SUBSCRIPTIONS = 'ManageSubscriptions';
-    const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
+
+    const ACTION_EDIT_COURSE_GROUP = 'Editor';
+
     const ACTION_EXPORT_SUBSCRIPTIONS_OVERVIEW = 'Exporter';
+
     const ACTION_GROUP_DETAILS = 'Details';
+
     const ACTION_LAUNCH_INTEGRATION = 'IntegrationLauncher';
+
+    const ACTION_MANAGE_SUBSCRIPTIONS = 'ManageSubscriptions';
+
+    const ACTION_SUBSCRIBE = 'SubscribeBrowser';
+
+    const ACTION_SUBSCRIPTIONS_OVERVIEW = 'SubscriptionsOverviewer';
+
+    const ACTION_UNSUBSCRIBE = 'UnsubscribeBrowser';
+
+    const ACTION_USER_SELF_SUBSCRIBE = 'SelfSubscriber';
+
+    const ACTION_USER_SELF_UNSUBSCRIBE = 'SelfUnsubscriber';
+
+    const ACTION_VIEW_GROUPS = 'Browser';
+
+    const PARAM_COURSE_GROUP = 'course_group';
+
+    const PARAM_COURSE_GROUP_ACTION = 'tool_action';
+
+    const PARAM_DELETE_COURSE_GROUPS = 'delete_course_groups';
+
+    const PARAM_TAB = 'tab';
+
+    const PARAM_UNSUBSCRIBE_USERS = 'unsubscribe_users';
+
+    const TOOL_NAME = 'course_group';
+
+    /**
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
+     */
+    protected function getCourseGroupDecoratorsManager()
+    {
+        return $this->getService(CourseGroupDecoratorsManager::class);
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_COURSE_GROUP;
+
+        return $additionalParameters;
+    }
 
     /**
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass | CourseGroup
@@ -47,18 +80,5 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return DataManager::retrieve_by_id(
             CourseGroup::class, $course_group_id
         );
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_COURSE_GROUP);
-    }
-
-    /**
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Infrastructure\Service\CourseGroupDecorator\CourseGroupDecoratorsManager
-     */
-    protected function getCourseGroupDecoratorsManager()
-    {
-        return $this->getService(CourseGroupDecoratorsManager::class);
     }
 }

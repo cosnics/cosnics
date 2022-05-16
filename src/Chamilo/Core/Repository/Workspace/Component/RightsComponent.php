@@ -18,13 +18,6 @@ use Chamilo\Libraries\Translation\Translation;
 class RightsComponent extends TabComponent implements DelegateComponent
 {
 
-    public function build()
-    {
-        return $this->getApplicationFactory()->getApplication(
-            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
-    }
-
     /**
      * Adds additional breadcrumbs
      *
@@ -37,11 +30,24 @@ class RightsComponent extends TabComponent implements DelegateComponent
         $breadcrumb_trail->add(
             new Breadcrumb(
                 $this->get_url(array(Manager::PARAM_ACTION => $browserSource)),
-                Translation::get($browserSource . 'Component')));
+                Translation::get($browserSource . 'Component')
+            )
+        );
     }
 
-    public function get_additional_parameters()
+    public function build()
     {
-        return array(self::PARAM_WORKSPACE_ID, self::PARAM_BROWSER_SOURCE);
+        return $this->getApplicationFactory()->getApplication(
+            \Chamilo\Core\Repository\Workspace\Rights\Manager::context(),
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+        $additionalParameters[] = self::PARAM_BROWSER_SOURCE;
+
+        return $additionalParameters;
     }
 }

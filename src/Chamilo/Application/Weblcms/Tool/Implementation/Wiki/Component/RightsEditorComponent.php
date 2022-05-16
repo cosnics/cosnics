@@ -13,7 +13,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
         return WeblcmsRights::get_available_rights($location);
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
         return array(
             \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID, 

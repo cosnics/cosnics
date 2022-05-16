@@ -156,13 +156,6 @@ abstract class Manager extends Application
     const TAB_SEARCH = 'Search';
     const TAB_USERVIEW = 'Userview';
 
-    /**
-     * Property of this repository manager.
-     */
-    private $search_parameters;
-
-    private $search_form;
-
     private $category_menu;
 
     /**
@@ -170,6 +163,13 @@ abstract class Manager extends Application
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     private $currentWorkspace;
+
+    private $search_form;
+
+    /**
+     * Property of this repository manager.
+     */
+    private $search_parameters;
 
     /**
      * Constructor
@@ -215,6 +215,14 @@ abstract class Manager extends Application
     }
 
     /**
+     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
+     */
+    public function getDataClassEntityFactory()
+    {
+        return $this->getService(DataClassEntityFactory::class);
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface
      */
     public function getPublicationAggregator()
@@ -249,7 +257,7 @@ abstract class Manager extends Application
         return $this->getService(WorkspaceExtensionManager::class);
     }
 
-    public function get_additional_parameters($additionalParameters = [])
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
 
@@ -387,7 +395,8 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self::PARAM_ACTION => self::ACTION_DELETE_CONTENT_OBJECTS,
-                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), $param => 1
+                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                $param => 1
             )
         );
     }
@@ -423,7 +432,8 @@ abstract class Manager extends Application
         return $this->get_url(
             array(
                 self::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
-                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), self::PARAM_EXPORT_TYPE => $type
+                self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                self::PARAM_EXPORT_TYPE => $type
             ), array(self::PARAM_CATEGORY_ID)
         );
     }
@@ -532,7 +542,8 @@ abstract class Manager extends Application
             return $this->get_url(
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_CONTENT_OBJECTS,
-                    self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(), self::PARAM_CATEGORY_ID => null
+                    self::PARAM_CONTENT_OBJECT_ID => $content_object->get_id(),
+                    self::PARAM_CATEGORY_ID => null
                 )
             );
         }
@@ -550,7 +561,8 @@ abstract class Manager extends Application
     {
         return $this->get_url(
             array(
-                self::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS, $type => $ids,
+                self::PARAM_ACTION => self::ACTION_EXPORT_CONTENT_OBJECTS,
+                $type => $ids,
                 self::PARAM_EXPORT_TYPE => $format
             )
         );
@@ -565,6 +577,11 @@ abstract class Manager extends Application
             )
         );
     }
+
+    /*
+     * Returns the url of the attachment viewer. Used in rendition implementation @param ContentObject $attachment
+     * @return string
+     */
 
     /**
      * Return a condition object that can be used to look for objects of the current logged user that are recycled
@@ -586,11 +603,6 @@ abstract class Manager extends Application
         return new AndCondition($conditions);
     }
 
-    /*
-     * Returns the url of the attachment viewer. Used in rendition implementation @param ContentObject $attachment
-     * @return string
-     */
-
     public static function get_document_downloader_url($documentId, $securityCode = null)
     {
         if (!$securityCode)
@@ -611,8 +623,10 @@ abstract class Manager extends Application
 
         $redirect = new Redirect(
             array(
-                self::PARAM_CONTEXT => self::package(), self::PARAM_ACTION => self::ACTION_DOWNLOAD_DOCUMENT,
-                self::PARAM_CONTENT_OBJECT_ID => $documentId, ContentObject::PARAM_SECURITY_CODE => $securityCode
+                self::PARAM_CONTEXT => self::package(),
+                self::PARAM_ACTION => self::ACTION_DOWNLOAD_DOCUMENT,
+                self::PARAM_CONTENT_OBJECT_ID => $documentId,
+                ContentObject::PARAM_SECURITY_CODE => $securityCode
             )
         );
 
@@ -820,13 +834,5 @@ abstract class Manager extends Application
         $this->set_parameter(
             DynamicTabsRenderer::PARAM_SELECTED_TAB, Request::get(DynamicTabsRenderer::PARAM_SELECTED_TAB)
         );
-    }
-
-    /**
-     * @return \Chamilo\Core\Metadata\Entity\DataClassEntityFactory
-     */
-    public function getDataClassEntityFactory()
-    {
-        return $this->getService(DataClassEntityFactory::class);
     }
 }

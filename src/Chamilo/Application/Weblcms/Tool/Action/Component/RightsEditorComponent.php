@@ -199,7 +199,7 @@ class RightsEditorComponent extends Manager
         }
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
         return array(
             \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION,

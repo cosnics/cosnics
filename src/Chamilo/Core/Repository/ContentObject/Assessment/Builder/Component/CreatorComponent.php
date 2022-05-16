@@ -16,11 +16,14 @@ class CreatorComponent extends Manager implements DelegateComponent
     {
         return $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Repository\Builder\Action\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_TYPE);
+        $additionalParameters[] = self::PARAM_TYPE;
+
+        return $additionalParameters;
     }
 }

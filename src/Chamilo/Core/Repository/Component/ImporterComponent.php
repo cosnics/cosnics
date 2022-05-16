@@ -22,7 +22,7 @@ class ImporterComponent extends Manager
      */
     public function run()
     {
-        if (! RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
+        if (!RightsService::getInstance()->canAddContentObjects($this->get_user(), $this->getWorkspace()))
         {
             throw new NotAllowedException();
         }
@@ -39,12 +39,15 @@ class ImporterComponent extends Manager
         {
             BreadcrumbTrail::getInstance()->add(
                 new Breadcrumb(
-                    $this->get_url(),
-                    Translation::get(
-                        'ImportType',
-                        array(
-                            'TYPE' => Translation::get(
-                                'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize())))));
+                    $this->get_url(), Translation::get(
+                    'ImportType', array(
+                        'TYPE' => Translation::get(
+                            'ImportType' . StringUtilities::getInstance()->createString($type)->upperCamelize()
+                        )
+                    )
+                )
+                )
+            );
 
             $html = [];
 
@@ -58,8 +61,9 @@ class ImporterComponent extends Manager
         return null;
     }
 
-    public function get_additional_parameters($additionalParameters = [])
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return parent::get_additional_parameters([self::PARAM_IMPORT_TYPE]);
+        $additionalParameters[] = self::PARAM_IMPORT_TYPE;
+        return $additionalParameters;
     }
 }

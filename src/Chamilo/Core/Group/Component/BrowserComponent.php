@@ -44,7 +44,7 @@ class BrowserComponent extends Manager implements TableSupport
     const TAB_DETAILS = 2;
     const TAB_SUBGROUPS = 0;
     const TAB_USERS = 1;
-    
+
     private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     private $group;
@@ -189,9 +189,10 @@ class BrowserComponent extends Manager implements TableSupport
     /**
      * @return string[]
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_GROUP_ID);
+        $additionalParameters[] = self::PARAM_GROUP_ID;
+        return $additionalParameters;
     }
 
     /**

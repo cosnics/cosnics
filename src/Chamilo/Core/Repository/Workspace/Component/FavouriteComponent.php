@@ -18,12 +18,14 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
     public function build()
     {
         return $this->getApplicationFactory()->getApplication(
-            Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
+            Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_WORKSPACE_ID);
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+
+        return $additionalParameters;
     }
 }

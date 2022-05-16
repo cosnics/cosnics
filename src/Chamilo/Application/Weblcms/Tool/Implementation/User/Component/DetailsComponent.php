@@ -31,8 +31,8 @@ class DetailsComponent extends Manager
         {
             /** @var \Chamilo\Core\User\Storage\DataClass\User $user */
             $user = DataManager::retrieve_by_id(
-                User::class,
-                Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS));
+                User::class, Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_USERS)
+            );
 
             $details = new UserDetails($user);
             $groups = new UserGroups($user->get_id(), true, $availableGroups);
@@ -48,8 +48,8 @@ class DetailsComponent extends Manager
             foreach ($_POST['user_id'] as $user_id)
             {
                 $user = DataManager::retrieve_by_id(
-                    User::class,
-                    $user_id);
+                    User::class, $user_id
+                );
                 $details = new UserDetails($user);
                 $groups = new UserGroups($user->get_id(), true, $availableGroups);
                 $course_groups = new UserCourseGroups($user->get_id(), $this->get_course_id());
@@ -65,8 +65,11 @@ class DetailsComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(\Chamilo\Application\Weblcms\Manager::PARAM_USERS, self::PARAM_TAB);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
+        $additionalParameters[] = self::PARAM_TAB;
+
+        return $additionalParameters;
     }
 }

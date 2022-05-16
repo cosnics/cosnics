@@ -155,10 +155,9 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
         return $this->buttonToolbarRenderer;
     }
 
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        $parameters = [];
-        $parameters[] = self::PARAM_TAB;
+        $additionalParameters[] = self::PARAM_TAB;
 
         $current_tab = self::TAB_ALL;
         if (Request::get(self::PARAM_TAB))
@@ -168,10 +167,10 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
 
         if ($current_tab != self::TAB_ALL && $current_tab != self::TAB_USERS)
         {
-            $parameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
+            $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }
 
-        return $parameters;
+        return $additionalParameters;
     }
 
     private function get_all_users_tab()

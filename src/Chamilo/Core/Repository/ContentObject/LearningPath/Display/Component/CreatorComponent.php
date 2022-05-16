@@ -23,11 +23,11 @@ use Exception;
  * @package repository\content_object\learning_path\display
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
-class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
-    DelegateComponent
+class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface, DelegateComponent
 {
-    const PARAM_CREATE_MODE = 'CreateMode';
     const CREATE_MODE_FOLDER = 'Folder';
+
+    const PARAM_CREATE_MODE = 'CreateMode';
 
     /**
      * Executes this component
@@ -36,7 +36,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
     {
         $this->validateSelectedTreeNodeData();
 
-        if (! $this->canEditCurrentTreeNode())
+        if (!$this->canEditCurrentTreeNode())
         {
             throw new NotAllowedException();
         }
@@ -52,7 +52,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
 
         BreadcrumbTrail::getInstance()->add(new Breadcrumb($this->get_url(), Translation::get($variable)));
 
-        if (! \Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
+        if (!\Chamilo\Core\Repository\Viewer\Manager::is_ready_to_be_published())
         {
             $exclude = $this->determine_excluded_content_object_ids();
 
@@ -60,8 +60,8 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             $applicationConfiguration->set(\Chamilo\Core\Repository\Viewer\Manager::SETTING_TABS_DISABLED, true);
 
             $component = $this->getApplicationFactory()->getApplication(
-                \Chamilo\Core\Repository\Viewer\Manager::context(),
-                $applicationConfiguration);
+                \Chamilo\Core\Repository\Viewer\Manager::context(), $applicationConfiguration
+            );
             $component->set_excluded_objects($exclude);
 
             return $component->run();
@@ -69,7 +69,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
         else
         {
             $object_ids = \Chamilo\Core\Repository\Viewer\Manager::get_selected_objects();
-            if (! is_array($object_ids))
+            if (!is_array($object_ids))
             {
                 $object_ids = array($object_ids);
             }
@@ -80,8 +80,8 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
             {
                 /** @var ContentObject $object */
                 $object = DataManager::retrieve_by_id(
-                    ContentObject::class,
-                    $object_id);
+                    ContentObject::class, $object_id
+                );
 
                 $learningPathService = $this->getLearningPathService();
 
@@ -90,23 +90,21 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
                     $parentNode = $this->getCurrentTreeNode();
 
                     $treeNodeData = $learningPathService->addContentObjectToLearningPath(
-                        $this->learningPath,
-                        $parentNode,
-                        $object,
-                        $this->getUser());
+                        $this->learningPath, $parentNode, $object, $this->getUser()
+                    );
 
                     $nextStep = $treeNodeData->getId();
 
                     Event::trigger(
-                        'Activity',
-                        Manager::context(),
-                        array(
+                        'Activity', Manager::context(), array(
                             Activity::PROPERTY_TYPE => Activity::ACTIVITY_ADD_ITEM,
                             Activity::PROPERTY_USER_ID => $this->get_user_id(),
                             Activity::PROPERTY_DATE => time(),
                             Activity::PROPERTY_CONTENT_OBJECT_ID => $this->getCurrentContentObject()->getId(),
                             Activity::PROPERTY_CONTENT => $this->getCurrentContentObject()->get_title() . ' > ' .
-                                 $object->get_title()));
+                                $object->get_title()
+                        )
+                    );
                 }
                 catch (Exception $ex)
                 {
@@ -114,7 +112,7 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
                 }
             }
 
-            if (! isset($nextStep))
+            if (!isset($nextStep))
             {
                 $nextStep = $this->getCurrentTreeNodeDataId();
             }
@@ -144,10 +142,11 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
 
             $this->redirect(
                 Translation::get(
-                    $message,
-                    array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
-                    Utilities::COMMON_LIBRARIES), (bool) $failures,
-                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep));
+                    $message, array('OBJECT' => Translation::get('Item'), 'OBJECTS' => Translation::get('Items')),
+                    Utilities::COMMON_LIBRARIES
+                ), (bool) $failures,
+                array(self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT, self::PARAM_CHILD_ID => $nextStep)
+            );
         }
     }
 
@@ -165,9 +164,12 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
      *
      * @return array
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_CHILD_ID, self::PARAM_CREATE_MODE);
+        $additionalParameters[] = self::PARAM_CHILD_ID;
+        $additionalParameters[] = self::PARAM_CREATE_MODE;
+
+        return $additionalParameters;
     }
 
     /**

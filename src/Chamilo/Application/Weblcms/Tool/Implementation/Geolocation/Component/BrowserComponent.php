@@ -6,8 +6,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Geolocation\Manager;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -15,6 +15,21 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
  */
 class BrowserComponent extends Manager
 {
+
+    /**
+     *
+     * @param BreadcrumbTrail $breadcrumbtrail
+     */
+    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
+    {
+    }
+
+    public function get_additional_parameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return $additionalParameters;
+    }
 
     public function show_additional_information($browser)
     {
@@ -28,7 +43,8 @@ class BrowserComponent extends Manager
             $html[] = '<script src="http://maps.google.com/maps/api/js?sensor=false"></script>';
             $html[] = ResourceManager::getInstance()->getResourceHtml(
                 Path::getInstance()->getJavascriptPath('Chamilo\Core\Repository\ContentObject\PhysicalLocation', true) .
-                     'Plugin\GoogleMaps.js');
+                'Plugin\GoogleMaps.js'
+            );
             $html[] = '<div id="map_canvas" style="border: 1px solid black; height:500px"></div>';
             $html[] = '<script>';
             $html[] = 'initialize(8);';
@@ -40,7 +56,7 @@ class BrowserComponent extends Manager
                 if ($publication_object->is_visible_for_target_users())
                 {
                     $html[] = 'codeAddress(\'' . $publication_object->get_content_object()->get_location() . '\', \'' .
-                         $publication_object->get_content_object()->get_title() . '\');';
+                        $publication_object->get_content_object()->get_title() . '\');';
                 }
             }
 
@@ -48,18 +64,5 @@ class BrowserComponent extends Manager
 
             return implode(PHP_EOL, $html);
         }
-    }
-
-    public function get_additional_parameters()
-    {
-        return array(self::PARAM_BROWSE_PUBLICATION_TYPE);
-    }
-
-    /**
-     *
-     * @param BreadcrumbTrail $breadcrumbtrail
-     */
-    public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
-    {
     }
 }

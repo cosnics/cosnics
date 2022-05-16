@@ -186,7 +186,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                                 new SubButton(
                                     Translation::get('MoveUp'), new FontAwesomeGlyph('chevron-up'), $this->get_url(
                                     array(
-                                        self::PARAM_ACTION => self::ACTION_SORT, self::PARAM_SORT => self::SORT_UP,
+                                        self::PARAM_ACTION => self::ACTION_SORT,
+                                        self::PARAM_SORT => self::SORT_UP,
                                         self::PARAM_STEP => $this->get_current_step()
                                     )
                                 )
@@ -200,7 +201,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                                 new SubButton(
                                     Translation::get('MoveDown'), new FontAwesomeGlyph('chevron-down'), $this->get_url(
                                     array(
-                                        self::PARAM_ACTION => self::ACTION_SORT, self::PARAM_SORT => self::SORT_DOWN,
+                                        self::PARAM_ACTION => self::ACTION_SORT,
+                                        self::PARAM_SORT => self::SORT_DOWN,
                                         self::PARAM_STEP => $this->get_current_step()
                                     )
                                 )
@@ -252,7 +254,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                                 new SubButton(
                                     Translation::get('MoveUp'), new FontAwesomeGlyph('chevron-up'), $this->get_url(
                                     array(
-                                        self::PARAM_ACTION => self::ACTION_SORT, self::PARAM_SORT => self::SORT_UP,
+                                        self::PARAM_ACTION => self::ACTION_SORT,
+                                        self::PARAM_SORT => self::SORT_UP,
                                         self::PARAM_STEP => $this->get_current_step()
                                     )
                                 )
@@ -266,7 +269,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                                 new SubButton(
                                     Translation::get('MoveDown'), new FontAwesomeGlyph('chevron-down'), $this->get_url(
                                     array(
-                                        self::PARAM_ACTION => self::ACTION_SORT, self::PARAM_SORT => self::SORT_DOWN,
+                                        self::PARAM_ACTION => self::ACTION_SORT,
+                                        self::PARAM_SORT => self::SORT_DOWN,
                                         self::PARAM_STEP => $this->get_current_step()
                                     )
                                 )
@@ -357,7 +361,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     $rightsButton = new SplitDropdownButton(
                         Translation::get($variable), new FontAwesomeGlyph('lock'), $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_RIGHTS, self::PARAM_STEP => $this->get_current_step()
+                            self::PARAM_ACTION => self::ACTION_RIGHTS,
+                            self::PARAM_STEP => $this->get_current_step()
                         )
                     )
                     );
@@ -366,7 +371,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                         new SubButton(
                             Translation::get('UserComponent'), new FontAwesomeGlyph('user'), $this->get_url(
                             array(
-                                self::PARAM_ACTION => self::ACTION_USER, self::PARAM_STEP => $this->get_current_step()
+                                self::PARAM_ACTION => self::ACTION_USER,
+                                self::PARAM_STEP => $this->get_current_step()
                             )
                         )
                         )
@@ -379,7 +385,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                         Translation::get('ReturnToYourPortfolio'),
                         new FontAwesomeGlyph('user', array('fa-lg'), null, 'fas'), $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_USER, self::PARAM_STEP => $this->get_current_step()
+                            self::PARAM_ACTION => self::ACTION_USER,
+                            self::PARAM_STEP => $this->get_current_step()
                         )
                     )
                     );
@@ -417,7 +424,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     Translation::get('BookmarkerComponent'),
                     new FontAwesomeGlyph('bookmark', array('fa-lg'), null, 'fas'), $this->get_url(
                     array(
-                        self::PARAM_ACTION => self::ACTION_BOOKMARK, self::PARAM_STEP => $this->get_current_step()
+                        self::PARAM_ACTION => self::ACTION_BOOKMARK,
+                        self::PARAM_STEP => $this->get_current_step()
                     )
                 )
                 )
@@ -435,7 +443,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
                     new SubButton(
                         Translation::get('ManagerComponent'), new FontAwesomeGlyph('cog'), $this->get_url(
                         array(
-                            self::PARAM_ACTION => self::ACTION_MANAGE, self::PARAM_STEP => $this->get_current_step()
+                            self::PARAM_ACTION => self::ACTION_MANAGE,
+                            self::PARAM_STEP => $this->get_current_step()
                         )
                     )
                     )
@@ -456,7 +465,8 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         if ($isAllowedToViewFeedback || $isAllowedToCreateFeedback)
         {
             $baseParameters = array(
-                self::PARAM_ACTION => self::ACTION_FEEDBACK, self::PARAM_STEP => $this->get_current_step()
+                self::PARAM_ACTION => self::ACTION_FEEDBACK,
+                self::PARAM_STEP => $this->get_current_step()
             );
 
             if ($isAllowedToViewFeedback)
@@ -508,9 +518,11 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
      *
      * @see \libraries\SubManager::get_additional_parameters()
      */
-    public function get_additional_parameters()
+    public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(self::PARAM_STEP);
+        $additionalParameters[] = self::PARAM_STEP;
+
+        return $additionalParameters;
     }
 
     /**
@@ -579,8 +591,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
             $this->get_parent()->is_allowed_to_create_feedback($this->get_current_node()))
         {
             return $this->getApplicationFactory()->getApplication(
-                Manager::context(),
-                new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+                Manager::context(), new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
             )->run();
         }
     }
