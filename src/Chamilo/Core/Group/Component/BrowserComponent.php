@@ -42,16 +42,10 @@ use Chamilo\Libraries\Utilities\Utilities;
 class BrowserComponent extends Manager implements TableSupport
 {
     const TAB_DETAILS = 2;
-
     const TAB_SUBGROUPS = 0;
-
     const TAB_USERS = 1;
-
-    /**
-     *
-     * @var ButtonToolBarRenderer
-     */
-    private $buttonToolbarRenderer;
+    
+    private ButtonToolBarRenderer $buttonToolbarRenderer;
 
     private $group;
 
