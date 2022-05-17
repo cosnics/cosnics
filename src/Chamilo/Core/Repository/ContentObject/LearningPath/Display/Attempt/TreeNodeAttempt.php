@@ -22,17 +22,17 @@ abstract class TreeNodeAttempt extends DataClass
     const PROPERTY_SCORE = 'score';
     const PROPERTY_COMPLETED = 'completed';
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_LEARNING_PATH_ID;
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_TREE_NODE_DATA_ID;
-        $extended_property_names[] = self::PROPERTY_START_TIME;
-        $extended_property_names[] = self::PROPERTY_TOTAL_TIME;
-        $extended_property_names[] = self::PROPERTY_SCORE;
-        $extended_property_names[] = self::PROPERTY_COMPLETED;
+        $extendedPropertyNames[] = self::PROPERTY_LEARNING_PATH_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TREE_NODE_DATA_ID;
+        $extendedPropertyNames[] = self::PROPERTY_START_TIME;
+        $extendedPropertyNames[] = self::PROPERTY_TOTAL_TIME;
+        $extendedPropertyNames[] = self::PROPERTY_SCORE;
+        $extendedPropertyNames[] = self::PROPERTY_COMPLETED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     public function get_start_time()

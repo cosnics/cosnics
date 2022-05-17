@@ -39,9 +39,9 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         );
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(self::PROPERTY_VIEWED, self::PROPERTY_CONTENT, self::PROPERTY_MODIFIER_ID)
         );
     }

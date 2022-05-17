@@ -49,7 +49,7 @@ class Result extends EphorusDataClass
      *
      * @return string[] - The property types.
      */
-    public static function get_default_property_names($default_property_names = [])
+    public static function getDefaultPropertyNames($default_property_names = [])
     {
         $default_property_names[] = self::PROPERTY_REQUEST_ID;
         $default_property_names[] = self::PROPERTY_URL;
@@ -61,7 +61,7 @@ class Result extends EphorusDataClass
         $default_property_names[] = self::PROPERTY_STUDENT_NAME;
         $default_property_names[] = self::PROPERTY_DIFF;
 
-        return parent::get_default_property_names($default_property_names);
+        return parent::getDefaultPropertyNames($default_property_names);
     }
 
     /**

@@ -19,9 +19,9 @@ abstract class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataCl
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(array(self::PROPERTY_ENTRY_ID));
+        return parent::getDefaultPropertyNames(array(self::PROPERTY_ENTRY_ID));
     }
 
     /**

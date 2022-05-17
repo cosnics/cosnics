@@ -520,7 +520,7 @@ class Course extends DataClass
      *
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_properties = [])
+    public static function getDefaultPropertyNames($extended_properties = []): array
     {
         $extended_properties[] = self::PROPERTY_COURSE_TYPE_ID;
         $extended_properties[] = self::PROPERTY_TITULAR_ID;
@@ -534,7 +534,7 @@ class Course extends DataClass
         $extended_properties[] = self::PROPERTY_CATEGORY_ID;
         $extended_properties[] = self::PROPERTY_LANGUAGE;
 
-        return parent::get_default_property_names($extended_properties);
+        return parent::getDefaultPropertyNames($extended_properties);
     }
 
     /**

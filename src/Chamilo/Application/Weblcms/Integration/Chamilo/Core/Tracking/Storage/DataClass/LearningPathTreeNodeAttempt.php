@@ -14,15 +14,15 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
 
     /**
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_PUBLICATION_ID;
+        $extendedPropertyNames[] = self::PROPERTY_PUBLICATION_ID;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

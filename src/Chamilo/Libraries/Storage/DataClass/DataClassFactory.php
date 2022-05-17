@@ -25,7 +25,7 @@ class DataClassFactory
 
         $dataClass = new $dataClassName();
 
-        foreach ($dataClass->get_default_property_names() as $property)
+        foreach ($dataClass->getDefaultPropertyNames() as $property)
         {
             if (array_key_exists($property, $record))
             {

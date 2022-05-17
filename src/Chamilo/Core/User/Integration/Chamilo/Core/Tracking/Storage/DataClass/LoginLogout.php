@@ -104,9 +104,9 @@ class LoginLogout extends SimpleTracker
         $this->set_default_property(self::PROPERTY_TYPE, $type);
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(self::PROPERTY_TYPE, self::PROPERTY_USER_ID, self::PROPERTY_DATE, self::PROPERTY_IP));
     }
 

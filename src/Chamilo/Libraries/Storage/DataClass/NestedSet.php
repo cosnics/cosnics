@@ -625,13 +625,13 @@ abstract class NestedSet extends DataClass
      * @return string[]
      * @done Domain method
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
         $extendedPropertyNames[] = self::PROPERTY_LEFT_VALUE;
         $extendedPropertyNames[] = self::PROPERTY_RIGHT_VALUE;
 
-        return parent::get_default_property_names($extendedPropertyNames);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -25,9 +25,9 @@ class BlockTypeTargetEntity extends HomeTargetEntity
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(array(self::PROPERTY_BLOCK_TYPE));
+        return parent::getDefaultPropertyNames(array(self::PROPERTY_BLOCK_TYPE));
     }
 
     /**

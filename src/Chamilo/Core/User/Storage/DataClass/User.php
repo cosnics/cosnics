@@ -168,11 +168,11 @@ class User extends DataClass
     /**
      * Returns all (unique) properties by which a DataClass object can be cached
      *
-     * @param $extended_property_names string[]
+     * @param $extendedPropertyNames string[]
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($extended_property_names = [])
+    public static function get_cacheable_property_names($extendedPropertyNames = [])
     {
         return parent::get_cacheable_property_names(array(self::PROPERTY_USERNAME));
     }
@@ -210,9 +210,9 @@ class User extends DataClass
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_LASTNAME,
                 self::PROPERTY_FIRSTNAME,

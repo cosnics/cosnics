@@ -111,15 +111,15 @@ class Instance extends CompositeDataClass
         return $this->get_default_property(self::PROPERTY_CREATED);
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_TITLE;
-        $extended_property_names[] = self::PROPERTY_IMPLEMENTATION;
-        $extended_property_names[] = self::PROPERTY_ENABLED;
-        $extended_property_names[] = self::PROPERTY_CREATED;
-        $extended_property_names[] = self::PROPERTY_MODIFIED;
+        $extendedPropertyNames[] = self::PROPERTY_TITLE;
+        $extendedPropertyNames[] = self::PROPERTY_IMPLEMENTATION;
+        $extendedPropertyNames[] = self::PROPERTY_ENABLED;
+        $extendedPropertyNames[] = self::PROPERTY_CREATED;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFIED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

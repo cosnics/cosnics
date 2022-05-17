@@ -56,14 +56,14 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      *
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_COURSE_TYPE_ID;
-        $extended_property_names[] = self::PROPERTY_LOCKED;
-        $extended_property_names[] = self::PROPERTY_DEFAULT_VALUE;
-        $extended_property_names[] = self::PROPERTY_LIMITED;
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_TYPE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LOCKED;
+        $extendedPropertyNames[] = self::PROPERTY_DEFAULT_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_LIMITED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -240,19 +240,19 @@ class SynchronizationData extends DataClass
      *
      * @param $property_names array
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_CREATED;
-        $extended_property_names[] = self::PROPERTY_MODIFIED;
-        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
-        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_TIMESTAMP;
-        $extended_property_names[] = self::PROPERTY_EXTERNAL_ID;
-        $extended_property_names[] = self::PROPERTY_EXTERNAL_OBJECT_ID;
-        $extended_property_names[] = self::PROPERTY_EXTERNAL_OBJECT_TIMESTAMP;
-        $extended_property_names[] = self::PROPERTY_EXTERNAL_USER_ID;
-        $extended_property_names[] = self::PROPERTY_STATE;
+        $extendedPropertyNames[] = self::PROPERTY_CREATED;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFIED;
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_TIMESTAMP;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_ID;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_OBJECT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_OBJECT_TIMESTAMP;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_STATE;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -30,9 +30,9 @@ class WorkspaceEntityRelation extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_WORKSPACE_ID, 
                 self::PROPERTY_ENTITY_TYPE, 

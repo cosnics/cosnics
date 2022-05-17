@@ -261,13 +261,13 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * Returns the default properties of this dataclass
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_TITLE,
                 self::PROPERTY_ACTIVE,

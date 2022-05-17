@@ -17,12 +17,12 @@ abstract class HomeTargetEntity extends DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self::PROPERTY_ENTITY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_ID;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

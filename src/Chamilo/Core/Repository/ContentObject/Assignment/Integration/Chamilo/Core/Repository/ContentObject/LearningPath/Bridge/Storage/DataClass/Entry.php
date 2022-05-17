@@ -21,12 +21,12 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_TREE_NODE_ATTEMPT_ID;
         $extendedPropertyNames[] = self::PROPERTY_TREE_NODE_DATA_ID;
 
-        return parent::get_default_property_names($extendedPropertyNames);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

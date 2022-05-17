@@ -37,17 +37,17 @@ class ProviderRegistration extends DataClass
     /**
      * Get the default properties
      * 
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_ENTITY_TYPE;
-        $extended_property_names[] = self::PROPERTY_PROVIDER_CLASS;
-        $extended_property_names[] = self::PROPERTY_PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_PROVIDER_CLASS;
+        $extendedPropertyNames[] = self::PROPERTY_PROPERTY_NAME;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

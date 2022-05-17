@@ -54,12 +54,12 @@ class Language extends DataClass
     /**
      * Get the default properties of all languages
      * 
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_ORIGINAL_NAME, 
                 self::PROPERTY_ENGLISH_NAME, 

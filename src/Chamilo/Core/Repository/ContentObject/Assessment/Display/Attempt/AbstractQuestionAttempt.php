@@ -20,17 +20,17 @@ abstract class AbstractQuestionAttempt extends DataClass
 
     /**
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_QUESTION_COMPLEX_ID;
-        $extended_property_names[] = self::PROPERTY_ANSWER;
-        $extended_property_names[] = self::PROPERTY_FEEDBACK;
-        $extended_property_names[] = self::PROPERTY_SCORE;
-        $extended_property_names[] = self::PROPERTY_HINT;
-        return parent::get_default_property_names($extended_property_names);
+        $extendedPropertyNames[] = self::PROPERTY_QUESTION_COMPLEX_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ANSWER;
+        $extendedPropertyNames[] = self::PROPERTY_FEEDBACK;
+        $extendedPropertyNames[] = self::PROPERTY_SCORE;
+        $extendedPropertyNames[] = self::PROPERTY_HINT;
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

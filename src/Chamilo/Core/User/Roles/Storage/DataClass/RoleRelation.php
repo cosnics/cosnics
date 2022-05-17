@@ -16,16 +16,16 @@ class RoleRelation extends DataClass
     /**
      * Get the default properties of all data classes.
      * 
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_ROLE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_ROLE_ID;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

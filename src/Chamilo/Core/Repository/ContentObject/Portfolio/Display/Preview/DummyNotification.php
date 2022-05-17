@@ -49,9 +49,9 @@ class DummyNotification extends Notification
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(array(self::PROPERTY_CONTENT_OBJECT_ID));
+        return parent::getDefaultPropertyNames(array(self::PROPERTY_CONTENT_OBJECT_ID));
     }
 
     /**

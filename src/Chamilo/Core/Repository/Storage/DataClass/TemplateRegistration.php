@@ -74,20 +74,20 @@ class TemplateRegistration extends DataClass
 
     /**
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_TYPE;
-        $extended_property_names[] = self::PROPERTY_NAME;
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_CREATOR_ID;
-        $extended_property_names[] = self::PROPERTY_DEFAULT;
-        $extended_property_names[] = self::PROPERTY_TEMPLATE;
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CREATOR_ID;
+        $extendedPropertyNames[] = self::PROPERTY_DEFAULT;
+        $extendedPropertyNames[] = self::PROPERTY_TEMPLATE;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

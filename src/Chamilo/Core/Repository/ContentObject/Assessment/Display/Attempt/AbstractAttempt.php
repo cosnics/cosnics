@@ -27,18 +27,18 @@ abstract class AbstractAttempt extends DataClass
 
     /**
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_TOTAL_SCORE;
-        $extended_property_names[] = self::PROPERTY_STATUS;
-        $extended_property_names[] = self::PROPERTY_START_TIME;
-        $extended_property_names[] = self::PROPERTY_END_TIME;
-        $extended_property_names[] = self::PROPERTY_TOTAL_TIME;
-        return parent::get_default_property_names($extended_property_names);
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TOTAL_SCORE;
+        $extendedPropertyNames[] = self::PROPERTY_STATUS;
+        $extendedPropertyNames[] = self::PROPERTY_START_TIME;
+        $extendedPropertyNames[] = self::PROPERTY_END_TIME;
+        $extendedPropertyNames[] = self::PROPERTY_TOTAL_TIME;
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -105,27 +105,27 @@ class Package extends DataClass
     }
 
     /**
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return mixed
      */
-    public static function getDefaultProperty_names($extended_property_names = [])
+    public static function getDefaultProperty_names($extendedPropertyNames = [])
     {
-        $extended_property_names[] = self::PROPERTY_CONTEXT;
-        $extended_property_names[] = self::PROPERTY_NAME;
-        $extended_property_names[] = self::PROPERTY_TYPE;
-        $extended_property_names[] = self::PROPERTY_CATEGORY;
-        $extended_property_names[] = self::PROPERTY_AUTHORS;
-        $extended_property_names[] = self::PROPERTY_VERSION;
-        $extended_property_names[] = self::PROPERTY_DESCRIPTION;
-        $extended_property_names[] = self::PROPERTY_CORE_INSTALL;
-        $extended_property_names[] = self::PROPERTY_DEFAULT_INSTALL;
-        $extended_property_names[] = self::PROPERTY_DEPENDENCIES;
-        $extended_property_names[] = self::PROPERTY_EXTRA;
-        $extended_property_names[] = self::PROPERTY_RESOURCES;
-        $extended_property_names[] = self::PROPERTY_ADDITIONAL;
+        $extendedPropertyNames[] = self::PROPERTY_CONTEXT;
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_CATEGORY;
+        $extendedPropertyNames[] = self::PROPERTY_AUTHORS;
+        $extendedPropertyNames[] = self::PROPERTY_VERSION;
+        $extendedPropertyNames[] = self::PROPERTY_DESCRIPTION;
+        $extendedPropertyNames[] = self::PROPERTY_CORE_INSTALL;
+        $extendedPropertyNames[] = self::PROPERTY_DEFAULT_INSTALL;
+        $extendedPropertyNames[] = self::PROPERTY_DEPENDENCIES;
+        $extendedPropertyNames[] = self::PROPERTY_EXTRA;
+        $extendedPropertyNames[] = self::PROPERTY_RESOURCES;
+        $extendedPropertyNames[] = self::PROPERTY_ADDITIONAL;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

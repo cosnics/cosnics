@@ -119,7 +119,7 @@ class PropertyMapper
 
         foreach ($dataClasses as $dataClass)
         {
-            if (in_array($propertyName, $dataClass->get_default_property_names()))
+            if (in_array($propertyName, $dataClass->getDefaultPropertyNames()))
             {
                 $propertyValue = $dataClass->getDefaultProperty($propertyName);
 

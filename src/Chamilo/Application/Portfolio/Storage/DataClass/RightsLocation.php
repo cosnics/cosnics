@@ -36,7 +36,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         $default_property_names = [];
         $default_property_names[] = self::PROPERTY_ID;

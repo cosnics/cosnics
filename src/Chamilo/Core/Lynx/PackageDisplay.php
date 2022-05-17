@@ -127,7 +127,7 @@ class PackageDisplay
 
         $html = [];
         $html[] = '<table class="table table-striped table-bordered table-hover table-data data_table_no_header">';
-        $properties = $package_info->get_default_property_names();
+        $properties = $package_info->getDefaultPropertyNames();
 
         $hidden_properties = array(
             Package::PROPERTY_AUTHORS,

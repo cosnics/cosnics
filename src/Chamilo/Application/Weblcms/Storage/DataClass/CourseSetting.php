@@ -80,13 +80,13 @@ class CourseSetting extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function get_default_property_names($extended_property_names = [])
+    static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_TOOL_ID;
-        $extended_property_names[] = self::PROPERTY_GLOBAL_SETTING;
-        $extended_property_names[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_TOOL_ID;
+        $extendedPropertyNames[] = self::PROPERTY_GLOBAL_SETTING;
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

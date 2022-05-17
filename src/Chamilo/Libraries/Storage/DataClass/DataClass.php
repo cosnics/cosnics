@@ -211,7 +211,7 @@ abstract class DataClass
     public static function factory($class, &$record)
     {
         $object = new $class();
-        foreach ($object->get_default_property_names() as $property)
+        foreach ($object->getDefaultPropertyNames() as $property)
         {
             if (array_key_exists($property, $record))
             {
@@ -308,7 +308,7 @@ abstract class DataClass
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = static::PROPERTY_ID;
 
@@ -521,7 +521,7 @@ abstract class DataClass
      */
     public static function is_default_property_name($name)
     {
-        return in_array($name, static::get_default_property_names());
+        return in_array($name, static::getDefaultPropertyNames());
     }
 
     /**

@@ -42,19 +42,19 @@ class CourseGroupOffice365Reference extends DataClass
     }
 
     /**
-     * @param array $extended_property_names
+     * @param array $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_COURSE_GROUP_ID;
-        $extended_property_names[] = self::PROPERTY_OFFICE365_HAS_TEAM;
-        $extended_property_names[] = self::PROPERTY_OFFICE365_GROUP_ID;
-        $extended_property_names[] = self::PROPERTY_OFFICE365_PLAN_ID;
-        $extended_property_names[] = self::PROPERTY_LINKED;
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_GROUP_ID;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICE365_HAS_TEAM;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICE365_GROUP_ID;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICE365_PLAN_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LINKED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

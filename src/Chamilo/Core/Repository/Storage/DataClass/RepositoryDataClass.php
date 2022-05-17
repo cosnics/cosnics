@@ -73,12 +73,12 @@ abstract class RepositoryDataClass extends DataClass
     /**
      * **********************************************************************
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_CREATED;
-        $extended_property_names[] = self::PROPERTY_MODIFIED;
+        $extendedPropertyNames[] = self::PROPERTY_CREATED;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFIED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
 /**

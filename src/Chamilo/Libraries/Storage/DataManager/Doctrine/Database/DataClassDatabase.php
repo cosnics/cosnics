@@ -258,7 +258,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $objectProperties = $dataClass->getDefaultProperties();
 
-        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
+        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
         {
             $objectProperties[DataClass::PROPERTY_ID] = null;
             unset($objectProperties[DataClass::PROPERTY_ID]);
@@ -268,7 +268,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $this->getConnection()->insert($objectTableName, $objectProperties);
 
-            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
+            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
             {
                 $dataClass->setId($this->getConnection()->lastInsertId($objectTableName));
             }

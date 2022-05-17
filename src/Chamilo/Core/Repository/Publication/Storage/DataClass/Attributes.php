@@ -28,23 +28,23 @@ class Attributes extends DataClass
     const PROPERTY_MODIFIER_SERVICE_ID = 'modifier_service_id';
 
     /**
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_TITLE;
-        $extended_property_names[] = self::PROPERTY_APPLICATION;
-        $extended_property_names[] = self::PROPERTY_LOCATION;
-        $extended_property_names[] = self::PROPERTY_DATE;
-        $extended_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
-        $extended_property_names[] = self::PROPERTY_PUBLISHER_ID;
-        $extended_property_names[] = self::PROPERTY_URL;
-        $extended_property_names[] = self::PROPERTY_PUBLICATION_CONTEXT;
-        $extended_property_names[] = self::PROPERTY_MODIFIER_SERVICE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TITLE;
+        $extendedPropertyNames[] = self::PROPERTY_APPLICATION;
+        $extendedPropertyNames[] = self::PROPERTY_LOCATION;
+        $extendedPropertyNames[] = self::PROPERTY_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_PUBLISHER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_URL;
+        $extendedPropertyNames[] = self::PROPERTY_PUBLICATION_CONTEXT;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFIER_SERVICE_ID;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

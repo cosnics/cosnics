@@ -135,7 +135,7 @@ class ItemService
     {
         $item = $this->getItemTypeInstance($itemType);
 
-        foreach ($item->get_default_property_names() as $property)
+        foreach ($item->getDefaultPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
@@ -675,7 +675,7 @@ class ItemService
             $item->setSort(null);
         }
 
-        foreach ($item->get_default_property_names() as $property)
+        foreach ($item->getDefaultPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {

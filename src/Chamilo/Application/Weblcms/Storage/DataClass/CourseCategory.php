@@ -58,9 +58,9 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      *
      * @return array The property titles.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(array(self::PROPERTY_CODE, self::PROPERTY_STATE));
+        return parent::getDefaultPropertyNames(array(self::PROPERTY_CODE, self::PROPERTY_STATE));
     }
 
     /**

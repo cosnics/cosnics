@@ -181,21 +181,21 @@ class Request extends DataClass
     /**
      * Get the default properties
      *
-     * @param $extended_property_names string[]
+     * @param $extendedPropertyNames string[]
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_QUOTA;
-        $extended_property_names[] = self::PROPERTY_MOTIVATION;
-        $extended_property_names[] = self::PROPERTY_CREATION_DATE;
-        $extended_property_names[] = self::PROPERTY_DECISION_DATE;
-        $extended_property_names[] = self::PROPERTY_DECISION;
-        $extended_property_names[] = self::PROPERTY_DECISION_MOTIVATION;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_QUOTA;
+        $extendedPropertyNames[] = self::PROPERTY_MOTIVATION;
+        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_DECISION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_DECISION;
+        $extendedPropertyNames[] = self::PROPERTY_DECISION_MOTIVATION;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

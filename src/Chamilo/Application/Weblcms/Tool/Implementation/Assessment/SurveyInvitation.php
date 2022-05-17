@@ -23,7 +23,7 @@ class SurveyInvitation
         $this->default_properties = $default_properties;
     }
 
-    public function get_default_property_names()
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         return array(
             self::PROPERTY_ID,

@@ -99,21 +99,21 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     /**
      * Get the default properties
      *
-     * @param array $extended_property_names
+     * @param array $extendedPropertyNames
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_SCHEMA_ID;
-        $extended_property_names[] = self::PROPERTY_NAME;
-        $extended_property_names[] = self::PROPERTY_DISPLAY_NAME;
-        $extended_property_names[] = self::PROPERTY_FIXED;
-        $extended_property_names[] = self::PROPERTY_DISPLAY_ORDER;
-        $extended_property_names[] = self::PROPERTY_VALUE_TYPE;
-        $extended_property_names[] = self::PROPERTY_VALUE_LIMIT;
+        $extendedPropertyNames[] = self::PROPERTY_SCHEMA_ID;
+        $extendedPropertyNames[] = self::PROPERTY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_DISPLAY_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_FIXED;
+        $extendedPropertyNames[] = self::PROPERTY_DISPLAY_ORDER;
+        $extendedPropertyNames[] = self::PROPERTY_VALUE_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_VALUE_LIMIT;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -16,16 +16,16 @@ class StructureLocation extends DataClass
     /**
      * Get the default properties of all data classes.
      * 
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_CONTEXT;
-        $extended_property_names[] = self::PROPERTY_ACTION;
+        $extendedPropertyNames[] = self::PROPERTY_CONTEXT;
+        $extendedPropertyNames[] = self::PROPERTY_ACTION;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

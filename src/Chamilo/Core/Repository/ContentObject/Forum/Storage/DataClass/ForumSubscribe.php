@@ -82,9 +82,9 @@ class ForumSubscribe extends DataClass
      * 
      * @return String[] - The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(array(self::PROPERTY_USER_ID, self::PROPERTY_FORUM_ID));
+        return parent::getDefaultPropertyNames(array(self::PROPERTY_USER_ID, self::PROPERTY_FORUM_ID));
     }
 
     /**

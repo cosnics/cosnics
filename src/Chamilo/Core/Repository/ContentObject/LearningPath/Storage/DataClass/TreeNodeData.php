@@ -49,9 +49,9 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     /**
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_LEARNING_PATH_ID,
                 self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID,

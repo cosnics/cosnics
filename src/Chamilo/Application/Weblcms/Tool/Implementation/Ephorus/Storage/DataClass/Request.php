@@ -255,7 +255,7 @@ class Request extends EphorusDataClass
      *
      * @return string[] - The property request_times.
      */
-    public static function get_default_property_names($default_property_names = [])
+    public static function getDefaultPropertyNames($default_property_names = [])
     {
         $default_property_names[] = self::PROPERTY_COURSE_ID;
         $default_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
@@ -273,7 +273,7 @@ class Request extends EphorusDataClass
         $default_property_names[] = self::PROPERTY_SUMMARY;
         $default_property_names[] = self::PROPERTY_VISIBLE_IN_INDEX;
 
-        return parent::get_default_property_names($default_property_names);
+        return parent::getDefaultPropertyNames($default_property_names);
     }
 
     /**

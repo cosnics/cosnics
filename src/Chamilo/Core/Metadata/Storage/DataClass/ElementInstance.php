@@ -54,11 +54,11 @@ class ElementInstance extends DataClass
     /**
      * Get the default properties
      *
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_SCHEMA_INSTANCE_ID;
         $extendedPropertyNames[] = self::PROPERTY_ELEMENT_ID;
@@ -66,7 +66,7 @@ class ElementInstance extends DataClass
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
 
-        return parent::get_default_property_names($extendedPropertyNames);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

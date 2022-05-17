@@ -38,9 +38,9 @@ abstract class RightsLocation extends NestedSet
      *
      * @return string[]
      */
-    public static function get_default_property_names($extendedPropertyNames = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_TYPE,
                 self::PROPERTY_IDENTIFIER,

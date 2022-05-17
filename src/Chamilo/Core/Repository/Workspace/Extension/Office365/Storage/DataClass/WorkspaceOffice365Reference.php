@@ -17,18 +17,18 @@ class WorkspaceOffice365Reference extends DataClass
     const PROPERTY_LINKED = 'linked';
 
     /**
-     * @param array $extended_property_names
+     * @param array $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_WORKSPACE_ID;
-        $extended_property_names[] = self::PROPERTY_OFFICE365_GROUP_ID;
-        $extended_property_names[] = self::PROPERTY_OFFICE365_PLAN_ID;
-        $extended_property_names[] = self::PROPERTY_LINKED;
+        $extendedPropertyNames[] = self::PROPERTY_WORKSPACE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICE365_GROUP_ID;
+        $extendedPropertyNames[] = self::PROPERTY_OFFICE365_PLAN_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LINKED;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -47,7 +47,7 @@ class PublicationRepository
 
         $propertiesArray[] = new PropertiesConditionVariable($publicationClassName);
 
-        foreach (ContentObject::get_default_property_names() as $property_name)
+        foreach (ContentObject::getDefaultPropertyNames() as $property_name)
         {
             if ($property_name != ContentObject::PROPERTY_ID)
             {
@@ -205,9 +205,9 @@ class PublicationRepository
     {
         /** @var Publication $publication */
         $publication = new $publicationClassName(
-            array_intersect_key($record, array_flip($publicationClassName::get_default_property_names())));
+            array_intersect_key($record, array_flip($publicationClassName::getDefaultPropertyNames())));
 
-        $defaultProperties = array_intersect_key($record, array_flip(ContentObject::get_default_property_names()));
+        $defaultProperties = array_intersect_key($record, array_flip(ContentObject::getDefaultPropertyNames()));
 
         $defaultProperties[ContentObject::PROPERTY_ID] = $publication->get_content_object_id();
 

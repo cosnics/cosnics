@@ -255,7 +255,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
         $objectProperties = $dataClass->getDefaultProperties();
 
-        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
+        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
         {
             $objectProperties[DataClass::PROPERTY_ID] = null;
         }
@@ -270,7 +270,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 throw new Exception('Insert object Failed. Query: ' . $insertSql);
             }
 
-            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->get_default_property_names()))
+            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
             {
                 $dataClass->setId($this->getConnection()->Insert_ID($objectTableName));
             }

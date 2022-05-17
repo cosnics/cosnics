@@ -37,11 +37,11 @@ abstract class CommonRequest extends DataClass
         return $this->get_default_property(self::PROPERTY_DECISION_DATE);
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array_merge(
-                $extended_property_names, array(
+                $extendedPropertyNames, array(
                     self::PROPERTY_USER_ID,
                     self::PROPERTY_SUBJECT,
                     self::PROPERTY_MOTIVATION,

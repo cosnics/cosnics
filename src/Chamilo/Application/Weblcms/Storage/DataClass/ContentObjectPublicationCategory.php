@@ -111,7 +111,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         return $this->get_default_property(self::PROPERTY_COURSE);
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         return array(
             self::PROPERTY_COURSE,

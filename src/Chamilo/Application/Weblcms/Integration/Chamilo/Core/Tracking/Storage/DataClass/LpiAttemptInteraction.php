@@ -35,9 +35,9 @@ class LpiAttemptInteraction extends SimpleTracker
         return $this->get_default_property(self::PROPERTY_CORRECT_RESPONSES);
     }
 
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        return parent::get_default_property_names(
+        return parent::getDefaultPropertyNames(
             array(
                 self::PROPERTY_LPI_VIEW_ID,
                 self::PROPERTY_INTERACTION_ID,

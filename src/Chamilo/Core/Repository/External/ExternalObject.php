@@ -132,20 +132,20 @@ abstract class ExternalObject
      *
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_ID;
-        $extended_property_names[] = self::PROPERTY_EXTERNAL_REPOSITORY_ID;
-        $extended_property_names[] = self::PROPERTY_TITLE;
-        $extended_property_names[] = self::PROPERTY_DESCRIPTION;
-        $extended_property_names[] = self::PROPERTY_OWNER_ID;
-        $extended_property_names[] = self::PROPERTY_OWNER_NAME;
-        $extended_property_names[] = self::PROPERTY_CREATED;
-        $extended_property_names[] = self::PROPERTY_MODIFIED;
-        $extended_property_names[] = self::PROPERTY_TYPE;
-        $extended_property_names[] = self::PROPERTY_RIGHTS;
+        $extendedPropertyNames[] = self::PROPERTY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_REPOSITORY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TITLE;
+        $extendedPropertyNames[] = self::PROPERTY_DESCRIPTION;
+        $extendedPropertyNames[] = self::PROPERTY_OWNER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_OWNER_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_CREATED;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFIED;
+        $extendedPropertyNames[] = self::PROPERTY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_RIGHTS;
 
-        return $extended_property_names;
+        return $extendedPropertyNames;
     }
 
     /**

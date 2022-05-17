@@ -19,14 +19,14 @@ abstract class Feedback extends DataClass
      * 
      * @return array The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_COMMENT;
-        $extended_property_names[] = self::PROPERTY_CREATION_DATE;
-        $extended_property_names[] = self::PROPERTY_MODIFICATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_COMMENT;
+        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_MODIFICATION_DATE;
 
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     public function get_user_id()

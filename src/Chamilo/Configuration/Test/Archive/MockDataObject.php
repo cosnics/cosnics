@@ -27,7 +27,7 @@ class MockDataObject
         $this->props = $props;
     }
 
-    public function get_default_property_names()
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
         return array('id', 'inta', 'intb', 'texta', 'textb', 'bool');
     }

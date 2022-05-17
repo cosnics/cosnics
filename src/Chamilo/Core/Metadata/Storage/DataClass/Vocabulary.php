@@ -51,18 +51,18 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
     /**
      * Get the default properties
      * 
-     * @param string[] $extended_property_names
+     * @param string[] $extendedPropertyNames
      *
      * @return string[] The property names.
      */
-    public static function get_default_property_names($extended_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_property_names[] = self::PROPERTY_ELEMENT_ID;
-        $extended_property_names[] = self::PROPERTY_USER_ID;
-        $extended_property_names[] = self::PROPERTY_DEFAULT_VALUE;
-        $extended_property_names[] = self::PROPERTY_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_ELEMENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_DEFAULT_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_VALUE;
         
-        return parent::get_default_property_names($extended_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**
