@@ -185,7 +185,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_section';
     }

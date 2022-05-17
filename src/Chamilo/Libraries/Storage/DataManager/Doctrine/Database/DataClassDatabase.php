@@ -249,11 +249,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if ($dataClass instanceof CompositeDataClass)
         {
             $parentClass = $dataClass->parent_class_name();
-            $objectTableName = $parentClass::get_table_name();
+            $objectTableName = $parentClass::getTableName();
         }
         else
         {
-            $objectTableName = $dataClass->get_table_name();
+            $objectTableName = $dataClass->getTableName();
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
@@ -278,7 +278,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
                 $objectProperties = $dataClass->get_additional_properties();
                 $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-                $this->getConnection()->insert($dataClass->get_table_name(), $objectProperties);
+                $this->getConnection()->insert($dataClass->getTableName(), $objectProperties);
             }
 
             return true;
@@ -302,7 +302,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         try
         {
-            $this->getConnection()->insert($dataClassName::get_table_name(), $record);
+            $this->getConnection()->insert($dataClassName::getTableName(), $record);
         }
         catch (Exception $exception)
         {
@@ -325,7 +325,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function delete($dataClassName, Condition $condition = null)
     {
         $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->delete($dataClassName::get_table_name(), $this->getAlias($dataClassName::get_table_name()));
+        $queryBuilder->delete($dataClassName::getTableName(), $this->getAlias($dataClassName::getTableName()));
 
         if (isset($condition))
         {
@@ -675,20 +675,20 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
             get_parent_class($dataClassName) == CompositeDataClass::class)
         {
-            $tableName = $dataClassName::get_table_name();
+            $tableName = $dataClassName::getTableName();
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::is_extended())
         {
-            $tableName = $dataClassName::get_table_name();
+            $tableName = $dataClassName::getTableName();
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
         {
             $parent = $dataClassName::parent_class_name();
-            $tableName = $parent::get_table_name();
+            $tableName = $parent::getTableName();
         }
         else
         {
-            $tableName = $dataClassName::get_table_name();
+            $tableName = $dataClassName::getTableName();
         }
 
         return $tableName;
@@ -894,7 +894,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $conditionPartTranslatorService = $this->getConditionPartTranslatorService();
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
-            $queryBuilder->update($dataClassName::get_table_name());
+            $queryBuilder->update($dataClassName::getTableName());
 
             foreach ($properties->get() as $dataClassProperty)
             {

@@ -33,7 +33,7 @@ class Entry extends
         return parent::get_default_property_names($extendedPropertyNames);
     }
 
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_learning_path_assignment_entry';
     }

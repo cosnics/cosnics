@@ -38,7 +38,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $subselect = new SubselectCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-            Element::get_table_name(),
+            Element::getTableName(),
             $subcondition);
 
         return self::deletes(Value::class, $subselect);

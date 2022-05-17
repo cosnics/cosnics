@@ -133,7 +133,7 @@ class ForumSubforumCreatorComponent extends Manager implements ViewerInterface,
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($object),
-                ComplexContentObjectItem::get_table_name()));
+                ComplexContentObjectItem::getTableName()));
         foreach($complex_content_object_items as $complex_content_object_item)
         {
 

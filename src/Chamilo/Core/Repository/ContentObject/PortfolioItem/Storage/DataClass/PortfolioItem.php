@@ -47,7 +47,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_portfolio_item';
     }

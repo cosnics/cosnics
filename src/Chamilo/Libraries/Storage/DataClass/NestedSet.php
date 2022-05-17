@@ -536,7 +536,7 @@ abstract class NestedSet extends DataClass
             $where_condition[] = $id;
         }
 
-        $query = "UPDATE " . $this->get_table_name() . " SET " . self::PROPERTY_LEFT_VALUE . " = CASE " .
+        $query = "UPDATE " . $this->getTableName() . " SET " . self::PROPERTY_LEFT_VALUE . " = CASE " .
             implode('', $left_updates) . ", " . " SET " . self::PROPERTY_RIGHT_VALUE . " = CASE " .
             implode('', $right_updates) . ", " . " WHERE " . self::PROPERTY_ID . " IN ( " .
             implode(', ', $where_condition) . ")";

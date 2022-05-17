@@ -71,7 +71,7 @@ class ForumTopicView extends SimpleTracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_forum_topic_view';
     }

@@ -11,7 +11,7 @@ namespace Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\Dat
 class EntryAttachment extends
     \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\EntryAttachment
 {
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_learning_path_assignment_entry_attachment';
     }

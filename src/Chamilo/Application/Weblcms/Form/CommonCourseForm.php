@@ -342,7 +342,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
         $tools_condition = new SubselectCondition(
             new PropertyConditionVariable(CourseTool::class, CourseTool::PROPERTY_ID),
             new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID),
-            CourseSetting::get_table_name(), $settings_condition
+            CourseSetting::getTableName(), $settings_condition
         );
 
         $toolsArray = DataManager::retrieves(CourseTool::class, new DataClassRetrievesParameters($tools_condition));

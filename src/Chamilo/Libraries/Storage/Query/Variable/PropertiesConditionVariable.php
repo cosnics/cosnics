@@ -66,7 +66,7 @@ class PropertiesConditionVariable extends ConditionVariable
          */
         $class_name = $this->get_class();
 
-        return DataManager::get_alias($class_name::get_table_name());
+        return DataManager::get_alias($class_name::getTableName());
     }
 
     /**

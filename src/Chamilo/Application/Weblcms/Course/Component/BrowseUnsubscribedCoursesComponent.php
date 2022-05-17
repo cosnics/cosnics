@@ -62,9 +62,9 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_COURSE_ID), 
-                CourseEntityRelation::get_table_name(), 
+                CourseEntityRelation::getTableName(),
                 new AndCondition($userConditions), 
-                Course::get_table_name()));
+                Course::getTableName()));
         
         $groups = $user->get_groups(true);
         
@@ -76,7 +76,7 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
                     CourseEntityRelation::class,
                     CourseEntityRelation::PROPERTY_ENTITY_ID), 
                 $user->get_groups(true), 
-                CourseEntityRelation::get_table_name());
+                CourseEntityRelation::getTableName());
             $groupsConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,
@@ -89,9 +89,9 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
                     new PropertyConditionVariable(
                         CourseEntityRelation::class,
                         CourseEntityRelation::PROPERTY_COURSE_ID), 
-                    CourseEntityRelation::get_table_name(), 
+                    CourseEntityRelation::getTableName(),
                     new AndCondition($groupsConditions), 
-                    Course::get_table_name()));
+                    Course::getTableName()));
         }
         
         return new AndCondition($conditions);

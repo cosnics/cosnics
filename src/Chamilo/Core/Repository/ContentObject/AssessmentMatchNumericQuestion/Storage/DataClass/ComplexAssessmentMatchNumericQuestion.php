@@ -53,7 +53,7 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_complex_assessment_match_numeric_question';
     }

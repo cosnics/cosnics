@@ -169,7 +169,7 @@ class ContentObjectOwnerChanger
                 ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($co->get_id()),
-            ComplexContentObjectItem::get_table_name());
+            ComplexContentObjectItem::getTableName());
 
         $items = DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $condition);
         foreach($items as $item)

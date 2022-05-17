@@ -71,7 +71,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_assessment_rating_question';
     }

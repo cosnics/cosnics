@@ -43,7 +43,7 @@ class SubselectConditionTranslator extends ConditionTranslator
         $string[] = 'FROM';
 
         $class = $this->getCondition()->get_value()->get_class();
-        $table = $class::get_table_name();
+        $table = $class::getTableName();
 
         $alias = $this->getDataClassDatabase()->getAlias($table);
 

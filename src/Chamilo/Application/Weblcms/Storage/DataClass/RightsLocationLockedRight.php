@@ -56,7 +56,7 @@ class RightsLocationLockedRight extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_rights_location_locked_right';
     }

@@ -1114,7 +1114,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition, array(
                 new OrderBy(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::get_table_name())
+                    self::get_alias(ContentObject::getTableName())
                 )
             )
         );
@@ -1159,7 +1159,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             array(
                 new OrderBy(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::get_table_name())
+                    self::get_alias(ContentObject::getTableName())
                 )
             )
         );
@@ -1309,7 +1309,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition, array(
                 new OrderBy(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::get_table_name())
+                    self::get_alias(ContentObject::getTableName())
                 )
             )
         );

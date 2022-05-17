@@ -10,7 +10,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  */
 class Score extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Bridge\Storage\DataClass\Score
 {
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_learning_path_assignment_score';
     }

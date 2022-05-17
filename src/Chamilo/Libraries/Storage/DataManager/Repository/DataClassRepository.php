@@ -1194,12 +1194,12 @@ class DataClassRepository
         if ($dataClass instanceof CompositeDataClass)
         {
             $propertyConditionClass = $dataClass::parent_class_name();
-            $dataClassTableName = $propertyConditionClass::get_table_name();
+            $dataClassTableName = $propertyConditionClass::getTableName();
         }
         else
         {
             $propertyConditionClass = $dataClass::class_name();
-            $dataClassTableName = $dataClass->get_table_name();
+            $dataClassTableName = $dataClass->getTableName();
         }
 
         $condition = new EqualityCondition(
@@ -1222,7 +1222,7 @@ class DataClassRepository
             );
 
             $result = $this->getDataClassDatabase()->update(
-                $dataClass->get_table_name(), $condition, $dataClass->get_additional_properties()
+                $dataClass->getTableName(), $condition, $dataClass->get_additional_properties()
             );
         }
 

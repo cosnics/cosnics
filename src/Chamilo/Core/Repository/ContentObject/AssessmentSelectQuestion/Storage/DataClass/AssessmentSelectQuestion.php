@@ -21,7 +21,7 @@ class AssessmentSelectQuestion extends ContentObject
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_assessment_select_question';
     }

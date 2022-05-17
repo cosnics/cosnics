@@ -67,7 +67,7 @@ class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
     {
         if (is_null($baseKey))
         {
-            $baseKey = $this->generate_key($this->get_base_object()->get_table_name());
+            $baseKey = $this->generate_key($this->get_base_object()->getTableName());
         }
 
         $this->base_key = $baseKey;

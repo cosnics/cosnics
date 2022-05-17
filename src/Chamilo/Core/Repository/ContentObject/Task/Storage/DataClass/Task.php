@@ -216,7 +216,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_task';
     }

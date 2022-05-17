@@ -159,7 +159,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new PropertyConditionVariable(Forum::class, Forum::PROPERTY_ID))));
 
-        $forum_post_alias = self::get_alias(ForumPost::get_table_name());
+        $forum_post_alias = self::get_alias(ForumPost::getTableName());
 
         $order_by = [];
         $order_by[] = new OrderBy(
@@ -196,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 ComplexContentObjectItem::PROPERTY_PARENT),
             new StaticConditionVariable($forum_id));
 
-        $forum_post_alias = self::get_alias(ForumPost::get_table_name());
+        $forum_post_alias = self::get_alias(ForumPost::getTableName());
 
         $order_by = [];
         $order_by[] = new OrderBy(

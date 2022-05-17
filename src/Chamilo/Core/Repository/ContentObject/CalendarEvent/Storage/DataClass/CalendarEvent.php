@@ -67,7 +67,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_calendar_event';
     }

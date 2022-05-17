@@ -67,7 +67,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id()),
-                ComplexContentObjectItem::get_table_name()));
+                ComplexContentObjectItem::getTableName()));
 
         if ($return_complex_items)
         {
@@ -101,9 +101,9 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
-            ComplexContentObjectItem::get_table_name(),
+            ComplexContentObjectItem::getTableName(),
             $complex_content_object_item_condition,
-            ContentObject::get_table_name());
+            ContentObject::getTableName());
         $content_object_condition = new AndCondition($content_object_conditions);
 
         return DataManager::retrieve_active_content_objects(
@@ -124,7 +124,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_wiki';
     }

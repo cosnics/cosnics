@@ -128,7 +128,7 @@ class Connector
             new PropertyConditionVariable(
                 CourseTypeUserCategory::class, 
                 CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID), 
-            CourseTypeUserCategory::get_table_name(), 
+            CourseTypeUserCategory::getTableName(),
             $subcondition);
         
         return DataManager::retrieves(

@@ -33,7 +33,7 @@ class Feedback extends \Chamilo\Core\Repository\ContentObject\Portfolio\Storage\
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'portfolio_feedback';
     }

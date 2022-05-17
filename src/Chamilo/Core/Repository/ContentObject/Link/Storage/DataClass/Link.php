@@ -18,7 +18,7 @@ class Link extends ContentObject implements Versionable, Includeable
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_link';
     }

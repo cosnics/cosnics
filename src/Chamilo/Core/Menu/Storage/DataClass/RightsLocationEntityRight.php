@@ -21,7 +21,7 @@ class RightsLocationEntityRight extends \Chamilo\Libraries\Rights\Domain\RightsL
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'menu_rights_location_entity_right';
     }

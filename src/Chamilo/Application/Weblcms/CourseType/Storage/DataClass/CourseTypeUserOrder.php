@@ -109,7 +109,7 @@ class CourseTypeUserOrder extends DataClass implements DisplayOrderDataClassList
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_type_user_order';
     }

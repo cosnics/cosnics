@@ -35,8 +35,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * This method uses dynamic
      * variables and dynamic query construction. For each new table added, care must be taken. Example: Add new table
      * 'x' for class 'X'. The following constants must also be declared. $x_ref = 'x'; $x_table =
-     * {DataManager}::getInstance()->escape_table_name(X::get_table_name()); //DataManager must be the appropriate data
-     * manager. $x_alias = {DataManager}::getInstance()->get_alias(X::get_table_name()); //DataManager must be the
+     * {DataManager}::getInstance()->escape_table_name(X::getTableName()); //DataManager must be the appropriate data
+     * manager. $x_alias = {DataManager}::getInstance()->get_alias(X::getTableName()); //DataManager must be the
      * appropriate data manager. Failure to declare them will break the code using dynamic variables. New columns to be
      * added to $select. New tables to be added to $table_aliases using $x_ref. New joins to be added to
      * $join_declarations. Subselects are not catered for.

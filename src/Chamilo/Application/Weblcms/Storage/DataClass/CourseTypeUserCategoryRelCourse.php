@@ -84,7 +84,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_type_user_category_rel_course';
     }

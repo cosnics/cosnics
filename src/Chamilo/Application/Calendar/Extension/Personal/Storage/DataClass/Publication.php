@@ -50,7 +50,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'calendar_personal_publication';
     }

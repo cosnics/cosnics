@@ -36,7 +36,7 @@ class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Br
         return parent::get_default_property_names($extendedPropertyNames);
     }
 
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_assignment_entry';
     }

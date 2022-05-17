@@ -136,7 +136,7 @@ class AssessmentMergerComponent extends Manager implements ViewerInterface, Tabl
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-            ), ComplexContentObjectItem::get_table_name(), $sub_condition, ContentObject::get_table_name()
+            ), ComplexContentObjectItem::getTableName(), $sub_condition, ContentObject::getTableName()
         );
 
         return $condition;

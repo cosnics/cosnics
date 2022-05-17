@@ -286,7 +286,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'metadata_element';
     }

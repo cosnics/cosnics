@@ -34,7 +34,7 @@ class Notification extends \Chamilo\Core\Repository\ContentObject\Portfolio\Stor
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'portfolio_notification';
     }

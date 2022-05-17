@@ -38,7 +38,7 @@ class OneToManyForeignObjectsParameters extends ForeignObjectsParameters
     {
         if (is_null($foreignKey))
         {
-            $foreignKey = $this->generate_key($this->get_base_object()->get_table_name());
+            $foreignKey = $this->generate_key($this->get_base_object()->getTableName());
         }
 
         parent::set_foreign_key($foreignKey);

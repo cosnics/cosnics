@@ -162,7 +162,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'home_element';
     }

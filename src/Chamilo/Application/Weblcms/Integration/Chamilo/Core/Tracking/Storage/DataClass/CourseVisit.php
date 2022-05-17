@@ -150,7 +150,7 @@ class CourseVisit extends Tracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_course_visit';
     }

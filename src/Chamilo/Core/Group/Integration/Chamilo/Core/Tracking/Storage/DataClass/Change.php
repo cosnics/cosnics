@@ -23,7 +23,7 @@ class Change extends ChangesTracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_group_change';
     }

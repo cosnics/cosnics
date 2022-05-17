@@ -14,7 +14,7 @@ class Visibility extends \Chamilo\Libraries\Calendar\Event\Visibility
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'calendar_visibility';
     }

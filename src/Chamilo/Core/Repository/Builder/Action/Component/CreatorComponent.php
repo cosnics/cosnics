@@ -211,7 +211,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
             ComplexContentObjectItem::class, new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                ), new StaticConditionVariable($parent), ComplexContentObjectItem::get_table_name()
+                ), new StaticConditionVariable($parent), ComplexContentObjectItem::getTableName()
             )
         );
         foreach($complex_content_object_items as $complex_content_object_item)

@@ -280,7 +280,7 @@ abstract class ExternalObject
             );
             $sync_conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                new StaticConditionVariable(Session::get_user_id()), ContentObject::get_table_name()
+                new StaticConditionVariable(Session::get_user_id()), ContentObject::getTableName()
             );
             $sync_condition = new AndCondition($sync_conditions);
 

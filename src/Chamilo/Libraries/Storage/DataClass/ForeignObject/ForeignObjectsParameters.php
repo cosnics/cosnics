@@ -69,7 +69,7 @@ class ForeignObjectsParameters
      */
     protected function generate_key($className)
     {
-        return $className::get_table_name() . '_' . DataClass::PROPERTY_ID;
+        return $className::getTableName() . '_' . DataClass::PROPERTY_ID;
     }
 
     /**

@@ -12,7 +12,7 @@ class MockDataObject
 
     public $props;
 
-    public function get_table_name()
+    public function getTableName()
     {
         return 'mockdata';
     }

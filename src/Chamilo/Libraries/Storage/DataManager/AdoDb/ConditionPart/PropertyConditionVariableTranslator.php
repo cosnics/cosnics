@@ -33,7 +33,7 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 
         if ($enableAliasing)
         {
-            $alias = $this->getDataClassDatabase()->getAlias($className::get_table_name());
+            $alias = $this->getDataClassDatabase()->getAlias($className::getTableName());
         }
         else
         {

@@ -162,7 +162,7 @@ class ApplicationItem extends Item
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'menu_application_item';
     }

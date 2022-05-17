@@ -16,7 +16,7 @@ abstract class User extends AggregateTracker
     const TYPE_PROVIDER = 'provider';
     const TYPE_REFERER = 'referer';
 
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_user_user';
     }

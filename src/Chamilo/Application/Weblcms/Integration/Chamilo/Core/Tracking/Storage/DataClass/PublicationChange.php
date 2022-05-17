@@ -8,7 +8,7 @@ class PublicationChange extends ChangesTracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_publication_change';
     }

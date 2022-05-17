@@ -192,7 +192,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
             ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            ContentObject::get_table_name(), $subselect_condition
+            ContentObject::getTableName(), $subselect_condition
         );
 
         $condition = new AndCondition($conditions);

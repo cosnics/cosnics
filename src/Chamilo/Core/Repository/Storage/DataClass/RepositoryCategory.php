@@ -385,7 +385,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_repository_category';
     }

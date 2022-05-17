@@ -75,7 +75,7 @@ class StructureLocationRole extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'rights_structure_location_role';
     }

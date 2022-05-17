@@ -204,7 +204,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_category';
     }

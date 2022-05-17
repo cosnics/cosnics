@@ -110,7 +110,7 @@ class LpiAttemptObjective extends SimpleTracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_lpi_attempt_objective';
     }

@@ -47,7 +47,7 @@ class RightsLocationEntityRightGroup extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_quote_rights_location_entity_right_group';
     }

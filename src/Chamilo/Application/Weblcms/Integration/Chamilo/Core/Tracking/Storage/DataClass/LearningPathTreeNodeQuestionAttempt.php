@@ -16,7 +16,7 @@ class LearningPathTreeNodeQuestionAttempt extends TreeNodeQuestionAttempt
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_learning_path_tree_node_question_attempt';
     }

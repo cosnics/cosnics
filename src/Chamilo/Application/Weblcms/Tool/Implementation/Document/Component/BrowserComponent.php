@@ -180,7 +180,7 @@ class BrowserComponent extends Manager
                 $image_subselect_conditions[] = new SubselectCondition(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-                    ), new PropertyConditionVariable($class, $class::PROPERTY_ID), $class::get_table_name(),
+                    ), new PropertyConditionVariable($class, $class::PROPERTY_ID), $class::getTableName(),
                     $image_condition
                 );
             }

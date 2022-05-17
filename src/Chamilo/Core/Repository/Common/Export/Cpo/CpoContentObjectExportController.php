@@ -361,7 +361,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
                 $content_object_ids, 
-                ContentObject::get_table_name());
+                ContentObject::getTableName());
         }
         else
         {
@@ -508,7 +508,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($content_object->get_id()), 
-                ComplexContentObjectItem::get_table_name());
+                ComplexContentObjectItem::getTableName());
             $children = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class,
                 $condition);

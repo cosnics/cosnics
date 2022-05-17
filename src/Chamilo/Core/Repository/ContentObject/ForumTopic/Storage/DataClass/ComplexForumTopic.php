@@ -90,7 +90,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_complex_forum_topic';
     }

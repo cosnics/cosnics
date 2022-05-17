@@ -88,7 +88,7 @@ class UserStatusChange extends SimpleTracker
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_user_status_change';
     }

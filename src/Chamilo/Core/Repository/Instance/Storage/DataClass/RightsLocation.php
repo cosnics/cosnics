@@ -19,7 +19,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_instance_rights_location';
     }

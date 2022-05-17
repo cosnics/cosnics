@@ -28,7 +28,7 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_feedback';
     }

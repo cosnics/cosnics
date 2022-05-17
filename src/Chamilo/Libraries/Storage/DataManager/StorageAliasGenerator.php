@@ -139,7 +139,7 @@ class StorageAliasGenerator
         /**
          * @var \Chamilo\Libraries\Storage\DataClass\DataClass $class
          */
-        return $this->getTableAlias($class::get_table_name());
+        return $this->getTableAlias($class::getTableName());
     }
 
     /**

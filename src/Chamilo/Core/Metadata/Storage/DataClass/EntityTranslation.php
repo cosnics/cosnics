@@ -77,7 +77,7 @@ class EntityTranslation extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'metadata_entity_translation';
     }

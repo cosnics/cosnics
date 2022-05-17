@@ -52,7 +52,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
                     new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                        ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                        ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
                     )
                 )
             );
@@ -132,7 +132,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
             );
             $this->questions = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $condition
@@ -160,7 +160,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_assessment';
     }

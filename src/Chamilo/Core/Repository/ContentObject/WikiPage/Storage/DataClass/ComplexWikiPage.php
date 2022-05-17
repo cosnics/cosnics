@@ -37,7 +37,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_complex_wiki_page';
     }
@@ -60,13 +60,13 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                ), new StaticConditionVariable($this->get_parent()), ComplexContentObjectItem::get_table_name()
+                ), new StaticConditionVariable($this->get_parent()), ComplexContentObjectItem::getTableName()
             );
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
-                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::get_table_name()
+                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
                 )
             );
 

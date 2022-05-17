@@ -30,7 +30,7 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
 
         if ($enableAliasing)
         {
-            $tableAlias = $this->getDataClassDatabase()->getAlias($className::get_table_name());
+            $tableAlias = $this->getDataClassDatabase()->getAlias($className::getTableName());
         }
         else
         {

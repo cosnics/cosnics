@@ -60,7 +60,7 @@ class CourseGroupOffice365Reference extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_group_office365_reference';
     }

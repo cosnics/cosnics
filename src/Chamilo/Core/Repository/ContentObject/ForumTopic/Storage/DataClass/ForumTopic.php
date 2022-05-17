@@ -223,7 +223,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_forum_topic';
     }

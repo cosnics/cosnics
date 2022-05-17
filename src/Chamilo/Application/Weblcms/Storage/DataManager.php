@@ -482,7 +482,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new SubselectCondition(
                 new PropertyConditionVariable(
                     CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
-                ), new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), Course::get_table_name()
+                ), new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), Course::getTableName()
             )
         );
 

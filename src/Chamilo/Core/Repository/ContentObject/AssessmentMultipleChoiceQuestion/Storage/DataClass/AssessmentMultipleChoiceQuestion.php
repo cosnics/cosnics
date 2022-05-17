@@ -111,7 +111,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_assessment_multiple_choice_question';
     }

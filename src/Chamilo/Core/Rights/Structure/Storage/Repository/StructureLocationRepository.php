@@ -54,11 +54,11 @@ class StructureLocationRepository extends DataManagerRepository implements Struc
      */
     public function truncateStructureLocationsAndRoles()
     {
-        if (! DataManager::truncate_storage_unit(StructureLocation::get_table_name()))
+        if (! DataManager::truncate_storage_unit(StructureLocation::getTableName()))
         {
             return false;
         }
         
-        return DataManager::truncate_storage_unit(StructureLocationRole::get_table_name());
+        return DataManager::truncate_storage_unit(StructureLocationRole::getTableName());
     }
 }

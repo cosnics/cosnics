@@ -85,7 +85,7 @@ class Instance extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'configuration_form_instance';
     }

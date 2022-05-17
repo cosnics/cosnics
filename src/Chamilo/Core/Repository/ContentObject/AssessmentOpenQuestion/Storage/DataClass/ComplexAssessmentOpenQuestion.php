@@ -53,7 +53,7 @@ class ComplexAssessmentOpenQuestion extends ComplexContentObjectItem implements 
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_complex_assessment_open_question';
     }

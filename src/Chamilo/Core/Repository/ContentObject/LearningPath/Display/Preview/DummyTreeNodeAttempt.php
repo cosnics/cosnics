@@ -34,7 +34,7 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_learning_path_preview_tree_node_attempt';
     }

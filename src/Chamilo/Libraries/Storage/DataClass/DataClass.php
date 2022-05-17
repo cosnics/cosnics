@@ -188,7 +188,7 @@ abstract class DataClass
                 $dependency_class, new DataClassRetrievesParameters($dependency_condition)
             );
 
-            foreach($dependency_objects as $dependency_object)
+            foreach ($dependency_objects as $dependency_object)
             {
                 if (!$dependency_object->delete())
                 {
@@ -488,12 +488,7 @@ abstract class DataClass
         return (isset($properties) && array_key_exists($propertyName, $properties)) ? $properties[$propertyName] : null;
     }
 
-    /**
-     * Returns the table name for this dataclass
-     *
-     * @return string
-     */
-    abstract public static function get_table_name();
+    abstract public static function getTableName(): string;
 
     /**
      * Checks wether the object has errors

@@ -73,7 +73,7 @@ class PublicationGroup extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'calendar_personal_publication_group';
     }

@@ -90,7 +90,7 @@ class AssessmentAttempt extends AbstractAttempt
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'tracking_weblcms_assessment_attempt';
     }

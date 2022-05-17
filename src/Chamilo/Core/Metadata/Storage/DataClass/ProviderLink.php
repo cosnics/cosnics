@@ -151,7 +151,7 @@ class ProviderLink extends DataClass
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'metadata_provider_link';
     }

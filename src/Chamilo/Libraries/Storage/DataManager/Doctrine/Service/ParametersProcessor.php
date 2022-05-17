@@ -324,23 +324,23 @@ class ParametersProcessor
                 {
                     case Join::TYPE_NORMAL :
                         $queryBuilder->join(
-                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
-                            $joinDataClassName::get_table_name(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()), $joinCondition
+                            $storageAliasGenerator->getTableAlias($dataClassName::getTableName()),
+                            $joinDataClassName::getTableName(),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::getTableName()), $joinCondition
                         );
                         break;
                     case Join::TYPE_RIGHT :
                         $queryBuilder->rightJoin(
-                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
-                            $joinDataClassName::get_table_name(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()), $joinCondition
+                            $storageAliasGenerator->getTableAlias($dataClassName::getTableName()),
+                            $joinDataClassName::getTableName(),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::getTableName()), $joinCondition
                         );
                         break;
                     case Join::TYPE_LEFT :
                         $queryBuilder->leftJoin(
-                            $storageAliasGenerator->getTableAlias($dataClassName::get_table_name()),
-                            $joinDataClassName::get_table_name(),
-                            $storageAliasGenerator->getTableAlias($joinDataClassName::get_table_name()), $joinCondition
+                            $storageAliasGenerator->getTableAlias($dataClassName::getTableName()),
+                            $joinDataClassName::getTableName(),
+                            $storageAliasGenerator->getTableAlias($joinDataClassName::getTableName()), $joinCondition
                         );
                         break;
                 }

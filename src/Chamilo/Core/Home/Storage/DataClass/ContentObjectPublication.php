@@ -34,7 +34,7 @@ class ContentObjectPublication extends Publication
      *
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'home_content_object_publication';
     }

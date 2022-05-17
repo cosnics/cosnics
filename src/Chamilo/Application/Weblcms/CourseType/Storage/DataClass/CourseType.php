@@ -342,7 +342,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_type';
     }

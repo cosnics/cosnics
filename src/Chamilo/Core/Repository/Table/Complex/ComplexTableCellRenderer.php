@@ -194,7 +194,7 @@ class ComplexTableCellRenderer extends DataClassTableCellRenderer implements Tab
                 {
                     $condition = new EqualityCondition(
                         ComplexContentObjectItem::PROPERTY_PARENT, $cloi->get_ref(),
-                        ComplexContentObjectItem::get_table_name()
+                        ComplexContentObjectItem::getTableName()
                     );
 
                     return DataManager::count_complex_content_object_items(

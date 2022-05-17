@@ -100,7 +100,7 @@ class CourseEntityRelation extends DataClass
         return $this->get_default_property(self::PROPERTY_STATUS);
     }
 
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'weblcms_course_entity_relation';
     }

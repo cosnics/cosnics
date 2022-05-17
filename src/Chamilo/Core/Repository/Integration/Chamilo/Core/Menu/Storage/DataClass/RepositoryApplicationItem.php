@@ -22,9 +22,9 @@ class RepositoryApplicationItem extends ApplicationItem
         return new FontAwesomeGlyph('hdd', [], null, 'fas');
     }
 
-    public static function get_table_name()
+    public static function getTableName(): string
     {
-        return ApplicationItem::get_table_name();
+        return ApplicationItem::getTableName();
     }
 
     /**

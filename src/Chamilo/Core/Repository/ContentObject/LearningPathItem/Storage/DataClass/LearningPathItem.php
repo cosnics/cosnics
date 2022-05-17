@@ -37,7 +37,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
     /**
      * @return string
      */
-    public static function get_table_name()
+    public static function getTableName(): string
     {
         return 'repository_learning_path_item';
     }
