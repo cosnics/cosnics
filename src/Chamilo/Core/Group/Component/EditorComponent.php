@@ -97,9 +97,9 @@ class EditorComponent extends Manager
         $breadcrumbtrail->add_help('group general');
     }
 
-    // public function get_additional_parameters(array $additionalParameters = []): array
+    // public function getAdditionalParameters(array $additionalParameters = []): array
     // {
     // $additionalParameters[] = self::PARAM_GROUP_ID;
-    // return parent::get_additional_parameters($additionalParameters);
+    // return parent::getAdditionalParameters($additionalParameters);
     // }
 }

@@ -134,11 +134,11 @@ abstract class BaseReportingComponent extends BaseHtmlTreeComponent
     /**
      * @return array
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_REPORTING_USER_ID;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

@@ -63,11 +63,11 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager impleme
         return $this->getService(CourseGroupDecoratorsManager::class);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_COURSE_GROUP;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

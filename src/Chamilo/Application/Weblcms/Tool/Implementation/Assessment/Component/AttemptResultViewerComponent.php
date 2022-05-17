@@ -231,13 +231,13 @@ class AttemptResultViewerComponent extends Manager
      *
      * @return array
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_ASSESSMENT;
         $additionalParameters[] = self::PARAM_USER_ASSESSMENT;
         $additionalParameters[] = self::PARAM_SHOW_FULL;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_assessment_configuration()

@@ -107,7 +107,7 @@ class ApplicationFactory
             $component->set_parameter(Application::PARAM_CONTEXT, $this->getContext());
         }
 
-        $parameters = $component->get_additional_parameters();
+        $parameters = $component->getAdditionalParameters();
 
         foreach ($parameters as $parameter)
         {

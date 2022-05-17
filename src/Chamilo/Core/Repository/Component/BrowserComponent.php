@@ -221,13 +221,13 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->getService(TemplateRegistrationConsulter::class);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_RENDERER;
         $additionalParameters[] = ContentObject::PROPERTY_PARENT_ID;
         $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_available_renderers()

@@ -88,11 +88,11 @@ class DeleterComponent extends Manager
     /**
      * @return string[]
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = Manager::PARAM_ITEM;
         $additionalParameters[] = Manager::PARAM_DIRECTION;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

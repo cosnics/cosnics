@@ -237,13 +237,13 @@ class BrowserComponent extends Manager implements TableSupport
         );
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PROPERTY_CATEGORY;
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
         $additionalParameters[] = self::PARAM_IN_WORKSPACES;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

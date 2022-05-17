@@ -111,11 +111,11 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
         return (int) $this->getRequest()->get(self::PARAM_ITEM_ATTEMPT_ID);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_ITEM_ATTEMPT_ID;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

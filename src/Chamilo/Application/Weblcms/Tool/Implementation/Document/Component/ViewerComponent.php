@@ -21,10 +21,10 @@ class ViewerComponent extends Manager implements DelegateComponent
         $this->addBrowserBreadcrumb($breadcrumbtrail);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

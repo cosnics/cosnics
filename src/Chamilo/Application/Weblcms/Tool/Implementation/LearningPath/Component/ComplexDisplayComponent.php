@@ -276,14 +276,14 @@ class ComplexDisplayComponent extends Manager
         return $this->publication->getContentObject();
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
         $additionalParameters[] = \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_STEP;
         $additionalParameters[] =
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_assessment_back_url()

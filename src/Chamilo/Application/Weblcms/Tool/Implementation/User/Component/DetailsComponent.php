@@ -65,11 +65,11 @@ class DetailsComponent extends Manager
         return implode(PHP_EOL, $html);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
         $additionalParameters[] = self::PARAM_TAB;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

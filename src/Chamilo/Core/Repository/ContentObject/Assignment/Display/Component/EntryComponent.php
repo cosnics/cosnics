@@ -679,13 +679,13 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         return $this->getService(UserService::class);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_ENTRY_ID;
         $additionalParameters[] = self::PARAM_ENTITY_ID;
         $additionalParameters[] = self::PARAM_ENTITY_TYPE;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

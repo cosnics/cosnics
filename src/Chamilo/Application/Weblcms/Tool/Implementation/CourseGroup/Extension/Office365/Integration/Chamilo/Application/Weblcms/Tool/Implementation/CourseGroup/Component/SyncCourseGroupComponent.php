@@ -57,12 +57,12 @@ class SyncCourseGroupComponent extends Manager
     /**
      * @return array
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = IntegrationLauncherComponent::PARAM_BASE_CONTEXT;
         $additionalParameters[] =
             \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_COURSE_GROUP;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

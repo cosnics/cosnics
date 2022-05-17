@@ -34,11 +34,11 @@ class IndexVisibilityChangerComponent extends Manager
     /**
      * @return array|string[]
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_REQUEST_IDS;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
 }

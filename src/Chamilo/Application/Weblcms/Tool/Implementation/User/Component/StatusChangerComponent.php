@@ -94,7 +94,7 @@ abstract class StatusChangerComponent extends Manager
         );
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_TAB;
         if (Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_GROUP))
@@ -102,7 +102,7 @@ abstract class StatusChangerComponent extends Manager
             $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     abstract public function get_relation();

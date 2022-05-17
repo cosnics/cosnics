@@ -375,7 +375,7 @@ abstract class Application
      *
      * @return string[]
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         return $additionalParameters;
     }

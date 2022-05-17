@@ -78,12 +78,12 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
     /**
      * @return string[]
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID;
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

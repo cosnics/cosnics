@@ -18,10 +18,10 @@ class CategoryManagerComponent extends Manager implements DelegateComponent
      *
      * @return array The additional parameters
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

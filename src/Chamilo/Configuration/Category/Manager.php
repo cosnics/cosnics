@@ -28,7 +28,7 @@ abstract class Manager extends Application
 
     const PROPERTY_DISPLAY_ORDER = 'display_order';
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         if (!is_null(Request::get(Manager::PARAM_CATEGORY_ID)))
         {
@@ -37,7 +37,7 @@ abstract class Manager extends Application
 
         $additionalParameters = array_merge($additionalParameters, $this->get_application()->get_category_parameters());
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_browse_categories_url($category_id = 0)

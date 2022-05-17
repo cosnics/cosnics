@@ -223,13 +223,13 @@ class DeleterComponent extends Manager
         $breadcrumbtrail->add_help('repository_deleter');
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
         $additionalParameters[] = self::PARAM_DELETE_VERSION;
         $additionalParameters[] = self::PARAM_DELETE_PERMANENTLY;
         $additionalParameters[] = self::PARAM_DELETE_RECYCLED;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

@@ -28,10 +28,10 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
         )->run();
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = FilterData::FILTER_CATEGORY;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

@@ -160,11 +160,11 @@ class CreatorComponent extends BaseHtmlTreeComponent implements ViewerInterface,
         return [];
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_CREATE_MODE;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

@@ -89,7 +89,7 @@ class BreadcrumbGenerator implements BreadcrumbGeneratorInterface
         $component = $this->component;
         $context = $component->package();
 
-        $filter_parameters = $component->get_additional_parameters();
+        $filter_parameters = $component->getAdditionalParameters();
         $filter_parameters[] = $component::PARAM_ACTION;
 
         $this->breadcrumb_trail->add(

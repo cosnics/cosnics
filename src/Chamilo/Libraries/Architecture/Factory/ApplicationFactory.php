@@ -105,7 +105,7 @@ class ApplicationFactory
             $application->set_parameter(Application::PARAM_CONTEXT, $context);
         }
 
-        $parameters = $application->get_additional_parameters();
+        $parameters = $application->getAdditionalParameters();
 
         foreach ($parameters as $parameter)
         {

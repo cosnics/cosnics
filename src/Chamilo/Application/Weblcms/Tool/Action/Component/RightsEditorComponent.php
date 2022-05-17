@@ -199,12 +199,12 @@ class RightsEditorComponent extends Manager
         return implode(PHP_EOL, $info);
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION;
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_available_rights($location)

@@ -54,11 +54,6 @@ class ViewerComponent extends Manager
         }
     }
 
-    function get_additional_parameters()
-    {
-        return [];
-    }
-
     /**
      *
      * @param BreadcrumbTrail $breadcrumbtrail

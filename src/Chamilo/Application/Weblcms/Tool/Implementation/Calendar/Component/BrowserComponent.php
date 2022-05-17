@@ -141,11 +141,11 @@ class BrowserComponent extends Manager
         return $this->defaultComponent;
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_tool_actions()

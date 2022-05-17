@@ -234,12 +234,12 @@ class SelectComponent extends Manager implements TableSupport
         return DataManager::retrieves(Vocabulary::class, new DataClassRetrievesParameters($condition));
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID;
         $additionalParameters[] = Manager::PARAM_ELEMENT_IDENTIFIER;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

@@ -41,7 +41,7 @@ class MoverComponent extends Manager
                     array(
                         Manager::PARAM_ACTION => Manager::ACTION_BROWSE, 
                         \Chamilo\Core\Metadata\Schema\Manager::PARAM_SCHEMA_ID => $metadata_element->get_schema_id()), 
-                    $this->get_additional_parameters());
+                    $this->getAdditionalParameters());
             }
             else
             {
@@ -66,7 +66,7 @@ class MoverComponent extends Manager
             new Breadcrumb(
                 $this->get_url(
                     array(Manager::PARAM_ACTION => Manager::ACTION_BROWSE), 
-                    $this->get_additional_parameters()), 
+                    $this->getAdditionalParameters()),
                 Translation::get('BrowserComponent')));
     }
 }

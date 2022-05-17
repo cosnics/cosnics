@@ -43,11 +43,11 @@ class RightsComponent extends TabComponent implements DelegateComponent
         )->run();
     }
 
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
         $additionalParameters[] = self::PARAM_BROWSER_SOURCE;
 
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 }

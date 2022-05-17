@@ -42,12 +42,12 @@ class FeedbackComponent extends ItemComponent implements FeedbackSupport, Feedba
 
     /**
      *
-     * @see \libraries\SubManager::get_additional_parameters()
+     * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
      */
-    public function get_additional_parameters(array $additionalParameters = []): array
+    public function getAdditionalParameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_STEP;
-        return parent::get_additional_parameters($additionalParameters);
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
