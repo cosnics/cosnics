@@ -13,6 +13,6 @@ class ReportingViewerComponent extends Manager
         $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_TEMPLATE_NAME;
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_COURSE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

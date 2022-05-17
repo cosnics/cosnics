@@ -26,6 +26,6 @@ class FavouriteComponent extends TabComponent implements DelegateComponent
     {
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

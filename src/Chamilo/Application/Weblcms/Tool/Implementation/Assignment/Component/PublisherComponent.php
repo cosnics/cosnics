@@ -63,6 +63,6 @@ class PublisherComponent extends Manager
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_IN_WORKSPACES;
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_WORKSPACE_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

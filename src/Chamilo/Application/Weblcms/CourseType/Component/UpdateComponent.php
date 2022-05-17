@@ -111,6 +111,6 @@ class UpdateComponent extends CourseTypeFormActionComponent
     {
         $additionalParameters[] = self::PARAM_COURSE_TYPE_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

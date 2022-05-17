@@ -37,14 +37,10 @@ class IntegrationLauncherComponent extends Manager
         )->run();
     }
 
-    /**
-     * @return array
-     */
     public function get_additional_parameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_BASE_CONTEXT;
-        $additionalParameters[] = self::PARAM_COURSE_GROUP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

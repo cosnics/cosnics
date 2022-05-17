@@ -107,7 +107,7 @@ class ViewerComponent extends Manager implements DelegateComponent
     {
         $additionalParameters[] = self::PARAM_VIEW;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

@@ -251,7 +251,7 @@ class GroupSubscribeBrowserComponent extends Manager implements TableSupport
         $additionalParameters[] = self::PARAM_TAB;
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

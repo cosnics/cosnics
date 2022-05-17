@@ -685,7 +685,7 @@ class EntryComponent extends Manager implements FeedbackSupport, TableSupport
         $additionalParameters[] = self::PARAM_ENTITY_ID;
         $additionalParameters[] = self::PARAM_ENTITY_TYPE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

@@ -19,6 +19,7 @@ use Chamilo\Libraries\Translation\Translation;
  *
  * @package application.lib.weblcms.tool.component
  */
+
 /**
  * Description of reporting_template_viewerclass
  *
@@ -27,8 +28,10 @@ use Chamilo\Libraries\Translation\Translation;
 class RightsEditorComponent extends Manager
 {
     const ADDITIONAL_INFORMATION_OBJECT_SEPARATOR = '  |  ';
-    const LOCATION_TYPE_OBJECT = 'Objects';
+
     const LOCATION_TYPE_LOCATIONS = 'Locations';
+
+    const LOCATION_TYPE_OBJECT = 'Objects';
 
     /**
      * Runs this component and displays its output.
@@ -36,7 +39,7 @@ class RightsEditorComponent extends Manager
     public function run()
     {
         $course = $this->get_course();
-        if (! $course->is_course_admin($this->get_user()) && ! $this->get_user()->is_platform_admin())
+        if (!$course->is_course_admin($this->get_user()) && !$this->get_user()->is_platform_admin())
         {
             throw new NotAllowedException();
         }
@@ -49,22 +52,30 @@ class RightsEditorComponent extends Manager
 
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Core\Rights\Editor\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $component->set_locations($locations);
         $component->set_entities($this->get_entities());
         $component->set_context('Chamilo\Application\Weblcms');
+
         return $component->run();
     }
 
-    public function get_available_rights($location)
+    public function add_category_string($category, $array)
     {
-        return $this->get_parent()->get_available_rights($location);
+        if ($category)
+        {
+            $info[] = '<a href="' . $this->get_category_rights_editor_url($category->get_id()) . '">';
+            $array[] .= $category->get_name();
+            $info[] = '</a>';
+            $array[] .= ' > ';
+        }
     }
 
     public function get_additional_information()
     {
         $publication_ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
-        if (! is_array($publication_ids))
+        if (!is_array($publication_ids))
         {
             $publication_ids = array($publication_ids);
         }
@@ -83,9 +94,9 @@ class RightsEditorComponent extends Manager
         $translation_context = \Chamilo\Core\Rights\Manager::context();
 
         $info[] = Translation::get(
-            "YouAreEditingRightsFor",
-            array("TYPE" => Translation::get($type, null, $translation_context)),
-            $translation_context);
+            "YouAreEditingRightsFor", array("TYPE" => Translation::get($type, null, $translation_context)),
+            $translation_context
+        );
 
         $info[] = '<br/>';
 
@@ -93,7 +104,7 @@ class RightsEditorComponent extends Manager
         {
             case self::LOCATION_TYPE_OBJECT :
                 $publication_ids = Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION);
-                if (! is_array($publication_ids))
+                if (!is_array($publication_ids))
                 {
                     $publication_ids = array($publication_ids);
                 }
@@ -101,8 +112,8 @@ class RightsEditorComponent extends Manager
                 foreach ($publication_ids as $publication_id)
                 {
                     $publication = DataManager::retrieve_by_id(
-                        ContentObjectPublication::class,
-                        $publication_id);
+                        ContentObjectPublication::class, $publication_id
+                    );
 
                     if ($publication)
                     {
@@ -120,8 +131,8 @@ class RightsEditorComponent extends Manager
             case self::LOCATION_TYPE_LOCATIONS :
 
                 $course = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieve_by_id(
-                    Course::class,
-                    Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE));
+                    Course::class, Request::get(\Chamilo\Application\Weblcms\Manager::PARAM_COURSE)
+                );
 
                 if ($course)
                 {
@@ -149,8 +160,8 @@ class RightsEditorComponent extends Manager
                     {
                         // get the given category
                         $category = DataManager::retrieve_by_id(
-                            ContentObjectPublicationCategory::class,
-                            $category_id);
+                            ContentObjectPublicationCategory::class, $category_id
+                        );
 
                         if ($category)
                         {
@@ -161,8 +172,8 @@ class RightsEditorComponent extends Manager
                             {
                                 // construct the single link
                                 $category_link = [];
-                                $category_link[] = '<a href="' .
-                                     $this->get_category_rights_editor_url($category->get_id()) . '">';
+                                $category_link[] =
+                                    '<a href="' . $this->get_category_rights_editor_url($category->get_id()) . '">';
                                 $category_link[] = $category->get_name();
                                 $category_link[] = '</a>';
                                 $category_link[] = ' > ';
@@ -173,8 +184,8 @@ class RightsEditorComponent extends Manager
 
                                 // parent
                                 $category = DataManager::retrieve_by_id(
-                                    ContentObjectPublicationCategory::class,
-                                    $category->get_parent());
+                                    ContentObjectPublicationCategory::class, $category->get_parent()
+                                );
                             }
                         }
                     }
@@ -188,22 +199,40 @@ class RightsEditorComponent extends Manager
         return implode(PHP_EOL, $info);
     }
 
-    public function add_category_string($category, $array)
-    {
-        if ($category)
-        {
-            $info[] = '<a href="' . $this->get_category_rights_editor_url($category->get_id()) . '">';
-            $array[] .= $category->get_name();
-            $info[] = '</a>';
-            $array[] .= ' > ';
-        }
-    }
-
     public function get_additional_parameters(array $additionalParameters = []): array
     {
-        return array(
-            \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION,
-            \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY);
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION;
+        $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY;
+
+        return parent::get_additional_parameters($additionalParameters);
+    }
+
+    public function get_available_rights($location)
+    {
+        return $this->get_parent()->get_available_rights($location);
+    }
+
+    public function get_category_rights_editor_url($category_id)
+    {
+        return $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
+                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $category_id
+            )
+        );
+    }
+
+    public function get_course_rights_editor_url()
+    {
+        return $this->get_url(
+            array(
+                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Tool\Manager::class_to_type(
+                    RightsTool
+                ),
+                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
+                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => null
+            )
+        );
     }
 
     public function get_entities()
@@ -221,14 +250,14 @@ class RightsEditorComponent extends Manager
         return $entities;
     }
 
-    public function get_course_rights_editor_url()
+    public function get_publication_rights_editor_url($publication_id)
     {
         return $this->get_url(
             array(
-                \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Tool\Manager::class_to_type(
-                    RightsTool),
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => null));
+                \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $publication_id
+            )
+        );
     }
 
     public function get_tool_rights_editor_url()
@@ -236,22 +265,8 @@ class RightsEditorComponent extends Manager
         return $this->get_url(
             array(
                 \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => null));
-    }
-
-    public function get_category_rights_editor_url($category_id)
-    {
-        return $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => $category_id));
-    }
-
-    public function get_publication_rights_editor_url($publication_id)
-    {
-        return $this->get_url(
-            array(
-                \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Manager::ACTION_EDIT_RIGHTS,
-                \Chamilo\Application\Weblcms\Manager::PARAM_PUBLICATION => $publication_id));
+                \Chamilo\Application\Weblcms\Manager::PARAM_CATEGORY => null
+            )
+        );
     }
 }

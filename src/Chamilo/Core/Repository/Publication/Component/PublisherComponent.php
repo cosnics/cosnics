@@ -125,6 +125,6 @@ class PublisherComponent extends Manager implements DelegateComponent
     {
         $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

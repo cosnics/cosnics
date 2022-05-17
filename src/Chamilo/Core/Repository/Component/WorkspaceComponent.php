@@ -32,6 +32,6 @@ class WorkspaceComponent extends Manager implements ApplicationSupport
     {
         $additionalParameters[] = FilterData::FILTER_CATEGORY;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

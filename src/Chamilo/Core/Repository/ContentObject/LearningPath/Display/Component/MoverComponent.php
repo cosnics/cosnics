@@ -178,17 +178,6 @@ class MoverComponent extends BaseHtmlTreeComponent
     }
 
     /**
-     *
-     * @see \libraries\SubManager::get_additional_parameters()
-     */
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;
-
-        return $additionalParameters;
-    }
-
-    /**
      * Render the list of available nodes as HTML
      *
      * @param TreeNode[] $available_nodes

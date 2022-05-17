@@ -100,7 +100,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
         $additionalParameters[] = self::PARAM_EDIT_ID;
         $additionalParameters[] = self::PARAM_CONTENT_OBJECT_TYPE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

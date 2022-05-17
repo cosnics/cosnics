@@ -149,6 +149,6 @@ class UpdaterComponent extends ItemComponent
     {
         $additionalParameters[] = self::PARAM_STEP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

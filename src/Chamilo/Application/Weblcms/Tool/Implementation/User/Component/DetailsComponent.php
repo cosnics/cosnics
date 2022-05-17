@@ -70,6 +70,6 @@ class DetailsComponent extends Manager
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_USERS;
         $additionalParameters[] = self::PARAM_TAB;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

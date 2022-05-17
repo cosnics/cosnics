@@ -243,7 +243,7 @@ class BrowserComponent extends Manager implements TableSupport
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
         $additionalParameters[] = self::PARAM_IN_WORKSPACES;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

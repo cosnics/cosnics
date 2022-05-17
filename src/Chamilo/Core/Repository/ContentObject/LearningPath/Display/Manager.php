@@ -263,7 +263,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
         $additionalParameters[] = self::PARAM_CHILD_ID;
         $additionalParameters[] = self::PARAM_FULL_SCREEN;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

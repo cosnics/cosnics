@@ -103,6 +103,6 @@ class UpdaterComponent extends TabComponent
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
         $additionalParameters[] = self::PARAM_BROWSER_SOURCE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

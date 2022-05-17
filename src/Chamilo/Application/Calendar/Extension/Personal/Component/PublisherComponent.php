@@ -83,7 +83,7 @@ class PublisherComponent extends Manager implements PublisherSupport, DelegateCo
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ID;
         $additionalParameters[] = \Chamilo\Core\Repository\Viewer\Manager::PARAM_ACTION;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

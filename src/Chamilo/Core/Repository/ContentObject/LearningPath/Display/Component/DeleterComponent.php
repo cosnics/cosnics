@@ -119,17 +119,9 @@ class DeleterComponent extends Manager
                 $failures > 0 ? 'ObjectsNotDeleted' : 'ObjectsDeleted', array('OBJECTS' => Translation::get('Steps')),
                 Utilities::COMMON_LIBRARIES
             ), $failures > 0, array(
-                self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
-                self::PARAM_CHILD_ID => $new_node->getId()
-            ), array(self::PARAM_CONTENT_OBJECT_ID)
+            self::PARAM_ACTION => self::ACTION_VIEW_COMPLEX_CONTENT_OBJECT,
+            self::PARAM_CHILD_ID => $new_node->getId()
+        ), array(self::PARAM_CONTENT_OBJECT_ID)
         );
-    }
-
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;
-        $additionalParameters[] = self::PARAM_FULL_SCREEN;
-
-        return $additionalParameters;
     }
 }

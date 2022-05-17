@@ -8,35 +8,22 @@ use Chamilo\Libraries\Platform\Session\Request;
 abstract class Manager extends Application
 {
     const ACTION_AJAX_DELETE_CATEGORIES = 'AjaxCategoryDeleter';
-
     const ACTION_AJAX_MOVE_CATEGORIES = 'AjaxCategoryMover';
-
     const ACTION_BROWSE_CATEGORIES = 'Browser';
-
     const ACTION_CHANGE_CATEGORY_PARENT = 'ParentChanger';
-
     const ACTION_CREATE_CATEGORY = 'Creator';
-
     const ACTION_DELETE_CATEGORY = 'Deleter';
-
     const ACTION_IMPACT_VIEW = 'ImpactView';
-
     const ACTION_MOVE_CATEGORY = 'Mover';
-
     const ACTION_TOGGLE_CATEGORY_VISIBILITY = 'VisibilityToggler';
-
     const ACTION_UPDATE_CATEGORY = 'Updater';
 
     const DEFAULT_ACTION = self::ACTION_BROWSE_CATEGORIES;
 
     const PARAM_ACTION = 'category_action';
-
     const PARAM_CATEGORY_ID = 'category_id';
-
     const PARAM_DIRECTION = 'direction';
-
     const PARAM_MOVE_SELECTED_CATEGORIES = 'move_selected_categories';
-
     const PARAM_REMOVE_SELECTED_CATEGORIES = 'remove_selected_categories';
 
     const PROPERTY_DISPLAY_ORDER = 'display_order';
@@ -48,7 +35,9 @@ abstract class Manager extends Application
             $additionalParameters[] = Manager::PARAM_CATEGORY_ID;
         }
 
-        return array_merge($additionalParameters, $this->get_application()->get_category_parameters());
+        $additionalParameters = array_merge($additionalParameters, $this->get_application()->get_category_parameters());
+
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_browse_categories_url($category_id = 0)

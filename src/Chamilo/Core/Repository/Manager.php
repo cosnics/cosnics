@@ -261,7 +261,7 @@ abstract class Manager extends Application
     {
         $additionalParameters[] = self::PARAM_WORKSPACE_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

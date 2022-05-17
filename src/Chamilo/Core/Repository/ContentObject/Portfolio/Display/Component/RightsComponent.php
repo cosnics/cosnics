@@ -217,6 +217,6 @@ class RightsComponent extends ItemComponent
     public function get_additional_parameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_STEP;
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

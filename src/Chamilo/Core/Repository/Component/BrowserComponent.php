@@ -227,7 +227,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $additionalParameters[] = ContentObject::PROPERTY_PARENT_ID;
         $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_available_renderers()

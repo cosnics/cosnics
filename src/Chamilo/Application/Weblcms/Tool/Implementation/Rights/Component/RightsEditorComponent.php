@@ -42,7 +42,7 @@ class RightsEditorComponent extends Manager implements DelegateComponent
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_available_rights($location)

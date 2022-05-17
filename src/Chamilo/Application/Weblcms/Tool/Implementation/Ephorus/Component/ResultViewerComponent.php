@@ -89,6 +89,6 @@ class ResultViewerComponent extends Manager
     {
         $additionalParameters[] = self::PARAM_REQUEST_IDS;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

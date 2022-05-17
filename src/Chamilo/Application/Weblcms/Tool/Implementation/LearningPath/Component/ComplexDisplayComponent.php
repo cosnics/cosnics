@@ -283,7 +283,7 @@ class ComplexDisplayComponent extends Manager
         $additionalParameters[] =
             \Chamilo\Core\Repository\ContentObject\LearningPath\Display\Manager::PARAM_FULL_SCREEN;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_assessment_back_url()

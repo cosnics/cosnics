@@ -23,7 +23,7 @@ class BrowserComponent extends Manager
     {
         $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_tool_actions()

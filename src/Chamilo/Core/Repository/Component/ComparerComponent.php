@@ -157,6 +157,7 @@ class ComparerComponent extends Manager
         $additionalParameters[] = self::PARAM_CONTENT_OBJECT_ID;
         $additionalParameters[] = self::PARAM_COMPARE_OBJECT;
         $additionalParameters[] = self::PARAM_COMPARE_VERSION;
-        return $additionalParameters;
+
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

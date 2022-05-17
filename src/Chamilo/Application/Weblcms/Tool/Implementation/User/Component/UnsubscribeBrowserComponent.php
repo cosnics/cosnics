@@ -170,7 +170,7 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     private function get_all_users_tab()

@@ -34,7 +34,6 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     const PLATFORM_GROUP_ROOT_ID = 0;
 
     const TAB_COURSE_GROUPS = 2;
-
     const TAB_USERS = 1;
 
     /**
@@ -135,7 +134,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
         $additionalParameters[] = self::PARAM_TAB;
         $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_condition()

@@ -115,7 +115,7 @@ class AssessmentResultViewerComponent extends BaseReportingComponent
     {
         $additionalParameters[] = self::PARAM_ITEM_ATTEMPT_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

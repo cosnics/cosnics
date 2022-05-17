@@ -22,6 +22,6 @@ class CategoryManagerComponent extends Manager implements DelegateComponent
     {
         $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

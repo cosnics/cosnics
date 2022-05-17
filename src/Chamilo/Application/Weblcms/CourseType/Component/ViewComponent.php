@@ -121,7 +121,8 @@ class ViewComponent extends Manager
     public function get_additional_parameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = self::PARAM_COURSE_TYPE_ID;
-        return $additionalParameters;
+
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

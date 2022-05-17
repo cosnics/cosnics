@@ -522,7 +522,7 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
     {
         $additionalParameters[] = self::PARAM_STEP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

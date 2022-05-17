@@ -24,6 +24,6 @@ class CreatorComponent extends Manager implements DelegateComponent
     {
         $additionalParameters[] = self::PARAM_TYPE;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

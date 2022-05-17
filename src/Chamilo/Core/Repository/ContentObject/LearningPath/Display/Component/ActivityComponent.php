@@ -43,18 +43,6 @@ class ActivityComponent extends BaseHtmlTreeComponent implements TableSupport, D
         return implode(PHP_EOL, $html);
     }
 
-    /*
-     * (non-PHPdoc) @see \libraries\format\TableSupport::get_table_condition()
-     */
-
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;
-        $additionalParameters[] = self::PARAM_FULL_SCREEN;
-
-        return $additionalParameters;
-    }
-
     /**
      * Backwards Compatibility for the generic ActivityTable
      *

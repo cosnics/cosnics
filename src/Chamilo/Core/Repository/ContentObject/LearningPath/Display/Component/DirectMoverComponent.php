@@ -93,12 +93,4 @@ class DirectMoverComponent extends Manager
 
         $this->redirect($message, (!$success), $parameters, array(self::PARAM_CONTENT_OBJECT_ID));
     }
-
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;
-        $additionalParameters[] = self::PARAM_FULL_SCREEN;
-
-        return $additionalParameters;
-    }
 }

@@ -230,6 +230,6 @@ class DeleterComponent extends Manager
         $additionalParameters[] = self::PARAM_DELETE_PERMANENTLY;
         $additionalParameters[] = self::PARAM_DELETE_RECYCLED;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

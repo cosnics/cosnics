@@ -102,7 +102,7 @@ abstract class StatusChangerComponent extends Manager
             $additionalParameters[] = \Chamilo\Application\Weblcms\Manager::PARAM_GROUP;
         }
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     abstract public function get_relation();

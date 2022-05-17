@@ -49,8 +49,8 @@ class SyncCourseGroupComponent extends Manager
                 $message, [],
                 'Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Extension\Office365\Integration\Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup'
             ), !$success, [
-                \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_GROUP_DETAILS
-            ], [self::PARAM_ACTION, IntegrationLauncherComponent::PARAM_BASE_CONTEXT]
+            \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::ACTION_GROUP_DETAILS
+        ], [self::PARAM_ACTION, IntegrationLauncherComponent::PARAM_BASE_CONTEXT]
         );
     }
 
@@ -63,6 +63,6 @@ class SyncCourseGroupComponent extends Manager
         $additionalParameters[] =
             \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Manager::PARAM_COURSE_GROUP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

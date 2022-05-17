@@ -239,7 +239,7 @@ class SelectComponent extends Manager implements TableSupport
         $additionalParameters[] = \Chamilo\Core\Metadata\Element\Manager::PARAM_ELEMENT_ID;
         $additionalParameters[] = Manager::PARAM_ELEMENT_IDENTIFIER;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

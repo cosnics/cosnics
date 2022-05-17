@@ -49,6 +49,6 @@ class DeleteComponent extends Manager
     {
         $additionalParameters[] = self::PARAM_COURSE_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 }

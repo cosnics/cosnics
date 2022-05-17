@@ -22,17 +22,11 @@ class TypeSpecificComponent extends BaseHtmlTreeComponent implements Application
         $this->validateSelectedTreeNodeData();
 
         $object_namespace = $this->getCurrentTreeNode()->getContentObject()->package();
-        $integration_namespace = $object_namespace .
-             '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
+        $integration_namespace =
+            $object_namespace . '\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Display';
 
         return $this->getApplicationFactory()->getApplication(
-            $integration_namespace,
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this))->run();
-    }
-
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;$additionalParameters[] = self::PARAM_FULL_SCREEN;
-        return $additionalParameters;
+            $integration_namespace, new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        )->run();
     }
 }

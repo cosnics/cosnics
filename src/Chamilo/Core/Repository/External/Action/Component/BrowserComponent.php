@@ -147,7 +147,7 @@ class BrowserComponent extends Manager implements DelegateComponent
     public function get_additional_parameters(array $additionalParameters = []): array
     {
         $additionalParameters[] = \Chamilo\Core\Repository\External\Manager::PARAM_FOLDER;
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_condition()

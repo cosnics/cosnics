@@ -143,17 +143,6 @@ class UpdaterComponent extends BaseHtmlTreeComponent
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::get_additional_parameters()
-     */
-    public function get_additional_parameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_CHILD_ID;
-
-        return $additionalParameters;
-    }
-
-    /**
      * @return string
      */
     public function render_header($pageTitle = '')

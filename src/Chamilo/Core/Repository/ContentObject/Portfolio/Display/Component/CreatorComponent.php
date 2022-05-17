@@ -239,7 +239,7 @@ class CreatorComponent extends ItemComponent implements ViewerInterface
     {
         $additionalParameters[] = self::PARAM_STEP;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     /**

@@ -63,7 +63,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
     {
         $additionalParameters[] = \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID;
 
-        return $additionalParameters;
+        return parent::get_additional_parameters($additionalParameters);
     }
 
     public function get_root_content_object()
