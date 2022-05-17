@@ -4,5 +4,5 @@ namespace Chamilo\Core\Admin;
 interface ActionsSupportInterface
 {
 
-    public static function get_actions();
+    public static function getActions(): Actions;
 }

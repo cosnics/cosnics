@@ -13,7 +13,7 @@ use Chamilo\Libraries\Translation\Translation;
 class Manager implements ActionsSupportInterface
 {
 
-    public static function get_actions()
+    public static function getActions(): Actions
     {
         $links = [];
 

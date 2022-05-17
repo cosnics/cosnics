@@ -15,7 +15,7 @@ use Chamilo\Libraries\Utilities\Utilities;
 class Manager implements ActionsSupportInterface, ImportActionsInterface
 {
 
-    public static function get_actions()
+    public static function getActions(): Actions
     {
         $links = [];
 
