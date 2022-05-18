@@ -18,7 +18,7 @@ class BlockTypeTargetEntity extends HomeTargetEntity
      */
     public function get_block_type()
     {
-        return $this->get_default_property(self::PROPERTY_BLOCK_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_BLOCK_TYPE);
     }
 
     /**
@@ -45,6 +45,6 @@ class BlockTypeTargetEntity extends HomeTargetEntity
      */
     public function set_block_type($block_type)
     {
-        $this->set_default_property(self::PROPERTY_BLOCK_TYPE, $block_type);
+        $this->setDefaultProperty(self::PROPERTY_BLOCK_TYPE, $block_type);
     }
 }

@@ -22,7 +22,7 @@ class LatestDocumentsPublisherComponent extends Manager
         {
             if (!$tracker->get_optional_property(Request::PROPERTY_REQUEST_TIME))
             {
-                $ids[] = $tracker->get_default_property(Entry::PROPERTY_ID);
+                $ids[] = $tracker->getDefaultProperty(Entry::PROPERTY_ID);
             }
         }
 

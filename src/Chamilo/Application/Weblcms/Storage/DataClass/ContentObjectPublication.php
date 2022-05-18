@@ -182,7 +182,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     public function get_allow_collaboration()
     {
-        return $this->get_default_property(self::PROPERTY_ALLOW_COLLABORATION);
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_COLLABORATION);
     }
 
     /**
@@ -192,7 +192,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -226,7 +226,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     private function get_course_viewer_link()
@@ -283,7 +283,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     public function get_display_order_index()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER_INDEX);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER_INDEX);
     }
 
     /**
@@ -304,7 +304,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_from_date()
     {
-        return $this->get_default_property(self::PROPERTY_FROM_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_FROM_DATE);
     }
 
     /**
@@ -314,7 +314,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_modified_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED_DATE);
     }
 
     /**
@@ -324,7 +324,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_publication_date()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_DATE);
     }
 
     public function get_publication_publisher()
@@ -346,12 +346,12 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_publisher_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER_ID);
     }
 
     public function get_show_on_homepage()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_ON_HOMEPAGE);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_ON_HOMEPAGE);
     }
 
     /**
@@ -451,7 +451,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_to_date()
     {
-        return $this->get_default_property(self::PROPERTY_TO_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_TO_DATE);
     }
 
     /**
@@ -461,7 +461,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function get_tool()
     {
-        return $this->get_default_property(self::PROPERTY_TOOL);
+        return $this->getDefaultProperty(self::PROPERTY_TOOL);
     }
 
     /**
@@ -480,7 +480,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function is_email_sent()
     {
-        return $this->get_default_property(self::PROPERTY_EMAIL_SENT);
+        return $this->getDefaultProperty(self::PROPERTY_EMAIL_SENT);
     }
 
     public function is_for_everybody()
@@ -508,7 +508,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function is_hidden()
     {
-        return $this->get_default_property(self::PROPERTY_HIDDEN);
+        return $this->getDefaultProperty(self::PROPERTY_HIDDEN);
     }
 
     public function is_visible_for_target_users()
@@ -698,47 +698,47 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     public function set_allow_collaboration($allow_collaboration)
     {
-        $this->set_default_property(self::PROPERTY_ALLOW_COLLABORATION, $allow_collaboration);
+        $this->setDefaultProperty(self::PROPERTY_ALLOW_COLLABORATION, $allow_collaboration);
     }
 
     public function set_category_id($category)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $category);
     }
 
     public function set_course_id($course)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course);
     }
 
     public function set_display_order_index($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER_INDEX, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER_INDEX, $display_order);
     }
 
     public function set_email_sent($email_sent)
     {
-        $this->set_default_property(self::PROPERTY_EMAIL_SENT, $email_sent);
+        $this->setDefaultProperty(self::PROPERTY_EMAIL_SENT, $email_sent);
     }
 
     public function set_from_date($from_date)
     {
-        $this->set_default_property(self::PROPERTY_FROM_DATE, $from_date);
+        $this->setDefaultProperty(self::PROPERTY_FROM_DATE, $from_date);
     }
 
     public function set_hidden($hidden)
     {
-        $this->set_default_property(self::PROPERTY_HIDDEN, $hidden);
+        $this->setDefaultProperty(self::PROPERTY_HIDDEN, $hidden);
     }
 
     public function set_modified_date($modified_date)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIED_DATE, $modified_date);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIED_DATE, $modified_date);
     }
 
     public function set_publication_date($publication_date)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_DATE, $publication_date);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_DATE, $publication_date);
     }
 
     /**
@@ -753,22 +753,22 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     public function set_publisher_id($publisher)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHER_ID, $publisher);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHER_ID, $publisher);
     }
 
     public function set_show_on_homepage($show_on_homepage)
     {
-        $this->set_default_property(self::PROPERTY_SHOW_ON_HOMEPAGE, $show_on_homepage);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_ON_HOMEPAGE, $show_on_homepage);
     }
 
     public function set_to_date($to_date)
     {
-        $this->set_default_property(self::PROPERTY_TO_DATE, $to_date);
+        $this->setDefaultProperty(self::PROPERTY_TO_DATE, $to_date);
     }
 
     public function set_tool($tool)
     {
-        $this->set_default_property(self::PROPERTY_TOOL, $tool);
+        $this->setDefaultProperty(self::PROPERTY_TOOL, $tool);
     }
 
     /**

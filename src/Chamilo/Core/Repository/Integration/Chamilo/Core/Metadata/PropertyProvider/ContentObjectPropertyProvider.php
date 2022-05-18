@@ -77,7 +77,7 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
         
         if ($contentObject->is_default_property_name($property))
         {
-            return $contentObject->get_default_property($property);
+            return $contentObject->getDefaultProperty($property);
         }
         else
         {

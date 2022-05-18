@@ -40,7 +40,7 @@ class PublicationGroup extends DataClass
      */
     public function get_publication()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION);
     }
 
     /**
@@ -49,7 +49,7 @@ class PublicationGroup extends DataClass
      */
     public function set_publication($publication)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION, $publication);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION, $publication);
     }
 
     /**
@@ -58,7 +58,7 @@ class PublicationGroup extends DataClass
      */
     public function get_group_id()
     {
-        return $this->get_default_property(self::PROPERTY_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
     }
 
     /**
@@ -67,7 +67,7 @@ class PublicationGroup extends DataClass
      */
     public function set_group_id($group_id)
     {
-        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
+        $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $group_id);
     }
 
     /**

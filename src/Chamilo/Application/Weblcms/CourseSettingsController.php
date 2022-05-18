@@ -131,7 +131,7 @@ class CourseSettingsController
         foreach ($available_settings as $available_setting)
         {
             if (($available_setting[CourseSetting::PROPERTY_GLOBAL_SETTING] &&
-                    $base_object->can_change_course_setting($available_setting)) || $base_object->is_identified())
+                    $base_object->can_change_course_setting($available_setting)) || $base_object->isIdentified())
             {
                 $values = $base_object->get_course_setting(
                     $available_setting[CourseSetting::PROPERTY_NAME],

@@ -36,7 +36,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      */
     public function get_published()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHED);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHED);
     }
 
     /**
@@ -44,7 +44,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      */
     public function get_publisher()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHER);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER);
     }
 
     /**
@@ -60,7 +60,7 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      */
     public function set_published($published)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHED, $published);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHED, $published);
     }
 
     /**
@@ -68,6 +68,6 @@ class Publication extends \Chamilo\Core\Repository\Publication\Storage\DataClass
      */
     public function set_publisher($publisher)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHER, $publisher);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHER, $publisher);
     }
 }

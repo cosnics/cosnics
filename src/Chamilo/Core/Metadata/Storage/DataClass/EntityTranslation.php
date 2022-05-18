@@ -52,7 +52,7 @@ class EntityTranslation extends DataClass
      */
     public function get_entity_id()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -61,7 +61,7 @@ class EntityTranslation extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -71,7 +71,7 @@ class EntityTranslation extends DataClass
      */
     public function get_isocode()
     {
-        return $this->get_default_property(self::PROPERTY_ISOCODE);
+        return $this->getDefaultProperty(self::PROPERTY_ISOCODE);
     }
 
     /**
@@ -88,7 +88,7 @@ class EntityTranslation extends DataClass
      */
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     /**
@@ -97,7 +97,7 @@ class EntityTranslation extends DataClass
      */
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 
     /**
@@ -106,7 +106,7 @@ class EntityTranslation extends DataClass
      */
     public function set_entity_type($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -116,7 +116,7 @@ class EntityTranslation extends DataClass
      */
     public function set_isocode($isocode)
     {
-        $this->set_default_property(self::PROPERTY_ISOCODE, $isocode);
+        $this->setDefaultProperty(self::PROPERTY_ISOCODE, $isocode);
     }
 
     /**
@@ -125,6 +125,6 @@ class EntityTranslation extends DataClass
      */
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 }

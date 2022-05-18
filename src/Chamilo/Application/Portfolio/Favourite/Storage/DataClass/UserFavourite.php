@@ -29,7 +29,7 @@ class UserFavourite extends DataClass
      */
     public function getSourceUserId()
     {
-        return $this->get_default_property(self::PROPERTY_SOURCE_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_USER_ID);
     }
 
     /**
@@ -38,7 +38,7 @@ class UserFavourite extends DataClass
      */
     public function setSourceUserId($sourceUserId)
     {
-        $this->set_default_property(self::PROPERTY_SOURCE_USER_ID, $sourceUserId);
+        $this->setDefaultProperty(self::PROPERTY_SOURCE_USER_ID, $sourceUserId);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserFavourite extends DataClass
      */
     public function getFavouriteUserId()
     {
-        return $this->get_default_property(self::PROPERTY_FAVOURITE_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FAVOURITE_USER_ID);
     }
 
     /**
@@ -56,7 +56,7 @@ class UserFavourite extends DataClass
      */
     public function setFavouriteUserId($favouriteUserId)
     {
-        $this->set_default_property(self::PROPERTY_FAVOURITE_USER_ID, $favouriteUserId);
+        $this->setDefaultProperty(self::PROPERTY_FAVOURITE_USER_ID, $favouriteUserId);
     }
 
     /**

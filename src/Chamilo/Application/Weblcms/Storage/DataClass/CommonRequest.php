@@ -24,17 +24,17 @@ abstract class CommonRequest extends DataClass
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     public function get_decision()
     {
-        return $this->get_default_property(self::PROPERTY_DECISION);
+        return $this->getDefaultProperty(self::PROPERTY_DECISION);
     }
 
     public function get_decision_date()
     {
-        return $this->get_default_property(self::PROPERTY_DECISION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array
@@ -55,46 +55,46 @@ abstract class CommonRequest extends DataClass
 
     public function get_motivation()
     {
-        return $this->get_default_property(self::PROPERTY_MOTIVATION);
+        return $this->getDefaultProperty(self::PROPERTY_MOTIVATION);
     }
 
     public function get_subject()
     {
-        return $this->get_default_property(self::PROPERTY_SUBJECT);
+        return $this->getDefaultProperty(self::PROPERTY_SUBJECT);
     }
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_creation_date($creation_date)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creation_date);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creation_date);
     }
 
     public function set_decision($decision)
     {
-        $this->set_default_property(self::PROPERTY_DECISION, $decision);
+        $this->setDefaultProperty(self::PROPERTY_DECISION, $decision);
     }
 
     public function set_decision_date($decision_date)
     {
-        $this->set_default_property(self::PROPERTY_DECISION_DATE, $decision_date);
+        $this->setDefaultProperty(self::PROPERTY_DECISION_DATE, $decision_date);
     }
 
     public function set_motivation($motivation)
     {
-        $this->set_default_property(self::PROPERTY_MOTIVATION, $motivation);
+        $this->setDefaultProperty(self::PROPERTY_MOTIVATION, $motivation);
     }
 
     public function set_subject($subject)
     {
-        $this->set_default_property(self::PROPERTY_SUBJECT, $subject);
+        $this->setDefaultProperty(self::PROPERTY_SUBJECT, $subject);
     }
 
     public function set_user_id($user_id)
     {
-        return $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        return $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

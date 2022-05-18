@@ -115,7 +115,7 @@ class CourseForm extends CommonCourseForm
         
         $course_visual_code_element = $this->add_textfield(Course::PROPERTY_VISUAL_CODE, Translation::get('VisualCode'));
         
-        if ($this->get_base_object()->is_identified())
+        if ($this->get_base_object()->isIdentified())
         {
             $this->validate_element_change($course_type_element, CourseManagementRights::CAN_CHANGE_COURSE_TYPE_RIGHT);
             
@@ -153,7 +153,7 @@ class CourseForm extends CommonCourseForm
     {
         parent::set_default_values();
         
-        if (! $this->get_base_object()->is_identified())
+        if (! $this->get_base_object()->isIdentified())
         {
             $default_values[CourseSettingsController::SETTING_PARAM_COURSE_SETTINGS . '[' .
                  CourseSettingsConnector::TITULAR . ']'] = Session::get_user_id();

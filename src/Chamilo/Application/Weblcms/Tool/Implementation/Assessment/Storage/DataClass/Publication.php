@@ -29,7 +29,7 @@ class Publication extends DataClass
      */
     public function get_allow_hints()
     {
-        return $this->get_default_property(self::PROPERTY_ALLOW_HINTS);
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_HINTS);
     }
 
     /**
@@ -75,12 +75,12 @@ class Publication extends DataClass
      */
     public function get_feedback_location()
     {
-        return $this->get_default_property(self::PROPERTY_FEEDBACK_LOCATION);
+        return $this->getDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -89,7 +89,7 @@ class Publication extends DataClass
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -98,7 +98,7 @@ class Publication extends DataClass
      */
     public function get_show_correction()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_CORRECTION);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_CORRECTION);
     }
 
     /**
@@ -107,7 +107,7 @@ class Publication extends DataClass
      */
     public function get_show_score()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_SCORE);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SCORE);
     }
 
     /**
@@ -116,7 +116,7 @@ class Publication extends DataClass
      */
     public function get_show_solution()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_SOLUTION);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SOLUTION);
     }
 
     /**
@@ -133,7 +133,7 @@ class Publication extends DataClass
      */
     public function set_allow_hints($allow_hints)
     {
-        $this->set_default_property(self::PROPERTY_ALLOW_HINTS, $allow_hints);
+        $this->setDefaultProperty(self::PROPERTY_ALLOW_HINTS, $allow_hints);
     }
 
     /**
@@ -142,12 +142,12 @@ class Publication extends DataClass
      */
     public function set_feedback_location($feedback_location)
     {
-        $this->set_default_property(self::PROPERTY_FEEDBACK_LOCATION, $feedback_location);
+        $this->setDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION, $feedback_location);
     }
 
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -156,7 +156,7 @@ class Publication extends DataClass
      */
     public function set_show_answer_feedback($show_answer_feedback)
     {
-        $this->set_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $show_answer_feedback);
     }
 
     /**
@@ -165,7 +165,7 @@ class Publication extends DataClass
      */
     public function set_show_correction($show_correction)
     {
-        $this->set_default_property(self::PROPERTY_SHOW_CORRECTION, $show_correction);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_CORRECTION, $show_correction);
     }
 
     /**
@@ -174,7 +174,7 @@ class Publication extends DataClass
      */
     public function set_show_score($show_score)
     {
-        $this->set_default_property(self::PROPERTY_SHOW_SCORE, $show_score);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SCORE, $show_score);
     }
 
     /**
@@ -183,6 +183,6 @@ class Publication extends DataClass
      */
     public function set_show_solution($show_solution)
     {
-        $this->set_default_property(self::PROPERTY_SHOW_SOLUTION, $show_solution);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SOLUTION, $show_solution);
     }
 }

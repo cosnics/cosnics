@@ -48,7 +48,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -71,7 +71,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function get_workspace_id()
     {
-        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -80,7 +80,7 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -89,6 +89,6 @@ class WorkspaceUserFavourite extends DataClass
      */
     public function set_workspace_id($workspace_id)
     {
-        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 }

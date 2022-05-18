@@ -196,7 +196,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_display_name()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_NAME);
     }
 
     /**
@@ -206,7 +206,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -236,7 +236,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -280,7 +280,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_schema_id()
     {
-        return $this->get_default_property(self::PROPERTY_SCHEMA_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SCHEMA_ID);
     }
 
     /**
@@ -298,7 +298,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_value_limit()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE_LIMIT);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE_LIMIT);
     }
 
     /**
@@ -308,7 +308,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function get_value_type()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE_TYPE);
     }
 
     public function isNumberOfValuesLimited()
@@ -335,7 +335,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function is_fixed()
     {
-        return $this->get_default_property(self::PROPERTY_FIXED);
+        return $this->getDefaultProperty(self::PROPERTY_FIXED);
     }
 
     /**
@@ -372,7 +372,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_display_name($display_name)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_NAME, $display_name);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_NAME, $display_name);
     }
 
     /**
@@ -388,7 +388,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     /**
@@ -398,7 +398,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_fixed($fixed)
     {
-        $this->set_default_property(self::PROPERTY_FIXED, $fixed);
+        $this->setDefaultProperty(self::PROPERTY_FIXED, $fixed);
     }
 
     /**
@@ -408,7 +408,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -418,7 +418,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_schema_id($schema_id)
     {
-        $this->set_default_property(self::PROPERTY_SCHEMA_ID, $schema_id);
+        $this->setDefaultProperty(self::PROPERTY_SCHEMA_ID, $schema_id);
     }
 
     /**
@@ -434,7 +434,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_value_limit($value_limit)
     {
-        $this->set_default_property(self::PROPERTY_VALUE_LIMIT, $value_limit);
+        $this->setDefaultProperty(self::PROPERTY_VALUE_LIMIT, $value_limit);
     }
 
     /**
@@ -444,7 +444,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      */
     public function set_value_type($value_type)
     {
-        $this->set_default_property(self::PROPERTY_VALUE_TYPE, $value_type);
+        $this->setDefaultProperty(self::PROPERTY_VALUE_TYPE, $value_type);
     }
 
     public function usesVocabulary()

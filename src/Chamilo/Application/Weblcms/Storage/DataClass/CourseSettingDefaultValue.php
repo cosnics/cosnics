@@ -29,7 +29,7 @@ class CourseSettingDefaultValue extends CourseSettingValue
      */
     function get_course_setting_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_SETTING_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_SETTING_ID);
     }
 
     /**
@@ -65,6 +65,6 @@ class CourseSettingDefaultValue extends CourseSettingValue
      */
     function set_course_setting_id($course_setting_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_SETTING_ID, $course_setting_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_SETTING_ID, $course_setting_id);
     }
 }

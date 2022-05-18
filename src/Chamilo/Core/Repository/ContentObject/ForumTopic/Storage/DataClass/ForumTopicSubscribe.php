@@ -68,7 +68,7 @@ class ForumTopicSubscribe extends DataClass
      */
     public function get_forum_topic_id()
     {
-        return $this->get_default_property(self::PROPERTY_FORUM_TOPIC_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID);
     }
 
     /**
@@ -78,7 +78,7 @@ class ForumTopicSubscribe extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -109,7 +109,7 @@ class ForumTopicSubscribe extends DataClass
      */
     public function set_forum_topic_id($forum_topic_id)
     {
-        $this->set_default_property(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
+        $this->setDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
     }
 
     /**
@@ -119,7 +119,7 @@ class ForumTopicSubscribe extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

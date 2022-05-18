@@ -36,7 +36,7 @@ class Instance extends DataClass
 
     public function get_application()
     {
-        return $this->get_default_property(self::PROPERTY_APPLICATION);
+        return $this->getDefaultProperty(self::PROPERTY_APPLICATION);
     }
 
     /**
@@ -79,7 +79,7 @@ class Instance extends DataClass
 
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -104,11 +104,11 @@ class Instance extends DataClass
 
     public function set_application($application)
     {
-        $this->set_default_property(self::PROPERTY_APPLICATION, $application);
+        $this->setDefaultProperty(self::PROPERTY_APPLICATION, $application);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 }

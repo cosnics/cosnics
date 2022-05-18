@@ -43,7 +43,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getCreationDate()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -66,7 +66,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getCreatorId()
     {
-        return $this->get_default_property(self::PROPERTY_CREATOR_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
     }
 
     /**
@@ -75,7 +75,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getDescription()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -93,7 +93,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function getName()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     public function getTitle()
@@ -166,7 +166,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setCreationDate($creationDate)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 
     /*
@@ -179,7 +179,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setCreatorId($creatorId)
     {
-        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creatorId);
+        $this->setDefaultProperty(self::PROPERTY_CREATOR_ID, $creatorId);
     }
 
     /**
@@ -188,7 +188,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setDescription($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -197,6 +197,6 @@ class Workspace extends DataClass implements WorkspaceInterface
      */
     public function setName($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 }

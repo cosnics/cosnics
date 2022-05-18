@@ -35,7 +35,7 @@ class CourseEntityRelation extends DataClass
 
     public function getEntityId()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -46,7 +46,7 @@ class CourseEntityRelation extends DataClass
 
     public function getEntityType()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -66,7 +66,7 @@ class CourseEntityRelation extends DataClass
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -97,7 +97,7 @@ class CourseEntityRelation extends DataClass
      */
     public function get_status()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     public static function getTableName(): string
@@ -107,12 +107,12 @@ class CourseEntityRelation extends DataClass
 
     public function setEntityId($entityId)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entityId);
     }
 
     public function setEntityType($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -132,7 +132,7 @@ class CourseEntityRelation extends DataClass
      */
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     /**
@@ -142,6 +142,6 @@ class CourseEntityRelation extends DataClass
      */
     public function set_status($status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 }

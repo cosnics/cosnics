@@ -48,17 +48,17 @@ class Activity extends Tracker
 
     public function get_content()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT);
     }
 
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     public function get_date()
     {
-        return $this->get_default_property(self::PROPERTY_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DATE);
     }
 
     /**
@@ -89,7 +89,7 @@ class Activity extends Tracker
 
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -124,17 +124,17 @@ class Activity extends Tracker
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_content($content)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT, $content);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT, $content);
     }
 
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     /*
@@ -143,17 +143,17 @@ class Activity extends Tracker
 
     public function set_date($date)
     {
-        $this->set_default_property(self::PROPERTY_DATE, $date);
+        $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

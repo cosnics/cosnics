@@ -31,7 +31,7 @@ abstract class HomeTargetEntity extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -40,7 +40,7 @@ abstract class HomeTargetEntity extends DataClass
      */
     public function set_entity_type($entity_type)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }
 
     /**
@@ -49,7 +49,7 @@ abstract class HomeTargetEntity extends DataClass
      */
     public function get_entity_id()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -58,6 +58,6 @@ abstract class HomeTargetEntity extends DataClass
      */
     public function set_entity_id($entity_id)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entity_id);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entity_id);
     }
 }

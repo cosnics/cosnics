@@ -27,7 +27,7 @@ class ElementForm extends FormValidator
         $this->element = $element;
         $this->build_form();
         
-        if ($this->element->is_identified())
+        if ($this->element->isIdentified())
         {
             $this->set_defaults();
         }

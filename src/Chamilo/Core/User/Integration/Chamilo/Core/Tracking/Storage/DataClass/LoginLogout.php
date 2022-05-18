@@ -31,7 +31,7 @@ class LoginLogout extends SimpleTracker
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class LoginLogout extends SimpleTracker
      */
     public function set_user_id($userid)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userid);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userid);
     }
 
     /**
@@ -51,7 +51,7 @@ class LoginLogout extends SimpleTracker
      */
     public function get_date()
     {
-        return $this->get_default_property(self::PROPERTY_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DATE);
     }
 
     /**
@@ -61,7 +61,7 @@ class LoginLogout extends SimpleTracker
      */
     public function set_date($date)
     {
-        $this->set_default_property(self::PROPERTY_DATE, $date);
+        $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
     /**
@@ -71,7 +71,7 @@ class LoginLogout extends SimpleTracker
      */
     public function get_ip()
     {
-        return $this->get_default_property(self::PROPERTY_IP);
+        return $this->getDefaultProperty(self::PROPERTY_IP);
     }
 
     /**
@@ -81,7 +81,7 @@ class LoginLogout extends SimpleTracker
      */
     public function set_ip($ip)
     {
-        $this->set_default_property(self::PROPERTY_IP, $ip);
+        $this->setDefaultProperty(self::PROPERTY_IP, $ip);
     }
 
     /**
@@ -91,7 +91,7 @@ class LoginLogout extends SimpleTracker
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -101,7 +101,7 @@ class LoginLogout extends SimpleTracker
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array

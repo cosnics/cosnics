@@ -18,7 +18,7 @@ class Role extends DataClass
      */
     public function getRole()
     {
-        return $this->get_default_property(self::PROPERTY_ROLE);
+        return $this->getDefaultProperty(self::PROPERTY_ROLE);
     }
 
     /**
@@ -51,7 +51,7 @@ class Role extends DataClass
      */
     public function setRole($role)
     {
-        $this->set_default_property(self::PROPERTY_ROLE, $role);
+        $this->setDefaultProperty(self::PROPERTY_ROLE, $role);
 
         return $this;
     }

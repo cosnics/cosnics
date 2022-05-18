@@ -32,7 +32,7 @@ class CourseTool extends DataClass
      */
     function getContext()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -79,7 +79,7 @@ class CourseTool extends DataClass
      */
     function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -89,7 +89,7 @@ class CourseTool extends DataClass
      */
     function get_section_type()
     {
-        return $this->get_default_property(self::PROPERTY_SECTION_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_SECTION_TYPE);
     }
 
     /**
@@ -106,7 +106,7 @@ class CourseTool extends DataClass
      */
     function setContext($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -116,7 +116,7 @@ class CourseTool extends DataClass
      */
     function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -126,6 +126,6 @@ class CourseTool extends DataClass
      */
     function set_section_type($section_type)
     {
-        $this->set_default_property(self::PROPERTY_SECTION_TYPE, $section_type);
+        $this->setDefaultProperty(self::PROPERTY_SECTION_TYPE, $section_type);
     }
 }

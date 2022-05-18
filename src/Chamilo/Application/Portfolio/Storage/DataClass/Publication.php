@@ -55,7 +55,7 @@ class Publication extends DataClass
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -80,7 +80,7 @@ class Publication extends DataClass
      */
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     /**
@@ -89,7 +89,7 @@ class Publication extends DataClass
      */
     public function get_publisher_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER_ID);
     }
 
     /**
@@ -114,7 +114,7 @@ class Publication extends DataClass
      */
     public function set_publisher_id($publisher_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHER_ID, $publisher_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHER_ID, $publisher_id);
     }
 
     /**
@@ -123,7 +123,7 @@ class Publication extends DataClass
      */
     public function get_published()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHED);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHED);
     }
 
     /**
@@ -132,7 +132,7 @@ class Publication extends DataClass
      */
     public function set_published($published)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHED, $published);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHED, $published);
     }
 
     /**
@@ -141,7 +141,7 @@ class Publication extends DataClass
      */
     public function get_modified()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -150,7 +150,7 @@ class Publication extends DataClass
      */
     public function set_modified($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
     }
 
     /**

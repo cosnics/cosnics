@@ -50,32 +50,32 @@ abstract class PlatformCategory extends DataClass
 
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     public function get_parent()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT);
     }
 
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     public function set_parent($parent)
     {
-        $this->set_default_property(self::PROPERTY_PARENT, $parent);
+        $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
     }
 
     public function update($move = false)

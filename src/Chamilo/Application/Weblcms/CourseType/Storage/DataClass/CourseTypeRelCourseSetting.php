@@ -48,7 +48,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function get_course_type_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
     }
 
     /**
@@ -81,7 +81,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function is_default_value()
     {
-        return $this->get_default_property(self::PROPERTY_DEFAULT_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_DEFAULT_VALUE);
     }
 
     /**
@@ -101,7 +101,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function is_locked()
     {
-        return $this->get_default_property(self::PROPERTY_LOCKED);
+        return $this->getDefaultProperty(self::PROPERTY_LOCKED);
     }
 
     /**
@@ -121,7 +121,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function set_course_type_id($course_type_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
     }
 
     /**
@@ -137,7 +137,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function set_default_value($default_value)
     {
-        $this->set_default_property(self::PROPERTY_DEFAULT_VALUE, $default_value);
+        $this->setDefaultProperty(self::PROPERTY_DEFAULT_VALUE, $default_value);
     }
 
     /**
@@ -157,6 +157,6 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function set_locked($locked)
     {
-        $this->set_default_property(self::PROPERTY_LOCKED, $locked);
+        $this->setDefaultProperty(self::PROPERTY_LOCKED, $locked);
     }
 }

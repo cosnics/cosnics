@@ -61,7 +61,7 @@ class RelationInstance extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -90,7 +90,7 @@ class RelationInstance extends DataClass
      */
     public function get_relation_id()
     {
-        return $this->get_default_property(self::PROPERTY_RELATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_RELATION_ID);
     }
 
     /**
@@ -99,7 +99,7 @@ class RelationInstance extends DataClass
      */
     public function get_source_id()
     {
-        return $this->get_default_property(self::PROPERTY_SOURCE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_ID);
     }
 
     /**
@@ -108,7 +108,7 @@ class RelationInstance extends DataClass
      */
     public function get_source_type()
     {
-        return $this->get_default_property(self::PROPERTY_SOURCE_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_SOURCE_TYPE);
     }
 
     /**
@@ -125,7 +125,7 @@ class RelationInstance extends DataClass
      */
     public function get_target_id()
     {
-        return $this->get_default_property(self::PROPERTY_TARGET_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TARGET_ID);
     }
 
     /**
@@ -134,7 +134,7 @@ class RelationInstance extends DataClass
      */
     public function get_target_type()
     {
-        return $this->get_default_property(self::PROPERTY_TARGET_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TARGET_TYPE);
     }
 
     /**
@@ -143,7 +143,7 @@ class RelationInstance extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -152,7 +152,7 @@ class RelationInstance extends DataClass
      */
     public function set_creation_date($creationDate)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 
     /**
@@ -161,7 +161,7 @@ class RelationInstance extends DataClass
      */
     public function set_relation_id($relationId)
     {
-        $this->set_default_property(self::PROPERTY_RELATION_ID, $relationId);
+        $this->setDefaultProperty(self::PROPERTY_RELATION_ID, $relationId);
     }
 
     /**
@@ -170,7 +170,7 @@ class RelationInstance extends DataClass
      */
     public function set_source_id($sourceId)
     {
-        $this->set_default_property(self::PROPERTY_SOURCE_ID, $sourceId);
+        $this->setDefaultProperty(self::PROPERTY_SOURCE_ID, $sourceId);
     }
 
     /**
@@ -179,7 +179,7 @@ class RelationInstance extends DataClass
      */
     public function set_source_type($sourceType)
     {
-        $this->set_default_property(self::PROPERTY_SOURCE_TYPE, $sourceType);
+        $this->setDefaultProperty(self::PROPERTY_SOURCE_TYPE, $sourceType);
     }
 
     /**
@@ -188,7 +188,7 @@ class RelationInstance extends DataClass
      */
     public function set_target_id($targetId)
     {
-        $this->set_default_property(self::PROPERTY_TARGET_ID, $targetId);
+        $this->setDefaultProperty(self::PROPERTY_TARGET_ID, $targetId);
     }
 
     /**
@@ -197,7 +197,7 @@ class RelationInstance extends DataClass
      */
     public function set_target_type($targetType)
     {
-        $this->set_default_property(self::PROPERTY_TARGET_TYPE, $targetType);
+        $this->setDefaultProperty(self::PROPERTY_TARGET_TYPE, $targetType);
     }
 
     /**
@@ -206,6 +206,6 @@ class RelationInstance extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

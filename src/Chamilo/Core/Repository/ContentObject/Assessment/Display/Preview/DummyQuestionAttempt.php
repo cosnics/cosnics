@@ -32,7 +32,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function get_attempt_id()
     {
-        return $this->get_default_property(self::PROPERTY_ATTEMPT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ATTEMPT_ID);
     }
 
     /**
@@ -41,7 +41,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
      */
     public function set_attempt_id($attempt_id)
     {
-        $this->set_default_property(self::PROPERTY_ATTEMPT_ID, $attempt_id);
+        $this->setDefaultProperty(self::PROPERTY_ATTEMPT_ID, $attempt_id);
     }
 
     /**

@@ -40,7 +40,7 @@ class PublicationUser extends DataClass
      */
     public function get_publication()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION);
     }
 
     /**
@@ -49,7 +49,7 @@ class PublicationUser extends DataClass
      */
     public function set_publication($publication)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION, $publication);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION, $publication);
     }
 
     /**
@@ -58,7 +58,7 @@ class PublicationUser extends DataClass
      */
     public function get_user()
     {
-        return $this->get_default_property(self::PROPERTY_USER);
+        return $this->getDefaultProperty(self::PROPERTY_USER);
     }
 
     /**
@@ -67,7 +67,7 @@ class PublicationUser extends DataClass
      */
     public function set_user($user)
     {
-        $this->set_default_property(self::PROPERTY_USER, $user);
+        $this->setDefaultProperty(self::PROPERTY_USER, $user);
     }
 
     /**

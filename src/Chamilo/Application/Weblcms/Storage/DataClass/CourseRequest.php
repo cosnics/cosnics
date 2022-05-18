@@ -16,12 +16,12 @@ class CourseRequest extends CommonRequest
 
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     public function set_course_id($course_id)
     {
-        return $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        return $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     /**

@@ -215,7 +215,7 @@ abstract class DataClass
         {
             if (array_key_exists($property, $record))
             {
-                $object->set_default_property($property, $record[$property]);
+                $object->setDefaultProperty($property, $record[$property]);
                 unset($record[$property]);
             }
         }
@@ -275,30 +275,6 @@ abstract class DataClass
         $cacheablePropertyNames[] = static::PROPERTY_ID;
 
         return $cacheablePropertyNames;
-    }
-
-    /**
-     * Gets the default properties of this data class.
-     *
-     * @return string[] An associative array containing the properties.
-     * @deprecated Use DataClass::getDefaultProperties() now
-     */
-    public function get_default_properties()
-    {
-        return $this->getDefaultProperties();
-    }
-
-    /**
-     * Gets a default property of this data class object by name.
-     *
-     * @param string $name The name of the property
-     *
-     * @return mixed
-     * @deprecated Use DataClass::getDefaultProperty() now
-     */
-    public function get_default_property($name)
-    {
-        return $this->getDefaultProperty($name);
     }
 
     /**
@@ -367,7 +343,7 @@ abstract class DataClass
         if (is_null($foreign_property))
         {
             $foreign_property = DataManager::retrieve_by_id(
-                $classname, $this->get_default_property($name . '_id')
+                $classname, $this->getDefaultProperty($name . '_id')
             );
 
             $this->set_foreign_property($name, $foreign_property);
@@ -535,15 +511,6 @@ abstract class DataClass
     }
 
     /**
-     * @return boolean
-     * @deprecated
-     */
-    public function is_identified()
-    {
-        return $this->isIdentified();
-    }
-
-    /**
      * Triggers an event in all the listeners
      *
      * @param string $event
@@ -647,20 +614,6 @@ abstract class DataClass
     public function set_default_properties($defaultProperties)
     {
         $this->set_specific_properties(self::PROPERTIES_DEFAULT, $defaultProperties);
-    }
-
-    /**
-     * Sets a default property of this data class by name.
-     *
-     * @param string $name The name of the property.
-     * @param mixed $value The new value for the property.
-     *
-     * @throws \Exception
-     * @deprecated Use DataClass::setDefaultProperty() now
-     */
-    public function set_default_property($name, $value)
-    {
-        $this->setDefaultProperty($name, $value);
     }
 
     /**

@@ -25,32 +25,32 @@ class ContentObjectAttachment extends DataClass
 
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     public function get_attachment_id()
     {
-        return $this->get_default_property(self::PROPERTY_ATTACHMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ATTACHMENT_ID);
     }
 
     public function set_attachment_id($attachment_id)
     {
-        $this->set_default_property(self::PROPERTY_ATTACHMENT_ID, $attachment_id);
+        $this->setDefaultProperty(self::PROPERTY_ATTACHMENT_ID, $attachment_id);
     }
 
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     public function get_attachment_object()

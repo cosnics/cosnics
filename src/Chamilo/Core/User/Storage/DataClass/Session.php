@@ -26,7 +26,7 @@ class Session extends DataClass
      */
     public function get_data()
     {
-        return $this->get_default_property(self::PROPERTY_DATA);
+        return $this->getDefaultProperty(self::PROPERTY_DATA);
     }
 
     /**
@@ -70,7 +70,7 @@ class Session extends DataClass
      */
     public function get_lifetime()
     {
-        return $this->get_default_property(self::PROPERTY_LIFETIME);
+        return $this->getDefaultProperty(self::PROPERTY_LIFETIME);
     }
 
     /**
@@ -80,7 +80,7 @@ class Session extends DataClass
      */
     public function get_modified()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -90,7 +90,7 @@ class Session extends DataClass
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -100,7 +100,7 @@ class Session extends DataClass
      */
     public function get_save_path()
     {
-        return $this->get_default_property(self::PROPERTY_SAVE_PATH);
+        return $this->getDefaultProperty(self::PROPERTY_SAVE_PATH);
     }
 
     /**
@@ -110,7 +110,7 @@ class Session extends DataClass
      */
     public function get_session_id()
     {
-        return $this->get_default_property(self::PROPERTY_SESSION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SESSION_ID);
     }
 
     /**
@@ -135,7 +135,7 @@ class Session extends DataClass
      */
     public function set_data($data)
     {
-        $this->set_default_property(self::PROPERTY_DATA, $data);
+        $this->setDefaultProperty(self::PROPERTY_DATA, $data);
     }
 
     /**
@@ -145,7 +145,7 @@ class Session extends DataClass
      */
     public function set_lifetime($lifetime)
     {
-        $this->set_default_property(self::PROPERTY_LIFETIME, $lifetime);
+        $this->setDefaultProperty(self::PROPERTY_LIFETIME, $lifetime);
     }
 
     /**
@@ -155,7 +155,7 @@ class Session extends DataClass
      */
     public function set_modified($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
     }
 
     /**
@@ -165,7 +165,7 @@ class Session extends DataClass
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -175,7 +175,7 @@ class Session extends DataClass
      */
     public function set_save_path($save_path)
     {
-        $this->set_default_property(self::PROPERTY_SAVE_PATH, $save_path);
+        $this->setDefaultProperty(self::PROPERTY_SAVE_PATH, $save_path);
     }
 
     /**
@@ -185,6 +185,6 @@ class Session extends DataClass
      */
     public function set_session_id($session_id)
     {
-        $this->set_default_property(self::PROPERTY_SESSION_ID, $session_id);
+        $this->setDefaultProperty(self::PROPERTY_SESSION_ID, $session_id);
     }
 }

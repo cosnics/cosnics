@@ -46,7 +46,7 @@ class WorkspaceCategoryRelation extends DataClass
      */
     public function getWorkspaceId()
     {
-        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -69,7 +69,7 @@ class WorkspaceCategoryRelation extends DataClass
      */
     public function setWorkspaceId($workspaceId)
     {
-        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspaceId);
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
     }
 
     /**
@@ -78,7 +78,7 @@ class WorkspaceCategoryRelation extends DataClass
      */
     public function getCategoryId()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -101,7 +101,7 @@ class WorkspaceCategoryRelation extends DataClass
      */
     public function setCategoryId($categoryId)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $categoryId);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $categoryId);
     }
 
     /**

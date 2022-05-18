@@ -117,7 +117,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             case ContentObject::PROPERTY_DESCRIPTION :
                 return htmlentities(
                     StringUtilities::getInstance()->truncate(
-                        $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION), 50
+                        $object->getDefaultProperty(ContentObject::PROPERTY_DESCRIPTION), 50
                     )
                 );
             case EntryRequestTableColumnModel::COLUMN_NAME_AUTHOR :

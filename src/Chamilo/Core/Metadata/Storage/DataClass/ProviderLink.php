@@ -70,7 +70,7 @@ class ProviderLink extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -79,7 +79,7 @@ class ProviderLink extends DataClass
      */
     public function set_entity_type($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -88,7 +88,7 @@ class ProviderLink extends DataClass
      */
     public function get_element_id()
     {
-        return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ELEMENT_ID);
     }
 
     /**
@@ -111,7 +111,7 @@ class ProviderLink extends DataClass
      */
     public function set_element_id($elementId)
     {
-        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $elementId);
+        $this->setDefaultProperty(self::PROPERTY_ELEMENT_ID, $elementId);
     }
 
     /**
@@ -120,7 +120,7 @@ class ProviderLink extends DataClass
      */
     public function get_provider_registration_id()
     {
-        return $this->get_default_property(self::PROPERTY_PROVIDER_REGISTRATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PROVIDER_REGISTRATION_ID);
     }
 
     /**
@@ -129,7 +129,7 @@ class ProviderLink extends DataClass
      */
     public function set_provider_registration_id($providerRegistrationId)
     {
-        $this->set_default_property(self::PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
+        $this->setDefaultProperty(self::PROPERTY_PROVIDER_REGISTRATION_ID, $providerRegistrationId);
     }
 
     /**

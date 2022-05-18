@@ -59,7 +59,7 @@ class Setting extends DataClass
 
     public function get_context()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -69,7 +69,7 @@ class Setting extends DataClass
      */
     public function get_variable()
     {
-        return $this->get_default_property(self::PROPERTY_VARIABLE);
+        return $this->getDefaultProperty(self::PROPERTY_VARIABLE);
     }
 
     /**
@@ -79,7 +79,7 @@ class Setting extends DataClass
      */
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     /**
@@ -95,7 +95,7 @@ class Setting extends DataClass
 
     public function set_context($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -105,7 +105,7 @@ class Setting extends DataClass
      */
     public function set_variable($variable)
     {
-        $this->set_default_property(self::PROPERTY_VARIABLE, $variable);
+        $this->setDefaultProperty(self::PROPERTY_VARIABLE, $variable);
     }
 
     /**
@@ -115,7 +115,7 @@ class Setting extends DataClass
      */
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 
     /**
@@ -125,7 +125,7 @@ class Setting extends DataClass
      */
     public function get_user_setting()
     {
-        return $this->get_default_property(self::PROPERTY_USER_SETTING);
+        return $this->getDefaultProperty(self::PROPERTY_USER_SETTING);
     }
 
     /**
@@ -135,7 +135,7 @@ class Setting extends DataClass
      */
     public function set_user_setting($user_setting)
     {
-        $this->set_default_property(self::PROPERTY_USER_SETTING, $user_setting);
+        $this->setDefaultProperty(self::PROPERTY_USER_SETTING, $user_setting);
     }
 
     public function delete()

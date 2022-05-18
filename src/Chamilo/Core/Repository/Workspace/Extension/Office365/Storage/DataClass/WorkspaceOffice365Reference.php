@@ -36,7 +36,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function getWorkspaceId()
     {
-        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -46,7 +46,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function setWorkspaceId($workspaceId)
     {
-        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspaceId);
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
 
         return $this;
     }
@@ -56,7 +56,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function getOffice365GroupId()
     {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID);
     }
 
     /**
@@ -66,7 +66,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function setOffice365GroupId($office365GroupId)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
 
         return $this;
     }
@@ -76,7 +76,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function getOffice365PlanId()
     {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_PLAN_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID);
     }
 
     /**
@@ -86,7 +86,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function setOffice365PlanId($office365PlanId)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
 
         return $this;
     }
@@ -99,7 +99,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function isLinked()
     {
-        return (bool) $this->get_default_property(self::PROPERTY_LINKED);
+        return (bool) $this->getDefaultProperty(self::PROPERTY_LINKED);
     }
 
     /**
@@ -112,7 +112,7 @@ class WorkspaceOffice365Reference extends DataClass
      */
     public function setLinked($linked = true)
     {
-        $this->set_default_property(self::PROPERTY_LINKED, $linked);
+        $this->setDefaultProperty(self::PROPERTY_LINKED, $linked);
 
         return $this;
     }

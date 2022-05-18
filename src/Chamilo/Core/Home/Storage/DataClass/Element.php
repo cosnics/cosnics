@@ -63,7 +63,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getConfiguration()
     {
-        return unserialize($this->get_default_property(self::PROPERTY_CONFIGURATION));
+        return unserialize($this->getDefaultProperty(self::PROPERTY_CONFIGURATION));
     }
 
     /**
@@ -83,7 +83,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getParentId()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
     /**
@@ -105,7 +105,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getSort()
     {
-        return $this->get_default_property(self::PROPERTY_SORT);
+        return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getTitle()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -123,7 +123,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getType()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -132,7 +132,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function getUserId()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array
@@ -212,7 +212,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setConfiguration($configuration)
     {
-        $this->set_default_property(self::PROPERTY_CONFIGURATION, serialize($configuration));
+        $this->setDefaultProperty(self::PROPERTY_CONFIGURATION, serialize($configuration));
     }
 
     /**
@@ -221,7 +221,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setParentId($parentId)
     {
-        $this->set_default_property(self::PROPERTY_PARENT_ID, $parentId);
+        $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parentId);
     }
 
     /**
@@ -243,7 +243,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setSort($sort)
     {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
+        $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }
 
     /**
@@ -252,7 +252,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setTitle($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -261,7 +261,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setType($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -270,7 +270,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
     }
 
     /**

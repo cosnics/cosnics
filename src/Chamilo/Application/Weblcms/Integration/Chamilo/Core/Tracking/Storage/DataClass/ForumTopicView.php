@@ -30,42 +30,42 @@ class ForumTopicView extends SimpleTracker
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     public function get_forum_topic_id()
     {
-        return $this->get_default_property(self::PROPERTY_FORUM_TOPIC_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID);
     }
 
     public function set_forum_topic_id($forum_topic_id)
     {
-        $this->set_default_property(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
+        $this->setDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
     }
 
     public function get_date()
     {
-        return $this->get_default_property(self::PROPERTY_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DATE);
     }
 
     public function set_date($date)
     {
-        $this->set_default_property(self::PROPERTY_DATE, $date);
+        $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
     /**

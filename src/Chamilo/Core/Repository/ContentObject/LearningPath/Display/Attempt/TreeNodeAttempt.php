@@ -37,48 +37,48 @@ abstract class TreeNodeAttempt extends DataClass
 
     public function get_start_time()
     {
-        return $this->get_default_property(self::PROPERTY_START_TIME);
+        return $this->getDefaultProperty(self::PROPERTY_START_TIME);
     }
 
     public function set_start_time($start_time)
     {
-        $this->set_default_property(self::PROPERTY_START_TIME, $start_time);
+        $this->setDefaultProperty(self::PROPERTY_START_TIME, $start_time);
 
         return $this;
     }
 
     public function getTreeNodeDataId()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_NODE_DATA_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID);
     }
 
     public function setTreeNodeDataId($learning_path_item_id)
     {
-        $this->set_default_property(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID, $learning_path_item_id);
 
         return $this;
     }
 
     public function get_total_time()
     {
-        return $this->get_default_property(self::PROPERTY_TOTAL_TIME);
+        return $this->getDefaultProperty(self::PROPERTY_TOTAL_TIME);
     }
 
     public function set_total_time($total_time)
     {
-        $this->set_default_property(self::PROPERTY_TOTAL_TIME, $total_time);
+        $this->setDefaultProperty(self::PROPERTY_TOTAL_TIME, $total_time);
 
         return $this;
     }
 
     public function get_score()
     {
-        return $this->get_default_property(self::PROPERTY_SCORE);
+        return $this->getDefaultProperty(self::PROPERTY_SCORE);
     }
 
     public function set_score($score)
     {
-        $this->set_default_property(self::PROPERTY_SCORE, $score);
+        $this->setDefaultProperty(self::PROPERTY_SCORE, $score);
 
         return $this;
     }
@@ -88,7 +88,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function isCompleted()
     {
-        return $this->get_default_property(self::PROPERTY_COMPLETED);
+        return $this->getDefaultProperty(self::PROPERTY_COMPLETED);
     }
 
     /**
@@ -98,7 +98,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function setCompleted($completed = true)
     {
-        $this->set_default_property(self::PROPERTY_COMPLETED, $completed);
+        $this->setDefaultProperty(self::PROPERTY_COMPLETED, $completed);
 
         return $this;
     }
@@ -108,7 +108,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function getLearningPathId()
     {
-        return (int) $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
+        return (int) $this->getDefaultProperty(self::PROPERTY_LEARNING_PATH_ID);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function setLearningPathId($learningPathId)
     {
-        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
+        $this->setDefaultProperty(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
 
         return $this;
     }
@@ -129,7 +129,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class TreeNodeAttempt extends DataClass
      */
     public function setUserId($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
 
         return $this;
     }

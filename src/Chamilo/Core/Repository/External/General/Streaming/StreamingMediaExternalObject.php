@@ -43,7 +43,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_thumbnail()
     {
-        return $this->get_default_property(self::PROPERTY_THUMBNAIL);
+        return $this->getDefaultProperty(self::PROPERTY_THUMBNAIL);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_thumbnail($thumbnail)
     {
-        $this->set_default_property(self::PROPERTY_THUMBNAIL, $thumbnail);
+        $this->setDefaultProperty(self::PROPERTY_THUMBNAIL, $thumbnail);
     }
 
     /**
@@ -61,7 +61,7 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_url()
     {
-        return $this->get_default_property(self::PROPERTY_URL);
+        return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -70,12 +70,12 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function get_duration()
     {
-        return $this->get_default_property(self::PROPERTY_DURATION);
+        return $this->getDefaultProperty(self::PROPERTY_DURATION);
     }
 
     public function get_status()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     /**
@@ -84,12 +84,12 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_url($url)
     {
-        $this->set_default_property(self::PROPERTY_URL, $url);
+        $this->setDefaultProperty(self::PROPERTY_URL, $url);
     }
 
     public function set_status($status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
     /**
@@ -98,6 +98,6 @@ abstract class StreamingMediaExternalObject extends ExternalObject
      */
     public function set_duration($duration)
     {
-        $this->set_default_property(self::PROPERTY_DURATION, $duration);
+        $this->setDefaultProperty(self::PROPERTY_DURATION, $duration);
     }
 }

@@ -26,22 +26,22 @@ class ContentObjectInclude extends DataClass
 
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     public function get_include_id()
     {
-        return $this->get_default_property(self::PROPERTY_INCLUDE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_INCLUDE_ID);
     }
 
     public function set_include_id($include_id)
     {
-        $this->set_default_property(self::PROPERTY_INCLUDE_ID, $include_id);
+        $this->setDefaultProperty(self::PROPERTY_INCLUDE_ID, $include_id);
     }
 
     public function get_include_object()

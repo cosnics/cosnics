@@ -60,7 +60,7 @@ class GroupRelUser extends DataClass
 
     public function get_group_id()
     {
-        return $this->get_default_property(self::PROPERTY_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
     }
 
     /**
@@ -73,16 +73,16 @@ class GroupRelUser extends DataClass
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_group_id($group_id)
     {
-        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
+        $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $group_id);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

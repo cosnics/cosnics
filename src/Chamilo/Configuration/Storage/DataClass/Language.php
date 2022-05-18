@@ -84,7 +84,7 @@ class Language extends DataClass
      */
     public function get_original_name()
     {
-        return $this->get_default_property(self::PROPERTY_ORIGINAL_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_ORIGINAL_NAME);
     }
 
     /**
@@ -94,7 +94,7 @@ class Language extends DataClass
      */
     public function get_english_name()
     {
-        return $this->get_default_property(self::PROPERTY_ENGLISH_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_ENGLISH_NAME);
     }
 
     /**
@@ -104,7 +104,7 @@ class Language extends DataClass
      */
     public function get_family()
     {
-        return $this->get_default_property(self::PROPERTY_FAMILY);
+        return $this->getDefaultProperty(self::PROPERTY_FAMILY);
     }
 
     /**
@@ -114,7 +114,7 @@ class Language extends DataClass
      */
     public function get_isocode()
     {
-        return $this->get_default_property(self::PROPERTY_ISOCODE);
+        return $this->getDefaultProperty(self::PROPERTY_ISOCODE);
     }
 
     /**
@@ -124,7 +124,7 @@ class Language extends DataClass
      */
     public function get_available()
     {
-        return $this->get_default_property(self::PROPERTY_AVAILABLE);
+        return $this->getDefaultProperty(self::PROPERTY_AVAILABLE);
     }
 
     /**
@@ -134,7 +134,7 @@ class Language extends DataClass
      */
     public function set_original_name($original_name)
     {
-        $this->set_default_property(self::PROPERTY_ORIGINAL_NAME, $original_name);
+        $this->setDefaultProperty(self::PROPERTY_ORIGINAL_NAME, $original_name);
     }
 
     /**
@@ -144,7 +144,7 @@ class Language extends DataClass
      */
     public function set_english_name($english_name)
     {
-        $this->set_default_property(self::PROPERTY_ENGLISH_NAME, $english_name);
+        $this->setDefaultProperty(self::PROPERTY_ENGLISH_NAME, $english_name);
     }
 
     /**
@@ -154,7 +154,7 @@ class Language extends DataClass
      */
     public function set_family($family)
     {
-        $this->set_default_property(self::PROPERTY_FAMILY, $family);
+        $this->setDefaultProperty(self::PROPERTY_FAMILY, $family);
     }
 
     /**
@@ -164,12 +164,12 @@ class Language extends DataClass
      */
     public function set_isocode($isocode)
     {
-        $this->set_default_property(self::PROPERTY_ISOCODE, $isocode);
+        $this->setDefaultProperty(self::PROPERTY_ISOCODE, $isocode);
     }
 
     public function set_available($available)
     {
-        $this->set_default_property(self::PROPERTY_AVAILABLE, $available);
+        $this->setDefaultProperty(self::PROPERTY_AVAILABLE, $available);
     }
 
     /**

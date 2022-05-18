@@ -66,7 +66,7 @@ class Relation extends DataClass implements EntityTranslationInterface
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -76,7 +76,7 @@ class Relation extends DataClass implements EntityTranslationInterface
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**

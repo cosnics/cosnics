@@ -29,7 +29,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function get_access_date()
     {
-        return $this->get_default_property(self::PROPERTY_ACCESS_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_ACCESS_DATE);
     }
 
     /**
@@ -39,7 +39,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function get_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -49,7 +49,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function get_course_code()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
     /**
@@ -79,7 +79,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function get_module_name()
     {
-        return $this->get_default_property(self::PROPERTY_MODULE_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_MODULE_NAME);
     }
 
     /**
@@ -97,7 +97,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -107,7 +107,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function set_access_date($access_date)
     {
-        $this->set_default_property(self::PROPERTY_ACCESS_DATE, $access_date);
+        $this->setDefaultProperty(self::PROPERTY_ACCESS_DATE, $access_date);
     }
 
     /**
@@ -117,7 +117,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function set_category_id($category_id)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category_id);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $category_id);
     }
 
     /**
@@ -127,7 +127,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function set_course_code($course_code)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_CODE, $course_code);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $course_code);
     }
 
     /**
@@ -137,7 +137,7 @@ class CourseModuleLastAccess extends DataClass
      */
     public function set_module_name($module_name)
     {
-        $this->set_default_property(self::PROPERTY_MODULE_NAME, $module_name);
+        $this->setDefaultProperty(self::PROPERTY_MODULE_NAME, $module_name);
     }
 
     /**
@@ -147,6 +147,6 @@ class CourseModuleLastAccess extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

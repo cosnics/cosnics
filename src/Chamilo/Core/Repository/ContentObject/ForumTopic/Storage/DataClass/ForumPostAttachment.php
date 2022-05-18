@@ -47,7 +47,7 @@ class ForumPostAttachment extends DataClass
      */
     public function get_attachment_id()
     {
-        return $this->get_default_property(self::PROPERTY_ATTACHMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ATTACHMENT_ID);
     }
 
     /*
@@ -93,7 +93,7 @@ class ForumPostAttachment extends DataClass
      */
     public function get_forum_post_id()
     {
-        return $this->get_default_property(self::PROPERTY_FORUM_POST_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FORUM_POST_ID);
     }
 
     /**
@@ -143,7 +143,7 @@ class ForumPostAttachment extends DataClass
      */
     public function set_attachment_id($attachment_id)
     {
-        $this->set_default_property(self::PROPERTY_ATTACHMENT_ID, $attachment_id);
+        $this->setDefaultProperty(self::PROPERTY_ATTACHMENT_ID, $attachment_id);
     }
 
     /**
@@ -153,6 +153,6 @@ class ForumPostAttachment extends DataClass
      */
     public function set_forum_post_id($forum_post_id)
     {
-        $this->set_default_property(self::PROPERTY_FORUM_POST_ID, $forum_post_id);
+        $this->setDefaultProperty(self::PROPERTY_FORUM_POST_ID, $forum_post_id);
     }
 }

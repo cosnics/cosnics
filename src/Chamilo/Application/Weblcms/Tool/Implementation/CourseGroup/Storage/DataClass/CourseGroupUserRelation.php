@@ -48,7 +48,7 @@ class CourseGroupUserRelation extends DataClass
      */
     public function get_course_group()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_GROUP);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP);
     }
 
     /**
@@ -56,7 +56,7 @@ class CourseGroupUserRelation extends DataClass
      *
      * @return array An associative array containing the properties.
      */
-    public function get_default_properties()
+    public function getDefaultProperties()
     {
         return $this->defaultProperties;
     }
@@ -71,7 +71,7 @@ class CourseGroupUserRelation extends DataClass
      *
      * @param $name string The name of the property.
      */
-    public function get_default_property($name)
+    public function getDefaultProperty($name)
     {
         return $this->defaultProperties[$name];
     }
@@ -93,7 +93,7 @@ class CourseGroupUserRelation extends DataClass
      */
     public function get_subscription_time()
     {
-        return $this->get_default_property(self::PROPERTY_SUBSCRIPTION_TIME);
+        return $this->getDefaultProperty(self::PROPERTY_SUBSCRIPTION_TIME);
     }
 
     /**
@@ -111,7 +111,7 @@ class CourseGroupUserRelation extends DataClass
      */
     public function get_user()
     {
-        return $this->get_default_property(self::PROPERTY_USER);
+        return $this->getDefaultProperty(self::PROPERTY_USER);
     }
 
     /**
@@ -134,7 +134,7 @@ class CourseGroupUserRelation extends DataClass
      */
     public function set_course_group($course_group)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_GROUP, $course_group);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_GROUP, $course_group);
     }
 
     /**
@@ -143,7 +143,7 @@ class CourseGroupUserRelation extends DataClass
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
-    public function set_default_property($name, $value)
+    public function setDefaultProperty($name, $value)
     {
         $this->defaultProperties[$name] = $value;
     }
@@ -155,7 +155,7 @@ class CourseGroupUserRelation extends DataClass
      */
     public function set_subscription_time($subscription_time)
     {
-        $this->set_default_property(self::PROPERTY_SUBSCRIPTION_TIME, $subscription_time);
+        $this->setDefaultProperty(self::PROPERTY_SUBSCRIPTION_TIME, $subscription_time);
     }
 
     /**
@@ -165,6 +165,6 @@ class CourseGroupUserRelation extends DataClass
      */
     public function set_user($user)
     {
-        $this->set_default_property(self::PROPERTY_USER, $user);
+        $this->setDefaultProperty(self::PROPERTY_USER, $user);
     }
 }

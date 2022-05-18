@@ -35,7 +35,7 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function getTreeNodeAttemptId()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_NODE_ATTEMPT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID);
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function setTreeNodeAttemptId($treeNodeAttemptId)
     {
-        $this->set_default_property(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
     }
 
     /**
@@ -53,7 +53,7 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function getTreeNodeDataId()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_NODE_DATA_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID);
     }
 
     /**
@@ -62,6 +62,6 @@ abstract class Entry extends \Chamilo\Core\Repository\ContentObject\Assignment\D
      */
     public function setTreeNodeDataId($treeNodeAttemptId)
     {
-        $this->set_default_property(self::PROPERTY_TREE_NODE_DATA_ID, $treeNodeAttemptId);
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_DATA_ID, $treeNodeAttemptId);
     }
 }

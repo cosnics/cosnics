@@ -83,7 +83,7 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             case ContentObject::PROPERTY_DESCRIPTION :
                 return htmlentities(
                     StringUtilities::getInstance()->truncate(
-                        $object->get_default_property(ContentObject::PROPERTY_DESCRIPTION), 50
+                        $object->getDefaultProperty(ContentObject::PROPERTY_DESCRIPTION), 50
                     )
                 );
             case RequestTableColumnModel::COLUMN_NAME_AUTHOR :

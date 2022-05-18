@@ -27,7 +27,7 @@ class ElementTargetEntity extends HomeTargetEntity
      */
     public function get_element_id()
     {
-        return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ELEMENT_ID);
     }
 
     /**
@@ -45,6 +45,6 @@ class ElementTargetEntity extends HomeTargetEntity
      */
     public function set_element_id($element_id)
     {
-        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $element_id);
+        $this->setDefaultProperty(self::PROPERTY_ELEMENT_ID, $element_id);
     }
 }

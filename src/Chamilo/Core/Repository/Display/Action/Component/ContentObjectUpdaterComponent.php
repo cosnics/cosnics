@@ -30,7 +30,7 @@ class ContentObjectUpdaterComponent extends Manager
                 ContentObject::class, $pid
             );
 
-            $content_object->set_default_property(ContentObject::PROPERTY_OWNER_ID, $this->get_user_id());
+            $content_object->setDefaultProperty(ContentObject::PROPERTY_OWNER_ID, $this->get_user_id());
 
             $form = ContentObjectForm::factory(
                 ContentObjectForm::TYPE_EDIT, new PersonalWorkspace($this->get_user()), $content_object, 'edit',

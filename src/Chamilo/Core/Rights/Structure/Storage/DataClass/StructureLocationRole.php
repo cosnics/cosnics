@@ -34,7 +34,7 @@ class StructureLocationRole extends DataClass
      */
     public function getStructureLocationId()
     {
-        return $this->get_default_property(self::PROPERTY_STRUCTURE_LOCATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_STRUCTURE_LOCATION_ID);
     }
 
     /**
@@ -45,7 +45,7 @@ class StructureLocationRole extends DataClass
      */
     public function setStructureLocationId($structureLocationId)
     {
-        $this->set_default_property(self::PROPERTY_STRUCTURE_LOCATION_ID, $structureLocationId);
+        $this->setDefaultProperty(self::PROPERTY_STRUCTURE_LOCATION_ID, $structureLocationId);
         
         return $this;
     }
@@ -56,7 +56,7 @@ class StructureLocationRole extends DataClass
      */
     public function getRoleId()
     {
-        return $this->get_default_property(self::PROPERTY_ROLE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ROLE_ID);
     }
 
     /**
@@ -67,7 +67,7 @@ class StructureLocationRole extends DataClass
      */
     public function setRoleId($roleId)
     {
-        $this->set_default_property(self::PROPERTY_ROLE_ID, $roleId);
+        $this->setDefaultProperty(self::PROPERTY_ROLE_ID, $roleId);
         
         return $this;
     }

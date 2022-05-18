@@ -46,7 +46,7 @@ abstract class Score extends DataClass
      */
     public function getScore()
     {
-        return $this->get_default_property(self::PROPERTY_SCORE);
+        return $this->getDefaultProperty(self::PROPERTY_SCORE);
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class Score extends DataClass
      */
     public function setScore($score)
     {
-        $this->set_default_property(self::PROPERTY_SCORE, $score);
+        $this->setDefaultProperty(self::PROPERTY_SCORE, $score);
     }
 
     /**
@@ -64,7 +64,7 @@ abstract class Score extends DataClass
      */
     public function getEntryId()
     {
-        return $this->get_default_property(self::PROPERTY_ENTRY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTRY_ID);
     }
 
     /**
@@ -73,7 +73,7 @@ abstract class Score extends DataClass
      */
     public function setEntryId($entryId)
     {
-        $this->set_default_property(self::PROPERTY_ENTRY_ID, $entryId);
+        $this->setDefaultProperty(self::PROPERTY_ENTRY_ID, $entryId);
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class Score extends DataClass
      */
     public function getCreated()
     {
-        return $this->get_default_property(self::PROPERTY_CREATED);
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class Score extends DataClass
      */
     public function setCreated($created)
     {
-        $this->set_default_property(self::PROPERTY_CREATED, $created);
+        $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class Score extends DataClass
      */
     public function getModified()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class Score extends DataClass
      */
     public function setModified($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class Score extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -127,6 +127,6 @@ abstract class Score extends DataClass
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
     }
 }

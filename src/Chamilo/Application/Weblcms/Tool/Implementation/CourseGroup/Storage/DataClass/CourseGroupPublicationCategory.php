@@ -21,7 +21,7 @@ class CourseGroupPublicationCategory extends DataClass
      */
     public function getCourseGroupId()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP_ID);
     }
 
     /**
@@ -29,7 +29,7 @@ class CourseGroupPublicationCategory extends DataClass
      */
     public function getPublicationCategoryId()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_CATEGORY_ID);
     }
 
     /**
@@ -57,7 +57,7 @@ class CourseGroupPublicationCategory extends DataClass
      */
     public function setCourseGroupId($courseGroupId)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_GROUP_ID, $courseGroupId);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_GROUP_ID, $courseGroupId);
 
         return $this;
     }
@@ -69,7 +69,7 @@ class CourseGroupPublicationCategory extends DataClass
      */
     public function setPublicationCategoryId($contentObjectPublicationCategoryId)
     {
-        $this->set_default_property(
+        $this->setDefaultProperty(
             self::PROPERTY_PUBLICATION_CATEGORY_ID, $contentObjectPublicationCategoryId
         );
 

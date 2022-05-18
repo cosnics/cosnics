@@ -48,7 +48,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function getCategoryId()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -57,7 +57,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function setCategoryId($categoryId)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $categoryId);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $categoryId);
     }
 
     /**
@@ -66,7 +66,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function getWorkspaceId()
     {
-        return $this->get_default_property(self::PROPERTY_WORKSPACE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     /**
@@ -89,7 +89,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function setWorkspaceId($workspaceId)
     {
-        $this->set_default_property(self::PROPERTY_WORKSPACE_ID, $workspaceId);
+        $this->setDefaultProperty(self::PROPERTY_WORKSPACE_ID, $workspaceId);
     }
 
     /**
@@ -98,7 +98,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function getContentObjectId()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -121,7 +121,7 @@ class WorkspaceContentObjectRelation extends DataClass
      */
     public function setContentObjectId($contentObjectId)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
     }
 
     /**

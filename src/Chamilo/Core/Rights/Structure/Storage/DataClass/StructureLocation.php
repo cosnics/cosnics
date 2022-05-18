@@ -34,7 +34,7 @@ class StructureLocation extends DataClass
      */
     public function getContext()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -45,7 +45,7 @@ class StructureLocation extends DataClass
      */
     public function setContext($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
         
         return $this;
     }
@@ -56,7 +56,7 @@ class StructureLocation extends DataClass
      */
     public function getAction()
     {
-        return $this->get_default_property(self::PROPERTY_ACTION);
+        return $this->getDefaultProperty(self::PROPERTY_ACTION);
     }
 
     /**
@@ -67,7 +67,7 @@ class StructureLocation extends DataClass
      */
     public function setAction($action)
     {
-        $this->set_default_property(self::PROPERTY_ACTION, $action);
+        $this->setDefaultProperty(self::PROPERTY_ACTION, $action);
         
         return $this;
     }

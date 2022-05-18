@@ -138,7 +138,7 @@ class PackageDisplay
 
         foreach ($properties as $property)
         {
-            $value = $package_info->get_default_property($property);
+            $value = $package_info->getDefaultProperty($property);
             if (!empty($value) && !in_array($property, $hidden_properties))
             {
                 $html[] = '<tr><td class="header">' . Translation::get(

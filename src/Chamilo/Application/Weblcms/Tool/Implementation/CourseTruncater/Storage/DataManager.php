@@ -49,7 +49,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $course_sections = [];
         foreach($course_sections_set as $course_section)
         {
-            $course_sections[] = $course_section->get_default_properties();
+            $course_sections[] = $course_section->getDefaultProperties();
         }
 
         return $course_sections;

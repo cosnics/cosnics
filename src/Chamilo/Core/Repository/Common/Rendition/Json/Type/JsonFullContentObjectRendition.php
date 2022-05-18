@@ -8,6 +8,6 @@ class JsonFullContentObjectRendition extends JsonContentObjectRendition
 
     public function render()
     {
-        return json_encode($this->get_content_object()->get_default_properties());
+        return json_encode($this->get_content_object()->getDefaultProperties());
     }
 }

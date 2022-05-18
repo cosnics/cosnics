@@ -372,7 +372,7 @@ class Course extends DataClass
      */
     public function get_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -463,7 +463,7 @@ class Course extends DataClass
      */
     public function get_course_type_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
     }
 
     /**
@@ -491,7 +491,7 @@ class Course extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -606,7 +606,7 @@ class Course extends DataClass
      */
     public function get_expiration_date()
     {
-        return $this->get_default_property(self::PROPERTY_EXPIRATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_EXPIRATION_DATE);
     }
 
     public function get_fully_qualified_name($include_self = true)
@@ -642,7 +642,7 @@ class Course extends DataClass
      */
     public function get_language()
     {
-        return $this->get_default_property(self::PROPERTY_LANGUAGE);
+        return $this->getDefaultProperty(self::PROPERTY_LANGUAGE);
     }
 
     /**
@@ -652,7 +652,7 @@ class Course extends DataClass
      */
     public function get_last_edit()
     {
-        return $this->get_default_property(self::PROPERTY_LAST_EDIT);
+        return $this->getDefaultProperty(self::PROPERTY_LAST_EDIT);
     }
 
     /**
@@ -662,7 +662,7 @@ class Course extends DataClass
      */
     public function get_last_visit()
     {
-        return $this->get_default_property(self::PROPERTY_LAST_VISIT);
+        return $this->getDefaultProperty(self::PROPERTY_LAST_VISIT);
     }
 
     /**
@@ -755,7 +755,7 @@ class Course extends DataClass
      */
     public function get_system_code()
     {
-        return $this->get_default_property(self::PROPERTY_SYSTEM_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_SYSTEM_CODE);
     }
 
     /**
@@ -773,7 +773,7 @@ class Course extends DataClass
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -783,7 +783,7 @@ class Course extends DataClass
      */
     public function get_titular_id()
     {
-        return $this->get_default_property(self::PROPERTY_TITULAR_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TITULAR_ID);
     }
 
     /**
@@ -793,7 +793,7 @@ class Course extends DataClass
      */
     public function get_visual_code()
     {
-        return $this->get_default_property(self::PROPERTY_VISUAL_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_VISUAL_CODE);
     }
 
     /**
@@ -1015,7 +1015,7 @@ class Course extends DataClass
      */
     public function set_category_id($category_id)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category_id);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $category_id);
     }
 
     /**
@@ -1054,7 +1054,7 @@ class Course extends DataClass
 
         $this->old_course_type_id = $old_course_type_id;
 
-        $this->set_default_property(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_TYPE_ID, $course_type_id);
     }
 
     /**
@@ -1064,7 +1064,7 @@ class Course extends DataClass
      */
     public function set_creation_date($creation_date)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creation_date);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creation_date);
     }
 
     /**
@@ -1074,7 +1074,7 @@ class Course extends DataClass
      */
     public function set_expiration_date($expiration_date)
     {
-        $this->set_default_property(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
+        $this->setDefaultProperty(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
     }
 
     /**
@@ -1084,7 +1084,7 @@ class Course extends DataClass
      */
     public function set_language($language)
     {
-        $this->set_default_property(self::PROPERTY_LANGUAGE, $language);
+        $this->setDefaultProperty(self::PROPERTY_LANGUAGE, $language);
     }
 
     /**
@@ -1094,7 +1094,7 @@ class Course extends DataClass
      */
     public function set_last_edit($last_edit)
     {
-        $this->set_default_property(self::PROPERTY_LAST_EDIT, $last_edit);
+        $this->setDefaultProperty(self::PROPERTY_LAST_EDIT, $last_edit);
     }
 
     /**
@@ -1104,7 +1104,7 @@ class Course extends DataClass
      */
     public function set_last_visit($last_visit)
     {
-        $this->set_default_property(self::PROPERTY_LAST_VISIT, $last_visit);
+        $this->setDefaultProperty(self::PROPERTY_LAST_VISIT, $last_visit);
     }
 
     /**
@@ -1114,7 +1114,7 @@ class Course extends DataClass
      */
     public function set_system_code($system_code)
     {
-        $this->set_default_property(self::PROPERTY_SYSTEM_CODE, $system_code);
+        $this->setDefaultProperty(self::PROPERTY_SYSTEM_CODE, $system_code);
     }
 
     /**
@@ -1124,7 +1124,7 @@ class Course extends DataClass
      */
     public function set_title($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -1134,7 +1134,7 @@ class Course extends DataClass
      */
     public function set_titular_id($titular_id)
     {
-        $this->set_default_property(self::PROPERTY_TITULAR_ID, $titular_id);
+        $this->setDefaultProperty(self::PROPERTY_TITULAR_ID, $titular_id);
     }
 
     /**
@@ -1150,7 +1150,7 @@ class Course extends DataClass
      */
     public function set_visual_code($visual_code)
     {
-        $this->set_default_property(self::PROPERTY_VISUAL_CODE, $visual_code);
+        $this->setDefaultProperty(self::PROPERTY_VISUAL_CODE, $visual_code);
     }
 
     /**

@@ -74,7 +74,7 @@ class Registration extends DataClass
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -84,12 +84,12 @@ class Registration extends DataClass
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     public function get_context()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -99,7 +99,7 @@ class Registration extends DataClass
      */
     public function get_status()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     /**
@@ -109,7 +109,7 @@ class Registration extends DataClass
      */
     public function get_version()
     {
-        return $this->get_default_property(self::PROPERTY_VERSION);
+        return $this->getDefaultProperty(self::PROPERTY_VERSION);
     }
 
     /**
@@ -119,7 +119,7 @@ class Registration extends DataClass
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -129,12 +129,12 @@ class Registration extends DataClass
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     public function set_context($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -144,7 +144,7 @@ class Registration extends DataClass
      */
     public function set_status($status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
     /**
@@ -154,7 +154,7 @@ class Registration extends DataClass
      */
     public function set_version($version)
     {
-        $this->set_default_property(self::PROPERTY_VERSION, $version);
+        $this->setDefaultProperty(self::PROPERTY_VERSION, $version);
     }
 
     /**
@@ -163,7 +163,7 @@ class Registration extends DataClass
      */
     public function get_priority()
     {
-        return (int) $this->get_default_property(self::PROPERTY_PRIORITY);
+        return (int) $this->getDefaultProperty(self::PROPERTY_PRIORITY);
     }
 
     /**
@@ -174,7 +174,7 @@ class Registration extends DataClass
      */
     public function set_priority($priority)
     {
-        $this->set_default_property(self::PROPERTY_PRIORITY, $priority);
+        $this->setDefaultProperty(self::PROPERTY_PRIORITY, $priority);
 
         return $this;
     }
@@ -185,7 +185,7 @@ class Registration extends DataClass
      */
     public function get_category()
     {
-        return (string) $this->get_default_property(self::PROPERTY_CATEGORY);
+        return (string) $this->getDefaultProperty(self::PROPERTY_CATEGORY);
     }
 
     /**
@@ -196,7 +196,7 @@ class Registration extends DataClass
      */
     public function set_category($category)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY, $category);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY, $category);
 
         return $this;
     }

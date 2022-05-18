@@ -37,52 +37,52 @@ class UserStatusChange extends SimpleTracker
 
     function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     function get_subject_id()
     {
-        return $this->get_default_property(self::PROPERTY_SUBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SUBJECT_ID);
     }
 
     function set_subject_id($subject_id)
     {
-        $this->set_default_property(self::PROPERTY_SUBJECT_ID, $subject_id);
+        $this->setDefaultProperty(self::PROPERTY_SUBJECT_ID, $subject_id);
     }
 
     function get_new_status()
     {
-        $this->get_default_property(self::PROPERTY_NEW_STATUS);
+        $this->getDefaultProperty(self::PROPERTY_NEW_STATUS);
     }
 
     function set_new_status($new_status)
     {
-        $this->set_default_property(self::PROPERTY_NEW_STATUS, $new_status);
+        $this->setDefaultProperty(self::PROPERTY_NEW_STATUS, $new_status);
     }
 
     function get_course_id()
     {
-        $this->get_default_property(self::PROPERTY_COURSE_ID);
+        $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     function get_date()
     {
-        $this->get_default_property(self::PROPERTY_DATE);
+        $this->getDefaultProperty(self::PROPERTY_DATE);
     }
 
     function set_date($date)
     {
-        $this->set_default_property(self::PROPERTY_DATE, $date);
+        $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
     /**

@@ -131,7 +131,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -141,7 +141,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -151,7 +151,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function get_namespace()
     {
-        return $this->get_default_property(self::PROPERTY_NAMESPACE);
+        return $this->getDefaultProperty(self::PROPERTY_NAMESPACE);
     }
 
     /**
@@ -169,7 +169,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function get_url()
     {
-        return $this->get_default_property(self::PROPERTY_URL);
+        return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -179,7 +179,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function is_fixed()
     {
-        return $this->get_default_property(self::PROPERTY_FIXED);
+        return $this->getDefaultProperty(self::PROPERTY_FIXED);
     }
 
     /**
@@ -189,7 +189,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function set_description($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -199,7 +199,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function set_fixed($fixed)
     {
-        $this->set_default_property(self::PROPERTY_FIXED, $fixed);
+        $this->setDefaultProperty(self::PROPERTY_FIXED, $fixed);
     }
 
     /**
@@ -209,7 +209,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -219,7 +219,7 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function set_namespace($namespace)
     {
-        $this->set_default_property(self::PROPERTY_NAMESPACE, $namespace);
+        $this->setDefaultProperty(self::PROPERTY_NAMESPACE, $namespace);
     }
 
     /**
@@ -229,6 +229,6 @@ class Schema extends DataClass implements EntityTranslationInterface
      */
     public function set_url($url)
     {
-        $this->set_default_property(self::PROPERTY_URL, $url);
+        $this->setDefaultProperty(self::PROPERTY_URL, $url);
     }
 }

@@ -90,7 +90,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -149,7 +149,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -179,7 +179,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -197,7 +197,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -243,7 +243,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function is_visible()
     {
-        return $this->get_default_property(self::PROPERTY_VISIBLE);
+        return $this->getDefaultProperty(self::PROPERTY_VISIBLE);
     }
 
     /**
@@ -253,7 +253,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     /**
@@ -263,7 +263,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     /**
@@ -273,7 +273,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -283,7 +283,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -293,6 +293,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
     public function set_visible($visible)
     {
-        $this->set_default_property(self::PROPERTY_VISIBLE, $visible);
+        $this->setDefaultProperty(self::PROPERTY_VISIBLE, $visible);
     }
 }

@@ -100,7 +100,7 @@ class Request extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -120,7 +120,7 @@ class Request extends DataClass
      */
     public function get_decision()
     {
-        return $this->get_default_property(self::PROPERTY_DECISION);
+        return $this->getDefaultProperty(self::PROPERTY_DECISION);
     }
 
     /**
@@ -130,7 +130,7 @@ class Request extends DataClass
      */
     public function get_decision_date()
     {
-        return $this->get_default_property(self::PROPERTY_DECISION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
     }
 
     /**
@@ -149,7 +149,7 @@ class Request extends DataClass
      */
     public function get_decision_motivation()
     {
-        return $this->get_default_property(self::PROPERTY_DECISION_MOTIVATION);
+        return $this->getDefaultProperty(self::PROPERTY_DECISION_MOTIVATION);
     }
 
     /**
@@ -205,7 +205,7 @@ class Request extends DataClass
      */
     public function get_motivation()
     {
-        return $this->get_default_property(self::PROPERTY_MOTIVATION);
+        return $this->getDefaultProperty(self::PROPERTY_MOTIVATION);
     }
 
     /**
@@ -215,7 +215,7 @@ class Request extends DataClass
      */
     public function get_quota()
     {
-        return $this->get_default_property(self::PROPERTY_QUOTA);
+        return $this->getDefaultProperty(self::PROPERTY_QUOTA);
     }
 
     /**
@@ -242,7 +242,7 @@ class Request extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -262,7 +262,7 @@ class Request extends DataClass
      */
     public function set_creation_date($creation_date)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creation_date);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creation_date);
     }
 
     /**
@@ -272,7 +272,7 @@ class Request extends DataClass
      */
     public function set_decision($decision)
     {
-        $this->set_default_property(self::PROPERTY_DECISION, $decision);
+        $this->setDefaultProperty(self::PROPERTY_DECISION, $decision);
     }
 
     /**
@@ -282,7 +282,7 @@ class Request extends DataClass
      */
     public function set_decision_date($decision_date)
     {
-        $this->set_default_property(self::PROPERTY_DECISION_DATE, $decision_date);
+        $this->setDefaultProperty(self::PROPERTY_DECISION_DATE, $decision_date);
     }
 
     /**
@@ -292,7 +292,7 @@ class Request extends DataClass
      */
     public function set_decision_motivation($decision_motivation)
     {
-        $this->set_default_property(self::PROPERTY_DECISION_MOTIVATION, $decision_motivation);
+        $this->setDefaultProperty(self::PROPERTY_DECISION_MOTIVATION, $decision_motivation);
     }
 
     /**
@@ -302,7 +302,7 @@ class Request extends DataClass
      */
     public function set_motivation($motivation)
     {
-        $this->set_default_property(self::PROPERTY_MOTIVATION, $motivation);
+        $this->setDefaultProperty(self::PROPERTY_MOTIVATION, $motivation);
     }
 
     /**
@@ -312,7 +312,7 @@ class Request extends DataClass
      */
     public function set_quota($quota)
     {
-        $this->set_default_property(self::PROPERTY_QUOTA, $quota);
+        $this->setDefaultProperty(self::PROPERTY_QUOTA, $quota);
     }
 
     /**
@@ -322,7 +322,7 @@ class Request extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

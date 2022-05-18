@@ -337,7 +337,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
 
             if ($first_publication)
             {
-                if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->is_identified())
+                if ($contentObject instanceof ComplexContentObjectSupport && !$first_publication->isIdentified())
                 {
                     if (\Chamilo\Core\Repository\Builder\Manager::exists($contentObject->package()) &&
                         ($canEditContentObject || $canEditPublicationContentObject))
@@ -859,7 +859,7 @@ class ContentObjectPublicationForm extends BasePublicationForm
                 );
 
                 $defaults[ContentObjectPublication::PROPERTY_ALLOW_COLLABORATION] =
-                    $first_publication->is_identified() ? $first_publication->get_allow_collaboration() :
+                    $first_publication->isIdentified() ? $first_publication->get_allow_collaboration() :
                         $collaborateDefault;
             }
             else

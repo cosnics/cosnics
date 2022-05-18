@@ -34,7 +34,7 @@ class Change extends ChangesTracker
      */
     public function get_target_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_TARGET_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TARGET_USER_ID);
     }
 
     public function is_summary_tracker()
@@ -48,7 +48,7 @@ class Change extends ChangesTracker
      */
     public function set_target_user_id($target_user_id)
     {
-        $this->set_default_property(self::PROPERTY_TARGET_USER_ID, $target_user_id);
+        $this->setDefaultProperty(self::PROPERTY_TARGET_USER_ID, $target_user_id);
     }
 
     public function validate_parameters(array $parameters = [])

@@ -283,7 +283,7 @@ class DataClassRepositoryCache
             $cacheablePropertyParameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable($className, $cacheableProperty),
-                    new StaticConditionVariable($object->get_default_property($cacheableProperty))
+                    new StaticConditionVariable($object->getDefaultProperty($cacheableProperty))
                 )
             );
             $this->set($className, $cacheablePropertyParameters->hash(), null);

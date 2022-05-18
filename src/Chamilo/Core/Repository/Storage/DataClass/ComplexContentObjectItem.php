@@ -110,7 +110,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_add_date()
     {
-        return $this->get_default_property(self::PROPERTY_ADD_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_ADD_DATE);
     }
 
     /**
@@ -143,7 +143,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -168,7 +168,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_parent()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT);
     }
 
     public function get_parent_object()
@@ -180,7 +180,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_ref()
     {
-        return $this->get_default_property(self::PROPERTY_REF);
+        return $this->getDefaultProperty(self::PROPERTY_REF);
     }
 
     public function get_ref_object()
@@ -205,7 +205,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function is_complex()
@@ -215,22 +215,22 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function set_add_date($add_date)
     {
-        $this->set_default_property(self::PROPERTY_ADD_DATE, $add_date);
+        $this->setDefaultProperty(self::PROPERTY_ADD_DATE, $add_date);
     }
 
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     public function set_parent($parent)
     {
-        $this->set_default_property(self::PROPERTY_PARENT, $parent);
+        $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
     }
 
     public function set_ref($ref)
     {
-        $this->set_default_property(self::PROPERTY_REF, $ref);
+        $this->setDefaultProperty(self::PROPERTY_REF, $ref);
     }
 
     /**
@@ -244,6 +244,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

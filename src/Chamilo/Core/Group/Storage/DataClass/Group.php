@@ -309,7 +309,7 @@ class Group extends NestedSet
 
     public function get_code()
     {
-        return $this->get_default_property(self::PROPERTY_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_CODE);
     }
 
     /**
@@ -327,7 +327,7 @@ class Group extends NestedSet
      */
     public function get_database_quota()
     {
-        return $this->get_default_property(self::PROPERTY_DATABASE_QUOTA);
+        return $this->getDefaultProperty(self::PROPERTY_DATABASE_QUOTA);
     }
 
     /**
@@ -356,7 +356,7 @@ class Group extends NestedSet
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -366,7 +366,7 @@ class Group extends NestedSet
      */
     public function get_disk_quota()
     {
-        return $this->get_default_property(self::PROPERTY_DISK_QUOTA);
+        return $this->getDefaultProperty(self::PROPERTY_DISK_QUOTA);
     }
 
     /**
@@ -395,7 +395,7 @@ class Group extends NestedSet
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -419,7 +419,7 @@ class Group extends NestedSet
 
     public function get_sort()
     {
-        return $this->get_default_property(self::PROPERTY_SORT);
+        return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
@@ -572,22 +572,22 @@ class Group extends NestedSet
 
     public function set_code($code)
     {
-        $this->set_default_property(self::PROPERTY_CODE, $code);
+        $this->setDefaultProperty(self::PROPERTY_CODE, $code);
     }
 
     public function set_database_quota($database_quota)
     {
-        $this->set_default_property(self::PROPERTY_DATABASE_QUOTA, $database_quota);
+        $this->setDefaultProperty(self::PROPERTY_DATABASE_QUOTA, $database_quota);
     }
 
     public function set_description($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     public function set_disk_quota($disk_quota)
     {
-        $this->set_default_property(self::PROPERTY_DISK_QUOTA, $disk_quota);
+        $this->setDefaultProperty(self::PROPERTY_DISK_QUOTA, $disk_quota);
     }
 
     /**
@@ -597,7 +597,7 @@ class Group extends NestedSet
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -611,7 +611,7 @@ class Group extends NestedSet
 
     public function set_sort($sort)
     {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
+        $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }
 
     /**

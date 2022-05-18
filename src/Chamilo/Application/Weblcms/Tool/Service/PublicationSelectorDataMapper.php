@@ -46,7 +46,7 @@ class PublicationSelectorDataMapper
 
         foreach($publication_categories_set as $category)
         {
-            $properties = $category->get_default_properties();
+            $properties = $category->getDefaultProperties();
             $glyphNamespace = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
                 $properties[ContentObjectPublicationCategory::PROPERTY_TOOL];
 

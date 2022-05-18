@@ -413,7 +413,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                  * should not happen when the object is newly created, only for an update
                  */
                 $as_new_version = $this->get_save_as_new_version();
-                if (!$as_new_version && $this->is_identified())
+                if (!$as_new_version && $this->isIdentified())
                 {
                     $current_path = $this->get_path();
 

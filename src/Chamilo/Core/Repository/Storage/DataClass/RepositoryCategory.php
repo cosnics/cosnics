@@ -285,7 +285,7 @@ class RepositoryCategory extends PlatformCategory
      */
     public function get_type_id()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE_ID);
     }
 
     /**
@@ -294,7 +294,7 @@ class RepositoryCategory extends PlatformCategory
      */
     public function set_type_id($type_id)
     {
-        $this->set_default_property(self::PROPERTY_TYPE_ID, $type_id);
+        $this->setDefaultProperty(self::PROPERTY_TYPE_ID, $type_id);
     }
 
     /**
@@ -304,7 +304,7 @@ class RepositoryCategory extends PlatformCategory
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -314,7 +314,7 @@ class RepositoryCategory extends PlatformCategory
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**

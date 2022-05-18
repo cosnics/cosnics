@@ -191,9 +191,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
                     $orderProperty
                 ) {
                     return strcasecmp(
-                        $publicationAttributeLeft->get_default_property(
+                        $publicationAttributeLeft->getDefaultProperty(
                             $orderProperty->getConditionVariable()->get_property()
-                        ), $publicationAttributeRight->get_default_property(
+                        ), $publicationAttributeRight->getDefaultProperty(
                         $orderProperty->getConditionVariable()->get_property()
                     )
                     );

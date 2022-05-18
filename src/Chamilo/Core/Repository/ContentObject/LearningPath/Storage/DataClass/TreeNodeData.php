@@ -78,7 +78,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getLearningPathId()
     {
-        return $this->get_default_property(self::PROPERTY_LEARNING_PATH_ID);
+        return $this->getDefaultProperty(self::PROPERTY_LEARNING_PATH_ID);
     }
 
     /**
@@ -95,7 +95,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             );
         }
 
-        $this->set_default_property(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
+        $this->setDefaultProperty(self::PROPERTY_LEARNING_PATH_ID, $learningPathId);
 
         return $this;
     }
@@ -105,7 +105,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getParentTreeNodeDataId()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID);
     }
 
     /**
@@ -122,7 +122,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             );
         }
 
-        $this->set_default_property(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentTreeNodeDataId);
+        $this->setDefaultProperty(self::PROPERTY_PARENT_LEARNING_PATH_CHILD_ID, $parentTreeNodeDataId);
 
         return $this;
     }
@@ -132,7 +132,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getContentObjectId()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -149,7 +149,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             );
         }
 
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $contentObjectId);
 
         return $this;
     }
@@ -159,7 +159,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getMaxAttempts()
     {
-        return $this->get_default_property(self::PROPERTY_MAX_ATTEMPTS);
+        return $this->getDefaultProperty(self::PROPERTY_MAX_ATTEMPTS);
     }
 
     /**
@@ -176,7 +176,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             );
         }
 
-        $this->set_default_property(self::PROPERTY_MAX_ATTEMPTS, $maxAttempts);
+        $this->setDefaultProperty(self::PROPERTY_MAX_ATTEMPTS, $maxAttempts);
 
         return $this;
     }
@@ -186,7 +186,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getMasteryScore()
     {
-        return $this->get_default_property(self::PROPERTY_MASTERY_SCORE);
+        return $this->getDefaultProperty(self::PROPERTY_MASTERY_SCORE);
     }
 
     /**
@@ -206,7 +206,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new RangeException('The given mastery score must be between 0 and 100');
         }
 
-        $this->set_default_property(self::PROPERTY_MASTERY_SCORE, $masteryScore);
+        $this->setDefaultProperty(self::PROPERTY_MASTERY_SCORE, $masteryScore);
 
         return $this;
     }
@@ -216,7 +216,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getAllowHints()
     {
-        return $this->get_default_property(self::PROPERTY_ALLOW_HINTS);
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_HINTS);
     }
 
     /**
@@ -231,7 +231,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given allow hints must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_ALLOW_HINTS, $allowHints);
+        $this->setDefaultProperty(self::PROPERTY_ALLOW_HINTS, $allowHints);
 
         return $this;
     }
@@ -241,7 +241,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getShowScore()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_SCORE);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SCORE);
     }
 
     /**
@@ -256,7 +256,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given show score must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_SHOW_SCORE, $showScore);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SCORE, $showScore);
 
         return $this;
     }
@@ -266,7 +266,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getShowCorrection()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_CORRECTION);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_CORRECTION);
     }
 
     /**
@@ -281,7 +281,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given show correction must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_SHOW_CORRECTION, $showCorrection);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_CORRECTION, $showCorrection);
 
         return $this;
     }
@@ -291,7 +291,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getShowSolution()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_SOLUTION);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_SOLUTION);
     }
 
     /**
@@ -306,7 +306,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given show solution must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_SHOW_SOLUTION, $showSolution);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_SOLUTION, $showSolution);
 
         return $this;
     }
@@ -316,7 +316,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getShowAnswerFeedback()
     {
-        return $this->get_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->getDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -331,7 +331,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given show answer feedback must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $showAnswerFeedback);
+        $this->setDefaultProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $showAnswerFeedback);
 
         return $this;
     }
@@ -341,7 +341,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getFeedbackLocation()
     {
-        return $this->get_default_property(self::PROPERTY_FEEDBACK_LOCATION);
+        return $this->getDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION);
     }
 
     /**
@@ -356,7 +356,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given feedback location must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_FEEDBACK_LOCATION, $feedbackLocation);
+        $this->setDefaultProperty(self::PROPERTY_FEEDBACK_LOCATION, $feedbackLocation);
 
         return $this;
     }
@@ -366,7 +366,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function isBlocked()
     {
-        return $this->get_default_property(self::PROPERTY_BLOCKED);
+        return $this->getDefaultProperty(self::PROPERTY_BLOCKED);
     }
 
     /**
@@ -381,7 +381,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given blocked must be a valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_BLOCKED, $blocked);
+        $this->setDefaultProperty(self::PROPERTY_BLOCKED, $blocked);
 
         return $this;
     }
@@ -391,7 +391,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getDisplayOrder()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
@@ -406,7 +406,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given display order must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $displayOrder);
 
         return $this;
     }
@@ -416,7 +416,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getUserId()
     {
-        return (int) $this->get_default_property(self::PROPERTY_USER_ID);
+        return (int) $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -431,7 +431,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given user id must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
 
         return $this;
     }
@@ -441,7 +441,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function getAddedDate()
     {
-        return (int) $this->get_default_property(self::PROPERTY_ADDED_DATE);
+        return (int) $this->getDefaultProperty(self::PROPERTY_ADDED_DATE);
     }
 
     /**
@@ -456,7 +456,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given added date must be a valid integer');
         }
 
-        $this->set_default_property(self::PROPERTY_ADDED_DATE, $addedDate);
+        $this->setDefaultProperty(self::PROPERTY_ADDED_DATE, $addedDate);
 
         return $this;
     }
@@ -496,7 +496,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
             throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
 
-        $this->set_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+        $this->setDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
     }
 
     /**
@@ -506,7 +506,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      */
     public function enforcesDefaultTraversingOrder()
     {
-        return (bool) $this->get_default_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+        return (bool) $this->getDefaultProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
 
     /**

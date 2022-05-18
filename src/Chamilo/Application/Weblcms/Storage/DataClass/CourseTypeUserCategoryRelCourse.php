@@ -30,12 +30,12 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     public function get_course_type_user_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID);
     }
 
     /**
@@ -78,7 +78,7 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
     public function get_sort()
     {
-        return $this->get_default_property(self::PROPERTY_SORT);
+        return $this->getDefaultProperty(self::PROPERTY_SORT);
     }
 
     /**
@@ -91,26 +91,26 @@ class CourseTypeUserCategoryRelCourse extends DataClass implements DisplayOrderD
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     public function set_course_type_user_category_id($course_type_user_category_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID, $course_type_user_category_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID, $course_type_user_category_id);
     }
 
     public function set_sort($sort)
     {
-        $this->set_default_property(self::PROPERTY_SORT, $sort);
+        $this->setDefaultProperty(self::PROPERTY_SORT, $sort);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 }

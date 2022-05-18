@@ -39,72 +39,72 @@ class LpiAttemptObjective extends SimpleTracker
 
     public function get_lpi_view_id()
     {
-        return $this->get_default_property(self::PROPERTY_LPI_VIEW_ID);
+        return $this->getDefaultProperty(self::PROPERTY_LPI_VIEW_ID);
     }
 
     public function set_lpi_view_id($lpi_view_id)
     {
-        $this->set_default_property(self::PROPERTY_LPI_VIEW_ID, $lpi_view_id);
+        $this->setDefaultProperty(self::PROPERTY_LPI_VIEW_ID, $lpi_view_id);
     }
 
     public function get_objective_id()
     {
-        return $this->get_default_property(self::PROPERTY_OBJECTIVE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OBJECTIVE_ID);
     }
 
     public function set_objective_id($objective_id)
     {
-        $this->set_default_property(self::PROPERTY_OBJECTIVE_ID, $objective_id);
+        $this->setDefaultProperty(self::PROPERTY_OBJECTIVE_ID, $objective_id);
     }
 
     public function get_score_raw()
     {
-        return $this->get_default_property(self::PROPERTY_SCORE_RAW);
+        return $this->getDefaultProperty(self::PROPERTY_SCORE_RAW);
     }
 
     public function set_score_raw($score_raw)
     {
-        $this->set_default_property(self::PROPERTY_SCORE_RAW, $score_raw);
+        $this->setDefaultProperty(self::PROPERTY_SCORE_RAW, $score_raw);
     }
 
     public function get_score_max()
     {
-        return $this->get_default_property(self::PROPERTY_SCORE_MAX);
+        return $this->getDefaultProperty(self::PROPERTY_SCORE_MAX);
     }
 
     public function set_score_max($score_max)
     {
-        $this->set_default_property(self::PROPERTY_SCORE_MAX, $score_max);
+        $this->setDefaultProperty(self::PROPERTY_SCORE_MAX, $score_max);
     }
 
     public function get_score_min()
     {
-        return $this->get_default_property(self::PROPERTY_SCORE_MIN);
+        return $this->getDefaultProperty(self::PROPERTY_SCORE_MIN);
     }
 
     public function set_score_min($score_min)
     {
-        $this->set_default_property(self::PROPERTY_SCORE_MIN, $score_min);
+        $this->setDefaultProperty(self::PROPERTY_SCORE_MIN, $score_min);
     }
 
     public function get_status()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     public function set_status($status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     /**

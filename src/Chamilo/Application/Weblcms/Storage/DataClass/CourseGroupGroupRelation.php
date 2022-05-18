@@ -181,7 +181,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_course_code()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
     function get_course_groups_by_group_id()
@@ -212,7 +212,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return array An associative array containing the properties.
      */
-    function get_default_properties()
+    function getDefaultProperties()
     {
         return $this->defaultProperties;
     }
@@ -227,7 +227,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @param $name string The name of the property.
      */
-    function get_default_property($name)
+    function getDefaultProperty($name)
     {
         return $this->defaultProperties[$name];
     }
@@ -256,7 +256,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_document_publication_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID);
     }
 
     /**
@@ -266,7 +266,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_forum_publication_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID);
     }
 
     /**
@@ -276,7 +276,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_id()
     {
-        return $this->get_default_property(self::PROPERTY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ID);
     }
 
     /**
@@ -286,7 +286,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_max_number_of_course_group_per_member()
     {
-        return $this->get_default_property(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER);
+        return $this->getDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER);
     }
 
     /**
@@ -296,7 +296,7 @@ class CourseGroupGroupRelation extends DataClass
      */
     function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     function get_parent_id()
@@ -319,7 +319,7 @@ class CourseGroupGroupRelation extends DataClass
 
     function set_course_code($code)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_CODE, $code);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $code);
     }
 
     /**
@@ -328,34 +328,34 @@ class CourseGroupGroupRelation extends DataClass
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
-    function set_default_property($name, $value)
+    function setDefaultProperty($name, $value)
     {
         $this->defaultProperties[$name] = $value;
     }
 
     function set_document_publication_category_id($id)
     {
-        return $this->set_default_property(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID, $id);
+        return $this->setDefaultProperty(self::PROPERTY_DOCUMENT_PUBLICATION_CATEGORY_ID, $id);
     }
 
     function set_forum_publication_category_id($id)
     {
-        return $this->set_default_property(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID, $id);
+        return $this->setDefaultProperty(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID, $id);
     }
 
     function set_id($id)
     {
-        return $this->set_default_property(self::PROPERTY_ID, $id);
+        return $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
 
     function set_max_number_of_course_group_per_member($number)
     {
-        return $this->set_default_property(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, $number);
+        return $this->setDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, $number);
     }
 
     function set_name($name)
     {
-        return $this->set_default_property(self::PROPERTY_NAME, $name);
+        return $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**

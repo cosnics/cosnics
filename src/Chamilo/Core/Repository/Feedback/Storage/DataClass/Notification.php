@@ -42,7 +42,7 @@ abstract class Notification extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -67,7 +67,7 @@ abstract class Notification extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -77,7 +77,7 @@ abstract class Notification extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class Notification extends DataClass
      */
     public function set_creation_date($creation_date)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creation_date);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creation_date);
     }
 
     /**
@@ -97,7 +97,7 @@ abstract class Notification extends DataClass
      */
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFICATION_DATE);
     }
 
     /**
@@ -107,6 +107,6 @@ abstract class Notification extends DataClass
      */
     public function set_modification_date($modification_date)
     {
-        $this->set_default_property(self::PROPERTY_MODIFICATION_DATE, $modification_date);
+        $this->setDefaultProperty(self::PROPERTY_MODIFICATION_DATE, $modification_date);
     }
 }

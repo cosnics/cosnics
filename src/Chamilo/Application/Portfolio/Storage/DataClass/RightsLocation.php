@@ -53,7 +53,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -62,7 +62,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -71,7 +71,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function get_node_id()
     {
-        return $this->get_default_property(self::PROPERTY_NODE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_NODE_ID);
     }
 
     /**
@@ -80,7 +80,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      */
     public function set_node_id($node_id)
     {
-        $this->set_default_property(self::PROPERTY_NODE_ID, $node_id);
+        $this->setDefaultProperty(self::PROPERTY_NODE_ID, $node_id);
     }
 
     /**

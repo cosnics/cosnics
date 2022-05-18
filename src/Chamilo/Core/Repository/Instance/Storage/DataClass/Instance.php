@@ -108,7 +108,7 @@ class Instance extends CompositeDataClass
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATED);
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array
@@ -128,7 +128,7 @@ class Instance extends CompositeDataClass
      */
     public function get_enabled()
     {
-        return $this->get_default_property(self::PROPERTY_ENABLED, false);
+        return $this->getDefaultProperty(self::PROPERTY_ENABLED, false);
     }
 
     /**
@@ -137,12 +137,12 @@ class Instance extends CompositeDataClass
      */
     public function get_implementation()
     {
-        return $this->get_default_property(self::PROPERTY_IMPLEMENTATION);
+        return $this->getDefaultProperty(self::PROPERTY_IMPLEMENTATION);
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     public function get_setting($variable)
@@ -164,7 +164,7 @@ class Instance extends CompositeDataClass
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     public function get_user_setting($user_id, $variable)
@@ -208,7 +208,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($created))
         {
-            $this->set_default_property(self::PROPERTY_CREATED, $created);
+            $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
         }
     }
 
@@ -216,7 +216,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($enabled) && is_bool($enabled))
         {
-            $this->set_default_property(self::PROPERTY_ENABLED, $enabled);
+            $this->setDefaultProperty(self::PROPERTY_ENABLED, $enabled);
         }
     }
 
@@ -224,7 +224,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($implementation) && strlen($implementation) > 0)
         {
-            $this->set_default_property(self::PROPERTY_IMPLEMENTATION, $implementation);
+            $this->setDefaultProperty(self::PROPERTY_IMPLEMENTATION, $implementation);
         }
     }
 
@@ -232,7 +232,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($modified))
         {
-            $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+            $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
         }
     }
 
@@ -240,7 +240,7 @@ class Instance extends CompositeDataClass
     {
         if (isset($title) && strlen($title) > 0)
         {
-            $this->set_default_property(self::PROPERTY_TITLE, $title);
+            $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
         }
     }
 }

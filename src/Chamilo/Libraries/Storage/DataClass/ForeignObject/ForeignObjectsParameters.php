@@ -58,7 +58,7 @@ class ForeignObjectsParameters
     {
         return new EqualityCondition(
             new PropertyConditionVariable($this->get_foreign_class(), DataClass::PROPERTY_ID),
-            new StaticConditionVariable($this->get_base_object()->get_default_property($this->get_foreign_key())));
+            new StaticConditionVariable($this->get_base_object()->getDefaultProperty($this->get_foreign_key())));
     }
 
     /**

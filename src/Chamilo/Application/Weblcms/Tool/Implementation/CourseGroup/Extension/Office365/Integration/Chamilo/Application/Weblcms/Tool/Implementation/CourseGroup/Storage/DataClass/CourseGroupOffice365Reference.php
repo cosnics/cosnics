@@ -22,7 +22,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function getCourseGroupId()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_GROUP_ID);
     }
 
     /**
@@ -30,7 +30,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function getOffice365GroupId()
     {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID);
     }
 
     /**
@@ -38,7 +38,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function getOffice365PlanId()
     {
-        return $this->get_default_property(self::PROPERTY_OFFICE365_PLAN_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID);
     }
 
     /**
@@ -70,7 +70,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function hasTeam(): bool
     {
-        return !empty($this->get_default_property(self::PROPERTY_OFFICE365_HAS_TEAM));
+        return !empty($this->getDefaultProperty(self::PROPERTY_OFFICE365_HAS_TEAM));
     }
 
     /**
@@ -81,7 +81,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function isLinked()
     {
-        return (bool) $this->get_default_property(self::PROPERTY_LINKED);
+        return (bool) $this->getDefaultProperty(self::PROPERTY_LINKED);
     }
 
     /**
@@ -91,7 +91,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function setCourseGroupId($courseGroupId)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_GROUP_ID, $courseGroupId);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_GROUP_ID, $courseGroupId);
 
         return $this;
     }
@@ -101,7 +101,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function setHasTeam(bool $hasTeam)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_HAS_TEAM, $hasTeam);
     }
 
     /**
@@ -114,7 +114,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function setLinked($linked = true)
     {
-        $this->set_default_property(self::PROPERTY_LINKED, $linked);
+        $this->setDefaultProperty(self::PROPERTY_LINKED, $linked);
 
         return $this;
     }
@@ -126,7 +126,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function setOffice365GroupId($office365GroupId)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_GROUP_ID, $office365GroupId);
 
         return $this;
     }
@@ -138,7 +138,7 @@ class CourseGroupOffice365Reference extends DataClass
      */
     public function setOffice365PlanId($office365PlanId)
     {
-        $this->set_default_property(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
+        $this->setDefaultProperty(self::PROPERTY_OFFICE365_PLAN_ID, $office365PlanId);
 
         return $this;
     }

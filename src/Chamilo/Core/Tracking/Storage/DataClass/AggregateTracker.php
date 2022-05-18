@@ -69,31 +69,31 @@ abstract class AggregateTracker extends Tracker
 
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 }

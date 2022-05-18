@@ -28,7 +28,7 @@ class AssessmentAttempt extends AbstractAttempt
      */
     public function get_assessment_id()
     {
-        return $this->get_default_property(self::PROPERTY_ASSESSMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ASSESSMENT_ID);
     }
 
     public function get_average_score($publication, $user_id = null)
@@ -70,7 +70,7 @@ class AssessmentAttempt extends AbstractAttempt
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -125,7 +125,7 @@ class AssessmentAttempt extends AbstractAttempt
      */
     public function set_assessment_id($assessment_id)
     {
-        $this->set_default_property(self::PROPERTY_ASSESSMENT_ID, $assessment_id);
+        $this->setDefaultProperty(self::PROPERTY_ASSESSMENT_ID, $assessment_id);
     }
 
     /**
@@ -134,6 +134,6 @@ class AssessmentAttempt extends AbstractAttempt
      */
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 }

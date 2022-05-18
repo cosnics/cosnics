@@ -47,7 +47,7 @@ class Availability extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -56,7 +56,7 @@ class Availability extends DataClass
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
     }
 
     /**
@@ -65,7 +65,7 @@ class Availability extends DataClass
      */
     public function getCalendarType()
     {
-        return $this->get_default_property(self::PROPERTY_CALENDAR_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_CALENDAR_TYPE);
     }
 
     /**
@@ -74,7 +74,7 @@ class Availability extends DataClass
      */
     public function setCalendarType($calendarType)
     {
-        $this->set_default_property(self::PROPERTY_CALENDAR_TYPE, $calendarType);
+        $this->setDefaultProperty(self::PROPERTY_CALENDAR_TYPE, $calendarType);
     }
 
     /**
@@ -83,7 +83,7 @@ class Availability extends DataClass
      */
     public function getCalendarId()
     {
-        return $this->get_default_property(self::PROPERTY_CALENDAR_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CALENDAR_ID);
     }
 
     /**
@@ -92,7 +92,7 @@ class Availability extends DataClass
      */
     public function setCalendarId($calendarId)
     {
-        $this->set_default_property(self::PROPERTY_CALENDAR_ID, $calendarId);
+        $this->setDefaultProperty(self::PROPERTY_CALENDAR_ID, $calendarId);
     }
 
     /**
@@ -101,7 +101,7 @@ class Availability extends DataClass
      */
     public function getAvailability()
     {
-        return $this->get_default_property(self::PROPERTY_AVAILABILITY);
+        return $this->getDefaultProperty(self::PROPERTY_AVAILABILITY);
     }
 
     /**
@@ -110,7 +110,7 @@ class Availability extends DataClass
      */
     public function setAvailability($availability)
     {
-        $this->set_default_property(self::PROPERTY_AVAILABILITY, $availability);
+        $this->setDefaultProperty(self::PROPERTY_AVAILABILITY, $availability);
     }
 
     /**
@@ -137,7 +137,7 @@ class Availability extends DataClass
      */
     public function getColour()
     {
-        return $this->get_default_property(self::PROPERTY_COLOUR);
+        return $this->getDefaultProperty(self::PROPERTY_COLOUR);
     }
 
     /**
@@ -146,7 +146,7 @@ class Availability extends DataClass
      */
     public function setColour($colour)
     {
-        $this->set_default_property(self::PROPERTY_COLOUR, $colour);
+        $this->setDefaultProperty(self::PROPERTY_COLOUR, $colour);
     }
 
     /**

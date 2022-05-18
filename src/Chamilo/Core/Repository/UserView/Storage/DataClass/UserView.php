@@ -38,7 +38,7 @@ class UserView extends DataClass
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserView extends DataClass
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -56,7 +56,7 @@ class UserView extends DataClass
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -65,7 +65,7 @@ class UserView extends DataClass
      */
     public function set_description($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -74,7 +74,7 @@ class UserView extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -83,7 +83,7 @@ class UserView extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
 

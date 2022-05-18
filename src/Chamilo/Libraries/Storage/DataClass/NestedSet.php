@@ -550,7 +550,7 @@ abstract class NestedSet extends DataClass
      */
     public function getLeftValue()
     {
-        return $this->get_default_property(self::PROPERTY_LEFT_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_LEFT_VALUE);
     }
 
     /**
@@ -561,7 +561,7 @@ abstract class NestedSet extends DataClass
      */
     public function getParentId()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
     /**
@@ -572,7 +572,7 @@ abstract class NestedSet extends DataClass
      */
     public function getRightValue()
     {
-        return $this->get_default_property(self::PROPERTY_RIGHT_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_RIGHT_VALUE);
     }
 
     /**

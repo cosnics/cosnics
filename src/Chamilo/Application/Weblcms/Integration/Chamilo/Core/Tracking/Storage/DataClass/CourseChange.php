@@ -30,12 +30,12 @@ class CourseChange extends ChangesTracker
 
     public function get_target_reference_id()
     {
-        return $this->get_default_property(self::PROPERTY_TARGET_REFERENCE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TARGET_REFERENCE_ID);
     }
 
     public function set_target_reference_id($target_reference_id)
     {
-        $this->set_default_property(self::PROPERTY_TARGET_REFERENCE_ID, $target_reference_id);
+        $this->setDefaultProperty(self::PROPERTY_TARGET_REFERENCE_ID, $target_reference_id);
     }
 
     /**

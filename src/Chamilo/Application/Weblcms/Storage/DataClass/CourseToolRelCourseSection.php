@@ -31,7 +31,7 @@ class CourseToolRelCourseSection extends DataClass
      */
     public function get_section_id()
     {
-        return $this->get_default_property(self::PROPERTY_SECTION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SECTION_ID);
     }
 
     /**
@@ -49,7 +49,7 @@ class CourseToolRelCourseSection extends DataClass
      */
     public function get_tool_id()
     {
-        return $this->get_default_property(self::PROPERTY_TOOL_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TOOL_ID);
     }
 
     /**
@@ -59,7 +59,7 @@ class CourseToolRelCourseSection extends DataClass
      */
     public function set_section_id($section_id)
     {
-        $this->set_default_property(self::PROPERTY_SECTION_ID, $section_id);
+        $this->setDefaultProperty(self::PROPERTY_SECTION_ID, $section_id);
     }
 
     /**
@@ -69,6 +69,6 @@ class CourseToolRelCourseSection extends DataClass
      */
     public function set_tool_id($tool_id)
     {
-        $this->set_default_property(self::PROPERTY_TOOL_ID, $tool_id);
+        $this->setDefaultProperty(self::PROPERTY_TOOL_ID, $tool_id);
     }
 }

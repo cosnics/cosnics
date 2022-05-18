@@ -24,11 +24,11 @@ abstract class RepositoryDataClass extends DataClass
      *
      * @param $name The name of the object property to get
      * @param $default_value A default value is the $name property is not set
-     * @see chamilo/common/DataClass#get_default_property($name)
+     * @see chamilo/common/DataClass#getDefaultProperty($name)
      */
-    public function get_default_property($name, $default_value = null)
+    public function getDefaultProperty($name, $default_value = null)
     {
-        $value = parent::get_default_property($name);
+        $value = parent::getDefaultProperty($name);
 
         if (! isset($value) && isset($default_value))
         {
@@ -45,13 +45,13 @@ abstract class RepositoryDataClass extends DataClass
     {
         if (isset($created))
         {
-            $this->set_default_property(self::PROPERTY_CREATED, $created);
+            $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
         }
     }
 
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATED);
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
     /**
@@ -61,13 +61,13 @@ abstract class RepositoryDataClass extends DataClass
     {
         if (isset($modified))
         {
-            $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+            $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
         }
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     /**

@@ -211,7 +211,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_content()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT);
     }
 
     /**
@@ -221,7 +221,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -259,7 +259,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_forum_topic_id()
     {
-        return $this->get_default_property(self::PROPERTY_FORUM_TOPIC_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID);
     }
 
     /**
@@ -269,7 +269,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFICATION_DATE);
     }
 
     /**
@@ -285,7 +285,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_reply_on_post_id()
     {
-        return $this->get_default_property(self::PROPERTY_REPLY_ON_POST_ID);
+        return $this->getDefaultProperty(self::PROPERTY_REPLY_ON_POST_ID);
     }
 
     /**
@@ -303,7 +303,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -340,7 +340,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -350,7 +350,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_content($content)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT, $content);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT, $content);
     }
 
     /**
@@ -366,7 +366,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_creation_date($created)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $created);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $created);
     }
 
     /**
@@ -376,7 +376,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_forum_topic_id($forum_topic_id)
     {
-        $this->set_default_property(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
+        $this->setDefaultProperty(self::PROPERTY_FORUM_TOPIC_ID, $forum_topic_id);
     }
 
     /**
@@ -386,7 +386,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_modification_date($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFICATION_DATE, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFICATION_DATE, $modified);
     }
 
     /**
@@ -403,7 +403,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_reply_on_post_id($forum_post_id)
     {
-        $this->set_default_property(self::PROPERTY_REPLY_ON_POST_ID, $forum_post_id);
+        $this->setDefaultProperty(self::PROPERTY_REPLY_ON_POST_ID, $forum_post_id);
     }
 
     /**
@@ -413,7 +413,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_title($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -423,7 +423,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      */
     public function set_user_id($user)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user);
     }
 
     /**

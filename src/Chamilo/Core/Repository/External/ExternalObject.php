@@ -98,10 +98,10 @@ abstract class ExternalObject
      */
     public function get_created()
     {
-        return $this->get_default_property(self::PROPERTY_CREATED);
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
-    public function get_default_properties()
+    public function getDefaultProperties()
     {
         return $this->default_properties;
     }
@@ -121,7 +121,7 @@ abstract class ExternalObject
      * @param $name string The name of the property.
      * @param mixed
      */
-    public function get_default_property($name)
+    public function getDefaultProperty($name)
     {
         return (isset($this->default_properties) && array_key_exists($name, $this->default_properties)) ?
             $this->default_properties[$name] : null;
@@ -154,7 +154,7 @@ abstract class ExternalObject
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class ExternalObject
      */
     public function get_external_repository_id()
     {
-        return $this->get_default_property(self::PROPERTY_EXTERNAL_REPOSITORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_EXTERNAL_REPOSITORY_ID);
     }
 
     /**
@@ -205,7 +205,7 @@ abstract class ExternalObject
      */
     public function get_id()
     {
-        return $this->get_default_property(self::PROPERTY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ID);
     }
 
     /**
@@ -214,7 +214,7 @@ abstract class ExternalObject
      */
     public function get_modified()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIED);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIED);
     }
 
     /**
@@ -223,12 +223,12 @@ abstract class ExternalObject
      */
     public function get_owner_id()
     {
-        return $this->get_default_property(self::PROPERTY_OWNER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OWNER_ID);
     }
 
     public function get_owner_name()
     {
-        return $this->get_default_property(self::PROPERTY_OWNER_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_OWNER_NAME);
     }
 
     /**
@@ -256,7 +256,7 @@ abstract class ExternalObject
      */
     public function get_rights()
     {
-        return $this->get_default_property(self::PROPERTY_RIGHTS);
+        return $this->getDefaultProperty(self::PROPERTY_RIGHTS);
     }
 
     /**
@@ -307,7 +307,7 @@ abstract class ExternalObject
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -316,7 +316,7 @@ abstract class ExternalObject
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -379,7 +379,7 @@ abstract class ExternalObject
      */
     public function set_created($created)
     {
-        $this->set_default_property(self::PROPERTY_CREATED, $created);
+        $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
     }
 
     /**
@@ -388,7 +388,7 @@ abstract class ExternalObject
      * @param $name string The name of the property.
      * @param $value mixed The new value for the property.
      */
-    public function set_default_property($name, $value)
+    public function setDefaultProperty($name, $value)
     {
         $this->default_properties[$name] = $value;
     }
@@ -399,7 +399,7 @@ abstract class ExternalObject
      */
     public function set_description($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -408,7 +408,7 @@ abstract class ExternalObject
      */
     public function set_external_repository_id($external_repository_id)
     {
-        $this->set_default_property(self::PROPERTY_EXTERNAL_REPOSITORY_ID, $external_repository_id);
+        $this->setDefaultProperty(self::PROPERTY_EXTERNAL_REPOSITORY_ID, $external_repository_id);
     }
 
     /**
@@ -417,7 +417,7 @@ abstract class ExternalObject
      */
     public function set_id($id)
     {
-        $this->set_default_property(self::PROPERTY_ID, $id);
+        $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
 
     /**
@@ -426,7 +426,7 @@ abstract class ExternalObject
      */
     public function set_modified($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIED, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIED, $modified);
     }
 
     /**
@@ -435,12 +435,12 @@ abstract class ExternalObject
      */
     public function set_owner_id($owner_id)
     {
-        $this->set_default_property(self::PROPERTY_OWNER_ID, $owner_id);
+        $this->setDefaultProperty(self::PROPERTY_OWNER_ID, $owner_id);
     }
 
     public function set_owner_name($owner_name)
     {
-        return $this->set_default_property(self::PROPERTY_OWNER_NAME, $owner_name);
+        return $this->setDefaultProperty(self::PROPERTY_OWNER_NAME, $owner_name);
     }
 
     /**
@@ -461,7 +461,7 @@ abstract class ExternalObject
      */
     public function set_rights($rights)
     {
-        $this->set_default_property(self::PROPERTY_RIGHTS, $rights);
+        $this->setDefaultProperty(self::PROPERTY_RIGHTS, $rights);
     }
 
     /**
@@ -470,7 +470,7 @@ abstract class ExternalObject
      */
     public function set_title($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -479,6 +479,6 @@ abstract class ExternalObject
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 }

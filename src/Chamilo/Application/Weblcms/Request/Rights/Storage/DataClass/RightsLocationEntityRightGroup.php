@@ -68,7 +68,7 @@ class RightsLocationEntityRightGroup extends DataClass
 
     function get_group_id()
     {
-        return $this->get_default_property(self::PROPERTY_GROUP_ID);
+        return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
     }
 
     function get_location_entity_right()
@@ -86,7 +86,7 @@ class RightsLocationEntityRightGroup extends DataClass
 
     function get_location_entity_right_id()
     {
-        return $this->get_default_property(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID);
     }
 
     /**
@@ -99,11 +99,11 @@ class RightsLocationEntityRightGroup extends DataClass
 
     function set_group_id($group_id)
     {
-        $this->set_default_property(self::PROPERTY_GROUP_ID, $group_id);
+        $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $group_id);
     }
 
     function set_location_entity_right_id($location_entity_right_id)
     {
-        $this->set_default_property(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID, $location_entity_right_id);
+        $this->setDefaultProperty(self::PROPERTY_LOCATION_ENTITY_RIGHT_ID, $location_entity_right_id);
     }
 }

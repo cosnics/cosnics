@@ -77,7 +77,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function get_element_id()
     {
-        return $this->get_default_property(self::PROPERTY_ELEMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ELEMENT_ID);
     }
 
     /**
@@ -86,7 +86,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function set_element_id($element_id)
     {
-        $this->set_default_property(self::PROPERTY_ELEMENT_ID, $element_id);
+        $this->setDefaultProperty(self::PROPERTY_ELEMENT_ID, $element_id);
     }
 
     /**
@@ -95,7 +95,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -104,7 +104,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function isForEveryone()
@@ -128,7 +128,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function get_default_value()
     {
-        return $this->get_default_property(self::PROPERTY_DEFAULT_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_DEFAULT_VALUE);
     }
 
     /**
@@ -137,7 +137,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function set_default_value($default_value)
     {
-        $this->set_default_property(self::PROPERTY_DEFAULT_VALUE, $default_value);
+        $this->setDefaultProperty(self::PROPERTY_DEFAULT_VALUE, $default_value);
     }
 
     public function isDefault()
@@ -151,7 +151,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     /**
@@ -160,7 +160,7 @@ class Vocabulary extends DataClass implements EntityTranslationInterface
      */
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 
     /**

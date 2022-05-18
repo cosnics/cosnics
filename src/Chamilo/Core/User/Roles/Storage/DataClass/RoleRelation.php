@@ -34,7 +34,7 @@ class RoleRelation extends DataClass
      */
     public function getUserId()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -45,7 +45,7 @@ class RoleRelation extends DataClass
      */
     public function setUserId($userId)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userId);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userId);
         
         return $this;
     }
@@ -56,7 +56,7 @@ class RoleRelation extends DataClass
      */
     public function getRoleId()
     {
-        return $this->get_default_property(self::PROPERTY_ROLE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ROLE_ID);
     }
 
     /**
@@ -67,7 +67,7 @@ class RoleRelation extends DataClass
      */
     public function setRoleId($roleId)
     {
-        $this->set_default_property(self::PROPERTY_ROLE_ID, $roleId);
+        $this->setDefaultProperty(self::PROPERTY_ROLE_ID, $roleId);
         
         return $this;
     }

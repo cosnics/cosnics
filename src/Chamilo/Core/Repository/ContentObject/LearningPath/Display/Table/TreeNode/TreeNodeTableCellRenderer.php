@@ -126,7 +126,7 @@ class TreeNodeTableCellRenderer extends DataClassTableCellRenderer implements Ta
                 );
         }
 
-        return $node->getContentObject()->get_default_property($column->get_name());
+        return $node->getContentObject()->getDefaultProperty($column->get_name());
     }
 
     /**

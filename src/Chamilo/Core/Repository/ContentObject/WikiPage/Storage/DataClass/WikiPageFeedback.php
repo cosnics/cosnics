@@ -14,7 +14,7 @@ class WikiPageFeedback extends Feedback
 
     public function getWikiPageId()
     {
-        return $this->get_default_property(self::PROPERTY_WIKI_PAGE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_WIKI_PAGE_ID);
     }
 
     /**
@@ -38,6 +38,6 @@ class WikiPageFeedback extends Feedback
 
     public function setWikiPageId($wikiPageId)
     {
-        $this->set_default_property(self::PROPERTY_WIKI_PAGE_ID, $wikiPageId);
+        $this->setDefaultProperty(self::PROPERTY_WIKI_PAGE_ID, $wikiPageId);
     }
 }

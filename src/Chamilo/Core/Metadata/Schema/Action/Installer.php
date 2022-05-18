@@ -119,7 +119,7 @@ class Installer
             $element->set_value_type($elementProperties[Element::PROPERTY_VALUE_TYPE]);
             $element->set_value_limit($elementProperties[Element::PROPERTY_VALUE_LIMIT]);
 
-            $succes = $element->is_identified() ? $element->update() : $element->create();
+            $succes = $element->isIdentified() ? $element->update() : $element->create();
             $this->getDataClassRepositoryCache()->reset();
 
             if (!$succes)
@@ -163,7 +163,7 @@ class Installer
         $schema->set_url($schemaDefinition[Schema::class][Schema::PROPERTY_URL]);
         $schema->set_fixed($schemaDefinition[Schema::class][Schema::PROPERTY_FIXED]);
 
-        $succes = $schema->is_identified() ? $schema->update() : $schema->create();
+        $succes = $schema->isIdentified() ? $schema->update() : $schema->create();
 
         if (!$succes)
         {

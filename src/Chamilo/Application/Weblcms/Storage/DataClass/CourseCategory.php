@@ -35,22 +35,22 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
 
     public function get_code()
     {
-        return $this->get_default_property(self::PROPERTY_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_CODE);
     }
 
     public function set_code($code)
     {
-        $this->set_default_property(self::PROPERTY_CODE, $code);
+        $this->setDefaultProperty(self::PROPERTY_CODE, $code);
     }
 
     public function get_state()
     {
-        return $this->get_default_property(self::PROPERTY_STATE);
+        return $this->getDefaultProperty(self::PROPERTY_STATE);
     }
 
     public function set_state($state)
     {
-        $this->set_default_property(self::PROPERTY_STATE, $state);
+        $this->setDefaultProperty(self::PROPERTY_STATE, $state);
     }
 
     /**

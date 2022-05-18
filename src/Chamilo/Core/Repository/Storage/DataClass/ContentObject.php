@@ -1054,7 +1054,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_comment()
     {
-        return $this->get_default_property(self::PROPERTY_COMMENT);
+        return $this->getDefaultProperty(self::PROPERTY_COMMENT);
     }
 
     /**
@@ -1073,7 +1073,7 @@ class ContentObject extends CompositeDataClass
 
     public function get_content_hash()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_HASH);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_HASH);
     }
 
     /**
@@ -1122,12 +1122,12 @@ class ContentObject extends CompositeDataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     public function get_current()
     {
-        return $this->get_default_property(self::PROPERTY_CURRENT);
+        return $this->getDefaultProperty(self::PROPERTY_CURRENT);
     }
 
     /**
@@ -1163,7 +1163,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -1311,7 +1311,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFICATION_DATE);
     }
 
     /**
@@ -1321,7 +1321,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_object_number()
     {
-        return $this->get_default_property(self::PROPERTY_OBJECT_NUMBER);
+        return $this->getDefaultProperty(self::PROPERTY_OBJECT_NUMBER);
     }
 
     /**
@@ -1361,7 +1361,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_owner_id()
     {
-        return $this->get_default_property(self::PROPERTY_OWNER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_OWNER_ID);
     }
 
     public function get_packages_from_filesystem()
@@ -1394,7 +1394,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_parent_id()
     {
-        return $this->get_default_property(self::PROPERTY_PARENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
     public function get_parents($order_by = [], $offset = null, $count = null)
@@ -1446,7 +1446,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_state()
     {
-        return $this->get_default_property(self::PROPERTY_STATE);
+        return $this->getDefaultProperty(self::PROPERTY_STATE);
     }
 
     /**
@@ -1512,7 +1512,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_template_registration_id()
     {
-        return $this->get_default_property(self::PROPERTY_TEMPLATE_REGISTRATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TEMPLATE_REGISTRATION_ID);
     }
 
     /**
@@ -1522,7 +1522,7 @@ class ContentObject extends CompositeDataClass
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     public function get_type_string()
@@ -1880,12 +1880,12 @@ class ContentObject extends CompositeDataClass
      */
     public function set_comment($comment)
     {
-        $this->set_default_property(self::PROPERTY_COMMENT, $comment);
+        $this->setDefaultProperty(self::PROPERTY_COMMENT, $comment);
     }
 
     public function set_content_hash($content_hash)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_HASH, $content_hash);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_HASH, $content_hash);
     }
 
     /**
@@ -1895,12 +1895,12 @@ class ContentObject extends CompositeDataClass
      */
     public function set_creation_date($created)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $created);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $created);
     }
 
     public function set_current($current)
     {
-        $this->set_default_property(self::PROPERTY_CURRENT, $current);
+        $this->setDefaultProperty(self::PROPERTY_CURRENT, $current);
     }
 
     /**
@@ -1910,7 +1910,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_description($description)
     {
-        $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     /**
@@ -1920,7 +1920,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_modification_date($modified)
     {
-        $this->set_default_property(self::PROPERTY_MODIFICATION_DATE, $modified);
+        $this->setDefaultProperty(self::PROPERTY_MODIFICATION_DATE, $modified);
     }
 
     /**
@@ -1930,7 +1930,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_object_number($object_number)
     {
-        $this->set_default_property(self::PROPERTY_OBJECT_NUMBER, $object_number);
+        $this->setDefaultProperty(self::PROPERTY_OBJECT_NUMBER, $object_number);
     }
 
     /**
@@ -1940,7 +1940,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_owner_id($owner)
     {
-        $this->set_default_property(self::PROPERTY_OWNER_ID, $owner);
+        $this->setDefaultProperty(self::PROPERTY_OWNER_ID, $owner);
     }
 
     /**
@@ -1950,7 +1950,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_parent_id($parent)
     {
-        $this->set_default_property(self::PROPERTY_PARENT_ID, $parent);
+        $this->setDefaultProperty(self::PROPERTY_PARENT_ID, $parent);
     }
 
     /**
@@ -1962,7 +1962,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_state($state)
     {
-        return $this->set_default_property(self::PROPERTY_STATE, $state);
+        return $this->setDefaultProperty(self::PROPERTY_STATE, $state);
     }
 
     /**
@@ -1972,7 +1972,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_template_registration_id($template_registration_id)
     {
-        $this->set_default_property(self::PROPERTY_TEMPLATE_REGISTRATION_ID, $template_registration_id);
+        $this->setDefaultProperty(self::PROPERTY_TEMPLATE_REGISTRATION_ID, $template_registration_id);
     }
 
     /**
@@ -1982,7 +1982,7 @@ class ContentObject extends CompositeDataClass
      */
     public function set_title($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -2147,9 +2147,9 @@ class ContentObject extends CompositeDataClass
 
             foreach ($fields as $field)
             {
-                $value = $this->get_default_property($field);
+                $value = $this->getDefaultProperty($field);
                 $value = preg_replace($pattern, $replacement_string, $value);
-                $this->set_default_property($field, $value);
+                $this->setDefaultProperty($field, $value);
             }
 
             $this->process_additional_include_links($pattern, $replacement_string);

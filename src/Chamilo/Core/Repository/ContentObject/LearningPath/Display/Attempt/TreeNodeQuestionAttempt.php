@@ -30,7 +30,7 @@ abstract class TreeNodeQuestionAttempt extends AbstractQuestionAttempt
      */
     public function getTreeNodeAttemptId()
     {
-        return $this->get_default_property(self::PROPERTY_TREE_NODE_ATTEMPT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID);
     }
 
     /**
@@ -39,6 +39,6 @@ abstract class TreeNodeQuestionAttempt extends AbstractQuestionAttempt
      */
     public function setTreeNodeAttemptId($treeNodeAttemptId)
     {
-        $this->set_default_property(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
+        $this->setDefaultProperty(self::PROPERTY_TREE_NODE_ATTEMPT_ID, $treeNodeAttemptId);
     }
 }

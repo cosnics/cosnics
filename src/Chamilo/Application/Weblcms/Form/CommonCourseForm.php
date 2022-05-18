@@ -668,7 +668,7 @@ abstract class CommonCourseForm extends FormValidator implements CourseSettingsX
     {
         $available_rights = $this->get_available_rights();
 
-        if ($this->base_object->is_identified())
+        if ($this->base_object->isIdentified())
         {
             $location = $this->base_object->get_rights_location();
         }

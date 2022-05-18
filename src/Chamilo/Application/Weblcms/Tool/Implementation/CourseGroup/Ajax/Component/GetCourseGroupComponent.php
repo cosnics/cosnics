@@ -26,7 +26,7 @@ class GetCourseGroupComponent extends Manager
                 array('id' => $this->getPostDataValue(self::PARAM_COURSE_GROUP_ID)));
         }
         
-        $properties = $course_group->get_default_properties() + $course_group->get_optional_properties();
+        $properties = $course_group->getDefaultProperties() + $course_group->get_optional_properties();
         $properties['is_root'] = $course_group->is_root();
         
         $result = new JsonAjaxResult(200, $properties);

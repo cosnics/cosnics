@@ -47,7 +47,7 @@ class Publication extends DataClass
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -76,22 +76,22 @@ class Publication extends DataClass
 
     public function get_email_sent()
     {
-        return $this->get_default_property(self::PROPERTY_EMAIL_SENT);
+        return $this->getDefaultProperty(self::PROPERTY_EMAIL_SENT);
     }
 
     public function get_from_date()
     {
-        return $this->get_default_property(self::PROPERTY_FROM_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_FROM_DATE);
     }
 
     public function get_hidden()
     {
-        return $this->get_default_property(self::PROPERTY_HIDDEN);
+        return $this->getDefaultProperty(self::PROPERTY_HIDDEN);
     }
 
     public function get_modification_date()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFICATION_DATE);
     }
 
     /**
@@ -101,12 +101,12 @@ class Publication extends DataClass
      */
     public function get_publication_date()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_DATE);
     }
 
     public function get_publisher_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER_ID);
     }
 
     /**
@@ -119,7 +119,7 @@ class Publication extends DataClass
 
     public function get_to_date()
     {
-        return $this->get_default_property(self::PROPERTY_TO_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_TO_DATE);
     }
 
     /**
@@ -137,42 +137,42 @@ class Publication extends DataClass
 
     public function set_content_object_id($id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $id);
     }
 
     public function set_email_sent($email_sent)
     {
-        $this->set_default_property(self::PROPERTY_EMAIL_SENT, $email_sent);
+        $this->setDefaultProperty(self::PROPERTY_EMAIL_SENT, $email_sent);
     }
 
     public function set_from_date($from_date)
     {
-        $this->set_default_property(self::PROPERTY_FROM_DATE, $from_date);
+        $this->setDefaultProperty(self::PROPERTY_FROM_DATE, $from_date);
     }
 
     public function set_hidden($hidden)
     {
-        $this->set_default_property(self::PROPERTY_HIDDEN, $hidden);
+        $this->setDefaultProperty(self::PROPERTY_HIDDEN, $hidden);
     }
 
     public function set_modification_date($modification_date)
     {
-        $this->set_default_property(self::PROPERTY_MODIFICATION_DATE, $modification_date);
+        $this->setDefaultProperty(self::PROPERTY_MODIFICATION_DATE, $modification_date);
     }
 
     public function set_publication_date($publication_date)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_DATE, $publication_date);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_DATE, $publication_date);
     }
 
     public function set_publisher_id($publisher_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHER_ID, $publisher_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHER_ID, $publisher_id);
     }
 
     public function set_to_date($to_date)
     {
-        $this->set_default_property(self::PROPERTY_TO_DATE, $to_date);
+        $this->setDefaultProperty(self::PROPERTY_TO_DATE, $to_date);
     }
 
     /**

@@ -89,7 +89,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_license()
     {
-        return $this->get_default_property(self::PROPERTY_LICENSE);
+        return $this->getDefaultProperty(self::PROPERTY_LICENSE);
     }
 
     public function get_license_icon()
@@ -262,7 +262,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_tags()
     {
-        return $this->get_default_property(self::PROPERTY_TAGS);
+        return $this->getDefaultProperty(self::PROPERTY_TAGS);
     }
 
     public function get_tags_string($include_links = true)
@@ -304,21 +304,21 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_urls()
     {
-        return $this->get_default_property(self::PROPERTY_URLS);
+        return $this->getDefaultProperty(self::PROPERTY_URLS);
     }
 
     public function set_license($license)
     {
-        return $this->set_default_property(self::PROPERTY_LICENSE, $license);
+        return $this->setDefaultProperty(self::PROPERTY_LICENSE, $license);
     }
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
+        return $this->setDefaultProperty(self::PROPERTY_TAGS, $tags);
     }
 
     public function set_urls($urls)
     {
-        return $this->set_default_property(self::PROPERTY_URLS, $urls);
+        return $this->setDefaultProperty(self::PROPERTY_URLS, $urls);
     }
 }

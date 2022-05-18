@@ -219,7 +219,7 @@ class UserDetailComponent extends Manager
             );
             $table->setCellAttributes(($i + 1), 0, array('style' => 'width: 150px;'));
 
-            $value = $user->get_default_property($attribute);
+            $value = $user->getDefaultProperty($attribute);
             $value = $this->format_property($attribute, $value);
 
             $table->setCellContents(($i + 1), 1, $value);

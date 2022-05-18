@@ -145,7 +145,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             foreach ($publication_attributes as $key => $publication_attribute)
             {
                 $ordering_values[$key] = (string) strtolower(
-                    $publication_attribute->get_default_property($order_column)
+                    $publication_attribute->getDefaultProperty($order_column)
                 );
             }
 

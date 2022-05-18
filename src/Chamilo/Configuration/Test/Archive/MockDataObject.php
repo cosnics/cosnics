@@ -17,7 +17,7 @@ class MockDataObject
         return 'mockdata';
     }
 
-    public function get_default_properties()
+    public function getDefaultProperties()
     {
         return $this->props;
     }

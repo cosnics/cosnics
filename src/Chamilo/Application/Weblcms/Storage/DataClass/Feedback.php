@@ -17,12 +17,12 @@ class Feedback extends \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedb
 
     public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**

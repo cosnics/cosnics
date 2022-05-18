@@ -40,7 +40,7 @@ class RightsLocationLockedRight extends DataClass
      */
     function get_location_id()
     {
-        return $this->get_default_property(self::PROPERTY_LOCATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_LOCATION_ID);
     }
 
     /**
@@ -50,7 +50,7 @@ class RightsLocationLockedRight extends DataClass
      */
     function get_right_id()
     {
-        return $this->get_default_property(self::PROPERTY_RIGHT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_RIGHT_ID);
     }
 
     /**
@@ -68,7 +68,7 @@ class RightsLocationLockedRight extends DataClass
      */
     function set_location_id($location_id)
     {
-        $this->set_default_property(self::PROPERTY_LOCATION_ID, $location_id);
+        $this->setDefaultProperty(self::PROPERTY_LOCATION_ID, $location_id);
     }
 
     /**
@@ -78,6 +78,6 @@ class RightsLocationLockedRight extends DataClass
      */
     function set_right_id($right_id)
     {
-        $this->set_default_property(self::PROPERTY_RIGHT_ID, $right_id);
+        $this->setDefaultProperty(self::PROPERTY_RIGHT_ID, $right_id);
     }
 }

@@ -263,7 +263,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function createDummyTreeNodeAttempt(DummyTreeNodeAttempt $dummyTreeNodeAttempt)
     {
-        if (!$dummyTreeNodeAttempt->is_identified())
+        if (!$dummyTreeNodeAttempt->isIdentified())
         {
             $dummyTreeNodeAttempt->setId(UUID::v4());
         }
@@ -306,7 +306,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     protected function createDummyQuestionAttempt(DummyQuestionAttempt $dummyQuestionAttempt)
     {
-        if (!$dummyQuestionAttempt->is_identified())
+        if (!$dummyQuestionAttempt->isIdentified())
         {
             $dummyQuestionAttempt->setId(UUID::v4());
         }

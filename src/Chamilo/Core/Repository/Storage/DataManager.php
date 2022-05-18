@@ -1227,7 +1227,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
                 else
                 {
-                    $ordering_values[$key] = (string) strtolower($content_object->get_default_property($order_column));
+                    $ordering_values[$key] = (string) strtolower($content_object->getDefaultProperty($order_column));
                 }
             }
 

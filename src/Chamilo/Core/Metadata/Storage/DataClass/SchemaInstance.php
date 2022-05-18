@@ -77,7 +77,7 @@ class SchemaInstance extends DataClass
      */
     public function get_creation_date()
     {
-        return $this->get_default_property(self::PROPERTY_CREATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
     }
 
     /**
@@ -151,7 +151,7 @@ class SchemaInstance extends DataClass
      */
     public function get_entity_id()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_ID);
     }
 
     /**
@@ -160,7 +160,7 @@ class SchemaInstance extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -169,7 +169,7 @@ class SchemaInstance extends DataClass
      */
     public function get_schema_id()
     {
-        return $this->get_default_property(self::PROPERTY_SCHEMA_ID);
+        return $this->getDefaultProperty(self::PROPERTY_SCHEMA_ID);
     }
 
     /**
@@ -178,7 +178,7 @@ class SchemaInstance extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -187,7 +187,7 @@ class SchemaInstance extends DataClass
      */
     public function set_creation_date($creationDate)
     {
-        $this->set_default_property(self::PROPERTY_CREATION_DATE, $creationDate);
+        $this->setDefaultProperty(self::PROPERTY_CREATION_DATE, $creationDate);
     }
 
     /**
@@ -196,7 +196,7 @@ class SchemaInstance extends DataClass
      */
     public function set_entity_id($entityId)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_ID, $entityId);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_ID, $entityId);
     }
 
     /**
@@ -205,7 +205,7 @@ class SchemaInstance extends DataClass
      */
     public function set_entity_type($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -214,7 +214,7 @@ class SchemaInstance extends DataClass
      */
     public function set_schema_id($schemaId)
     {
-        $this->set_default_property(self::PROPERTY_SCHEMA_ID, $schemaId);
+        $this->setDefaultProperty(self::PROPERTY_SCHEMA_ID, $schemaId);
     }
 
     /**
@@ -223,7 +223,7 @@ class SchemaInstance extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

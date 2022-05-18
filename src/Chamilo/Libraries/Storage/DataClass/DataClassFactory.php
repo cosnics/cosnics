@@ -29,7 +29,7 @@ class DataClassFactory
         {
             if (array_key_exists($property, $record))
             {
-                $dataClass->set_default_property($property, $record[$property]);
+                $dataClass->setDefaultProperty($property, $record[$property]);
                 unset($record[$property]);
             }
         }

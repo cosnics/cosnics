@@ -36,7 +36,7 @@ abstract class FeedbackAttachment extends DataClass
      */
     public function getFeedbackId()
     {
-        return $this->get_default_property(self::PROPERTY_FEEDBACK_ID);
+        return $this->getDefaultProperty(self::PROPERTY_FEEDBACK_ID);
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class FeedbackAttachment extends DataClass
      */
     public function setFeedbackId($feedbackId)
     {
-        $this->set_default_property(self::PROPERTY_FEEDBACK_ID, $feedbackId);
+        $this->setDefaultProperty(self::PROPERTY_FEEDBACK_ID, $feedbackId);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class FeedbackAttachment extends DataClass
      */
     public function getAttachmentId()
     {
-        return $this->get_default_property(self::PROPERTY_ATTACHMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ATTACHMENT_ID);
     }
 
     /**
@@ -60,6 +60,6 @@ abstract class FeedbackAttachment extends DataClass
      */
     public function setAttachmentId($attachmentId)
     {
-        $this->set_default_property(self::PROPERTY_ATTACHMENT_ID, $attachmentId);
+        $this->setDefaultProperty(self::PROPERTY_ATTACHMENT_ID, $attachmentId);
     }
 }

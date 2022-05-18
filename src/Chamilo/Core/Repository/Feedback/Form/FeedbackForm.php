@@ -31,7 +31,7 @@ class FeedbackForm extends FormValidator
         $this->application = $application;
         $this->build_form();
 
-        if ($feedback && $feedback->is_identified())
+        if ($feedback && $feedback->isIdentified())
         {
             $this->set_defaults($feedback);
         }
@@ -79,7 +79,7 @@ class FeedbackForm extends FormValidator
     protected function set_defaults($feedback)
     {
         $defaults = [];
-        if ($feedback && $feedback->is_identified())
+        if ($feedback && $feedback->isIdentified())
         {
             $defaults[Feedback::PROPERTY_COMMENT] = $feedback->get_comment();
         }

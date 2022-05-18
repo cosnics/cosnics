@@ -20,7 +20,7 @@ class Publication extends DataClass
      */
     public function getEntityType()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -28,7 +28,7 @@ class Publication extends DataClass
      */
     public function getPublicationId()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -57,7 +57,7 @@ class Publication extends DataClass
      */
     public function setEntityType($entityType)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entityType);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entityType);
     }
 
     /**
@@ -65,7 +65,7 @@ class Publication extends DataClass
      */
     public function setPublicationId($publicationId)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publicationId);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publicationId);
     }
 
     /**

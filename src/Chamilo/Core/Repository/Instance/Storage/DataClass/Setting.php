@@ -95,7 +95,7 @@ class Setting extends DataClass
      */
     public function get_external_id()
     {
-        return $this->get_default_property(self::PROPERTY_EXTERNAL_ID);
+        return $this->getDefaultProperty(self::PROPERTY_EXTERNAL_ID);
     }
 
     /**
@@ -113,7 +113,7 @@ class Setting extends DataClass
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -123,7 +123,7 @@ class Setting extends DataClass
      */
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     /**
@@ -133,7 +133,7 @@ class Setting extends DataClass
      */
     public function get_variable()
     {
-        return $this->get_default_property(self::PROPERTY_VARIABLE);
+        return $this->getDefaultProperty(self::PROPERTY_VARIABLE);
     }
 
     public static function initialize(Instance $external_instance)
@@ -189,7 +189,7 @@ class Setting extends DataClass
      */
     public function set_external_id($external_id)
     {
-        $this->set_default_property(self::PROPERTY_EXTERNAL_ID, $external_id);
+        $this->setDefaultProperty(self::PROPERTY_EXTERNAL_ID, $external_id);
     }
 
     /**
@@ -199,7 +199,7 @@ class Setting extends DataClass
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**
@@ -209,7 +209,7 @@ class Setting extends DataClass
      */
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 
     /**
@@ -219,6 +219,6 @@ class Setting extends DataClass
      */
     public function set_variable($variable)
     {
-        $this->set_default_property(self::PROPERTY_VARIABLE, $variable);
+        $this->setDefaultProperty(self::PROPERTY_VARIABLE, $variable);
     }
 }

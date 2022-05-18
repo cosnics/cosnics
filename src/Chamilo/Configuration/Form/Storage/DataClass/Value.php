@@ -54,7 +54,7 @@ class Value extends DataClass
 
     public function get_dynamic_form_element_id()
     {
-        return $this->get_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID);
     }
 
     /**
@@ -67,36 +67,36 @@ class Value extends DataClass
 
     public function get_time()
     {
-        return $this->get_default_property(self::PROPERTY_TIME);
+        return $this->getDefaultProperty(self::PROPERTY_TIME);
     }
 
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function get_value()
     {
-        return $this->get_default_property(self::PROPERTY_VALUE);
+        return $this->getDefaultProperty(self::PROPERTY_VALUE);
     }
 
     public function set_dynamic_form_element_id($dynamic_form_element_id)
     {
-        $this->set_default_property(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, $dynamic_form_element_id);
+        $this->setDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ELEMENT_ID, $dynamic_form_element_id);
     }
 
     public function set_time($time)
     {
-        $this->set_default_property(self::PROPERTY_TIME, $time);
+        $this->setDefaultProperty(self::PROPERTY_TIME, $time);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function set_value($value)
     {
-        $this->set_default_property(self::PROPERTY_VALUE, $value);
+        $this->setDefaultProperty(self::PROPERTY_VALUE, $value);
     }
 }

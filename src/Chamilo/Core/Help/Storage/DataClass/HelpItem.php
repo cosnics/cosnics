@@ -41,12 +41,12 @@ class HelpItem extends DataClass
      */
     public function get_context()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     public function get_identifier()
     {
-        return $this->get_default_property(self::PROPERTY_IDENTIFIER);
+        return $this->getDefaultProperty(self::PROPERTY_IDENTIFIER);
     }
 
     /**
@@ -56,12 +56,12 @@ class HelpItem extends DataClass
      */
     public function get_url()
     {
-        return $this->get_default_property(self::PROPERTY_URL);
+        return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
     public function get_language()
     {
-        return $this->get_default_property(self::PROPERTY_LANGUAGE);
+        return $this->getDefaultProperty(self::PROPERTY_LANGUAGE);
     }
 
     /**
@@ -71,12 +71,12 @@ class HelpItem extends DataClass
      */
     public function set_context($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
 
     public function set_identifier($identifier)
     {
-        $this->set_default_property(self::PROPERTY_IDENTIFIER, $identifier);
+        $this->setDefaultProperty(self::PROPERTY_IDENTIFIER, $identifier);
     }
 
     /**
@@ -86,12 +86,12 @@ class HelpItem extends DataClass
      */
     public function set_url($url)
     {
-        $this->set_default_property(self::PROPERTY_URL, $url);
+        $this->setDefaultProperty(self::PROPERTY_URL, $url);
     }
 
     public function set_language($language)
     {
-        $this->set_default_property(self::PROPERTY_LANGUAGE, $language);
+        $this->setDefaultProperty(self::PROPERTY_LANGUAGE, $language);
     }
 
     public function has_url()

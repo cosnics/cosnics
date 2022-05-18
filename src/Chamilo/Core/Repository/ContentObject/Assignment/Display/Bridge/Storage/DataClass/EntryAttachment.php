@@ -36,7 +36,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function getEntryId()
     {
-        return $this->get_default_property(self::PROPERTY_ENTRY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ENTRY_ID);
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function setEntryId($entryId)
     {
-        $this->set_default_property(self::PROPERTY_ENTRY_ID, $entryId);
+        $this->setDefaultProperty(self::PROPERTY_ENTRY_ID, $entryId);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function getAttachmentId()
     {
-        return $this->get_default_property(self::PROPERTY_ATTACHMENT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ATTACHMENT_ID);
     }
 
     /**
@@ -60,7 +60,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function setAttachmentId($attachmentId)
     {
-        $this->set_default_property(self::PROPERTY_ATTACHMENT_ID, $attachmentId);
+        $this->setDefaultProperty(self::PROPERTY_ATTACHMENT_ID, $attachmentId);
     }
 
     /**
@@ -69,7 +69,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function getCreated()
     {
-        return $this->get_default_property(self::PROPERTY_CREATED);
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
     }
 
     /**
@@ -78,7 +78,7 @@ abstract class EntryAttachment extends DataClass
      */
     public function setCreated($created)
     {
-        $this->set_default_property(self::PROPERTY_CREATED, $created);
+        $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
     }
 
 }

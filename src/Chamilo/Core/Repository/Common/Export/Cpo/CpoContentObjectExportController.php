@@ -693,7 +693,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                 $dom_property = $this->get_dom_document()->createElement($property);
                 $category_node->appendChild($dom_property);
                 $dom_property->appendChild(
-                    $this->get_dom_document()->createTextNode($category->get_default_property($property)));
+                    $this->get_dom_document()->createTextNode($category->getDefaultProperty($property)));
             }
         }
     }

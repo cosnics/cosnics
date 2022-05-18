@@ -42,7 +42,7 @@ class LearningPathForm extends ContentObjectForm
     {
         /** @var LearningPath $object */
         $object = $this->get_content_object();
-        if ($object->is_identified())
+        if ($object->isIdentified())
         {
             $defaults[LearningPath::PROPERTY_AUTOMATIC_NUMBERING] = $object->getAutomaticNumbering();
 

@@ -103,12 +103,12 @@ class ContentObjectPublicationCategory extends PlatformCategory
 
     public function get_allow_change()
     {
-        return $this->get_default_property(self::PROPERTY_ALLOW_CHANGE);
+        return $this->getDefaultProperty(self::PROPERTY_ALLOW_CHANGE);
     }
 
     public function get_course()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array
@@ -178,7 +178,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
 
     public function get_tool()
     {
-        return $this->get_default_property(self::PROPERTY_TOOL);
+        return $this->getDefaultProperty(self::PROPERTY_TOOL);
     }
 
     /**
@@ -191,7 +191,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
      */
     public function get_visibility()
     {
-        return $this->get_default_property(self::PROPERTY_VISIBLE);
+        return $this->getDefaultProperty(self::PROPERTY_VISIBLE);
     }
 
     /**
@@ -257,26 +257,26 @@ class ContentObjectPublicationCategory extends PlatformCategory
 
     public function set_allow_change($allow_change)
     {
-        $this->set_default_property(self::PROPERTY_ALLOW_CHANGE, $allow_change);
+        $this->setDefaultProperty(self::PROPERTY_ALLOW_CHANGE, $allow_change);
     }
 
     // PERFORMANCE-TWEAKS-START
 
     public function set_course($course)
     {
-        $this->set_default_property(self::PROPERTY_COURSE, $course);
+        $this->setDefaultProperty(self::PROPERTY_COURSE, $course);
     }
 
     // PERFORMANCE-TWEAKS-END
 
     public function set_tool($tool)
     {
-        $this->set_default_property(self::PROPERTY_TOOL, $tool);
+        $this->setDefaultProperty(self::PROPERTY_TOOL, $tool);
     }
 
     public function set_visibility($visibility)
     {
-        $this->set_default_property(self::PROPERTY_VISIBLE, $visibility);
+        $this->setDefaultProperty(self::PROPERTY_VISIBLE, $visibility);
     }
 
     public function toggle_visibility()

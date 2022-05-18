@@ -72,7 +72,7 @@ class CpoDefaultExportImplementation extends CpoExportImplementation
 
             $treeNodeDataNode = $document->createElement('child');
 
-            foreach ($treeNodeData->get_default_properties() as $propertyName => $propertyValue)
+            foreach ($treeNodeData->getDefaultProperties() as $propertyName => $propertyValue)
             {
                 $propertyNode = $document->createElement($propertyName);
                 $propertyNode->appendChild($document->createTextNode($propertyValue));

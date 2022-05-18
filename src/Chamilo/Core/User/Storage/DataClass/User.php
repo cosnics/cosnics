@@ -136,22 +136,22 @@ class User extends DataClass
      */
     public function getAuthenticationSource()
     {
-        return $this->get_default_property(self::PROPERTY_AUTH_SOURCE);
+        return $this->getDefaultProperty(self::PROPERTY_AUTH_SOURCE);
     }
 
     public function get_activation_date()
     {
-        return $this->get_default_property(self::PROPERTY_ACTIVATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_ACTIVATION_DATE);
     }
 
     public function get_active()
     {
-        return $this->get_default_property(self::PROPERTY_ACTIVE);
+        return $this->getDefaultProperty(self::PROPERTY_ACTIVE);
     }
 
     public function get_approved()
     {
-        return $this->get_default_property(self::PROPERTY_APPROVED);
+        return $this->getDefaultProperty(self::PROPERTY_APPROVED);
     }
 
     /**
@@ -184,7 +184,7 @@ class User extends DataClass
      */
     public function get_creator_id()
     {
-        return $this->get_default_property(self::PROPERTY_CREATOR_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CREATOR_ID);
     }
 
     /**
@@ -202,7 +202,7 @@ class User extends DataClass
      */
     public function get_database_quota()
     {
-        return $this->get_default_property(self::PROPERTY_DATABASE_QUOTA);
+        return $this->getDefaultProperty(self::PROPERTY_DATABASE_QUOTA);
     }
 
     /**
@@ -247,7 +247,7 @@ class User extends DataClass
      */
     public function get_disk_quota()
     {
-        return $this->get_default_property(self::PROPERTY_DISK_QUOTA);
+        return $this->getDefaultProperty(self::PROPERTY_DISK_QUOTA);
     }
 
     /**
@@ -257,7 +257,7 @@ class User extends DataClass
      */
     public function get_email()
     {
-        return $this->get_default_property(self::PROPERTY_EMAIL);
+        return $this->getDefaultProperty(self::PROPERTY_EMAIL);
     }
 
     /**
@@ -267,7 +267,7 @@ class User extends DataClass
      */
     public function get_expiration_date()
     {
-        return $this->get_default_property(self::PROPERTY_EXPIRATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_EXPIRATION_DATE);
     }
 
     /**
@@ -279,7 +279,7 @@ class User extends DataClass
      */
     public function get_external_uid()
     {
-        return $this->get_default_property(self::PROPERTY_EXTERNAL_UID);
+        return $this->getDefaultProperty(self::PROPERTY_EXTERNAL_UID);
     }
 
     /**
@@ -289,7 +289,7 @@ class User extends DataClass
      */
     public function get_firstname()
     {
-        return $this->get_default_property(self::PROPERTY_FIRSTNAME);
+        return $this->getDefaultProperty(self::PROPERTY_FIRSTNAME);
     }
 
     /**
@@ -338,7 +338,7 @@ class User extends DataClass
      */
     public function get_lastname()
     {
-        return $this->get_default_property(self::PROPERTY_LASTNAME);
+        return $this->getDefaultProperty(self::PROPERTY_LASTNAME);
     }
 
     /**
@@ -348,7 +348,7 @@ class User extends DataClass
      */
     public function get_official_code()
     {
-        return $this->get_default_property(self::PROPERTY_OFFICIAL_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_OFFICIAL_CODE);
     }
 
     /**
@@ -358,7 +358,7 @@ class User extends DataClass
      */
     public function get_password()
     {
-        return $this->get_default_property(self::PROPERTY_PASSWORD);
+        return $this->getDefaultProperty(self::PROPERTY_PASSWORD);
     }
 
     /**
@@ -368,7 +368,7 @@ class User extends DataClass
      */
     public function get_phone()
     {
-        return $this->get_default_property(self::PROPERTY_PHONE);
+        return $this->getDefaultProperty(self::PROPERTY_PHONE);
     }
 
     /**
@@ -378,7 +378,7 @@ class User extends DataClass
      */
     public function get_picture_uri()
     {
-        return $this->get_default_property(self::PROPERTY_PICTURE_URI);
+        return $this->getDefaultProperty(self::PROPERTY_PICTURE_URI);
     }
 
     /**
@@ -388,17 +388,17 @@ class User extends DataClass
      */
     public function get_platformadmin()
     {
-        return $this->get_default_property(self::PROPERTY_PLATFORMADMIN);
+        return $this->getDefaultProperty(self::PROPERTY_PLATFORMADMIN);
     }
 
     public function get_registration_date()
     {
-        return $this->get_default_property(self::PROPERTY_REGISTRATION_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_REGISTRATION_DATE);
     }
 
     public function get_security_token()
     {
-        return $this->get_default_property(self::PROPERTY_SECURITY_TOKEN);
+        return $this->getDefaultProperty(self::PROPERTY_SECURITY_TOKEN);
     }
 
     /**
@@ -408,7 +408,7 @@ class User extends DataClass
      */
     public function get_status()
     {
-        return $this->get_default_property(self::PROPERTY_STATUS);
+        return $this->getDefaultProperty(self::PROPERTY_STATUS);
     }
 
     public function get_status_name()
@@ -449,7 +449,7 @@ class User extends DataClass
      */
     public function get_terms_date()
     {
-        return $this->get_default_property(self::PROPERTY_TERMS_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_TERMS_DATE);
     }
 
     public function get_user_groups()
@@ -464,7 +464,7 @@ class User extends DataClass
      */
     public function get_username()
     {
-        return $this->get_default_property(self::PROPERTY_USERNAME);
+        return $this->getDefaultProperty(self::PROPERTY_USERNAME);
     }
 
     public function is_active()
@@ -510,17 +510,17 @@ class User extends DataClass
 
     public function set_activation_date($activation_date)
     {
-        $this->set_default_property(self::PROPERTY_ACTIVATION_DATE, $activation_date);
+        $this->setDefaultProperty(self::PROPERTY_ACTIVATION_DATE, $activation_date);
     }
 
     public function set_active($active)
     {
-        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
+        $this->setDefaultProperty(self::PROPERTY_ACTIVE, $active);
     }
 
     public function set_approved($approved)
     {
-        $this->set_default_property(self::PROPERTY_APPROVED, $approved);
+        $this->setDefaultProperty(self::PROPERTY_APPROVED, $approved);
     }
 
     /**
@@ -530,7 +530,7 @@ class User extends DataClass
      */
     public function set_auth_source($auth_source)
     {
-        $this->set_default_property(self::PROPERTY_AUTH_SOURCE, $auth_source);
+        $this->setDefaultProperty(self::PROPERTY_AUTH_SOURCE, $auth_source);
     }
 
     /**
@@ -540,7 +540,7 @@ class User extends DataClass
      */
     public function set_creator_id($creator_id)
     {
-        $this->set_default_property(self::PROPERTY_CREATOR_ID, $creator_id);
+        $this->setDefaultProperty(self::PROPERTY_CREATOR_ID, $creator_id);
     }
 
     /**
@@ -550,7 +550,7 @@ class User extends DataClass
      */
     public function set_database_quota($database_quota)
     {
-        $this->set_default_property(self::PROPERTY_DATABASE_QUOTA, $database_quota);
+        $this->setDefaultProperty(self::PROPERTY_DATABASE_QUOTA, $database_quota);
     }
 
     /**
@@ -560,7 +560,7 @@ class User extends DataClass
      */
     public function set_disk_quota($disk_quota)
     {
-        $this->set_default_property(self::PROPERTY_DISK_QUOTA, $disk_quota);
+        $this->setDefaultProperty(self::PROPERTY_DISK_QUOTA, $disk_quota);
     }
 
     /**
@@ -570,7 +570,7 @@ class User extends DataClass
      */
     public function set_email($email)
     {
-        $this->set_default_property(self::PROPERTY_EMAIL, $email);
+        $this->setDefaultProperty(self::PROPERTY_EMAIL, $email);
     }
 
     /**
@@ -580,7 +580,7 @@ class User extends DataClass
      */
     public function set_expiration_date($expiration_date)
     {
-        $this->set_default_property(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
+        $this->setDefaultProperty(self::PROPERTY_EXPIRATION_DATE, $expiration_date);
     }
 
     /**
@@ -592,7 +592,7 @@ class User extends DataClass
      */
     public function set_external_uid($external_uid)
     {
-        $this->set_default_property(self::PROPERTY_EXTERNAL_UID, $external_uid);
+        $this->setDefaultProperty(self::PROPERTY_EXTERNAL_UID, $external_uid);
     }
 
     /**
@@ -602,7 +602,7 @@ class User extends DataClass
      */
     public function set_firstname($firstname)
     {
-        $this->set_default_property(self::PROPERTY_FIRSTNAME, $firstname);
+        $this->setDefaultProperty(self::PROPERTY_FIRSTNAME, $firstname);
     }
 
     /*
@@ -615,7 +615,7 @@ class User extends DataClass
      */
     public function set_lastname($lastname)
     {
-        $this->set_default_property(self::PROPERTY_LASTNAME, $lastname);
+        $this->setDefaultProperty(self::PROPERTY_LASTNAME, $lastname);
     }
 
     /**
@@ -625,7 +625,7 @@ class User extends DataClass
      */
     public function set_official_code($official_code)
     {
-        $this->set_default_property(self::PROPERTY_OFFICIAL_CODE, $official_code);
+        $this->setDefaultProperty(self::PROPERTY_OFFICIAL_CODE, $official_code);
     }
 
     /**
@@ -637,7 +637,7 @@ class User extends DataClass
      */
     public function set_password($password)
     {
-        $this->set_default_property(self::PROPERTY_PASSWORD, $password);
+        $this->setDefaultProperty(self::PROPERTY_PASSWORD, $password);
     }
 
     /**
@@ -647,7 +647,7 @@ class User extends DataClass
      */
     public function set_phone($phone)
     {
-        $this->set_default_property(self::PROPERTY_PHONE, $phone);
+        $this->setDefaultProperty(self::PROPERTY_PHONE, $phone);
     }
 
     /**
@@ -657,7 +657,7 @@ class User extends DataClass
      */
     public function set_picture_uri($picture_uri)
     {
-        $this->set_default_property(self::PROPERTY_PICTURE_URI, $picture_uri);
+        $this->setDefaultProperty(self::PROPERTY_PICTURE_URI, $picture_uri);
     }
 
     /**
@@ -667,17 +667,17 @@ class User extends DataClass
      */
     public function set_platformadmin($admin)
     {
-        $this->set_default_property(self::PROPERTY_PLATFORMADMIN, $admin);
+        $this->setDefaultProperty(self::PROPERTY_PLATFORMADMIN, $admin);
     }
 
     public function set_registration_date($registration_date)
     {
-        $this->set_default_property(self::PROPERTY_REGISTRATION_DATE, $registration_date);
+        $this->setDefaultProperty(self::PROPERTY_REGISTRATION_DATE, $registration_date);
     }
 
     public function set_security_token($security_token)
     {
-        $this->set_default_property(self::PROPERTY_SECURITY_TOKEN, $security_token);
+        $this->setDefaultProperty(self::PROPERTY_SECURITY_TOKEN, $security_token);
     }
 
     /**
@@ -687,7 +687,7 @@ class User extends DataClass
      */
     public function set_status($status)
     {
-        $this->set_default_property(self::PROPERTY_STATUS, $status);
+        $this->setDefaultProperty(self::PROPERTY_STATUS, $status);
     }
 
     /**
@@ -697,7 +697,7 @@ class User extends DataClass
      */
     public function set_term_date($terms_date)
     {
-        $this->set_default_property(self::PROPERTY_TERMS_DATE, $terms_date);
+        $this->setDefaultProperty(self::PROPERTY_TERMS_DATE, $terms_date);
     }
 
     /**
@@ -707,7 +707,7 @@ class User extends DataClass
      */
     public function set_username($username)
     {
-        $this->set_default_property(self::PROPERTY_USERNAME, $username);
+        $this->setDefaultProperty(self::PROPERTY_USERNAME, $username);
     }
 
     /**

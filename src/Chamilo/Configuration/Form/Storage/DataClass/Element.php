@@ -111,17 +111,17 @@ class Element extends DataClass
 
     public function get_display_order()
     {
-        return $this->get_default_property(self::PROPERTY_DISPLAY_ORDER);
+        return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function get_dynamic_form_id()
     {
-        return $this->get_default_property(self::PROPERTY_DYNAMIC_FORM_ID);
+        return $this->getDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ID);
     }
 
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     public function get_option($index)
@@ -146,12 +146,12 @@ class Element extends DataClass
 
     public function get_required()
     {
-        return $this->get_default_property(self::PROPERTY_REQUIRED);
+        return $this->getDefaultProperty(self::PROPERTY_REQUIRED);
     }
 
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     public static function get_type_name($type)
@@ -195,27 +195,27 @@ class Element extends DataClass
 
     public function set_display_order($display_order)
     {
-        $this->set_default_property(self::PROPERTY_DISPLAY_ORDER, $display_order);
+        $this->setDefaultProperty(self::PROPERTY_DISPLAY_ORDER, $display_order);
     }
 
     public function set_dynamic_form_id($dynamic_form_id)
     {
-        $this->set_default_property(self::PROPERTY_DYNAMIC_FORM_ID, $dynamic_form_id);
+        $this->setDefaultProperty(self::PROPERTY_DYNAMIC_FORM_ID, $dynamic_form_id);
     }
 
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     public function set_required($required)
     {
-        $this->set_default_property(self::PROPERTY_REQUIRED, $required);
+        $this->setDefaultProperty(self::PROPERTY_REQUIRED, $required);
     }
 
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**

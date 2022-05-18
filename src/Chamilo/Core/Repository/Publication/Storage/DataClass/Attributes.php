@@ -52,7 +52,7 @@ class Attributes extends DataClass
      */
     public function get_title()
     {
-        return $this->get_default_property(self::PROPERTY_TITLE);
+        return $this->getDefaultProperty(self::PROPERTY_TITLE);
     }
 
     /**
@@ -60,7 +60,7 @@ class Attributes extends DataClass
      */
     public function set_title($title)
     {
-        $this->set_default_property(self::PROPERTY_TITLE, $title);
+        $this->setDefaultProperty(self::PROPERTY_TITLE, $title);
     }
 
     /**
@@ -68,7 +68,7 @@ class Attributes extends DataClass
      */
     public function get_application()
     {
-        return $this->get_default_property(self::PROPERTY_APPLICATION);
+        return $this->getDefaultProperty(self::PROPERTY_APPLICATION);
     }
 
     /**
@@ -76,7 +76,7 @@ class Attributes extends DataClass
      */
     public function set_application($application)
     {
-        $this->set_default_property(self::PROPERTY_APPLICATION, $application);
+        $this->setDefaultProperty(self::PROPERTY_APPLICATION, $application);
     }
 
     /**
@@ -84,7 +84,7 @@ class Attributes extends DataClass
      */
     public function get_location()
     {
-        return $this->get_default_property(self::PROPERTY_LOCATION);
+        return $this->getDefaultProperty(self::PROPERTY_LOCATION);
     }
 
     /**
@@ -92,7 +92,7 @@ class Attributes extends DataClass
      */
     public function set_location($location)
     {
-        $this->set_default_property(self::PROPERTY_LOCATION, $location);
+        $this->setDefaultProperty(self::PROPERTY_LOCATION, $location);
     }
 
     /**
@@ -100,7 +100,7 @@ class Attributes extends DataClass
      */
     public function get_date()
     {
-        return $this->get_default_property(self::PROPERTY_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_DATE);
     }
 
     /**
@@ -108,7 +108,7 @@ class Attributes extends DataClass
      */
     public function set_date($date)
     {
-        $this->set_default_property(self::PROPERTY_DATE, $date);
+        $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
     /**
@@ -116,7 +116,7 @@ class Attributes extends DataClass
      */
     public function get_content_object_id()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
     /**
@@ -124,7 +124,7 @@ class Attributes extends DataClass
      */
     public function set_content_object_id($content_object_id)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID, $content_object_id);
     }
 
     /**
@@ -132,7 +132,7 @@ class Attributes extends DataClass
      */
     public function get_publisher_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLISHER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLISHER_ID);
     }
 
     /**
@@ -140,7 +140,7 @@ class Attributes extends DataClass
      */
     public function set_publisher_id($publisher_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLISHER_ID, $publisher_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLISHER_ID, $publisher_id);
     }
 
     /**
@@ -148,7 +148,7 @@ class Attributes extends DataClass
      */
     public function get_url()
     {
-        return $this->get_default_property(self::PROPERTY_URL);
+        return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -156,7 +156,7 @@ class Attributes extends DataClass
      */
     public function set_url($url)
     {
-        $this->set_default_property(self::PROPERTY_URL, $url);
+        $this->setDefaultProperty(self::PROPERTY_URL, $url);
     }
 
     /**
@@ -175,7 +175,7 @@ class Attributes extends DataClass
      */
     public function setPublicationContext($publicationContext)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_CONTEXT, $publicationContext);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_CONTEXT, $publicationContext);
     }
 
     /**
@@ -183,7 +183,7 @@ class Attributes extends DataClass
      */
     public function getPublicationContext()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_CONTEXT);
     }
 
     /**
@@ -191,7 +191,7 @@ class Attributes extends DataClass
      */
     public function setModifierServiceIdentifier($modifierServiceIdentifier)
     {
-        $this->set_default_property(self::PROPERTY_MODIFIER_SERVICE_ID, $modifierServiceIdentifier);
+        $this->setDefaultProperty(self::PROPERTY_MODIFIER_SERVICE_ID, $modifierServiceIdentifier);
     }
 
     /**
@@ -199,7 +199,7 @@ class Attributes extends DataClass
      */
     public function getModifierServiceIdentifier()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIER_SERVICE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIER_SERVICE_ID);
     }
 
     /**

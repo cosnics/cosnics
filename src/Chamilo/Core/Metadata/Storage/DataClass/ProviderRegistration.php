@@ -62,7 +62,7 @@ class ProviderRegistration extends DataClass
      */
     public function get_entity_type()
     {
-        return $this->get_default_property(self::PROPERTY_ENTITY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTITY_TYPE);
     }
 
     /**
@@ -71,7 +71,7 @@ class ProviderRegistration extends DataClass
      */
     public function set_entity_type($entity_type)
     {
-        $this->set_default_property(self::PROPERTY_ENTITY_TYPE, $entity_type);
+        $this->setDefaultProperty(self::PROPERTY_ENTITY_TYPE, $entity_type);
     }
 
     /**
@@ -80,7 +80,7 @@ class ProviderRegistration extends DataClass
      */
     public function get_provider_class()
     {
-        return $this->get_default_property(self::PROPERTY_PROVIDER_CLASS);
+        return $this->getDefaultProperty(self::PROPERTY_PROVIDER_CLASS);
     }
 
     /**
@@ -89,7 +89,7 @@ class ProviderRegistration extends DataClass
      */
     public function set_provider_class($provider_class)
     {
-        $this->set_default_property(self::PROPERTY_PROVIDER_CLASS, $provider_class);
+        $this->setDefaultProperty(self::PROPERTY_PROVIDER_CLASS, $provider_class);
     }
 
     /**
@@ -98,7 +98,7 @@ class ProviderRegistration extends DataClass
      */
     public function get_property_name()
     {
-        return $this->get_default_property(self::PROPERTY_PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_PROPERTY_NAME);
     }
 
     /**
@@ -107,7 +107,7 @@ class ProviderRegistration extends DataClass
      */
     public function set_property_name($property_name)
     {
-        $this->set_default_property(self::PROPERTY_PROPERTY_NAME, $property_name);
+        $this->setDefaultProperty(self::PROPERTY_PROPERTY_NAME, $property_name);
     }
 
     /**

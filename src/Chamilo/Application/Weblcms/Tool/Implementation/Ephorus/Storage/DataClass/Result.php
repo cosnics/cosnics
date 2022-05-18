@@ -77,7 +77,7 @@ class Result extends EphorusDataClass
      */
     public function get_diff()
     {
-        return $this->get_default_property(self::PROPERTY_DIFF);
+        return $this->getDefaultProperty(self::PROPERTY_DIFF);
     }
 
     /**
@@ -93,7 +93,7 @@ class Result extends EphorusDataClass
      */
     public function get_mimetype()
     {
-        return $this->get_default_property(self::PROPERTY_MIMETYPE);
+        return $this->getDefaultProperty(self::PROPERTY_MIMETYPE);
     }
 
     /**
@@ -103,7 +103,7 @@ class Result extends EphorusDataClass
      */
     public function get_original_guid()
     {
-        return $this->get_default_property(self::PROPERTY_ORIGINAL_GUID);
+        return $this->getDefaultProperty(self::PROPERTY_ORIGINAL_GUID);
     }
 
     /**
@@ -113,7 +113,7 @@ class Result extends EphorusDataClass
      */
     public function get_percentage()
     {
-        return $this->get_default_property(self::PROPERTY_PERCENTAGE);
+        return $this->getDefaultProperty(self::PROPERTY_PERCENTAGE);
     }
 
     /**
@@ -123,7 +123,7 @@ class Result extends EphorusDataClass
      */
     public function get_request_id()
     {
-        return $this->get_default_property(self::PROPERTY_REQUEST_ID);
+        return $this->getDefaultProperty(self::PROPERTY_REQUEST_ID);
     }
 
     /**
@@ -133,7 +133,7 @@ class Result extends EphorusDataClass
      */
     public function get_student_name()
     {
-        return $this->get_default_property(self::PROPERTY_STUDENT_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_STUDENT_NAME);
     }
 
     /**
@@ -143,7 +143,7 @@ class Result extends EphorusDataClass
      */
     public function get_student_number()
     {
-        return $this->get_default_property(self::PROPERTY_STUDENT_NUMBER);
+        return $this->getDefaultProperty(self::PROPERTY_STUDENT_NUMBER);
     }
 
     /**
@@ -161,7 +161,7 @@ class Result extends EphorusDataClass
      */
     public function get_type()
     {
-        return $this->get_default_property(self::PROPERTY_TYPE);
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -171,7 +171,7 @@ class Result extends EphorusDataClass
      */
     public function get_url()
     {
-        return $this->get_default_property(self::PROPERTY_URL);
+        return $this->getDefaultProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -208,7 +208,7 @@ class Result extends EphorusDataClass
      */
     public function set_diff($diff)
     {
-        $this->set_default_property(self::PROPERTY_DIFF, $diff);
+        $this->setDefaultProperty(self::PROPERTY_DIFF, $diff);
     }
 
     /**
@@ -218,7 +218,7 @@ class Result extends EphorusDataClass
      */
     public function set_mimetype($mimetype)
     {
-        $this->set_default_property(self::PROPERTY_MIMETYPE, $mimetype);
+        $this->setDefaultProperty(self::PROPERTY_MIMETYPE, $mimetype);
     }
 
     /**
@@ -228,7 +228,7 @@ class Result extends EphorusDataClass
      */
     public function set_original_guid($original_guid)
     {
-        $this->set_default_property(self::PROPERTY_ORIGINAL_GUID, $original_guid);
+        $this->setDefaultProperty(self::PROPERTY_ORIGINAL_GUID, $original_guid);
     }
 
     /**
@@ -238,7 +238,7 @@ class Result extends EphorusDataClass
      */
     public function set_percentage($percentage)
     {
-        $this->set_default_property(self::PROPERTY_PERCENTAGE, $percentage);
+        $this->setDefaultProperty(self::PROPERTY_PERCENTAGE, $percentage);
     }
 
     /**
@@ -248,7 +248,7 @@ class Result extends EphorusDataClass
      */
     public function set_request_id($request_id)
     {
-        $this->set_default_property(self::PROPERTY_REQUEST_ID, $request_id);
+        $this->setDefaultProperty(self::PROPERTY_REQUEST_ID, $request_id);
     }
 
     /**
@@ -258,7 +258,7 @@ class Result extends EphorusDataClass
      */
     public function set_student_name($student_name)
     {
-        $this->set_default_property(self::PROPERTY_STUDENT_NAME, $student_name);
+        $this->setDefaultProperty(self::PROPERTY_STUDENT_NAME, $student_name);
     }
 
     /**
@@ -268,7 +268,7 @@ class Result extends EphorusDataClass
      */
     public function set_student_number($student_number)
     {
-        $this->set_default_property(self::PROPERTY_STUDENT_NUMBER, $student_number);
+        $this->setDefaultProperty(self::PROPERTY_STUDENT_NUMBER, $student_number);
     }
 
     /**
@@ -278,7 +278,7 @@ class Result extends EphorusDataClass
      */
     public function set_type($type)
     {
-        $this->set_default_property(self::PROPERTY_TYPE, $type);
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -288,6 +288,6 @@ class Result extends EphorusDataClass
      */
     public function set_url($url)
     {
-        $this->set_default_property(self::PROPERTY_URL, $url);
+        $this->setDefaultProperty(self::PROPERTY_URL, $url);
     }
 }

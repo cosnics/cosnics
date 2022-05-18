@@ -74,7 +74,7 @@ abstract class Event extends DataClass
      */
     public function get_active()
     {
-        return $this->get_default_property(self::PROPERTY_ACTIVE);
+        return $this->getDefaultProperty(self::PROPERTY_ACTIVE);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class Event extends DataClass
      */
     public function get_context()
     {
-        return $this->get_default_property(self::PROPERTY_CONTEXT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTEXT);
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class Event extends DataClass
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class Event extends DataClass
      */
     public function set_active($active)
     {
-        $this->set_default_property(self::PROPERTY_ACTIVE, $active);
+        $this->setDefaultProperty(self::PROPERTY_ACTIVE, $active);
     }
 
     /**
@@ -173,7 +173,7 @@ abstract class Event extends DataClass
      */
     public function set_context($context)
     {
-        $this->set_default_property(self::PROPERTY_CONTEXT, $context);
+        $this->setDefaultProperty(self::PROPERTY_CONTEXT, $context);
     }
 
     /**
@@ -183,7 +183,7 @@ abstract class Event extends DataClass
      */
     public function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     public static function trigger($name, $context, $parameters)

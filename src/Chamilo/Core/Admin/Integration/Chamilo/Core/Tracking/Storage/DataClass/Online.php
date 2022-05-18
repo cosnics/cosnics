@@ -54,22 +54,22 @@ class Online extends SimpleTracker
     // Properties getters and setters
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     public function get_last_access_date()
     {
-        return $this->get_default_property(self::PROPERTY_LAST_ACCESS_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_LAST_ACCESS_DATE);
     }
 
     public function set_last_access_date($last_access_date)
     {
-        $this->set_default_property(self::PROPERTY_LAST_ACCESS_DATE, $last_access_date);
+        $this->setDefaultProperty(self::PROPERTY_LAST_ACCESS_DATE, $last_access_date);
     }
 
     /**

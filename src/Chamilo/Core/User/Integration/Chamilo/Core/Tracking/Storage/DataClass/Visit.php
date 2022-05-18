@@ -65,7 +65,7 @@ class Visit extends SimpleTracker
      */
     public function get_enter_date()
     {
-        return $this->get_default_property(self::PROPERTY_ENTER_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_ENTER_DATE);
     }
 
     /**
@@ -75,7 +75,7 @@ class Visit extends SimpleTracker
      */
     public function get_leave_date()
     {
-        return $this->get_default_property(self::PROPERTY_LEAVE_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_LEAVE_DATE);
     }
 
     /**
@@ -85,7 +85,7 @@ class Visit extends SimpleTracker
      */
     public function get_location()
     {
-        return $this->get_default_property(self::PROPERTY_LOCATION);
+        return $this->getDefaultProperty(self::PROPERTY_LOCATION);
     }
 
     /**
@@ -95,7 +95,7 @@ class Visit extends SimpleTracker
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     private function init_enter()
@@ -116,7 +116,7 @@ class Visit extends SimpleTracker
      */
     public function set_enter_date($value)
     {
-        $this->set_default_property(self::PROPERTY_ENTER_DATE, $value);
+        $this->setDefaultProperty(self::PROPERTY_ENTER_DATE, $value);
     }
 
     /**
@@ -126,7 +126,7 @@ class Visit extends SimpleTracker
      */
     public function set_leave_date($value)
     {
-        $this->set_default_property(self::PROPERTY_LEAVE_DATE, $value);
+        $this->setDefaultProperty(self::PROPERTY_LEAVE_DATE, $value);
     }
 
     /**
@@ -136,7 +136,7 @@ class Visit extends SimpleTracker
      */
     public function set_location($value)
     {
-        $this->set_default_property(self::PROPERTY_LOCATION, $value);
+        $this->setDefaultProperty(self::PROPERTY_LOCATION, $value);
     }
 
     /**
@@ -146,7 +146,7 @@ class Visit extends SimpleTracker
      */
     public function set_user_id($userid)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $userid);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $userid);
     }
 
     private function track_enter()

@@ -17,7 +17,7 @@ class Entry extends
      */
     public function getContentObjectPublicationId()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
     }
 
     /**
@@ -44,6 +44,6 @@ class Entry extends
      */
     public function setContentObjectPublicationId($contentObjectPublicationId)
     {
-        $this->set_default_property(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublicationId);
+        $this->setDefaultProperty(self::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID, $contentObjectPublicationId);
     }
 }

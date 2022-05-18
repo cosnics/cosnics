@@ -107,7 +107,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_course_code()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_CODE);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
     public function get_data_manager()
@@ -156,7 +156,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_description()
     {
-        return $this->get_default_property(self::PROPERTY_DESCRIPTION);
+        return $this->getDefaultProperty(self::PROPERTY_DESCRIPTION);
     }
 
     /**
@@ -166,7 +166,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_group_id()
     {
-        // return $this->get_default_property(self::PROPERTY_GROUP_ID);
+        // return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
         return $this->get_optional_property(self::PROPERTY_GROUP_ID);
     }
 
@@ -177,7 +177,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_id()
     {
-        return $this->get_default_property(self::PROPERTY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_ID);
     }
 
     /**
@@ -187,7 +187,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_max_number_of_course_group_per_member()
     {
-        return $this->get_default_property(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER);
+        return $this->getDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER);
     }
 
     /**
@@ -197,7 +197,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_max_number_of_members()
     {
-        return $this->get_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS);
+        return $this->getDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_MEMBERS);
     }
 
     /**
@@ -285,7 +285,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -323,7 +323,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function is_random_registration_done()
     {
-        return $this->get_default_property(self::PROPERTY_RANDOM_REG);
+        return $this->getDefaultProperty(self::PROPERTY_RANDOM_REG);
     }
 
     /**
@@ -333,7 +333,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function is_self_registration_allowed()
     {
-        return $this->get_default_property(self::PROPERTY_SELF_REG);
+        return $this->getDefaultProperty(self::PROPERTY_SELF_REG);
     }
 
     /**
@@ -343,12 +343,12 @@ class CourseGroup extends NestedTreeNode
      */
     public function is_self_unregistration_allowed()
     {
-        return $this->get_default_property(self::PROPERTY_SELF_UNREG);
+        return $this->getDefaultProperty(self::PROPERTY_SELF_UNREG);
     }
 
     public function set_course_code($code)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_CODE, $code);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_CODE, $code);
     }
 
     /**
@@ -358,17 +358,17 @@ class CourseGroup extends NestedTreeNode
      */
     public function set_description($description)
     {
-        return $this->set_default_property(self::PROPERTY_DESCRIPTION, $description);
+        return $this->setDefaultProperty(self::PROPERTY_DESCRIPTION, $description);
     }
 
     public function set_group_id($id)
     {
-        return $this->set_default_property(self::PROPERTY_GROUP_ID, $id);
+        return $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $id);
     }
 
     public function set_id($id)
     {
-        return $this->set_default_property(self::PROPERTY_ID, $id);
+        return $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
 
     /**
@@ -379,7 +379,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function set_max_number_of_course_group_per_member($max_number_of_course_group_per_member)
     {
-        return $this->set_default_property(
+        return $this->setDefaultProperty(
             self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, $max_number_of_course_group_per_member
         );
     }
@@ -393,7 +393,7 @@ class CourseGroup extends NestedTreeNode
     public function set_max_number_of_members($max_number_of_members)
     {
         // Todo: Check current number of members.
-        return $this->set_default_property(self::PROPERTY_MAX_NUMBER_OF_MEMBERS, $max_number_of_members);
+        return $this->setDefaultProperty(self::PROPERTY_MAX_NUMBER_OF_MEMBERS, $max_number_of_members);
     }
 
     /**
@@ -403,7 +403,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function set_name($name)
     {
-        return $this->set_default_property(self::PROPERTY_NAME, $name);
+        return $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -413,7 +413,7 @@ class CourseGroup extends NestedTreeNode
      */
     public function set_random_registration_done($random_registration_done)
     {
-        return $this->set_default_property(self::PROPERTY_RANDOM_REG, $random_registration_done);
+        return $this->setDefaultProperty(self::PROPERTY_RANDOM_REG, $random_registration_done);
     }
 
     /**
@@ -428,7 +428,7 @@ class CourseGroup extends NestedTreeNode
             $self_reg = 0;
         }
 
-        return $this->set_default_property(self::PROPERTY_SELF_REG, $self_reg);
+        return $this->setDefaultProperty(self::PROPERTY_SELF_REG, $self_reg);
     }
 
     /**
@@ -443,7 +443,7 @@ class CourseGroup extends NestedTreeNode
             $self_unreg = 0;
         }
 
-        return $this->set_default_property(self::PROPERTY_SELF_UNREG, $self_unreg);
+        return $this->setDefaultProperty(self::PROPERTY_SELF_UNREG, $self_unreg);
     }
 
     /**

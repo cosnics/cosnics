@@ -18,17 +18,17 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function get_category()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY);
     }
 
     public function set_category($category)
     {
-        return $this->set_default_property(self::PROPERTY_CATEGORY, $category);
+        return $this->setDefaultProperty(self::PROPERTY_CATEGORY, $category);
     }
 
     public function get_tags()
     {
-        return $this->get_default_property(self::PROPERTY_TAGS);
+        return $this->getDefaultProperty(self::PROPERTY_TAGS);
     }
 
     public function get_tags_string()
@@ -43,7 +43,7 @@ class ExternalObject extends StreamingMediaExternalObject
 
     public function set_tags($tags)
     {
-        return $this->set_default_property(self::PROPERTY_TAGS, $tags);
+        return $this->setDefaultProperty(self::PROPERTY_TAGS, $tags);
     }
 
     public static function getDefaultPropertyNames($extendedPropertyNames = []): array

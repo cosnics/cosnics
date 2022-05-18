@@ -24,7 +24,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_content()
     {
-        return $this->get_default_property(self::PROPERTY_CONTENT);
+        return $this->getDefaultProperty(self::PROPERTY_CONTENT);
     }
 
     public function get_content_data($exportFormat)
@@ -60,7 +60,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_export_links()
     {
-        return $this->get_default_property(self::PROPERTY_EXPORT_LINKS);
+        return $this->getDefaultProperty(self::PROPERTY_EXPORT_LINKS);
     }
 
     public function get_export_types()
@@ -75,12 +75,12 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_icon_link()
     {
-        return $this->get_default_property(self::PROPERTY_ICON_LINK);
+        return $this->getDefaultProperty(self::PROPERTY_ICON_LINK);
     }
 
     public function get_modifier_id()
     {
-        return $this->get_default_property(self::PROPERTY_MODIFIER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_MODIFIER_ID);
     }
 
     public static function get_object_type()
@@ -90,7 +90,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_preview()
     {
-        return $this->get_default_property(self::PROPERTY_PREVIEW);
+        return $this->getDefaultProperty(self::PROPERTY_PREVIEW);
     }
 
     /**
@@ -104,36 +104,36 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
 
     public function get_viewed()
     {
-        return $this->get_default_property(self::PROPERTY_VIEWED);
+        return $this->getDefaultProperty(self::PROPERTY_VIEWED);
     }
 
     public function set_content($content)
     {
-        return $this->set_default_property(self::PROPERTY_CONTENT, $content);
+        return $this->setDefaultProperty(self::PROPERTY_CONTENT, $content);
     }
 
     public function set_export_links($export_links = [])
     {
-        $this->set_default_property(self::PROPERTY_EXPORT_LINKS, $export_links);
+        $this->setDefaultProperty(self::PROPERTY_EXPORT_LINKS, $export_links);
     }
 
     public function set_icon_link($icon_link)
     {
-        $this->set_default_property(self::PROPERTY_ICON_LINK, $icon_link);
+        $this->setDefaultProperty(self::PROPERTY_ICON_LINK, $icon_link);
     }
 
     public function set_modifier_id($modifier_id)
     {
-        return $this->set_default_property(self::PROPERTY_MODIFIER_ID, $modifier_id);
+        return $this->setDefaultProperty(self::PROPERTY_MODIFIER_ID, $modifier_id);
     }
 
     public function set_preview($preview)
     {
-        return $this->set_default_property(self::PROPERTY_PREVIEW, $preview);
+        return $this->setDefaultProperty(self::PROPERTY_PREVIEW, $preview);
     }
 
     public function set_viewed($viewed)
     {
-        return $this->set_default_property(self::PROPERTY_VIEWED, $viewed);
+        return $this->setDefaultProperty(self::PROPERTY_VIEWED, $viewed);
     }
 }

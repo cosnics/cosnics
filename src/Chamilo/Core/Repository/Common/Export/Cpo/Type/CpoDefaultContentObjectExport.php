@@ -94,7 +94,7 @@ class CpoDefaultContentObjectExport extends CpoContentObjectExport
             $document, 
             $general, 
             $prop, 
-            $this->get_export_implementation()->get_content_object()->get_default_property($prop));
+            $this->get_export_implementation()->get_content_object()->getDefaultProperty($prop));
     }
 
     public function addGeneralPropertyValue($document, $general, $prop, $value)

@@ -70,7 +70,7 @@ class CourseVisit extends Tracker
      */
     public function get_category_id()
     {
-        return $this->get_default_property(self::PROPERTY_CATEGORY_ID);
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
     }
 
     /**
@@ -80,7 +80,7 @@ class CourseVisit extends Tracker
      */
     public function get_course_id()
     {
-        return $this->get_default_property(self::PROPERTY_COURSE_ID);
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
 
     /**
@@ -112,7 +112,7 @@ class CourseVisit extends Tracker
      */
     public function get_first_access_date()
     {
-        return $this->get_default_property(self::PROPERTY_FIRST_ACCESS_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_FIRST_ACCESS_DATE);
     }
 
     /**
@@ -128,7 +128,7 @@ class CourseVisit extends Tracker
      */
     public function get_last_access_date()
     {
-        return $this->get_default_property(self::PROPERTY_LAST_ACCESS_DATE);
+        return $this->getDefaultProperty(self::PROPERTY_LAST_ACCESS_DATE);
     }
 
     /**
@@ -144,7 +144,7 @@ class CourseVisit extends Tracker
      */
     public function get_publication_id()
     {
-        return $this->get_default_property(self::PROPERTY_PUBLICATION_ID);
+        return $this->getDefaultProperty(self::PROPERTY_PUBLICATION_ID);
     }
 
     /**
@@ -162,7 +162,7 @@ class CourseVisit extends Tracker
      */
     public function get_tool_id()
     {
-        return $this->get_default_property(self::PROPERTY_TOOL_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TOOL_ID);
     }
 
     /**
@@ -172,7 +172,7 @@ class CourseVisit extends Tracker
      */
     public function get_total_number_of_access()
     {
-        return $this->get_default_property(self::PROPERTY_TOTAL_NUMBER_OF_ACCESS);
+        return $this->getDefaultProperty(self::PROPERTY_TOTAL_NUMBER_OF_ACCESS);
     }
 
     /**
@@ -182,7 +182,7 @@ class CourseVisit extends Tracker
      */
     public function get_total_time()
     {
-        return $this->get_default_property(self::PROPERTY_TOTAL_TIME);
+        return $this->getDefaultProperty(self::PROPERTY_TOTAL_TIME);
     }
 
     /**
@@ -192,7 +192,7 @@ class CourseVisit extends Tracker
      */
     public function get_user_id()
     {
-        return $this->get_default_property(self::PROPERTY_USER_ID);
+        return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
     /**
@@ -208,7 +208,7 @@ class CourseVisit extends Tracker
     {
         // Retrieves the full class because the class can be identified without having all the necessary parameters
         // If the class is already fully retrieved from the database the caching system will catch this.
-        if ($this->is_identified())
+        if ($this->isIdentified())
         {
             return DataManager::retrieve_by_id(self::class, $this->get_id());
         }
@@ -226,7 +226,7 @@ class CourseVisit extends Tracker
      */
     public function set_category_id($category_id)
     {
-        $this->set_default_property(self::PROPERTY_CATEGORY_ID, $category_id);
+        $this->setDefaultProperty(self::PROPERTY_CATEGORY_ID, $category_id);
     }
 
     /**
@@ -236,7 +236,7 @@ class CourseVisit extends Tracker
      */
     public function set_course_id($course_id)
     {
-        $this->set_default_property(self::PROPERTY_COURSE_ID, $course_id);
+        $this->setDefaultProperty(self::PROPERTY_COURSE_ID, $course_id);
     }
 
     /**
@@ -246,7 +246,7 @@ class CourseVisit extends Tracker
      */
     public function set_first_access_date($first_access_date)
     {
-        $this->set_default_property(self::PROPERTY_FIRST_ACCESS_DATE, $first_access_date);
+        $this->setDefaultProperty(self::PROPERTY_FIRST_ACCESS_DATE, $first_access_date);
     }
 
     /**
@@ -256,7 +256,7 @@ class CourseVisit extends Tracker
      */
     public function set_last_access_date($last_access_date)
     {
-        $this->set_default_property(self::PROPERTY_LAST_ACCESS_DATE, $last_access_date);
+        $this->setDefaultProperty(self::PROPERTY_LAST_ACCESS_DATE, $last_access_date);
     }
 
     /**
@@ -266,7 +266,7 @@ class CourseVisit extends Tracker
      */
     public function set_publication_id($publication_id)
     {
-        $this->set_default_property(self::PROPERTY_PUBLICATION_ID, $publication_id);
+        $this->setDefaultProperty(self::PROPERTY_PUBLICATION_ID, $publication_id);
     }
 
     /**
@@ -276,7 +276,7 @@ class CourseVisit extends Tracker
      */
     public function set_tool_id($tool_id)
     {
-        $this->set_default_property(self::PROPERTY_TOOL_ID, $tool_id);
+        $this->setDefaultProperty(self::PROPERTY_TOOL_ID, $tool_id);
     }
 
     /**
@@ -286,7 +286,7 @@ class CourseVisit extends Tracker
      */
     public function set_total_number_of_access($total_number_of_access)
     {
-        $this->set_default_property(self::PROPERTY_TOTAL_NUMBER_OF_ACCESS, $total_number_of_access);
+        $this->setDefaultProperty(self::PROPERTY_TOTAL_NUMBER_OF_ACCESS, $total_number_of_access);
     }
 
     /**
@@ -296,7 +296,7 @@ class CourseVisit extends Tracker
      */
     public function set_total_time($total_time)
     {
-        $this->set_default_property(self::PROPERTY_TOTAL_TIME, $total_time);
+        $this->setDefaultProperty(self::PROPERTY_TOTAL_TIME, $total_time);
     }
 
     /**
@@ -306,7 +306,7 @@ class CourseVisit extends Tracker
      */
     public function set_user_id($user_id)
     {
-        $this->set_default_property(self::PROPERTY_USER_ID, $user_id);
+        $this->setDefaultProperty(self::PROPERTY_USER_ID, $user_id);
     }
 
     /**

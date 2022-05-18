@@ -96,7 +96,7 @@ class CourseSetting extends DataClass
      */
     function get_name()
     {
-        return $this->get_default_property(self::PROPERTY_NAME);
+        return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
     /**
@@ -124,7 +124,7 @@ class CourseSetting extends DataClass
      */
     function get_tool_id()
     {
-        return $this->get_default_property(self::PROPERTY_TOOL_ID);
+        return $this->getDefaultProperty(self::PROPERTY_TOOL_ID);
     }
 
     /**
@@ -134,7 +134,7 @@ class CourseSetting extends DataClass
      */
     function is_global_setting()
     {
-        return $this->get_default_property(self::PROPERTY_GLOBAL_SETTING);
+        return $this->getDefaultProperty(self::PROPERTY_GLOBAL_SETTING);
     }
 
     /**
@@ -166,7 +166,7 @@ class CourseSetting extends DataClass
      */
     function set_global_setting($global_setting)
     {
-        $this->set_default_property(self::PROPERTY_GLOBAL_SETTING, $global_setting);
+        $this->setDefaultProperty(self::PROPERTY_GLOBAL_SETTING, $global_setting);
     }
 
     /**
@@ -176,7 +176,7 @@ class CourseSetting extends DataClass
      */
     function set_name($name)
     {
-        $this->set_default_property(self::PROPERTY_NAME, $name);
+        $this->setDefaultProperty(self::PROPERTY_NAME, $name);
     }
 
     /**
@@ -186,6 +186,6 @@ class CourseSetting extends DataClass
      */
     function set_tool_id($tool_id)
     {
-        $this->set_default_property(self::PROPERTY_TOOL_ID, $tool_id);
+        $this->setDefaultProperty(self::PROPERTY_TOOL_ID, $tool_id);
     }
 }
