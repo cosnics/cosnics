@@ -23,9 +23,9 @@ class RepositoryImplementationCategoryItem extends Item
 
     private $children;
 
-    public function __construct($default_properties = [], $additional_properties = null)
+    public function __construct($default_properties = [], $additionalProperties = [])
     {
-        parent::__construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additionalProperties);
         $this->set_type(__CLASS__);
     }
 

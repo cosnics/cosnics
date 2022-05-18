@@ -132,10 +132,10 @@ class ContentObject extends CompositeDataClass
      * @param $additionalProperties array The properties specific for this type of object. Associative array. Null if
      *        they are unknown at construction of the object; in this case, they will be retrieved when needed.
      */
-    public function __construct($default_properties = [], $additional_properties = null)
+    public function __construct($default_properties = [], $additionalProperties = [])
     {
         parent::__construct($default_properties);
-        $this->setAdditionalProperties($additional_properties);
+        $this->setAdditionalProperties($additionalProperties);
         $this->oldState = $default_properties[self::PROPERTY_STATE];
     }
 

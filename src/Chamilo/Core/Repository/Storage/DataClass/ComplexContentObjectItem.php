@@ -35,9 +35,9 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      */
     private $reference_object;
 
-    public function __construct($default_properties = [], $additional_properties = null)
+    public function __construct($default_properties = [], $additionalProperties = [])
     {
-        parent::__construct($default_properties, $additional_properties);
+        parent::__construct($default_properties, $additionalProperties);
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
