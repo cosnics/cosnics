@@ -520,21 +520,21 @@ class Course extends DataClass
      *
      * @return String[] - The property names.
      */
-    public static function getDefaultPropertyNames($extended_properties = []): array
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $extended_properties[] = self::PROPERTY_COURSE_TYPE_ID;
-        $extended_properties[] = self::PROPERTY_TITULAR_ID;
-        $extended_properties[] = self::PROPERTY_TITLE;
-        $extended_properties[] = self::PROPERTY_VISUAL_CODE;
-        $extended_properties[] = self::PROPERTY_SYSTEM_CODE;
-        $extended_properties[] = self::PROPERTY_CREATION_DATE;
-        $extended_properties[] = self::PROPERTY_EXPIRATION_DATE;
-        $extended_properties[] = self::PROPERTY_LAST_EDIT;
-        $extended_properties[] = self::PROPERTY_LAST_VISIT;
-        $extended_properties[] = self::PROPERTY_CATEGORY_ID;
-        $extended_properties[] = self::PROPERTY_LANGUAGE;
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_TYPE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TITULAR_ID;
+        $extendedPropertyNames[] = self::PROPERTY_TITLE;
+        $extendedPropertyNames[] = self::PROPERTY_VISUAL_CODE;
+        $extendedPropertyNames[] = self::PROPERTY_SYSTEM_CODE;
+        $extendedPropertyNames[] = self::PROPERTY_CREATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_EXPIRATION_DATE;
+        $extendedPropertyNames[] = self::PROPERTY_LAST_EDIT;
+        $extendedPropertyNames[] = self::PROPERTY_LAST_VISIT;
+        $extendedPropertyNames[] = self::PROPERTY_CATEGORY_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LANGUAGE;
 
-        return parent::getDefaultPropertyNames($extended_properties);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

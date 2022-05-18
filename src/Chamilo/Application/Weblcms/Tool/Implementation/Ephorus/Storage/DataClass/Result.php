@@ -49,19 +49,19 @@ class Result extends EphorusDataClass
      *
      * @return string[] - The property types.
      */
-    public static function getDefaultPropertyNames($default_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $default_property_names[] = self::PROPERTY_REQUEST_ID;
-        $default_property_names[] = self::PROPERTY_URL;
-        $default_property_names[] = self::PROPERTY_MIMETYPE;
-        $default_property_names[] = self::PROPERTY_TYPE;
-        $default_property_names[] = self::PROPERTY_PERCENTAGE;
-        $default_property_names[] = self::PROPERTY_ORIGINAL_GUID;
-        $default_property_names[] = self::PROPERTY_STUDENT_NUMBER;
-        $default_property_names[] = self::PROPERTY_STUDENT_NAME;
-        $default_property_names[] = self::PROPERTY_DIFF;
+        $extendedPropertyNames[] = self::PROPERTY_REQUEST_ID;
+        $extendedPropertyNames[] = self::PROPERTY_URL;
+        $extendedPropertyNames[] = self::PROPERTY_MIMETYPE;
+        $extendedPropertyNames[] = self::PROPERTY_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_PERCENTAGE;
+        $extendedPropertyNames[] = self::PROPERTY_ORIGINAL_GUID;
+        $extendedPropertyNames[] = self::PROPERTY_STUDENT_NUMBER;
+        $extendedPropertyNames[] = self::PROPERTY_STUDENT_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_DIFF;
 
-        return parent::getDefaultPropertyNames($default_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

@@ -31,7 +31,6 @@ use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Exception;
 
@@ -71,7 +70,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchNumericQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -97,7 +96,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchTextQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -123,7 +122,7 @@ class UpgraderComponent extends Manager
             AssessmentMatchingQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -149,7 +148,7 @@ class UpgraderComponent extends Manager
             AssessmentMatrixQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -175,7 +174,7 @@ class UpgraderComponent extends Manager
             AssessmentMultipleChoiceQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -201,7 +200,7 @@ class UpgraderComponent extends Manager
             AssessmentSelectQuestion::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -225,7 +224,7 @@ class UpgraderComponent extends Manager
     {
         $existingAssignments = DataManager::retrieves(Assignment::class, new DataClassRetrievesParameters());
 
-        foreach($existingAssignments as $existingAssignment)
+        foreach ($existingAssignments as $existingAssignment)
         {
             $oldAllowedTypes = $existingAssignment->get_allowed_types();
             $oldAllowedTypes = explode(',', $oldAllowedTypes);
@@ -258,8 +257,7 @@ class UpgraderComponent extends Manager
         foreach ($formats as $format)
         {
             $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION),
-                $format
+                new PropertyConditionVariable(Element::class, Element::PROPERTY_CONFIGURATION), $format
             );
         }
 
@@ -269,7 +267,7 @@ class UpgraderComponent extends Manager
             Block::class, new DataClassRetrievesParameters($condition)
         );
 
-        foreach($blocks as $block)
+        foreach ($blocks as $block)
         {
             $useObjectId = $block->getSetting('use_object');
             $contentObjectPublicationService->setOnlyContentObjectForElement($block, $useObjectId);
@@ -283,7 +281,7 @@ class UpgraderComponent extends Manager
     {
         $existingQuestions = DataManager::retrieves(HotspotQuestion::class, new DataClassRetrievesParameters());
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_answers();
             $newOptions = [];
@@ -307,7 +305,7 @@ class UpgraderComponent extends Manager
     {
         $existingQuestions = DataManager::retrieves(OrderingQuestion::class, new DataClassRetrievesParameters());
 
-        foreach($existingQuestions as $existingQuestion)
+        foreach ($existingQuestions as $existingQuestion)
         {
             $oldOptions = $existingQuestion->get_options();
             $newOptions = [];
@@ -333,7 +331,7 @@ class UpgraderComponent extends Manager
             TemplateRegistration::class, new DataClassRetrievesParameters()
         );
 
-        foreach($existingTemplates as $existingTemplate)
+        foreach ($existingTemplates as $existingTemplate)
         {
             try
             {
@@ -360,9 +358,6 @@ class UpgraderComponent extends Manager
      */
     function fix_object($object)
     {
-        // preg_replace_callback handler. Needed to calculate new key-length.
-        $fix_key = create_function('$matches', 'return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";');
-
         // 1. Serialize the object to a string.
         $dump = serialize($object);
 
@@ -370,7 +365,9 @@ class UpgraderComponent extends Manager
         $dump = preg_replace('/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $dump);
 
         // 3. Make private and protected properties public.
-        $dump = preg_replace_callback('/:\d+:"\0.*?\0([^"]+)"/', $fix_key, $dump);
+        $dump = preg_replace_callback('/:\d+:"\0.*?\0([^"]+)"/', function ($matches) {
+            return ':' . strlen($matches[1]) . ':"' . $matches[1] . '"';
+        }, $dump);
 
         // 4. Unserialize the modified object again.
         return unserialize($dump);

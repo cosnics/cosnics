@@ -233,7 +233,8 @@ class HtmlMenu
                     if (0 == count($last_node))
                     {
                         reset($this->_menu);
-                        list($node_id, $last_node) = each($this->_menu);
+                        $node_id = key($this->_menu);
+                        $last_node = current($this->_menu);
                     }
 
                     $this->_renderer->renderEntry($last_node, $level, self::HTML_MENU_ENTRY_PREVIOUS);
@@ -242,7 +243,9 @@ class HtmlMenu
                     if (0 == count($up_node))
                     {
                         reset($this->_menu);
-                        list($node_id, $up_node) = each($this->_menu);
+                        $node_id = key($this->_menu);
+                        $up_node = current($this->_menu);
+
                     }
 
                     $this->_renderer->renderEntry($up_node, $level, self::HTML_MENU_ENTRY_UPPER);

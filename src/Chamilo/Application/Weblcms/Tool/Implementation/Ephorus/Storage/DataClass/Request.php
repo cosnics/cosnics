@@ -255,25 +255,25 @@ class Request extends EphorusDataClass
      *
      * @return string[] - The property request_times.
      */
-    public static function getDefaultPropertyNames($default_property_names = [])
+    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
     {
-        $default_property_names[] = self::PROPERTY_COURSE_ID;
-        $default_property_names[] = self::PROPERTY_CONTENT_OBJECT_ID;
-        $default_property_names[] = self::PROPERTY_AUTHOR_ID;
-        $default_property_names[] = self::PROPERTY_REQUEST_USER_ID;
-        $default_property_names[] = self::PROPERTY_REQUEST_TIME;
-        $default_property_names[] = self::PROPERTY_STATUS;
-        $default_property_names[] = self::PROPERTY_PROCESS_TYPE;
-        $default_property_names[] = self::PROPERTY_PERCENTAGE;
-        $default_property_names[] = self::PROPERTY_STATUS_DESCRIPTION;
-        $default_property_names[] = self::PROPERTY_GUID;
-        $default_property_names[] = self::PROPERTY_DUPLICATE_ORIGINAL_GUID;
-        $default_property_names[] = self::PROPERTY_DUPLICATE_STUDENT_NAME;
-        $default_property_names[] = self::PROPERTY_DUPLICATE_STUDENT_NUMBER;
-        $default_property_names[] = self::PROPERTY_SUMMARY;
-        $default_property_names[] = self::PROPERTY_VISIBLE_IN_INDEX;
+        $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
+        $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_AUTHOR_ID;
+        $extendedPropertyNames[] = self::PROPERTY_REQUEST_USER_ID;
+        $extendedPropertyNames[] = self::PROPERTY_REQUEST_TIME;
+        $extendedPropertyNames[] = self::PROPERTY_STATUS;
+        $extendedPropertyNames[] = self::PROPERTY_PROCESS_TYPE;
+        $extendedPropertyNames[] = self::PROPERTY_PERCENTAGE;
+        $extendedPropertyNames[] = self::PROPERTY_STATUS_DESCRIPTION;
+        $extendedPropertyNames[] = self::PROPERTY_GUID;
+        $extendedPropertyNames[] = self::PROPERTY_DUPLICATE_ORIGINAL_GUID;
+        $extendedPropertyNames[] = self::PROPERTY_DUPLICATE_STUDENT_NAME;
+        $extendedPropertyNames[] = self::PROPERTY_DUPLICATE_STUDENT_NUMBER;
+        $extendedPropertyNames[] = self::PROPERTY_SUMMARY;
+        $extendedPropertyNames[] = self::PROPERTY_VISIBLE_IN_INDEX;
 
-        return parent::getDefaultPropertyNames($default_property_names);
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

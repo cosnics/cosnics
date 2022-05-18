@@ -70,10 +70,13 @@ class MultiPasswordResetterComponent extends Manager
                 if ($user->update())
                 {
                     $mail_subject = Translation::get('LoginRequest');
+                    $mail_body = [];
+
                     $mail_body[] = $user->get_fullname() . ',';
                     $mail_body[] = Translation::get('YourAccountParam') . ' ' . Path::getInstance()->getBasePath(true);
                     $mail_body[] = Translation::get('UserName') . ' :' . $user->get_username();
                     $mail_body[] = Translation::get('Password') . ' :' . $password;
+
                     $mail_body = implode(PHP_EOL, $mail_body);
 
                     $mail = new Mail($mail_subject, $mail_body, $user->get_email());

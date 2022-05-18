@@ -75,7 +75,7 @@ class OrderingQuestionOption
 
     /**
      *
-     * @return field_type
+     * @return int
      */
     public function get_score()
     {
@@ -84,7 +84,7 @@ class OrderingQuestionOption
 
     /**
      *
-     * @param field_type $score
+     * @param int $score
      */
     public function set_score($score)
     {
@@ -93,7 +93,7 @@ class OrderingQuestionOption
 
     /**
      *
-     * @return field_type
+     * @return string
      */
     public function get_feedback()
     {
