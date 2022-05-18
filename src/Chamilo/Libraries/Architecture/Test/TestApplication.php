@@ -75,7 +75,7 @@ trait TestApplication
      */
     public function test_package_uses_manager()
     {
-        $namespace = $this->determine_package_namespace();
+        $namespace = $this->determinePackageNamespace();
         $class_name = $namespace . '\\' . 'Manager';
 
         $this->assertTrue(class_exists($class_name));
@@ -138,7 +138,7 @@ trait TestApplication
     {
         if (file_exists($this->get_component_folder_path()))
         {
-            return $this->scan_files_in_directory($this->get_component_folder_path(), '/^.+\.php$/i', 0);
+            return $this->scanFilesInDirectory($this->get_component_folder_path(), '/^.+\.php$/i', 0);
         }
 
         return array(array(''));
@@ -172,7 +172,7 @@ trait TestApplication
 
         $class_name = $this->getClassNameFromPHPFile($file);
 
-        $this->assertEquals($class_name, $this->determine_package_namespace() . '\Storage\DataManager');
+        $this->assertEquals($class_name, $this->determinePackageNamespace() . '\Storage\DataManager');
     }
 
     /**
@@ -187,7 +187,7 @@ trait TestApplication
         }
 
         $this->assertTrue(
-            $this->check_if_class_in_file_is_subclass_of(
+            $this->checkIfClassInFileIsSubclassOf(
                 $file, array('Chamilo\Libraries\Storage\DataManager\DataManager')
             )
         );

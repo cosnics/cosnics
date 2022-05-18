@@ -19,19 +19,19 @@ class ComplexWikiPage extends ComplexContentObjectItem
     const PROPERTY_IS_HOMEPAGE = 'is_homepage';
     const PROPERTY_IS_LOCKED = 'is_locked';
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_IS_HOMEPAGE, self::PROPERTY_IS_LOCKED);
     }
 
     public function get_is_homepage()
     {
-        return $this->get_additional_property(self::PROPERTY_IS_HOMEPAGE);
+        return $this->getAdditionalProperty(self::PROPERTY_IS_HOMEPAGE);
     }
 
     public function get_is_locked()
     {
-        return $this->get_additional_property(self::PROPERTY_IS_LOCKED);
+        return $this->getAdditionalProperty(self::PROPERTY_IS_LOCKED);
     }
 
     /**
@@ -44,12 +44,12 @@ class ComplexWikiPage extends ComplexContentObjectItem
 
     public function set_is_homepage($value)
     {
-        $this->set_additional_property(self::PROPERTY_IS_HOMEPAGE, $value);
+        $this->setAdditionalProperty(self::PROPERTY_IS_HOMEPAGE, $value);
     }
 
     public function set_is_locked($value)
     {
-        $this->set_additional_property(self::PROPERTY_IS_LOCKED, $value);
+        $this->setAdditionalProperty(self::PROPERTY_IS_LOCKED, $value);
     }
 
     public function update()

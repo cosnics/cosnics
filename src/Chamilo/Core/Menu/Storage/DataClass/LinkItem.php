@@ -64,7 +64,7 @@ class LinkItem extends Item
      */
     public function getUrl()
     {
-        return $this->get_additional_property(self::PROPERTY_URL);
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -72,7 +72,7 @@ class LinkItem extends Item
      */
     public function setUrl($url)
     {
-        return $this->set_additional_property(self::PROPERTY_URL, $url);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 
     /**
@@ -99,7 +99,7 @@ class LinkItem extends Item
      */
     public function getTarget()
     {
-        return $this->get_additional_property(self::PROPERTY_TARGET);
+        return $this->getAdditionalProperty(self::PROPERTY_TARGET);
     }
 
     /**
@@ -107,13 +107,13 @@ class LinkItem extends Item
      */
     public function setTarget($target)
     {
-        return $this->set_additional_property(self::PROPERTY_TARGET, $target);
+        return $this->setAdditionalProperty(self::PROPERTY_TARGET, $target);
     }
 
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_URL, self::PROPERTY_TARGET);
     }

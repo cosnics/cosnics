@@ -387,7 +387,7 @@ class DataClassRepository
     public function delete(DataClass $dataClass)
     {
         $dataClassName =
-            ($dataClass instanceof CompositeDataClass ? $dataClass::parent_class_name() : $dataClass::class_name());
+            ($dataClass instanceof CompositeDataClass ? $dataClass::parentClassName() : $dataClass::class_name());
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
@@ -457,7 +457,7 @@ class DataClassRepository
     {
         if ($this->isExtensionClass($dataClassName))
         {
-            return $dataClassName::parent_class_name();
+            return $dataClassName::parentClassName();
         }
         else
         {
@@ -1193,7 +1193,7 @@ class DataClassRepository
     {
         if ($dataClass instanceof CompositeDataClass)
         {
-            $propertyConditionClass = $dataClass::parent_class_name();
+            $propertyConditionClass = $dataClass::parentClassName();
             $dataClassTableName = $propertyConditionClass::getTableName();
         }
         else
@@ -1222,7 +1222,7 @@ class DataClassRepository
             );
 
             $result = $this->getDataClassDatabase()->update(
-                $dataClass->getTableName(), $condition, $dataClass->get_additional_properties()
+                $dataClass->getTableName(), $condition, $dataClass->getAdditionalProperties()
             );
         }
 

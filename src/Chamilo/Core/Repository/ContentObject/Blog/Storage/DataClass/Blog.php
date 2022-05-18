@@ -21,7 +21,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 {
     const PROPERTY_BLOG_LAYOUT = 'blog_layout';
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_BLOG_LAYOUT);
     }
@@ -54,7 +54,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 
     public function get_blog_layout()
     {
-        return $this->get_additional_property(self::PROPERTY_BLOG_LAYOUT);
+        return $this->getAdditionalProperty(self::PROPERTY_BLOG_LAYOUT);
     }
 
     /**
@@ -72,6 +72,6 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
 
     public function set_blog_layout($blog_layout)
     {
-        return $this->set_additional_property(self::PROPERTY_BLOG_LAYOUT, $blog_layout);
+        return $this->setAdditionalProperty(self::PROPERTY_BLOG_LAYOUT, $blog_layout);
     }
 }

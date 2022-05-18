@@ -55,7 +55,7 @@ class MigrationServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->learningPathServiceMock = $this->getMockBuilder(LearningPathService::class)
             ->disableOriginalConstructor()->getMock();
@@ -80,7 +80,7 @@ class MigrationServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->learningPathServiceMock);
         unset($this->treeNodeDataServiceMock);

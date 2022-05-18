@@ -24,7 +24,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
         return Translation::get('HotPotatoes');
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_PATH, self::PROPERTY_MAXIMUM_ATTEMPTS);
     }
@@ -43,22 +43,22 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
 
     public function get_maximum_attempts()
     {
-        return $this->get_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS);
+        return $this->getAdditionalProperty(self::PROPERTY_MAXIMUM_ATTEMPTS);
     }
 
     public function set_maximum_attempts($value)
     {
-        $this->set_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
+        $this->setAdditionalProperty(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
     }
 
     public function get_path()
     {
-        return $this->get_additional_property(self::PROPERTY_PATH);
+        return $this->getAdditionalProperty(self::PROPERTY_PATH);
     }
 
     public function set_path($path)
     {
-        return $this->set_additional_property(self::PROPERTY_PATH, $path);
+        return $this->setAdditionalProperty(self::PROPERTY_PATH, $path);
     }
 
     public function get_full_path()

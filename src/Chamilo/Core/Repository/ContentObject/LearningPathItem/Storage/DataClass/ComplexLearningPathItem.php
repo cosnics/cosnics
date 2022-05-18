@@ -12,14 +12,14 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
 {
     const PROPERTY_PREREQUISITES = 'prerequisites';
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_PREREQUISITES);
     }
 
     public function get_prerequisites()
     {
-        return $this->get_additional_property(self::PROPERTY_PREREQUISITES);
+        return $this->getAdditionalProperty(self::PROPERTY_PREREQUISITES);
     }
 
     /**
@@ -33,12 +33,12 @@ class ComplexLearningPathItem extends ComplexContentObjectItem
     public function has_prerequisites()
     {
         return !StringUtilities::getInstance()->isNullOrEmpty(
-            $this->get_additional_property(self::PROPERTY_PREREQUISITES)
+            $this->getAdditionalProperty(self::PROPERTY_PREREQUISITES)
         );
     }
 
     public function set_prerequisites($value)
     {
-        $this->set_additional_property(self::PROPERTY_PREREQUISITES, $value);
+        $this->setAdditionalProperty(self::PROPERTY_PREREQUISITES, $value);
     }
 }

@@ -41,7 +41,7 @@ class ViewerComponent extends Manager
             {
                 $content_object = DataManager::retrieve_by_id(
                     ContentObject::class,
-                    $content_object->get_additional_property('reference_id'));
+                    $content_object->getAdditionalProperty('reference_id'));
             }
 
             $trail = BreadcrumbTrail::getInstance();

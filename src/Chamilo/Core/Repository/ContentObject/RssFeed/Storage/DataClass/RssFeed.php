@@ -30,25 +30,25 @@ class RssFeed extends ContentObject implements Versionable, Includeable
 
     public function get_url()
     {
-        return $this->get_additional_property(self::PROPERTY_URL);
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_additional_property(self::PROPERTY_URL, $url);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 
     public function get_number_of_entries()
     {
-        return $this->get_additional_property(self::PROPERTY_NUMBER_OF_ENTRIES);
+        return $this->getAdditionalProperty(self::PROPERTY_NUMBER_OF_ENTRIES);
     }
 
     public function set_number_of_entries($numberOfEntries)
     {
-        $this->set_additional_property(self::PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
+        $this->setAdditionalProperty(self::PROPERTY_NUMBER_OF_ENTRIES, $numberOfEntries);
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_URL, self::PROPERTY_NUMBER_OF_ENTRIES);
     }

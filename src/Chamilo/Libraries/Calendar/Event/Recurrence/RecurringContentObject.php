@@ -83,7 +83,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_byday()
     {
-        return $this->get_additional_property(self::PROPERTY_BYDAY);
+        return $this->getAdditionalProperty(self::PROPERTY_BYDAY);
     }
 
     /**
@@ -149,7 +149,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_bymonth()
     {
-        return $this->get_additional_property(self::PROPERTY_BYMONTH);
+        return $this->getAdditionalProperty(self::PROPERTY_BYMONTH);
     }
 
     /**
@@ -192,7 +192,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_bymonthday()
     {
-        return $this->get_additional_property(self::PROPERTY_BYMONTHDAY);
+        return $this->getAdditionalProperty(self::PROPERTY_BYMONTHDAY);
     }
 
     /**
@@ -246,7 +246,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_frequency()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY);
+        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY);
     }
 
     /**
@@ -263,7 +263,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_frequency_count()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_COUNT);
+        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT);
     }
 
     /**
@@ -271,7 +271,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_frequency_interval()
     {
-        return $this->get_additional_property(self::PROPERTY_FREQUENCY_INTERVAL);
+        return $this->getAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL);
     }
 
     /**
@@ -357,7 +357,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function get_until()
     {
-        return $this->get_additional_property(self::PROPERTY_UNTIL);
+        return $this->getAdditionalProperty(self::PROPERTY_UNTIL);
     }
 
     /**
@@ -375,7 +375,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_byday($byday)
     {
-        return $this->set_additional_property(self::PROPERTY_BYDAY, $byday);
+        return $this->setAdditionalProperty(self::PROPERTY_BYDAY, $byday);
     }
 
     /**
@@ -383,7 +383,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_bymonth($bymonth)
     {
-        return $this->set_additional_property(self::PROPERTY_BYMONTH, $bymonth);
+        return $this->setAdditionalProperty(self::PROPERTY_BYMONTH, $bymonth);
     }
 
     /**
@@ -391,7 +391,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_bymonthday($bymonthday)
     {
-        return $this->set_additional_property(self::PROPERTY_BYMONTHDAY, $bymonthday);
+        return $this->setAdditionalProperty(self::PROPERTY_BYMONTHDAY, $bymonthday);
     }
 
     /**
@@ -399,7 +399,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_frequency($frequency)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY, $frequency);
+        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY, $frequency);
     }
 
     /**
@@ -407,7 +407,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_frequency_count($frequency_count)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
+        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_COUNT, $frequency_count);
     }
 
     /**
@@ -415,7 +415,7 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_frequency_interval($frequency_interval)
     {
-        return $this->set_additional_property(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
+        return $this->setAdditionalProperty(self::PROPERTY_FREQUENCY_INTERVAL, $frequency_interval);
     }
 
     /**
@@ -423,6 +423,6 @@ abstract class RecurringContentObject extends ContentObject
      */
     public function set_until($until)
     {
-        return $this->set_additional_property(self::PROPERTY_UNTIL, $until);
+        return $this->setAdditionalProperty(self::PROPERTY_UNTIL, $until);
     }
 }

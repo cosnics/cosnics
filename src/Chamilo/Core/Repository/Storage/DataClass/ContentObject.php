@@ -135,7 +135,7 @@ class ContentObject extends CompositeDataClass
     public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties);
-        $this->set_additional_properties($additional_properties);
+        $this->setAdditionalProperties($additional_properties);
         $this->oldState = $default_properties[self::PROPERTY_STATE];
     }
 

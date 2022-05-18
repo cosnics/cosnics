@@ -65,7 +65,7 @@ class LinkApplicationItem extends Item
      */
     public function getSection()
     {
-        return $this->get_additional_property(self::PROPERTY_SECTION);
+        return $this->getAdditionalProperty(self::PROPERTY_SECTION);
     }
 
     /**
@@ -73,13 +73,13 @@ class LinkApplicationItem extends Item
      */
     public function setSection($section)
     {
-        return $this->set_additional_property(self::PROPERTY_SECTION, $section);
+        return $this->setAdditionalProperty(self::PROPERTY_SECTION, $section);
     }
 
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_SECTION, self::PROPERTY_URL, self::PROPERTY_TARGET);
     }
@@ -108,7 +108,7 @@ class LinkApplicationItem extends Item
      */
     public function getUrl()
     {
-        return $this->get_additional_property(self::PROPERTY_URL);
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
     }
 
     /**
@@ -116,7 +116,7 @@ class LinkApplicationItem extends Item
      */
     public function setUrl($url)
     {
-        return $this->set_additional_property(self::PROPERTY_URL, $url);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 
     /**
@@ -143,7 +143,7 @@ class LinkApplicationItem extends Item
      */
     public function getTarget()
     {
-        return $this->get_additional_property(self::PROPERTY_TARGET);
+        return $this->getAdditionalProperty(self::PROPERTY_TARGET);
     }
 
     /**
@@ -151,7 +151,7 @@ class LinkApplicationItem extends Item
      */
     public function setTarget($target)
     {
-        return $this->set_additional_property(self::PROPERTY_TARGET, $target);
+        return $this->setAdditionalProperty(self::PROPERTY_TARGET, $target);
     }
 
     /**

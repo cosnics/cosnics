@@ -36,11 +36,11 @@ class DataClassFactory
 
         if ($dataClass instanceof CompositeDataClass)
         {
-            foreach ($dataClass->get_additional_property_names() as $property)
+            foreach ($dataClass->getAdditionalPropertyNames() as $property)
             {
                 if (array_key_exists($property, $record))
                 {
-                    $dataClass->set_additional_property($property, $record[$property]);
+                    $dataClass->setAdditionalProperty($property, $record[$property]);
                     unset($record[$property]);
                 }
             }

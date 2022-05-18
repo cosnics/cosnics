@@ -65,7 +65,7 @@ class LanguageItem extends Item
      */
     public function getLanguage()
     {
-        return $this->get_additional_property(self::PROPERTY_LANGUAGE);
+        return $this->getAdditionalProperty(self::PROPERTY_LANGUAGE);
     }
 
     /**
@@ -73,7 +73,7 @@ class LanguageItem extends Item
      */
     public function setLanguage($language)
     {
-        return $this->set_additional_property(self::PROPERTY_LANGUAGE, $language);
+        return $this->setAdditionalProperty(self::PROPERTY_LANGUAGE, $language);
     }
 
     /**
@@ -81,7 +81,7 @@ class LanguageItem extends Item
      */
     public function getIsocode()
     {
-        return $this->get_additional_property(self::PROPERTY_ISOCODE);
+        return $this->getAdditionalProperty(self::PROPERTY_ISOCODE);
     }
 
     /**
@@ -89,13 +89,13 @@ class LanguageItem extends Item
      */
     public function setIsocode($isocode)
     {
-        return $this->set_additional_property(self::PROPERTY_ISOCODE, $isocode);
+        return $this->setAdditionalProperty(self::PROPERTY_ISOCODE, $isocode);
     }
 
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_LANGUAGE);
     }

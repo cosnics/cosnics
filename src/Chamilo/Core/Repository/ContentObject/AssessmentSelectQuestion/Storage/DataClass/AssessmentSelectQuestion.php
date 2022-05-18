@@ -31,17 +31,17 @@ class AssessmentSelectQuestion extends ContentObject
         $options = $this->get_options();
         $options[] = $option;
 
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_ANSWER_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
 
     public function get_answer_type()
     {
-        return $this->get_additional_property(self::PROPERTY_ANSWER_TYPE);
+        return $this->getAdditionalProperty(self::PROPERTY_ANSWER_TYPE);
     }
 
     public function get_default_weight()
@@ -51,7 +51,7 @@ class AssessmentSelectQuestion extends ContentObject
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     /**
@@ -106,7 +106,7 @@ class AssessmentSelectQuestion extends ContentObject
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->getAdditionalProperty(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -143,18 +143,18 @@ class AssessmentSelectQuestion extends ContentObject
 
     public function set_answer_type($answer_type)
     {
-        return $this->set_additional_property(self::PROPERTY_ANSWER_TYPE, $answer_type);
+        return $this->setAdditionalProperty(self::PROPERTY_ANSWER_TYPE, $answer_type);
     }
 
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 }

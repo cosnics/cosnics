@@ -24,7 +24,7 @@ class DoctrineEntityManagerFactoryTest extends DependencyInjectionBasedTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->entityManagerFactory = $this->getService('Doctrine\ORM\EntityManagerFactory');
@@ -33,7 +33,7 @@ class DoctrineEntityManagerFactoryTest extends DependencyInjectionBasedTestCase
     /**
      * Teardown after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->entityManagerFactory);
     }

@@ -52,7 +52,7 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
 //     */
 //    public function test_package_uses_installer()
 //    {
-//        $namespace = $this->determine_package_namespace();
+//        $namespace = $this->determinePackageNamespace();
 //        $class_name = $namespace . '\Package\Installer';
 //
 //        $this->assertTrue(class_exists($class_name));
@@ -73,7 +73,7 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
     {
         if (! isset($this->source_files))
         {
-            $this->source_files = $this->scan_files_in_directory($this->get_source_path(), '/^.+\.php$/i');
+            $this->source_files = $this->scanFilesInDirectory($this->get_source_path(), '/^.+\.php$/i');
         }
         
         return $this->source_files;
@@ -92,7 +92,7 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
      */
     protected function get_source_path()
     {
-        return Path::getInstance()->namespaceToFullPath($this->determine_package_namespace());
+        return Path::getInstance()->namespaceToFullPath($this->determinePackageNamespace());
     }
 
     /**
@@ -100,7 +100,7 @@ abstract class CheckSourceCodeTest extends ChamiloTestCase
      * 
      * @return string
      */
-    protected function determine_package_namespace()
+    protected function determinePackageNamespace()
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(
             ClassnameUtilities::getInstance()->getNamespaceParent(

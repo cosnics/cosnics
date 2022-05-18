@@ -22,7 +22,7 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $containerBuilder = new DependencyInjectionContainerBuilder();
         $containerBuilder->clearContainerInstance();
@@ -32,7 +32,7 @@ abstract class DependencyInjectionBasedTestCase extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->container);
     }

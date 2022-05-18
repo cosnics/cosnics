@@ -8,14 +8,7 @@ namespace Chamilo\Libraries\Architecture\Traits;
 trait ClassFile
 {
 
-    /**
-     * Returns the classname from the given php file
-     *
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getClassNameFromPHPFile($file)
+    protected function getClassNameFromPHPFile(string $file): string
     {
         $fp = fopen($file, 'r');
         $class = $buffer = '';
@@ -82,5 +75,6 @@ trait ClassFile
         }
 
         fclose($fp);
+        throw new \Exception($file . ' is not a PHP class file');
     }
 }

@@ -77,7 +77,7 @@ class LearningPathServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contentObjectRepositoryMock =
             $this->getMockBuilder(ContentObjectRepository::class)->disableOriginalConstructor()->getMock();
@@ -95,7 +95,7 @@ class LearningPathServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->learningPathService);
         unset($this->treeNodeDataServiceMock);

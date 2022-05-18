@@ -21,6 +21,8 @@ trait HashableTrait
     public function setHash(string $hash)
     {
         $this->hash = $hash;
+
+        return $this;
     }
 
     /**

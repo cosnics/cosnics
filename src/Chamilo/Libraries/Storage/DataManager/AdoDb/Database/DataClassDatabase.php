@@ -245,7 +245,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     {
         if ($dataClass instanceof CompositeDataClass)
         {
-            $parentClass = $dataClass->parent_class_name();
+            $parentClass = $dataClass->parentClassName();
             $objectTableName = $dataClass->getTableName();
         }
         else
@@ -277,7 +277,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             if ($dataClass instanceof CompositeDataClass && $dataClass->isExtended())
             {
-                $objectProperties = $dataClass->get_additional_properties();
+                $objectProperties = $dataClass->getAdditionalProperties();
                 $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
                 $tableName = $dataClass->getTableName();
@@ -695,7 +695,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
         {
-            $parent = $dataClassName::parent_class_name();
+            $parent = $dataClassName::parentClassName();
             $tableName = $parent::getTableName();
         }
         else

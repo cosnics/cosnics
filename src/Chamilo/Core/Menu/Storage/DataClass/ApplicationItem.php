@@ -70,7 +70,7 @@ class ApplicationItem extends Item
      */
     public function getUseTranslation()
     {
-        return $this->get_additional_property(self::PROPERTY_USE_TRANSLATION);
+        return $this->getAdditionalProperty(self::PROPERTY_USE_TRANSLATION);
     }
 
     /**
@@ -78,7 +78,7 @@ class ApplicationItem extends Item
      */
     public function setUseTranslation($useTranslation = 0)
     {
-        $this->set_additional_property(self::PROPERTY_USE_TRANSLATION, $useTranslation);
+        $this->setAdditionalProperty(self::PROPERTY_USE_TRANSLATION, $useTranslation);
     }
 
     /**
@@ -105,7 +105,7 @@ class ApplicationItem extends Item
      */
     public function getApplication()
     {
-        return $this->get_additional_property(self::PROPERTY_APPLICATION);
+        return $this->getAdditionalProperty(self::PROPERTY_APPLICATION);
     }
 
     /**
@@ -113,7 +113,7 @@ class ApplicationItem extends Item
      */
     public function setApplication($application)
     {
-        return $this->set_additional_property(self::PROPERTY_APPLICATION, $application);
+        return $this->setAdditionalProperty(self::PROPERTY_APPLICATION, $application);
     }
 
     /**
@@ -121,7 +121,7 @@ class ApplicationItem extends Item
      */
     public function getComponent()
     {
-        return $this->get_additional_property(self::PROPERTY_COMPONENT);
+        return $this->getAdditionalProperty(self::PROPERTY_COMPONENT);
     }
 
     /**
@@ -129,7 +129,7 @@ class ApplicationItem extends Item
      */
     public function setComponent($component)
     {
-        $this->set_additional_property(self::PROPERTY_COMPONENT, $component);
+        $this->setAdditionalProperty(self::PROPERTY_COMPONENT, $component);
     }
 
     /**
@@ -137,7 +137,7 @@ class ApplicationItem extends Item
      */
     public function getExtraParameters()
     {
-        return $this->get_additional_property(self::PROPERTY_EXTRA_PARAMETERS);
+        return $this->getAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS);
     }
 
     /**
@@ -145,13 +145,13 @@ class ApplicationItem extends Item
      */
     public function setExtraParameters($extraParameters)
     {
-        $this->set_additional_property(self::PROPERTY_EXTRA_PARAMETERS, $extraParameters);
+        $this->setAdditionalProperty(self::PROPERTY_EXTRA_PARAMETERS, $extraParameters);
     }
 
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_USE_TRANSLATION, self::PROPERTY_APPLICATION, self::PROPERTY_COMPONENT,

@@ -24,10 +24,25 @@ class ItemService
     const PARAM_DIRECTION_UP = 1;
 
     /**
+     * @var \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
+     */
+    private $displayOrderHandler;
+
+    /**
+     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
+     */
+    private $itemCacheProvider;
+
+    /**
      *
      * @var \Chamilo\Core\Menu\Storage\Repository\ItemRepository
      */
     private $itemRepository;
+
+    /**
+     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
+     */
+    private $propertyMapper;
 
     /**
      * @var \Chamilo\Core\Menu\Service\RightsService
@@ -40,25 +55,10 @@ class ItemService
     private $stringUtilities;
 
     /**
-     * @var \Chamilo\Libraries\Storage\DataClass\PropertyMapper
-     */
-    private $propertyMapper;
-
-    /**
      *
      * @var \Symfony\Component\Translation\Translator
      */
     private $translator;
-
-    /**
-     * @var \Chamilo\Libraries\Storage\Service\DisplayOrderHandler
-     */
-    private $displayOrderHandler;
-
-    /**
-     * @var \Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache
-     */
-    private $itemCacheProvider;
 
     /**
      * @param \Chamilo\Core\Menu\Storage\Repository\ItemRepository $itemRepository
@@ -143,11 +143,11 @@ class ItemService
             }
         }
 
-        foreach ($item->get_additional_property_names() as $property)
+        foreach ($item->getAdditionalPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
-                $item->set_additional_property($property, $values[$property]);
+                $item->setAdditionalProperty($property, $values[$property]);
             }
         }
 
@@ -683,11 +683,11 @@ class ItemService
             }
         }
 
-        foreach ($item->get_additional_property_names() as $property)
+        foreach ($item->getAdditionalPropertyNames() as $property)
         {
             if (isset($values[$property]))
             {
-                $item->set_additional_property($property, $values[$property]);
+                $item->setAdditionalProperty($property, $values[$property]);
             }
         }
 

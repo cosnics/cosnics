@@ -133,7 +133,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_START_DATE,
@@ -153,7 +153,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function get_category()
     {
-        return $this->get_additional_property(self::PROPERTY_CATEGORY);
+        return $this->getAdditionalProperty(self::PROPERTY_CATEGORY);
     }
 
     /**
@@ -170,7 +170,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function get_due_date()
     {
-        return $this->get_additional_property(self::PROPERTY_DUE_DATE);
+        return $this->getAdditionalProperty(self::PROPERTY_DUE_DATE);
     }
 
     /**
@@ -178,7 +178,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function get_priority()
     {
-        return $this->get_additional_property(self::PROPERTY_PRIORITY);
+        return $this->getAdditionalProperty(self::PROPERTY_PRIORITY);
     }
 
     /**
@@ -210,7 +210,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function get_start_date()
     {
-        return $this->get_additional_property(self::PROPERTY_START_DATE);
+        return $this->getAdditionalProperty(self::PROPERTY_START_DATE);
     }
 
     /**
@@ -279,7 +279,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
     /**
      * @return string
      */
-    public static function parent_class_name()
+    public static function parentClassName(): string
     {
         return ContentObject::class;
     }
@@ -315,7 +315,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function set_category($category)
     {
-        return $this->set_additional_property(self::PROPERTY_CATEGORY, $category);
+        return $this->setAdditionalProperty(self::PROPERTY_CATEGORY, $category);
     }
 
     /**
@@ -323,7 +323,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function set_due_date($due_date)
     {
-        return $this->set_additional_property(self::PROPERTY_DUE_DATE, $due_date);
+        return $this->setAdditionalProperty(self::PROPERTY_DUE_DATE, $due_date);
     }
 
     /**
@@ -331,7 +331,7 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function set_priority($priority)
     {
-        return $this->set_additional_property(self::PROPERTY_PRIORITY, $priority);
+        return $this->setAdditionalProperty(self::PROPERTY_PRIORITY, $priority);
     }
 
     /**
@@ -339,6 +339,6 @@ class Task extends RecurringContentObject implements Versionable, AttachmentSupp
      */
     public function set_start_date($start_date)
     {
-        return $this->set_additional_property(self::PROPERTY_START_DATE, $start_date);
+        return $this->setAdditionalProperty(self::PROPERTY_START_DATE, $start_date);
     }
 }

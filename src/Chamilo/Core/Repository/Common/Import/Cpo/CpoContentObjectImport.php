@@ -51,12 +51,10 @@ class CpoContentObjectImport extends ContentObjectImport
         $version_number = $dom_xpath->query('general/object_number', $content_object_node)->item(0)->nodeValue;
         if (!$this->get_import_implementation()->get_controller()->get_content_object_object_number_cache_id(
             $version_number
-        )
-        )
+        ))
         {
             $this->get_import_implementation()->get_controller()->set_content_object_object_number_cache_id(
-                $version_number,
-                UUID::v4()
+                $version_number, UUID::v4()
             );
         }
         $content_object->set_object_number(
@@ -79,11 +77,10 @@ class CpoContentObjectImport extends ContentObjectImport
         );
 
         // additional_properties
-        foreach ($content_object->get_additional_property_names() as $additional_property)
+        foreach ($content_object->getAdditionalPropertyNames() as $additional_property)
         {
-            $content_object->set_additional_property(
-                $additional_property,
-                convert_uudecode(
+            $content_object->setAdditionalProperty(
+                $additional_property, convert_uudecode(
                     $dom_xpath->query('extended/' . $additional_property, $content_object_node)->item(0)->nodeValue
                 )
             );
@@ -104,7 +101,7 @@ class CpoContentObjectImport extends ContentObjectImport
             }
             else
             {
-                $value = $content_object->get_additional_property($html_editor_property);
+                $value = $content_object->getAdditionalProperty($html_editor_property);
             }
 
             $value = self::update_resources($this->get_import_implementation()->get_controller(), $value);
@@ -115,7 +112,7 @@ class CpoContentObjectImport extends ContentObjectImport
             }
             else
             {
-                $content_object->set_additional_property($html_editor_property, $value);
+                $content_object->setAdditionalProperty($html_editor_property, $value);
             }
         }
 
@@ -164,14 +161,14 @@ class CpoContentObjectImport extends ContentObjectImport
                     $resource->setAttribute('source', $new_source);
                     $resource->setAttribute('security_code', $contentObject->calculate_security_code());
                 }
-                catch(Exception $ex)
+                catch (Exception $ex)
                 {
 
                 }
             }
 
             $placeholders = $dom_xpath->query('//*[@data-co-id]'); //select all elements with the data-co-id attribute
-            foreach($placeholders as $placeholder)
+            foreach ($placeholders as $placeholder)
             {
                 /**
                  * @var \DOMNode $placeholder
@@ -188,7 +185,7 @@ class CpoContentObjectImport extends ContentObjectImport
                     $placeholder->setAttribute('data-co-id', $new_source);
                     $placeholder->setAttribute('data-security-code', $contentObject->calculate_security_code());
                 }
-                catch(Exception $ex)
+                catch (Exception $ex)
                 {
 
                 }

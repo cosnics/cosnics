@@ -33,10 +33,10 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         $options = $this->get_options();
         $options[] = $option;
 
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_TOLERANCE_TYPE, self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
@@ -65,7 +65,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     /**
@@ -116,7 +116,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->getAdditionalProperty(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -134,7 +134,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public function get_tolerance_type()
     {
-        return $this->get_additional_property(self::PROPERTY_TOLERANCE_TYPE);
+        return $this->getAdditionalProperty(self::PROPERTY_TOLERANCE_TYPE);
     }
 
     public static function get_type_name()
@@ -168,16 +168,16 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_tolerance_type($type)
     {
-        return $this->set_additional_property(self::PROPERTY_TOLERANCE_TYPE, $type);
+        return $this->setAdditionalProperty(self::PROPERTY_TOLERANCE_TYPE, $type);
     }
 }

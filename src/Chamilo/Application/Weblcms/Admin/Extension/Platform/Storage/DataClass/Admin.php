@@ -24,7 +24,7 @@ class Admin extends DataClass
     const PROPERTY_TARGET_ID = 'target_id';
     const PROPERTY_TARGET_TYPE = 'target_type';
 
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $now = time();
         $this->set_created($now);
@@ -131,7 +131,7 @@ class Admin extends DataClass
         $this->setDefaultProperty(self::PROPERTY_TARGET_TYPE, $target_type);
     }
 
-    public function update()
+    public function update(): bool
     {
         $this->set_modified(time());
 

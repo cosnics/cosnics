@@ -39,7 +39,7 @@ class BasicBundles
         $this->setup();
     }
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->discoverPackages($this->rootNamespace);
     }

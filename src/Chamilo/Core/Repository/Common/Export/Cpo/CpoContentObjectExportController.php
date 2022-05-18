@@ -541,7 +541,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         $id = $sub_item->appendChild($this->dom_document->createAttribute('id'));
         $id->appendChild($this->dom_document->createTextNode($child->get_id()));
         
-        foreach ($child->get_additional_properties() as $property_name => $property_value)
+        foreach ($child->getAdditionalProperties() as $property_name => $property_value)
         {
             $attribute = $sub_item->appendChild($this->dom_document->createAttribute($property_name));
             $attribute->appendChild($this->dom_document->createTextNode($property_value));

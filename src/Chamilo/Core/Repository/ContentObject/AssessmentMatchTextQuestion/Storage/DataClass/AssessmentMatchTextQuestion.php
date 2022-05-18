@@ -22,7 +22,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         $options = $this->get_options();
         $options[] = $option;
 
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function getBestOptions()
@@ -42,7 +42,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
         return $bestOptions;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_OPTIONS,
@@ -64,7 +64,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     /**
@@ -79,7 +79,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public function get_ignore_case()
     {
-        return $this->get_additional_property(self::PROPERTY_IGNORE_CASE);
+        return $this->getAdditionalProperty(self::PROPERTY_IGNORE_CASE);
     }
 
     /**
@@ -120,7 +120,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->getAdditionalProperty(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -143,7 +143,7 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public function get_use_wildcards()
     {
-        return $this->get_additional_property(self::PROPERTY_USE_WILDCARDS);
+        return $this->getAdditionalProperty(self::PROPERTY_USE_WILDCARDS);
     }
 
     /**
@@ -172,21 +172,21 @@ class AssessmentMatchTextQuestion extends ContentObject implements Versionable
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function set_ignore_case($type)
     {
-        return $this->set_additional_property(self::PROPERTY_IGNORE_CASE, (bool) $type);
+        return $this->setAdditionalProperty(self::PROPERTY_IGNORE_CASE, (bool) $type);
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_use_wildcards($type)
     {
-        return $this->set_additional_property(self::PROPERTY_USE_WILDCARDS, (bool) $type);
+        return $this->setAdditionalProperty(self::PROPERTY_USE_WILDCARDS, (bool) $type);
     }
 }

@@ -31,7 +31,7 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
     /**
      * Set up before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->treeNodeDataRepositoryMock = $this->getMockBuilder(TreeNodeDataRepository::class)
             ->disableOriginalConstructor()
@@ -43,7 +43,7 @@ class TreeNodeDataServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->treeNodeDataRepositoryMock);
         unset($this->treeNodeDataService);

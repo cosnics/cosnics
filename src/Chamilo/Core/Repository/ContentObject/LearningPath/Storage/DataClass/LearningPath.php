@@ -76,7 +76,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function enforcesDefaultTraversingOrder()
     {
-        return (bool) $this->get_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
+        return (bool) $this->getAdditionalProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
 
     /**
@@ -86,7 +86,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      */
     public function getAutomaticNumbering()
     {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING);
+        return $this->getAdditionalProperty(self::PROPERTY_AUTOMATIC_NUMBERING);
     }
 
     /**
@@ -136,7 +136,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      *
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_AUTOMATIC_NUMBERING, self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER);
     }
@@ -208,7 +208,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
             );
         }
 
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
+        $this->setAdditionalProperty(self::PROPERTY_AUTOMATIC_NUMBERING, $automaticNumberingOption);
     }
 
     /**
@@ -223,7 +223,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
             throw new InvalidArgumentException('The given enforceDefaultTraversingOrder is no valid boolean');
         }
 
-        $this->set_additional_property(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
+        $this->setAdditionalProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
     }
 
     public function update($trueUpdate = true)

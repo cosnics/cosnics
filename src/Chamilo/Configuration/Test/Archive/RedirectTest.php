@@ -17,7 +17,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
      * string(29) "/path/to/script.php/path/info" ["query"]=> string(21) "arg=value&arg2=value2" ["fragment"]=>
      * string(6) "anchor" }
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parsed_url = ParseUrl(self::URL);
         

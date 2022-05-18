@@ -25,7 +25,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
     const TYPE_OPEN = 1;
     const TYPE_OPEN_WITH_DOCUMENT = 2;
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_QUESTION_TYPE, self::PROPERTY_FEEDBACK, self::PROPERTY_HINT);
     }
@@ -37,12 +37,12 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     public function get_feedback()
     {
-        return $this->get_additional_property(self::PROPERTY_FEEDBACK);
+        return $this->getAdditionalProperty(self::PROPERTY_FEEDBACK);
     }
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     /**
@@ -57,7 +57,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     public function get_question_type()
     {
-        return $this->get_additional_property(self::PROPERTY_QUESTION_TYPE);
+        return $this->getAdditionalProperty(self::PROPERTY_QUESTION_TYPE);
     }
 
     /**
@@ -90,18 +90,18 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
 
     public function set_feedback($feedback)
     {
-        $this->set_additional_property(self::PROPERTY_FEEDBACK, $feedback);
+        $this->setAdditionalProperty(self::PROPERTY_FEEDBACK, $feedback);
     }
 
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function set_question_type($question_type)
     {
-        $this->set_additional_property(self::PROPERTY_QUESTION_TYPE, $question_type);
+        $this->setAdditionalProperty(self::PROPERTY_QUESTION_TYPE, $question_type);
     }
 }

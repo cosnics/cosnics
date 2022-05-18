@@ -57,7 +57,7 @@ class PublicationRepository
 
         if ($contentObjectTypeClassName)
         {
-            foreach ($contentObjectTypeClassName::get_additional_property_names() as $property_name)
+            foreach ($contentObjectTypeClassName::getAdditionalPropertyNames() as $property_name)
             {
                 if ($property_name != DataClass::PROPERTY_ID)
                 {
@@ -219,7 +219,7 @@ class PublicationRepository
             {
                 $additionalProperties = array_intersect_key(
                     $record,
-                    array_flip($contentObjectTypeClassName::get_additional_property_names()));
+                    array_flip($contentObjectTypeClassName::getAdditionalPropertyNames()));
 
                 $additionalProperties[DataClass::PROPERTY_ID] = $publication->get_content_object_id();
             }

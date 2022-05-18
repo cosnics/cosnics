@@ -22,7 +22,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
     const PROPERTY_HINT = 'hint';
     const PROPERTY_LOW = 'low';
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_LOW,
@@ -35,22 +35,22 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
 
     public function get_correct()
     {
-        return $this->get_additional_property(self::PROPERTY_CORRECT);
+        return $this->getAdditionalProperty(self::PROPERTY_CORRECT);
     }
 
     public function get_feedback()
     {
-        return $this->get_additional_property(self::PROPERTY_FEEDBACK);
+        return $this->getAdditionalProperty(self::PROPERTY_FEEDBACK);
     }
 
     public function get_high()
     {
-        return $this->get_additional_property(self::PROPERTY_HIGH);
+        return $this->getAdditionalProperty(self::PROPERTY_HIGH);
     }
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     /**
@@ -65,7 +65,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
 
     public function get_low()
     {
-        return $this->get_additional_property(self::PROPERTY_LOW);
+        return $this->getAdditionalProperty(self::PROPERTY_LOW);
     }
 
     /**
@@ -88,26 +88,26 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
 
     public function set_correct($value)
     {
-        $this->set_additional_property(self::PROPERTY_CORRECT, $value);
+        $this->setAdditionalProperty(self::PROPERTY_CORRECT, $value);
     }
 
     public function set_feedback($feedback)
     {
-        $this->set_additional_property(self::PROPERTY_FEEDBACK, $feedback);
+        $this->setAdditionalProperty(self::PROPERTY_FEEDBACK, $feedback);
     }
 
     public function set_high($value)
     {
-        $this->set_additional_property(self::PROPERTY_HIGH, $value);
+        $this->setAdditionalProperty(self::PROPERTY_HIGH, $value);
     }
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function set_low($value)
     {
-        $this->set_additional_property(self::PROPERTY_LOW, $value);
+        $this->setAdditionalProperty(self::PROPERTY_LOW, $value);
     }
 }

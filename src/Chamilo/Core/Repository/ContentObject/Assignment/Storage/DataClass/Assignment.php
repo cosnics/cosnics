@@ -54,7 +54,7 @@ class Assignment extends ContentObject implements AttachmentSupport
         return $contentObjects;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_START_TIME,
@@ -70,32 +70,32 @@ class Assignment extends ContentObject implements AttachmentSupport
 
     public function get_allow_late_submissions()
     {
-        return $this->get_additional_property(self::PROPERTY_ALLOW_LATE_SUBMISSIONS);
+        return $this->getAdditionalProperty(self::PROPERTY_ALLOW_LATE_SUBMISSIONS);
     }
 
     public function get_allowed_types()
     {
-        return $this->get_additional_property(self::PROPERTY_ALLOWED_TYPES);
+        return $this->getAdditionalProperty(self::PROPERTY_ALLOWED_TYPES);
     }
 
     public function get_automatic_feedback_co_ids()
     {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS);
+        return $this->getAdditionalProperty(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS);
     }
 
     public function get_automatic_feedback_text()
     {
-        return $this->get_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT);
+        return $this->getAdditionalProperty(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT);
     }
 
     public function get_end_time()
     {
-        return $this->get_additional_property(self::PROPERTY_END_TIME);
+        return $this->getAdditionalProperty(self::PROPERTY_END_TIME);
     }
 
     public function get_start_time()
     {
-        return $this->get_additional_property(self::PROPERTY_START_TIME);
+        return $this->getAdditionalProperty(self::PROPERTY_START_TIME);
     }
 
     /**
@@ -113,12 +113,12 @@ class Assignment extends ContentObject implements AttachmentSupport
 
     public function get_visibility_feedback()
     {
-        return $this->get_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK);
+        return $this->getAdditionalProperty(self::PROPERTY_VISIBILTY_FEEDBACK);
     }
 
     public function get_visibility_submissions()
     {
-        return $this->get_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS);
+        return $this->getAdditionalProperty(self::PROPERTY_VISIBILITY_SUBMISSIONS);
     }
 
     public function hasAutomaticFeedback()
@@ -209,41 +209,41 @@ class Assignment extends ContentObject implements AttachmentSupport
 
     public function set_allow_late_submissions($allow_late_submissions)
     {
-        $this->set_additional_property(self::PROPERTY_ALLOW_LATE_SUBMISSIONS, $allow_late_submissions);
+        $this->setAdditionalProperty(self::PROPERTY_ALLOW_LATE_SUBMISSIONS, $allow_late_submissions);
     }
 
     public function set_allowed_types($allowed_types)
     {
-        $this->set_additional_property(self::PROPERTY_ALLOWED_TYPES, $allowed_types);
+        $this->setAdditionalProperty(self::PROPERTY_ALLOWED_TYPES, $allowed_types);
     }
 
     public function set_automatic_feedback_co_ids($automatic_feedback_co_ids)
     {
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, $automatic_feedback_co_ids);
+        $this->setAdditionalProperty(self::PROPERTY_AUTOMATIC_FEEDBACK_CO_IDS, $automatic_feedback_co_ids);
     }
 
     public function set_automatic_feedback_text($automatic_feedback_text)
     {
-        $this->set_additional_property(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, $automatic_feedback_text);
+        $this->setAdditionalProperty(self::PROPERTY_AUTOMATIC_FEEDBACK_TEXT, $automatic_feedback_text);
     }
 
     public function set_end_time($end_time)
     {
-        $this->set_additional_property(self::PROPERTY_END_TIME, $end_time);
+        $this->setAdditionalProperty(self::PROPERTY_END_TIME, $end_time);
     }
 
     public function set_start_time($start_time)
     {
-        $this->set_additional_property(self::PROPERTY_START_TIME, $start_time);
+        $this->setAdditionalProperty(self::PROPERTY_START_TIME, $start_time);
     }
 
     public function set_visibility_feedback($visibility_feedback)
     {
-        $this->set_additional_property(self::PROPERTY_VISIBILTY_FEEDBACK, $visibility_feedback);
+        $this->setAdditionalProperty(self::PROPERTY_VISIBILTY_FEEDBACK, $visibility_feedback);
     }
 
     public function set_visibility_submissions($visibility_submissions)
     {
-        $this->set_additional_property(self::PROPERTY_VISIBILITY_SUBMISSIONS, $visibility_submissions);
+        $this->setAdditionalProperty(self::PROPERTY_VISIBILITY_SUBMISSIONS, $visibility_submissions);
     }
 }

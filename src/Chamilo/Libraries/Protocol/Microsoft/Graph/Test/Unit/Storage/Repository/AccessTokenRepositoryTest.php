@@ -33,7 +33,7 @@ class AccessTokenRepositoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->localSettingMock = $this->getMockBuilder(LocalSetting::class)
             ->disableOriginalConstructor()->getMock();
@@ -47,7 +47,7 @@ class AccessTokenRepositoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->localSettingMock);
         unset($this->sessionUtilitiesMock);

@@ -24,7 +24,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     /**
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_LOCATION,
@@ -45,7 +45,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function get_end_date()
     {
-        return $this->get_additional_property(self::PROPERTY_END_DATE);
+        return $this->getAdditionalProperty(self::PROPERTY_END_DATE);
     }
 
     /**
@@ -53,7 +53,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function get_location()
     {
-        return $this->get_additional_property(self::PROPERTY_LOCATION);
+        return $this->getAdditionalProperty(self::PROPERTY_LOCATION);
     }
 
     /**
@@ -61,7 +61,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function get_start_date()
     {
-        return $this->get_additional_property(self::PROPERTY_START_DATE);
+        return $this->getAdditionalProperty(self::PROPERTY_START_DATE);
     }
 
     /**
@@ -98,7 +98,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
     /**
      * @return string
      */
-    public static function parent_class_name()
+    public static function parentClassName(): string
     {
         return ContentObject::class;
     }
@@ -108,7 +108,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function set_end_date($end_date)
     {
-        return $this->set_additional_property(self::PROPERTY_END_DATE, $end_date);
+        return $this->setAdditionalProperty(self::PROPERTY_END_DATE, $end_date);
     }
 
     /**
@@ -116,7 +116,7 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function set_location($location)
     {
-        return $this->set_additional_property(self::PROPERTY_LOCATION, $location);
+        return $this->setAdditionalProperty(self::PROPERTY_LOCATION, $location);
     }
 
     /**
@@ -124,6 +124,6 @@ class CalendarEvent extends RecurringContentObject implements Versionable, Attac
      */
     public function set_start_date($start_date)
     {
-        return $this->set_additional_property(self::PROPERTY_START_DATE, $start_date);
+        return $this->setAdditionalProperty(self::PROPERTY_START_DATE, $start_date);
     }
 }

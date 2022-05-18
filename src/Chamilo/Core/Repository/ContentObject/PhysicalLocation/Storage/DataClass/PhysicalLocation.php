@@ -31,15 +31,15 @@ class PhysicalLocation extends ContentObject implements Versionable
 
     public function get_location()
     {
-        return $this->get_additional_property(self::PROPERTY_LOCATION);
+        return $this->getAdditionalProperty(self::PROPERTY_LOCATION);
     }
 
     public function set_location($location)
     {
-        return $this->set_additional_property(self::PROPERTY_LOCATION, $location);
+        return $this->setAdditionalProperty(self::PROPERTY_LOCATION, $location);
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_LOCATION);
     }

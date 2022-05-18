@@ -187,7 +187,7 @@ class PackageBundles extends BasicBundles
         $this->packageLists[$packageNamespace] = new PackageList($packageNamespace, $typeName, $glyph);
     }
 
-    protected function setup()
+    protected function setup(): void
     {
         parent::setup();
         $this->readPackageDefinitions();

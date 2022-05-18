@@ -21,7 +21,7 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
      *
      * @return string[]
      */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_WEIGHT, self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
@@ -47,7 +47,7 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
      */
     public function get_show_answer_feedback()
     {
-        return $this->get_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
+        return $this->getAdditionalProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK);
     }
 
     /**
@@ -64,7 +64,7 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
      */
     public function get_weight()
     {
-        return $this->get_additional_property(self::PROPERTY_WEIGHT);
+        return $this->getAdditionalProperty(self::PROPERTY_WEIGHT);
     }
 
     /**
@@ -88,7 +88,7 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
      */
     public function set_show_answer_feedback($value)
     {
-        $this->set_additional_property(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
+        $this->setAdditionalProperty(self::PROPERTY_SHOW_ANSWER_FEEDBACK, $value);
     }
 
     /**
@@ -97,6 +97,6 @@ class ComplexAssessmentMatchNumericQuestion extends ComplexContentObjectItem imp
      */
     public function set_weight($value)
     {
-        $this->set_additional_property(self::PROPERTY_WEIGHT, $value);
+        $this->setAdditionalProperty(self::PROPERTY_WEIGHT, $value);
     }
 }

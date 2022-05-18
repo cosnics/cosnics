@@ -30,25 +30,25 @@ class WorkspaceItem extends Item
 
     public function getWorkspaceId()
     {
-        return $this->get_additional_property(self::PROPERTY_WORKSPACE_ID);
+        return $this->getAdditionalProperty(self::PROPERTY_WORKSPACE_ID);
     }
 
     public function setWorkspaceId($workspace_id)
     {
-        return $this->set_additional_property(self::PROPERTY_WORKSPACE_ID, $workspace_id);
+        return $this->setAdditionalProperty(self::PROPERTY_WORKSPACE_ID, $workspace_id);
     }
 
     public function getName()
     {
-        return $this->get_additional_property(self::PROPERTY_NAME);
+        return $this->getAdditionalProperty(self::PROPERTY_NAME);
     }
 
     public function setName($name)
     {
-        return $this->set_additional_property(self::PROPERTY_NAME, $name);
+        return $this->setAdditionalProperty(self::PROPERTY_NAME, $name);
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_NAME);
     }

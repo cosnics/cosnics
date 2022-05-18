@@ -43,7 +43,7 @@ class AttachmentViewerComponent extends Manager
         
         if (DataManager::is_helper_type($reference_content_object->get_type()))
         {
-            $reference_content_object_id = $reference_content_object->get_additional_property('reference_id');
+            $reference_content_object_id = $reference_content_object->getAdditionalProperty('reference_id');
             $reference_content_object = DataManager::retrieve_by_id(
                 ContentObject::class,
                 $reference_content_object_id);

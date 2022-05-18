@@ -81,7 +81,7 @@ abstract class ContentObjectDifference
      */
     public function getAdditionalPropertyNames()
     {
-        return $this->getContentObject()->get_additional_property_names();
+        return $this->getContentObject()->getAdditionalPropertyNames();
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class ContentObjectDifference
         switch ($propertyName)
         {
             default:
-                $content = $contentObject->get_additional_property($propertyName);
+                $content = $contentObject->getAdditionalProperty($propertyName);
         }
 
         return explode(PHP_EOL, $content);

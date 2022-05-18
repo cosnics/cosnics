@@ -22,14 +22,14 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
      */
     private $reference_object;
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_REFERENCE);
     }
 
     public function get_reference()
     {
-        return $this->get_additional_property(self::PROPERTY_REFERENCE);
+        return $this->getAdditionalProperty(self::PROPERTY_REFERENCE);
     }
 
     public function get_reference_object()
@@ -59,6 +59,6 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
 
     public function set_reference($reference)
     {
-        $this->set_additional_property(self::PROPERTY_REFERENCE, $reference);
+        $this->setAdditionalProperty(self::PROPERTY_REFERENCE, $reference);
     }
 }

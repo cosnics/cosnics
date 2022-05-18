@@ -87,7 +87,7 @@ class TreeNodeCopierTest extends ChamiloTestCase
      * - Section D - ID: 5
      * - Page 2 - ID: 7
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $treeTestDataGenerator = new TreeTestDataGenerator();
 
@@ -128,7 +128,7 @@ class TreeNodeCopierTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->treeNodeCopier);
         unset($this->contentObjectCopierWrapper);

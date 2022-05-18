@@ -183,7 +183,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         return $success;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_LOCKED,
@@ -201,17 +201,17 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     public function get_last_post()
     {
-        return $this->get_additional_property(self::PROPERTY_LAST_POST);
+        return $this->getAdditionalProperty(self::PROPERTY_LAST_POST);
     }
 
     public function get_last_topic_changed_cloi()
     {
-        return $this->get_additional_property(self::PROPERTY_LAST_TOPIC_CHANGED_CLOI);
+        return $this->getAdditionalProperty(self::PROPERTY_LAST_TOPIC_CHANGED_CLOI);
     }
 
     public function get_locked()
     {
-        return $this->get_additional_property(self::PROPERTY_LOCKED);
+        return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
     }
 
     /**
@@ -227,7 +227,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
      */
     public function get_total_posts()
     {
-        return $this->get_additional_property(self::PROPERTY_TOTAL_POSTS);
+        return $this->getAdditionalProperty(self::PROPERTY_TOTAL_POSTS);
     }
 
     /**
@@ -238,7 +238,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     public function get_total_topics()
     {
-        return $this->get_additional_property(self::PROPERTY_TOTAL_TOPICS);
+        return $this->getAdditionalProperty(self::PROPERTY_TOTAL_TOPICS);
     }
 
     public static function get_type_name()
@@ -517,26 +517,26 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
     public function set_last_post($last_post)
     {
-        $this->set_additional_property(self::PROPERTY_LAST_POST, $last_post);
+        $this->setAdditionalProperty(self::PROPERTY_LAST_POST, $last_post);
     }
 
     public function set_last_topic_changed_cloi($last_cloi)
     {
-        $this->set_additional_property(self::PROPERTY_LAST_TOPIC_CHANGED_CLOI, $last_cloi);
+        $this->setAdditionalProperty(self::PROPERTY_LAST_TOPIC_CHANGED_CLOI, $last_cloi);
     }
 
     public function set_locked($locked)
     {
-        return $this->set_additional_property(self::PROPERTY_LOCKED, $locked);
+        return $this->setAdditionalProperty(self::PROPERTY_LOCKED, $locked);
     }
 
     public function set_total_posts($total_posts)
     {
-        $this->set_additional_property(self::PROPERTY_TOTAL_POSTS, $total_posts);
+        $this->setAdditionalProperty(self::PROPERTY_TOTAL_POSTS, $total_posts);
     }
 
     public function set_total_topics($total_topics)
     {
-        $this->set_additional_property(self::PROPERTY_TOTAL_TOPICS, $total_topics);
+        $this->setAdditionalProperty(self::PROPERTY_TOTAL_TOPICS, $total_topics);
     }
 }

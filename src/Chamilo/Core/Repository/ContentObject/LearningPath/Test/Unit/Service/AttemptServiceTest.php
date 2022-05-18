@@ -57,7 +57,7 @@ class AttemptServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trackingRepositoryMock = $this->getMockBuilder(TrackingRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -83,7 +83,7 @@ class AttemptServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->trackingParametersMock);
         unset($this->trackingRepositoryMock);

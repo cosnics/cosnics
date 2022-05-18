@@ -453,7 +453,7 @@ class ParametersProcessor
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
         {
-            $propertiesClassName = $dataClassName::parent_class_name();
+            $propertiesClassName = $dataClassName::parentClassName();
         }
         else
         {

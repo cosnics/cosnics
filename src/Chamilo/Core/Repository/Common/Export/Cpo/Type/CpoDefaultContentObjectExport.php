@@ -77,7 +77,7 @@ class CpoDefaultContentObjectExport extends CpoContentObjectExport
         $extended = $document->createElement('extended');
         $content_object_node->appendChild($extended);
         
-        foreach ($content_object->get_additional_properties() as $prop => $value)
+        foreach ($content_object->getAdditionalProperties() as $prop => $value)
         {
             $property = $document->createElement($prop);
             $extended->appendChild($property);

@@ -351,7 +351,7 @@ class DataClassRepositoryCache
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-            return $object::parent_class_name();
+            return $object::parentClassName();
         }
         else
         {

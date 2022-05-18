@@ -32,24 +32,24 @@ class RepositoryImplementationItem extends Item
         return new FontAwesomeGlyph('globe', [], null, 'fas');
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_IMPLEMENTATION, self::PROPERTY_INSTANCE_ID, self::PROPERTY_NAME);
     }
 
     public function get_implementation()
     {
-        return $this->get_additional_property(self::PROPERTY_IMPLEMENTATION);
+        return $this->getAdditionalProperty(self::PROPERTY_IMPLEMENTATION);
     }
 
     public function get_instance_id()
     {
-        return $this->get_additional_property(self::PROPERTY_INSTANCE_ID);
+        return $this->getAdditionalProperty(self::PROPERTY_INSTANCE_ID);
     }
 
     public function get_name()
     {
-        return $this->get_additional_property(self::PROPERTY_NAME);
+        return $this->getAdditionalProperty(self::PROPERTY_NAME);
     }
 
     public static function get_type_name()
@@ -59,16 +59,16 @@ class RepositoryImplementationItem extends Item
 
     public function set_implementation($implementation)
     {
-        return $this->set_additional_property(self::PROPERTY_IMPLEMENTATION, $implementation);
+        return $this->setAdditionalProperty(self::PROPERTY_IMPLEMENTATION, $implementation);
     }
 
     public function set_instance_id($instance_id)
     {
-        return $this->set_additional_property(self::PROPERTY_INSTANCE_ID, $instance_id);
+        return $this->setAdditionalProperty(self::PROPERTY_INSTANCE_ID, $instance_id);
     }
 
     public function set_name($name)
     {
-        return $this->set_additional_property(self::PROPERTY_NAME, $name);
+        return $this->setAdditionalProperty(self::PROPERTY_NAME, $name);
     }
 }

@@ -35,25 +35,25 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
 
     public function get_locked()
     {
-        return $this->get_additional_property(self::PROPERTY_LOCKED);
+        return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
     }
 
     public function set_locked($locked)
     {
-        return $this->set_additional_property(self::PROPERTY_LOCKED, $locked);
+        return $this->setAdditionalProperty(self::PROPERTY_LOCKED, $locked);
     }
 
     public function get_links()
     {
-        return $this->get_additional_property(self::PROPERTY_LINKS);
+        return $this->getAdditionalProperty(self::PROPERTY_LINKS);
     }
 
     public function set_links($links)
     {
-        return $this->set_additional_property(self::PROPERTY_LINKS, $links);
+        return $this->setAdditionalProperty(self::PROPERTY_LINKS, $links);
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_LOCKED, self::PROPERTY_LINKS);
     }

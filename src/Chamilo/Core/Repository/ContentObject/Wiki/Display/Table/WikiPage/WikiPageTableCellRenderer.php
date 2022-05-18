@@ -68,7 +68,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
         if ($this->get_component()->get_parent()->is_allowed_to_edit_content_object())
         {
-            if (($publication->get_additional_property('is_homepage') == 0))
+            if (($publication->getAdditionalProperty('is_homepage') == 0))
             {
                 $toolbar->add_item(
                     new ToolbarItem(
@@ -114,7 +114,7 @@ class WikiPageTableCellRenderer extends DataClassTableCellRenderer implements Ta
         $this->wikiPage = $this->get_publication_from_complex_content_object_item($publication);
         $this->complex_id = $publication->get_id();
 
-        if ($publication->get_additional_property('is_homepage') == 1)
+        if ($publication->getAdditionalProperty('is_homepage') == 1)
         {
             $homepage = ' (' . Translation::get('Homepage') . ')';
         }

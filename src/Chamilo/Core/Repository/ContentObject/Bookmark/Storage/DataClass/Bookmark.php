@@ -56,25 +56,25 @@ class Bookmark extends ContentObject implements Versionable, Includeable
 
     public function get_url()
     {
-        return $this->get_additional_property(self::PROPERTY_URL);
+        return $this->getAdditionalProperty(self::PROPERTY_URL);
     }
 
     public function set_url($url)
     {
-        return $this->set_additional_property(self::PROPERTY_URL, $url);
+        return $this->setAdditionalProperty(self::PROPERTY_URL, $url);
     }
 
     public function get_application()
     {
-        return $this->get_additional_property(self::PROPERTY_APPLICATION);
+        return $this->getAdditionalProperty(self::PROPERTY_APPLICATION);
     }
 
     public function set_application($application)
     {
-        return $this->set_additional_property(self::PROPERTY_APPLICATION, $application);
+        return $this->setAdditionalProperty(self::PROPERTY_APPLICATION, $application);
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_URL, self::PROPERTY_APPLICATION);
     }

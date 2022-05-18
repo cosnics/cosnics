@@ -81,7 +81,7 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
         }
         else
         {
-            return $contentObject->get_additional_property($property);
+            return $contentObject->getAdditionalProperty($property);
         }
     }
 }

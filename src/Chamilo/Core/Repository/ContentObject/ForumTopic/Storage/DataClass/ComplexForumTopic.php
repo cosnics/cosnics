@@ -72,7 +72,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         return true;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_FORUM_TYPE);
     }
@@ -84,7 +84,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
     public function get_forum_type()
     {
-        return $this->get_additional_property(self::PROPERTY_FORUM_TYPE);
+        return $this->getAdditionalProperty(self::PROPERTY_FORUM_TYPE);
     }
 
     /**
@@ -97,6 +97,6 @@ class ComplexForumTopic extends ComplexContentObjectItem
 
     public function set_forum_type($type)
     {
-        $this->set_additional_property(self::PROPERTY_FORUM_TYPE, $type);
+        $this->setAdditionalProperty(self::PROPERTY_FORUM_TYPE, $type);
     }
 }

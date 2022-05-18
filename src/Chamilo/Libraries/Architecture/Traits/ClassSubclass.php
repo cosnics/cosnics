@@ -9,15 +9,7 @@ trait ClassSubClass
 {
     use ClassFile;
 
-    /**
-     * Checks if the class in the given file is subclass of the given super classes
-     *
-     * @param string $file
-     * @param string[] $superClasses
-     *
-     * @return boolean
-     */
-    protected function check_if_class_in_file_is_subclass_of($file, array $superClasses)
+    protected function checkIfClassInFileIsSubclassOf(string $file, array $superClasses): bool
     {
         if (empty($file))
         {
@@ -37,10 +29,5 @@ trait ClassSubClass
         return false;
     }
 
-    /**
-     * Determines the package namespace depending on the namespace of the test class
-     *
-     * @return string
-     */
-    abstract protected function determine_package_namespace();
+    abstract protected function determinePackageNamespace(): string;
 }

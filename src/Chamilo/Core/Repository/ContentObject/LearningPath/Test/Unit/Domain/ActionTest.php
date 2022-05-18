@@ -20,7 +20,7 @@ class ActionTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->action = new Action(
             'delete', 'Remove', 'https://cosnics.github.io/', 'fas fa-times', 'Are you sure you want to remove this?'
@@ -30,7 +30,7 @@ class ActionTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->action);
     }

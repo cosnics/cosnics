@@ -174,12 +174,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         return parent::delete($only_version);
     }
 
-    /**
-     * Gets the additional properties of a forum topic.
-     *
-     * @return Array Returns an array of additional property names.
-     */
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_LOCKED, self::PROPERTY_TOTAL_POSTS, self::PROPERTY_LAST_POST);
     }
@@ -207,7 +202,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_last_post()
     {
-        return $this->get_additional_property(self::PROPERTY_LAST_POST);
+        return $this->getAdditionalProperty(self::PROPERTY_LAST_POST);
     }
 
     /**
@@ -217,7 +212,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_locked()
     {
-        return $this->get_additional_property(self::PROPERTY_LOCKED);
+        return $this->getAdditionalProperty(self::PROPERTY_LOCKED);
     }
 
     /**
@@ -249,7 +244,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function get_total_posts()
     {
-        return $this->get_additional_property(self::PROPERTY_TOTAL_POSTS);
+        return $this->getAdditionalProperty(self::PROPERTY_TOTAL_POSTS);
     }
 
     /**
@@ -450,7 +445,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function set_last_post($last_post)
     {
-        $this->set_additional_property(self::PROPERTY_LAST_POST, $last_post);
+        $this->setAdditionalProperty(self::PROPERTY_LAST_POST, $last_post);
     }
 
     /**
@@ -460,7 +455,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function set_locked($locked)
     {
-        $this->set_additional_property(self::PROPERTY_LOCKED, $locked);
+        $this->setAdditionalProperty(self::PROPERTY_LOCKED, $locked);
     }
 
     /**
@@ -470,7 +465,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      */
     public function set_total_posts($total_posts)
     {
-        $this->set_additional_property(self::PROPERTY_TOTAL_POSTS, $total_posts);
+        $this->setAdditionalProperty(self::PROPERTY_TOTAL_POSTS, $total_posts);
     }
 
     /**

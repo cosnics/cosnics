@@ -10,7 +10,7 @@ class PersonalInstance extends Instance
 {
     const PROPERTY_USER_ID = 'user_id';
 
-    public static function get_additional_property_names($extendedPropertyNames = [])
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_USER_ID);
     }
@@ -25,14 +25,14 @@ class PersonalInstance extends Instance
 
     public function get_user_id()
     {
-        return $this->get_additional_property(self::PROPERTY_USER_ID);
+        return $this->getAdditionalProperty(self::PROPERTY_USER_ID);
     }
 
     public function set_user_id($user_id)
     {
         if (isset($user_id) && strlen($user_id) > 0)
         {
-            $this->set_additional_property(self::PROPERTY_USER_ID, $user_id);
+            $this->setAdditionalProperty(self::PROPERTY_USER_ID, $user_id);
         }
     }
 }

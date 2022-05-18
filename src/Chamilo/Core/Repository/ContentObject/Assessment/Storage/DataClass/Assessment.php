@@ -61,7 +61,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         return $this->question_count;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_MAXIMUM_ATTEMPTS,
@@ -92,7 +92,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_maximum_attempts()
     {
-        return $this->get_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS);
+        return $this->getAdditionalProperty(self::PROPERTY_MAXIMUM_ATTEMPTS);
     }
 
     /**
@@ -122,7 +122,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_maximum_time()
     {
-        return $this->get_additional_property(self::PROPERTY_MAXIMUM_TIME);
+        return $this->getAdditionalProperty(self::PROPERTY_MAXIMUM_TIME);
     }
 
     public function get_questions()
@@ -144,12 +144,12 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_questions_per_page()
     {
-        return $this->get_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE);
+        return $this->getAdditionalProperty(self::PROPERTY_QUESTIONS_PER_PAGE);
     }
 
     public function get_random_questions()
     {
-        return $this->get_additional_property(self::PROPERTY_RANDOM_QUESTIONS);
+        return $this->getAdditionalProperty(self::PROPERTY_RANDOM_QUESTIONS);
     }
 
     public function get_table()
@@ -177,21 +177,21 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function set_maximum_attempts($value)
     {
-        $this->set_additional_property(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
+        $this->setAdditionalProperty(self::PROPERTY_MAXIMUM_ATTEMPTS, $value);
     }
 
     public function set_maximum_time($value)
     {
-        $this->set_additional_property(self::PROPERTY_MAXIMUM_TIME, $value);
+        $this->setAdditionalProperty(self::PROPERTY_MAXIMUM_TIME, $value);
     }
 
     public function set_questions_per_page($value)
     {
-        $this->set_additional_property(self::PROPERTY_QUESTIONS_PER_PAGE, $value);
+        $this->setAdditionalProperty(self::PROPERTY_QUESTIONS_PER_PAGE, $value);
     }
 
     public function set_random_questions($random_questions)
     {
-        $this->set_additional_property(self::PROPERTY_RANDOM_QUESTIONS, $random_questions);
+        $this->setAdditionalProperty(self::PROPERTY_RANDOM_QUESTIONS, $random_questions);
     }
 }

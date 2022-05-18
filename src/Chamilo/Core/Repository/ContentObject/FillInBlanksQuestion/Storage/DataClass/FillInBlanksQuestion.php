@@ -61,7 +61,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
         return $count;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_ANSWER_TEXT,
@@ -76,8 +76,8 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     /*
      * public function add_answer($answer) { $answers = $this->get_answers(); $answers[] = $answer; return
-     * $this->set_additional_property(self::PROPERTY_ANSWERS, serialize($answers)); } public function
-     * set_answers($answers) { return $this->set_additional_property(self::PROPERTY_ANSWERS, serialize($answers)); }
+     * $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers)); } public function
+     * set_answers($answers) { return $this->setAdditionalProperty(self::PROPERTY_ANSWERS, serialize($answers)); }
      */
 
     public function get_answer_object($question_index, $answer)
@@ -97,7 +97,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public function get_answer_text()
     {
-        return $this->get_additional_property(self::PROPERTY_ANSWER_TEXT);
+        return $this->getAdditionalProperty(self::PROPERTY_ANSWER_TEXT);
     }
 
     public function get_answers($index = - 1)
@@ -135,17 +135,17 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public function get_case_sensitive()
     {
-        return $this->get_additional_property(self::PROPERTY_CASE_SENSITIVE);
+        return $this->getAdditionalProperty(self::PROPERTY_CASE_SENSITIVE);
     }
 
     public function get_default_negative_score()
     {
-        return $this->get_additional_property(self::PROPERTY_DEFAULT_NEGATIVE_SCORE);
+        return $this->getAdditionalProperty(self::PROPERTY_DEFAULT_NEGATIVE_SCORE);
     }
 
     public function get_default_positive_score()
     {
-        return $this->get_additional_property(self::PROPERTY_DEFAULT_POSITIVE_SCORE);
+        return $this->getAdditionalProperty(self::PROPERTY_DEFAULT_POSITIVE_SCORE);
     }
 
     public function get_default_weight()
@@ -155,7 +155,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public function get_field_option()
     {
-        return $this->get_additional_property(self::PROPERTY_FIELD_OPTION);
+        return $this->getAdditionalProperty(self::PROPERTY_FIELD_OPTION);
     }
 
     public function get_hint_for_question($type, $index)
@@ -337,12 +337,12 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public function get_question_type()
     {
-        return $this->get_additional_property(self::PROPERTY_QUESTION_TYPE);
+        return $this->getAdditionalProperty(self::PROPERTY_QUESTION_TYPE);
     }
 
     public function get_show_inline()
     {
-        return $this->get_additional_property(self::PROPERTY_SHOW_INLINE);
+        return $this->getAdditionalProperty(self::PROPERTY_SHOW_INLINE);
     }
 
     /**
@@ -436,39 +436,39 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
 
     public function set_answer_text($answer_text)
     {
-        $this->set_additional_property(self::PROPERTY_ANSWER_TEXT, $answer_text);
+        $this->setAdditionalProperty(self::PROPERTY_ANSWER_TEXT, $answer_text);
         unset($this->answers);
     }
 
     public function set_case_sensitive($sensitive)
     {
-        $this->set_additional_property(self::PROPERTY_CASE_SENSITIVE, $sensitive);
+        $this->setAdditionalProperty(self::PROPERTY_CASE_SENSITIVE, $sensitive);
     }
 
     public function set_default_negative_score($score)
     {
-        $this->set_additional_property(self::PROPERTY_DEFAULT_NEGATIVE_SCORE, $score);
+        $this->setAdditionalProperty(self::PROPERTY_DEFAULT_NEGATIVE_SCORE, $score);
     }
 
     public function set_default_positive_score($score)
     {
-        $this->set_additional_property(self::PROPERTY_DEFAULT_POSITIVE_SCORE, $score);
+        $this->setAdditionalProperty(self::PROPERTY_DEFAULT_POSITIVE_SCORE, $score);
     }
 
     public function set_field_option($option)
     {
-        $this->set_additional_property(self::PROPERTY_FIELD_OPTION, $option);
+        $this->setAdditionalProperty(self::PROPERTY_FIELD_OPTION, $option);
     }
 
     public function set_question_type($question_type)
     {
-        $this->set_additional_property(self::PROPERTY_QUESTION_TYPE, $question_type);
+        $this->setAdditionalProperty(self::PROPERTY_QUESTION_TYPE, $question_type);
     }
 
     // TODO: should be moved to an additional parent layer "question" which offers a default implementation.
 
     public function set_show_inline($setting)
     {
-        $this->set_additional_property(self::PROPERTY_SHOW_INLINE, $setting);
+        $this->setAdditionalProperty(self::PROPERTY_SHOW_INLINE, $setting);
     }
 }

@@ -286,7 +286,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function getShowInline()
     {
-        return $this->get_additional_property(self::PROPERTY_SHOW_INLINE);
+        return $this->getAdditionalProperty(self::PROPERTY_SHOW_INLINE);
     }
 
     /**
@@ -297,7 +297,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return self::PROPERTY_FILESIZE;
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(
             self::PROPERTY_FILENAME,
@@ -343,12 +343,12 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_filename()
     {
-        return $this->get_additional_property(self::PROPERTY_FILENAME);
+        return $this->getAdditionalProperty(self::PROPERTY_FILENAME);
     }
 
     public function get_filesize()
     {
-        return $this->get_additional_property(self::PROPERTY_FILESIZE);
+        return $this->getAdditionalProperty(self::PROPERTY_FILESIZE);
     }
 
     /**
@@ -377,7 +377,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_hash()
     {
-        return $this->get_additional_property(self::PROPERTY_HASH);
+        return $this->getAdditionalProperty(self::PROPERTY_HASH);
     }
 
     /**
@@ -429,7 +429,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_path()
     {
-        return $this->get_additional_property(self::PROPERTY_PATH);
+        return $this->getAdditionalProperty(self::PROPERTY_PATH);
     }
 
     /**
@@ -485,7 +485,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function get_storage_path()
     {
-        return $this->get_additional_property(self::PROPERTY_STORAGE_PATH);
+        return $this->getAdditionalProperty(self::PROPERTY_STORAGE_PATH);
     }
 
     /**
@@ -781,7 +781,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function setShowInline($showInline)
     {
-        return $this->set_additional_property(self::PROPERTY_SHOW_INLINE, $showInline);
+        return $this->setAdditionalProperty(self::PROPERTY_SHOW_INLINE, $showInline);
     }
 
     /**
@@ -790,27 +790,27 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function set_filename($filename)
     {
-        return $this->set_additional_property(self::PROPERTY_FILENAME, $filename);
+        return $this->setAdditionalProperty(self::PROPERTY_FILENAME, $filename);
     }
 
     public function set_filesize($filesize)
     {
-        return $this->set_additional_property(self::PROPERTY_FILESIZE, $filesize);
+        return $this->setAdditionalProperty(self::PROPERTY_FILESIZE, $filesize);
     }
 
     public function set_hash($hash)
     {
-        return $this->set_additional_property(self::PROPERTY_HASH, $hash);
+        return $this->setAdditionalProperty(self::PROPERTY_HASH, $hash);
     }
 
     public function set_path($path)
     {
-        return $this->set_additional_property(self::PROPERTY_PATH, $path);
+        return $this->setAdditionalProperty(self::PROPERTY_PATH, $path);
     }
 
     public function set_storage_path($storage_path)
     {
-        return $this->set_additional_property(self::PROPERTY_STORAGE_PATH, $storage_path);
+        return $this->setAdditionalProperty(self::PROPERTY_STORAGE_PATH, $storage_path);
     }
 
     /**

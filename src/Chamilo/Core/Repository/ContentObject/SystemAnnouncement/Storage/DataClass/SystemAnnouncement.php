@@ -34,14 +34,14 @@ class SystemAnnouncement extends ContentObject implements Versionable
         return self::package() . '\Icon\\' . $this->get_icon();
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_ICON);
     }
 
     public function get_icon()
     {
-        return $this->get_additional_property(self::PROPERTY_ICON);
+        return $this->getAdditionalProperty(self::PROPERTY_ICON);
     }
 
     public static function get_possible_icons()
@@ -98,6 +98,6 @@ class SystemAnnouncement extends ContentObject implements Versionable
 
     public function set_icon($icon)
     {
-        return $this->set_additional_property(self::PROPERTY_ICON, $icon);
+        return $this->setAdditionalProperty(self::PROPERTY_ICON, $icon);
     }
 }

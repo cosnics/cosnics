@@ -32,12 +32,12 @@ class OrderingQuestion extends ContentObject implements Versionable
     {
         $options = $this->get_options();
         $options[] = $option;
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     public function set_options($options)
     {
-        return $this->set_additional_property(self::PROPERTY_OPTIONS, serialize($options));
+        return $this->setAdditionalProperty(self::PROPERTY_OPTIONS, serialize($options));
     }
 
     /**
@@ -45,7 +45,7 @@ class OrderingQuestion extends ContentObject implements Versionable
      */
     public function get_options()
     {
-        if ($result = unserialize($this->get_additional_property(self::PROPERTY_OPTIONS)))
+        if ($result = unserialize($this->getAdditionalProperty(self::PROPERTY_OPTIONS)))
         {
             return $result;
         }
@@ -54,12 +54,12 @@ class OrderingQuestion extends ContentObject implements Versionable
 
     public function set_hint($hint)
     {
-        return $this->set_additional_property(self::PROPERTY_HINT, $hint);
+        return $this->setAdditionalProperty(self::PROPERTY_HINT, $hint);
     }
 
     public function get_hint()
     {
-        return $this->get_additional_property(self::PROPERTY_HINT);
+        return $this->getAdditionalProperty(self::PROPERTY_HINT);
     }
 
     public function has_hint()
@@ -72,7 +72,7 @@ class OrderingQuestion extends ContentObject implements Versionable
         return count($this->get_options());
     }
 
-    public static function get_additional_property_names()
+    public static function getAdditionalPropertyNames(): array
     {
         return array(self::PROPERTY_OPTIONS, self::PROPERTY_HINT);
     }
