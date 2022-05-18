@@ -205,7 +205,7 @@ class Attributes extends DataClass
     /**
      * @return bool
      */
-    public function update()
+    public function update(): bool
     {
         $success = DataManager::update_content_object_publication_id($this);
         if (!$success)

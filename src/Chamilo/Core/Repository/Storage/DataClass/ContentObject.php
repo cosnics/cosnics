@@ -355,13 +355,13 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $content_object = $this;
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($create_in_batch, $content_object) { // checks wether to create a new content object or
+            function ($c) use ($content_object) { // checks wether to create a new content object or
                 // version:
                 // if the ID is set, we create a new version,
                 // otherwise a new CO.
@@ -459,7 +459,7 @@ class ContentObject extends CompositeDataClass
     /**
      * Instructs the data manager to delete the object.
      */
-    public function delete($only_version = false)
+    public function delete($only_version = false): bool
     {
         $versions = $this->get_content_object_versions();
         foreach ($versions as $version)
@@ -2092,7 +2092,7 @@ class ContentObject extends CompositeDataClass
      * .
      * @throws \Exception
      */
-    public function update($trueUpdate = true)
+    public function update($trueUpdate = true): bool
     {
         $versions = $this->get_content_object_versions();
         foreach ($versions as $version)

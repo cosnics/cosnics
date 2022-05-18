@@ -18,7 +18,7 @@ class Option extends DataClass
 
     const PROPERTY_NAME = 'name';
 
-    public function create()
+    public function create(): bool
     {
         $this->set_display_order(
             DataManager::select_next_dynamic_form_element_option_order($this->get_dynamic_form_element_id())

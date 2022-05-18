@@ -34,7 +34,7 @@ class UserServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->userRepositoryMock = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -49,7 +49,7 @@ class UserServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->userService);
     }

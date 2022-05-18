@@ -19,7 +19,7 @@ class DummyAttempt extends AbstractAttempt
      *
      * @see \libraries\storage\DataClass::create()
      */
-    public function create()
+    public function create(): bool
     {
         $this->set_id(UUID::v4());
 
@@ -30,7 +30,7 @@ class DummyAttempt extends AbstractAttempt
      *
      * @see \libraries\storage\DataClass::delete()
      */
-    public function delete()
+    public function delete(): bool
     {
         return PreviewStorage::getInstance()->delete_assessment_attempt($this);
     }
@@ -78,7 +78,7 @@ class DummyAttempt extends AbstractAttempt
      *
      * @see \libraries\storage\DataClass::update()
      */
-    public function update()
+    public function update(): bool
     {
         return PreviewStorage::getInstance()->update_assessment_attempt($this);
     }

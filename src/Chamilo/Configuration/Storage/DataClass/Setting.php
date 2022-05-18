@@ -138,7 +138,7 @@ class Setting extends DataClass
         $this->setDefaultProperty(self::PROPERTY_USER_SETTING, $user_setting);
     }
 
-    public function delete()
+    public function delete(): bool
     {
         if (! parent::delete())
         {
@@ -169,12 +169,12 @@ class Setting extends DataClass
         }
     }
 
-    public function create()
+    public function create(): bool
     {
         return $this->on_change(parent::create());
     }
 
-    public function update()
+    public function update(): bool
     {
         return $this->on_change(parent::update());
     }

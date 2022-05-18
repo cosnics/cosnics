@@ -51,7 +51,7 @@ class TreeNodeTest extends ChamiloTestCase
      * - Section D - ID: 5
      * - Page 2 - ID: 7
      */
-    public function setUp()
+    public function setUp(): void
     {
         $treeTestDataGenerator = new TreeTestDataGenerator();
         $this->tree = $treeTestDataGenerator->getTree();
@@ -63,7 +63,7 @@ class TreeNodeTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->treeNodes);
         unset($this->tree);

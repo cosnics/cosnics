@@ -22,7 +22,7 @@ class ComplexForum extends ComplexContentObjectItem
         return array(Forum::class, ForumTopic::class);
     }
 
-    public function create()
+    public function create(): bool
     {
         $success = parent::create();
 
@@ -61,7 +61,7 @@ class ComplexForum extends ComplexContentObjectItem
         return $success;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $succes = parent::delete();
 

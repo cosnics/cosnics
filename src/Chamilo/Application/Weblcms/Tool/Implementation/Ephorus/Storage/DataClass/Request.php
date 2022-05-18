@@ -70,7 +70,7 @@ class Request extends EphorusDataClass
      *
      * @return boolean
      */
-    protected function checkBeforeSave()
+    protected function checkBeforeSave(): bool
     {
         $string_utilities_class = $this->get_string_utilities_class();
 
@@ -116,7 +116,7 @@ class Request extends EphorusDataClass
      *
      * @return boolean
      */
-    public function create()
+    public function create(): bool
     {
         $this->set_request_time(time());
 
@@ -128,7 +128,7 @@ class Request extends EphorusDataClass
      *
      * @return boolean
      */
-    public function delete()
+    public function delete(): bool
     {
         if (!$this->truncate_results())
         {

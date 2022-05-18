@@ -251,7 +251,7 @@ class Registration extends DataClass
         $this->set_status(! $this->get_status());
     }
 
-    public function delete()
+    public function delete(): bool
     {
         return $this->on_change(parent::delete());
     }
@@ -274,12 +274,12 @@ class Registration extends DataClass
         return ! in_array($this->get_type(), array(self::TYPE_CORE, self::TYPE_EXTENSION, self::TYPE_LIBRARY));
     }
 
-    public function create()
+    public function create(): bool
     {
         return $this->on_change(parent::create());
     }
 
-    public function update()
+    public function update(): bool
     {
         return $this->on_change(parent::update());
     }

@@ -16,18 +16,16 @@ interface PropertyProviderInterface
 {
 
     /**
-     * Get the fully qualified class name of the object instance
-     * 
-     * @return string
+     * @throws \ReflectionException
+     *
+     * @deprecated Use ClassName::class or static::class now
      */
-    public static function class_name($fully_qualified = true, $camel_case = true);
+    public static function class_name(bool $fullyQualified = true, bool $camelCase = true): string;
 
     /**
-     * Get the namespace of the object instance
-     * 
-     * @return string
+     * @throws \ReflectionException
      */
-    public static function context();
+    public static function context(): string;
 
     /**
      * Returns the fully qualified class name of the entity the property provider provides properties for

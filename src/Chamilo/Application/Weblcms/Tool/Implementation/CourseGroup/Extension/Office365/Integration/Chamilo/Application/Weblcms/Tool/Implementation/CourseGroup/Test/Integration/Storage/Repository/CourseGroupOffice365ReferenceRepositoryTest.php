@@ -22,7 +22,7 @@ class CourseGroupOffice365ReferenceRepositoryTest extends ChamiloFixturesBasedTe
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -33,7 +33,7 @@ class CourseGroupOffice365ReferenceRepositoryTest extends ChamiloFixturesBasedTe
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

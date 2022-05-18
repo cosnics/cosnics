@@ -36,7 +36,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $succes = parent::create();
         if (!$succes)
@@ -61,7 +61,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         }
 
         $success = WeblcmsRights::getInstance()->create_location_in_courses_subtree(
-            WeblcmsRights::TYPE_COURSE_CATEGORY, $this->get_id(), $parent, $this->get_course(), $create_in_batch
+            WeblcmsRights::TYPE_COURSE_CATEGORY, $this->get_id(), $parent, $this->get_course()
         );
 
         if (!$success)
@@ -85,7 +85,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         $this->create();
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_COURSE_CATEGORY, $this->get_id(), $this->get_course()

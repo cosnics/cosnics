@@ -46,7 +46,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      *
      * @return boolean
      */
-    public function checkBeforeSave()
+    public function checkBeforeSave(): bool
     {
         if (!$this->get_add_date())
         {
@@ -87,7 +87,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         return !$this->hasErrors();
     }
 
-    public static function factory($class, &$record = [])
+    public static function factory($class, &$record = []): ComplexContentObjectItem
     {
         if (is_subclass_of($class, ComplexContentObjectItem::class))
         {

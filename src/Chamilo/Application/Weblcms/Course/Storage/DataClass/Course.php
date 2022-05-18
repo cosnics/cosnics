@@ -151,7 +151,7 @@ class Course extends DataClass
      *
      * @return boolean
      */
-    public function create($automated_values = true, $create_in_batch = false)
+    public function create($automated_values = true): bool
     {
         if ($automated_values)
         {
@@ -172,7 +172,7 @@ class Course extends DataClass
             return false;
         }
 
-        if (!$this->create_locations($create_in_batch))
+        if (!$this->create_locations())
         {
             return false;
         }
@@ -233,13 +233,13 @@ class Course extends DataClass
      *
      * @return boolean
      */
-    private function create_locations($create_in_batch = false)
+    private function create_locations()
     {
         // Create location in the course subtree
         $parent_id = $this->get_parent_rights_location()->get_id();
 
         if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
-            CourseManagementRights::TYPE_COURSE, $this->get_id(), $parent_id, 0, $create_in_batch, 0
+            CourseManagementRights::TYPE_COURSE, $this->get_id(), $parent_id, 0, false, 0
         ))
         {
             return false;
@@ -273,7 +273,7 @@ class Course extends DataClass
         {
             if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
                 CourseManagementRights::TYPE_COURSE_MODULE, $tool->get_id(), $course_subtree_root_location_id,
-                $this->get_id(), $create_in_batch
+                $this->get_id()
             ))
             {
                 return false;
@@ -304,12 +304,7 @@ class Course extends DataClass
         return $group->create();
     }
 
-    /**
-     * Deletes the dependencies for this course
-     *
-     * @return boolean
-     */
-    protected function deleteDependencies()
+    protected function deleteDependencies(): bool
     {
         parent::deleteDependencies();
 
@@ -537,7 +532,7 @@ class Course extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         $id = $this->get_id();
 
@@ -1159,7 +1154,7 @@ class Course extends DataClass
      *
      * @return boolean
      */
-    public function update()
+    public function update(): bool
     {
         $course_group =
             \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager::retrieve_course_group_root(

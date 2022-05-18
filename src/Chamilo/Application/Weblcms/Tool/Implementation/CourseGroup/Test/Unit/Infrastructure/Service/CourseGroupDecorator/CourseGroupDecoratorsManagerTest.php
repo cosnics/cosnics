@@ -41,7 +41,7 @@ class CourseGroupDecoratorsManagerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->courseGroupDecoratorsManager = new CourseGroupDecoratorsManager();
 
@@ -58,7 +58,7 @@ class CourseGroupDecoratorsManagerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->courseGroupDecoratorsManager);
     }

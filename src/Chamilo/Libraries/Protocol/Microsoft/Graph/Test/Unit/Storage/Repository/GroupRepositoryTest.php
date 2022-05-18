@@ -31,7 +31,7 @@ class GroupRepositoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->graphRepositoryMock = $this->getMockBuilder(GraphRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -42,7 +42,7 @@ class GroupRepositoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->graphRepositoryMock);
         unset($this->groupRepository);

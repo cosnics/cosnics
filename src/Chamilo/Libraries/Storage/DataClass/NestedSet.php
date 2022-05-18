@@ -296,7 +296,7 @@ abstract class NestedSet extends DataClass
      * @deprecated Migrated to NestedSetDataClassRepository::create()
      * @see \Chamilo\Libraries\Storage\DataClass\DataClass::create()
      */
-    public function create($position = self::AS_LAST_CHILD_OF, $reference_node = null)
+    public function create($position = self::AS_LAST_CHILD_OF, $reference_node = null): bool
     {
         // This variable is used to identify the node after which the newly
         // created node should be placed. This value is initialized with 0
@@ -372,7 +372,7 @@ abstract class NestedSet extends DataClass
      * @deprecated Migrated to NestedSetDataClassRepository::delete()
      * @see \Chamilo\Libraries\Storage\DataClass\DataClass::delete()
      */
-    public function delete($condition = null)
+    public function delete($condition = null): bool
     {
         // Deleting a node from a nested set requires multiple updates
         // which have to be performed atomically and consistently.

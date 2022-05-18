@@ -37,9 +37,9 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      *
      * @return bool
      */
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
-        if (!parent::create($create_in_batch))
+        if (!parent::create())
         {
             return false;
         }

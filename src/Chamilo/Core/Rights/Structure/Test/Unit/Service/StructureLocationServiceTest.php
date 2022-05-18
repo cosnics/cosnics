@@ -26,7 +26,7 @@ class StructureLocationServiceTest extends ChamiloTestCase
      */
     protected $structureLocationService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->structureLocationRepositoryMock = $this->getMockForAbstractClass(
             'Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRepositoryInterface'
@@ -35,7 +35,7 @@ class StructureLocationServiceTest extends ChamiloTestCase
         $this->structureLocationService = new StructureLocationService($this->structureLocationRepositoryMock);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->structureLocationRepositoryMock);
         unset($this->structureLocationService);

@@ -35,7 +35,7 @@ class PsrContextFactoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->configurationConsulterMock = $this->getMockBuilder(ConfigurationConsulter::class)
             ->disableOriginalConstructor()->getMock();
@@ -49,7 +49,7 @@ class PsrContextFactoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->psrContextFactory);
     }

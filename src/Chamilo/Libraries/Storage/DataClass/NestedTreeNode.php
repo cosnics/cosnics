@@ -61,7 +61,7 @@ abstract class NestedTreeNode extends NestedSet
      * @return boolean
      * @done Migrated to NestedSetDataClassRepository::create()
      */
-    public function create($previousId = 0, $createInBatch = false)
+    public function create($previousId = 0, $unusedVariable = null): bool
     {
         $parent_id = $this->get_parent_id();
 

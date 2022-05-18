@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 class DateTimeUtilitiesTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
     }
 

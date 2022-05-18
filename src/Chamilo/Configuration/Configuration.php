@@ -148,7 +148,7 @@ class Configuration
      *
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
-    public function getRegistrationConsulter()
+    public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->getService(RegistrationConsulter::class);
     }

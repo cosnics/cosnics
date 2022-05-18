@@ -34,7 +34,7 @@ class JobProducerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->jobEntityManagerMock = $this->getMockBuilder(JobEntityManager::class)
             ->disableOriginalConstructor()->getMock();
@@ -48,7 +48,7 @@ class JobProducerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->producerMock);
         unset($this->jobEntityManagerMock);

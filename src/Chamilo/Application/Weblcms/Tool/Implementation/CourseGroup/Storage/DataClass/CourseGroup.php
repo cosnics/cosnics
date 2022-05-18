@@ -57,7 +57,7 @@ class CourseGroup extends NestedTreeNode
      */
     private $members_cache;
 
-    public function checkBeforeSave()
+    public function checkBeforeSave(): bool
     {
         $children = DataManager::count_course_group_users($this->get_id());
 
@@ -78,7 +78,7 @@ class CourseGroup extends NestedTreeNode
         return count($members);
     }
 
-    public function create($previousId = 0, $createInBatch = false)
+    public function create($previousId = 0, $unusedVariable = null): bool
     {
         if (!$this->get_parent_id())
         {
@@ -131,14 +131,7 @@ class CourseGroup extends NestedTreeNode
         );
     }
 
-    /**
-     * Get the dependencies for this object
-     *
-     * @param array $dependencies
-     *
-     * @return bool
-     */
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         return array(
             CourseGroupUserRelation::class => new EqualityCondition(
@@ -175,7 +168,7 @@ class CourseGroup extends NestedTreeNode
      *
      * @return int
      */
-    public function get_id()
+    public function get_id(): ?int
     {
         return $this->getDefaultProperty(self::PROPERTY_ID);
     }
@@ -366,7 +359,7 @@ class CourseGroup extends NestedTreeNode
         return $this->setDefaultProperty(self::PROPERTY_GROUP_ID, $id);
     }
 
-    public function set_id($id)
+    public function set_id(int $id): CourseGroup
     {
         return $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
@@ -466,7 +459,7 @@ class CourseGroup extends NestedTreeNode
         return DataManager::unsubscribe_users_from_course_groups($users, $this->get_id());
     }
 
-    public function update()
+    public function update(): bool
     {
         if ($this->checkBeforeSave())
         {

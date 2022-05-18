@@ -79,7 +79,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      *
      * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         if (! parent::delete())
         {

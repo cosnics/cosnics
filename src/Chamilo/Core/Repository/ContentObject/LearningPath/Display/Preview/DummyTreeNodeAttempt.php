@@ -17,7 +17,7 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
      *
      * @see \libraries\storage\DataClass::create()
      */
-    public function create()
+    public function create(): bool
     {
         return true;
     }
@@ -26,7 +26,7 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
      *
      * @see \libraries\storage\DataClass::delete()
      */
-    public function delete()
+    public function delete(): bool
     {
         return true;
     }
@@ -43,7 +43,7 @@ class DummyTreeNodeAttempt extends TreeNodeAttempt
      *
      * @see \libraries\storage\DataClass::update()
      */
-    public function update()
+    public function update(): bool
     {
         return true;
     }

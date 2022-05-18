@@ -47,13 +47,13 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return boolean
      */
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $category = $this;
 
         // TRANSACTION
         $success = DataManager::transactional(
-            function ($c) use ($create_in_batch, $category) {
+            function ($c) use ($category) {
                 if (!$category->checkBeforeSave())
                 {
                     return false;
@@ -83,7 +83,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return boolean
      */
-    public function checkBeforeSave()
+    public function checkBeforeSave(): bool
     {
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_name()))
         {
@@ -207,7 +207,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return boolean
      */
-    public function delete()
+    public function delete(): bool
     {
         $category = $this;
 

@@ -171,7 +171,7 @@ class Package extends DataClass
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      * @throws \Exception
      */
-    public function getDependencies($dependencies = [])
+    public function getDependencies($dependencies = []): array
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
     }

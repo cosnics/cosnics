@@ -87,7 +87,7 @@ class UserView extends DataClass
     }
 
 
-    public function getDependencies($dependencies = [])
+    public function getDependencies(array $dependencies = []): array
     {
         return array(
             UserViewRelContentObject::class => new EqualityCondition(

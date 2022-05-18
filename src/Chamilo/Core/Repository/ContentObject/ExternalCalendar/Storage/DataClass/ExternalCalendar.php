@@ -85,7 +85,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
      *
      * @see common/DataClass#checkBeforeSave()
      */
-    protected function checkBeforeSave()
+    protected function checkBeforeSave(): bool
     {
         /*
          * Save file if needed

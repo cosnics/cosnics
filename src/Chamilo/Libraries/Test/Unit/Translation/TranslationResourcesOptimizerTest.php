@@ -42,7 +42,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->translationLoadersMocks = array(
             'ini' => $this->createMock('Symfony\Component\Translation\Loader\IniFileLoader'));
@@ -57,7 +57,7 @@ class TranslationResourcesOptimizerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->translationLoadersMocks);
         unset($this->translationResourcesFinderMock);

@@ -38,7 +38,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Element::class, static::PROPERTY_PARENT_ID),
@@ -121,7 +121,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
@@ -172,7 +172,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      * @return string
      * @deprecated User Element::getType() now
      */
-    public function get_type()
+    public function get_type(): string
     {
         return $this->getType();
     }
@@ -259,9 +259,11 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      *
      * @param string $type
      */
-    public function setType($type)
+    public function setType(string $type): CompositeDataClass
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+
+        return $this;
     }
 
     /**
@@ -280,7 +282,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
      * @throws \Exception
      * @deprecated Use Element::setType() now
      */
-    public function set_type($type)
+    public function set_type(string $type): CompositeDataClass
     {
         $this->setType($type);
     }

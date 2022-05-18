@@ -73,7 +73,7 @@ class ComplexHotpotatoes extends ComplexContentObjectItem
              $this->get_path();
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $this->delete_file();
         parent::delete();

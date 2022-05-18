@@ -35,7 +35,7 @@ class UserRoleServiceTest extends ChamiloTestCase
      */
     protected $userRoleService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->roleServiceMock =
             $this->getMockForAbstractClass('Chamilo\Core\User\Roles\Service\Interfaces\RoleServiceInterface');
@@ -47,7 +47,7 @@ class UserRoleServiceTest extends ChamiloTestCase
         $this->userRoleService = new UserRoleService($this->roleServiceMock, $this->userRoleRepositoryMock);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->roleServiceMock);
         unset($this->userRoleRepositoryInterfaceMock);

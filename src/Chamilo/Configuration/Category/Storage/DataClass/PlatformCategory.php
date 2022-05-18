@@ -38,7 +38,7 @@ abstract class PlatformCategory extends DataClass
         );
     }
 
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         return array(
             $this->class_name() => new EqualityCondition(
@@ -78,7 +78,7 @@ abstract class PlatformCategory extends DataClass
         $this->setDefaultProperty(self::PROPERTY_PARENT, $parent);
     }
 
-    public function update($move = false)
+    public function update($move = false): bool
     {
         return parent::update();
     }

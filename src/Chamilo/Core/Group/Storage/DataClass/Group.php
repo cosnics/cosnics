@@ -213,7 +213,7 @@ class Group extends NestedSet
      * @return bool
      * @deprecated Use GroupService::createGroup() now
      */
-    public function create($previous_id = 0, $reference_node = null)
+    public function create($previous_id = 0, $reference_node = null): bool
     {
         $parent_id = $this->get_parent_id();
 

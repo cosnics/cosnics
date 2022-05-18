@@ -22,7 +22,7 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -32,7 +32,7 @@ class TreeNodeDataRepositoryTest extends ChamiloFixturesBasedTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

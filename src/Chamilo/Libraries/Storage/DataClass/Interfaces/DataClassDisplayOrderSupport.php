@@ -11,14 +11,12 @@ interface DataClassDisplayOrderSupport
     /**
      * @return string[]
      */
-    public function getDefaultProperties();
+    public function getDefaultProperties(): array;
 
     /**
-     * @param string $propertyName
-     *
-     * @return string
+     * @return mixed
      */
-    public function getDefaultProperty($propertyName);
+    public function getDefaultProperty(string $name);
 
     /**
      * @return string[]
@@ -30,19 +28,14 @@ interface DataClassDisplayOrderSupport
      */
     public function getDisplayOrderPropertyName();
 
-    /**
-     * @return integer
-     */
-    public function getId();
+    public function getId(): ?int;
+
+    public function isIdentified(): bool;
 
     /**
-     * @return boolean
+     * @param mixed $value
+     *
+     * @throws \Exception
      */
-    public function isIdentified();
-
-    /**
-     * @param string $propertyName
-     * @param string $propertyvalue
-     */
-    public function setDefaultProperty($propertyName, $propertyvalue);
+    public function setDefaultProperty(string $name, $value);
 }

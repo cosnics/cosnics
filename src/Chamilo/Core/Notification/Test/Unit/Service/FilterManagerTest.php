@@ -41,7 +41,7 @@ class FilterManagerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->filterRepositoryMock = $this->getMockBuilder(FilterRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -60,7 +60,7 @@ class FilterManagerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->filterRepositoryMock);
         unset($this->notificationContextManagerMock);

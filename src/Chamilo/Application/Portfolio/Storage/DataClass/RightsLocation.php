@@ -132,7 +132,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      *
      * @see \libraries\storage\DataClass::update()
      */
-    public function update()
+    public function update(): bool
     {
         if ($this->inherits())
         {

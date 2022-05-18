@@ -54,7 +54,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     /**
      * Deletes the dependencies
      */
-    protected function deleteDependencies()
+    protected function deleteDependencies(): bool
     {
         $success = parent::deleteDependencies();
 
@@ -115,7 +115,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
         );
     }
 
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         return array(
             CourseTypeUserCategoryRelCourse::class => new EqualityCondition(

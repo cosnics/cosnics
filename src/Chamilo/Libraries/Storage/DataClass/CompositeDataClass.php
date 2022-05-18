@@ -19,7 +19,7 @@ abstract class CompositeDataClass extends DataClass
      *
      * @throws \Exception
      */
-    public function __construct(?array $defaultProperties = [], ?array $additionalProperties = null)
+    public function __construct(?array $defaultProperties = [], array $additionalProperties = [])
     {
         parent::__construct($defaultProperties);
         $this->setAdditionalProperties($additionalProperties);

@@ -83,7 +83,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     /**
      * Creates this publication in persistent storage
      */
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         if (is_null($this->get_category_id()))
         {
@@ -108,8 +108,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
                 $parent_id = WeblcmsRights::getInstance()->get_courses_subtree_root_id($this->get_course_id());
 
                 $success = WeblcmsRights::getInstance()->create_location_in_courses_subtree(
-                    WeblcmsRights::TYPE_PUBLICATION, $this->get_id(), $parent_id, $this->get_course_id(),
-                    $create_in_batch
+                    WeblcmsRights::TYPE_PUBLICATION, $this->get_id(), $parent_id, $this->get_course_id()
                 );
 
                 if (!$success)
@@ -133,7 +132,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         }
 
         $success = WeblcmsRights::getInstance()->create_location_in_courses_subtree(
-            WeblcmsRights::TYPE_PUBLICATION, $this->get_id(), $parent, $this->get_course_id(), $create_in_batch
+            WeblcmsRights::TYPE_PUBLICATION, $this->get_id(), $parent, $this->get_course_id()
         );
 
         if (!$success)
@@ -146,7 +145,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return true;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_PUBLICATION, $this->get_id(), $this->get_course_id()

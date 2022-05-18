@@ -48,7 +48,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->translatorMock = $this->getMockBuilder(Translation::class)->disableOriginalConstructor()->getMock();
         $this->contentObjectTypeNodeActionGeneratorMock = $this->getMockBuilder(NodeActionGenerator::class)
@@ -98,7 +98,7 @@ class NodeBaseActionGeneratorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->nodeBaseActionGenerator);
         unset($this->baseParameters);

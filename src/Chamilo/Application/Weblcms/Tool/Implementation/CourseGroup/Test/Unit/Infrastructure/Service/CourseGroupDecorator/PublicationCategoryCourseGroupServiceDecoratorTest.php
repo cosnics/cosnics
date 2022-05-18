@@ -29,7 +29,7 @@ class PublicationCategoryCourseGroupServiceDecoratorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->courseGroupPublicationCategoryServiceMock =
             $this->getMockBuilder(CourseGroupPublicationCategoryService::class)
@@ -42,7 +42,7 @@ class PublicationCategoryCourseGroupServiceDecoratorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->courseGroupPublicationCategoryServiceMock);
         unset($this->publicationCategoryCourseGroupServiceDecorator);

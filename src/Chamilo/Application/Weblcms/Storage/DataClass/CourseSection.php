@@ -117,13 +117,8 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         );
     }
 
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     *
-     */
-    protected function getDependencies($dependencies = [])
+
+    protected function getDependencies(array $dependencies = []): array
     {
         $id = $this->get_id();
 

@@ -122,7 +122,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         );
     }
 
-    public function getDependencies($dependencies = [])
+    public function getDependencies(array $dependencies = []): array
     {
         return array(
             WorkspaceEntityRelation::class => new EqualityCondition(

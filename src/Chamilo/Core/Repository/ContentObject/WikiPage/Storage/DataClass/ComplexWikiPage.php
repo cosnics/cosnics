@@ -52,7 +52,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
         $this->setAdditionalProperty(self::PROPERTY_IS_LOCKED, $value);
     }
 
-    public function update()
+    public function update(): bool
     {
         if ($this->get_is_homepage())
         {

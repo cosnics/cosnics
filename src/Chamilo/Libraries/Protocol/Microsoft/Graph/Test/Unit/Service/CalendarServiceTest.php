@@ -36,7 +36,7 @@ class CalendarServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->calendarRepositoryMock = $this->getMockBuilder(CalendarRepository::class)
             ->disableOriginalConstructor()->getMock();
@@ -50,7 +50,7 @@ class CalendarServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->userServiceMock);
         unset($this->calendarRepositoryMock);

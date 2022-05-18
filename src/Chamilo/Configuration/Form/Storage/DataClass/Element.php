@@ -57,7 +57,7 @@ class Element extends DataClass
         }
     }
 
-    public function create()
+    public function create(): bool
     {
         $this->set_display_order(DataManager::select_next_dynamic_form_element_order($this->get_dynamic_form_id()));
 

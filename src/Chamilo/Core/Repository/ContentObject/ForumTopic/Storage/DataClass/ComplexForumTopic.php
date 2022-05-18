@@ -18,7 +18,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
 {
     const PROPERTY_FORUM_TYPE = 'forum_type';
 
-    public function create()
+    public function create(): bool
     {
         parent::create();
 
@@ -53,7 +53,7 @@ class ComplexForumTopic extends ComplexContentObjectItem
         return true;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         parent::delete();
 

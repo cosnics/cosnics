@@ -19,7 +19,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
     const TOLERANCE_TYPE_ABSOLUTE = 'absolute';
     const TOLERANCE_TYPE_RELATIVE = 'relative';
 
-    public function __construct($defaultProperties = [], $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = [])
     {
         parent::__construct($defaultProperties, $additionalProperties);
         if (!isset($additionalProperties[self::PROPERTY_TOLERANCE_TYPE]))

@@ -115,7 +115,7 @@ class ProviderRegistration extends DataClass
      * 
      * @return string[string]
      */
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         $dependencies = [];
         

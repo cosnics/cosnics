@@ -414,7 +414,7 @@ class ExplodeIterator implements Iterator
         $this->rewind();
     }
 
-    function rewind()
+    function rewind(): void
     {
         $this->curPos = 0;
         $this->endPos = strpos($this->subject, $this->delim);
@@ -441,17 +441,17 @@ class ExplodeIterator implements Iterator
         }
     }
 
-    function current()
+    function current(): mixed
     {
         return $this->current;
     }
 
-    function key()
+    function key(): mixed
     {
         return $this->curPos;
     }
 
-    function next()
+    function next(): void
     {
         if ($this->endPos === false)
         {
@@ -470,10 +470,9 @@ class ExplodeIterator implements Iterator
             }
         }
         $this->refreshCurrent();
-        return $this->current;
     }
 
-    function valid()
+    function valid(): bool
     {
         return $this->curPos !== false;
     }

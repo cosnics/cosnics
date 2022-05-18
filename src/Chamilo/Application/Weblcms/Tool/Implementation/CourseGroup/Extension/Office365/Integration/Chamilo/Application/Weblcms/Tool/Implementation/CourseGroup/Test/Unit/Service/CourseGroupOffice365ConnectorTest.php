@@ -62,7 +62,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->groupServiceMock = $this->getMockBuilder(GroupService::class)
             ->disableOriginalConstructor()->getMock();
@@ -92,7 +92,7 @@ class CourseGroupOffice365ConnectorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->groupServiceMock);
         unset($this->userServiceMock);

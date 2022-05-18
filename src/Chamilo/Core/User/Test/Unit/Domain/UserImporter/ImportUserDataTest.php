@@ -24,7 +24,7 @@ class ImportUserDataTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->importUserData = new ImportUserData('test');
     }
@@ -32,7 +32,7 @@ class ImportUserDataTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->importUserData);
     }

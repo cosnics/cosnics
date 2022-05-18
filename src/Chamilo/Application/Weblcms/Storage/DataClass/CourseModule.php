@@ -50,7 +50,7 @@ class CourseModule extends DataClass
         return $tools_array;
     }
 
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $succes = parent::create();
         if (!$succes)
@@ -61,11 +61,11 @@ class CourseModule extends DataClass
         return WeblcmsRights::getInstance()->create_location_in_courses_subtree(
             WeblcmsRights::TYPE_COURSE_MODULE, $this->get_id(),
             WeblcmsRights::getInstance()->get_courses_subtree_root_id($this->get_course_code()),
-            $this->get_course_code(), $create_in_batch
+            $this->get_course_code()
         );
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $location = WeblcmsRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             WeblcmsRights::TYPE_COURSE_MODULE, $this->get_id(), $this->get_course_code()

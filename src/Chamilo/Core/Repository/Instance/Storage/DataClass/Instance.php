@@ -41,7 +41,7 @@ class Instance extends CompositeDataClass
      * *********************************************************************** Fat model methods
      * ***********************************************************************
      */
-    public function create()
+    public function create(): bool
     {
         if (!parent::create())
         {
@@ -71,7 +71,7 @@ class Instance extends CompositeDataClass
         $this->set_enabled(false);
     }
 
-    public function delete()
+    public function delete(): bool
     {
         if (!parent::delete())
         {

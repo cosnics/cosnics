@@ -92,7 +92,7 @@ class AttemptSummaryCalculatorTest extends ChamiloTestCase
      * - Section D - ID: 5
      * - Page 2 - ID: 7
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->attemptServiceMock = $this->getMockBuilder(AttemptService::class)->disableOriginalConstructor()->getMock();
 
@@ -152,7 +152,7 @@ class AttemptSummaryCalculatorTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->attemptSummaryCalculator);
         unset($this->trackingRepositoryMock);

@@ -24,7 +24,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
     private $dir1;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->work_dir = __DIR__ . "/__generated_during_test";
         $this->source_file = $this->work_dir . "/source_file";

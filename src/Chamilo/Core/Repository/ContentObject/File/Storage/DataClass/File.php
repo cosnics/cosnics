@@ -89,7 +89,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @see common/DataClass#checkBeforeSave()
      */
-    protected function checkBeforeSave()
+    protected function checkBeforeSave(): bool
     {
         // Title
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
@@ -168,11 +168,11 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @see repository/lib/ContentObject#create()
      */
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         $this->clearErrors();
 
-        return parent::create($create_in_batch);
+        return parent::create();
     }
 
     public function delete($only_version = false)

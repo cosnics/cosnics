@@ -182,7 +182,7 @@ class TypeSelectorFactory
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      * @throws \Exception
      */
-    public function getRegistrationConsulter()
+    public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->getService(
             RegistrationConsulter::class

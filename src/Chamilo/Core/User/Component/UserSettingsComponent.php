@@ -134,7 +134,7 @@ class UserSettingsComponent extends ProfileComponent
      *
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      */
-    public function getRegistrationConsulter()
+    public function getRegistrationConsulter(): RegistrationConsulter
     {
         return $this->getService(RegistrationConsulter::class);
     }

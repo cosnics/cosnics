@@ -122,9 +122,9 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
     }
 
 
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
-        $succes = parent::create($create_in_batch);
+        $succes = parent::create();
 
         if ($succes)
         {

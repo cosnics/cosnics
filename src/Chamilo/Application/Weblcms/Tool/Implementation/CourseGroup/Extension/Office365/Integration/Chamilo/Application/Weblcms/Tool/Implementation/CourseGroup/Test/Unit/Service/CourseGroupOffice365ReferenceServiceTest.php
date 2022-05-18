@@ -28,7 +28,7 @@ class CourseGroupOffice365ReferenceServiceTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->courseGroupOffice365ReferenceRepositoryMock =
             $this->getMockBuilder(CourseGroupOffice365ReferenceRepository::class)
@@ -41,7 +41,7 @@ class CourseGroupOffice365ReferenceServiceTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->courseGroupOffice365ReferenceRepositoryMock);
         unset($this->courseGroupOffice365ReferenceService);

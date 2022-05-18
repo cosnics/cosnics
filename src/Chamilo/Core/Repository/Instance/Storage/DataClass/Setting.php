@@ -34,7 +34,7 @@ class Setting extends DataClass
      * @return array The property names.
      */
 
-    public function delete()
+    public function delete(): bool
     {
         if (!parent::delete())
         {

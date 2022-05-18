@@ -94,7 +94,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     /**
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -142,7 +142,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     /**
      * @return string[]
      */
-    public function getDefaultProperties()
+    public function getDefaultProperties(): array
     {
         return array(
             self::PROPERTY_ID => $this->getId(), self::PROPERTY_SORT => $this->getSort(),
@@ -153,7 +153,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     /**
      * @return boolean
      */
-    public function isIdentified()
+    public function isIdentified(): bool
     {
         $id = $this->getId();
 

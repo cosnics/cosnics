@@ -31,7 +31,7 @@ class CourseGroupUserRelation extends DataClass
     /**
      * Creates a new subscription and adds the subscription time
      */
-    public function create()
+    public function create(): bool
     {
         if (!$this->get_subscription_time())
         {
@@ -56,14 +56,16 @@ class CourseGroupUserRelation extends DataClass
      *
      * @return array An associative array containing the properties.
      */
-    public function getDefaultProperties()
+    public function getDefaultProperties(): array
     {
         return $this->defaultProperties;
     }
 
-    public function setDefaultProperties($defaultProperties)
+    public function setDefaultProperties(array $defaultProperties): CourseGroupUserRelation
     {
         $this->defaultProperties = $defaultProperties;
+
+        return $this;
     }
 
     /**

@@ -28,7 +28,7 @@ class JobProcessorFactoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->containerMock = $this->getMockBuilder(ContainerInterface::class)
             ->disableOriginalConstructor()->getMock();
@@ -39,7 +39,7 @@ class JobProcessorFactoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->containerMock);
         unset($this->jobProcessorFactory);

@@ -23,7 +23,7 @@ class GroupRelUser extends DataClass
     const PROPERTY_GROUP_ID = 'group_id';
     const PROPERTY_USER_ID = 'user_id';
 
-    public function delete()
+    public function delete(): bool
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(

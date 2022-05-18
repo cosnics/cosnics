@@ -27,7 +27,7 @@ class Result extends EphorusDataClass
      *
      * @return boolean @codeCoverageIgnore
      */
-    protected function checkBeforeSave()
+    protected function checkBeforeSave(): bool
     {
         $this->is_valid_request();
 

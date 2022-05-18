@@ -370,7 +370,7 @@ class DependencyInjectionContainerBuilder
      * @return \Chamilo\Configuration\Service\RegistrationConsulter
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
-    protected function getRegistrationConsulter()
+    protected function getRegistrationConsulter(): RegistrationConsulter
     {
         if (!isset($this->registrationConsulter))
         {

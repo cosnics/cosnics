@@ -20,7 +20,7 @@ class LanguageCategoryItem extends Item
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = [], $additionalProperties = null)
+    public function __construct($defaultProperties = [], $additionalProperties = [])
     {
         parent::__construct($defaultProperties, $additionalProperties);
         $this->setType(__CLASS__);

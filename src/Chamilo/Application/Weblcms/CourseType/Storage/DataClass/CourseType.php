@@ -84,7 +84,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @return boolean
      */
-    public function create($create_in_batch = false)
+    public function create(): bool
     {
         if (!parent::create())
         {
@@ -94,7 +94,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         $parent_id = $this->get_parent_rights_location()->get_id();
 
         if (!CourseManagementRights::getInstance()->create_location_in_courses_subtree(
-            CourseManagementRights::TYPE_COURSE_TYPE, $this->get_id(), $parent_id, 0, $create_in_batch, 0
+            CourseManagementRights::TYPE_COURSE_TYPE, $this->get_id(), $parent_id, 0, false, 0
         ))
         {
             return false;
@@ -151,7 +151,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @return boolean
      */
-    public function delete()
+    public function delete(): bool
     {
         $location = $this->get_rights_location();
 

@@ -33,7 +33,7 @@ class AuthorizationCheckerTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->userRoleServiceMock =
             $this->getMockForAbstractClass('Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface');
@@ -49,7 +49,7 @@ class AuthorizationCheckerTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->userRoleServiceMock);
         unset($this->structureLocationRoleService);

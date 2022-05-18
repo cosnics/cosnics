@@ -9,7 +9,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config = new Configuration();
     }

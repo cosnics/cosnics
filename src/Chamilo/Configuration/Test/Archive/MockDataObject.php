@@ -42,7 +42,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
 
     public $db;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->db = new Mdb2Database();
         // TODO: Find a way to have a separate test database which can
@@ -51,7 +51,7 @@ class Mdb2DatabaseTest extends PHPUnit_Framework_TestCase
         $this->db->set_prefix('unit_test_');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // $this->db = new Mdb2Database; // For some reason, the db var is dropped before teardown?
         // FIXME: This is MDB2-specific.

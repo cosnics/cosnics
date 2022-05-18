@@ -259,7 +259,7 @@ class SynchronizationData extends DataClass
      *
      * @return boolean
      */
-    public function create()
+    public function create(): bool
     {
         $now = time();
         $this->set_creation_date($now);
@@ -271,7 +271,7 @@ class SynchronizationData extends DataClass
      *
      * @return boolean
      */
-    public function update()
+    public function update(): bool
     {
         if (! $this->isIdentified())
         {

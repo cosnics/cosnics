@@ -59,7 +59,7 @@ class InstallerTest extends PHPUnit_Framework_TestCase
         $this->install_configuration_file = __DIR__ . '/__files/install_config.php';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->tune_error_reporting_for_mdb2();
         $this->installer_config = new Configuration();
@@ -68,7 +68,7 @@ class InstallerTest extends PHPUnit_Framework_TestCase
         $this->installer_config->load_config_file($this->install_configuration_file);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Filesystem::remove(Path::getInstance()->getStoragePath() . 'configuration/configuration.php');
         foreach ($this->EXTRA_DIRECTORIES as $directory)

@@ -112,7 +112,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return boolean
      */
-    function create()
+    function create(): bool
     {
 
         // if ($wdm->retrieve_course_group_group_relation_by_name($this->get_name()) == null)
@@ -163,7 +163,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return boolean
      */
-    function delete()
+    function delete(): bool
     {
         $success = DataManager::delete_course_group_group_relation($this);
         if (!$success)
@@ -212,14 +212,16 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return array An associative array containing the properties.
      */
-    function getDefaultProperties()
+    function getDefaultProperties(): array
     {
         return $this->defaultProperties;
     }
 
-    function setDefaultProperties($defaultProperties)
+    function setDefaultProperties(array $defaultProperties): CourseGroupGroupRelation
     {
         $this->defaultProperties = $defaultProperties;
+
+        return $this;
     }
 
     /**
@@ -274,7 +276,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return int
      */
-    function get_id()
+    function get_id(): ?int
     {
         return $this->getDefaultProperty(self::PROPERTY_ID);
     }
@@ -343,7 +345,7 @@ class CourseGroupGroupRelation extends DataClass
         return $this->setDefaultProperty(self::PROPERTY_FORUM_PUBLICATION_CATEGORY_ID, $id);
     }
 
-    function set_id($id)
+    function set_id(int $id): CourseGroupGroupRelation
     {
         return $this->setDefaultProperty(self::PROPERTY_ID, $id);
     }
@@ -403,7 +405,7 @@ class CourseGroupGroupRelation extends DataClass
      *
      * @return boolean
      */
-    function update()
+    function update(): bool
     {
         if ($this->check_before_saving())
         {

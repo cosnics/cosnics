@@ -20,7 +20,7 @@ class Value extends DataClass
 
     const PROPERTY_VALUE = 'value';
 
-    public function create()
+    public function create(): bool
     {
         $this->set_time(time());
 

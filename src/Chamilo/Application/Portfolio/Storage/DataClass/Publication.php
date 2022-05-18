@@ -158,7 +158,7 @@ class Publication extends DataClass
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      */
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         return array(
             Feedback::class => new EqualityCondition(

@@ -75,7 +75,7 @@ class User extends DataClass
      *
      * @return boolean True if success, false otherwise
      */
-    public function create()
+    public function create(): bool
     {
         $this->set_registration_date(time());
         $this->set_security_token(sha1(time() . uniqid()));
@@ -88,7 +88,7 @@ class User extends DataClass
         return true;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         $group_rel_user_condition = new EqualityCondition(
             new PropertyConditionVariable(GroupRelUser::class, GroupRelUser::PROPERTY_USER_ID),

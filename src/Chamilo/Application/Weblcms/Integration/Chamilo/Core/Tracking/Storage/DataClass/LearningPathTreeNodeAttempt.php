@@ -45,7 +45,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
 
     /**
      */
-    public function delete()
+    public function delete(): bool
     {
         $succes = parent::delete();
         

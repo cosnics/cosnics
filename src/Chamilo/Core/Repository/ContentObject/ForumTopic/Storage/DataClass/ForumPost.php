@@ -87,7 +87,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return boolean Returns whether the create was succesfull.
      */
-    public function create($first_post = false)
+    public function create($first_post = false): bool
     {
         $now = time();
 
@@ -131,7 +131,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      *
      * @return boolean
      */
-    public function delete($all_posts = false)
+    public function delete($all_posts = false): bool
     {
         $delete_attachments = DataManager::retrieve_attached_objects($this->get_id());
         $forum_topic = \Chamilo\Core\Repository\Storage\DataManager::retrieve_by_id(
@@ -434,7 +434,7 @@ class ForumPost extends DataClass implements AttachmentSupport
      * @return boolean returns true when post is updated succesfull.
      * @throws \Exception
      */
-    public function update($request_from_topic = false)
+    public function update($request_from_topic = false): bool
     {
         if (!$request_from_topic)
         {

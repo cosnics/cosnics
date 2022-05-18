@@ -84,7 +84,7 @@ class Relation extends DataClass implements EntityTranslationInterface
      * 
      * @return string[string]
      */
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         $dependencies = [];
         

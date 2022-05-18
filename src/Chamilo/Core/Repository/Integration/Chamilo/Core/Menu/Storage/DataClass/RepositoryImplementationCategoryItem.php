@@ -34,7 +34,7 @@ class RepositoryImplementationCategoryItem extends Item
         $this->children[] = $child;
     }
 
-    public function delete()
+    public function delete(): bool
     {
         foreach ($this->get_children() as $child)
         {

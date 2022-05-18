@@ -22,7 +22,7 @@ class ImportParserFactoryTest extends ChamiloTestCase
     /**
      * Setup before each test
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->importParserFactory = new ImportParserFactory();
     }
@@ -30,7 +30,7 @@ class ImportParserFactoryTest extends ChamiloTestCase
     /**
      * Tear down after each test
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->importParserFactory);
     }
