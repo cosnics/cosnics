@@ -72,7 +72,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
         return implode('<br />' . PHP_EOL, $html);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_URLS, self::PROPERTY_LICENSE, self::PROPERTY_TAGS)

@@ -37,7 +37,7 @@ abstract class CommonRequest extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_DECISION_DATE);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array_merge(

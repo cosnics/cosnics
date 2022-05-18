@@ -57,13 +57,13 @@ class CourseGroup extends NestedTreeNode
      */
     private $members_cache;
 
-    public function check_before_save()
+    public function checkBeforeSave()
     {
         $children = DataManager::count_course_group_users($this->get_id());
 
         if ($this->get_max_number_of_members() > 0 && $children > $this->get_max_number_of_members())
         {
-            $this->add_error(Translation::get('MaximumMembersToSmall'));
+            $this->addError(Translation::get('MaximumMembersToSmall'));
 
             return false;
         }
@@ -120,7 +120,7 @@ class CourseGroup extends NestedTreeNode
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(
@@ -138,7 +138,7 @@ class CourseGroup extends NestedTreeNode
      *
      * @return bool
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         return array(
             CourseGroupUserRelation::class => new EqualityCondition(
@@ -167,7 +167,7 @@ class CourseGroup extends NestedTreeNode
     public function get_group_id()
     {
         // return $this->getDefaultProperty(self::PROPERTY_GROUP_ID);
-        return $this->get_optional_property(self::PROPERTY_GROUP_ID);
+        return $this->getOptionalProperty(self::PROPERTY_GROUP_ID);
     }
 
     /**
@@ -468,7 +468,7 @@ class CourseGroup extends NestedTreeNode
 
     public function update()
     {
-        if ($this->check_before_save())
+        if ($this->checkBeforeSave())
         {
             return parent::update();
         }

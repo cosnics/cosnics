@@ -24,7 +24,7 @@ class LpiAttemptObjective extends SimpleTracker
         $this->set_display_order($parameters[self::PROPERTY_DISPLAY_ORDER]);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

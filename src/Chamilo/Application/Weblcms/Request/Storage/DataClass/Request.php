@@ -197,7 +197,7 @@ class Request extends DataClass
      *
      * @return string[] The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_NAME;

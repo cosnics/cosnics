@@ -20,7 +20,7 @@ class LatestDocumentsPublisherComponent extends Manager
         $ids = [];
         foreach($trackers as $tracker)
         {
-            if (!$tracker->get_optional_property(Request::PROPERTY_REQUEST_TIME))
+            if (!$tracker->getOptionalProperty(Request::PROPERTY_REQUEST_TIME))
             {
                 $ids[] = $tracker->getDefaultProperty(Entry::PROPERTY_ID);
             }

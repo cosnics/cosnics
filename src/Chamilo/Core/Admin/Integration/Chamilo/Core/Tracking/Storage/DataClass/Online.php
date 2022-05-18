@@ -16,7 +16,7 @@ class Online extends SimpleTracker
     const PROPERTY_USER_ID = 'user_id';
     const PROPERTY_LAST_ACCESS_DATE = 'last_access_date';
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_USER_ID, self::PROPERTY_LAST_ACCESS_DATE));
     }

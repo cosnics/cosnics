@@ -40,7 +40,7 @@ class CreatorComponent extends Manager
             
             if (! $success)
             {
-                $message .= '<br />' . implode('<br /', $user_view->get_errors());
+                $message .= '<br />' . implode('<br /', $user_view->getErrors());
             }
             
             $this->redirect($message, !$success, array(self::PARAM_ACTION => self::ACTION_BROWSE));

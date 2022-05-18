@@ -37,7 +37,7 @@ class ManageSubscriptionsComponent extends TabComponent
                         'CourseGroupSubscriptionsUpdated',
                         array('OBJECT' => Translation::get('CourseGroup'))
                     ) . '<br />' .
-                    implode('<br />', $courseGroup->get_errors());
+                    implode('<br />', $courseGroup->getErrors());
             }
             else
             {
@@ -45,7 +45,7 @@ class ManageSubscriptionsComponent extends TabComponent
                         'ObjectNotUpdated',
                         array('OBJECT' => Translation::get('CourseGroup')),
                         Utilities::COMMON_LIBRARIES
-                    ) . '<br />' . implode('<br />', $courseGroup->get_errors());
+                    ) . '<br />' . implode('<br />', $courseGroup->getErrors());
             }
             $this->redirect($message, !$succes, array(self::PARAM_ACTION => self::ACTION_GROUP_DETAILS));
         }

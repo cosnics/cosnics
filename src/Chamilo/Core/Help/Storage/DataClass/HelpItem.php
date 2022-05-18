@@ -20,7 +20,7 @@ class HelpItem extends DataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_CONTEXT, self::PROPERTY_IDENTIFIER, self::PROPERTY_URL, self::PROPERTY_LANGUAGE));

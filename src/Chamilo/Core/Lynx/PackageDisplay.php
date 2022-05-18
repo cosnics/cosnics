@@ -75,11 +75,11 @@ class PackageDisplay
 
             $html[] = '<table class="table table-striped table-bordered table-hover table-data">';
 
-            if (!is_null($package_info->get_dependencies()))
+            if (!is_null($package_info->getDependencies()))
             {
                 $html[] = '<tr>';
                 $html[] = '<td class="header">' . Translation::get('PreDepends') . '</td>';
-                $html[] = '<td>' . $package_info->get_dependencies()->as_html() . '</td>';
+                $html[] = '<td>' . $package_info->getDependencies()->as_html() . '</td>';
                 $html[] = '</tr>';
             }
 

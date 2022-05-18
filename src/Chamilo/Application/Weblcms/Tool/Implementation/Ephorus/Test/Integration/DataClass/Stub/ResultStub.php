@@ -15,7 +15,7 @@ class ResultStub extends Result
      * 
      * @return boolean
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         return true;
     }

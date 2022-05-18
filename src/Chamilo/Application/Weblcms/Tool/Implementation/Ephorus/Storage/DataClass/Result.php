@@ -27,11 +27,11 @@ class Result extends EphorusDataClass
      *
      * @return boolean @codeCoverageIgnore
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         $this->is_valid_request();
 
-        return parent::check_before_save();
+        return parent::checkBeforeSave();
     }
 
     /**
@@ -49,7 +49,7 @@ class Result extends EphorusDataClass
      *
      * @return string[] - The property types.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_REQUEST_ID;
         $extendedPropertyNames[] = self::PROPERTY_URL;
@@ -184,7 +184,7 @@ class Result extends EphorusDataClass
         $string_utilities = $this->get_string_utilities_class();
         if ($string_utilities::getInstance()->isNullOrEmpty($this->get_request_id()))
         {
-            $this->add_error(Translation::get('RequestIdIsRequired'));
+            $this->addError(Translation::get('RequestIdIsRequired'));
 
             return false;
         }
@@ -193,7 +193,7 @@ class Result extends EphorusDataClass
         $request = $data_manager::retrieve_by_id(Request::class, (int) $this->get_request_id());
         if (!$request)
         {
-            $this->add_error(Translation::get('RequestNotFound'));
+            $this->addError(Translation::get('RequestNotFound'));
 
             return false;
         }

@@ -32,7 +32,7 @@ class Setting extends DataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_CONTEXT, self::PROPERTY_VARIABLE, self::PROPERTY_VALUE, self::PROPERTY_USER_SETTING));

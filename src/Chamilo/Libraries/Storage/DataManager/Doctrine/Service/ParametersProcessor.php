@@ -447,11 +447,11 @@ class ParametersProcessor
         {
             $propertiesClassName = $dataClassName;
         }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::is_extended())
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::isExtended())
         {
             $propertiesClassName = $dataClassName;
         }
-        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::is_extended())
+        elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
         {
             $propertiesClassName = $dataClassName::parent_class_name();
         }

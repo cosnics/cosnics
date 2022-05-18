@@ -48,7 +48,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         $question_attempts = $this->get_question_attempts_from_publication_and_question($publication_id, $question_id);
         foreach($question_attempts as $question_attempt)
         {
-            $user_question_attempts[$question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT)
+            $user_question_attempts[$question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT)
                 ->get_user_id()][] = $question_attempt;
         }
 
@@ -106,7 +106,7 @@ class AssessmentQuestionUsersBlock extends AssessmentBlock
         {
             $attempt_count ++;
 
-            $assessment_attempt = $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
+            $assessment_attempt = $question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT);
 
             if ($assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED)
             {

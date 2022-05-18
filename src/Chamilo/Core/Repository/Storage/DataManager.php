@@ -859,7 +859,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 );
             }
 
-            if ($class::is_extended())
+            if ($class::isExtended())
             {
                 if (isset($condition_owner))
                 {

@@ -30,7 +30,7 @@ abstract class AbstractAttempt extends DataClass
      * @param string[] $extendedPropertyNames
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_TOTAL_SCORE;

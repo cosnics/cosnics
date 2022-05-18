@@ -155,7 +155,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         if (($this->course_group->get_max_number_of_members() > 0) &&
             (count($values['users']['user']) > $this->course_group->get_max_number_of_members()))
         {
-            $this->course_group->add_error(Translation::get('MaximumAmountOfMembersReached'));
+            $this->course_group->addError(Translation::get('MaximumAmountOfMembersReached'));
 
             return false;
         }
@@ -256,7 +256,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
             foreach ($not_subscribed_users as $user_id)
             {
                 $user_fullname = \Chamilo\Core\User\Storage\DataManager::get_fullname_from_user($user_id);
-                $this->course_group->add_error($user_fullname . ' maximum number of group subscriptions is reached');
+                $this->course_group->addError($user_fullname . ' maximum number of group subscriptions is reached');
             }
             if (count($members_to_add) == 0)
             {

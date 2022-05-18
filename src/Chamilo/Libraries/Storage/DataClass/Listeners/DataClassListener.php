@@ -17,7 +17,19 @@ abstract class DataClassListener
     const BEFORE_DELETE = 'on_before_delete';
     const BEFORE_SET_PROPERTY = 'on_before_set_property';
     const BEFORE_UPDATE = 'on_before_update';
-    const GET_DEPENDENCIES = 'on_get_dependencies';
+    const GET_DEPENDENCIES = 'onGetDependencies';
+
+    /**
+     * Calls this function to return the dependencies of this class
+     *
+     * @param string[] $dependencies
+     *
+     * @return boolean
+     */
+    public function onGetDependencies(&$dependencies = [])
+    {
+        return true;
+    }
 
     /**
      * Calls this function after the creation of a dataclass in the database
@@ -107,18 +119,6 @@ abstract class DataClassListener
      * @return boolean
      */
     public function on_before_update()
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function to return the dependencies of this class
-     *
-     * @param string[] $dependencies
-     *
-     * @return boolean
-     */
-    public function on_get_dependencies(&$dependencies = [])
     {
         return true;
     }

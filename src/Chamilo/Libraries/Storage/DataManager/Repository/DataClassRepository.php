@@ -399,7 +399,7 @@ class DataClassRepository
             return false;
         }
 
-        if ($dataClass instanceof CompositeDataClass && $dataClass::is_extended())
+        if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable($dataClass::class_name(), DataClass::PROPERTY_ID),
@@ -965,7 +965,7 @@ class DataClassRepository
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass)
     {
-        if (!$compositeDataClass->is_extended())
+        if (!$compositeDataClass->isExtended())
         {
             return [];
         }
@@ -1114,7 +1114,7 @@ class DataClassRepository
         $parentDataClassName, $dataClassName, DataClassParameters $parameters
     )
     {
-        if ($dataClassName::is_extended())
+        if ($dataClassName::isExtended())
         {
             $join = new Join(
                 $parentDataClassName, new EqualityCondition(
@@ -1214,7 +1214,7 @@ class DataClassRepository
             $dataClassTableName, $condition, $defaultProperties
         );
 
-        if ($dataClass instanceof CompositeDataClass && $dataClass::is_extended() && $result === true)
+        if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended() && $result === true)
         {
             $condition = new EqualityCondition(
                 new PropertyConditionVariable(get_class($dataClass), DataClass::PROPERTY_ID),

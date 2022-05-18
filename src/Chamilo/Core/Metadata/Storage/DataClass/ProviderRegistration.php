@@ -41,7 +41,7 @@ class ProviderRegistration extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
         $extendedPropertyNames[] = self::PROPERTY_PROVIDER_CLASS;
@@ -115,7 +115,7 @@ class ProviderRegistration extends DataClass
      * 
      * @return string[string]
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         $dependencies = [];
         

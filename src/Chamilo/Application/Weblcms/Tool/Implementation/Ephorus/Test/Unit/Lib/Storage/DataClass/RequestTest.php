@@ -21,21 +21,21 @@ class RequestTest extends DataClassTest
     /**
      * Tests that the check before save function works
      */
-    public function test_check_before_save()
+    public function test_checkBeforeSave()
     {
-        $mock_object = $this->prepare_mock_object_for_check_before_save_tests(true, true, false);
+        $mock_object = $this->prepare_mock_object_for_checkBeforeSave_tests(true, true, false);
         
-        $this->assertTrue($this->invoke_check_before_save($mock_object));
+        $this->assertTrue($this->invoke_checkBeforeSave($mock_object));
     }
 
     /**
      * Tests that the check before save function works with invalid status and that the status is set to OK
      */
-    public function test_check_before_save_with_invalid_status()
+    public function test_checkBeforeSave_with_invalid_status()
     {
-        $mock_object = $this->prepare_mock_object_for_check_before_save_tests(false, true, false);
+        $mock_object = $this->prepare_mock_object_for_checkBeforeSave_tests(false, true, false);
         
-        $this->assertTrue($this->invoke_check_before_save($mock_object));
+        $this->assertTrue($this->invoke_checkBeforeSave($mock_object));
         $this->assertTrue($mock_object->get_status() == Request::STATUS_IN_PROGRESS);
     }
 
@@ -43,22 +43,22 @@ class RequestTest extends DataClassTest
      * Tests that the check before save function works with invalid process type and that the process type is set to
      * check and index
      */
-    public function test_check_before_save_with_invalid_process_type()
+    public function test_checkBeforeSave_with_invalid_process_type()
     {
-        $mock_object = $this->prepare_mock_object_for_check_before_save_tests(true, false, false);
+        $mock_object = $this->prepare_mock_object_for_checkBeforeSave_tests(true, false, false);
         
-        $this->assertTrue($this->invoke_check_before_save($mock_object));
+        $this->assertTrue($this->invoke_checkBeforeSave($mock_object));
         $this->assertTrue($mock_object->get_process_type() == Request::PROCESS_TYPE_CHECK_AND_VISIBLE);
     }
 
     /**
      * Tests that the check before save function fails when the required fields are not filled in.
      */
-    public function test_check_before_save_without_required_fields()
+    public function test_checkBeforeSave_without_required_fields()
     {
-        $mock_object = $this->prepare_mock_object_for_check_before_save_tests(true, true, true);
+        $mock_object = $this->prepare_mock_object_for_checkBeforeSave_tests(true, true, true);
         
-        $this->assertFalse($this->invoke_check_before_save($mock_object));
+        $this->assertFalse($this->invoke_checkBeforeSave($mock_object));
     }
 
     /**
@@ -262,7 +262,7 @@ class RequestTest extends DataClassTest
      *
      * @return PHPUnit_Framework_MockObject_MockObject
      */
-    protected function prepare_mock_object_for_check_before_save_tests($is_status_valid_return, 
+    protected function prepare_mock_object_for_checkBeforeSave_tests($is_status_valid_return,
         $is_process_type_valid_return, $is_null_or_empty_return)
     {
         $mock_object = $this->get_request_mock(
@@ -285,15 +285,15 @@ class RequestTest extends DataClassTest
     }
 
     /**
-     * Invokes the check_before_save function on a given mock object
+     * Invokes the checkBeforeSave function on a given mock object
      * 
      * @param PHPUnit_Framework_MockObject_MockObject $mock_object
      *
      * @return boolean
      */
-    protected function invoke_check_before_save($mock_object)
+    protected function invoke_checkBeforeSave($mock_object)
     {
-        return $this->get_method($mock_object, 'check_before_save')->invoke($mock_object);
+        return $this->get_method($mock_object, 'checkBeforeSave')->invoke($mock_object);
     }
 
     /**

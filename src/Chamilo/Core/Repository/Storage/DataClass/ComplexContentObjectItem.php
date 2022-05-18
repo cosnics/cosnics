@@ -38,7 +38,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
     public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties, $additional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
@@ -46,7 +46,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      *
      * @return boolean
      */
-    public function check_before_save()
+    public function checkBeforeSave()
     {
         if (!$this->get_add_date())
         {
@@ -60,31 +60,31 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
 
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_ref()))
         {
-            $this->add_error(Translation::get('ReferenceObjectShouldNotBeEmpty'));
+            $this->addError(Translation::get('ReferenceObjectShouldNotBeEmpty'));
         }
         else
         {
             $ref_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_ref());
             if (!$ref_content_object)
             {
-                $this->add_error(Translation::get('ReferenceObjectDoesNotExist'));
+                $this->addError(Translation::get('ReferenceObjectDoesNotExist'));
             }
         }
 
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_parent()))
         {
-            $this->add_error(Translation::get('ReferenceObjectShouldNotBeEmpty'));
+            $this->addError(Translation::get('ReferenceObjectShouldNotBeEmpty'));
         }
         else
         {
             $parent_content_object = DataManager::retrieve_by_id(ContentObject::class, $this->get_parent());
             if (!$parent_content_object)
             {
-                $this->add_error(Translation::get('ParentObjectDoesNotExist'));
+                $this->addError(Translation::get('ParentObjectDoesNotExist'));
             }
         }
 
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
     public static function factory($class, &$record = [])
@@ -128,7 +128,7 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

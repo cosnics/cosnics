@@ -43,7 +43,7 @@ class CourseSettingDefaultValue extends CourseSettingValue
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_SETTING_ID;
 

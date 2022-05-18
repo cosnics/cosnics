@@ -56,7 +56,7 @@ class CourseEntityRelation extends DataClass
      */
     public function get_course()
     {
-        return $this->get_foreign_property(self::FOREIGN_PROPERTY_COURSE, Course::class);
+        return $this->getForeignProperty(self::FOREIGN_PROPERTY_COURSE, Course::class);
     }
 
     /**
@@ -74,7 +74,7 @@ class CourseEntityRelation extends DataClass
      *
      * @return String[] - The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
         $extendedPropertyNames[] = self::PROPERTY_STATUS;
@@ -122,7 +122,7 @@ class CourseEntityRelation extends DataClass
      */
     public function set_course(Course $course)
     {
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE, $course);
+        $this->setForeignProperty(self::FOREIGN_PROPERTY_COURSE, $course);
     }
 
     /**

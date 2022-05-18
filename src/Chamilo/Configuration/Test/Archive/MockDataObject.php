@@ -22,12 +22,12 @@ class MockDataObject
         return $this->props;
     }
 
-    public function set_default_properties($props)
+    public function setDefaultProperties($props)
     {
         $this->props = $props;
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array('id', 'inta', 'intb', 'texta', 'textb', 'bool');
     }

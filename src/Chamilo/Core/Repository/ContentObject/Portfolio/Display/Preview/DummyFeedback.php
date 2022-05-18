@@ -49,7 +49,7 @@ class DummyFeedback extends Feedback
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_CONTENT_OBJECT_ID));
     }

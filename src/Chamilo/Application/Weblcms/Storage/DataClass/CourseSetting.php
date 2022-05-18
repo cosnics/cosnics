@@ -38,7 +38,7 @@ class CourseSetting extends DataClass
      */
     public function get_course_tool()
     {
-        return $this->get_foreign_property(
+        return $this->getForeignProperty(
             self::FOREIGN_PROPERTY_TOOL, CourseTool::class
         );
     }
@@ -56,7 +56,7 @@ class CourseSetting extends DataClass
      */
     public function get_course_tool_name()
     {
-        $course_tool_name = $this->get_optional_property(self::PROPERTY_COURSE_TOOL_NAME);
+        $course_tool_name = $this->getOptionalProperty(self::PROPERTY_COURSE_TOOL_NAME);
         if (!$course_tool_name)
         {
             $course_tool = $this->get_course_tool();
@@ -80,7 +80,7 @@ class CourseSetting extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_TOOL_ID;
         $extendedPropertyNames[] = self::PROPERTY_GLOBAL_SETTING;
@@ -150,7 +150,7 @@ class CourseSetting extends DataClass
      */
     public function set_course_tool(CourseTool $course_tool)
     {
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_TOOL, $course_tool);
+        $this->setForeignProperty(self::FOREIGN_PROPERTY_TOOL, $course_tool);
     }
 
     /**

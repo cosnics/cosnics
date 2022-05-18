@@ -172,9 +172,9 @@ class User extends DataClass
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($extendedPropertyNames = [])
+    public static function getCacheablePropertyNames(array $extendedPropertyNames = []): array
     {
-        return parent::get_cacheable_property_names(array(self::PROPERTY_USERNAME));
+        return parent::getCacheablePropertyNames([self::PROPERTY_USERNAME]);
     }
 
     /**
@@ -210,7 +210,7 @@ class User extends DataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

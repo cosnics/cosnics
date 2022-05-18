@@ -39,7 +39,7 @@ class Publication extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(
@@ -156,9 +156,9 @@ class Publication extends DataClass
     /**
      * Returns the dependencies for this dataclass
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[string]
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         return array(
             Feedback::class => new EqualityCondition(

@@ -87,14 +87,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
     /**
      * (non-PHPdoc)
      *
-     * @see common/DataClass#check_before_save()
+     * @see common/DataClass#checkBeforeSave()
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         // Title
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
         {
-            $this->add_error(Translation::get('FileTitleIsRequired'));
+            $this->addError(Translation::get('FileTitleIsRequired'));
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
@@ -104,14 +104,14 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         // Description
         if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
         {
-            $this->add_error(Translation::get('FileDescriptionIsRequired'));
+            $this->addError(Translation::get('FileDescriptionIsRequired'));
         }
 
         // OwnerId
         $owner_id = $this->get_owner_id();
         if (!isset($owner_id) || !is_numeric($owner_id))
         {
-            $this->add_error(Translation::get('ContentObjectOwnerIsRequired'));
+            $this->addError(Translation::get('ContentObjectOwnerIsRequired'));
         }
         /*
          * Save file if needed
@@ -130,7 +130,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             {
                 if (!$this->duplicate_current_file())
                 {
-                    $this->add_error(Translation::get('FileDuplicateError'));
+                    $this->addError(Translation::get('FileDuplicateError'));
                 }
             }
 
@@ -138,29 +138,29 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
             if (!isset($fullpath) || !file_exists($fullpath))
             {
-                $this->add_error(Translation::get('FileFileContentNotSet'));
+                $this->addError(Translation::get('FileFileContentNotSet'));
             }
         }
 
         // Filename
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
         {
-            $this->add_error(Translation::get('FileFilenameIsRequired'));
+            $this->addError(Translation::get('FileFilenameIsRequired'));
         }
 
         // Path
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
         {
-            $this->add_error(Translation::get('FilePathToFileNotSet'));
+            $this->addError(Translation::get('FilePathToFileNotSet'));
         }
 
         // Hash
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
         {
-            $this->add_error(Translation::get('FileHashNotSet'));
+            $this->addError(Translation::get('FileHashNotSet'));
         }
 
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
     /**
@@ -170,7 +170,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      */
     public function create($create_in_batch = false)
     {
-        $this->clear_errors();
+        $this->clearErrors();
 
         return parent::create($create_in_batch);
     }
@@ -685,7 +685,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                     }
                     else
                     {
-                        $this->add_error(
+                        $this->addError(
                             'File move failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save
                         );
 
@@ -697,12 +697,12 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                             }
                             else
                             {
-                                $this->add_error('File delete failed: ' . $this->temporary_file_path);
+                                $this->addError('File delete failed: ' . $this->temporary_file_path);
                             }
                         }
                         else
                         {
-                            $this->add_error(
+                            $this->addError(
                                 'File copy failed. From: ' . $this->temporary_file_path . ' to ' . $path_to_save
                             );
                         }
@@ -732,12 +732,12 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
                 }
                 else
                 {
-                    $this->add_error(Translation::get('FileStoreError'));
+                    $this->addError(Translation::get('FileStoreError'));
                 }
             }
             else
             {
-                $this->add_error(Translation::get('FileFilenameNotSet'));
+                $this->addError(Translation::get('FileFilenameNotSet'));
             }
         }
 
@@ -828,7 +828,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
             return $this->version();
         }
 
-        $this->clear_errors();
+        $this->clearErrors();
 
         return parent::update($trueUpdate);
     }
@@ -857,7 +857,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
 
     public function version($trueUpdate = true)
     {
-        $this->clear_errors();
+        $this->clearErrors();
 
         return parent::version($trueUpdate);
     }

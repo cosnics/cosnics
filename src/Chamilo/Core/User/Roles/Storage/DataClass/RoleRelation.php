@@ -20,7 +20,7 @@ class RoleRelation extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_USER_ID;
         $extendedPropertyNames[] = self::PROPERTY_ROLE_ID;

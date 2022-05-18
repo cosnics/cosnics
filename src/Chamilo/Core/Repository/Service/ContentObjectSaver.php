@@ -249,7 +249,7 @@ class ContentObjectSaver
             $contentObject->set_current(ContentObject::CURRENT_SINGLE);
         }
 
-        // TODO: The DataClass::check_before_save() is currently ignored
+        // TODO: The DataClass::checkBeforeSave() is currently ignored
         if (!$this->getContentObjectRepository()->createContentObject($contentObject))
         {
             return false;
@@ -303,7 +303,7 @@ class ContentObjectSaver
 
         $this->createContentObject($contentObject);
 
-        if ($contentObject->has_errors())
+        if ($contentObject->hasErrors())
         {
             return null;
         }
@@ -820,7 +820,7 @@ class ContentObjectSaver
             $contentObject->set_modification_date(time());
         }
 
-        // TODO: The DataClass::check_before_save() is currently ignored
+        // TODO: The DataClass::checkBeforeSave() is currently ignored
         $success = $this->getContentObjectRepository()->updateContentObject($contentObject);
 
         if (!$success)
@@ -873,7 +873,7 @@ class ContentObjectSaver
             $result = $this->updateContentObject($contentObject);
         }
 
-        if ($contentObject->has_errors())
+        if ($contentObject->hasErrors())
         {
             return false;
         }

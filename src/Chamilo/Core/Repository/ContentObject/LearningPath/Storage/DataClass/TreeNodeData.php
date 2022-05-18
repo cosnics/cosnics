@@ -43,13 +43,13 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
     public function __construct($default_properties = [], $additional_properties = null)
     {
         parent::__construct($default_properties, $additional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

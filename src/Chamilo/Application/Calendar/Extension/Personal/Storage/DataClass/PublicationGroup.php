@@ -20,7 +20,7 @@ class PublicationGroup extends DataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_PUBLICATION, self::PROPERTY_GROUP_ID));
     }
@@ -29,7 +29,7 @@ class PublicationGroup extends DataClass
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($cacheablePropertyNames = [])
+    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
     {
         return [];
     }

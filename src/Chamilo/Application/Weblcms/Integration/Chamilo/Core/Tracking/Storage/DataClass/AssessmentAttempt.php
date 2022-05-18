@@ -79,7 +79,7 @@ class AssessmentAttempt extends AbstractAttempt
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
         $extendedPropertyNames[] = self::PROPERTY_ASSESSMENT_ID;

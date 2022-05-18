@@ -110,7 +110,7 @@ abstract class ExternalObject
      *
      * @param $default_properties the $default_properties to set
      */
-    public function set_default_properties($default_properties)
+    public function setDefaultProperties($default_properties)
     {
         $this->default_properties = $default_properties;
     }
@@ -132,7 +132,7 @@ abstract class ExternalObject
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_ID;
         $extendedPropertyNames[] = self::PROPERTY_EXTERNAL_REPOSITORY_ID;

@@ -116,7 +116,7 @@ class RequestManager
         if (!$request->is_content_object_valid())
         {
             throw new InvalidArgumentException(
-                'The given base request is not valid: ' . implode(PHP_EOL, $request->get_errors())
+                'The given base request is not valid: ' . implode(PHP_EOL, $request->getErrors())
             );
         }
 

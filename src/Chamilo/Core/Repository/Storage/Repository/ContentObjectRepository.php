@@ -205,7 +205,7 @@ class ContentObjectRepository
             ]
         );
 
-        if ($contentObjectType::is_extended())
+        if ($contentObjectType::isExtended())
         {
             $joins = (new Joins(
                 [

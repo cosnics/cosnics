@@ -65,14 +65,14 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * (non-PHPdoc)
      *
-     * @see common/DataClass#check_before_save()
+     * @see common/DataClass#checkBeforeSave()
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         // Title
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_title()))
         {
-            $this->add_error(Translation::get('WebpageTitleIsRequired'));
+            $this->addError(Translation::get('WebpageTitleIsRequired'));
         }
 
         $descriptionRequired = Configuration::getInstance()->get_setting(
@@ -82,14 +82,14 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
         // Description
         if ($descriptionRequired && StringUtilities::getInstance()->isNullOrEmpty($this->get_description()))
         {
-            $this->add_error(Translation::get('WebpageDescriptionIsRequired'));
+            $this->addError(Translation::get('WebpageDescriptionIsRequired'));
         }
 
         // OwnerId
         $owner_id = $this->get_owner_id();
         if (!isset($owner_id) || !is_numeric($owner_id))
         {
-            $this->add_error(Translation::get('ContentObjectOwnerIsRequired'));
+            $this->addError(Translation::get('ContentObjectOwnerIsRequired'));
         }
 
         /*
@@ -109,7 +109,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
             {
                 if (!$this->duplicate_current_file())
                 {
-                    $this->add_error(Translation::get('WebpageDuplicateError'));
+                    $this->addError(Translation::get('WebpageDuplicateError'));
                 }
             }
 
@@ -117,29 +117,29 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
 
             if (!isset($fullpath) || !file_exists($fullpath))
             {
-                $this->add_error(Translation::get('WebpageFileContentNotSet'));
+                $this->addError(Translation::get('WebpageFileContentNotSet'));
             }
         }
 
         // Filename
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_filename()))
         {
-            $this->add_error(Translation::get('WebpageFilenameIsRequired'));
+            $this->addError(Translation::get('WebpageFilenameIsRequired'));
         }
 
         // Path
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_path()))
         {
-            $this->add_error(Translation::get('WebpagePathToFileNotSet'));
+            $this->addError(Translation::get('WebpagePathToFileNotSet'));
         }
 
         // Hash
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_hash()))
         {
-            $this->add_error(Translation::get('WebpageHashNotSet'));
+            $this->addError(Translation::get('WebpageHashNotSet'));
         }
 
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
     /**
@@ -149,7 +149,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
      */
     public function create($create_in_batch = false)
     {
-        $this->clear_errors();
+        $this->clearErrors();
 
         return parent::create($create_in_batch);
     }
@@ -635,12 +635,12 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
                 }
                 else
                 {
-                    $this->add_error(Translation::get('WebpageStoreError'));
+                    $this->addError(Translation::get('WebpageStoreError'));
                 }
             }
             else
             {
-                $this->add_error(Translation::get('WebpageFilenameNotSet'));
+                $this->addError(Translation::get('WebpageFilenameNotSet'));
             }
         }
 
@@ -724,9 +724,9 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
             return $this->version();
         }
 
-        $this->clear_errors();
+        $this->clearErrors();
 
-        if ($this->check_before_save()) // may be called twice in some situation
+        if ($this->checkBeforeSave()) // may be called twice in some situation
             // (if the calling method is 'save()
             // from the DataClass), but the create()
             // method in the content_object class
@@ -764,7 +764,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
 
     public function version($trueUpdate = true)
     {
-        $this->clear_errors();
+        $this->clearErrors();
 
         return parent::version($trueUpdate);
     }

@@ -65,7 +65,7 @@ abstract class CourseSettingRelation extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_SETTING_ID;
         $extendedPropertyNames[] = self::PROPERTY_VALUE;
@@ -90,7 +90,7 @@ abstract class CourseSettingRelation extends DataClass
      */
     function set_course_setting(CourseSetting $course_setting)
     {
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE_SETTING, $course_setting);
+        $this->setForeignProperty(self::FOREIGN_PROPERTY_COURSE_SETTING, $course_setting);
     }
 
     /**

@@ -74,10 +74,10 @@ class CourseUserExportExtender implements UserExportExtender
     {
         $data = [];
         
-        $data[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = $user->get_optional_property(
+        $data[self::EXPORT_COLUMN_SUBSCRIPTION_STATUS] = $user->getOptionalProperty(
             self::EXPORT_COLUMN_SUBSCRIPTION_STATUS) == 1 ? Translation::get('Teacher') : Translation::get('Student');
         
-        $data[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = $user->get_optional_property(
+        $data[self::EXPORT_COLUMN_SUBSCRIPTION_TYPE] = $user->getOptionalProperty(
             self::EXPORT_COLUMN_SUBSCRIPTION_TYPE) == 1 ? Translation::get('DirectSubscriptions') : Translation::get(
             'GroupSubscriptions');
         

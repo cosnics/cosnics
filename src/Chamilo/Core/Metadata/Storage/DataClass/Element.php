@@ -54,7 +54,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
@@ -103,7 +103,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_SCHEMA_ID;
         $extendedPropertyNames[] = self::PROPERTY_NAME;
@@ -122,7 +122,7 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
      * **************************************************************************************************************
      */
 
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         $dependencies = [];
 

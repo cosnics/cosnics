@@ -40,7 +40,7 @@ class CourseTool extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_SECTION_TYPE, self::PROPERTY_NAME, self::PROPERTY_CONTEXT)
@@ -59,7 +59,7 @@ class CourseTool extends DataClass
      * @return string[string]
      *
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         $id = $this->get_id();
 

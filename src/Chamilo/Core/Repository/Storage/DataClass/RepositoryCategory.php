@@ -54,14 +54,14 @@ class RepositoryCategory extends PlatformCategory
         // TRANSACTION
         $success = DataManager::transactional(
             function ($c) use ($create_in_batch, $category) {
-                if (!$category->check_before_save())
+                if (!$category->checkBeforeSave())
                 {
                     return false;
                 }
 
                 if (!DataManager::create($category))
                 {
-                    $this->add_error(
+                    $this->addError(
                         Translation::get(
                             'CouldNotCreateObjectInDatabase',
                             array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
@@ -83,21 +83,21 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return boolean
      */
-    public function check_before_save()
+    public function checkBeforeSave()
     {
         if (StringUtilities::getInstance()->isNullOrEmpty($this->get_name()))
         {
-            $this->add_error(Translation::get('TitleIsRequired'));
+            $this->addError(Translation::get('TitleIsRequired'));
         }
 
         if (!$this->get_type_id())
         {
-            $this->add_error(Translation::get('TypeIdIsRequired'));
+            $this->addError(Translation::get('TypeIdIsRequired'));
         }
 
         if (!$this->get_type())
         {
-            $this->add_error(Translation::get('TypeIsRequired'));
+            $this->addError(Translation::get('TypeIsRequired'));
         }
 
         if (!$this->get_parent())
@@ -113,7 +113,7 @@ class RepositoryCategory extends PlatformCategory
             $count = DataManager::count(RepositoryCategory::class, new DataClassCountParameters($condition));
             if ($count == 0)
             {
-                $this->add_error(Translation::get('ParentDoesNotExist'));
+                $this->addError(Translation::get('ParentDoesNotExist'));
             }
         }
 
@@ -160,10 +160,10 @@ class RepositoryCategory extends PlatformCategory
 
         if ($count > 0)
         {
-            $this->add_error('CategoryWithSameNameExists');
+            $this->addError('CategoryWithSameNameExists');
         }
 
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
     /**
@@ -180,14 +180,14 @@ class RepositoryCategory extends PlatformCategory
         // TRANSACTION
         $success = DataManager::transactional(
             function ($c) use ($move, $category) {
-                if (!$category->check_before_save())
+                if (!$category->checkBeforeSave())
                 {
                     return false;
                 }
 
                 if (!DataManager::update($category))
                 {
-                    $category->add_error(
+                    $category->addError(
                         Translation::get(
                             'CouldNotUpdateObjectInDatabase',
                             array('OBJECT' => Translation::get('Category'), Utilities::COMMON_LIBRARIES)
@@ -218,7 +218,7 @@ class RepositoryCategory extends PlatformCategory
                 {
                     if (!DataManager::delete_workspace_category_recursive($category))
                     {
-                        $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
+                        $category->addError(Translation::get('CouldNotDeleteCategoryInDatabase'));
 
                         return false;
                     }
@@ -236,7 +236,7 @@ class RepositoryCategory extends PlatformCategory
 
                     if (!DataManager::delete_category_recursive($this->getPublicationAggregator(), $category))
                     {
-                        $category->add_error(Translation::get('CouldNotDeleteCategoryInDatabase'));
+                        $category->addError(Translation::get('CouldNotDeleteCategoryInDatabase'));
 
                         return false;
                     }
@@ -265,7 +265,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array(
             self::PROPERTY_TYPE_ID, self::PROPERTY_TYPE, self::PROPERTY_ID, self::PROPERTY_NAME, self::PROPERTY_PARENT,

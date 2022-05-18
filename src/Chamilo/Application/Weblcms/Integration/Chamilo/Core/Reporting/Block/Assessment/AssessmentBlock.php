@@ -276,7 +276,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         foreach ($question_attempts as $question_attempt)
         {
-            $question_attempt->set_optional_property(
+            $question_attempt->setOptionalProperty(
                 self::PROPERTY_ASSESSMENT_ATTEMPT,
                 $assessment_attempts_by_id[$question_attempt->get_assessment_attempt_id()]
             );

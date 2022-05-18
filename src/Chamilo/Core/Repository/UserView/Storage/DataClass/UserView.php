@@ -26,7 +26,7 @@ class UserView extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION, self::PROPERTY_USER_ID));
@@ -87,7 +87,7 @@ class UserView extends DataClass
     }
 
 
-    public function get_dependencies($dependencies = [])
+    public function getDependencies($dependencies = [])
     {
         return array(
             UserViewRelContentObject::class => new EqualityCondition(

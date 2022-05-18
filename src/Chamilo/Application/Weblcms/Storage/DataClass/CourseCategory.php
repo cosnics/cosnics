@@ -30,7 +30,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     public function get_code()
@@ -58,7 +58,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      *
      * @return array The property titles.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_CODE, self::PROPERTY_STATE));
     }
@@ -69,7 +69,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
      * @return string[string]
      *
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         return [];
     }

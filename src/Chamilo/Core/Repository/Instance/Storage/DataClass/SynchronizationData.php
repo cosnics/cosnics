@@ -240,7 +240,7 @@ class SynchronizationData extends DataClass
      *
      * @param $property_names array
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_CREATED;
         $extendedPropertyNames[] = self::PROPERTY_MODIFIED;

@@ -38,7 +38,7 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
     {
         $toolbar = new Toolbar();
 
-        $request_id = $object->get_optional_property(Request::PROPERTY_REQUEST_ID);
+        $request_id = $object->getOptionalProperty(Request::PROPERTY_REQUEST_ID);
         if ($request_id != null)
         {
             $toolbar->add_item(
@@ -55,11 +55,11 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
             );
         }
 
-        if ($object->get_optional_property(Request::PROPERTY_REQUEST_TIME))
+        if ($object->getOptionalProperty(Request::PROPERTY_REQUEST_TIME))
         {
-            if ($object->get_optional_property(Request::PROPERTY_STATUS) != Request::STATUS_DUPLICATE)
+            if ($object->getOptionalProperty(Request::PROPERTY_STATUS) != Request::STATUS_DUPLICATE)
             {
-                if (!$object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX))
+                if (!$object->getOptionalProperty(Request::PROPERTY_VISIBLE_IN_INDEX))
                 {
                     $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                     $translation = Translation::get('AddDocumentToIndex', null, self::EPHORUS_TRANSLATION_CONTEXT);
@@ -121,44 +121,44 @@ class EntryRequestTableCellRenderer extends DataClassTableCellRenderer implement
                     )
                 );
             case EntryRequestTableColumnModel::COLUMN_NAME_AUTHOR :
-                return $object->get_optional_property(User::PROPERTY_FIRSTNAME) . ' ' .
-                    $object->get_optional_property(User::PROPERTY_LASTNAME);
+                return $object->getOptionalProperty(User::PROPERTY_FIRSTNAME) . ' ' .
+                    $object->getOptionalProperty(User::PROPERTY_LASTNAME);
             // return $object->get_author()->get_fullname();
             case Request::PROPERTY_REQUEST_TIME :
-                if ($object->get_optional_property(Request::PROPERTY_REQUEST_TIME))
+                if ($object->getOptionalProperty(Request::PROPERTY_REQUEST_TIME))
                 {
                     return DatetimeUtilities::format_locale_date(
-                        null, $object->get_optional_property(Request::PROPERTY_REQUEST_TIME)
+                        null, $object->getOptionalProperty(Request::PROPERTY_REQUEST_TIME)
                     );
                 }
 
                 return '-';
             case Entry::PROPERTY_SUBMITTED :
                 return DatetimeUtilities::format_locale_date(
-                    null, $object->get_optional_property(Entry::PROPERTY_SUBMITTED)
+                    null, $object->getOptionalProperty(Entry::PROPERTY_SUBMITTED)
                 );
             case Request::PROPERTY_STATUS :
-                if ($object->get_optional_property(Request::PROPERTY_STATUS) > 0)
+                if ($object->getOptionalProperty(Request::PROPERTY_STATUS) > 0)
                 {
-                    return Request::status_as_string($object->get_optional_property(Request::PROPERTY_STATUS));
+                    return Request::status_as_string($object->getOptionalProperty(Request::PROPERTY_STATUS));
                 }
                 else
                 {
                     return '-';
                 }
             case Request::PROPERTY_PERCENTAGE :
-                if ($object->get_optional_property(Request::PROPERTY_STATUS) != null)
+                if ($object->getOptionalProperty(Request::PROPERTY_STATUS) != null)
                 {
-                    return $object->get_optional_property(Request::PROPERTY_PERCENTAGE) . '%';
+                    return $object->getOptionalProperty(Request::PROPERTY_PERCENTAGE) . '%';
                 }
                 else
                 {
                     return '-';
                 }
             case Request::PROPERTY_VISIBLE_IN_INDEX :
-                if ($object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX) != null)
+                if ($object->getOptionalProperty(Request::PROPERTY_VISIBLE_IN_INDEX) != null)
                 {
-                    return $object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX) ? Translation::get(
+                    return $object->getOptionalProperty(Request::PROPERTY_VISIBLE_IN_INDEX) ? Translation::get(
                         'YesVisible', null, self::EPHORUS_TRANSLATION_CONTEXT
                     ) : Translation::get('NoVisible', null, self::EPHORUS_TRANSLATION_CONTEXT);
                 }

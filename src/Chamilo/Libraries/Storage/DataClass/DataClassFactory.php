@@ -50,7 +50,7 @@ class DataClassFactory
         {
             foreach ($record as $optional_property_name => $optional_property_value)
             {
-                $dataClass->set_optional_property($optional_property_name, $optional_property_value);
+                $dataClass->setOptionalProperty($optional_property_name, $optional_property_value);
             }
         }
 

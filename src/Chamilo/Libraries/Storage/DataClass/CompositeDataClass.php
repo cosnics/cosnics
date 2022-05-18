@@ -19,39 +19,41 @@ abstract class CompositeDataClass extends DataClass
      *
      * @throws \Exception
      */
-    public function __construct($defaultProperties = [], $additionalProperties = null)
+    public function __construct(?array $defaultProperties = [], ?array $additionalProperties = null)
     {
         parent::__construct($defaultProperties);
         $this->set_additional_properties($additionalProperties);
         $this->setType(static::class);
     }
 
-    public function check_for_additional_properties()
+    /**
+     * @throws \ReflectionException
+     */
+    public function checkForAdditionalProperties(): CompositeDataClass
     {
-        $additional_properties = $this->get_specific_properties(self::PROPERTIES_ADDITIONAL);
+        $additionalProperties = $this->getSpecificProperties(self::PROPERTIES_ADDITIONAL);
 
-        if (isset($additional_properties) && !empty($additional_properties))
+        if (!empty($additionalProperties))
         {
             return;
         }
 
         /**
-         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
+         * @var \Chamilo\Libraries\Storage\DataManager\DataManager $dataManager
          */
-        $data_manager = $this->package() . '\Storage\DataManager';
+        $dataManager = $this->package() . '\Storage\DataManager';
 
-        $this->set_additional_properties($data_manager::retrieve_composite_data_class_additional_properties($this));
+        $this->set_additional_properties($dataManager::retrieve_composite_data_class_additional_properties($this));
+
+        return $this;
     }
 
     /**
-     *
-     * @param string $class
      * @param string[] $record
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
      * @throws \Exception
      */
-    public static function factory($class, &$record = [])
+    public static function factory(string $class, array &$record = []): CompositeDataClass
     {
         $object = parent::factory($class, $record);
         foreach ($object->get_additional_property_names() as $property)
@@ -66,75 +68,52 @@ abstract class CompositeDataClass extends DataClass
         {
             foreach ($record as $optional_property_name => $optional_property_value)
             {
-                $object->set_optional_property($optional_property_name, $optional_property_value);
+                $object->setOptionalProperty($optional_property_name, $optional_property_value);
             }
         }
 
         return $object;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
-     * Gets the additional (type-specific) properties of this object.
-     *
      * @return string[] An associative array containing the properties.
      */
-    public function get_additional_properties()
+    public function get_additional_properties(): array
     {
-        $this->check_for_additional_properties();
+        $this->checkForAdditionalProperties();
 
-        return $this->get_specific_properties(self::PROPERTIES_ADDITIONAL);
+        return $this->getSpecificProperties(self::PROPERTIES_ADDITIONAL);
     }
 
     /**
-     * Gets an additional (type-specific) property of this object by name.
-     *
-     * @param string $name The name of the property.
-     *
      * @return string
      */
-    public function get_additional_property($name)
+    public function get_additional_property(string $name)
     {
-        $this->check_for_additional_properties();
+        $this->checkForAdditionalProperties();
 
-        return $this->get_specific_property(self::PROPERTIES_ADDITIONAL, $name);
+        return $this->getSpecificProperty(self::PROPERTIES_ADDITIONAL, $name);
     }
 
-    /**
-     * Gets the additional property names Should be overridden when needed
-     *
-     * @return string[] the aditional property names
-     */
-    public static function get_additional_property_names()
+    public static function get_additional_property_names(): array
     {
         return [];
     }
 
     /**
-     *
-     * @return string
-     * @deprecated User CompositeDataClass::getType() now
+     * @deprecated Use CompositeDataClass::getType() now
      */
-    public function get_type()
+    public function get_type(): string
     {
         return $this->getType();
     }
 
-    /**
-     *
-     * @param string $name
-     *
-     * @return boolean
-     */
-    static public function isAdditionalPropertyName($name)
+    static public function isAdditionalPropertyName(string $name): bool
     {
         return in_array($name, static::get_additional_property_names());
     }
@@ -143,61 +122,50 @@ abstract class CompositeDataClass extends DataClass
      *
      * @return boolean
      */
-    public static function is_extended()
+    public static function isExtended(): bool
     {
         return count(static::get_additional_property_names()) > 0;
     }
 
-    /**
-     * Get the fully qualified class name of the DataClass object
-     *
-     * @return string
-     */
-    public static function parent_class_name()
+    public static function parent_class_name(): string
     {
         return get_parent_class(static::class);
     }
 
     /**
-     * @param string $type
-     *
      * @throws \Exception
      */
-    public function setType($type)
+    public function setType(string $type): CompositeDataClass
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+
+        return $this;
     }
 
     /**
-     * Sets the additional (type-specific) properties of this object.
-     *
-     * @param string[] An associative array containing the properties.
+     * @param string[] $additionalProperties
      */
-    public function set_additional_properties($additional_properties)
+    public function set_additional_properties(array $additionalProperties)
     {
-        $this->set_specific_properties(self::PROPERTIES_ADDITIONAL, $additional_properties);
+        $this->setSpecificProperties(self::PROPERTIES_ADDITIONAL, $additionalProperties);
     }
 
     /**
-     * Sets an additional (type-specific) property of this object by name.
-     *
-     * @param string $name The name of the property.
      * @param mixed $value The new value for the property.
      */
-    public function set_additional_property($name, $value)
+    public function set_additional_property(string $name, $value)
     {
-        $this->set_specific_property(self::PROPERTIES_ADDITIONAL, $name, $value);
+        $this->setSpecificProperty(self::PROPERTIES_ADDITIONAL, $name, $value);
     }
 
     /**
-     *
-     * @param string $type
-     *
      * @throws \Exception
      * @deprecated Use CompositeDataClass::setType() now
      */
-    public function set_type($type)
+    public function set_type(string $type): CompositeDataClass
     {
         $this->setType($type);
+
+        return $this;
     }
 }

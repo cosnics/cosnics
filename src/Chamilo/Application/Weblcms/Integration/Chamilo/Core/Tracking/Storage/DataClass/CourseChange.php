@@ -9,7 +9,7 @@ class CourseChange extends ChangesTracker
     // Can be used for subscribsion of users / classes
     const PROPERTY_TARGET_REFERENCE_ID = 'target_reference_id';
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_TARGET_REFERENCE_ID));
     }

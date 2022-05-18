@@ -21,7 +21,7 @@ class WorkspaceOffice365Reference extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_WORKSPACE_ID;
         $extendedPropertyNames[] = self::PROPERTY_OFFICE365_GROUP_ID;

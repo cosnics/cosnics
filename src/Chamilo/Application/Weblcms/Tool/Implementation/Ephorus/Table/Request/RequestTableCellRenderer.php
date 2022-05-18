@@ -42,9 +42,9 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
             )
         );
 
-        if ($object->get_optional_property(Request::PROPERTY_STATUS) != Request::STATUS_DUPLICATE)
+        if ($object->getOptionalProperty(Request::PROPERTY_STATUS) != Request::STATUS_DUPLICATE)
         {
-            if (!$object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX))
+            if (!$object->getOptionalProperty(Request::PROPERTY_VISIBLE_IN_INDEX))
             {
                 $glyph = new FontAwesomeGlyph('eye', array('text-muted'));
                 $translation = Translation::get('AddDocumentToIndex');
@@ -87,18 +87,18 @@ class RequestTableCellRenderer extends DataClassTableCellRenderer implements Tab
                     )
                 );
             case RequestTableColumnModel::COLUMN_NAME_AUTHOR :
-                return $object->get_optional_property(User::PROPERTY_FIRSTNAME) . ' ' .
-                    $object->get_optional_property(User::PROPERTY_LASTNAME);
+                return $object->getOptionalProperty(User::PROPERTY_FIRSTNAME) . ' ' .
+                    $object->getOptionalProperty(User::PROPERTY_LASTNAME);
             case Request::PROPERTY_REQUEST_TIME :
                 return DatetimeUtilities::format_locale_date(
-                    null, $object->get_optional_property(Request::PROPERTY_REQUEST_TIME)
+                    null, $object->getOptionalProperty(Request::PROPERTY_REQUEST_TIME)
                 );
             case Request::PROPERTY_STATUS :
-                return Request::status_as_string($object->get_optional_property(Request::PROPERTY_STATUS));
+                return Request::status_as_string($object->getOptionalProperty(Request::PROPERTY_STATUS));
             case Request::PROPERTY_PERCENTAGE :
-                return $object->get_optional_property(Request::PROPERTY_PERCENTAGE) . '%';
+                return $object->getOptionalProperty(Request::PROPERTY_PERCENTAGE) . '%';
             case Request::PROPERTY_VISIBLE_IN_INDEX :
-                return $object->get_optional_property(Request::PROPERTY_VISIBLE_IN_INDEX) ? Translation::get(
+                return $object->getOptionalProperty(Request::PROPERTY_VISIBLE_IN_INDEX) ? Translation::get(
                     'YesVisible'
                 ) : Translation::get('NoVisible');
         }

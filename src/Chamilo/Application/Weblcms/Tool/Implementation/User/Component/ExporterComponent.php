@@ -147,12 +147,12 @@ class ExporterComponent extends Manager
             $individualUserRecordCopy = $individualUserRecord;
             $user = DataClass::factory(User::class, $individualUserRecordCopy);
 
-            $user->set_optional_property(
+            $user->setOptionalProperty(
                 CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS,
                 $individualUserRecord[CourseEntityRelation::PROPERTY_STATUS]
             );
 
-            $user->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 1);
+            $user->setOptionalProperty(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 1);
 
             $users[] = $user;
         }
@@ -216,11 +216,11 @@ class ExporterComponent extends Manager
 
             foreach ($groupUsers as $groupUser)
             {
-                $groupUser->set_optional_property(
+                $groupUser->setOptionalProperty(
                     CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_STATUS, $groupStatus
                 );
 
-                $groupUser->set_optional_property(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
+                $groupUser->setOptionalProperty(CourseUserExportExtender::EXPORT_COLUMN_SUBSCRIPTION_TYPE, 2);
             }
         }
 

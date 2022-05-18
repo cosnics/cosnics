@@ -26,7 +26,7 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $default_property_names = parent::getDefaultPropertyNames();
         $default_property_names[] = self::PROPERTY_PUBLICATION_ID;

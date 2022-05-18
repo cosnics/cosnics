@@ -18,7 +18,7 @@ class ForumTopicView extends SimpleTracker
         $this->set_date(time());
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

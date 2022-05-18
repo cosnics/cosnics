@@ -61,7 +61,7 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      */
     public static function factory($namespace, $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST)
     {
-        if (! $complex_content_object_item->is_extended())
+        if (! $complex_content_object_item->isExtended())
         {
             return null;
         }

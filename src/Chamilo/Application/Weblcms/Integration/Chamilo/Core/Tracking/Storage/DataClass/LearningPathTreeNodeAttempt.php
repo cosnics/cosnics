@@ -18,7 +18,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_PUBLICATION_ID;
 

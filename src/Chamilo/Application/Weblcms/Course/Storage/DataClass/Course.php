@@ -309,9 +309,9 @@ class Course extends DataClass
      *
      * @return boolean
      */
-    protected function delete_dependencies()
+    protected function deleteDependencies()
     {
-        parent::delete_dependencies();
+        parent::deleteDependencies();
 
         $id = $this->get_id();
 
@@ -473,7 +473,7 @@ class Course extends DataClass
      */
     public function get_course_type_title()
     {
-        $course_type_title = $this->get_optional_property(self::PROPERTY_COURSE_TYPE_TITLE);
+        $course_type_title = $this->getOptionalProperty(self::PROPERTY_COURSE_TYPE_TITLE);
         if (!$course_type_title)
         {
             $course_type = $this->get_course_type();
@@ -520,7 +520,7 @@ class Course extends DataClass
      *
      * @return String[] - The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_TYPE_ID;
         $extendedPropertyNames[] = self::PROPERTY_TITULAR_ID;
@@ -537,13 +537,7 @@ class Course extends DataClass
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    /**
-     * Returns the dependencies for this dataclass
-     *
-     * @return string[string]
-     *
-     */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         $id = $this->get_id();
 
@@ -1035,7 +1029,7 @@ class Course extends DataClass
             }
         }
 
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
+        $this->setForeignProperty(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
     }
 
     /**

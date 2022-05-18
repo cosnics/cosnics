@@ -19,7 +19,7 @@ class RightsLocationLockedRight extends DataClass
      *
      * @return String[] - The property names.
      */
-    static function getDefaultPropertyNames($extendedPropertyNames = []):array
+    static function getDefaultPropertyNames(array $extendedPropertyNames = []):array
     {
         $extendedPropertyNames[] = self::PROPERTY_LOCATION_ID;
         $extendedPropertyNames[] = self::PROPERTY_RIGHT_ID;

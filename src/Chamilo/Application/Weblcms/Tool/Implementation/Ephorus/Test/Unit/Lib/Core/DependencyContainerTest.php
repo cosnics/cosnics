@@ -66,7 +66,7 @@ class DependencyContainerTest extends Test
     {
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $this);
-        $value = $dependency_container->get_dependencies();
+        $value = $dependency_container->getDependencies();
 
         $this->assertEquals($this, $value['dependency_container_test']);
     }
@@ -80,7 +80,7 @@ class DependencyContainerTest extends Test
 
         $dependency_container = new DependencyContainer();
         $dependency_container->add('dependency_container_test', $classname);
-        $value = $dependency_container->get_dependencies();
+        $value = $dependency_container->getDependencies();
 
         $this->assertEquals($classname, $value['dependency_container_test']);
     }
@@ -117,7 +117,7 @@ class DependencyContainerTest extends Test
         $dependency_container->add('dependency_container_test', $this);
         $dependency_container->delete('dependency_container_test');
 
-        $value = $dependency_container->get_dependencies();
+        $value = $dependency_container->getDependencies();
 
         $this->assertEmpty($value['dependency_container_test']);
     }
@@ -132,7 +132,7 @@ class DependencyContainerTest extends Test
         $dependency_container->add('dependency_container_test2', $this);
         $dependency_container->delete('dependency_container_test');
 
-        $value = $dependency_container->get_dependencies();
+        $value = $dependency_container->getDependencies();
 
         $this->assertEquals($this, $value['dependency_container_test2']);
     }
@@ -170,7 +170,7 @@ class DependencyContainerTest extends Test
         $dependency_container->add('dependency_container_test', $result);
         $dependency_container->replace('dependency_container_test', $request);
 
-        $value = $dependency_container->get_dependencies();
+        $value = $dependency_container->getDependencies();
 
         $this->assertEquals($request, $value['dependency_container_test']);
     }

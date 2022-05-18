@@ -79,7 +79,7 @@ class CalendarRendererProvider extends \Chamilo\Libraries\Calendar\Renderer\Serv
             }
 
             $publicationObject = new ContentObjectPublication();
-            $publicationObject->set_default_properties($publication);
+            $publicationObject->setDefaultProperties($publication);
             $publicationObject->set_content_object($object);
 
             $eventParser = new EventParser($publicationObject, $startTime, $endTime);

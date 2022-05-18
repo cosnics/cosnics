@@ -88,7 +88,7 @@ class MigrationFixer
                 if ($subLearningPath instanceof LearningPath)
                 {
                     $sectionTreeNodeData = $descendantNode->getTreeNodeData();
-                    $sectionTreeNodeData->remove_listener(0);
+                    $sectionTreeNodeData->removeListener(0);
 
                     /** Remove first because this object will be recreated during copy action with section */
                     $this->treeNodeDataService->deleteTreeNodeData($sectionTreeNodeData);
@@ -182,7 +182,7 @@ class MigrationFixer
             else
             {
                 $treeNodeData = $childNode->getTreeNodeData();
-                $treeNodeData->remove_listener(0);
+                $treeNodeData->removeListener(0);
 
                 $treeNodeData->setLearningPathId((int) $rootLearningPath->getId());
                 $treeNodeData->setParentTreeNodeDataId((int) $parentTreeNodeData->getId());

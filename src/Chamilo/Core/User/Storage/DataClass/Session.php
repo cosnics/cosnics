@@ -46,7 +46,7 @@ class Session extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_NAME;
         $extendedPropertyNames[] = self::PROPERTY_SESSION_ID;

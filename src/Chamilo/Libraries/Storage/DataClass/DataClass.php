@@ -7,7 +7,6 @@ use Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Translation\Translation;
-use Exception;
 
 /**
  * Abstract class that describes a dataclass
@@ -29,64 +28,33 @@ abstract class DataClass
     const PROPERTY_ID = 'id';
 
     /**
-     *
      * @var string[]
      */
-    protected static $tableNames = [];
+    private array $errors;
 
     /**
-     * Properties of the data class object, stored in an associative array.
-     * Combination of different types of
-     * properties. Default properties => properties that are a mapping of dataclass and data table Optional properties
-     * => other properties that were added in join queries Foreign properties => objects of other dataclasses
-     *
-     * @var string[][]
-     */
-    private $properties;
-
-    /**
-     * The listeners for this dataclass
-     *
      * @var \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[]
      */
-    private $listeners;
+    private array $listeners;
 
     /**
-     * A list of errors that this dataclass has
-     *
-     * @var string[]
+     * @var string[][]
      */
-    private $errors;
+    private array $properties;
 
-    /**
-     * Creates a new data class object.
-     *
-     * @param string[] $defaultProperties The default properties of the data class object. Associative array.
-     * @param string[] $optionalProperties The optional properties of the data class object. Associative array.
-     */
-    public function __construct($defaultProperties = [], $optionalProperties = [])
+    public function __construct(?array $defaultProperties = [], ?array $optionalProperties = [])
     {
-        $this->set_default_properties($defaultProperties);
-        $this->set_optional_properties($optionalProperties);
-        $this->set_listeners([]);
+        $this->setDefaultProperties($defaultProperties);
+        $this->setOptionalProperties($optionalProperties);
+        $this->setListeners([]);
     }
 
-    /**
-     *
-     * @return string
-     */
-
-    public function __toString()
+    public function __toString(): string
     {
         return Translation::get('ToStringNotImplemented', array('TYPE' => static::class));
     }
 
-    /**
-     * Adds an error to the error list
-     *
-     * @param string $errorMsg
-     */
-    public function add_error($errorMsg)
+    public function addError(string $errorMsg): DataClass
     {
         if (!isset($this->errors))
         {
@@ -94,52 +62,41 @@ abstract class DataClass
         }
 
         $this->errors[] = $errorMsg;
+
+        return $this;
     }
 
-    /**
-     * Adss a listener to the listeners
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener $listener
-     */
-    public function add_listener(DataClassListener $listener)
+    public function addListener(DataClassListener $listener): DataClass
     {
         $this->listeners[] = $listener;
+
+        return $this;
     }
 
-    /**
-     * Check wether the object contains all mandatory properties to be saved in datasource This method should be
-     * overriden in classes inheriting from DataClass
-     *
-     * @return boolean Return true if the object can be saved, false otherwise
-     */
-    protected function check_before_save()
+    protected function checkBeforeSave(): bool
     {
         /*
          * Example: object with mandatory title if(stringUtilities::is_null_or_empty($this->get_title())) {
-         * $this->add_error(Translation::get('TitleIsRequired')); }
+         * $this->addError(Translation::get('TitleIsRequired')); }
          */
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
-    /**
-     * Clears the errors
-     */
-    public function clear_errors()
+    public function clearErrors(): DataClass
     {
         unset($this->errors);
+
+        return $this;
     }
 
     /**
-     * Creates the object
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public function create()
+    public function create(): bool
     {
         $this->notify(DataClassListener::BEFORE_CREATE);
         $success = false;
-        if ($this->check_before_save())
+        if ($this->checkBeforeSave())
         {
             $success = DataManager::create($this);
         }
@@ -150,18 +107,13 @@ abstract class DataClass
     }
 
     /**
-     * Deletes the object
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public function delete()
+    public function delete(): bool
     {
         $this->notify(DataClassListener::BEFORE_DELETE);
 
-        $success = true;
-
-        if (!$this->delete_dependencies())
+        if (!$this->deleteDependencies())
         {
             $success = false;
         }
@@ -176,13 +128,11 @@ abstract class DataClass
     }
 
     /**
-     * Deletes the dependencies
-     *
-     * @return boolean
+     * @throws \Exception
      */
-    protected function delete_dependencies()
+    protected function deleteDependencies(): bool
     {
-        foreach ($this->get_dependencies() as $dependency_class => $dependency_condition)
+        foreach ($this->getDependencies() as $dependency_class => $dependency_condition)
         {
             $dependency_objects = DataManager::retrieves(
                 $dependency_class, new DataClassRetrievesParameters($dependency_condition)
@@ -200,15 +150,7 @@ abstract class DataClass
         return true;
     }
 
-    /**
-     *
-     * @param string $class
-     * @param string[] $record
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
-     * @throws \Exception
-     */
-    public static function factory($class, &$record)
+    public static function factory(string $class, array &$record): DataClass
     {
         $object = new $class();
         foreach ($object->getDefaultPropertyNames() as $property)
@@ -224,7 +166,7 @@ abstract class DataClass
         {
             foreach ($record as $optional_property_name => $optional_property_value)
             {
-                $object->set_optional_property($optional_property_name, $optional_property_value);
+                $object->setOptionalProperty($optional_property_name, $optional_property_value);
             }
         }
 
@@ -232,45 +174,11 @@ abstract class DataClass
     }
 
     /**
-     * Gets the default properties of this data class.
-     *
-     * @return string[] An associative array containing the properties.
-     */
-    public function getDefaultProperties()
-    {
-        return $this->get_specific_properties(self::PROPERTIES_DEFAULT);
-    }
-
-    /**
-     * Gets a default property of this data class object by name.
-     *
-     * @param string $name The name of the property
-     *
-     * @return mixed
-     */
-    public function getDefaultProperty($name)
-    {
-        return $this->get_specific_property(self::PROPERTIES_DEFAULT, $name);
-    }
-
-    /**
-     * Returns the id of this object
-     *
-     * @return integer The id
-     */
-    public function getId()
-    {
-        return $this->getDefaultProperty(static::PROPERTY_ID);
-    }
-
-    /**
-     * Returns all (unique) properties by which a DataClass object can be cached
-     *
      * @param string[] $cacheablePropertyNames
      *
      * @return string[]
      */
-    public static function get_cacheable_property_names($cacheablePropertyNames = [])
+    public static function getCacheablePropertyNames(array $cacheablePropertyNames = []): array
     {
         $cacheablePropertyNames[] = static::PROPERTY_ID;
 
@@ -278,13 +186,27 @@ abstract class DataClass
     }
 
     /**
-     * Get the default properties of all data classes.
-     *
+     * @return string[]
+     */
+    public function getDefaultProperties(): array
+    {
+        return $this->getSpecificProperties(self::PROPERTIES_DEFAULT);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultProperty(string $name)
+    {
+        return $this->getSpecificProperty(self::PROPERTIES_DEFAULT, $name);
+    }
+
+    /**
      * @param string[] $extendedPropertyNames
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = static::PROPERTY_ID;
 
@@ -292,14 +214,12 @@ abstract class DataClass
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      * @throws \Exception
      */
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         $this->notify(DataClassListener::GET_DEPENDENCIES, array(&$dependencies));
 
@@ -307,219 +227,146 @@ abstract class DataClass
     }
 
     /**
-     * Retrieves the list of errors
-     *
      * @return string[]
      */
-    public function get_errors()
+    public function getErrors(): array
     {
-        return isset($this->errors) ? $this->errors : [];
+        return $this->errors ?? [];
     }
 
     /**
-     * Gets the foreign properties of this data class.
-     *
-     * @return string[] An associative array containing the properties.
+     * @return string[]
      */
-    public function get_foreign_properties()
+    public function getForeignProperties(): array
     {
-        return $this->get_specific_properties(self::PROPERTIES_FOREIGN);
+        return $this->getSpecificProperties(self::PROPERTIES_FOREIGN);
     }
 
     /**
-     * Gets a foreign property of this data class object by name and retrieves it with lazy loading if the property does
-     * not yet exists in this dataclass
-     *
-     * @param string $name
-     * @param string $classname The type of the foreign object
-     *
      * @return mixed
      * @throws \Exception
      */
-    public function get_foreign_property($name, $classname)
+    public function getForeignProperty(string $name, string $classname)
     {
-        $foreign_property = $this->get_specific_property(self::PROPERTIES_FOREIGN, $name);
+        $foreignProperty = $this->getSpecificProperty(self::PROPERTIES_FOREIGN, $name);
 
-        if (is_null($foreign_property))
+        if (is_null($foreignProperty))
         {
-            $foreign_property = DataManager::retrieve_by_id(
+            $foreignProperty = DataManager::retrieve_by_id(
                 $classname, $this->getDefaultProperty($name . '_id')
             );
 
-            $this->set_foreign_property($name, $foreign_property);
+            $this->setForeignProperty($name, $foreignProperty);
         }
 
-        return $foreign_property;
+        return $foreignProperty;
     }
 
-    /**
-     * Returns the id of this object
-     *
-     * @return integer The id
-     * @deprecated Use getId() now
-     */
-    public function get_id()
+    public function getId(): ?int
     {
-        return $this->getId();
+        return $this->getDefaultProperty(static::PROPERTY_ID);
     }
 
     /**
-     * Returns the listeners
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[]
      */
-    public function get_listeners()
+    public function getListeners(): array
     {
         return $this->listeners;
     }
 
     /**
-     * Sets the listeners
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[] $listeners
      */
-    public function set_listeners($listeners)
+    public function setListeners(array $listeners): DataClass
     {
         $this->listeners = $listeners;
+
+        return $this;
     }
 
     /**
-     * Returns the name of the object
-     *
-     * @return string
-     * @throws \ReflectionException
-     * @deprecated Only used for legacy calls to CUD method implementations, should no longer be necessary
+     * @return string[]
      */
-    public function get_object_name()
+    public function getOptionalProperties(): array
     {
-        return ClassnameUtilities::getInstance()->getClassnameFromObject($this, true);
+        return $this->getSpecificProperties(self::PROPERTIES_OPTIONAL);
     }
 
     /**
-     * Gets the optional properties of this data class.
-     *
-     * @return string[] An associative array containing the properties.
-     */
-    public function get_optional_properties()
-    {
-        return $this->get_specific_properties(self::PROPERTIES_OPTIONAL);
-    }
-
-    /**
-     * Gets a optional property of this data class object by name.
-     *
-     * @param string $name The name of the property
-     *
      * @return mixed
      */
-    public function get_optional_property($name)
+    public function getOptionalProperty(string $name)
     {
-        return $this->get_specific_property(self::PROPERTIES_OPTIONAL, $name);
+        return $this->getSpecificProperty(self::PROPERTIES_OPTIONAL, $name);
     }
 
     /**
-     * Retrieves all the properties
-     *
      * @return string[][]
      */
-    public function get_properties()
+    public function getProperties(): array
     {
         return $this->properties;
     }
 
     /**
-     * Sets all the properties
-     *
      * @param string[][] $properties
      */
-    public function set_properties($properties)
+    public function setProperties(array $properties): DataClass
     {
         $this->properties = $properties;
+
+        return $this;
     }
 
     /**
-     * Returns the properties for a specific type
-     *
-     * @param string $propertiesType
-     *
      * @return string[]
      */
-    public function get_specific_properties($propertiesType)
+    public function getSpecificProperties(string $propertiesType): array
     {
         return $this->properties[$propertiesType];
     }
 
-    /**
-     * Get a property from a property type
-     *
-     * @param string $propertiesType
-     * @param string $propertyName
-     *
-     * @return string
-     */
-    public function get_specific_property($propertiesType, $propertyName)
+    public function getSpecificProperty(string $propertiesType, string $propertyName)
     {
-        $properties = $this->get_specific_properties($propertiesType);
+        $properties = $this->getSpecificProperties($propertiesType);
 
-        return (isset($properties) && array_key_exists($propertyName, $properties)) ? $properties[$propertyName] : null;
+        return (array_key_exists($propertyName, $properties)) ? $properties[$propertyName] : null;
     }
 
     abstract public static function getTableName(): string;
 
     /**
-     * Checks wether the object has errors
-     *
-     * @return boolean
+     * @deprecated Use getId() now
      */
-    public function has_errors()
+    public function get_id(): ?int
+    {
+        return $this->getId();
+    }
+
+    public function hasErrors(): bool
     {
         return isset($this->errors) && count($this->errors) > 0;
     }
 
-    /**
-     * Check if the data class has an id or not (and therefore exists in the database)
-     *
-     * @return boolean
-     */
-    public function isIdentified()
+    public static function isDefaultPropertyName(string $name): bool
+    {
+        return in_array($name, static::getDefaultPropertyNames());
+    }
+
+    public static function isExtended(): bool
+    {
+        return false;
+    }
+
+    public function isIdentified(): bool
     {
         $id = $this->getId();
 
         return isset($id) && strlen($id) > 0 && $id != self::NO_UID;
     }
 
-    /**
-     * Checks if the given identifier is the name of a default data class property.
-     *
-     * @param string $name The identifier.
-     *
-     * @return boolean True if the identifier is a property name, false otherwise.
-     */
-    public static function is_default_property_name($name)
-    {
-        return in_array($name, static::getDefaultPropertyNames());
-    }
-
-    /**
-     * Returns whether or not this dataclass is an extended type
-     *
-     * @return boolean
-     */
-    public static function is_extended()
-    {
-        return false;
-    }
-
-    /**
-     * Triggers an event in all the listeners
-     *
-     * @param string $event
-     * @param string[] $parameters
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function notify($event, $parameters = [])
+    public function notify(string $event, ?array $parameters = []): bool
     {
         foreach ($this->listeners as $listener)
         {
@@ -536,32 +383,24 @@ abstract class DataClass
     }
 
     /**
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 2);
     }
 
-    /**
-     * Removes a listener from the index
-     *
-     * @param integer $index
-     */
-    public function remove_listener($index)
+    public function removeListener(int $index): DataClass
     {
         unset($this->listeners[$index]);
+
+        return $this;
     }
 
     /**
-     * Saves the object
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public function save()
+    public function save(): bool
     {
         if ($this->isIdentified())
         {
@@ -573,32 +412,52 @@ abstract class DataClass
         }
     }
 
+    public function setDefaultProperties(array $defaultProperties): DataClass
+    {
+        $this->setSpecificProperties(self::PROPERTIES_DEFAULT, $defaultProperties);
+
+        return $this;
+    }
+
     /**
-     * Sets a default property of this data class by name.
-     *
-     * @param string $name The name of the property.
-     * @param mixed $value The new value for the property.
+     * @param mixed $value
      *
      * @throws \Exception
      */
-    public function setDefaultProperty($name, $value)
+    public function setDefaultProperty(string $name, $value)
     {
         $this->notify(DataClassListener::BEFORE_SET_PROPERTY, array($name, $value));
-        $this->set_specific_property(self::PROPERTIES_DEFAULT, $name, $value);
+        $this->setSpecificProperty(self::PROPERTIES_DEFAULT, $name, $value);
         $this->notify(DataClassListener::AFTER_SET_PROPERTY, array($name, $value));
     }
 
     /**
-     * Sets id of the object
-     *
-     * @param integer $id
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @param string[] $foreignProperties
+     */
+    public function setForeignProperties(array $foreignProperties): DataClass
+    {
+        $this->setSpecificProperties(self::PROPERTIES_FOREIGN, $foreignProperties);
+
+        return $this;
+    }
+
+    /**
      * @throws \Exception
      */
-    public function setId($id)
+    public function setForeignProperty(string $name, DataClass $value): DataClass
     {
-        if (isset($id) && strlen($id) > 0)
+        $this->setSpecificProperty(self::PROPERTIES_FOREIGN, $name, $value);
+        $this->setDefaultProperty($name . '_id', $value->getId());
+
+        return $this;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function setId(int $id): DataClass
+    {
+        if (strlen($id) > 0)
         {
             $this->setDefaultProperty(static::PROPERTY_ID, $id);
         }
@@ -607,118 +466,64 @@ abstract class DataClass
     }
 
     /**
-     * Sets the default properties of this dataclass
-     *
-     * @param string[] $defaultProperties
+     * @param string[] $optionalProperties
      */
-    public function set_default_properties($defaultProperties)
+    public function setOptionalProperties(array $optionalProperties): DataClass
     {
-        $this->set_specific_properties(self::PROPERTIES_DEFAULT, $defaultProperties);
+        $this->setSpecificProperties(self::PROPERTIES_OPTIONAL, $optionalProperties);
+
+        return $this;
     }
 
     /**
-     * Sets the foreign properties of this dataclass
-     *
-     * @param string[] $foreignProperties
-     */
-    public function set_foreign_properties($foreignProperties)
-    {
-        $this->set_specific_properties(self::PROPERTIES_FOREIGN, $foreignProperties);
-    }
-
-    /**
-     * Sets a foreign property of this data class by name and pushes the id of this
-     *
-     * @param string $name The name of the property.
      * @param mixed $value The new value for the property.
-     *
-     * @throws \Exception
      */
-    public function set_foreign_property($name, $value)
+    public function setOptionalProperty(string $name, $value): DataClass
     {
-        if (is_null($value) || !$value instanceof DataClass)
-        {
-            throw new Exception(
-                Translation::get(
-                    'ForeignObjectPropertyCanNotBeNull', array('OBJECT' => static::class, 'FOREIGN_OBJECT' => $name)
-                )
-            );
-        }
+        $this->setSpecificProperty(self::PROPERTIES_OPTIONAL, $name, $value);
 
-        $this->set_specific_property(self::PROPERTIES_FOREIGN, $name, $value);
-        $this->setDefaultProperty($name . '_id', $value->getId());
+        return $this;
     }
 
     /**
-     * Sets id of the object
-     *
-     * @param integer $id
-     *
+     * @param string[] $properties
+     */
+    public function setSpecificProperties(string $propertiesType, array $properties): DataClass
+    {
+        $this->properties[$propertiesType] = $properties;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $propertyValue
+     */
+    public function setSpecificProperty(string $propertiesType, string $propertyName, $propertyValue): DataClass
+    {
+        $this->properties[$propertiesType][$propertyName] = $propertyValue;
+
+        return $this;
+    }
+
+    /**
      * @throws \Exception
      * @deprecated Use setId($id) now
      */
-    public function set_id($id)
+    public function set_id(int $id): DataClass
     {
-        $this->setId($id);
+        return $this->setId($id);
     }
 
     /**
-     * Sets the optional properties of this dataclass
-     *
-     * @param string[] $optionalProperties
-     */
-    public function set_optional_properties($optionalProperties)
-    {
-        $this->set_specific_properties(self::PROPERTIES_OPTIONAL, $optionalProperties);
-    }
-
-    /**
-     * Sets a optional property of this data class by name.
-     *
-     * @param string $name The name of the property.
-     * @param mixed $value The new value for the property.
-     */
-    public function set_optional_property($name, $value)
-    {
-        $this->set_specific_property(self::PROPERTIES_OPTIONAL, $name, $value);
-    }
-
-    /**
-     * Sets the properties for a specific type
-     *
-     * @param string $propertiesType
-     * @param string[] $properties
-     */
-    public function set_specific_properties($propertiesType, $properties)
-    {
-        $this->properties[$propertiesType] = $properties;
-    }
-
-    /**
-     * Sets a property for a specific property type
-     *
-     * @param string $propertiesType
-     * @param string $propertyName
-     * @param string $propertyValue
-     */
-    public function set_specific_property($propertiesType, $propertyName, $propertyValue)
-    {
-        $this->properties[$propertiesType][$propertyName] = $propertyValue;
-    }
-
-    /**
-     * Updates the object
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public function update()
+    public function update(): bool
     {
         $success = false;
 
         $this->notify(DataClassListener::BEFORE_UPDATE);
 
-        if ($this->check_before_save())
+        if ($this->checkBeforeSave())
         {
             $success = DataManager::update($this);
         }

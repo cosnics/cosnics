@@ -665,7 +665,7 @@ class CourseGroupForm extends FormValidator
 
         if ($size_children + $child_max_size > $parent_course_group->get_max_number_of_members())
         {
-            $this->course_group->add_error(
+            $this->course_group->addError(
                 Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
             );
 
@@ -847,7 +847,7 @@ class CourseGroupForm extends FormValidator
 
                 if ($this->course_group_name_exists($parent_group))
                 {
-                    $this->course_group->add_error(
+                    $this->course_group->addError(
                         Translation::getInstance()->getTranslation(
                             'CourseGroupTitleExists', array('NAME' => $parent_group->get_name())
                         )
@@ -856,7 +856,7 @@ class CourseGroupForm extends FormValidator
 
                 if (!$parent_group->create())
                 {
-                    $course_group->add_error(
+                    $course_group->addError(
                         Translation::getInstance()->getTranslation(
                             'CannotCreateCourseGroup', array('NAME' => $parent_group->get_name())
                         )
@@ -889,7 +889,7 @@ class CourseGroupForm extends FormValidator
                     }
                     else
                     {
-                        $course_group->add_error(
+                        $course_group->addError(
                             Translation::getInstance()->getTranslation(
                                 'CreationFailed', array('NAME' => $course_group->get_name())
                             )
@@ -898,7 +898,7 @@ class CourseGroupForm extends FormValidator
                 }
                 else
                 {
-                    $this->course_group->add_error(
+                    $this->course_group->addError(
                         Translation::getInstance()->getTranslation(
                             'CourseGroupTitleExists', array('NAME' => $course_group->get_name())
                         )
@@ -922,12 +922,12 @@ class CourseGroupForm extends FormValidator
             }
         }
 
-        return !$this->course_group->has_errors();
+        return !$this->course_group->hasErrors();
     }
 
-    public function get_errors()
+    public function getErrors()
     {
-        return $this->course_group->get_errors();
+        return $this->course_group->getErrors();
     }
 
     public function get_groups()
@@ -1170,7 +1170,7 @@ class CourseGroupForm extends FormValidator
 
         $data_set = $this->course_group->get_children(false);
 
-        if ($this->course_group->get_errors() == null)
+        if ($this->course_group->getErrors() == null)
         {
             // group size check -> total size must not be greater than parent group's max size
             $course_groups = [];
@@ -1210,7 +1210,7 @@ class CourseGroupForm extends FormValidator
                 if ($parent_group_form_max_number_of_members > 0 &&
                     $total_size > $parent_group_form_max_number_of_members)
                 {
-                    $this->course_group->add_error(
+                    $this->course_group->addError(
                         Translation::getInstance()->getTranslation('MaxMembersFromChildrenTooBigForParentCourseGroup')
                     );
 
@@ -1242,7 +1242,7 @@ class CourseGroupForm extends FormValidator
 
                     if ($parent_course_group->get_max_number_of_members() < $total_size)
                     {
-                        $this->course_group->add_error(
+                        $this->course_group->addError(
                             Translation::getInstance()->getTranslation('MaxMembersTooBigForParentCourseGroup')
                         );
 
@@ -1284,7 +1284,7 @@ class CourseGroupForm extends FormValidator
                     if ($this->course_group_name_exists($course_group))
                     {
                         $counter ++;
-                        $this->course_group->add_error(
+                        $this->course_group->addError(
                             Translation::getInstance()->getTranslation(
                                 'CourseGroupNotUpdated',
                                 array('NAME_OLD' => $old_name, 'NAME_NEW' => $course_group->get_name())
@@ -1309,7 +1309,7 @@ class CourseGroupForm extends FormValidator
                 $counter ++;
             }
 
-            return count($this->course_group->get_errors()) == 0;
+            return count($this->course_group->getErrors()) == 0;
         }
         else
         {

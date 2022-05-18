@@ -304,7 +304,7 @@ class PackageDescriber
     {
         if ($dependencies instanceof Dependencies)
         {
-            foreach ($dependencies->get_dependencies() as $dependency)
+            foreach ($dependencies->getDependencies() as $dependency)
             {
                 $this->processDependency($composerJsonInstance, $dependency);
             }
@@ -436,6 +436,6 @@ class PackageDescriber
         $this->processAuthors($composerJsonInstance, $legacyPackage->get_authors());
 
         // Dependencies
-        $this->processDependencies($composerJsonInstance, $legacyPackage->get_dependencies());
+        $this->processDependencies($composerJsonInstance, $legacyPackage->getDependencies());
     }
 }

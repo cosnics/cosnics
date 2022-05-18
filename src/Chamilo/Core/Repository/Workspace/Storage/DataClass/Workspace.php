@@ -110,7 +110,7 @@ class Workspace extends DataClass implements WorkspaceInterface
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(
@@ -122,7 +122,7 @@ class Workspace extends DataClass implements WorkspaceInterface
         );
     }
 
-    public function get_dependencies($dependencies = [])
+    public function getDependencies($dependencies = [])
     {
         return array(
             WorkspaceEntityRelation::class => new EqualityCondition(

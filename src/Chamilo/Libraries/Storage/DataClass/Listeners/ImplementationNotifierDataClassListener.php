@@ -233,7 +233,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @return boolean
      */
-    public function on_get_dependencies(&$dependencies = [])
+    public function on_getDependencies(&$dependencies = [])
     {
         return $this->notify_implementation_packages(__FUNCTION__, array(&$dependencies));
     }

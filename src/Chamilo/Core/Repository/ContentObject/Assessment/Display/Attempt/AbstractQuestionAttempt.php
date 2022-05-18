@@ -23,7 +23,7 @@ abstract class AbstractQuestionAttempt extends DataClass
      * @param string[] $extendedPropertyNames
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_QUESTION_COMPLEX_ID;
         $extendedPropertyNames[] = self::PROPERTY_ANSWER;

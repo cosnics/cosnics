@@ -146,7 +146,7 @@ class ReportRenderer
 
         foreach ($hits_rs as $hit)
         {
-            $hits[$hit->get_optional_property(Request::PROPERTY_GUID)] = $hit;
+            $hits[$hit->getOptionalProperty(Request::PROPERTY_GUID)] = $hit;
         }
 
         return $hits;

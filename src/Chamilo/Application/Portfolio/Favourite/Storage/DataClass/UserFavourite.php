@@ -17,7 +17,7 @@ class UserFavourite extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_SOURCE_USER_ID, self::PROPERTY_FAVOURITE_USER_ID));

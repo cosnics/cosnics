@@ -30,7 +30,7 @@ class EntityTranslation extends DataClass
      *
      * @return string[] The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_ENTITY_TYPE;
         $extendedPropertyNames[] = self::PROPERTY_ENTITY_ID;

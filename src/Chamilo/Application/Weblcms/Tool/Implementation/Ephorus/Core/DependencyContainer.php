@@ -136,19 +136,13 @@ class DependencyContainer
             throw new InvalidArgumentException('Dependency must be an existing object or class name');
         }
     }
-
-    /**
-     * **************************************************************************************************************
-     * Getters & Setters *
-     * **************************************************************************************************************
-     */
     
     /**
      * Returns the dependencies
      * 
      * @return mixed[] $dependencies
      */
-    public function get_dependencies()
+    public function getDependencies()
     {
         return $this->dependencies;
     }

@@ -142,7 +142,7 @@ class MailLog extends DataClass
         $this->setDefaultProperty(self::PROPERTY_HOST, $host);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

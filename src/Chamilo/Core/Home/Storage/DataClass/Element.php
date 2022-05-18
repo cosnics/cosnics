@@ -35,7 +35,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     public function __construct($default_properties = [])
     {
         parent::__construct($default_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     public function delete()
@@ -135,7 +135,7 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

@@ -75,7 +75,7 @@ abstract class ContentObjectPropertyProvider implements PropertyProviderInterfac
                 return '\Chamilo\Core\Repository\ContentObject:' . $contentObject->get_id();
         }
         
-        if ($contentObject->is_default_property_name($property))
+        if ($contentObject->isDefaultPropertyName($property))
         {
             return $contentObject->getDefaultProperty($property);
         }

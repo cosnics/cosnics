@@ -77,7 +77,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
@@ -204,10 +204,10 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     {
         if (is_null($this->contentObject) || $full)
         {
-            if (!is_null($this->get_optional_property(ContentObject::PROPERTY_TITLE)) && !$full)
+            if (!is_null($this->getOptionalProperty(ContentObject::PROPERTY_TITLE)) && !$full)
             {
-                $class = $this->get_optional_property(ContentObject::PROPERTY_TYPE);
-                $this->contentObject = new $class($this->get_optional_properties());
+                $class = $this->getOptionalProperty(ContentObject::PROPERTY_TYPE);
+                $this->contentObject = new $class($this->getOptionalProperties());
                 $this->contentObject->setId($this->get_content_object_id());
             }
             else
@@ -246,7 +246,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $redirect->getUrl();
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(
@@ -469,7 +469,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      */
     public function ignore_display_order()
     {
-        $this->remove_listener(0);
+        $this->removeListener(0);
     }
 
     /**

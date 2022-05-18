@@ -37,7 +37,7 @@ class AssessmentOpenQuestionOptionsBlock extends AssessmentQuestionOptionsBlock
                 $row_count, 
                 Translation::get('User'), 
                 DataManager::get_fullname_from_user(
-                    $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT)->get_user_id()));
+                    $question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT)->get_user_id()));
             
             $answers = unserialize($question_attempt->get_answer());
             

@@ -97,7 +97,7 @@ class CreatorComponent extends Manager
                             'ObjectNotCreated',
                             array('OBJECT' => Translation::get('CourseGroup')),
                             Utilities::COMMON_LIBRARIES
-                        ) . '<br />' . implode('<br />', $course_group->get_errors());
+                        ) . '<br />' . implode('<br />', $course_group->getErrors());
                 }
                 $this->redirect(
                     $message,

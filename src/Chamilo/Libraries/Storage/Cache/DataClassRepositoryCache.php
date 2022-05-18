@@ -86,7 +86,7 @@ class DataClassRepositoryCache
 
         $className = $this->getDataClassCacheClassName($object);
 
-        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
+        foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
         {
             $value = $object->getDefaultProperty($cacheableProperty);
             if (isset($value) && !is_null($value))
@@ -278,7 +278,7 @@ class DataClassRepositoryCache
 
         $className = $this->getDataClassCacheClassName($object);
 
-        foreach ($object->get_cacheable_property_names() as $cacheableProperty)
+        foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
         {
             $cacheablePropertyParameters = new DataClassRetrieveParameters(
                 new EqualityCondition(

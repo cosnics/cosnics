@@ -43,7 +43,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
@@ -265,7 +265,7 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

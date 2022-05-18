@@ -29,7 +29,7 @@ class WorkspaceUserFavourite extends DataClass
      *
      * @return string[]
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(array(self::PROPERTY_WORKSPACE_ID, self::PROPERTY_USER_ID));
     }

@@ -32,7 +32,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function get_course_type()
     {
-        return $this->get_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, CourseType::class);
+        return $this->getForeignProperty(self::FOREIGN_PROPERTY_COURSE_TYPE, CourseType::class);
     }
 
     /**
@@ -56,7 +56,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      *
      * @return String[] - The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_TYPE_ID;
         $extendedPropertyNames[] = self::PROPERTY_LOCKED;
@@ -111,7 +111,7 @@ class CourseTypeRelCourseSetting extends CourseSettingRelation
      */
     public function set_course_type(CourseType $course_type)
     {
-        $this->set_foreign_property(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
+        $this->setForeignProperty(self::FOREIGN_PROPERTY_COURSE_TYPE, $course_type);
     }
 
     /**

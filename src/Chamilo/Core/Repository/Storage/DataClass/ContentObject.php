@@ -139,7 +139,7 @@ class ContentObject extends CompositeDataClass
         $this->oldState = $default_properties[self::PROPERTY_STATE];
     }
 
-    public function __tostring()
+    public function __tostring(): string
     {
         return get_class($this) . '#' . $this->get_id() . ' (' . $this->get_title() . ')';
     }
@@ -1135,7 +1135,7 @@ class ContentObject extends CompositeDataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

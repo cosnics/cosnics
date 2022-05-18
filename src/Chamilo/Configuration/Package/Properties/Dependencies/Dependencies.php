@@ -49,7 +49,7 @@ class Dependencies
      *
      * @return \Chamilo\Configuration\Package\Properties\Dependencies\Dependency\Dependency[]
      */
-    public function get_dependencies()
+    public function getDependencies()
     {
         return $this->dependencies;
     }
@@ -80,7 +80,7 @@ class Dependencies
     {
         $html = [];
 
-        foreach ($this->get_dependencies() as $dependency)
+        foreach ($this->getDependencies() as $dependency)
         {
             $html[] = $dependency->as_html();
         }
@@ -97,7 +97,7 @@ class Dependencies
         $success = 0;
         $messages = [];
 
-        foreach ($this->get_dependencies() as $dependency)
+        foreach ($this->getDependencies() as $dependency)
         {
             if ($dependency->check())
             {
@@ -107,7 +107,7 @@ class Dependencies
             $messages[] = $dependency->get_logger()->render();
         }
 
-        $result = ($success == count($this->get_dependencies()));
+        $result = ($success == count($this->getDependencies()));
 
         $operator = Translation::get('And');
 
@@ -118,7 +118,7 @@ class Dependencies
 
     public function needs($context)
     {
-        foreach ($this->get_dependencies() as $dependency)
+        foreach ($this->getDependencies() as $dependency)
         {
             if ($dependency->needs($context))
             {

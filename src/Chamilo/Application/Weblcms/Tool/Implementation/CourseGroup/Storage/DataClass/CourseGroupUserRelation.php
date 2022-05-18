@@ -61,7 +61,7 @@ class CourseGroupUserRelation extends DataClass
         return $this->defaultProperties;
     }
 
-    public function set_default_properties($defaultProperties)
+    public function setDefaultProperties($defaultProperties)
     {
         $this->defaultProperties = $defaultProperties;
     }
@@ -81,7 +81,7 @@ class CourseGroupUserRelation extends DataClass
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array(self::PROPERTY_COURSE_GROUP, self::PROPERTY_USER);
     }

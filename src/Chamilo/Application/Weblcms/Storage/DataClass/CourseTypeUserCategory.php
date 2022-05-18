@@ -26,7 +26,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties = $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     /**
@@ -54,9 +54,9 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     /**
      * Deletes the dependencies
      */
-    protected function delete_dependencies()
+    protected function deleteDependencies()
     {
-        $success = parent::delete_dependencies();
+        $success = parent::deleteDependencies();
 
         $course_user_category_id_condition = new EqualityCondition(
             new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_USER_CATEGORY_ID),
@@ -104,7 +104,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
      *
      * @return array The property names.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array(
             self::PROPERTY_ID,
@@ -115,7 +115,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
         );
     }
 
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         return array(
             CourseTypeUserCategoryRelCourse::class => new EqualityCondition(

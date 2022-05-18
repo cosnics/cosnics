@@ -98,7 +98,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
 
         foreach($question_attempts as $question_attempt)
         {
-            $assessment_attempt = $question_attempt->get_optional_property(self::PROPERTY_ASSESSMENT_ATTEMPT);
+            $assessment_attempt = $question_attempt->getOptionalProperty(self::PROPERTY_ASSESSMENT_ATTEMPT);
 
             if ($assessment_attempt->get_status() == AssessmentAttempt::STATUS_COMPLETED)
             {

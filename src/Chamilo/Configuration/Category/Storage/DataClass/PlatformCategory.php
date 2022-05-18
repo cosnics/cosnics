@@ -31,14 +31,14 @@ abstract class PlatformCategory extends DataClass
      *
      * @return array The property titles.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(self::PROPERTY_NAME, self::PROPERTY_PARENT, self::PROPERTY_DISPLAY_ORDER)
         );
     }
 
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         return array(
             $this->class_name() => new EqualityCondition(

@@ -83,9 +83,9 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     /**
      * (non-PHPdoc)
      *
-     * @see common/DataClass#check_before_save()
+     * @see common/DataClass#checkBeforeSave()
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         /*
          * Save file if needed
@@ -106,7 +106,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 {
                     if (!$this->duplicate_current_file())
                     {
-                        $this->add_error(Translation::get('FileDuplicateError'));
+                        $this->addError(Translation::get('FileDuplicateError'));
                     }
                 }
 
@@ -114,12 +114,12 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
 
                 if (!isset($fullpath) || !file_exists($fullpath))
                 {
-                    $this->add_error(Translation::get('FileFileContentNotSet'));
+                    $this->addError(Translation::get('FileFileContentNotSet'));
                 }
             }
         }
 
-        return !$this->has_errors();
+        return !$this->hasErrors();
     }
 
     public function count_events()
@@ -475,12 +475,12 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
                 }
                 else
                 {
-                    $this->add_error(Translation::get('FileStoreError'));
+                    $this->addError(Translation::get('FileStoreError'));
                 }
             }
             else
             {
-                $this->add_error(Translation::get('FileFilenameNotSet'));
+                $this->addError(Translation::get('FileFilenameNotSet'));
             }
         }
 

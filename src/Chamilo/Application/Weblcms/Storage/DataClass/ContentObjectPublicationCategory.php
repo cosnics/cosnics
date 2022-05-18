@@ -33,7 +33,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
     public function __construct($default_properties = [], $optional_properties = [])
     {
         parent::__construct($default_properties, $optional_properties);
-        $this->add_listener(new DisplayOrderDataClassListener($this));
+        $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
     public function create($create_in_batch = false)
@@ -111,7 +111,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         return $this->getDefaultProperty(self::PROPERTY_COURSE);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return array(
             self::PROPERTY_COURSE,
@@ -125,7 +125,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         );
     }
 
-    protected function get_dependencies($dependencies = [])
+    protected function getDependencies($dependencies = [])
     {
         $id = $this->get_id();
 

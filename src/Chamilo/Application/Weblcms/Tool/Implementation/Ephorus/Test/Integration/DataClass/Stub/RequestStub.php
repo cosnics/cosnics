@@ -15,7 +15,7 @@ class RequestStub extends Request
      * 
      * @return boolean
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         return true;
     }

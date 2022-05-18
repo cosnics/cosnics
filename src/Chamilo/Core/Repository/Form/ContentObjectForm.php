@@ -585,7 +585,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $object->create();
 
-        if ($object->has_errors())
+        if ($object->hasErrors())
         {
             return null;
         }
@@ -1074,7 +1074,7 @@ abstract class ContentObjectForm extends FormValidator
             $result = $object->update();
         }
 
-        if ($object->has_errors())
+        if ($object->hasErrors())
         {
             return false;
         }

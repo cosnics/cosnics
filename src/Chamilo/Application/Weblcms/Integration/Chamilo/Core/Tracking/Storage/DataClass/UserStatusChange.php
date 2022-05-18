@@ -24,7 +24,7 @@ class UserStatusChange extends SimpleTracker
         $this->set_date($parameters[self::PROPERTY_DATE]);
     }
 
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(
             array(

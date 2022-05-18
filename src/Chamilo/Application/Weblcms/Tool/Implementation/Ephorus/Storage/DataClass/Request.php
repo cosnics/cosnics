@@ -70,7 +70,7 @@ class Request extends EphorusDataClass
      *
      * @return boolean
      */
-    protected function check_before_save()
+    protected function checkBeforeSave()
     {
         $string_utilities_class = $this->get_string_utilities_class();
 
@@ -89,12 +89,12 @@ class Request extends EphorusDataClass
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_course_id()))
         {
-            $this->add_error(Translation::get('CourseIdIsRequired'));
+            $this->addError(Translation::get('CourseIdIsRequired'));
         }
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_request_user_id()))
         {
-            $this->add_error(
+            $this->addError(
                 Translation::get('RequestUserIdIsRequired'), [],
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             );
@@ -102,13 +102,13 @@ class Request extends EphorusDataClass
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($this->get_guid()))
         {
-            $this->add_error(
+            $this->addError(
                 Translation::get('GuidIsRequired'), [],
                 ClassnameUtilities::getInstance()->getNamespaceFromClassname(self::class)
             );
         }
 
-        return parent::check_before_save();
+        return parent::checkBeforeSave();
     }
 
     /**
@@ -211,7 +211,7 @@ class Request extends EphorusDataClass
      */
     public function get_content_object()
     {
-        return $this->get_foreign_property(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class);
+        return $this->getForeignProperty(self::FOREIGN_PROPERTY_CONTENT_OBJECT, ContentObject::class);
     }
 
     /**
@@ -255,7 +255,7 @@ class Request extends EphorusDataClass
      *
      * @return string[] - The property request_times.
      */
-    public static function getDefaultPropertyNames($extendedPropertyNames = []): array
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         $extendedPropertyNames[] = self::PROPERTY_COURSE_ID;
         $extendedPropertyNames[] = self::PROPERTY_CONTENT_OBJECT_ID;
@@ -435,7 +435,7 @@ class Request extends EphorusDataClass
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($author_id))
         {
-            $this->add_error(Translation::get('AuthorIdIsRequired'));
+            $this->addError(Translation::get('AuthorIdIsRequired'));
 
             return false;
         }
@@ -443,7 +443,7 @@ class Request extends EphorusDataClass
         $author = $this->get_author();
         if (!$author)
         {
-            $this->add_error(Translation::get('AuthorDoesNotExist'));
+            $this->addError(Translation::get('AuthorDoesNotExist'));
 
             return false;
         }
@@ -466,7 +466,7 @@ class Request extends EphorusDataClass
 
         if ($string_utilities_class::getInstance()->isNullOrEmpty($content_object_id))
         {
-            $this->add_error(Translation::get('ContentObjectIdIsRequired'));
+            $this->addError(Translation::get('ContentObjectIdIsRequired'));
 
             return false;
         }
@@ -474,14 +474,14 @@ class Request extends EphorusDataClass
         $content_object = $this->get_content_object();
         if (!$content_object)
         {
-            $this->add_error(Translation::get('ContentObjectDoesNotExist'));
+            $this->addError(Translation::get('ContentObjectDoesNotExist'));
 
             return false;
         }
 
         if ($content_object->get_type() != File::class)
         {
-            $this->add_error(Translation::get('ContentObjectMustBeDocument'));
+            $this->addError(Translation::get('ContentObjectMustBeDocument'));
 
             return false;
         }
@@ -490,14 +490,14 @@ class Request extends EphorusDataClass
         $extension = 'txt';
         if (!in_array($extension, $this->supported_extensions))
         {
-            $this->add_error(Translation::get('DocumentExtensionNotValid'));
+            $this->addError(Translation::get('DocumentExtensionNotValid'));
 
             return false;
         }
 
         if ($content_object->get_filesize() > 16777216)
         {
-            $this->add_error(Translation::get('FileCanNotBeBiggerThen16MB'));
+            $this->addError(Translation::get('FileCanNotBeBiggerThen16MB'));
 
             return false;
         }
