@@ -137,7 +137,7 @@ class AssessmentMatchNumericQuestion extends ContentObject implements Versionabl
         return $this->getAdditionalProperty(self::PROPERTY_TOLERANCE_TYPE);
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

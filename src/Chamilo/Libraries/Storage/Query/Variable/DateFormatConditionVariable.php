@@ -11,108 +11,61 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
  */
 class DateFormatConditionVariable extends ConditionVariable
 {
+    private ?string $alias;
 
-    /**
-     * The ConditionVariable
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $conditionVariable;
+    private ConditionVariable $conditionVariable;
 
-    /**
-     * The DateFormat string
-     *
-     * @var string
-     */
-    private $format;
+    private string $format;
 
-    /**
-     *
-     * @var string
-     */
-    private $alias;
-
-    /**
-     *
-     * @param string $format
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     * @param string $alias
-     */
-    public function __construct($format, $conditionVariable, $alias = null)
+    public function __construct(string $format, ConditionVariable $conditionVariable, ?string $alias = null)
     {
         $this->conditionVariable = $conditionVariable;
         $this->format = $format;
         $this->alias = $alias;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
-    public function getHashParts(): array
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        $hashParts[] = $this->get_condition_variable()->getHashParts();
-        $hashParts[] = $this->get_format();
-        $hashParts[] = $this->get_alias();
-
-        return $hashParts;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_alias()
+    public function getAlias(): ?string
     {
         return $this->alias;
     }
 
-    /**
-     *
-     * @param string $alias
-     */
-    public function set_alias($alias)
+    public function setAlias(?string $alias)
     {
         $this->alias = $alias;
     }
 
-    /**
-     * Get the ConditionVariable on the condition_variable side of the operation
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_condition_variable()
+    public function getConditionVariable(): ConditionVariable
     {
         return $this->conditionVariable;
     }
 
-    /**
-     * Set the ConditionVariable on the condition_variable side of the operation
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     */
-    public function set_condition_variable($conditionVariable)
+    public function setConditionVariable(ConditionVariable $conditionVariable): DateFormatConditionVariable
     {
         $this->conditionVariable = $conditionVariable;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string
-     */
-    public function get_format()
+    public function getFormat(): string
     {
         return $this->format;
     }
 
-    /**
-     *
-     * @param string $format
-     */
-    public function set_format($format)
+    public function setFormat(string $format): DateFormatConditionVariable
     {
         $this->format = $format;
+
+        return $this;
+    }
+
+    public function getHashParts(): array
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        $hashParts[] = $this->getConditionVariable()->getHashParts();
+        $hashParts[] = $this->getFormat();
+        $hashParts[] = $this->getAlias();
+
+        return $hashParts;
     }
 }

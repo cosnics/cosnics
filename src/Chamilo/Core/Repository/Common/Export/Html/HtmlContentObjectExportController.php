@@ -50,7 +50,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
                 $this, 
                 $content_object, 
                 ContentObjectExport::FORMAT_HTML, 
-                $this->get_parameters()->get_type());
+                $this->get_parameters()->getType());
         }
     }
 

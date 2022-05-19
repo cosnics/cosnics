@@ -14,7 +14,7 @@ class LinkTableColumnModel extends DataClassTableColumnModel implements TableCol
     {
         $columns = [];
         
-        if ($this->get_table()->get_type() == LinkTable::TYPE_PUBLICATIONS)
+        if ($this->get_table()->getType() == LinkTable::TYPE_PUBLICATIONS)
         {
             $this->add_column(
                 new DataClassPropertyTableColumn(Attributes::class, Attributes::PROPERTY_APPLICATION));

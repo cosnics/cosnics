@@ -67,7 +67,7 @@ function report()
             $result->set_request_id($request->get_id());
             $result->set_url($dom_xpath->query('.//report:url', $result_element)->item(0)->nodeValue);
             $result->set_mimetype($dom_xpath->query('.//report:mimetype', $result_element)->item(0)->nodeValue);
-            $result->set_type($dom_xpath->query('.//report:type', $result_element)->item(0)->nodeValue);
+            $result->setType($dom_xpath->query('.//report:type', $result_element)->item(0)->nodeValue);
             $result->set_percentage($dom_xpath->query('.//report:percent', $result_element)->item(0)->nodeValue);
             $result->set_original_guid(
                 $dom_xpath->query('.//report:original_guid', $result_element)->item(0)->nodeValue

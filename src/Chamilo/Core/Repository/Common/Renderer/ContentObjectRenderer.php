@@ -239,7 +239,7 @@ abstract class ContentObjectRenderer implements TableSupport
             );
         }
 
-        if ($content_object->get_type() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
+        if ($content_object->getType() == 'Chamilo\Core\Repository\ContentObject\File\Storage\DataClass\File')
         {
             $actions[] = new ToolbarItem(
                 Translation::get('Download', null, Utilities::COMMON_LIBRARIES), new FontAwesomeGlyph('download'),

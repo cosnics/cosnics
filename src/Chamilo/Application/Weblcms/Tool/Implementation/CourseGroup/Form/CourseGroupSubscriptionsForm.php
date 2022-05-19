@@ -69,7 +69,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
 
         $legend = new Toolbar();
         $legend->set_items($legend_items);
-        $legend->set_type(Toolbar::TYPE_HORIZONTAL);
+        $legend->setType(Toolbar::TYPE_HORIZONTAL);
 
         $types = new AdvancedElementFinderElementTypes();
         $types->add_element_type(

@@ -9,6 +9,6 @@ class RepositoryTable extends \Chamilo\Core\Repository\Table\ContentObject\Table
     public function __construct($component)
     {
         parent::__construct($component);
-        $this->set_type(File::class);
+        $this->setType(File::class);
     }
 }

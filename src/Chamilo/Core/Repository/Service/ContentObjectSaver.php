@@ -484,7 +484,7 @@ class ContentObjectSaver
 
         $attachment->set_attachment_id($attachmentIdentifier);
         $attachment->set_content_object_id($contentObject->getId());
-        $attachment->set_type($type);
+        $attachment->setType($type);
 
         return $attachment;
     }

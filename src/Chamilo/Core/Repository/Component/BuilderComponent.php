@@ -71,7 +71,7 @@ class BuilderComponent extends Manager implements ApplicationSupport
                         'BuildContentObject',
                         array('CONTENT_OBJECT' => $this->content_object->get_title()))));
 
-            $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->content_object->get_type(), 3) .
+            $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->content_object->getType(), 3) .
                  '\Builder';
 
             return $this->getApplicationFactory()->getApplication(

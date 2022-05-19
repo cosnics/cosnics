@@ -209,7 +209,7 @@ class FilterData
      */
     public function getTypeDataClass()
     {
-        $type = $this->get_type();
+        $type = $this->getType();
 
         if (!is_null($type))
         {
@@ -342,11 +342,19 @@ class FilterData
         return $this->storage;
     }
 
-    public function get_type()
+    public function getType()
     {
         $type = $this->get_filter_property(self::FILTER_TYPE);
 
         return is_numeric($type) && !empty($type) ? $type : null;
+    }
+
+    /**
+     * @deprecated Use FilterData::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
     }
 
     public function get_type_category()
@@ -436,7 +444,7 @@ class FilterData
     public function is_set()
     {
         $text = $this->get_filter_property(self::FILTER_TEXT);
-        $type = $this->get_type();
+        $type = $this->getType();
         $type_category = $this->get_type_category();
         $user_view_id = (int) $this->get_filter_property(self::FILTER_USER_VIEW);
 

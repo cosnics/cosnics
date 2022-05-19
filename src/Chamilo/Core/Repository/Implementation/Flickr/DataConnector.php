@@ -324,7 +324,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
         {
             $types[] = strtolower($photo['originalformat']);
         }
-        $object->set_type(implode('_', $types));
+        $object->setType(implode('_', $types));
 
         $object->set_rights($this->determine_rights($photo['license'], $photo['owner']['nsid']));
 
@@ -407,7 +407,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             {
                 $types[] = strtolower($photo['originalformat']);
             }
-            $object->set_type(implode('_', $types));
+            $object->setType(implode('_', $types));
             $object->set_rights($this->determine_rights($photo['license'], $photo['owner']));
 
             $objects[] = $object;

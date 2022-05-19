@@ -20,9 +20,9 @@ class XmlExport extends Export
 
     /**
      *
-     * @see \Chamilo\Libraries\File\Export\Export::get_type()
+     * @see \Chamilo\Libraries\File\Export\Export::getType()
      */
-    public function get_type()
+    public function getType()
     {
         return self::EXPORT_TYPE;
     }

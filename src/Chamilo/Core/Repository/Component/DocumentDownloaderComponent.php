@@ -43,7 +43,7 @@ class DocumentDownloaderComponent extends Manager implements NoAuthenticationSup
             'Chamilo\Core\Repository\ContentObject\ExternalCalendar\Storage\DataClass\ExternalCalendar'
         );
 
-        if (! $object || ! in_array($object->get_type(), $valid_types))
+        if (! $object || ! in_array($object->getType(), $valid_types))
         {
             throw new UserException(Translation::get('ContentObjectMustBeDocument'));
         }

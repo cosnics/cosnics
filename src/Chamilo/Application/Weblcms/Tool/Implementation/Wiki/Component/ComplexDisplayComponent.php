@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Wiki\Manager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Wiki\Display\WikiDisplaySupport;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
 use Chamilo\Libraries\Architecture\Interfaces\DelegateComponent;
@@ -75,13 +76,13 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
              $this->publication->get_allow_collaboration();
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
@@ -96,7 +97,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Wiki
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }

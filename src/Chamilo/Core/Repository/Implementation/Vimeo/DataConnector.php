@@ -305,7 +305,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
             $object->set_owner_name($video['user']['name']);
             $object->set_urls($video['link']);
             $object->set_tags($video['tags']);
-            $object->set_type('video');
+            $object->setType('video');
             $object->set_thumbnail($video['pictures']['sizes'][1]['link']);
 
             $object->set_rights($this->determine_rights($video));

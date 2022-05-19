@@ -370,7 +370,7 @@ class BreadcrumbTrail
         if (is_array($extra_items) && count($extra_items) > 0)
         {
             $toolbar->add_items($extra_items);
-            $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
+            $toolbar->setType(Toolbar::TYPE_HORIZONTAL);
         }
 
         $html[] = $toolbar->as_html();
@@ -397,7 +397,7 @@ class BreadcrumbTrail
                 $html[] = '<div id="help_item">';
                 $toolbar = new Toolbar();
                 $toolbar->set_items(array($item));
-                $toolbar->set_type(Toolbar::TYPE_HORIZONTAL);
+                $toolbar->setType(Toolbar::TYPE_HORIZONTAL);
                 $html[] = $toolbar->as_html();
                 $html[] = '</div>';
             }

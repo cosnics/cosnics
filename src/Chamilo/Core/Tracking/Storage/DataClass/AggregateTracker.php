@@ -27,7 +27,7 @@ abstract class AggregateTracker extends Tracker
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(static::class, self::PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type())
+            new StaticConditionVariable($this->getType())
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(static::class, self::PROPERTY_NAME),
@@ -72,7 +72,15 @@ abstract class AggregateTracker extends Tracker
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
+    /**
+     * @deprecated Use AggregateTracker::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }

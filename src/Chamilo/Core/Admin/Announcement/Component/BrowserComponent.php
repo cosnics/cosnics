@@ -145,7 +145,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         $parameters[ButtonSearchForm::PARAM_SIMPLE_SEARCH_QUERY] =
             $this->buttonToolbarRenderer->getSearchForm()->getQuery();
 
-        $type = $this->get_type();
+        $type = $this->getType();
 
         $tabs = new DynamicVisualTabsRenderer('browser');
 
@@ -208,7 +208,7 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
     {
         $conditions = [];
 
-        if ($this->get_type() != self::TYPE_ALL)
+        if ($this->getType() != self::TYPE_ALL)
         {
             $publisher_id = $this->getUser()->getId();
 
@@ -260,7 +260,15 @@ class BrowserComponent extends Manager implements TableSupport, DelegateComponen
         }
     }
 
+    /**
+     * @deprecated User BrowserComponent::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         $type = $this->getRequest()->query->get(self::PARAM_PUBLICATION_TYPE);
 

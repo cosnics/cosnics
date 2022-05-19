@@ -139,7 +139,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
             $content_object_attachment->set_attachment_id(
                 $this->get_content_object_id_cache_id($attachment_node->getAttribute('idref'))
             );
-            $content_object_attachment->set_type($attachment_node->getAttribute('type'));
+            $content_object_attachment->setType($attachment_node->getAttribute('type'));
             $content_object_attachment->create();
         }
     }
@@ -451,7 +451,7 @@ class CpoContentObjectImportController extends ContentObjectImportController
         );
         $category->set_parent($parent_id);
         $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
-        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+        $category->setType($this->get_parameters()->getWorkspace()->getWorkspaceType());
 
         if (!$category->create())
         {

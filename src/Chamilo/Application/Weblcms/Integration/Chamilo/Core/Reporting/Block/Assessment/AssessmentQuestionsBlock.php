@@ -141,7 +141,7 @@ class AssessmentQuestionsBlock extends AssessmentBlock
         $object = $complex_question->get_ref_object();
 
         $type = Translation::get(
-            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($object->get_type())
+            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($object->getType())
         );
 
         $reporting_info = [];

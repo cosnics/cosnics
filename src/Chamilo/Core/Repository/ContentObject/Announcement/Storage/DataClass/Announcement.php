@@ -17,7 +17,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class Announcement extends ContentObject implements Versionable, AttachmentSupport
 {
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

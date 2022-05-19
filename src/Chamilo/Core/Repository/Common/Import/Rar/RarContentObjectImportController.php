@@ -90,7 +90,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                         $category = new RepositoryCategory();
                         $category->set_id(0);
                         $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
-                        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+                        $category->setType($this->get_parameters()->getWorkspace()->getWorkspaceType());
                     }
                     else
                     {
@@ -261,7 +261,7 @@ class RarContentObjectImportController extends ContentObjectImportController
                 $base_name));
         $category->set_parent($this->created_categories[md5($dir_name)]->get_id());
         $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
-        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+        $category->setType($this->get_parameters()->getWorkspace()->getWorkspaceType());
 
         if (! $category->create())
         {

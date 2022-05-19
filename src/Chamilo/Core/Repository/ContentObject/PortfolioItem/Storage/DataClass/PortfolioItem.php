@@ -52,7 +52,7 @@ class PortfolioItem extends ContentObject implements Versionable, HelperContentO
         return 'repository_portfolio_item';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

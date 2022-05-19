@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Forum\Manager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Forum\Display\ForumDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\ContentObject\Introduction\Storage\DataClass\Introduction;
@@ -148,12 +149,12 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
             $this->publication->get_allow_collaboration();
@@ -164,7 +165,7 @@ class ViewerComponent extends Manager implements ForumDisplaySupport, DelegateCo
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }

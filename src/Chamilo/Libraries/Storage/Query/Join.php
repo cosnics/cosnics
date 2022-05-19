@@ -22,111 +22,56 @@ class Join implements Hashable
     const TYPE_NORMAL = 1;
     const TYPE_RIGHT = 3;
 
-    /**
-     * The classname of the data_class you want to join with
-     *
-     * @var string
-     */
-    private $data_class;
+    private ?Condition $condition;
 
-    /**
-     * The join type
-     *
-     * @var integer
-     */
-    private $type;
+    private string $dataClassName;
 
-    /**
-     * The join condition
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    private $condition;
+    private int $type;
 
-    /**
-     *
-     * @param string $dataClass
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $type
-     */
-    public function __construct($dataClass, Condition $condition = null, $type = self::TYPE_NORMAL)
+    public function __construct(string $dataClassName, ?Condition $condition = null, ?int $type = self::TYPE_NORMAL)
     {
-        $this->set_data_class($dataClass);
-        $this->set_condition($condition);
-        $this->set_type($type);
+        $this->dataClassName = $dataClassName;
+        $this->condition = $condition;
+        $this->type = $type;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
-    public function getHashParts(): array
-    {
-        $hashParts = [];
-
-        $hashParts[] = $this->get_data_class();
-        $hashParts[] = $this->get_condition()->getHashParts();
-        $hashParts[] = $this->get_type();
-
-        return $hashParts;
-    }
-
-    /**
-     * Returns the condition
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
+    public function getCondition(): Condition
     {
         return $this->condition;
     }
 
-    /**
-     * Sets the condition
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     */
-    public function set_condition(Condition $condition = null)
+    public function setCondition(?Condition $condition = null)
     {
         $this->condition = $condition;
     }
 
-    /**
-     * Returns the data class name
-     *
-     * @return string
-     */
-    public function get_data_class()
+    public function getDataClassName(): string
     {
-        return $this->data_class;
+        return $this->dataClassName;
     }
 
-    /**
-     * Sets the data class name
-     *
-     * @param string $dataClass
-     */
-    public function set_data_class($dataClass)
+    public function setDataClassName(string $dataClassName)
     {
-        $this->data_class = $dataClass;
+        $this->dataClassName = $dataClassName;
     }
 
-    /**
-     * Returns the type
-     *
-     * @return integer
-     */
-    public function get_type()
+    public function getHashParts(): array
+    {
+        $hashParts = [];
+
+        $hashParts[] = $this->getDataClassName();
+        $hashParts[] = $this->getCondition()->getHashParts();
+        $hashParts[] = $this->getType();
+
+        return $hashParts;
+    }
+
+    public function getType(): int
     {
         return $this->type;
     }
 
-    /**
-     * Sets the type
-     *
-     * @param integer $type
-     */
-    public function set_type($type)
+    public function setType(int $type)
     {
         $this->type = $type;
     }

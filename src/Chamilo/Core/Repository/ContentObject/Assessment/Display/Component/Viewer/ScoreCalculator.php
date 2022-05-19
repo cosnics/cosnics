@@ -63,7 +63,7 @@ abstract class ScoreCalculator
 
     public static function factory($question, $answer, $weight)
     {
-        $type = $question->get_type();
+        $type = $question->getType();
 
         $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
              Assessment::package() . '\Display\ScoreCalculator';

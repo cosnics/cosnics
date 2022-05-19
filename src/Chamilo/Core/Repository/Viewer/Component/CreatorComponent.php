@@ -172,7 +172,7 @@ class CreatorComponent extends Manager implements DelegateComponent, TabsTypeSel
             new Breadcrumb(
                 null, Translation::get(
                 'UpdateContentType', array(
-                'OBJECTTYPE' => strtolower(Translation::get('TypeName', null, $content_object->get_type()))
+                'OBJECTTYPE' => strtolower(Translation::get('TypeName', null, $content_object->getType()))
             ), \Chamilo\Core\Repository\Manager::context()
             )
             )

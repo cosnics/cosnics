@@ -69,38 +69,6 @@ abstract class ExternalObject
         $this->default_properties = $default_properties;
     }
 
-    /**
-     * @return string
-     */
-    public function getGlyphNamespace()
-    {
-        return self::package() . '\Type\\' .
-            StringUtilities::getInstance()->createString($this->get_icon_name())->upperCamelize();
-    }
-
-    public static function get_available_rights()
-    {
-        return array(self::RIGHT_DELETE, self::RIGHT_DOWNLOAD, self::RIGHT_EDIT, self::RIGHT_USE);
-    }
-
-    public function get_connector()
-    {
-        $external_instance = DataManager::retrieve_by_id(
-            Instance::class, $this->get_external_repository_id()
-        );
-
-        return DataConnector::getInstance($external_instance);
-    }
-
-    /**
-     *
-     * @return int
-     */
-    public function get_created()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATED);
-    }
-
     public function getDefaultProperties()
     {
         return $this->default_properties;
@@ -149,6 +117,47 @@ abstract class ExternalObject
     }
 
     /**
+     * @return string
+     */
+    public function getGlyphNamespace()
+    {
+        return self::package() . '\Type\\' .
+            StringUtilities::getInstance()->createString($this->get_icon_name())->upperCamelize();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
+    }
+
+    public static function get_available_rights()
+    {
+        return array(self::RIGHT_DELETE, self::RIGHT_DOWNLOAD, self::RIGHT_EDIT, self::RIGHT_USE);
+    }
+
+    public function get_connector()
+    {
+        $external_instance = DataManager::retrieve_by_id(
+            Instance::class, $this->get_external_repository_id()
+        );
+
+        return DataConnector::getInstance($external_instance);
+    }
+
+    /**
+     *
+     * @return int
+     */
+    public function get_created()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATED);
+    }
+
+    /**
      *
      * @return string
      */
@@ -174,13 +183,12 @@ abstract class ExternalObject
      * @return string
      */
     public function get_icon_image(
-        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true,
-        $extraClasses = []
+        $size = IdentGlyph::SIZE_SMALL, $isAvailable = true, $extraClasses = []
     )
     {
 
         $glyphTitle = Translation::get(
-            'Type' . StringUtilities::getInstance()->createString($this->get_type())->upperCamelize(), null,
+            'Type' . StringUtilities::getInstance()->createString($this->getType())->upperCamelize(), null,
             static::context()
         );
 
@@ -196,7 +204,7 @@ abstract class ExternalObject
      */
     public function get_icon_name()
     {
-        return $this->get_type();
+        return $this->getType();
     }
 
     /**
@@ -312,11 +320,11 @@ abstract class ExternalObject
 
     /**
      *
-     * @return string
+     * @deprecated Use ExternalObject::getType() now
      */
     public function get_type()
     {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
+        return $this->getType();
     }
 
     /**
@@ -374,15 +382,6 @@ abstract class ExternalObject
     }
 
     /**
-     *
-     * @param $created int
-     */
-    public function set_created($created)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
-    }
-
-    /**
      * Sets a default property of this data class by name.
      *
      * @param $name string The name of the property.
@@ -391,6 +390,15 @@ abstract class ExternalObject
     public function setDefaultProperty($name, $value)
     {
         $this->default_properties[$name] = $value;
+    }
+
+    /**
+     *
+     * @param $created int
+     */
+    public function set_created($created)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CREATED, $created);
     }
 
     /**
@@ -477,8 +485,16 @@ abstract class ExternalObject
      *
      * @param $type string
      */
-    public function set_type($type)
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+    }
+
+    /**
+     * @deprecated Use ExternalObject::setType()
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
     }
 }

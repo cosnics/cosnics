@@ -62,13 +62,13 @@ class ContentObjectUpdaterComponent extends Manager implements DelegateComponent
             $this->get_course());
 
         $is_admin_introduction = $this->get_course()->is_course_admin($this->get_user()) &&
-             $publication->get_content_object()->get_type() == Introduction::class;
+             $publication->get_content_object()->getType() == Introduction::class;
 
         if ($canEditContentObject || $canEditPublicationContentObject || $is_admin_introduction)
         {
             $content_object = $publication->get_content_object();
 
-            if ($content_object->get_type() == Introduction::class)
+            if ($content_object->getType() == Introduction::class)
             {
                 $publication->ignore_display_order();
             }

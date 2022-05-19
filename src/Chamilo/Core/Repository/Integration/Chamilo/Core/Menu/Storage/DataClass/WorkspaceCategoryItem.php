@@ -20,7 +20,7 @@ class WorkspaceCategoryItem extends Item
     public function __construct($default_properties = [], $additionalProperties = [])
     {
         parent::__construct($default_properties, $additionalProperties);
-        $this->set_type(__CLASS__);
+        $this->setType(__CLASS__);
     }
 
     public function add_child($child)
@@ -70,7 +70,7 @@ class WorkspaceCategoryItem extends Item
         $this->children = $children;
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }

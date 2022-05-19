@@ -144,7 +144,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
                 ContentObject::class, $item->get_ref()
             );
 
-            if ($object->get_type() == Forum::class)
+            if ($object->getType() == Forum::class)
             {
                 $this->set_total_topics($this->get_total_topics() - $object->get_total_topics());
             }
@@ -241,7 +241,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
         return $this->getAdditionalProperty(self::PROPERTY_TOTAL_TOPICS);
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

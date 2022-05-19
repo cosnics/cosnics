@@ -23,7 +23,7 @@ class InstanceTableDataProvider extends DataClassTableDataProvider
      */
     public function count_data($condition)
     {
-        return DataManager::count($this->get_component()->get_type(), new DataClassCountParameters($condition));
+        return DataManager::count($this->get_component()->getType(), new DataClassCountParameters($condition));
     }
 
     /**
@@ -41,6 +41,6 @@ class InstanceTableDataProvider extends DataClassTableDataProvider
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
 
-        return DataManager::retrieves($this->get_component()->get_type(), $parameters);
+        return DataManager::retrieves($this->get_component()->getType(), $parameters);
     }
 }

@@ -138,7 +138,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             ContentObject::class, $question_complex_content_object_item->get_ref()
         );
 
-        $type = (string) StringUtilities::getInstance()->createString($question->get_type_name())->upperCamelize();
+        $type = (string) StringUtilities::getInstance()->createString($question->getTypeName())->upperCamelize();
         $class = __NAMESPACE__ . '\\' . $type . 'OptionsBlock';
 
         return new $class($question, $question_complex_content_object_item, $parent);

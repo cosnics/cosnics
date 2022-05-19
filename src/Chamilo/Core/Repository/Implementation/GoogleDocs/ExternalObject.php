@@ -99,7 +99,7 @@ class ExternalObject extends \Chamilo\Core\Repository\External\ExternalObject
      */
     public function get_resource_id()
     {
-        return urlencode($this->get_type() . ':' . $this->get_id());
+        return urlencode($this->getType() . ':' . $this->get_id());
     }
 
     public function get_viewed()

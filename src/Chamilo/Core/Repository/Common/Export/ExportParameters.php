@@ -248,9 +248,18 @@ class ExportParameters
 
     /**
      *
-     * @return the $type
+     * @deprecated Use ExportParameters::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }

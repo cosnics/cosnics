@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
+use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
  * Describes the group by functionality of a query.
@@ -19,38 +20,31 @@ class GroupBy implements Hashable
     use HashableTrait;
 
     /**
-     * List of ConditionVariables to group by
-     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    private $conditionVariables;
+    private array $conditionVariables;
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function __construct($conditionVariables = [])
+    public function __construct(array $conditionVariables = [])
     {
-        $this->conditionVariables = (is_array($conditionVariables) ? $conditionVariables : func_get_args());
+        $this->conditionVariables = $conditionVariables;
+    }
+
+    public function addConditionVariable(ConditionVariable $conditionVariable)
+    {
+        $this->conditionVariables[] = $conditionVariable;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    public function get()
+    public function getConditionVariables(): array
     {
         return $this->conditionVariables;
-    }
-
-    /**
-     * Adds a group by
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $groupBy
-     */
-    public function add($groupBy)
-    {
-        $this->conditionVariables[] = $groupBy;
     }
 
     /**
@@ -61,7 +55,7 @@ class GroupBy implements Hashable
     {
         $hashes = [];
 
-        foreach ($this->get() as $conditionVariable)
+        foreach ($this->getConditionVariables() as $conditionVariable)
         {
             $hashes[] = $conditionVariable->getHashParts();
         }

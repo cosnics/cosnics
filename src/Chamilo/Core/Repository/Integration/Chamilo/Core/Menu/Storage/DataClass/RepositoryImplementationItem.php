@@ -21,7 +21,7 @@ class RepositoryImplementationItem extends Item
     public function __construct($default_properties = [], $additionalProperties = [])
     {
         parent::__construct($default_properties, $additionalProperties);
-        $this->set_type(__CLASS__);
+        $this->setType(__CLASS__);
     }
 
     /**
@@ -52,7 +52,7 @@ class RepositoryImplementationItem extends Item
         return $this->getAdditionalProperty(self::PROPERTY_NAME);
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }

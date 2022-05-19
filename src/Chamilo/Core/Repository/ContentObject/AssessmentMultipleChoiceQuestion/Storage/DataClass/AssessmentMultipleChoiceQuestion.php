@@ -116,7 +116,7 @@ class AssessmentMultipleChoiceQuestion extends ContentObject implements Versiona
         return 'repository_assessment_multiple_choice_question';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

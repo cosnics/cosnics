@@ -15,7 +15,7 @@ class CsvExport extends Export
     /**
      * @return string
      */
-    public function get_type()
+    public function getType()
     {
         return self::EXPORT_TYPE;
     }

@@ -56,7 +56,7 @@ abstract class Manager extends \Chamilo\Core\Repository\External\Manager
         {
             $video_conditions[] = new EndsWithCondition(
                 new PropertyConditionVariable(File::class, File::PROPERTY_FILENAME), $video_type,
-                File::get_type_name()
+                File::getTypeName()
             );
         }
 

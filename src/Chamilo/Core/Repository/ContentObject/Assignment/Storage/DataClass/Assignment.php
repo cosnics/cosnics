@@ -106,7 +106,7 @@ class Assignment extends ContentObject implements AttachmentSupport
         return 'repository_assignment';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

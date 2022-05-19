@@ -137,7 +137,7 @@ class CreatorComponent extends Manager implements ViewerInterface
 
             foreach($contentObjects as $contentObject)
             {
-                $namespace = ContentObject::get_content_object_type_namespace($contentObject->get_type());
+                $namespace = ContentObject::get_content_object_type_namespace($contentObject->getType());
                 $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 
                 if (RightsService::getInstance()->canUseContentObject($this->getUser(), $contentObject))

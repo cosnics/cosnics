@@ -72,7 +72,7 @@ class VimeoContentObjectImportController extends ContentObjectImportController
                 $vimeo_connector = DataConnector::getInstance($external_repository);
                 $external_object = $vimeo_connector->retrieve_external_repository_object($external_id);
                 
-                $vimeo = ContentObject::factory(Vimeo::get_type_name());
+                $vimeo = ContentObject::factory(Vimeo::getTypeName());
                 $vimeo->set_title($external_object->get_title());
                 $vimeo->set_description($external_object->get_description());
                 $vimeo->set_owner_id($this->get_parameters()->get_user());

@@ -320,7 +320,7 @@ class ParametersProcessor
                 $joinCondition = $this->translate($dataClassDatabase, $join->get_condition());
                 $joinDataClassName = $join->get_data_class();
 
-                switch ($join->get_type())
+                switch ($join->getType())
                 {
                     case Join::TYPE_NORMAL :
                         $queryBuilder->join(

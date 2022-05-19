@@ -43,6 +43,13 @@ abstract class Manager extends Application
         return new $class($application);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getButtonToolbarRenderer(ContentObject $content_object = null)
     {
         return $this->get_parent()->getButtonToolbarRenderer($content_object);
@@ -51,13 +58,6 @@ abstract class Manager extends Application
     public function get_additional_links()
     {
         return $this->get_parent()->get_additional_links();
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_complex_content_object_breadcrumbs()

@@ -64,7 +64,7 @@ class ElementTableCellRenderer extends DataClassTableCellRenderer implements Tab
         switch ($column->get_name())
         {
             case Element::PROPERTY_TYPE :
-                return $result->get_type_name($result->get_type());
+                return $result->getTypeName($result->getType());
             case Element::PROPERTY_REQUIRED :
                 if ($result->get_required())
                 {

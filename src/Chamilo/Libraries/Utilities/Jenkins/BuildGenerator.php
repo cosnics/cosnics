@@ -111,8 +111,8 @@ class BuildGenerator
      */
     public function process(PackageList $package_list)
     {
-        $this->write_build($package_list->get_type());
-        $this->write_phpunit($package_list->get_type());
+        $this->write_build($package_list->getType());
+        $this->write_phpunit($package_list->getType());
 
         $sub_jobs = [];
 
@@ -121,12 +121,12 @@ class BuildGenerator
             foreach ($package_list->get_children() as $child_list)
             {
                 $this->process($child_list);
-                $sub_jobs[] = $this->get_job_name($child_list->get_type());
+                $sub_jobs[] = $this->get_job_name($child_list->getType());
             }
         }
 
         $this->write_configuration(
-            $package_list->get_type(), $sub_jobs, $this->get_source_repository($package_list->get_type())
+            $package_list->getType(), $sub_jobs, $this->get_source_repository($package_list->getType())
         );
     }
 

@@ -238,9 +238,17 @@ abstract class RightsLocation extends NestedSet
      *
      * @throws \Exception
      */
-    public function set_type($type)
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+    }
+
+    /**
+     * @deprecated Use RightsLocation::setType() now
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
     }
 
     /**
@@ -251,7 +259,7 @@ abstract class RightsLocation extends NestedSet
      */
     public function set_type_from_object($object)
     {
-        $this->set_type(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
+        $this->setType(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
     /**

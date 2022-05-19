@@ -16,6 +16,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\LearningPath\Storage\DataManager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Assessment\Storage\DataClass\Assessment;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
@@ -108,7 +109,7 @@ class ComplexDisplayComponent extends Manager
             BreadcrumbTrail::getInstance(), $this, $this->publication
         );
 
-        if ($this->get_root_content_object()->get_type() == Assessment::class)
+        if ($this->get_root_content_object()->getType() == Assessment::class)
         {
             try
             {
@@ -508,12 +509,12 @@ class ComplexDisplayComponent extends Manager
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
             ($this->publication->get_allow_collaboration() ||
@@ -532,7 +533,7 @@ class ComplexDisplayComponent extends Manager
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }

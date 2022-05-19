@@ -104,7 +104,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         FormValidator $form, ContentObject $contentObject, User $user
     )
     {
-        $type = $contentObject->get_type();
+        $type = $contentObject->getType();
 
         $excludedCourseTypeSetting = (string) Configuration::getInstance()->get_setting(
             array('Chamilo\Application\Weblcms', 'excluded_course_types')

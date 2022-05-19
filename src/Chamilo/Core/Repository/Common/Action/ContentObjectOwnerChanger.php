@@ -98,7 +98,7 @@ class ContentObjectOwnerChanger
         $co->set_owner_id($this->target_repository);
 
         // Set the category
-        if (DataManager::is_helper_type($co->get_type()))
+        if (DataManager::is_helper_type($co->getType()))
         {
             $co->set_parent_id(0);
         }
@@ -126,7 +126,7 @@ class ContentObjectOwnerChanger
         // Process the physical files
         $this->move_files($co, $old_user_id);
 
-        if (in_array($co->get_type(), DataManager::get_active_helper_types()))
+        if (in_array($co->getType(), DataManager::get_active_helper_types()))
         {
             $co = DataManager::retrieve_by_id(ContentObject::class, $co->get_reference());
             if ($co)
@@ -221,16 +221,16 @@ class ContentObjectOwnerChanger
      */
     private function move_files($co, $old_user_id)
     {
-        $type = $co->get_type();
+        $type = $co->getType();
         switch ($type)
         {
-            case File::get_type_name() :
+            case File::getTypeName() :
                 return $this->move_document_files($co);
-            case Webpage::get_type_name() :
+            case Webpage::getTypeName() :
                 return $this->move_document_files($co);
-            case Hotpotatoes::get_type_name() :
+            case Hotpotatoes::getTypeName() :
                 return $this->move_hotpotatoes_files($co, $old_user_id);
-            case LearningPath::get_type_name() :
+            case LearningPath::getTypeName() :
                 if ($co->get_version() == 'SCORM1.2' || $co->get_version() == 'SCORM2004')
                 {
                     return $this->move_scorm_files($co, $old_user_id);

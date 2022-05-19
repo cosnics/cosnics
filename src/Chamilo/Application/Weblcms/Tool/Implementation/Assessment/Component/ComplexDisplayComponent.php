@@ -8,6 +8,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Manager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass\Publication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
 use Chamilo\Core\Repository\ContentObject\Hotpotatoes\Storage\DataClass\Hotpotatoes;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -131,7 +132,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
 
         // Executing assessment
 
-        if ($this->assessment->get_type() == Hotpotatoes::class)
+        if ($this->assessment->getType() == Hotpotatoes::class)
         {
             $html = [];
 
@@ -386,13 +387,13 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
              $this->publication->get_allow_collaboration();
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
@@ -407,7 +408,7 @@ class ComplexDisplayComponent extends Manager implements AssessmentDisplaySuppor
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }

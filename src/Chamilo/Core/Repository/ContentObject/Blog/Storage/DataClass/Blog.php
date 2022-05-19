@@ -65,7 +65,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
         return 'repository_blog';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

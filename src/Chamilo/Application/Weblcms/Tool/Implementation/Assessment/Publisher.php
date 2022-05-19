@@ -147,7 +147,7 @@ class Publisher
 
             foreach($content_objects as $content_object)
             {
-                $namespace = ContentObject::get_content_object_type_namespace($content_object->get_type());
+                $namespace = ContentObject::get_content_object_type_namespace($content_object->getType());
                 $glyph = $content_object->getGlyph(IdentGlyph::SIZE_MINI);
 
                 if (RightsService::getInstance()->canUseContentObject($this->parent->get_user(), $content_object))

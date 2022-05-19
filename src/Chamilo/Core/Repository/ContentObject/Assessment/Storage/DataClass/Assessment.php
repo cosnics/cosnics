@@ -107,7 +107,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         );
 
         $clo_questions = DataManager::retrieve_complex_content_object_items(
-            $this->get_type_name(), ComplexContentObjectItem::class, $condition
+            $this->getTypeName(), ComplexContentObjectItem::class, $condition
         );
 
         $maxscore = 0;
@@ -154,7 +154,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
 
     public function get_table()
     {
-        return self::get_type_name();
+        return self::getTypeName();
     }
 
     /**
@@ -165,7 +165,7 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
         return 'repository_assessment';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

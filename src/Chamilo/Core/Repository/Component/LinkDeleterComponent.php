@@ -155,7 +155,7 @@ class LinkDeleterComponent extends Manager
                 continue;
             }
 
-            if (in_array($object->get_type(), DataManager::get_active_helper_types()))
+            if (in_array($object->getType(), DataManager::get_active_helper_types()))
             {
                 if (!$object->delete())
                 {

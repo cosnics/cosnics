@@ -93,7 +93,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $html[] = '<div class="clearfix"></div>';
 
-        if ($section->get_type() == CourseSection::TYPE_TOOL || $section->get_type() == CourseSection::TYPE_DISABLED)
+        if ($section->getType() == CourseSection::TYPE_TOOL || $section->getType() == CourseSection::TYPE_DISABLED)
         {
             $html[] = '</div>';
         }
@@ -105,12 +105,12 @@ class FixedLocationToolListRenderer extends ToolListRenderer
     {
         $html = [];
 
-        if ($section->get_type() == CourseSection::TYPE_TOOL)
+        if ($section->getType() == CourseSection::TYPE_TOOL)
         {
             $html[] = '<div class="toolblock" id="block_' . $section->get_id() . '" style="width:100%;">';
         }
 
-        if ($section->get_type() == CourseSection::TYPE_DISABLED)
+        if ($section->getType() == CourseSection::TYPE_DISABLED)
         {
             $html[] = '<div class="disabledblock" id="block_' . $section->get_id() . '" style="width:100%;">';
         }
@@ -368,7 +368,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $isNew = false;
             $isDisabled = false;
 
-            if ($tool_visible || $section->get_type() == CourseSection::TYPE_ADMIN)
+            if ($tool_visible || $section->getType() == CourseSection::TYPE_ADMIN)
             {
                 $lcms_action =
                     \Chamilo\Application\Weblcms\Tool\Implementation\Home\Manager::ACTION_MAKE_TOOL_INVISIBLE;
@@ -391,8 +391,8 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
             $title = Translation::get('TypeName', null, $tool_namespace);
 
-            if ($section->get_type() == CourseSection::TYPE_TOOL ||
-                $section->get_type() == CourseSection::TYPE_DISABLED)
+            if ($section->getType() == CourseSection::TYPE_TOOL ||
+                $section->getType() == CourseSection::TYPE_DISABLED)
             {
                 $html[] = '<div id="tool_' . $tool->get_id() . '" class="tool" style="display: block !important">';
                 $id = ' id="drag_' . $tool->get_id() . '"';
@@ -407,7 +407,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             );
 
             // Show visibility-icon
-            if ($this->is_course_admin && $canChangeCourseSetting && $section->get_type() != CourseSection::TYPE_ADMIN)
+            if ($this->is_course_admin && $canChangeCourseSetting && $section->getType() != CourseSection::TYPE_ADMIN)
             {
                 $html[] = '<a href="' . $parent->get_url(
                         array(
@@ -483,7 +483,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($sections as $section)
         {
-            $section_types_map[$section->get_type()] = $section->get_id();
+            $section_types_map[$section->getType()] = $section->get_id();
         }
 
         $sorted_tools = [];
@@ -522,7 +522,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         foreach ($sections as $section)
         {
-            $sec_name = $section->get_type() == CourseSection::TYPE_CUSTOM ? $section->get_name() : Translation::get(
+            $sec_name = $section->getType() == CourseSection::TYPE_CUSTOM ? $section->get_name() : Translation::get(
                 $section->get_name()
             );
 
@@ -539,13 +539,13 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
             }
 
-            if ($section->get_type() == CourseSection::TYPE_DISABLED &&
+            if ($section->getType() == CourseSection::TYPE_DISABLED &&
                 ($course_tool_layout < 3 || !$this->is_course_admin))
             {
                 continue;
             }
 
-            if ($section->get_type() == CourseSection::TYPE_LINK)
+            if ($section->getType() == CourseSection::TYPE_LINK)
             {
                 $publications = $this->get_publication_links();
 
@@ -555,7 +555,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
                 }
             }
 
-            if ($section->get_type() == CourseSection::TYPE_ADMIN && !$this->is_course_admin)
+            if ($section->getType() == CourseSection::TYPE_ADMIN && !$this->is_course_admin)
             {
                 continue;
             }
@@ -579,9 +579,9 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $html[] = '">' . $sec_name . '</a></li>';
 
             if ($section->getId() == $selectedTab ||
-                !isset($selectedTab) && $section->get_type() == CourseSection::TYPE_TOOL)
+                !isset($selectedTab) && $section->getType() == CourseSection::TYPE_TOOL)
             {
-                if ($section->get_type() == CourseSection::TYPE_LINK)
+                if ($section->getType() == CourseSection::TYPE_LINK)
                 {
                     $content = $this->show_links($section);
                 }

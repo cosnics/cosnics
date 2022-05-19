@@ -65,25 +65,26 @@ class LinkTypeSelectorOption implements TypeSelectorOption
 
     public function get_label()
     {
-        return Translation::get($this->get_type(), null, $this->get_context());
+        return Translation::get($this->getType(), null, $this->get_context());
     }
 
-    /*
-     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_image_path()
+    /**
+     *
+     * @deprecated Use LinkTypeSelectorOption::getType()
      */
+    public function get_type()
+    {
+        return $this->getType();
+    }
 
     /**
      *
      * @return string
      */
-    public function get_type()
+    public function getType()
     {
         return $this->type;
     }
-
-    /*
-     * (non-PHPdoc) @see \core\repository\TypeSelectorOption::get_label()
-     */
 
     /**
      *

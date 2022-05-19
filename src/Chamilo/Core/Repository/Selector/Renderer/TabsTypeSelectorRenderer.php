@@ -97,13 +97,13 @@ class TabsTypeSelectorRenderer extends TypeSelectorRenderer
         foreach ($this->get_type_selector()->get_categories() as $category)
         {
             $glyph = new NamespaceIdentGlyph(
-                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->get_type(), true, false, false,
+                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->getType(), true, false, false,
                 IdentGlyph::SIZE_SMALL, array('fa-fw')
             );
 
             $tabs->add_tab(
                 new DynamicContentTab(
-                    $category->get_type(), $category->get_name(), $glyph, $this->render_category($category)
+                    $category->getType(), $category->get_name(), $glyph, $this->render_category($category)
                 )
             );
         }

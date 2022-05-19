@@ -425,7 +425,7 @@ class PackageDescriber
         // General properties
         $composerJsonInstance->extra->cosnics->name = $legacyPackage->get_name();
         $composerJsonInstance->extra->cosnics->context = $legacyPackage->get_context();
-        $composerJsonInstance->extra->cosnics->type = $legacyPackage->get_type();
+        $composerJsonInstance->extra->cosnics->type = $legacyPackage->getType();
 
         $composerJsonInstance->extra->cosnics->install->default = (integer) $legacyPackage->getDefaultInstall();
         $composerJsonInstance->extra->cosnics->install->core = (integer) $legacyPackage->getCoreInstall();

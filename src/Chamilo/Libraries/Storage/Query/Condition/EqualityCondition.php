@@ -14,17 +14,11 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class EqualityCondition extends ComparisonCondition
 {
-
-    /**
-     * Constructor
-     *
-     * @param $name string|ConditionVariable
-     * @param $value string|ConditionVariable
-     * @param $storageUnit string
-     * @param $isAlias boolean
-     */
-    public function __construct($name, $value, $storageUnit = null, $isAlias = false)
+    public function __construct(
+        ConditionVariable $leftConditionVariable, ConditionVariable $rightConditionVariable,
+        ?string $storageUnit = null, ?bool $isAlias = false
+    )
     {
-        parent::__construct($name, self::EQUAL, $value, $storageUnit, $isAlias);
+        parent::__construct($leftConditionVariable, self::EQUAL, $rightConditionVariable, $storageUnit, $isAlias);
     }
 }

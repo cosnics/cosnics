@@ -311,7 +311,7 @@ abstract class AssessmentBlock extends ToolBlock
         $question_information[Translation::get('QuestionTitle')] = $question->get_title();
         $question_information[Translation::get('QuestionDescription')] = $question->get_description();
         $question_information[Translation::get('QuestionType')] = Translation::get(
-            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($question->get_type())
+            'TypeName', [], ClassnameUtilities::getInstance()->getNamespaceFromClassname($question->getType())
         );
 
         return $question_information;

@@ -244,7 +244,7 @@ class ForumViewerComponent extends Manager implements DelegateComponent
                 $child->get_ref());
             $child->set_ref($contentObject);
 
-            if ($contentObject->get_type() == ForumTopic::class)
+            if ($contentObject->getType() == ForumTopic::class)
             {
                 $this->topics[] = $child;
             }

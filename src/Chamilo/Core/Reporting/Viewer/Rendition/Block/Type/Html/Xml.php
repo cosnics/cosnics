@@ -29,7 +29,7 @@ class Xml extends Html
             $file_path, 
             true, 
             $file_properties->get_name_extension(), 
-            $file_properties->get_type());
+            $file_properties->getType());
         exit();
     }
 }

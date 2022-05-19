@@ -46,7 +46,7 @@ class LearningPathItem extends ContentObject implements Versionable, HelperConte
      *
      * @return string
      */
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

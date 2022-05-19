@@ -163,7 +163,7 @@ class PanelToolListRenderer extends ToolListRenderer
 
             foreach ($sections as $section)
             {
-                $this->sectionTypes[$section->get_type()] = $section->get_id();
+                $this->sectionTypes[$section->getType()] = $section->get_id();
             }
         }
 
@@ -358,7 +358,7 @@ class PanelToolListRenderer extends ToolListRenderer
                 $this->getCourse(), CourseSetting::COURSE_SETTING_TOOL_VISIBLE, $tool->get_id()
             );
 
-            if ($section->get_type() != CourseSection::TYPE_ADMIN && $toolIsVisible && $this->isCourseAdmin())
+            if ($section->getType() != CourseSection::TYPE_ADMIN && $toolIsVisible && $this->isCourseAdmin())
             {
                 $visibilityUrl = $parent->get_url(
                     array(
@@ -440,15 +440,15 @@ class PanelToolListRenderer extends ToolListRenderer
 
         foreach ($this->getSections() as $section)
         {
-            $isAdminSectionType = ($section->get_type() == CourseSection::TYPE_DISABLED) ||
-                ($section->get_type() == CourseSection::TYPE_ADMIN);
+            $isAdminSectionType = ($section->getType() == CourseSection::TYPE_DISABLED) ||
+                ($section->getType() == CourseSection::TYPE_ADMIN);
 
             if ((!$section->is_visible() || $isAdminSectionType) && !$this->isCourseAdmin())
             {
                 continue;
             }
 
-            switch ($section->get_type())
+            switch ($section->getType())
             {
                 case CourseSection::TYPE_DISABLED :
                     break;

@@ -12,74 +12,59 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 class FunctionConditionVariable extends ConditionVariable
 {
     const AVERAGE = 6;
-
-    /**
-     * A constant defining a count
-     *
-     * @var integer
-     */
     const COUNT = 2;
-
-    /**
-     * A constant defining a distinct
-     *
-     * @var integer
-     */
     const DISTINCT = 5;
-
-    /**
-     * A constant defining a maximum
-     *
-     * @var integer
-     */
     const MAX = 4;
-
-    /**
-     * A constant defining a minimum
-     *
-     * @var integer
-     */
     const MIN = 3;
-
-    /**
-     * A constant defining a sum
-     *
-     * @var integer
-     */
     const SUM = 1;
 
-    /**
-     * The ConditionVariable
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $condition_variable;
+    private ?string $alias;
 
-    /**
-     * The function to apply to the ConditionVariable
-     *
-     * @var integer
-     */
-    private $function;
+    private ConditionVariable $conditionVariable;
 
-    /**
-     *
-     * @var string
-     */
-    private $alias;
+    private int $function;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     * @param integer $function
-     * @param string $alias
-     */
-    public function __construct($function, $conditionVariable, $alias = null)
+    public function __construct(int $function, ConditionVariable $conditionVariable, ?string $alias = null)
     {
-        $this->condition_variable = $conditionVariable;
+        $this->conditionVariable = $conditionVariable;
         $this->function = $function;
         $this->alias = $alias;
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(?string $alias): ConditionVariable
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    public function getConditionVariable(): ConditionVariable
+    {
+        return $this->conditionVariable;
+    }
+
+    public function setConditionVariable(ConditionVariable $conditionVariable)
+    {
+        $this->conditionVariable = $conditionVariable;
+
+        return $this;
+    }
+
+    public function getFunction(): int
+    {
+        return $this->function;
+    }
+
+    public function setFunction(int $function): ConditionVariable
+    {
+        $this->function = $function;
+
+        return $this;
     }
 
     /**
@@ -90,65 +75,10 @@ class FunctionConditionVariable extends ConditionVariable
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $hashParts[] = $this->get_condition_variable()->getHashParts();
-        $hashParts[] = $this->get_function();
-        $hashParts[] = $this->get_alias();
+        $hashParts[] = $this->getConditionVariable()->getHashParts();
+        $hashParts[] = $this->getFunction();
+        $hashParts[] = $this->getAlias();
 
         return $hashParts;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public function get_alias()
-    {
-        return $this->alias;
-    }
-
-    /**
-     *
-     * @param string $alias
-     */
-    public function set_alias($alias)
-    {
-        $this->alias = $alias;
-    }
-
-    /**
-     * Get the ConditionVariable on the condition_variable side of the operation
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_condition_variable()
-    {
-        return $this->condition_variable;
-    }
-
-    /**
-     * Set the ConditionVariable on the condition_variable side of the operation
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     */
-    public function set_condition_variable($conditionVariable)
-    {
-        $this->condition_variable = $conditionVariable;
-    }
-
-    /**
-     * @return integer
-     */
-    public function get_function()
-    {
-        return $this->function;
-    }
-
-    /**
-     *
-     * @param integer $function
-     */
-    public function set_function($function)
-    {
-        $this->function = $function;
     }
 }

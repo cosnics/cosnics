@@ -62,13 +62,13 @@ abstract class Action
     public function failed($error_message)
     {
         $this->add_message(self::TYPE_ERROR, $error_message);
-        $this->add_message(self::TYPE_ERROR, Translation::get($this->get_type() . 'Failed'));
+        $this->add_message(self::TYPE_ERROR, Translation::get($this->getType() . 'Failed'));
         return false;
     }
 
     public function successful()
     {
-        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->get_type() . 'Successful'));
+        $this->add_message(self::TYPE_CONFIRM, Translation::get($this->getType() . 'Successful'));
         return true;
     }
 
@@ -81,9 +81,17 @@ abstract class Action
         return implode('<br />' . PHP_EOL, $this->get_message());
     }
 
-    public function get_type()
+    public function getType()
     {
         return ClassnameUtilities::getInstance()->getClassnameFromObject($this);
+    }
+
+    /**
+     * @deprecated Use Action::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
     }
 
     public function get_path()

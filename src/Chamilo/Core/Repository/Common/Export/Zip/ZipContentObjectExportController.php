@@ -66,7 +66,7 @@ class ZipContentObjectExportController extends ContentObjectExportController
                 $this, 
                 $content_object, 
                 ContentObjectExport::FORMAT_ZIP, 
-                $this->get_parameters()->get_type());
+                $this->get_parameters()->getType());
         }
     }
 

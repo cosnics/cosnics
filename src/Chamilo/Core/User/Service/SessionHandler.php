@@ -135,7 +135,7 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @see SessionHandlerInterface::read()
      */
-    public function read(string $sessionIdentifier)
+    public function read($sessionIdentifier)
     {
         $session = $this->getSessionRepository()->getSessionForIdentifierNameAndSavePath(
             $sessionIdentifier,

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Assessment\Display\Preview\Component;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Attempt\AbstractAttempt;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Interfaces\AssessmentDisplaySupport;
@@ -120,12 +121,12 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
     }
 
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
@@ -140,7 +141,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Assessment\
         return true;
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return true;
     }

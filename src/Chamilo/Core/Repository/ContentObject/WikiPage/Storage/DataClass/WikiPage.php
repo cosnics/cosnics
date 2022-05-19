@@ -13,7 +13,7 @@ use Chamilo\Libraries\Architecture\Interfaces\Versionable;
 class WikiPage extends ContentObject implements Versionable, ForcedVersionSupport
 {
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

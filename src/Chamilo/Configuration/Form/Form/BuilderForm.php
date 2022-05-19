@@ -47,7 +47,7 @@ class BuilderForm extends FormValidator
 
     public function build_basic_form()
     {
-        $this->addElement('category', $this->element->get_type_name($this->element->get_type()));
+        $this->addElement('category', $this->element->getTypeName($this->element->getType()));
 
         $this->addElement('text', Element::PROPERTY_NAME, Translation::get('Name'));
         $this->addRule(
@@ -59,7 +59,7 @@ class BuilderForm extends FormValidator
             'checkbox', Element::PROPERTY_REQUIRED, Translation::get('Required', null, Utilities::COMMON_LIBRARIES)
         );
 
-        if ($this->element->get_type() >= Element::TYPE_RADIO_BUTTONS)
+        if ($this->element->getType() >= Element::TYPE_RADIO_BUTTONS)
         {
             $this->build_options();
         }

@@ -27,7 +27,7 @@ class BuilderComponent extends Manager
 
         $this->rootContentObject = $learningPathTreeNode->getContentObject();
 
-        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->rootContentObject->get_type(), 3) .
+        $context = ClassnameUtilities::getInstance()->getNamespaceParent($this->rootContentObject->getType(), 3) .
              '\Builder';
 
         return $this->getApplicationFactory()->getApplication(

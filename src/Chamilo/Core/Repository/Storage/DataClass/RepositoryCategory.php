@@ -95,7 +95,7 @@ class RepositoryCategory extends PlatformCategory
             $this->addError(Translation::get('TypeIdIsRequired'));
         }
 
-        if (!$this->get_type())
+        if (!$this->getType())
         {
             $this->addError(Translation::get('TypeIsRequired'));
         }
@@ -121,7 +121,7 @@ class RepositoryCategory extends PlatformCategory
         {
             $this->set_display_order(
                 DataManager::select_next_category_display_order(
-                    $this->get_parent(), $this->get_type_id(), $this->get_type()
+                    $this->get_parent(), $this->get_type_id(), $this->getType()
                 )
             );
         }
@@ -152,7 +152,7 @@ class RepositoryCategory extends PlatformCategory
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($this->get_type())
+            new StaticConditionVariable($this->getType())
         );
 
         $condition = new AndCondition($conditions);
@@ -173,7 +173,7 @@ class RepositoryCategory extends PlatformCategory
      *
      * @return boolean
      */
-    public function update($move = false)
+    public function update($move = false): bool
     {
         $category = $this;
 
@@ -214,7 +214,7 @@ class RepositoryCategory extends PlatformCategory
         // TRANSACTION
         $success = DataManager::transactional(
             function ($c) use ($category) {
-                if ($category->get_type() == Workspace::WORKSPACE_TYPE)
+                if ($category->getType() == Workspace::WORKSPACE_TYPE)
                 {
                     if (!DataManager::delete_workspace_category_recursive($category))
                     {
@@ -298,21 +298,32 @@ class RepositoryCategory extends PlatformCategory
     }
 
     /**
+     * @deprecated Use RepositoryCategory::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
      * Returns the type of this object
      *
      * @return int
      */
-    public function get_type()
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
-     * Sets the type of this object
-     *
-     * @param $type int
+     * @deprecated Use RepositoryCategory::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

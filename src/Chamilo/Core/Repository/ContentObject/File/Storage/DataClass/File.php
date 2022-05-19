@@ -175,7 +175,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         return parent::create();
     }
 
-    public function delete($only_version = false)
+    public function delete($only_version = false): bool
     {
         if ($only_version)
         {
@@ -519,7 +519,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
         }
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
@@ -818,7 +818,7 @@ class File extends ContentObject implements Versionable, Includeable, FileStorag
      *
      * @see repository/lib/ContentObject#update($trueUpdate)
      */
-    public function update($trueUpdate = true)
+    public function update($trueUpdate = true): bool
     {
         /*
          * Force using version() instead of update() if the object is marked to be saved as a new version

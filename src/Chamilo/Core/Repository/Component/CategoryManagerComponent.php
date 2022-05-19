@@ -123,7 +123,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     public function getCategory()
     {
         $category = new RepositoryCategory();
-        $category->set_type($this->getWorkspace()->getWorkspaceType());
+        $category->setType($this->getWorkspace()->getWorkspaceType());
         $category->set_type_id($this->getWorkspace()->getId());
 
         return $category;

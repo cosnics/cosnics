@@ -23,7 +23,7 @@ class Bookmark extends ContentObject implements Versionable, Includeable
         return 'repository_bookmark';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

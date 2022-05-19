@@ -43,7 +43,7 @@ class AdvancedElementFinderElement
         $this->set_class($class);
         $this->set_title($title);
         $this->set_description($description);
-        $this->set_type($type);
+        $this->setType($type);
     }
 
     /**
@@ -179,11 +179,19 @@ class AdvancedElementFinderElement
     }
 
     /**
+     * @deprecated Use AdvancedElementFinderElement::setType()
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    /**
      * Sets the type of this element
      *
      * @param string $type
      */
-    public function set_type($type)
+    public function setType($type)
     {
         $this->set_property(self::PROPERTY_TYPE, $type);
     }

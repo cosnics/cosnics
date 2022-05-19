@@ -30,19 +30,19 @@ class SubselectConditionTranslator extends ConditionTranslator
         $string = [];
 
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
         );
 
         $string[] = 'IN (';
         $string[] = 'SELECT';
 
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getCondition()->getSubselectConditionVariable(), $enableAliasing
         );
 
         $string[] = 'FROM';
 
-        $class = $this->getCondition()->get_value()->get_class();
+        $class = $this->getCondition()->getSubselectConditionVariable()->get_class();
         $table = $class::getTableName();
 
         $alias = $this->getDataClassDatabase()->getAlias($table);
@@ -52,11 +52,11 @@ class SubselectConditionTranslator extends ConditionTranslator
         $string[] = 'AS';
         $string[] = $alias;
 
-        if ($this->getCondition()->get_condition())
+        if ($this->getCondition()->getCondition())
         {
             $string[] = 'WHERE ';
             $string[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_condition(), $enableAliasing
+                $this->getDataClassDatabase(), $this->getCondition()->getCondition(), $enableAliasing
             );
         }
 

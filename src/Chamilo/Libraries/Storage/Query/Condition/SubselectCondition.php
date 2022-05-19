@@ -14,79 +14,50 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class SubselectCondition extends Condition
 {
 
-    /**
-     * The DataClass property
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    private $name;
+    private ?Condition $condition;
 
-    /**
-     * The storage unit of the DataClass
-     *
-     * @var string
-     */
-    private $storage_unit_name;
+    private ConditionVariable $conditionVariable;
 
-    /**
-     * The DataClass property of the object used in the subselect
-     *
-     * @var  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    private $value;
+    private ?string $storageUnitName;
 
-    /**
-     * The storage unit of the DataClass used in the subselect
-     *
-     * @var string
-     */
-    private $storage_unit_value;
+    private ConditionVariable $subselectConditionVariable;
 
-    /**
-     * The condition for the subselect
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    private $condition;
+    private string $subselectStorageUnitName;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $name
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $value
-     * @param string $storageUnitValue
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param $storageUnitName string
-     */
     public function __construct(
-        $name, $value, $storageUnitValue, $condition = null, $storageUnitName = null
+        ConditionVariable $conditionVariable, ConditionVariable $subselectConditionVariable,
+        string $subselectStorageUnitName, ?Condition $condition = null, ?string $storageUnitName = null
     )
     {
-        $this->name = $name;
-        $this->value = $value;
-        $this->storage_unit_value = $storageUnitValue;
-        $this->storage_unit_name = $storageUnitName;
+        $this->conditionVariable = $conditionVariable;
+        $this->subselectConditionVariable = $subselectConditionVariable;
+        $this->subselectStorageUnitName = $subselectStorageUnitName;
+        $this->storageUnitName = $storageUnitName;
         $this->condition = $condition;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
+    public function getCondition(): Condition
+    {
+        return $this->condition;
+    }
+
+    public function getConditionVariable(): ConditionVariable
+    {
+        return $this->conditionVariable;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] =
-            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-        $hashParts[] =
-            $this->get_value() instanceof ConditionVariable ? $this->get_value()->getHashParts() : $this->get_value();
-        $hashParts[] = $this->get_storage_unit_value();
-        $hashParts[] = $this->get_storage_unit_name();
+        $hashParts[] = $this->getConditionVariable()->getHashParts();
+        $hashParts[] = $this->getSubselectConditionVariable()->getHashParts();
+        $hashParts[] = $this->getSubselectStorageUnitName();
+        $hashParts[] = $this->getStorageUnitName();
 
-        if ($this->get_condition() instanceof Condition)
+        if ($this->getCondition() instanceof Condition)
         {
-            $hashParts[] = $this->get_condition()->getHashParts();
+            $hashParts[] = $this->getCondition()->getHashParts();
         }
         else
         {
@@ -96,52 +67,18 @@ class SubselectCondition extends Condition
         return $hashParts;
     }
 
-    /**
-     * Gets the condition for the subselect
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
+    public function getStorageUnitName(): ?string
     {
-        return $this->condition;
+        return $this->storageUnitName;
     }
 
-    /**
-     * Gets the DataClass property
-     *
-     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_name()
+    public function getSubselectConditionVariable(): ConditionVariable
     {
-        return $this->name;
+        return $this->subselectConditionVariable;
     }
 
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit_name()
+    public function getSubselectStorageUnitName(): string
     {
-        return $this->storage_unit_name;
-    }
-
-    /**
-     * Gets the storage unit of the DataClass used in the subselect
-     *
-     * @return string
-     */
-    public function get_storage_unit_value()
-    {
-        return $this->storage_unit_value;
-    }
-
-    /**
-     * Gets the DataClass property of the object used in the subselect
-     *
-     * @return  \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_value()
-    {
-        return $this->value;
+        return $this->subselectStorageUnitName;
     }
 }

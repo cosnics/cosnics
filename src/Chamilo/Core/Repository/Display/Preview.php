@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\Display;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Format\Display;
 
@@ -80,7 +81,7 @@ abstract class Preview extends Application
      *
      * @return boolean
      */
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return true;
     }
@@ -89,7 +90,7 @@ abstract class Preview extends Application
      *
      * @return boolean
      */
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
@@ -107,7 +108,7 @@ abstract class Preview extends Application
      *
      * @return boolean
      */
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }

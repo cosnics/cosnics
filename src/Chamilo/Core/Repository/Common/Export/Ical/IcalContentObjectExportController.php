@@ -184,7 +184,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
         if (in_array(ContentObjectExport::FORMAT_ICAL, $export_types))
         {
             ContentObjectExportImplementation::launch(
-                $this, $content_object, ContentObjectExport::FORMAT_ICAL, $this->get_parameters()->get_type()
+                $this, $content_object, ContentObjectExport::FORMAT_ICAL, $this->get_parameters()->getType()
             );
         }
     }

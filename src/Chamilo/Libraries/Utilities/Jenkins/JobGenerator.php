@@ -83,11 +83,11 @@ class JobGenerator
      */
     public function process(PackageList $package_list)
     {
-        $job_folder = $this->get_job_path() . $this->get_job_name($package_list->get_type()) . DIRECTORY_SEPARATOR;
+        $job_folder = $this->get_job_path() . $this->get_job_name($package_list->getType()) . DIRECTORY_SEPARATOR;
 
         if (!is_dir($job_folder))
         {
-            $package_config_path = $this->get_folder($package_list->get_type()) . 'config.xml';
+            $package_config_path = $this->get_folder($package_list->getType()) . 'config.xml';
             $job_config_path = $job_folder . 'config.xml';
 
             Filesystem::copy_file($package_config_path, $job_config_path);

@@ -160,7 +160,7 @@ class ContentObject extends CompositeDataClass
             $attachment = new ContentObjectAttachment();
             $attachment->set_attachment_id($id);
             $attachment->set_content_object_id($this->get_id());
-            $attachment->set_type($type);
+            $attachment->setType($type);
 
             return $attachment->create();
         }

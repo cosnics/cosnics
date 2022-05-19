@@ -125,7 +125,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         );
     }
 
-    protected function getDependencies($dependencies = [])
+    protected function getDependencies(array $dependencies = []): array
     {
         $id = $this->get_id();
 
@@ -284,7 +284,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
         $this->set_visibility(!$this->get_visibility());
     }
 
-    public function update($move = false)
+    public function update($move = false): bool
     {
         $succes = parent::update();
         if (!$succes)

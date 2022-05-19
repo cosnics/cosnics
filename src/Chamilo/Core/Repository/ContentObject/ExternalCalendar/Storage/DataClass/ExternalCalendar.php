@@ -365,7 +365,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
         }
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

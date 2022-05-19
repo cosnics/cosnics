@@ -668,7 +668,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($category->get_type())
+            new StaticConditionVariable($category->getType())
         );
         $condition = new AndCondition($conditions);
 
@@ -789,7 +789,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $category->set_type_id($user_id);
             $category->set_name($title);
             $category->set_parent($parent_id);
-            $category->set_type(PersonalWorkspace::WORKSPACE_TYPE);
+            $category->setType(PersonalWorkspace::WORKSPACE_TYPE);
 
             // Create category in database
             $category->create($create_in_batch);

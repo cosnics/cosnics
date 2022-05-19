@@ -93,7 +93,7 @@ class PackageList
      */
     public function add_child(PackageList $child)
     {
-        $this->children[$child->get_type()] = $child;
+        $this->children[$child->getType()] = $child;
     }
 
     /**
@@ -114,7 +114,7 @@ class PackageList
 
             if (count($this->get_packages()) > 0)
             {
-                $this->all_packages[$recursive][$this->get_type()] = $this->get_packages();
+                $this->all_packages[$recursive][$this->getType()] = $this->get_packages();
             }
 
             foreach ($this->get_children() as $child)
@@ -133,7 +133,7 @@ class PackageList
                 {
                     if (count($child->get_packages($recursive)) > 0)
                     {
-                        $this->all_packages[$recursive][$child->get_type()] = $child->get_packages($recursive);
+                        $this->all_packages[$recursive][$child->getType()] = $child->get_packages($recursive);
                     }
                 }
             }
@@ -226,9 +226,19 @@ class PackageList
     /**
      * Get the type
      *
-     * @return string
+     * @deprecated Use PackageList::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     * Get the type
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }
@@ -264,11 +274,14 @@ class PackageList
     }
 
     /**
-     * Get the type name
-     *
-     * @return string
+     * @deprecated Use PackageList::getTypeName() now
      */
     public function get_type_name()
+    {
+        return $this->getTypeName();
+    }
+
+    public function getTypeName()
     {
         return $this->type_name;
     }
@@ -296,7 +309,7 @@ class PackageList
 
             if (count($this->get_packages()) > 0)
             {
-                $this->types[$recursive][] = $this->get_type();
+                $this->types[$recursive][] = $this->getType();
             }
 
             foreach ($this->get_children() as $child)
@@ -307,7 +320,7 @@ class PackageList
                 }
                 else
                 {
-                    $this->types[$recursive][] = $child->get_type();
+                    $this->types[$recursive][] = $child->getType();
                 }
             }
         }

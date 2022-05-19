@@ -654,7 +654,7 @@ abstract class ContentObjectForm extends FormValidator
             $new_category->set_name($category_name);
             $new_category->set_parent($parent_id);
             $new_category->set_type_id($this->workspace->getId());
-            $new_category->set_type($this->workspace->getWorkspaceType());
+            $new_category->setType($this->workspace->getWorkspaceType());
 
             if (!$new_category->create())
             {

@@ -59,7 +59,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
      *
      * @return boolean Returns whether the delete was succesfull.
      */
-    public function delete($only_version = false)
+    public function delete($only_version = false): bool
     {
         if ($only_version)
         {
@@ -226,7 +226,7 @@ class LearningPath extends ContentObject implements ComplexContentObjectSupport
         $this->setAdditionalProperty(self::PROPERTY_ENFORCE_DEFAULT_TRAVERSING_ORDER, $enforceDefaultTraversingOrder);
     }
 
-    public function update($trueUpdate = true)
+    public function update($trueUpdate = true): bool
     {
         if (!parent::update($trueUpdate))
         {

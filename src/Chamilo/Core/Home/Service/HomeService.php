@@ -116,7 +116,7 @@ class HomeService
         {
             if ($this->elementRightsService->canUserViewElement($user, $defaultElement))
             {
-                $defaultElements[$defaultElement->get_type()][$defaultElement->getParentId()][] = $defaultElement;
+                $defaultElements[$defaultElement->getType()][$defaultElement->getParentId()][] = $defaultElement;
             }
         }
         
@@ -216,7 +216,7 @@ class HomeService
             
             foreach($elementsResultSet as $element)
             {
-                $this->elements[$element->get_type()][$element->getParentId()][] = $element;
+                $this->elements[$element->getType()][$element->getParentId()][] = $element;
             }
         }
         

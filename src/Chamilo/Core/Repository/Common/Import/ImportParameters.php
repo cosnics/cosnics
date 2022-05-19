@@ -67,9 +67,18 @@ abstract class ImportParameters
 
     /**
      *
-     * @return the $type
+     * @deprecated Use ImportParameters::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }

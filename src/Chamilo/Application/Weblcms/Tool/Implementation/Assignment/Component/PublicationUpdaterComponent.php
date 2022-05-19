@@ -69,7 +69,7 @@ class PublicationUpdaterComponent extends Manager
             $is_course_admin, [], $this->getTranslator(), $this->getPublicationRepository()
         );
 
-        if ($publication_form->validate() || $content_object->get_type() == 'introduction')
+        if ($publication_form->validate() || $content_object->getType() == 'introduction')
         {
             $succes = $publication_form->handle_form_submit();
 

@@ -36,7 +36,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         return $path;
     }
 
-    public function delete($only_version = false)
+    public function delete($only_version = false): bool
     {
         if ($only_version)
         {
@@ -106,7 +106,7 @@ class Hotpotatoes extends ContentObject implements Versionable
         return $this->getAdditionalProperty(self::PROPERTY_PATH);
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

@@ -42,7 +42,7 @@ class RepositoryCategoryService
             $category->set_name($categoryName);
             $category->set_parent($parentIdentifier);
             $category->set_type_id($workspace->getId());
-            $category->set_type($workspace->getWorkspaceType());
+            $category->setType($workspace->getWorkspaceType());
 
             if (!$category->create())
             {

@@ -33,7 +33,7 @@ class GalleryTable extends DataClassGalleryTable implements TableFormActionsSupp
         parent::__construct($component);
 
         $template_id =
-            FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace())->get_type();
+            FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace())->getType();
 
         if (!$template_id || !is_numeric($template_id))
         {

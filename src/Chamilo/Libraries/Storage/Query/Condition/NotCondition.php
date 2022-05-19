@@ -11,43 +11,24 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
 class NotCondition extends AggregateCondition
 {
 
-    /**
-     * The condition to negate
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    private $condition;
+    private Condition $condition;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     */
     public function __construct(Condition $condition)
     {
         $this->condition = $condition;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
+    public function getCondition(): Condition
+    {
+        return $this->condition;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] = $this->get_condition()->getHashParts();
+        $hashParts[] = $this->getCondition()->getHashParts();
 
         return $hashParts;
-    }
-
-    /**
-     * Gets the condition to negate
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
-    {
-        return $this->condition;
     }
 }

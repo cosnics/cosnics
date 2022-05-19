@@ -63,7 +63,7 @@ class Toolbar
         }
 
         $toolbar_data = $this->items;
-        $type = $this->get_type();
+        $type = $this->getType();
         $class_names = $this->class_names;
         $css = $this->css;
 
@@ -191,18 +191,36 @@ class Toolbar
 
     /**
      *
-     * @return string
+     * @deprecated Use Toolbar::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }
 
     /**
      *
-     * @param string $type
+     * @deprecated Use Toolbar::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    /**
+     *
+     * @param string $type
+     */
+    public function setType($type)
     {
         $this->type = $type;
     }

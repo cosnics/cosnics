@@ -21,7 +21,7 @@ class LoginLogout extends SimpleTracker
         $this->set_user_id($user->get_id());
         $this->set_date(time());
         $this->set_ip($server['REMOTE_ADDR']);
-        $this->set_type($this->get_event()->getType());
+        $this->setType($this->get_event()->getType());
     }
 
     /**
@@ -95,11 +95,14 @@ class LoginLogout extends SimpleTracker
     }
 
     /**
-     * Sets the type of the login tracker
-     * 
-     * @param int $type the type
+     * @deprecated Use LoginLogout::setType()
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

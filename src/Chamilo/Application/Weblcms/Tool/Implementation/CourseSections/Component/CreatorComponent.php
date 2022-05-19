@@ -36,7 +36,7 @@ class CreatorComponent extends Manager
 
         $course_section = new CourseSection();
         $course_section->set_course_id($this->get_course_id());
-        $course_section->set_type(CourseSection::TYPE_CUSTOM);
+        $course_section->setType(CourseSection::TYPE_CUSTOM);
 
         $form = new CourseSectionForm(
             CourseSectionForm::TYPE_CREATE,

@@ -76,7 +76,7 @@ class AssessmentRatingQuestion extends ContentObject implements Versionable
         return 'repository_assessment_rating_question';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

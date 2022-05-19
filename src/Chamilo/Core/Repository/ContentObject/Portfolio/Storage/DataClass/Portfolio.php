@@ -45,7 +45,7 @@ class Portfolio extends ContentObject implements ComplexContentObjectSupport, Co
      *
      * @return string
      */
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

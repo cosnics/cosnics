@@ -18,114 +18,42 @@ class OrderBy implements Hashable
 {
     use HashableTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $conditionVariable;
+    private ConditionVariable $conditionVariable;
 
-    /**
-     *
-     * @var integer
-     */
-    private $direction;
+    private int $direction;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     * @param integer $direction
-     */
-    public function __construct(ConditionVariable $conditionVariable, $direction = SORT_ASC)
+    public function __construct(ConditionVariable $conditionVariable, ?int $direction = SORT_ASC)
     {
         $this->conditionVariable = $conditionVariable;
         $this->direction = $direction;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionVariable
     {
         return $this->conditionVariable;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     */
-    public function setConditionVariable(ConditionVariable $conditionVariable)
+    public function setConditionVariable(ConditionVariable $conditionVariable): OrderBy
     {
         $this->conditionVariable = $conditionVariable;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getDirection()
+    public function getDirection(): int
     {
         return $this->direction;
     }
 
-    /**
-     *
-     * @return integer
-     * @deprecated User getDirection() now
-     */
-    public function get_direction()
-    {
-        return $this->getDirection();
-    }
-
-    /**
-     *
-     * @param integer $direction
-     */
-    public function setDirection($direction)
+    public function setDirection(int $direction): OrderBy
     {
         $this->direction = $direction;
+
+        return $this;
     }
 
-    /**
-     *
-     * @param integer $direction
-     *
-     * @deprecated User setDirection() now
-     */
-    public function set_direction($direction)
-    {
-        $this->setDirection($direction);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
     public function getHashParts(): array
     {
         return array($this->getConditionVariable()->getHashParts(), $this->getDirection());
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     * @deprecated Use getConditionVariable() now
-     */
-    public function get_property()
-    {
-        return $this->getConditionVariable();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     *
-     * @deprecated Use getConditionVariable() now
-     */
-    public function set_property(ConditionVariable $conditionVariable)
-    {
-        $this->setConditionVariable($conditionVariable);
     }
 }

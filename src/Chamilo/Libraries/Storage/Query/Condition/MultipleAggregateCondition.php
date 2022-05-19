@@ -14,35 +14,35 @@ abstract class MultipleAggregateCondition extends AggregateCondition
 {
 
     /**
-     * The aggregated conditions
-     *
      * @var \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      */
-    private $conditions;
+    private array $conditions;
 
     /**
-     * Constructor
-     *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $conditions
      */
-    public function __construct($conditions)
+    public function __construct(array $conditions)
     {
-        $this->conditions = (is_array($conditions) ? $conditions : func_get_args());
+        $this->conditions = $conditions;
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
      */
+    public function getConditions(): array
+    {
+        return $this->conditions;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] = $this->get_operator();
+        $hashParts[] = $this->getOperator();
 
         $aggregateParts = [];
 
-        foreach ($this->get_conditions() as $condition)
+        foreach ($this->getConditions() as $condition)
         {
             $aggregateParts[] = $condition->getHashParts();
         }
@@ -54,20 +54,5 @@ abstract class MultipleAggregateCondition extends AggregateCondition
         return $hashParts;
     }
 
-    /**
-     * Gets the aggregated conditions
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
-     */
-    public function get_conditions()
-    {
-        return $this->conditions;
-    }
-
-    /**
-     * Gets the operator of this MultipleAggregateCondition
-     *
-     * @return string
-     */
-    abstract public function get_operator();
+    abstract public function getOperator(): string;
 }

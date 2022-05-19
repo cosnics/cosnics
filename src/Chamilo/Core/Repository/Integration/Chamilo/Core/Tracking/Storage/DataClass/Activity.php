@@ -87,7 +87,15 @@ class Activity extends Tracker
         return 'tracking_repository_activity';
     }
 
+    /**
+     * @deprecated Use Activity::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
@@ -98,7 +106,7 @@ class Activity extends Tracker
      */
     public function get_type_image()
     {
-        return self::type_image($this->get_type());
+        return self::type_image($this->getType());
     }
 
     /**
@@ -107,7 +115,7 @@ class Activity extends Tracker
      */
     public function get_type_string()
     {
-        return self::type_string($this->get_type());
+        return self::type_string($this->getType());
     }
 
     public function get_user()
@@ -146,7 +154,15 @@ class Activity extends Tracker
         $this->setDefaultProperty(self::PROPERTY_DATE, $date);
     }
 
+    /**
+     * @deprecated Use Activity::setType() now
+     */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
@@ -250,7 +266,7 @@ class Activity extends Tracker
 
     public function validate_parameters(array $parameters = [])
     {
-        $this->set_type($parameters[self::PROPERTY_TYPE]);
+        $this->setType($parameters[self::PROPERTY_TYPE]);
         $this->set_user_id((int) $parameters[self::PROPERTY_USER_ID]);
         $this->set_date($parameters[self::PROPERTY_DATE]);
         $this->set_content($parameters[self::PROPERTY_CONTENT]);

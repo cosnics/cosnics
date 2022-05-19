@@ -122,8 +122,8 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
 
     public function create_helper_object($helper_object, $content_object_id)
     {
-        $helper_object->set_title($helper_object->get_type_name());
-        $helper_object->set_description($helper_object->get_type_name());
+        $helper_object->set_title($helper_object->getTypeName());
+        $helper_object->set_description($helper_object->getTypeName());
         $helper_object->set_owner_id($this->get_user_id());
         $helper_object->set_reference($content_object_id);
         $helper_object->set_parent_id(0);
@@ -179,7 +179,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                     'NEW_TYPE' => $template->translate('TypeName'),
                     'PARENT_TYPE' => Translation::get(
                         'TypeName', null,
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->get_type())
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->getType())
                     ),
                     'TITLE' => $content_object->get_title()
                 ), \Chamilo\Core\Repository\Manager::context()
@@ -193,7 +193,7 @@ class CreatorComponent extends Manager implements ViewerInterface, DelegateCompo
                     'NEW_TYPE' => Translation::get('Items'),
                     'PARENT_TYPE' => Translation::get(
                         'TypeName', null,
-                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->get_type())
+                        ClassnameUtilities::getInstance()->getNamespaceFromClassname($content_object->getType())
                     ),
                     'TITLE' => $content_object->get_title()
                 ), \Chamilo\Core\Repository\Manager::context()

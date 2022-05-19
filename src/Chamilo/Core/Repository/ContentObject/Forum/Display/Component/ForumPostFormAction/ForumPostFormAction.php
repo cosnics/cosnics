@@ -42,7 +42,7 @@ abstract class ForumPostFormAction extends Manager implements DelegateComponent
             foreach ($complex_content_objects_path as $key => $value)
             {
                 
-                if ($value->get_type() == 'forum_topic')
+                if ($value->getType() == 'forum_topic')
                 {
                     $trail->add(
                         new Breadcrumb(

@@ -41,7 +41,7 @@ class ApplicationItem extends Item
     /**
      * @return string
      */
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }

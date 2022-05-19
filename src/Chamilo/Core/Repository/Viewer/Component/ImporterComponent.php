@@ -75,7 +75,7 @@ class ImporterComponent extends Manager implements DelegateComponent
                     $new_category->set_name($new_category_name);
                     $new_category->set_parent($parent_id);
                     $new_category->set_type_id($this->getWorkspace()->getId());
-                    $new_category->set_type($this->getWorkspace()->getWorkspaceType());
+                    $new_category->setType($this->getWorkspace()->getWorkspaceType());
 
                     if (!$new_category->create())
                     {

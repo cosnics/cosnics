@@ -129,13 +129,13 @@ class ObjectTypeMenu extends HtmlMenu
             $menu_item = [];
 
             $glyph = new NamespaceIdentGlyph(
-                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->get_type(), true, false, false, null, array('fa-fw')
+                'Chamilo\Core\Repository\ContentObject\Category\\' . $category->getType(), true, false, false, null, array('fa-fw')
             );
 
             $menu_item['class'] = $glyph->getClassNamesString();
             $menu_item['title'] = $category->get_name();
-            $menu_item['url'] = $this->get_category_url($category->get_type());
-            $menu_item[OptionsMenuRenderer::KEY_ID] = $category->get_type();
+            $menu_item['url'] = $this->get_category_url($category->getType());
+            $menu_item[OptionsMenuRenderer::KEY_ID] = $category->getType();
 
             $sub_menu_items = [];
 

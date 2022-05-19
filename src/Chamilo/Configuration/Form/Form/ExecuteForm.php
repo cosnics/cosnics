@@ -42,7 +42,7 @@ class ExecuteForm extends FormValidator
         $elements = $this->form->get_elements();
         foreach ($elements as $element)
         {
-            switch ($element->get_type())
+            switch ($element->getType())
             {
                 case Element::TYPE_TEXTBOX :
                     $this->build_text_box($element);
@@ -215,7 +215,7 @@ class ExecuteForm extends FormValidator
                     new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
                     new StaticConditionVariable($value->get_dynamic_form_element_id())))->current();
             
-            if ($element->get_type() == Element::TYPE_RADIO_BUTTONS)
+            if ($element->getType() == Element::TYPE_RADIO_BUTTONS)
             {
                 $parameters['element[' . $value->get_dynamic_form_element_id() . '][' .
                      $value->get_dynamic_form_element_id() . ']'] = $value->get_value();

@@ -10,18 +10,9 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  */
 class OrCondition extends MultipleAggregateCondition
 {
-    /**
-     * The operator
-     *
-     * @var string
-     */
     const OPERATOR = ' OR ';
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition::get_operator()
-     */
-    public function get_operator()
+    public function getOperator(): string
     {
         return self::OPERATOR;
     }

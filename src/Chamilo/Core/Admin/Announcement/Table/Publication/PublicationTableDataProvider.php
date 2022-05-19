@@ -42,7 +42,7 @@ class PublicationTableDataProvider extends RecordTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        $type = $this->get_component()->get_type();
+        $type = $this->get_component()->getType();
         switch ($type)
         {
             case BrowserComponent::TYPE_FROM_ME :
@@ -61,7 +61,7 @@ class PublicationTableDataProvider extends RecordTableDataProvider
 
     public function count_data($condition)
     {
-        $type = $this->get_component()->get_type();
+        $type = $this->get_component()->getType();
         switch ($type)
         {
             case BrowserComponent::TYPE_FROM_ME :

@@ -42,7 +42,7 @@ class PreviewComponent extends Manager
 
     public function getPreview()
     {
-        $contentObjectClassname = $this->get_root_content_object()->get_type();
+        $contentObjectClassname = $this->get_root_content_object()->getType();
         $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname($contentObjectClassname);
         $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($contentObjectNamespace, 2);
         $namespace = $contentObjectNamespace . '\Display\Preview';

@@ -155,7 +155,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @return boolean Returns whether the delete was succesfull.
      */
-    public function delete($only_version = false)
+    public function delete($only_version = false): bool
     {
         if ($only_version)
         {
@@ -252,7 +252,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
      *
      * @return string
      */
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }
@@ -468,15 +468,7 @@ class ForumTopic extends ContentObject implements Versionable, AttachmentSupport
         $this->setAdditionalProperty(self::PROPERTY_TOTAL_POSTS, $total_posts);
     }
 
-    /**
-     * update if the firstpost is al ready updated then only do an update else make a new topicnotificator and send the
-     * emails
-     *
-     * @param type $firstpostupdated
-     *
-     * @return bool
-     */
-    public function update($request_from_forum_postpost = false)
+    public function update($request_from_forum_postpost = false): bool
     {
         if (!$request_from_forum_postpost)
         {

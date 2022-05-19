@@ -16,7 +16,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 class Glossary extends ContentObject implements ComplexContentObjectSupport
 {
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

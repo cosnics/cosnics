@@ -50,8 +50,8 @@ abstract class ContentObjectImportController
     public static function factory($parameters)
     {
         $class = __NAMESPACE__ . '\\' .
-             (string) StringUtilities::getInstance()->createString($parameters->get_type())->upperCamelize() . '\\' .
-             (string) StringUtilities::getInstance()->createString($parameters->get_type())->upperCamelize() .
+             (string) StringUtilities::getInstance()->createString($parameters->getType())->upperCamelize() . '\\' .
+             (string) StringUtilities::getInstance()->createString($parameters->getType())->upperCamelize() .
              'ContentObjectImportController';
         return new $class($parameters);
     }

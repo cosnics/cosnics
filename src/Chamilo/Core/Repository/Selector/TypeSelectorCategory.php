@@ -96,9 +96,18 @@ class TypeSelectorCategory implements TypeSelectorItemInterface
 
     /**
      *
-     * @return string
+     * @deprecated Use TypeSelectorCategory::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }

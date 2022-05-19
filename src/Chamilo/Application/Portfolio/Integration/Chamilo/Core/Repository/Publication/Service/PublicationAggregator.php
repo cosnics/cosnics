@@ -82,7 +82,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
         $userPublication = $this->getPublicationService()->findPublicationForUser($user);
 
         $allowedTypes = Portfolio::get_allowed_types();
-        $type = $contentObject->get_type();
+        $type = $contentObject->getType();
 
         if (in_array($type, $allowedTypes) && $userPublication instanceof Publication)
         {

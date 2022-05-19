@@ -14,109 +14,58 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class InCondition extends Condition
 {
+    private ConditionVariable $conditionVariable;
 
-    /**
-     * Is the storage unit name already an alias?
-     *
-     * @var boolean
-     */
-    private $is_alias;
+    private bool $isAlias;
 
-    /**
-     * Gets the DataClass property
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $name;
+    private ?string $storageUnit;
 
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @var string
-     */
-    private $storage_unit;
+    private array $values;
 
-    /**
-     * The list of values that defines the selection
-     *
-     * @var string[]
-     */
-    private $values;
-
-    /**
-     *
-     * @param $name string|ConditionVariable
-     * @param $values array
-     * @param $storageUnit string
-     * @param $isAlias boolean
-     */
-    public function __construct($name, $values, $storageUnit = null, $isAlias = false)
+    public function __construct(
+        ConditionVariable $conditionVariable, array $values, ?string $storageUnit = null, ?bool $isAlias = false
+    )
     {
-        $this->name = $name;
+        $this->conditionVariable = $conditionVariable;
         $this->values = $values;
-        $this->storage_unit = $storageUnit;
-        $this->is_alias = $isAlias;
+        $this->storageUnit = $storageUnit;
+        $this->isAlias = $isAlias;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
+    public function getConditionVariable(): ConditionVariable
+    {
+        return $this->conditionVariable;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] =
-            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
+        $hashParts[] = $this->getConditionVariable()->getHashParts();
 
-        $values = $this->get_values();
+        $values = $this->getValues();
 
         ksort($values);
         $hashParts[] = $values;
 
-        $hashParts[] = $this->get_storage_unit();
-        $hashParts[] = $this->is_alias();
+        $hashParts[] = $this->getStorageUnit();
+        $hashParts[] = $this->isAlias();
 
         return $hashParts;
     }
 
-    /**
-     * Gets the DataClass property
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_name()
+    public function getStorageUnit(): ?string
     {
-        return $this->name;
+        return $this->storageUnit;
     }
 
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit()
-    {
-        return $this->storage_unit;
-    }
-
-    /**
-     * Gets the list of values that defines the selection
-     *
-     * @return string[]
-     */
-    public function get_values()
+    public function getValues(): array
     {
         return $this->values;
     }
 
-    /**
-     * Is the storage unit already an alias?
-     *
-     * @return boolean
-     */
-    public function is_alias()
+    public function isAlias(): bool
     {
-        return $this->is_alias;
+        return $this->isAlias;
     }
 }

@@ -47,7 +47,7 @@ class DeleterComponent extends Manager
             
             $content_object = $publication->get_content_object();
             
-            if ($content_object->get_type() == Introduction::class)
+            if ($content_object->getType() == Introduction::class)
             {
                 $publication->ignore_display_order();
             }

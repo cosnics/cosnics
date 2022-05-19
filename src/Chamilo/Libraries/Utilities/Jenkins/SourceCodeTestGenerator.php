@@ -62,7 +62,7 @@ class SourceCodeTestGenerator
      */
     public function process(PackageList $package_list)
     {
-        $this->write_source_code_test($package_list->get_type());
+        $this->write_source_code_test($package_list->getType());
 
         if ($package_list->has_children())
         {

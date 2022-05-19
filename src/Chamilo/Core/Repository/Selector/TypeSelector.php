@@ -58,7 +58,7 @@ class TypeSelector
      */
     public function add_category(TypeSelectorCategory $category)
     {
-        $this->categories[$category->get_type()] = $category;
+        $this->categories[$category->getType()] = $category;
         $this->typeSelectorItems[] = $category;
     }
 
@@ -130,7 +130,7 @@ class TypeSelector
     {
         foreach ($this->get_categories() as $category)
         {
-            if ($category->get_type() == $type)
+            if ($category->getType() == $type)
             {
                 return $category;
             }
@@ -173,7 +173,7 @@ class TypeSelector
         {
             if (count($this->categories) > 1)
             {
-                $type_options[$category->get_type()] = $category->get_name();
+                $type_options[$category->getType()] = $category->get_name();
             }
             
             foreach ($category->get_options() as $option)

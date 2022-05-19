@@ -42,7 +42,7 @@ abstract class BasePublicationForm extends FormValidator
         foreach ($this->selectedContentObjects as $contentObject)
         {
             $namespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname(
-                ContentObject::get_content_object_type_namespace($contentObject->get_type())
+                ContentObject::get_content_object_type_namespace($contentObject->getType())
             );
             $glyph = $contentObject->getGlyph(IdentGlyph::SIZE_MINI);
 

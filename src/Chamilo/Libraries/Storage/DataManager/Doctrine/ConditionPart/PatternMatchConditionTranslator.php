@@ -22,7 +22,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
 
     protected function getPattern(): string
     {
-        return $this->searchString($this->getCondition()->get_pattern());
+        return $this->searchString($this->getCondition()->getPattern());
     }
 
     /**
@@ -51,7 +51,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     public function translate(bool $enableAliasing = true)
     {
         return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
             ) . ' LIKE ' . $this->getDataClassDatabase()->quote($this->getPattern());
     }
 }

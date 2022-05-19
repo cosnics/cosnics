@@ -58,7 +58,7 @@ class WeblcmsRights extends RightsUtil
 
     public static function get_available_rights($location)
     {
-        if ($location && $location->get_type() == self::TYPE_PUBLICATION)
+        if ($location && $location->getType() == self::TYPE_PUBLICATION)
         {
             return array(
                 Translation::get('ViewRight') => self::VIEW_RIGHT,

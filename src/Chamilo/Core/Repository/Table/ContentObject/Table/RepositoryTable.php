@@ -33,7 +33,7 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
     {
         parent::__construct($component);
         $template_id =
-            FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace())->get_type();
+            FilterData::getInstance($this->get_component()->get_repository_browser()->getWorkspace())->getType();
 
         if (!$template_id || !is_numeric($template_id))
         {
@@ -150,8 +150,16 @@ class RepositoryTable extends DataClassTable implements TableFormActionsSupport
         return $this->type;
     }
 
-    public function set_type($type)
+    public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @deprecated Use RepositoryTable::setType()
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
     }
 }

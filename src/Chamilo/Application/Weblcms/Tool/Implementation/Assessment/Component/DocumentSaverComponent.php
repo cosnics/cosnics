@@ -182,7 +182,7 @@ class DocumentSaverComponent extends Manager
         $open_document_question_ids = [];
         foreach ($complex_questions as $complex_question)
         {
-            if ($complex_question->get_ref_object()->get_type() == AssessmentOpenQuestion::class &&
+            if ($complex_question->get_ref_object()->getType() == AssessmentOpenQuestion::class &&
                  $this->is_open_question_document_allowed($complex_question->get_ref_object()))
             {
                 $open_document_question_ids[] = $complex_question->get_id();

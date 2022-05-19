@@ -364,7 +364,7 @@ class NodeBaseActionGenerator extends NodeActionGenerator
      */
     protected function getNodeSpecificActions(TreeNode $treeNode, $canEditTreeNode = false)
     {
-        $contentObjectType = $treeNode->getContentObject()->get_type();
+        $contentObjectType = $treeNode->getContentObject()->getType();
         if (array_key_exists($contentObjectType, $this->contentObjectTypeNodeActionGenerators))
         {
             return $this->contentObjectTypeNodeActionGenerators[$contentObjectType]->generateNodeActions(

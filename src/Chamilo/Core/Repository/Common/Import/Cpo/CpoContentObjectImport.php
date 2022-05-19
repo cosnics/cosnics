@@ -46,7 +46,7 @@ class CpoContentObjectImport extends ContentObjectImport
             );
         }
 
-        $content_object->set_type($content_object_type);
+        $content_object->setType($content_object_type);
 
         $version_number = $dom_xpath->query('general/object_number', $content_object_node)->item(0)->nodeValue;
         if (!$this->get_import_implementation()->get_controller()->get_content_object_object_number_cache_id(

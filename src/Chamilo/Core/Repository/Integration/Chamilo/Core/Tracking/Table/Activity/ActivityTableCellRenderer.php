@@ -18,8 +18,8 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
     /**
      * Renders a single cell
      *
-     * @param TableColumn $column
-     * @param DataClass $result
+     * @param \Chamilo\Libraries\Format\Table\Column\TableColumn $column
+     * @param Activity $result
      *
      * @return string
      */
@@ -28,7 +28,7 @@ class ActivityTableCellRenderer extends DataClassTableCellRenderer
         switch ($column->get_name())
         {
             case ActivityTableColumnModel::PROPERTY_TYPE_ICON :
-                return Activity::type_image($result->get_type());
+                return Activity::type_image($result->getType());
                 break;
             case Activity::PROPERTY_TYPE :
                 return $result->get_type_string();

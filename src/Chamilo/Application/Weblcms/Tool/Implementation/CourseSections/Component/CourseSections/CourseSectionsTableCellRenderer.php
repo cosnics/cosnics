@@ -34,7 +34,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer
             CourseSection::TYPE_ADMIN
         );
 
-        if (!in_array($course_section->get_type(), $filter))
+        if (!in_array($course_section->getType(), $filter))
         {
             $toolbar->add_item(
                 new ToolbarItem(
@@ -148,7 +148,7 @@ class CourseSectionsTableCellRenderer extends DataClassTableCellRenderer
             );
         }
 
-        if ($course_section->get_type() != CourseSection::TYPE_ADMIN)
+        if ($course_section->getType() != CourseSection::TYPE_ADMIN)
         {
             if ($course_section->is_visible())
             {

@@ -41,7 +41,7 @@ class AttachmentViewerComponent extends Manager
             ContentObject::class,
             $reference_content_object_id);
         
-        if (DataManager::is_helper_type($reference_content_object->get_type()))
+        if (DataManager::is_helper_type($reference_content_object->getType()))
         {
             $reference_content_object_id = $reference_content_object->getAdditionalProperty('reference_id');
             $reference_content_object = DataManager::retrieve_by_id(

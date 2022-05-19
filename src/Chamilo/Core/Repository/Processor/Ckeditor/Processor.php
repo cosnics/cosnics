@@ -50,7 +50,7 @@ class Processor extends HtmlEditorProcessor
             }
             else
             {
-                $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($object->get_type(), true);
+                $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($object->getType(), true);
             }
 
             $rendition = $display->render();

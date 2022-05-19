@@ -54,7 +54,7 @@ abstract class ContentObjectExportController
         $path = $this->run();
         
         $file_properties = FileProperties::from_path($path);
-        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->get_type());
+        Filesystem::file_send_for_download($path, true, $this->get_filename(), $file_properties->getType());
         Filesystem::remove($path);
     }
 

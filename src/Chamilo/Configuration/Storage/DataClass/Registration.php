@@ -70,9 +70,19 @@ class Registration extends DataClass
     /**
      * Returns the type of this registration.
      *
-     * @return int The type
+     * @deprecated Use Registration::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     * Returns the type of this registration.
+     *
+     * @return int The type
+     */
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
@@ -113,11 +123,14 @@ class Registration extends DataClass
     }
 
     /**
-     * Sets the type of this registration.
-     *
-     * @param $id Int the registration type.
+     * @deprecated Use Registration::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
@@ -271,7 +284,7 @@ class Registration extends DataClass
 
     public function can_be_activated()
     {
-        return ! in_array($this->get_type(), array(self::TYPE_CORE, self::TYPE_EXTENSION, self::TYPE_LIBRARY));
+        return ! in_array($this->getType(), array(self::TYPE_CORE, self::TYPE_EXTENSION, self::TYPE_LIBRARY));
     }
 
     public function create(): bool

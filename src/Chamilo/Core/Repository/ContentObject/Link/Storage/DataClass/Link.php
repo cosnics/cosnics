@@ -23,7 +23,7 @@ class Link extends ContentObject implements Versionable, Includeable
         return 'repository_link';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

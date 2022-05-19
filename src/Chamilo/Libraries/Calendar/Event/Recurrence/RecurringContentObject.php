@@ -330,7 +330,7 @@ abstract class RecurringContentObject extends ContentObject
      * @return string
      * @throws \ReflectionException
      */
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(static::class, true);
     }

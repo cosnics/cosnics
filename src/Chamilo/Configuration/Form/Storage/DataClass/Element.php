@@ -149,12 +149,28 @@ class Element extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_REQUIRED);
     }
 
+    /**
+     * @deprecated Use Element::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
+    /**
+     * @deprecated Use Element::getTypeName() now
+     */
     public static function get_type_name($type)
+    {
+        return self::getTypeName($type);
+    }
+
+    public static function getTypeName($type)
     {
         switch ($type)
         {
@@ -213,7 +229,15 @@ class Element extends DataClass
         $this->setDefaultProperty(self::PROPERTY_REQUIRED, $required);
     }
 
+    /**
+     * @deprecated Use Element::setType() now
+     */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

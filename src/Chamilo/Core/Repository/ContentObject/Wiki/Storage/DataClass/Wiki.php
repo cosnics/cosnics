@@ -23,7 +23,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     const PROPERTY_LOCKED = 'locked';
     const PROPERTY_LINKS = 'links';
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

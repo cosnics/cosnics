@@ -28,7 +28,7 @@ class AddElementComponent extends Manager
         $trail->add_help('dynamic form general');
         
         $element = new Element();
-        $element->set_type($type);
+        $element->setType($type);
         $element->set_dynamic_form_id($this->get_form()->get_id());
         
         $form = new BuilderForm(BuilderForm::TYPE_CREATE, $element, $this->get_url($parameters), $this->get_user());

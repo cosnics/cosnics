@@ -412,7 +412,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
             $this, 
             $content_object, 
             ContentObjectExport::FORMAT_CPO, 
-            $this->get_parameters()->get_type());
+            $this->get_parameters()->getType());
         
         $this->set_id_cache($content_object->get_id());
         
@@ -472,7 +472,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
      */
     public function process_helpers($helper_object)
     {
-        if (in_array($helper_object->get_type(), DataManager::get_active_helper_types()))
+        if (in_array($helper_object->getType(), DataManager::get_active_helper_types()))
         {
             $content_object = $helper_object->get_reference_object();
             if ($content_object instanceof ContentObject)
@@ -587,7 +587,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
         
         $attachment = $attachments_node->appendChild($this->dom_document->createElement('attachment'));
         $type = $attachment->appendChild($this->dom_document->createAttribute('type'));
-        $type->appendChild($this->dom_document->createTextNode($content_object_attachment->get_type()));
+        $type->appendChild($this->dom_document->createTextNode($content_object_attachment->getType()));
         $id_ref = $attachment->appendChild($this->dom_document->createAttribute('idref'));
         $id_ref->appendChild($this->dom_document->createTextNode($content_object_attachment->get_attachment_id()));
     }

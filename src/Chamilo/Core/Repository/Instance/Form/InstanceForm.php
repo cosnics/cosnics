@@ -144,7 +144,7 @@ class InstanceForm extends FormValidator
                 $this->addElement(
                     'static', null, Translation::get('Type'), Translation::get(
                     ClassnameUtilities::getInstance()->getClassNameFromNamespace(
-                        $this->external_instance->get_type()
+                        $this->external_instance->getType()
                     )
                 )
                 );
@@ -459,7 +459,7 @@ class InstanceForm extends FormValidator
             $defaults[Instance::PROPERTY_TITLE] = $external_instance->get_title();
             $defaults[Instance::PROPERTY_IMPLEMENTATION] = $external_instance->get_implementation();
             $defaults[Instance::PROPERTY_ENABLED] = $external_instance->get_enabled();
-            $defaults[Instance::PROPERTY_TYPE] = $external_instance->get_type();
+            $defaults[Instance::PROPERTY_TYPE] = $external_instance->getType();
 
             $configuration = $this->configuration;
 

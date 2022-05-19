@@ -10,34 +10,30 @@ class DistinctConditionVariable extends ConditionVariable
 {
 
     /**
-     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    private $conditionVariables;
+    private array $conditionVariables;
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function __construct($conditionVariables)
+    public function __construct(array $conditionVariables = [])
     {
         $this->conditionVariables = $conditionVariables;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     */
-    public function addConditionVariable($conditionVariable)
+    public function addConditionVariable(ConditionVariable $conditionVariable): DistinctConditionVariable
     {
         $this->conditionVariables[] = $conditionVariable;
+
+        return $this;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    public function getConditionVariables()
+    public function getConditionVariables(): array
     {
         return $this->conditionVariables;
     }
@@ -46,15 +42,13 @@ class DistinctConditionVariable extends ConditionVariable
      *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
-    public function setConditionVariables($conditionVariables)
+    public function setConditionVariables(array $conditionVariables): DistinctConditionVariable
     {
         $this->conditionVariables = $conditionVariables;
+
+        return $this;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
     public function getHashParts(): array
     {
         $hashParts = ConditionVariable::getHashParts();
@@ -71,7 +65,7 @@ class DistinctConditionVariable extends ConditionVariable
         return $hashParts;
     }
 
-    public function hasConditionVariables()
+    public function hasConditionVariables(): bool
     {
         return count($this->getConditionVariables()) > 0;
     }

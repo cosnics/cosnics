@@ -52,7 +52,7 @@ class WebpageContentObjectImportController extends ContentObjectImportController
                 
                 if ($file->get_path() && $file->get_name() && $file->get_extension() && (in_array(
                     $file->get_extension(), 
-                    array('html', 'htm')) || strpos($file->get_type(), 'text/html') !== false))
+                    array('html', 'htm')) || strpos($file->getType(), 'text/html') !== false))
                 {
                     $calculator = new Calculator(
                         \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(

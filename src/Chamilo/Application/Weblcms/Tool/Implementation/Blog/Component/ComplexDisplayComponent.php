@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Rights\WeblcmsRights;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Blog\Manager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Blog\Display\BlogDisplaySupport;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -87,12 +88,12 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         );
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication) &&
             $this->publication->get_allow_collaboration();
@@ -103,7 +104,7 @@ class ComplexDisplayComponent extends Manager implements BlogDisplaySupport
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }

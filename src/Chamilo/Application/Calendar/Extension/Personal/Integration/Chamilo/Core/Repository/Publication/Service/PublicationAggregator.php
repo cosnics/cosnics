@@ -97,7 +97,7 @@ class PublicationAggregator implements PublicationAggregatorInterface
     )
     {
         $allowedTypes = $this->getAllowedContentObjectTypes();
-        $type = $contentObject->get_type();
+        $type = $contentObject->getType();
 
         if (in_array($type, $allowedTypes))
         {

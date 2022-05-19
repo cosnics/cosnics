@@ -51,8 +51,8 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     public function translate(bool $enableAliasing = true)
     {
         return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
             ) . ' LIKE ' .
-            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->get_pattern()));
+            $this->getDataClassDatabase()->quote($this->searchString($this->getCondition()->getPattern()));
     }
 }

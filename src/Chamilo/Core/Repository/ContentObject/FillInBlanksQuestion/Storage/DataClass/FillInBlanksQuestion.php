@@ -353,7 +353,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
         return 'repository_fill_in_blanks_question';
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class, true);
     }

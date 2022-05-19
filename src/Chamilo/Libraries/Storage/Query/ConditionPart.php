@@ -28,7 +28,7 @@ abstract class ConditionPart implements Hashable
      * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return static::context();
     }

@@ -19,7 +19,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
 
     public function render_cell($column, $data_class)
     {
-        $type = $this->get_table()->get_type();
+        $type = $this->get_table()->getType();
 
         if ($type == LinkTable::TYPE_PARENTS)
         {
@@ -32,7 +32,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $object = DataManager::retrieve_by_id(
                 ContentObject::class, $data_class->get_ref()
             );
-            if (in_array($object->get_type(), DataManager::get_active_helper_types()))
+            if (in_array($object->getType(), DataManager::get_active_helper_types()))
             {
                 $object = DataManager::retrieve_by_id(
                     ContentObject::class, $object->get_reference()
@@ -85,7 +85,7 @@ class LinkTableCellRenderer extends DataClassTableCellRenderer implements TableC
             $link_id = $this->render_id_cell($object);
         }
 
-        $type = $this->get_table()->get_type();
+        $type = $this->get_table()->getType();
 
         if ($type == LinkTable::TYPE_INCLUDES)
         {

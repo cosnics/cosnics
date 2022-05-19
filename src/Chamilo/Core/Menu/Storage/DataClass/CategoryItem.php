@@ -26,7 +26,7 @@ class CategoryItem extends Item
         $this->setType(__CLASS__);
     }
 
-    public static function get_type_name()
+    public static function getTypeName(): string
     {
         return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }

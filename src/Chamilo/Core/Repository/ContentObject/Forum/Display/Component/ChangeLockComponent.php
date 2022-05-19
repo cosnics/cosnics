@@ -32,7 +32,7 @@ class ChangeLockComponent extends Manager
         }
 
         $params = [];
-        if ($object->get_type() == Forum::class)
+        if ($object->getType() == Forum::class)
         {
             $params[self::PARAM_ACTION] = self::ACTION_VIEW_FORUM;
         }

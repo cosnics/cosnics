@@ -129,6 +129,19 @@ class Package extends DataClass
     }
 
     /**
+     * Returns the dependencies for this dataclass
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
+     * @throws \Exception
+     */
+    public function getDependencies($dependencies = []): array
+    {
+        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
+    }
+
+    /**
      * Returns the extra of this Package.
      *
      * @return \stdClass[]
@@ -136,6 +149,22 @@ class Package extends DataClass
     public function getResources()
     {
         return unserialize($this->getDefaultProperty(self::PROPERTY_RESOURCES));
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'configuration_package';
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -164,19 +193,6 @@ class Package extends DataClass
     }
 
     /**
-     * Returns the dependencies for this dataclass
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
-     * @throws \Exception
-     */
-    public function getDependencies($dependencies = []): array
-    {
-        return unserialize($this->getDefaultProperty(self::PROPERTY_DEPENDENCIES));
-    }
-
-    /**
      * @return string
      */
     public function get_description()
@@ -201,19 +217,11 @@ class Package extends DataClass
     }
 
     /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'configuration_package';
-    }
-
-    /**
-     * @return string
+     * @deprecated Use Package::getType() now
      */
     public function get_type()
     {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
+        return $this->getType();
     }
 
     /**
@@ -274,6 +282,16 @@ class Package extends DataClass
     public function setResources($resources)
     {
         $this->setDefaultProperty(self::PROPERTY_RESOURCES, serialize($resources));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @throws \Exception
+     */
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -347,13 +365,11 @@ class Package extends DataClass
     }
 
     /**
-     * @param string $type
-     *
-     * @throws \Exception
+     * @deprecated Use Package::setType() now
      */
     public function set_type($type)
     {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+        $this->setType($type);
     }
 
     /**

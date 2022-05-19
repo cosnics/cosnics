@@ -21,7 +21,15 @@ class LinkTable extends DataClassTable
         parent::__construct($component);
     }
 
+    /**
+     * @deprecated Use LinkTable::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->type;
     }

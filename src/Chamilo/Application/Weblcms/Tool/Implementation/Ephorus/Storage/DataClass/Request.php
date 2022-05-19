@@ -479,7 +479,7 @@ class Request extends EphorusDataClass
             return false;
         }
 
-        if ($content_object->get_type() != File::class)
+        if ($content_object->getType() != File::class)
         {
             $this->addError(Translation::get('ContentObjectMustBeDocument'));
 

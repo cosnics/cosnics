@@ -60,7 +60,7 @@ class SessionHandler implements SessionHandlerInterface
      *
      * @return boolean
      */
-    public function destroy(string $session_id): bool
+    public function destroy($session_id): bool
     {
         return DataManager::deletes(
             \Chamilo\Core\User\Storage\DataClass\Session::class, $this->getCondition($session_id)
@@ -172,7 +172,7 @@ class SessionHandler implements SessionHandlerInterface
      * @return boolean|string
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    public function read(string $session_id): bool
+    public function read($session_id): bool
     {
         $this->getDataClassRepositoryCache()->truncate(\Chamilo\Core\User\Storage\DataClass\Session::class);
         $session = DataManager::retrieve(

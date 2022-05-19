@@ -10,18 +10,9 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  */
 class AndCondition extends MultipleAggregateCondition
 {
-    /**
-     * The operator
-     *
-     * @var string
-     */
     const OPERATOR = ' AND ';
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition::get_operator()
-     */
-    public function get_operator()
+    public function getOperator(): string
     {
         return self::OPERATOR;
     }

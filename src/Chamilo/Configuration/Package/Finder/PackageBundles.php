@@ -87,7 +87,7 @@ class PackageBundles extends BasicBundles
     {
         if (isset($this->packageDefinitions[$packageNamespace]))
         {
-            return $this->packageDefinitions[$packageNamespace]->get_type();
+            return $this->packageDefinitions[$packageNamespace]->getType();
         }
         else
         {
@@ -143,7 +143,7 @@ class PackageBundles extends BasicBundles
                     $this->setPackageList($packageNamespaceAncestor);
                 }
 
-                if (!$this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->get_type()))
+                if (!$this->packageLists[$packageNamespaceAncestor]->has_child($previousPackageList->getType()))
                 {
                     $this->packageLists[$packageNamespaceAncestor]->add_child($previousPackageList);
                 }

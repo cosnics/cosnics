@@ -77,7 +77,7 @@ class XmlFormParserValidationRule
     {
         $this->set_element_name($element);
         $this->set_message($message);
-        $this->set_type($type);
+        $this->setType($type);
         $this->set_format($format);
         $this->set_validation($validation);
         $this->set_reset($reset);
@@ -94,7 +94,7 @@ class XmlFormParserValidationRule
         $form->addRule(
             $this->get_element_name(),
             $this->get_message(),
-            $this->get_type(),
+            $this->getType(),
             $this->get_format(),
             $this->get_validation(),
             $this->get_reset(),
@@ -144,9 +144,19 @@ class XmlFormParserValidationRule
     /**
      * Returns the type property of this object
      *
-     * @return string
+     * @deprecated Use XmlFormParserValidationRule::getType() now
      */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    /**
+     * Returns the type property of this object
+     *
+     * @return string
+     */
+    public function getType()
     {
         return $this->type;
     }
@@ -156,9 +166,17 @@ class XmlFormParserValidationRule
      *
      * @param string $type
      */
-    public function set_type($type)
+    public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @deprecated Use XmlFormParserValidationRule::setType() now
+     */
+    public function set_type($type)
+    {
+        $this->setType($type);
     }
 
     /**

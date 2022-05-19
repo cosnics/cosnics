@@ -272,11 +272,14 @@ class Result extends EphorusDataClass
     }
 
     /**
-     * Sets the type property of this object
-     *
-     * @param $type int
+     * @deprecated Use Result::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

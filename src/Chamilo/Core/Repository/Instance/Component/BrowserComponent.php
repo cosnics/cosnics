@@ -152,7 +152,15 @@ class BrowserComponent extends Manager implements TableSupport
         return new AndCondition($conditions);
     }
 
+    /**
+     * @deprecated Use BrowserComponent::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->type;
     }

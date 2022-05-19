@@ -121,9 +121,9 @@ class PublicationTargetForm extends FormValidator
 
             if ($this->type == null)
             {
-                $this->type = $content_object->get_type();
+                $this->type = $content_object->getType();
             }
-            elseif ($this->type != $content_object->get_type())
+            elseif ($this->type != $content_object->getType())
             {
                 throw new UserException(Translation::get('ObjectsNotSameType'));
             }

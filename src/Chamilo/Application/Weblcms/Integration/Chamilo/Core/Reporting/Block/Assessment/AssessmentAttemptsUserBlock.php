@@ -31,7 +31,7 @@ class AssessmentAttemptsUserBlock extends AssessmentBlock
             $this->getPublicationId());
         
         $assessment = $publication->get_content_object();
-        $isHotpotatoes = $assessment->get_type() == Hotpotatoes::class;
+        $isHotpotatoes = $assessment->getType() == Hotpotatoes::class;
         
         $assessment_attempts = $this->get_assessment_attempts($this->getPublicationId(), $this->get_user_id());
         foreach($assessment_attempts as $assessment_attempt)

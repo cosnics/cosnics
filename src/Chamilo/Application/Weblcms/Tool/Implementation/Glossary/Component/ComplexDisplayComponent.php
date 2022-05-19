@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Service\ServiceFactory;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Application\Weblcms\Tool\Implementation\Glossary\Manager;
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\Glossary\Display\GlossaryDisplaySupport;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Libraries\Architecture\Application\ApplicationConfiguration;
@@ -65,7 +66,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
     }
 
     // METHODS FOR COMPLEX DISPLAY RIGHTS
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         $hasWorkspaceRight = RightsService::getInstance()->canEditContentObject(
             $this->get_user(),
@@ -84,7 +85,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         return $hasWorkspaceRight || $hasPublicationContentRight || $hasPublictionRight;
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return $this->is_allowed(WeblcmsRights::VIEW_RIGHT, $this->publication);
     }
@@ -99,7 +100,7 @@ class ComplexDisplayComponent extends Manager implements DelegateComponent, Glos
         return $this->is_allowed_to_edit_content_object();
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return $this->is_allowed(WeblcmsRights::EDIT_RIGHT, $this->publication);
     }

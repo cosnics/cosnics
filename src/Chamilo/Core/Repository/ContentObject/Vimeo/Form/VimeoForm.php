@@ -19,7 +19,7 @@ class VimeoForm extends ContentObjectForm
         parent::build_creation_form();
         $this->addElement('category', Translation::get('Properties'));
 
-        $external_repositories = Manager::get_links(Vimeo::get_type_name(), true);
+        $external_repositories = Manager::get_links(Vimeo::getTypeName(), true);
 
         if ($external_repositories)
         {

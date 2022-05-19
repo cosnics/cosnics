@@ -43,12 +43,28 @@ class ContentObjectAttachment extends DataClass
         $this->setDefaultProperty(self::PROPERTY_ATTACHMENT_ID, $attachment_id);
     }
 
+    /**
+     * @deprecated User ContentObjectAttachment::getType() now
+     */
     public function get_type()
+    {
+        return $this->getType();
+    }
+
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
+    /**
+     * @deprecated Use ContentObjectAttachment::setType() now
+     */
     public function set_type($type)
+    {
+        $this->setType( $type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

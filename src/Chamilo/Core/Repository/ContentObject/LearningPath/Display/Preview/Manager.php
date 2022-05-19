@@ -2,6 +2,7 @@
 
 namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Embedder\Embedder;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Domain\TrackingParameters;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Preview\Service\TrackingServiceBuilder;
@@ -171,12 +172,12 @@ abstract class Manager extends Preview implements PreviewResetSupport
         return true;
     }
 
-    function is_allowed_to_delete_feedback()
+    function is_allowed_to_delete_feedback($feedback)
     {
         return true;
     }
 
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
@@ -191,7 +192,7 @@ abstract class Manager extends Preview implements PreviewResetSupport
         return true;
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }

@@ -13,15 +13,15 @@ class RegularExpressionCondition extends Condition
 
     private ConditionVariable $conditionVariable;
 
-    private ?bool $isAlias;
+    private bool $isAlias;
 
     private string $regularExpression;
 
     private ?string $storageUnit;
 
     public function __construct(
-        ConditionVariable $conditionVariable, string $regularExpression, string $storageUnit = null,
-        bool $isAlias = false
+        ConditionVariable $conditionVariable, string $regularExpression, ?string $storageUnit = null,
+        ?bool $isAlias = false
     )
     {
         $this->conditionVariable = $conditionVariable;
@@ -57,7 +57,7 @@ class RegularExpressionCondition extends Condition
         return $this->storageUnit;
     }
 
-    public function isAlias(): ?bool
+    public function isAlias(): bool
     {
         return $this->isAlias;
     }

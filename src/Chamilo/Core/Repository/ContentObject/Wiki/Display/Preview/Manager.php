@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Wiki\Display\Preview;
 
+use Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode;
 use Chamilo\Core\Repository\Display\Preview;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -27,12 +28,12 @@ abstract class Manager extends Preview
     }
     
     // FUNCTIONS FOR COMPLEX DISPLAY SUPPORT
-    public function is_allowed_to_edit_content_object()
+    public function is_allowed_to_edit_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
 
-    public function is_allowed_to_view_content_object()
+    public function is_allowed_to_view_content_object(ComplexContentObjectPathNode $node)
     {
         return true;
     }
@@ -47,7 +48,7 @@ abstract class Manager extends Preview
         return true;
     }
 
-    public function is_allowed_to_delete_feedback()
+    public function is_allowed_to_delete_feedback($feedback)
     {
         return true;
     }

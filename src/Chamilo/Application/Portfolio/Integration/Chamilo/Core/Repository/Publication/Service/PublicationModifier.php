@@ -213,8 +213,8 @@ class PublicationModifier implements PublicationModifierInterface
                  */
                 $newObject = ContentObject::factory(PortfolioItem::class);
                 $newObject->set_owner_id($publicationTarget->getUserIdentifier());
-                $newObject->set_title(PortfolioItem::get_type_name());
-                $newObject->set_description(PortfolioItem::get_type_name());
+                $newObject->set_title(PortfolioItem::getTypeName());
+                $newObject->set_description(PortfolioItem::getTypeName());
                 $newObject->set_parent_id(0);
                 $newObject->set_reference($contentObject->getId());
                 $newObject->create();

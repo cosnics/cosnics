@@ -857,7 +857,7 @@ class Course extends DataClass
                 )
             );
 
-            $course_section->set_type($section['type']);
+            $course_section->setType($section['type']);
             $course_section->set_visible(true);
             if (!$course_section->create())
             {

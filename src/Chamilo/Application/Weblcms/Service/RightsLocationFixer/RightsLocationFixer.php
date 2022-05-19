@@ -278,13 +278,13 @@ class RightsLocationFixer
         $rightsLocation = new RightsLocation();
 
         $parentId = ($parentRightsLocation instanceof RightsLocation) ? $parentRightsLocation->getId() : 0;
-        $rightsLocation->set_parent_id($parentId);
+        $rightsLocation->setParentId($parentId);
         $rightsLocation->set_tree_type(WeblcmsRights::TREE_TYPE_COURSE);
         $rightsLocation->set_tree_identifier($course->getId());
-        $rightsLocation->set_type($type);
+        $rightsLocation->setType($type);
         $rightsLocation->set_identifier($identifier);
-        $rightsLocation->set_left_value(0);
-        $rightsLocation->set_right_value(0);
+        $rightsLocation->setLeftValue(0);
+        $rightsLocation->setRightValue(0);
         $rightsLocation->set_inherit(true);
         $rightsLocation->set_locked(false);
 

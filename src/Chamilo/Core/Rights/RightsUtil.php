@@ -123,7 +123,7 @@ class RightsUtil
         $location = new $rights_location_class();
         $location->set_parent_id($parent);
         $location->set_context($context);
-        $location->set_type($type);
+        $location->setType($type);
         $location->set_identifier($identifier);
         $location->set_inherit($inherit);
         $location->set_locked($locked);

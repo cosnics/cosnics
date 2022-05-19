@@ -74,18 +74,15 @@ class GetContentObjectsComponent extends Manager
             }
             else
             {
-                $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($contentObject->get_type(), true);
+                $type = ClassnameUtilities::getInstance()->getClassNameFromNamespace($contentObject->getType(), true);
             }
 
-            array_push(
-                $contentObjectsArray,
-                array(
-                    'id' => $contentObject->getId(),
-                    'title' => $contentObject->get_title(),
-                    'icon' => $contentObject->getGlyph()->render(),
-                    'securityCode' => $contentObject->calculate_security_code(),
-                    'type' => $type
-                )
+            $contentObjectsArray[] = array(
+                'id' => $contentObject->getId(),
+                'title' => $contentObject->get_title(),
+                'icon' => $contentObject->getGlyph()->render(),
+                'securityCode' => $contentObject->calculate_security_code(),
+                'type' => $type
             );
         }
 

@@ -150,7 +150,7 @@ abstract class QuestionDisplay
         $question = DataManager::retrieve_by_id(
             ContentObject::class,
             $complex_content_object_question->get_ref());
-        $type = $question->get_type();
+        $type = $question->getType();
 
         $class = ClassnameUtilities::getInstance()->getNamespaceParent($type, 3) . '\Integration\\' .
              Assessment::package() . '\Display\Display';

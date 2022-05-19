@@ -70,7 +70,7 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     {
         if (!isset($this->displayName))
         {
-            if ($this->get_type() == CourseSection::TYPE_CUSTOM)
+            if ($this->getType() == CourseSection::TYPE_CUSTOM)
             {
                 $this->displayName = $this->get_name();
             }
@@ -190,9 +190,17 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      *
      * @return int
      */
-    public function get_type()
+    public function getType()
     {
         return $this->getDefaultProperty(self::PROPERTY_TYPE);
+    }
+
+    /**
+     * @deprecated Use CourseSection::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
     }
 
     /**
@@ -272,11 +280,14 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     }
 
     /**
-     * Sets the type property of this object
-     *
-     * @param $type int
+     * @deprecated Use CourseSection::setType() now
      */
     public function set_type($type)
+    {
+        $this->setType($type);
+    }
+
+    public function setType($type)
     {
         $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }

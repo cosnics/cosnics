@@ -47,11 +47,11 @@ class FileProperties
 
         if (!$fileInfo)
         {
-            $properties->set_type('application/octet-stream');
+            $properties->setType('application/octet-stream');
         }
         else
         {
-            $properties->set_type($fileInfo->file($path));
+            $properties->setType($fileInfo->file($path));
         }
 
         $properties->set_size(filesize($path));
@@ -84,11 +84,11 @@ class FileProperties
 
         if (!$fileInfo)
         {
-            $properties->set_type($fileDescription['type']);
+            $properties->setType($fileDescription['type']);
         }
         else
         {
-            $properties->set_type($fileInfo->file($fileDescription['tmp_name']));
+            $properties->setType($fileInfo->file($fileDescription['tmp_name']));
         }
 
         $properties->set_size($fileDescription['size']);
@@ -153,11 +153,11 @@ class FileProperties
             {
                 if (!is_null($info['content_type']))
                 {
-                    $properties->set_type($info['content_type']);
+                    $properties->setType($info['content_type']);
                 }
                 else
                 {
-                    $properties->set_type('application/octet-stream');
+                    $properties->setType('application/octet-stream');
                 }
 
                 $properties->set_size((int) $info['download_content_length']);
@@ -166,6 +166,15 @@ class FileProperties
         }
 
         return $properties;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->get_property(self::PROPERTY_TYPE);
     }
 
     /**
@@ -244,11 +253,16 @@ class FileProperties
 
     /**
      *
-     * @return string
+     * @deprecated Use FileProperties::getType() now
      */
     public function get_type()
     {
-        return $this->get_property(self::PROPERTY_TYPE);
+        return $this->getType();
+    }
+
+    public function setType($type)
+    {
+        $this->set_property(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -298,11 +312,10 @@ class FileProperties
     }
 
     /**
-     *
-     * @param string $type
+     * @deprecated Use FileProperties::setType() now
      */
     public function set_type($type)
     {
-        $this->set_property(self::PROPERTY_TYPE, $type);
+        $this->setType($type);
     }
 }

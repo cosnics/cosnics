@@ -43,7 +43,7 @@ class DeleterComponent extends Manager
                     CourseSection::class,
                     $id);
 
-                if ($course_section->get_type() != CourseSection::TYPE_CUSTOM || ! $course_section->delete())
+                if ($course_section->getType() != CourseSection::TYPE_CUSTOM || ! $course_section->delete())
                 {
                     $failures ++;
                 }

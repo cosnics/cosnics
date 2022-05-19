@@ -157,7 +157,7 @@ abstract class RightsService
     {
         $location = $this->getRightsLocationInstance();
         $location->setParentId($parent);
-        $location->set_type($type);
+        $location->setType($type);
         $location->set_identifier($identifier);
         $location->set_inherit($inherit);
         $location->set_locked($locked);

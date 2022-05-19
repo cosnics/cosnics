@@ -16,105 +16,53 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class PatternMatchCondition extends Condition
 {
+    private ConditionVariable $conditionVariable;
 
-    /**
-     * The DataClass property
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $name;
+    private bool $isAlias;
 
-    /**
-     * The pattern to apply to the Dataclass property value
-     *
-     * @var string
-     */
-    private $pattern;
+    private string $pattern;
 
-    /**
-     * The storage unit of the DataClass
-     *
-     * @var string
-     */
-    private $storage_unit;
+    private ?string $storageUnit;
 
-    /**
-     * Is the storage unit name already an alias?
-     *
-     * @var boolean
-     */
-    private $is_alias;
-
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $name
-     * @param string $pattern
-     * @param string $storageUnit
-     * @param boolean $isAlias
-     */
-    public function __construct($name, $pattern, $storageUnit = null, $isAlias = false)
+    public function __construct(
+        ConditionVariable $conditionVariable, string $pattern, ?string $storageUnit = null, ?bool $isAlias = false
+    )
     {
-        $this->name = $name;
+        $this->conditionVariable = $conditionVariable;
         $this->pattern = $pattern;
-        $this->storage_unit = $storageUnit;
-        $this->is_alias = $isAlias;
+        $this->storageUnit = $storageUnit;
+        $this->isAlias = $isAlias;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
+    public function getConditionVariable(): ConditionVariable
+    {
+        return $this->conditionVariable;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        $hashParts[] =
-            $this->get_name() instanceof ConditionVariable ? $this->get_name()->getHashParts() : $this->get_name();
-        $hashParts[] = $this->get_pattern();
-        $hashParts[] = $this->get_storage_unit();
-        $hashParts[] = $this->is_alias();
+        $hashParts[] = $this->getConditionVariable()->getHashParts();
+        $hashParts[] = $this->getPattern();
+        $hashParts[] = $this->getStorageUnit();
+        $hashParts[] = $this->isAlias();
 
         return $hashParts;
     }
 
-    /**
-     * Gets the DataClass property
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    public function get_name()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Gets the pattern to apply to the Dataclass property value
-     *
-     * @return string
-     */
-    public function get_pattern()
+    public function getPattern(): string
     {
         return $this->pattern;
     }
 
-    /**
-     * Gets the storage unit of the DataClass
-     *
-     * @return string
-     */
-    public function get_storage_unit()
+    public function getStorageUnit(): ?string
     {
-        return $this->storage_unit;
+        return $this->storageUnit;
     }
 
-    /**
-     * Is the storage unit already an alias?
-     *
-     * @return boolean
-     */
-    public function is_alias()
+    public function isAlias(): bool
     {
-        return $this->is_alias;
+        return $this->isAlias;
     }
 }

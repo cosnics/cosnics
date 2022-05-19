@@ -18,85 +18,56 @@ class CaseElementConditionVariable extends ConditionVariable
     /**
      * The condition used after the WHEN statement.
      * If empty the case element is an ELSE statement.
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
-    private $condition;
+    private Condition $condition;
 
-    /**
-     * The Statement
-     *
-     * @var string
-     */
-    private $statement;
+    private string $statement;
 
-    /**
-     * Constructor
-     *
-     * @param string $statement
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     */
-    public function __construct($statement, $condition)
+    public function __construct(string $statement, ?Condition $condition = null)
     {
         $this->statement = $statement;
         $this->condition = $condition;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
-     */
-    public function getHashParts(): array
-    {
-        $hashParts = ConditionVariable::getHashParts();
-
-        if ($this->get_condition() instanceof Condition)
-        {
-            $hashParts[] = $this->get_condition()->hash();
-        }
-
-        $hashParts[] = $this->get_statement();
-
-        return $hashParts;
-    }
-
-    /**
-     * Get the condition
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     */
-    public function get_condition()
+    public function getCondition(): ?Condition
     {
         return $this->condition;
     }
 
-    /**
-     * Set the condition
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition $condition
-     */
-    public function set_condition($condition)
+    public function setCondition($condition): CaseElementConditionVariable
     {
         $this->condition = $condition;
+
+        return $this;
     }
 
-    /**
-     * Get the statement
-     *
-     * @return string
-     */
-    public function get_statement()
+    public function getHashParts(): array
+    {
+        $hashParts = ConditionVariable::getHashParts();
+
+        if ($this->getCondition() instanceof Condition)
+        {
+            $hashParts[] = $this->getCondition()->hash();
+        }
+        else
+        {
+            $hashParts[] = null;
+        }
+
+        $hashParts[] = $this->getStatement();
+
+        return $hashParts;
+    }
+
+    public function getStatement(): string
     {
         return $this->statement;
     }
 
-    /**
-     * Set the statement
-     *
-     * @param string $statement
-     */
-    public function set_statement($statement)
+    public function setStatement(string $statement): CaseElementConditionVariable
     {
         $this->statement = $statement;
+
+        return $this;
     }
 }

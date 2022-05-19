@@ -152,7 +152,7 @@ abstract class FormProcessor
             $newCategory->set_name($newCategoryName);
             $newCategory->set_parent($parentIdentifier);
             $newCategory->set_type_id($this->getWorkspace()->getId());
-            $newCategory->set_type($this->getWorkspace()->getWorkspaceType());
+            $newCategory->setType($this->getWorkspace()->getWorkspaceType());
             
             if (! $newCategory->create())
             {
@@ -187,7 +187,7 @@ abstract class FormProcessor
         $fileProperties = new FileProperties();
         $fileProperties->set_extension($file->getClientOriginalExtension());
         $fileProperties->set_name($file->getClientOriginalName());
-        $fileProperties->set_type($file->getMimeType());
+        $fileProperties->setType($file->getMimeType());
         $fileProperties->set_size($file->getSize());
         $fileProperties->set_path($file->getRealPath());
         

@@ -189,7 +189,7 @@ class Menu extends HtmlMenu
             );
             $url = null;
 
-            if (in_array($lo->get_type(), DataManager::get_active_helper_types()))
+            if (in_array($lo->getType(), DataManager::get_active_helper_types()))
             {
                 $lo = DataManager::retrieve_by_id(
                     ContentObject::class, $lo->get_reference()

@@ -38,9 +38,9 @@ class PackageTypeSettingsMenu extends HtmlMenu
         $item = [];
 
         $item['class'] = $package_list->get_type_icon()->getClassNamesString();
-        $item['title'] = $package_list->get_type_name();
-        $item['url'] = $this->get_url($package_list->get_type());
-        $item[OptionsMenuRenderer::KEY_ID] = $package_list->get_type();
+        $item['title'] = $package_list->getTypeName();
+        $item['url'] = $this->get_url($package_list->getType());
+        $item[OptionsMenuRenderer::KEY_ID] = $package_list->getType();
 
         $sub_items = [];
 

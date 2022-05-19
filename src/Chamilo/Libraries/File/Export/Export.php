@@ -85,7 +85,7 @@ abstract class Export
      */
     public function set_filename($filename)
     {
-        $this->filename = $filename . '.' . $this->get_type();
+        $this->filename = $filename . '.' . $this->getType();
     }
 
     /**
@@ -142,7 +142,15 @@ abstract class Export
      *
      * @return string
      */
-    abstract public function get_type();
+    abstract public function getType();
+
+    /**
+     * @deprecated Use Export::getType() now
+     */
+    public function get_type()
+    {
+        return $this->getType();
+    }
 
     /**
      *

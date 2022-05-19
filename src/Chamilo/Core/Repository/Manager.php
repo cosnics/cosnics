@@ -668,7 +668,7 @@ abstract class Manager extends Application
             )
         );
 
-        $selected_type = FilterData::getInstance($this->getWorkspace())->get_type();
+        $selected_type = FilterData::getInstance($this->getWorkspace())->getType();
         $selected_category = FilterData::getInstance($this->getWorkspace())->get_type_category();
 
         $object_type = new ObjectTypeMenu(

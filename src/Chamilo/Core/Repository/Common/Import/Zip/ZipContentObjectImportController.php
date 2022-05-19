@@ -215,7 +215,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
             $category = new RepositoryCategory();
             $category->set_id(0);
             $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
-            $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+            $category->setType($this->get_parameters()->getWorkspace()->getWorkspaceType());
         }
         else
         {
@@ -387,7 +387,7 @@ class ZipContentObjectImportController extends ContentObjectImportController
         
         $category->set_parent($parent_category->get_id());
         $category->set_type_id($this->get_parameters()->getWorkspace()->getId());
-        $category->set_type($this->get_parameters()->getWorkspace()->getWorkspaceType());
+        $category->setType($this->get_parameters()->getWorkspace()->getWorkspaceType());
         
         if ($category->create())
         {

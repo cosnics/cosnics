@@ -72,11 +72,40 @@ abstract class RightsLocation extends NestedTreeNode
     }
 
     /**
+     * Get the default properties of all users.
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_TYPE,
+                self::PROPERTY_IDENTIFIER,
+                self::PROPERTY_TREE_IDENTIFIER,
+                self::PROPERTY_TREE_TYPE,
+                self::PROPERTY_INHERIT,
+                self::PROPERTY_LOCKED
+            )
+        );
+    }
+
+    /**
      * @return string[]
      */
     public function getSubTreePropertyNames()
     {
         return array(self::PROPERTY_TREE_TYPE, self::PROPERTY_TREE_IDENTIFIER);
+    }
+
+    /**
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -98,27 +127,6 @@ abstract class RightsLocation extends NestedTreeNode
     public function set_context($context)
     {
         $this->context = $context;
-    }
-
-    /**
-     * Get the default properties of all users.
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_TYPE,
-                self::PROPERTY_IDENTIFIER,
-                self::PROPERTY_TREE_IDENTIFIER,
-                self::PROPERTY_TREE_TYPE,
-                self::PROPERTY_INHERIT,
-                self::PROPERTY_LOCKED
-            )
-        );
     }
 
     /**
@@ -158,13 +166,13 @@ abstract class RightsLocation extends NestedTreeNode
         );
 
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE),
-            ComparisonCondition::LESS_THAN, new StaticConditionVariable($this->get_left_value())
+            new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE), ComparisonCondition::LESS_THAN,
+            new StaticConditionVariable($this->get_left_value())
         );
 
         $locked_parent_conditions[] = new ComparisonCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE),
-            ComparisonCondition::GREATER_THAN, new StaticConditionVariable($this->get_right_value())
+            new PropertyConditionVariable(self::class, self::PROPERTY_RIGHT_VALUE), ComparisonCondition::GREATER_THAN,
+            new StaticConditionVariable($this->get_right_value())
         );
 
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
@@ -257,11 +265,11 @@ abstract class RightsLocation extends NestedTreeNode
     }
 
     /**
-     * @return integer
+     * @deprecated use RightsLocation::getType() now
      */
     public function get_type()
     {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
+        return $this->getType();
     }
 
     /**
@@ -304,6 +312,16 @@ abstract class RightsLocation extends NestedTreeNode
     public function lock()
     {
         $this->set_locked(true);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @throws \Exception
+     */
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**
@@ -357,13 +375,11 @@ abstract class RightsLocation extends NestedTreeNode
     }
 
     /**
-     * @param string $type
-     *
-     * @throws \Exception
-     */
+     * @deprecated Use RightsLocation::setType() now
+     * */
     public function set_type($type)
     {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+        $this->setType($type);
     }
 
     /**
@@ -374,7 +390,7 @@ abstract class RightsLocation extends NestedTreeNode
      */
     public function set_type_from_object($object)
     {
-        $this->set_type(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
+        $this->setType(ClassnameUtilities::getInstance()->getClassnameFromObject($object, true));
     }
 
     public function switch_inherit()
