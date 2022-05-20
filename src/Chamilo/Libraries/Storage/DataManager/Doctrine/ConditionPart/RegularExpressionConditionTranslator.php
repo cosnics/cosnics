@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -12,17 +13,16 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 class RegularExpressionConditionTranslator extends ConditionTranslator
 {
 
-    public function getCondition()
+    /**
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\RegularExpressionCondition
+     */
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         return $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing

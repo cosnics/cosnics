@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Exception;
 
@@ -16,18 +17,12 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $distinctConditionVariable = $this->getConditionVariable();
 

@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,23 +16,18 @@ class NotConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\NotCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $string = [];
 
         $string[] = 'NOT (';
         $string[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getCondition()->get_condition(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getCondition()->getCondition(), $enableAliasing
         );
         $string[] = ')';
 

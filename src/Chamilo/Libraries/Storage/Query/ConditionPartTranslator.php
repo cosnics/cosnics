@@ -14,30 +14,12 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 abstract class ConditionPartTranslator
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface
-     */
-    private $conditionPartTranslatorService;
+    private ConditionPart $conditionPart;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
-     */
-    private $dataClassDatabase;
+    private ConditionPartTranslatorServiceInterface $conditionPartTranslatorService;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\ConditionPart
-     */
-    private $conditionPart;
+    private DataClassDatabaseInterface $dataClassDatabase;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     */
     public function __construct(
         ConditionPartTranslatorServiceInterface $conditionPartTranslatorService,
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
@@ -48,66 +30,43 @@ abstract class ConditionPartTranslator
         $this->conditionPart = $conditionPart;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
-     */
-    public function getConditionPart()
+    public function getConditionPart(): ConditionPart
     {
         return $this->conditionPart;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     */
-    public function setConditionPart(ConditionPart $conditionPart)
+    public function setConditionPart(ConditionPart $conditionPart): ConditionPartTranslator
     {
         $this->conditionPart = $conditionPart;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface
-     */
-    public function getConditionPartTranslatorService()
+    public function getConditionPartTranslatorService(): ConditionPartTranslatorServiceInterface
     {
         return $this->conditionPartTranslatorService;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
-     */
     public function setConditionPartTranslatorService(
         ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
-    )
+    ): ConditionPartTranslator
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
-     */
-    public function getDataClassDatabase()
+    public function getDataClassDatabase(): DataClassDatabaseInterface
     {
         return $this->dataClassDatabase;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     */
-    public function setDataClassDatabase(DataClassDatabaseInterface $dataClassDatabase)
+    public function setDataClassDatabase(DataClassDatabaseInterface $dataClassDatabase): ConditionPartTranslator
     {
         $this->dataClassDatabase = $dataClassDatabase;
+
+        return $this;
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    abstract public function translate(bool $enableAliasing = true);
+    abstract public function translate(?bool $enableAliasing = true): string;
 }

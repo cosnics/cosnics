@@ -17,16 +17,16 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\Cache\ConditionPartCache
+     */
+    protected $conditionPartCache;
+
+    /**
+     *
      * @var \Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory
      *     $conditionPartTranslatorFactory
      */
     protected $conditionPartTranslatorFactory;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\ConditionPartCache
-     */
-    protected $conditionPartCache;
 
     /**
      *
@@ -136,8 +136,8 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
      * @return string
      */
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, bool $enableAliasing = true
-    )
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
+    ): string
     {
         if ($this->isQueryCacheEnabled())
         {

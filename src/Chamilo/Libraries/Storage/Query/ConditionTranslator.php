@@ -13,10 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 abstract class ConditionTranslator extends ConditionPartTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
-     */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return $this->getConditionPart();
     }

@@ -12,18 +12,12 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 abstract class ConditionVariableTranslator extends ConditionPartTranslator
 {
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPart
-     */
-    public function getConditionVariable()
+
+    public function getConditionVariable(): ConditionPart
     {
         return $this->getConditionPart();
     }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $conditionVariable
-     */
+    
     public function setConditionVariable(ConditionVariable $conditionVariable)
     {
         $this->setConditionPart($conditionVariable);

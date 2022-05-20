@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -31,22 +30,10 @@ use Doctrine\DBAL\Query\QueryBuilder;
 class ParametersProcessor
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
-     */
-    protected $conditionPartTranslatorService;
+    protected ConditionPartTranslatorService $conditionPartTranslatorService;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    protected $storageAliasGenerator;
+    protected StorageAliasGenerator $storageAliasGenerator;
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     */
     public function __construct(
         ConditionPartTranslatorService $conditionPartTranslatorService, StorageAliasGenerator $storageAliasGenerator
     )
@@ -55,75 +42,58 @@ class ParametersProcessor
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
-     */
-    public function getConditionPartTranslatorService()
+    public function getConditionPartTranslatorService(): ConditionPartTranslatorService
     {
         return $this->conditionPartTranslatorService;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
-     */
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
+    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService
+    ): ParametersProcessor
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    public function getStorageAliasGenerator()
+    public function getStorageAliasGenerator(): StorageAliasGenerator
     {
         return $this->storageAliasGenerator;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     */
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): ParametersProcessor
     {
         $this->storageAliasGenerator = $storageAliasGenerator;
+
+        return $this;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     * @param string $dataClassName
-     *
      * @throws \Exception
      */
-    protected function handleCompositeDataClassJoins($dataClassName, DataClassRetrieveParameters $parameters)
+    protected function handleCompositeDataClassJoins(string $dataClassName, DataClassRetrieveParameters $parameters
+    ): ParametersProcessor
     {
         if ($parameters->getJoins() instanceof Joins)
         {
             $dataClassProperties = $parameters->getDataClassProperties();
 
-            foreach ($parameters->getJoins()->get() as $join)
+            foreach ($parameters->getJoins()->getJoins() as $join)
             {
-                if (is_subclass_of($join->get_data_class(), CompositeDataClass::class))
+                if (is_subclass_of($join->getDataClassName(), CompositeDataClass::class))
                 {
-                    if (is_subclass_of($dataClassName, $join->get_data_class()))
+                    if (is_subclass_of($dataClassName, $join->getDataClassName()))
                     {
-                        $dataClassProperties->add(new PropertiesConditionVariable($join->get_data_class()));
+                        $dataClassProperties->add(new PropertiesConditionVariable($join->getDataClassName()));
                     }
                 }
             }
         }
+
+        return $this;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters
-     */
-    public function handleDataClassCountGroupedParameters(DataClassCountGroupedParameters $parameters)
+    public function handleDataClassCountGroupedParameters(DataClassCountGroupedParameters $parameters
+    ): DataClassCountGroupedParameters
     {
         $dataClassProperties = $parameters->getDataClassProperties();
         $dataClassProperties->add(
@@ -133,13 +103,7 @@ class ParametersProcessor
         return $parameters;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters
-     */
-    public function handleDataClassCountParameters(DataClassCountParameters $parameters)
+    public function handleDataClassCountParameters(DataClassCountParameters $parameters): DataClassCountParameters
     {
         $dataClassProperties = $parameters->getDataClassProperties();
 
@@ -159,13 +123,8 @@ class ParametersProcessor
         return $parameters;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters
-     */
-    public function handleDataClassDistinctParameters(DataClassDistinctParameters $parameters)
+    public function handleDataClassDistinctParameters(DataClassDistinctParameters $parameters
+    ): DataClassDistinctParameters
     {
         $existingConditionVariables = $parameters->getDataClassProperties()->get();
 
@@ -177,14 +136,10 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param string $dataClassName ;
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters
      * @throws \Exception
      */
-    public function handleDataClassRetrieveParameters($dataClassName, DataClassRetrieveParameters $parameters)
+    public function handleDataClassRetrieveParameters(string $dataClassName, DataClassRetrieveParameters $parameters
+    ): DataClassRetrieveParameters
     {
         $this->setDataClassPropertiesClassName($dataClassName, $parameters);
 
@@ -197,14 +152,10 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param string $dataClassName ;
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters
      * @throws \Exception
      */
-    public function handleDataClassRetrievesParameters($dataClassName, DataClassRetrievesParameters $parameters)
+    public function handleDataClassRetrievesParameters(string $dataClassName, DataClassRetrievesParameters $parameters
+    ): DataClassRetrievesParameters
     {
         $this->setDataClassPropertiesClassName($dataClassName, $parameters);
         $this->handleCompositeDataClassJoins($dataClassName, $parameters);
@@ -213,16 +164,11 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processCondition(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, Condition $condition = null
-    )
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
+    ): QueryBuilder
     {
         if ($condition instanceof Condition)
         {
@@ -233,16 +179,11 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties|null $properties
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processDataClassProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassProperties $properties = null
-    )
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?DataClassProperties $properties = null
+    ): QueryBuilder
     {
         if ($properties instanceof DataClassProperties)
         {
@@ -256,20 +197,15 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy|null $groupBy
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processGroupBy(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, GroupBy $groupBy = null
-    )
+    ): QueryBuilder
     {
         if ($groupBy instanceof GroupBy)
         {
-            foreach ($groupBy->get() as $groupByVariable)
+            foreach ($groupBy->getConditionVariables() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy($this->translate($dataClassDatabase, $groupByVariable));
             }
@@ -279,16 +215,11 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processHavingCondition(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, Condition $condition = null
-    )
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?Condition $condition = null
+    ): QueryBuilder
     {
         if ($condition instanceof Condition)
         {
@@ -299,26 +230,20 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processJoins(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, $dataClassName, Joins $joins = null
-    )
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, string $dataClassName, ?Joins $joins = null
+    ): QueryBuilder
     {
         $storageAliasGenerator = $this->getStorageAliasGenerator();
 
         if ($joins instanceof Joins)
         {
-            foreach ($joins->get() as $join)
+            foreach ($joins->getJoins() as $join)
             {
-                $joinCondition = $this->translate($dataClassDatabase, $join->get_condition());
-                $joinDataClassName = $join->get_data_class();
+                $joinCondition = $this->translate($dataClassDatabase, $join->getCondition());
+                $joinDataClassName = $join->getDataClassName();
 
                 switch ($join->getType())
                 {
@@ -350,15 +275,7 @@ class ParametersProcessor
         return $queryBuilder;
     }
 
-    /**
-     *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param integer|null $count
-     * @param integer|null $offset
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    protected function processLimit(QueryBuilder $queryBuilder, $count = null, $offset = null)
+    protected function processLimit(QueryBuilder $queryBuilder, ?int $count = null, ?int $offset = null): QueryBuilder
     {
         if (intval($count) > 0)
         {
@@ -374,26 +291,12 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderByCollection
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     protected function processOrderByCollection(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, array $orderByCollection = null
-    )
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?array $orderByCollection = []
+    ): QueryBuilder
     {
-        if (is_null($orderByCollection))
-        {
-            $orderByCollection = [];
-        }
-        elseif (!is_array($orderByCollection) && $orderByCollection instanceof OrderBy)
-        {
-            $orderByCollection = array($orderByCollection);
-        }
-
         foreach ($orderByCollection as $orderBy)
         {
             $queryBuilder->addOrderBy(
@@ -406,18 +309,12 @@ class ParametersProcessor
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @param string $dataClassName
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @throws \ReflectionException
      */
     public function processParameters(
         DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassParameters $parameters,
-        $dataClassName
-    )
+        string $dataClassName
+    ): QueryBuilder
     {
         $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
         $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
@@ -433,13 +330,10 @@ class ParametersProcessor
     }
 
     /**
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $dataClassRetrieveParameters
-     *
      * @throws \Exception
      */
     public function setDataClassPropertiesClassName(
-        $dataClassName, DataClassRetrieveParameters $dataClassRetrieveParameters
+        string $dataClassName, DataClassRetrieveParameters $dataClassRetrieveParameters
     )
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
@@ -468,12 +362,9 @@ class ParametersProcessor
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    protected function translate(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart)
+    protected function translate(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart): string
     {
         return $this->getConditionPartTranslatorService()->translate($dataClassDatabase, $conditionPart);
     }

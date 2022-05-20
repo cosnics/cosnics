@@ -13,29 +13,20 @@ class ConditionPartCache
 {
 
     /**
-     * The cache
-     *
-     * @var string[][]
+     * @var string[][][]
      */
-    private $cache;
+    private array $cache;
 
     /**
      */
     public function __construct()
     {
-        $this->cache = [];
+        $this->cache = [true => [], false => []];
     }
 
-    /**
-     * Returns whether a Condition object exists in the cache
-     *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     *
-     * @return boolean
-     */
-    public function exists(ConditionPart $conditionPart)
+    public function exists(ConditionPart $conditionPart, bool $enableAliasing): bool
     {
-        if (isset($this->cache[$conditionPart->hash()]))
+        if (isset($this->cache[$enableAliasing][$conditionPart->hash()]))
         {
             return true;
         }
@@ -45,18 +36,11 @@ class ConditionPartCache
         }
     }
 
-    /**
-     * Get a translated condition from the cache
-     *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     *
-     * @return string
-     */
-    public function get(ConditionPart $conditionPart)
+    public function get(ConditionPart $conditionPart, bool $enableAliasing): string
     {
-        if ($this->exists($conditionPart))
+        if ($this->exists($conditionPart, $enableAliasing))
         {
-            return $this->cache[$conditionPart->hash()];
+            return $this->cache[$enableAliasing][$conditionPart->hash()];
         }
         else
         {
@@ -64,14 +48,10 @@ class ConditionPartCache
         }
     }
 
-    /**
-     * Set the cache value for a specific Condition
-     *
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @param string $value
-     */
-    public function set($conditionPart, $value)
+    public function set(ConditionPart $conditionPart, bool $enableAliasing, string $value): ConditionPartCache
     {
-        $this->cache[$conditionPart->hash()] = $value;
+        $this->cache[$enableAliasing][$conditionPart->hash()] = $value;
+
+        return $this;
     }
 }

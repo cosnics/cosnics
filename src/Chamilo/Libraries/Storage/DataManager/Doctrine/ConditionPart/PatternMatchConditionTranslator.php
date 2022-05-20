@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,7 +16,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
@@ -43,12 +44,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
         return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $string);
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         return $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing

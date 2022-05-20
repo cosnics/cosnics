@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 
 /**
@@ -16,17 +17,12 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\DateFormatConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $strings = [];
 
@@ -35,15 +31,15 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
         $strings[] = '(';
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_condition_variable(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getConditionVariable(), $enableAliasing
         );
         $strings[] = ', ';
-        $strings[] = "'" . $this->getConditionVariable()->get_format() . "'";
+        $strings[] = "'" . $this->getConditionVariable()->getFormat() . "'";
         $strings[] = ')';
 
-        if ($this->getConditionVariable()->get_alias())
+        if ($this->getConditionVariable()->getAlias())
         {
-            return implode('', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();
+            return implode('', $strings) . ' AS ' . $this->getConditionVariable()->getAlias();
         }
         else
         {

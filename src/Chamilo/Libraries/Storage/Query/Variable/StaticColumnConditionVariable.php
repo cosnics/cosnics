@@ -10,13 +10,7 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
  */
 class StaticColumnConditionVariable extends StaticConditionVariable
 {
-
-    /**
-     *
-     * @param string $value
-     * @param boolean $quote
-     */
-    public function __construct($value, $quote = false)
+    public function __construct(string $value, ?bool $quote = false)
     {
         parent::__construct($value, $quote);
     }

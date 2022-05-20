@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,17 +16,12 @@ class SubselectConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\SubselectCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $string = [];
 
@@ -42,7 +38,7 @@ class SubselectConditionTranslator extends ConditionTranslator
 
         $string[] = 'FROM';
 
-        $class = $this->getCondition()->getSubselectConditionVariable()->get_class();
+        $class = $this->getCondition()->getSubselectConditionVariable()->getDataClassName();
         $table = $class::getTableName();
 
         $alias = $this->getDataClassDatabase()->getAlias($table);

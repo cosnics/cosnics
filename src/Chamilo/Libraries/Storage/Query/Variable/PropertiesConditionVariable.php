@@ -16,76 +16,54 @@ use Exception;
 class PropertiesConditionVariable extends ConditionVariable
 {
 
-    /**
-     * The fully qualified class name of the DataClass object the property belongs to
-     *
-     * @var string
-     */
-    private $class;
+    private string $dataClassName;
 
     /**
-     * Constructor
-     *
-     * @param string $class
-     *
      * @throws \Exception
      */
-    public function __construct($class)
+    public function __construct(string $dataClassName)
     {
-        if (!class_exists($class))
+        if (!class_exists($dataClassName))
         {
-            throw new Exception($class . ' does not exist');
+            throw new Exception($dataClassName . ' does not exist');
         }
-        $this->class = $class;
+
+        $this->dataClassName = $dataClassName;
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @throws \ReflectionException
+     * @throws \Exception
+     * @deprecated DO NOT use this anymore!
      */
+    public function getAlias(): string
+    {
+        /**
+         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $dataClassName
+         */
+        $dataClassName = $this->getDataClassName();
+
+        return DataManager::get_alias($dataClassName::getTableName());
+    }
+
+    public function getDataClassName(): string
+    {
+        return $this->dataClassName;
+    }
+
+    public function setDataClassName(string $dataClassName): PropertiesConditionVariable
+    {
+        $this->dataClassName = $dataClassName;
+
+        return $this;
+    }
+
     public function getHashParts(): array
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $hashParts[] = $this->get_class();
+        $hashParts[] = $this->getDataClassName();
 
         return $hashParts;
-    }
-
-    /**
-     * Determines the alias of the dataclass
-     *
-     * @return string
-     * @throws \ReflectionException
-     * @deprecated DO NOT use this anymore!
-     */
-    public function get_alias()
-    {
-        /**
-         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $class_name
-         */
-        $class_name = $this->get_class();
-
-        return DataManager::get_alias($class_name::getTableName());
-    }
-
-    /**
-     * Get the fully qualified class name of the DataClass object the property belongs to
-     *
-     * @return string
-     */
-    public function get_class()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Set the fully qualified class name of the DataClass object the property belongs to
-     *
-     * @param string $class
-     */
-    public function set_class($class)
-    {
-        $this->class = $class;
     }
 }

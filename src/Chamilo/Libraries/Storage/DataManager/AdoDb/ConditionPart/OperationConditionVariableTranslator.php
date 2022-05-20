@@ -33,7 +33,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = '(';
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_left(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getLeftConditionVariable(), $enableAliasing
         );
 
         switch ($this->getConditionVariable()->get_operator())
@@ -59,7 +59,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_right(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getRightConditionVariable(), $enableAliasing
         );
         $strings[] = ')';
 

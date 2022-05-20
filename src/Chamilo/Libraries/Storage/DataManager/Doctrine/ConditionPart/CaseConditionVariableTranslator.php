@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 
 /**
@@ -17,23 +18,18 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $strings = [];
 
         $strings[] = 'CASE ';
 
-        foreach ($this->getConditionVariable()->get_case_elements() as $caseElement)
+        foreach ($this->getConditionVariable()->getCaseElementConditionVariables() as $caseElement)
         {
             $strings[] = $this->getConditionPartTranslatorService()->translate(
                 $this->getDataClassDatabase(), $caseElement, $enableAliasing
@@ -42,9 +38,9 @@ class CaseConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = ' END';
 
-        if ($this->getConditionVariable()->get_alias())
+        if ($this->getConditionVariable()->getAlias())
         {
-            $value = implode(' ', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();
+            $value = implode(' ', $strings) . ' AS ' . $this->getConditionVariable()->getAlias();
         }
         else
         {

@@ -12,77 +12,47 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 class StaticConditionVariable extends ConditionVariable
 {
 
-    /**
-     * Whether or not the variable should be quoted
-     *
-     * @var boolean
-     */
-    private $quote;
+    private bool $quote;
 
-    /**
-     * A static value that should remain unchanged in the Condition
-     *
-     * @var string|int
-     */
     private $value;
 
-    /**
-     *
-     * @param string|int $value
-     * @param boolean $quote
-     */
-    public function __construct($value, $quote = true)
+    public function __construct($value, ?bool $quote = true)
     {
         $this->value = $value;
         $this->quote = $quote;
     }
 
-    /**
-     * @return string[]
-     */
     public function getHashParts(): array
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $hashParts[] = $this->get_value();
-        $hashParts[] = $this->get_quote();
+        $hashParts[] = $this->getValue();
+        $hashParts[] = $this->getQuote();
 
         return $hashParts;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function get_quote()
+    public function getQuote(): bool
     {
         return $this->quote;
     }
 
-    /**
-     *
-     * @param boolean $quote
-     */
-    public function set_quote($quote)
+    public function setQuote(bool $quote): StaticConditionVariable
     {
         $this->quote = $quote;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return string|int
-     */
-    public function get_value()
+    public function getValue()
     {
         return $this->value;
     }
 
-    /**
-     *
-     * @param string|int $value
-     */
-    public function set_value($value)
+    public function setValue($value): StaticConditionVariable
     {
         $this->value = $value;
+
+        return $this;
     }
 }

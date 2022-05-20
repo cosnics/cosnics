@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,29 +16,24 @@ class EqualityConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
-        if (is_null($this->getCondition()->get_value()))
+        if (is_null($this->getCondition()->getRightConditionVariable()))
         {
             return $this->getConditionPartTranslatorService()->translate(
-                    $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                    $this->getDataClassDatabase(), $this->getCondition()->getLeftConditionVariable(), $enableAliasing
                 ) . ' IS NULL';
         }
 
         return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                $this->getDataClassDatabase(), $this->getCondition()->getLeftConditionVariable(), $enableAliasing
             ) . ' = ' . $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->get_value(), $enableAliasing
+                $this->getDataClassDatabase(), $this->getCondition()->getRightConditionVariable(), $enableAliasing
             );
     }
 }

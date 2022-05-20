@@ -20,6 +20,6 @@ interface ConditionPartTranslatorServiceInterface
      * @return string
      */
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, bool $enableAliasing = true
-    );
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
+    ): string;
 }

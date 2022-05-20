@@ -26,7 +26,7 @@ class FixedPropertyConditionVariableTranslator extends PropertyConditionVariable
      */
     public function translate(bool $enableAliasing = true)
     {
-        $className = $this->getConditionVariable()->get_class();
+        $className = $this->getConditionVariable()->getDataClassName();
 
         if ($enableAliasing)
         {

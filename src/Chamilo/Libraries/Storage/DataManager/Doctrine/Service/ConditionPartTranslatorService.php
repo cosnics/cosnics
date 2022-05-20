@@ -6,6 +6,7 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslat
 use Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\Query\ConditionPartTranslator;
 
 /**
  *
@@ -16,34 +17,15 @@ use Chamilo\Libraries\Storage\Query\ConditionPart;
 class ConditionPartTranslatorService implements ConditionPartTranslatorServiceInterface
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
-     *     $conditionPartTranslatorFactory
-     */
-    protected $conditionPartTranslatorFactory;
+    protected ConditionPartCache $conditionPartCache;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\ConditionPartCache
-     */
-    protected $conditionPartCache;
+    protected ConditionPartTranslatorFactory $conditionPartTranslatorFactory;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $queryCacheEnabled;
+    private bool $queryCacheEnabled;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
-     * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
-     * @param boolean $queryCacheEnabled
-     */
     public function __construct(
         ConditionPartTranslatorFactory $conditionPartTranslatorFactory, ConditionPartCache $conditionPartCache,
-        $queryCacheEnabled = true
+        ?bool $queryCacheEnabled = true
     )
     {
         $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
@@ -51,96 +33,82 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Cache\ConditionPartCache
-     */
-    public function getConditionPartCache()
+    public function getConditionPartCache(): ConditionPartCache
     {
         return $this->conditionPartCache;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Cache\ConditionPartCache $conditionPartCache
-     */
-    public function setConditionPartCache($conditionPartCache)
+    public function setConditionPartCache(ConditionPartCache $conditionPartCache): ConditionPartTranslatorService
     {
         $this->conditionPartCache = $conditionPartCache;
+
+        return $this;
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     *
-     * @return \Chamilo\Libraries\Storage\Query\ConditionPartTranslator
+     * @throws \ReflectionException
      */
     protected function getConditionPartTranslator(
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
-    )
+    ): ConditionPartTranslator
     {
         return $this->getConditionPartTranslatorFactory()->getConditionPartTranslator(
             $this, $dataClassDatabase, $conditionPart
         );
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory
-     */
-    public function getConditionPartTranslatorFactory()
+    public function getConditionPartTranslatorFactory(): ConditionPartTranslatorFactory
     {
         return $this->conditionPartTranslatorFactory;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory $conditionPartTranslatorFactory
-     */
-    public function setConditionPartTranslatorFactory(ConditionPartTranslatorFactory $conditionPartTranslatorFactory)
+    public function setConditionPartTranslatorFactory(ConditionPartTranslatorFactory $conditionPartTranslatorFactory
+    ): ConditionPartTranslatorService
     {
         $this->conditionPartTranslatorFactory = $conditionPartTranslatorFactory;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function getQueryCacheEnabled()
+    public function getQueryCacheEnabled(): bool
+    {
+        return $this->isQueryCacheEnabled();
+    }
+
+    public function setQueryCacheEnabled(bool $queryCacheEnabled): ConditionPartTranslatorService
+    {
+        $this->queryCacheEnabled = $queryCacheEnabled;
+
+        return $this;
+    }
+
+    protected function isQueryCacheEnabled(): bool
     {
         return $this->queryCacheEnabled;
     }
 
     /**
-     *
-     * @return boolean
-     */
-    protected function isQueryCacheEnabled()
-    {
-        return (bool) $this->getQueryCacheEnabled();
-    }
-
-    /**
-     *
-     * @param boolean $queryCacheEnabled
-     */
-    public function setQueryCacheEnabled($queryCacheEnabled)
-    {
-        $this->queryCacheEnabled = $queryCacheEnabled;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @param boolean $enableAliasing
-     *
-     * @return string
+     * @throws \ReflectionException
      */
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, bool $enableAliasing = true
-    )
+        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
+    ): string
     {
-        return $this->getConditionPartTranslator($dataClassDatabase, $conditionPart)->translate($enableAliasing);
+        if ($this->isQueryCacheEnabled())
+        {
+            if (!$this->getConditionPartCache()->exists($conditionPart, $enableAliasing))
+            {
+                $this->getConditionPartCache()->set(
+                    $conditionPart, $enableAliasing,
+                    $this->getConditionPartTranslator($dataClassDatabase, $conditionPart)->translate($enableAliasing)
+                );
+            }
+
+            return $this->getConditionPartCache()->get($conditionPart, $enableAliasing);
+        }
+        else
+        {
+            return $this->getConditionPartTranslator($dataClassDatabase, $conditionPart)->translate($enableAliasing);
+        }
     }
 }

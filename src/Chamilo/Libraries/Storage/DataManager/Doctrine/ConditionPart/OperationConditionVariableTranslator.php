@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
@@ -17,26 +18,21 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $strings = [];
 
         $strings[] = '(';
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_left(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getLeftConditionVariable(), $enableAliasing
         );
 
-        switch ($this->getConditionVariable()->get_operator())
+        switch ($this->getConditionVariable()->getOperator())
         {
             case OperationConditionVariable::ADDITION :
                 $strings[] = '+';
@@ -59,7 +55,7 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_right(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getRightConditionVariable(), $enableAliasing
         );
         $strings[] = ')';
 

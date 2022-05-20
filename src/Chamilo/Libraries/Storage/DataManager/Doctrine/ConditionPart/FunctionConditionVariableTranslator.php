@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 
@@ -17,20 +18,15 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $strings = [];
-        switch ($this->getConditionVariable()->get_function())
+        switch ($this->getConditionVariable()->getFunction())
         {
             case FunctionConditionVariable::SUM :
                 $strings[] = 'SUM';
@@ -52,7 +48,7 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        if ($this->getConditionVariable()->get_function() !== FunctionConditionVariable::DISTINCT)
+        if ($this->getConditionVariable()->getFunction() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = '(';
         }
@@ -62,17 +58,17 @@ class FunctionConditionVariableTranslator extends ConditionVariableTranslator
         }
 
         $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_condition_variable(), $enableAliasing
+            $this->getDataClassDatabase(), $this->getConditionVariable()->getConditionVariable(), $enableAliasing
         );
 
-        if ($this->getConditionVariable()->get_function() !== FunctionConditionVariable::DISTINCT)
+        if ($this->getConditionVariable()->getFunction() !== FunctionConditionVariable::DISTINCT)
         {
             $strings[] = ')';
         }
 
-        if ($this->getConditionVariable()->get_alias())
+        if ($this->getConditionVariable()->getAlias())
         {
-            $value = implode('', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();
+            $value = implode('', $strings) . ' AS ' . $this->getConditionVariable()->getAlias();
         }
         else
         {

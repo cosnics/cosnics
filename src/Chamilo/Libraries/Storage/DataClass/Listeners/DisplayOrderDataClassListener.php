@@ -81,7 +81,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         foreach ($properties as $property)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($property->get_class(), $property->get_property()),
+                new PropertyConditionVariable($property->getDataClassName(), $property->get_property()),
                 new StaticConditionVariable($data_class->getDefaultProperty($property->get_property()))
             );
         }
@@ -108,7 +108,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         if ($success)
         {
             $success = $data_manager::move_display_orders(
-                $data_class->get_display_order_property()->get_class(), $display_order_property,
+                $data_class->get_display_order_property()->getDataClassName(), $display_order_property,
                 $data_class->getDefaultProperty($display_order_property), null, $this->get_display_order_condition()
             );
         }
@@ -153,7 +153,7 @@ class DisplayOrderDataClassListener extends DataClassListener
 
         $data_class->setDefaultProperty(
             $data_class->get_display_order_property()->get_property(), $data_manager::retrieve_next_value(
-            $data_class->get_display_order_property()->get_class(),
+            $data_class->get_display_order_property()->getDataClassName(),
             $data_class->get_display_order_property()->get_property(), $this->get_display_order_condition()
         )
         );
@@ -234,7 +234,7 @@ class DisplayOrderDataClassListener extends DataClassListener
             $original_value = $this->old_display_order ?: $display_order_value;
 
             if (!$data_manager::move_display_orders(
-                $data_class->get_display_order_property()->get_class(), $display_order_property, $original_value, null,
+                $data_class->get_display_order_property()->getDataClassName(), $display_order_property, $original_value, null,
                 $this->old_display_order_condition
             ))
             {
@@ -242,7 +242,7 @@ class DisplayOrderDataClassListener extends DataClassListener
             }
 
             $next_display_order = $data_manager::retrieve_next_value(
-                $data_class->get_display_order_property()->get_class(),
+                $data_class->get_display_order_property()->getDataClassName(),
                 $data_class->get_display_order_property()->get_property(), $this->get_display_order_condition()
             );
 
@@ -261,7 +261,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         if (isset($this->old_display_order) && !is_null($display_order_value))
         {
             if (!$data_manager::move_display_orders(
-                $data_class->get_display_order_property()->get_class(), $display_order_property,
+                $data_class->get_display_order_property()->getDataClassName(), $display_order_property,
                 $this->old_display_order, $display_order_value, $this->get_display_order_condition()
             ))
             {

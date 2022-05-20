@@ -43,7 +43,7 @@ class PropertyConditionVariable extends PropertiesConditionVariable
     {
         $hashParts = ConditionVariable::getHashParts();
 
-        $hashParts[] = $this->get_class();
+        $hashParts[] = $this->getDataClassName();
         $hashParts[] = $this->get_property();
 
         return $hashParts;

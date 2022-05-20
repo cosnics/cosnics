@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
-use InvalidArgumentException;
 
 /**
  *
@@ -16,44 +16,21 @@ class InConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
-        $values = $this->getCondition()->get_values();
-
-        if (!is_array($values))
-        {
-            if (is_scalar($values))
-            {
-                $values = array($values);
-            }
-            elseif (is_null($values))
-            {
-                $values = [];
-            }
-            else
-            {
-                throw new InvalidArgumentException(
-                    'An InCondition only accepts an array or a scalar as input for the values'
-                );
-            }
-        }
+        $values = $this->getCondition()->getValues();
 
         if (count($values) > 0)
         {
             $where_clause = [];
 
             $where_clause[] = $this->getConditionPartTranslatorService()->translate(
-                    $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+                    $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
                 ) . ' IN (';
 
             $placeholders = [];

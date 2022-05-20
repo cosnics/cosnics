@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 
 /**
@@ -18,27 +19,22 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable
      */
-    public function getConditionVariable()
+    public function getConditionVariable(): ConditionPart
     {
         return parent::getConditionVariable();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $strings = [];
 
         $conditionVariable = $this->getConditionVariable();
 
-        if ($conditionVariable->get_condition() instanceof Condition)
+        if ($conditionVariable->getCondition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
             $strings[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $conditionVariable->get_condition(), $enableAliasing
+                $this->getDataClassDatabase(), $conditionVariable->getCondition(), $enableAliasing
             );
             $strings[] = ' THEN ';
         }
@@ -47,7 +43,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = ' ELSE ';
         }
 
-        $strings[] = $conditionVariable->get_statement();
+        $strings[] = $conditionVariable->getStatement();
 
         return implode('', $strings);
     }

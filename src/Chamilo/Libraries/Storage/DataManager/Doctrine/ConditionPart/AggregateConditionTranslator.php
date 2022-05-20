@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
+use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -15,24 +16,19 @@ class AggregateConditionTranslator extends ConditionTranslator
     /**
      * @return \Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition
      */
-    public function getCondition()
+    public function getCondition(): ConditionPart
     {
         return parent::getCondition();
     }
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(?bool $enableAliasing = true): string
     {
         $string = '';
 
         $conditionTranslations = [];
         $count = 0;
 
-        foreach ($this->getCondition()->get_conditions() as $key => $condition)
+        foreach ($this->getCondition()->getConditions() as $key => $condition)
         {
             $count ++;
             $translation = $this->getConditionPartTranslatorService()->translate(
@@ -47,7 +43,7 @@ class AggregateConditionTranslator extends ConditionTranslator
 
         if (count($conditionTranslations) > 0)
         {
-            $string = '(' . implode($this->getCondition()->get_operator(), $conditionTranslations) . ')';
+            $string = '(' . implode($this->getCondition()->getOperator(), $conditionTranslations) . ')';
         }
 
         return $string;
