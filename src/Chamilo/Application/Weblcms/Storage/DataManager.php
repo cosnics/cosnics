@@ -2057,7 +2057,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable(0)
         );
 
-        $conditions[] = new OrCondition($condition_publication_forever, $condition_publication_period);
+        $conditions[] = new OrCondition([$condition_publication_forever, $condition_publication_period]);
 
         $conditions[] = new NotCondition(
             new EqualityCondition(
@@ -2161,12 +2161,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $properties = new DataClassProperties();
         $properties->add(
-            new PropertiesConditionVariable(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_ID
             )
         );
         $properties->add(
-            new PropertiesConditionVariable(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
             )
         );
@@ -2239,12 +2239,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $properties = new DataClassProperties();
         $properties->add(
-            new PropertiesConditionVariable(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_ID
             )
         );
         $properties->add(
-            new PropertiesConditionVariable(
+            new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_VISIBLE
             )
         );

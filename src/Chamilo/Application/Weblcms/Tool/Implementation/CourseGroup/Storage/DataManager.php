@@ -215,7 +215,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
             else
             {
-                $condition = new AndCondition($condition, $user_condition);
+                $condition = new AndCondition([$condition, $user_condition]);
             }
         }
         else
@@ -402,7 +402,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
             else
             {
-                $condition = new AndCondition($condition, $user_condition);
+                $condition = new AndCondition([$condition, $user_condition]);
             }
 
             return \Chamilo\Core\User\Storage\DataManager::count(

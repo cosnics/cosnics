@@ -243,7 +243,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                         $context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID
                     ), new StaticConditionVariable($right_id)
                 );
-                $join_condition = new AndCondition($join_condition, $right_id_condition);
+                $join_condition = new AndCondition([$join_condition, $right_id_condition]);
             }
 
             $join = new Join($context_entity_right::class_name(), $join_condition);
@@ -253,7 +253,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
             if ($entities_condition)
             {
-                $condition = new AndCondition($condition, $entities_condition);
+                $condition = new AndCondition([$condition, $entities_condition]);
             }
 
             $parameters = new DataClassDistinctParameters(
@@ -267,12 +267,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         else
         {
             // Inheriting children
-            $inheriting_condition = new AndCondition(
-                $condition, new EqualityCondition(
-                    new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_INHERIT),
-                    new StaticConditionVariable(1)
-                )
-            );
+            $inheriting_condition = new AndCondition([
+                    $condition,
+                    new EqualityCondition(
+                        new PropertyConditionVariable(
+                            $context_location::class_name(), $context_location::PROPERTY_INHERIT
+                        ), new StaticConditionVariable(1)
+                    )
+                ]);
             $parameters = new DataClassDistinctParameters(
                 $inheriting_condition, new DataClassProperties(
                     array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))

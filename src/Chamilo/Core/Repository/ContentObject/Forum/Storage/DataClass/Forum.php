@@ -394,7 +394,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
 
                 $lasttop = DataManager::retrieve_by_id(ForumTopic::class, $lastpostt->get_forum_topic_id());
 
-                if ($is_parent_forum && $lastpostistopic == false)
+                if ($is_parent_forum && !$lastpostistopic)
                 {
                     if ($lasttop->get_id() == $last_topic_changed_id)
                     {
@@ -409,7 +409,7 @@ class Forum extends ContentObject implements ComplexContentObjectSupport
                 }
                 else
                 {
-                    if ($lastpostistopic == true)
+                    if ($lastpostistopic)
                     {
                         $cond = new EqualityCondition(
                             new PropertyConditionVariable(

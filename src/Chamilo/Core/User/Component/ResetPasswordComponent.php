@@ -49,7 +49,7 @@ class ResetPasswordComponent extends Manager implements NoAuthenticationSupport
             array(Manager::context(), 'allow_password_retrieval')
         );
 
-        if ($allow_password_retrieval == false)
+        if (!$allow_password_retrieval)
         {
             throw new NotAllowedException();
         }

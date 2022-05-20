@@ -18,9 +18,9 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -51,15 +51,16 @@ class Calculator
 
     /**
      *
-     * @var \Chamilo\Core\User\Storage\DataClass\User
+     * @var \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
      */
-    private $user;
+    private $calculatorCacheService;
 
     /**
      *
      * @var integer
+     * @deprecated No longer relevant
      */
-    private $usedUserDiskQuota;
+    private $maximumDatabaseQuota;
 
     /**
      *
@@ -83,15 +84,14 @@ class Calculator
     /**
      *
      * @var integer
-     * @deprecated No longer relevant
      */
-    private $maximumDatabaseQuota;
+    private $usedUserDiskQuota;
 
     /**
      *
-     * @var \Chamilo\Core\Repository\Quota\Service\CalculatorCacheService
+     * @var \Chamilo\Core\User\Storage\DataClass\User
      */
-    private $calculatorCacheService;
+    private $user;
 
     /**
      *
@@ -602,15 +602,18 @@ class Calculator
         if (is_null($this->usedDatabaseQuota))
         {
             $condition = new AndCondition(
-                new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-                    new StaticConditionVariable($this->user->get_id())
-                ), new NotCondition(
-                    new InCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
-                        DataManager::get_active_helper_types()
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
+                        new StaticConditionVariable($this->user->get_id())
+                    ),
+                    new NotCondition(
+                        new InCondition(
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE),
+                            DataManager::get_active_helper_types()
+                        )
                     )
-                )
+                ]
             );
 
             $this->usedDatabaseQuota = DataManager::count_active_content_objects(

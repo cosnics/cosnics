@@ -10,10 +10,8 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 class ContainsCondition extends PatternMatchCondition
 {
-    public function __construct(
-        ConditionVariable $conditionVariable, string $pattern, ?string $storageUnit = null, ?bool $isAlias = false
-    )
+    public function __construct(ConditionVariable $conditionVariable, string $pattern)
     {
-        parent::__construct($conditionVariable, '*' . $pattern . '*', $storageUnit, $isAlias);
+        parent::__construct($conditionVariable, '*' . $pattern . '*');
     }
 }

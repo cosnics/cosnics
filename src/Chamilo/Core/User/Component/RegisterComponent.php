@@ -27,7 +27,7 @@ class RegisterComponent extends Manager implements NoAuthenticationSupport
     public function run()
     {
         $allow_registration = Configuration::getInstance()->get_setting(array(self::context(), 'allow_registration'));
-        if ($allow_registration == false)
+        if (!$allow_registration)
         {
             throw new NotAllowedException();
         }

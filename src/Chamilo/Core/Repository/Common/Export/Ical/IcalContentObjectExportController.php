@@ -43,8 +43,7 @@ class IcalContentObjectExportController extends ContentObjectExportController
         if (count($content_object_ids) > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids,
-                ContentObject::getTableName()
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
             );
         }
         else

@@ -123,7 +123,7 @@ class ContentObjectPublicationCategoryTree extends HtmlMenu
             ), new StaticConditionVariable($category)
         );
 
-        return new AndCondition($tool_cond, $category_cond);
+        return new AndCondition([$tool_cond, $category_cond]);
     }
 
     /**

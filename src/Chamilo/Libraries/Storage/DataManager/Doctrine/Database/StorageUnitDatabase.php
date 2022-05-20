@@ -259,7 +259,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 $table->addColumn($property, $attributes['type'], $options);
 
-                if ($options['autoincrement'] == true)
+                if ($options['autoincrement'])
                 {
                     $primaryKeyName = $this->getStorageAliasGenerator()->getConstraintName(
                         $storageUnitName, $storageUnitName

@@ -24,6 +24,11 @@ class Publisher
 {
 
     /**
+     * The html that displays the list of available content objects
+     */
+    private $content_object_html;
+
+    /**
      * The component on which this publisher will run
      *
      * @var Application
@@ -36,11 +41,6 @@ class Publisher
      * @var Array<ContentObjectPublication>
      */
     private $publications;
-
-    /**
-     * The html that displays the list of available content objects
-     */
-    private $content_object_html;
 
     /**
      * Show the form or publish directly
@@ -126,8 +126,7 @@ class Publisher
         if ($items_to_publish > 0)
         {
             $condition = new InCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                $content_object_ids, ContentObject::getTableName()
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
             );
             $parameters = new DataClassRetrievesParameters($condition);
 
@@ -145,7 +144,7 @@ class Publisher
 
             $html[] = '<ul class="list-group">';
 
-            foreach($content_objects as $content_object)
+            foreach ($content_objects as $content_object)
             {
                 $namespace = ContentObject::get_content_object_type_namespace($content_object->getType());
                 $glyph = $content_object->getGlyph(IdentGlyph::SIZE_MINI);

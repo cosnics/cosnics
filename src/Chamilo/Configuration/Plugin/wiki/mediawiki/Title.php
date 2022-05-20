@@ -968,9 +968,9 @@ class MediaWikiTitle
             $dbkey = wfUrlencode($this->getPrefixedDBkey());
             if ($query == '')
             {
-                if ($variant != false && $wgContLang->hasVariants())
+                if ($variant && $wgContLang->hasVariants())
                 {
-                    if ($wgVariantArticlePath == false)
+                    if (!$wgVariantArticlePath)
                     {
                         $variantArticlePath = "$wgScript?title=$1&variant=$2"; // default
                     }
@@ -1349,7 +1349,7 @@ class MediaWikiTitle
                 
                 foreach (explode(',', $scBlockExpiryOptions) as $option)
                 {
-                    if (strpos($option, ':') == false)
+                    if (!strpos($option, ':'))
                         continue;
                     
                     list($show, $value) = explode(":", $option);

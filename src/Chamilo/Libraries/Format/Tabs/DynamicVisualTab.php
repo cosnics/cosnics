@@ -210,7 +210,7 @@ class DynamicVisualTab extends DynamicTab
     {
         $classes = [];
 
-        if ($this->get_selected() == true)
+        if ($this->get_selected())
         {
             $classes[] = 'active';
         }
@@ -265,7 +265,7 @@ class DynamicVisualTab extends DynamicTab
         }
 
         if ($this->get_name() &&
-            (($this->get_display() == self::DISPLAY_BOTH_SELECTED && $this->get_selected() == true) ||
+            (($this->get_display() == self::DISPLAY_BOTH_SELECTED && $this->get_selected()) ||
                 $this->get_display() == self::DISPLAY_ICON || $this->get_display() == self::DISPLAY_BOTH))
         {
             $html[] = '<span class="title">' . $this->get_name() . '</span>';

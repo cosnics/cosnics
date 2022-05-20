@@ -344,7 +344,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 )
             );
 
-            if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin() == true) ||
+            if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin()) ||
                 $this->is_forum_manager($this->get_user()))
             {
                 $parameters = [];
@@ -362,8 +362,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
 
             if (!$this->getForumTopic()->is_first_post($forumPost))
             {
-                if (($forumPost->get_user_id() == $this->get_user_id() ||
-                        $this->get_user()->is_platform_admin() == true) || $this->is_forum_manager($this->get_user()))
+                if (($forumPost->get_user_id() == $this->get_user_id() || $this->get_user()->is_platform_admin()) || $this->is_forum_manager($this->get_user()))
                 {
                     $parameters = [];
                     $parameters[self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID] =

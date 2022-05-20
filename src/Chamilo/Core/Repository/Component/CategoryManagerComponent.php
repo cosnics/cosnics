@@ -30,9 +30,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class CategoryManagerComponent extends Manager implements ImpactViewSupport, TableSupport, CategorySupport
 {
 
-    private $impact_view_table_condition;
-
     protected $impact_view_selected_categories;
+
+    private $impact_view_table_condition;
 
     /**
      * Runs this component and displays its output.
@@ -41,8 +41,10 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     {
         $component = $this->getApplicationFactory()->getApplication(
             \Chamilo\Configuration\Category\Manager::context(),
-            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this));
+            new ApplicationConfiguration($this->getRequest(), $this->get_user(), $this)
+        );
         $component->set_subcategories_allowed(true);
+
         return $component->run();
     }
 
@@ -51,154 +53,14 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         $breadcrumbtrail->add_help('repository_category_manager');
     }
 
-    public function get_category_parameters()
+    public function allowed_to_add_category($parent_category_id)
     {
-        return [];
+        return true;
     }
 
-    /**
-     * Returns the condition for a table
-     *
-     * @param string $class_name
-     *
-     * @return Condition
-     */
-    public function get_table_condition($class_name)
+    public function allowed_to_change_category_visibility($category_id)
     {
-        return $this->impact_view_table_condition;
-    }
-
-    /**
-     * Renders the impact view
-     *
-     * @param int[] $selected_category_ids - [OPTIONAL] default: array
-     * @return string
-     */
-    public function render_impact_view($selected_category_ids = [])
-    {
-        $this->impact_view_selected_categories = $selected_category_ids;
-
-        $conditions = [];
-        foreach ($selected_category_ids as $selected_category_id)
-        {
-            $this->get_categories_condition($selected_category_id, $conditions);
-        }
-
-        $condition = new AndCondition(
-            new OrCondition($conditions),
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_NORMAL)));
-
-        $this->impact_view_table_condition = $condition;
-        $impact_view_table = new ImpactViewTable($this);
-
-        return $impact_view_table->as_html();
-    }
-
-    public function has_impact($selected_category_ids = [])
-    {
-        $conditions = [];
-        foreach ($selected_category_ids as $selected_category_id)
-        {
-            $this->get_categories_condition($selected_category_id, $conditions);
-        }
-
-        $condition = new AndCondition(
-            new OrCondition($conditions),
-            new EqualityCondition(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                new StaticConditionVariable(ContentObject::STATE_NORMAL)));
-
-        $parameters = new DataClassCountParameters($condition);
-
-        return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
-    }
-
-    /**
-     * Returns the category object
-     *
-     * @return RepositoryCategory
-     */
-    public function getCategory()
-    {
-        $category = new RepositoryCategory();
-        $category->setType($this->getWorkspace()->getWorkspaceType());
-        $category->set_type_id($this->getWorkspace()->getId());
-
-        return $category;
-    }
-
-    /**
-     * Counts the categories for a given condition
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_categories($condition = null)
-    {
-        if ($condition)
-        {
-            $conditions[] = $condition;
-        }
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
-            new StaticConditionVariable($this->getWorkspace()->getId()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
-
-        $condition = new AndCondition($conditions);
-
-        $parameters = new DataClassCountParameters($condition);
-
-        return DataManager::count(RepositoryCategory::class, $parameters);
-    }
-
-    /**
-     * Retrieves the categories for a given condition
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param int $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
-     */
-    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = [])
-    {
-        if ($condition)
-        {
-            $conditions[] = $condition;
-        }
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
-            new StaticConditionVariable($this->getWorkspace()->getId()));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
-            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType()));
-
-        $condition = new AndCondition($conditions);
-
-        return DataManager::retrieve_categories($condition, $offset, $count, $order_property);
-    }
-
-    /**
-     * Returns the next display order for a given parent
-     *
-     * @param int $parent_id
-     *
-     * @return int
-     */
-    public function get_next_category_display_order($parent_id)
-    {
-        return DataManager::select_next_category_display_order(
-            $parent_id,
-            $this->getWorkspace()->getId(),
-            $this->getWorkspace()->getWorkspaceType());
+        return true;
     }
 
     /**
@@ -222,6 +84,41 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         return true;
     }
 
+    public function allowed_to_edit_category($category_id)
+    {
+        return true;
+    }
+
+    /**
+     * Counts the categories for a given condition
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public function count_categories($condition = null)
+    {
+        if ($condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getWorkspace()->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
+            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        $parameters = new DataClassCountParameters($condition);
+
+        return DataManager::count(RepositoryCategory::class, $parameters);
+    }
+
     /**
      * Count the objects in a category
      *
@@ -234,40 +131,31 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($category_id));
+            new StaticConditionVariable($category_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-            new StaticConditionVariable(ContentObject::STATE_NORMAL));
+            new StaticConditionVariable(ContentObject::STATE_NORMAL)
+        );
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassCountParameters($condition);
+
         return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
 
-    /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
-     */
-    public function allowed_to_edit_category($category_id)
-    {
-        return true;
-    }
-
-    /*
-     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
-     */
-    public function allowed_to_change_category_visibility($category_id)
-    {
-        return true;
-    }
-
     /**
-     * Returns the type
+     * Returns the category object
      *
-     * @return int
+     * @return RepositoryCategory
      */
-    public function get_type()
+    public function getCategory()
     {
-        return $this->getWorkspace()->getWorkspaceType();
+        $category = new RepositoryCategory();
+        $category->setType($this->getWorkspace()->getWorkspaceType());
+        $category->set_type_id($this->getWorkspace()->getId());
+
+        return $category;
     }
 
     /**
@@ -280,34 +168,166 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($category_id));
+            new StaticConditionVariable($category_id)
+        );
 
         // retrieve children
         $retrieve_children_condition = new EqualityCondition(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT),
-            new StaticConditionVariable($category_id));
+            new StaticConditionVariable($category_id)
+        );
         $child_categories = DataManager::retrieve_categories($retrieve_children_condition);
 
-        foreach($child_categories as $child_category)
+        foreach ($child_categories as $child_category)
         {
             $this->get_categories_condition($child_category->get_id(), $conditions);
         }
     }
 
-    public function allowed_to_add_category($parent_category_id)
+    public function get_category_parameters()
     {
-        return true;
+        return [];
     }
+
+    /**
+     * Returns the next display order for a given parent
+     *
+     * @param int $parent_id
+     *
+     * @return int
+     */
+    public function get_next_category_display_order($parent_id)
+    {
+        return DataManager::select_next_category_display_order(
+            $parent_id, $this->getWorkspace()->getId(), $this->getWorkspace()->getWorkspaceType()
+        );
+    }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_edit_category()
+     */
 
     public function get_parameters($include_search = false)
     {
         $extra_parameters = [];
-        if (! empty($this->impact_view_selected_categories))
+        if (!empty($this->impact_view_selected_categories))
         {
-            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID] = $this->impact_view_selected_categories;
-            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_ACTION] = \Chamilo\Configuration\Category\Manager::ACTION_IMPACT_VIEW;
+            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID] =
+                $this->impact_view_selected_categories;
+            $extra_parameters[\Chamilo\Configuration\Category\Manager::PARAM_ACTION] =
+                \Chamilo\Configuration\Category\Manager::ACTION_IMPACT_VIEW;
         }
 
         return array_merge($extra_parameters, parent::get_parameters($include_search));
+    }
+
+    /*
+     * (non-PHPdoc) @see \configuration\category\CategorySupport::allowed_to_change_category_visibility()
+     */
+
+    /**
+     * Returns the condition for a table
+     *
+     * @param string $class_name
+     *
+     * @return Condition
+     */
+    public function get_table_condition($class_name)
+    {
+        return $this->impact_view_table_condition;
+    }
+
+    /**
+     * Returns the type
+     *
+     * @return int
+     */
+    public function get_type()
+    {
+        return $this->getWorkspace()->getWorkspaceType();
+    }
+
+    public function has_impact($selected_category_ids = [])
+    {
+        $conditions = [];
+        foreach ($selected_category_ids as $selected_category_id)
+        {
+            $this->get_categories_condition($selected_category_id, $conditions);
+        }
+
+        $condition = new AndCondition(
+            [new OrCondition($conditions), new EqualityCondition(
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+                new StaticConditionVariable(ContentObject::STATE_NORMAL)
+            )]
+        );
+
+        $parameters = new DataClassCountParameters($condition);
+
+        return DataManager::count_active_content_objects(ContentObject::class, $parameters) > 0;
+    }
+
+    /**
+     * Renders the impact view
+     *
+     * @param int[] $selected_category_ids - [OPTIONAL] default: array
+     *
+     * @return string
+     */
+    public function render_impact_view($selected_category_ids = [])
+    {
+        $this->impact_view_selected_categories = $selected_category_ids;
+
+        $conditions = [];
+        foreach ($selected_category_ids as $selected_category_id)
+        {
+            $this->get_categories_condition($selected_category_id, $conditions);
+        }
+
+        $condition = new AndCondition(
+            [
+                new OrCondition($conditions),
+                new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+                    new StaticConditionVariable(ContentObject::STATE_NORMAL)
+                )
+            ]
+        );
+
+        $this->impact_view_table_condition = $condition;
+        $impact_view_table = new ImpactViewTable($this);
+
+        return $impact_view_table->as_html();
+    }
+
+    /**
+     * Retrieves the categories for a given condition
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param int $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
+     */
+    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = [])
+    {
+        if ($condition)
+        {
+            $conditions[] = $condition;
+        }
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE_ID),
+            new StaticConditionVariable($this->getWorkspace()->getId())
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_TYPE),
+            new StaticConditionVariable($this->getWorkspace()->getWorkspaceType())
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return DataManager::retrieve_categories($condition, $offset, $count, $order_property);
     }
 }

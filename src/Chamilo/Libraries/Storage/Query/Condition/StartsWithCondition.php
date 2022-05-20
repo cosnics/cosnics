@@ -11,10 +11,10 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class StartsWithCondition extends PatternMatchCondition
 {
     public function __construct(
-        ConditionVariable $conditionVariable, string $pattern, ?string $storageUnit = null, ?bool $isAlias = false
+        ConditionVariable $conditionVariable, string $pattern
     )
     {
-        parent::__construct($conditionVariable, $pattern . '*', $storageUnit, $isAlias);
+        parent::__construct($conditionVariable, $pattern . '*');
     }
 
 }

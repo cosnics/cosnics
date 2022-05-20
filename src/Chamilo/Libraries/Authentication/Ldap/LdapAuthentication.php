@@ -163,7 +163,7 @@ class LdapAuthentication extends Authentication implements AuthenticationInterfa
         $ldapConnect = ldap_connect($settings['host'], $settings['port']);
         ldap_set_option($ldapConnect, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-        if (!(@ldap_bind($ldapConnect, $dn, $password)) == true)
+        if (!(@ldap_bind($ldapConnect, $dn, $password)))
         {
             ldap_close($ldapConnect);
 

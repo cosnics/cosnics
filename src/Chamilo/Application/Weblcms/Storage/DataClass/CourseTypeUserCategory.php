@@ -70,7 +70,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
             )
         );
 
-        $condition = new AndCondition($course_user_category_id_condition, $filter_out_this_course_type_id_condition);
+        $condition = new AndCondition([$course_user_category_id_condition, $filter_out_this_course_type_id_condition]);
 
         $count = DataManager::count(self::class, new DataClassCountParameters($condition));
         // if there are no more links to a course type, then the course user category object itself may be deleted

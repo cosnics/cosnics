@@ -119,7 +119,7 @@ class CreatorComponent extends Manager implements ViewerInterface
             $parameters = new DataClassRetrievesParameters(
                 new InCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    $contentObjectIdentifiers, ContentObject::getTableName()
+                    $contentObjectIdentifiers
                 )
             );
 

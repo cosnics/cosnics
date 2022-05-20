@@ -72,9 +72,8 @@ class BrowseUnsubscribedCoursesComponent extends BrowseSubscriptionCoursesCompon
             $groupsConditions[] = new InCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,
-                    CourseEntityRelation::PROPERTY_ENTITY_ID), 
-                $user->get_groups(true), 
-                CourseEntityRelation::getTableName());
+                    CourseEntityRelation::PROPERTY_ENTITY_ID),
+                $user->get_groups(true));
             $groupsConditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     CourseEntityRelation::class,

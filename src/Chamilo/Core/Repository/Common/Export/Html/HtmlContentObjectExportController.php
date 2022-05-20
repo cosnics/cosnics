@@ -67,8 +67,7 @@ class HtmlContentObjectExportController extends ContentObjectExportController
         {
             $condition = new InCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                $content_object_ids, 
-                ContentObject::getTableName());
+                $content_object_ids);
         }
         else
         {

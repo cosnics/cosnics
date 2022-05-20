@@ -164,8 +164,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
-            SORT_DESC,
-            $forum_post_alias);
+            SORT_DESC);
 
         $parameters = new DataClassRetrieveParameters($condition, $order_by, $joins);
 
@@ -201,8 +200,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $order_by = [];
         $order_by[] = new OrderBy(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
-            SORT_DESC,
-            $forum_post_alias);
+            SORT_DESC);
 
         $joins = new Joins();
 

@@ -1037,13 +1037,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (($parameters instanceof DataClassCountParameters && $action == self::ACTION_COUNT) ||
             ($parameters instanceof DataClassRetrievesParameters && $action == self::ACTION_RETRIEVES))
         {
-            $parameters->set_condition(new AndCondition($parameters->get_condition(), $condition));
+            $parameters->set_condition(new AndCondition([$parameters->get_condition(), $condition]));
         }
         else
         {
             if ($parameters instanceof Condition)
             {
-                $condition = new AndCondition($condition, $parameters);
+                $condition = new AndCondition([$condition, $parameters]);
             }
 
             if ($action == self::ACTION_COUNT)
@@ -1066,10 +1066,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $parameters->set_condition(
                 new AndCondition(
-                    $parameters->get_condition(), new InCondition(
+                    [$parameters->get_condition(), new InCondition(
                         new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                         ContentObject::get_active_status_types()
-                    )
+                    )]
                 )
             );
         }
@@ -1113,8 +1113,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new DataClassRetrieveParameters(
             $condition, array(
                 new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::getTableName())
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
             )
         );
@@ -1158,8 +1157,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters->set_order_by(
             array(
                 new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::getTableName())
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
             )
         );
@@ -1308,8 +1306,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new DataClassRetrieveParameters(
             $condition, array(
                 new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC,
-                    self::get_alias(ContentObject::getTableName())
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
             )
         );
