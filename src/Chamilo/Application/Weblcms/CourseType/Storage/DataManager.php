@@ -116,7 +116,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID),
                 new PropertyConditionVariable(
                     CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID
-                ), CourseTypeUserOrder::getTableName(), $subcondition
+                ), $subcondition
             )
         );
 
@@ -152,7 +152,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 new PropertyConditionVariable(
                     CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID
                 ), new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID),
-                CourseType::getTableName(), $subcondition
+                $subcondition
             )
         );
         $conditions[] = $user_condition;

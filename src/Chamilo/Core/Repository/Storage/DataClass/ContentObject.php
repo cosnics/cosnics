@@ -336,7 +336,7 @@ class ContentObject extends CompositeDataClass
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID), null,
+                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID),
                 $subselect_condition
             );
         }
@@ -1416,7 +1416,7 @@ class ContentObject extends CompositeDataClass
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID), null,
+                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID),
                 $subselect_condition
             );
         }

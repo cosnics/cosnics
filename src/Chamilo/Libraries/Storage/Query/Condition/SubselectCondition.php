@@ -18,21 +18,15 @@ class SubselectCondition extends Condition
 
     private ConditionVariable $conditionVariable;
 
-    private ?string $storageUnitName;
-
     private ConditionVariable $subselectConditionVariable;
-
-    private ?string $subselectStorageUnitName;
 
     public function __construct(
         ConditionVariable $conditionVariable, ConditionVariable $subselectConditionVariable,
-        ?string $subselectStorageUnitName = null, ?Condition $condition = null, ?string $storageUnitName = null
+        ?Condition $condition = null
     )
     {
         $this->conditionVariable = $conditionVariable;
         $this->subselectConditionVariable = $subselectConditionVariable;
-        $this->subselectStorageUnitName = $subselectStorageUnitName;
-        $this->storageUnitName = $storageUnitName;
         $this->condition = $condition;
     }
 
@@ -52,8 +46,6 @@ class SubselectCondition extends Condition
 
         $hashParts[] = $this->getConditionVariable()->getHashParts();
         $hashParts[] = $this->getSubselectConditionVariable()->getHashParts();
-        $hashParts[] = $this->getSubselectStorageUnitName();
-        $hashParts[] = $this->getStorageUnitName();
 
         if ($this->getCondition() instanceof Condition)
         {
@@ -67,18 +59,8 @@ class SubselectCondition extends Condition
         return $hashParts;
     }
 
-    public function getStorageUnitName(): ?string
-    {
-        return $this->storageUnitName;
-    }
-
     public function getSubselectConditionVariable(): ConditionVariable
     {
         return $this->subselectConditionVariable;
-    }
-
-    public function getSubselectStorageUnitName(): ?string
-    {
-        return $this->subselectStorageUnitName;
     }
 }

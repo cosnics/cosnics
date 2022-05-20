@@ -69,7 +69,6 @@ class EndingAssignments extends Block
                 ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
             ),
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            null,
             $subselect_condition
         );
         $condition = new AndCondition($conditions);

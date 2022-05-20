@@ -136,7 +136,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $sub_select_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID), 
             new StaticConditionVariable($user_id));
-        $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
+        $conditions[] = new SubselectCondition($name, $value, $sub_select_condition);
         $condition = new AndCondition($conditions);
         
         $properties = [];
@@ -166,7 +166,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $sub_select_condition = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID), 
             new StaticConditionVariable($user_id));
-        $conditions[] = new SubselectCondition($name, $value, null, $sub_select_condition);
+        $conditions[] = new SubselectCondition($name, $value, $sub_select_condition);
         $condition = new AndCondition($conditions);
         
         $properties = [];

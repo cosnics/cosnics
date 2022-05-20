@@ -18,20 +18,14 @@ class PatternMatchCondition extends Condition
 {
     private ConditionVariable $conditionVariable;
 
-    private bool $isAlias;
-
     private string $pattern;
 
-    private ?string $storageUnit;
-
     public function __construct(
-        ConditionVariable $conditionVariable, string $pattern, ?string $storageUnit = null, ?bool $isAlias = false
+        ConditionVariable $conditionVariable, string $pattern
     )
     {
         $this->conditionVariable = $conditionVariable;
         $this->pattern = $pattern;
-        $this->storageUnit = $storageUnit;
-        $this->isAlias = $isAlias;
     }
 
     public function getConditionVariable(): ConditionVariable
@@ -45,8 +39,6 @@ class PatternMatchCondition extends Condition
 
         $hashParts[] = $this->getConditionVariable()->getHashParts();
         $hashParts[] = $this->getPattern();
-        $hashParts[] = $this->getStorageUnit();
-        $hashParts[] = $this->isAlias();
 
         return $hashParts;
     }
@@ -54,15 +46,5 @@ class PatternMatchCondition extends Condition
     public function getPattern(): string
     {
         return $this->pattern;
-    }
-
-    public function getStorageUnit(): ?string
-    {
-        return $this->storageUnit;
-    }
-
-    public function isAlias(): bool
-    {
-        return $this->isAlias;
     }
 }

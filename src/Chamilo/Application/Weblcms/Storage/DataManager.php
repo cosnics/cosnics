@@ -482,7 +482,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new SubselectCondition(
                 new PropertyConditionVariable(
                     CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
-                ), new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), Course::getTableName()
+                ), new PropertyConditionVariable(Course::class, Course::PROPERTY_ID)
             )
         );
 
@@ -1120,11 +1120,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $between_conditions = [];
 
             $between_conditions[] = new ComparisonCondition(
-                $from_date_variable, InEqualityCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
+                $from_date_variable, ComparisonCondition::LESS_THAN_OR_EQUAL, new StaticConditionVariable(time())
             );
 
             $between_conditions[] = new ComparisonCondition(
-                $to_date_variable, InEqualityCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
+                $to_date_variable, ComparisonCondition::GREATER_THAN_OR_EQUAL, new StaticConditionVariable(time())
             );
 
             $date_conditions = [];

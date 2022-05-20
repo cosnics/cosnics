@@ -100,7 +100,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
         $parameters = new DataClassDistinctParameters(
             new ComparisonCondition(
                 new PropertyConditionVariable(Online::class, Online::PROPERTY_LAST_ACCESS_DATE),
-                InEqualityCondition::GREATER_THAN,
+                ComparisonCondition::GREATER_THAN,
                 new StaticConditionVariable($pastTime)),
             new DataClassProperties(array(new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID))));
 

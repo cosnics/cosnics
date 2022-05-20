@@ -203,7 +203,6 @@ class ExecuteForm extends FormValidator
         $subselect = new SubselectCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
             new PropertyConditionVariable(Element::class, Element::PROPERTY_ID),
-            Element::getTableName(),
             $subcondition);
         
         $values = DataManager::retrieve_dynamic_form_element_values($subselect);

@@ -13,21 +13,14 @@ class RegularExpressionCondition extends Condition
 
     private ConditionVariable $conditionVariable;
 
-    private bool $isAlias;
-
     private string $regularExpression;
 
-    private ?string $storageUnit;
-
     public function __construct(
-        ConditionVariable $conditionVariable, string $regularExpression, ?string $storageUnit = null,
-        ?bool $isAlias = false
+        ConditionVariable $conditionVariable, string $regularExpression
     )
     {
         $this->conditionVariable = $conditionVariable;
         $this->regularExpression = $regularExpression;
-        $this->storageUnit = $storageUnit;
-        $this->isAlias = $isAlias;
     }
 
     public function getConditionVariable(): ConditionVariable
@@ -41,8 +34,6 @@ class RegularExpressionCondition extends Condition
 
         $hashParts[] = $this->getConditionVariable()->getHashParts();
         $hashParts[] = $this->getRegularExpression();
-        $hashParts[] = $this->getStorageUnit();
-        $hashParts[] = $this->isAlias();
 
         return $hashParts;
     }
@@ -50,15 +41,5 @@ class RegularExpressionCondition extends Condition
     public function getRegularExpression(): string
     {
         return $this->regularExpression;
-    }
-
-    public function getStorageUnit(): ?string
-    {
-        return $this->storageUnit;
-    }
-
-    public function isAlias(): bool
-    {
-        return $this->isAlias;
     }
 }

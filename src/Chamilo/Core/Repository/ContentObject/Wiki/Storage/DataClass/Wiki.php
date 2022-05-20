@@ -101,9 +101,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class,
                 ComplexContentObjectItem::PROPERTY_REF),
-            ComplexContentObjectItem::getTableName(),
-            $complex_content_object_item_condition,
-            ContentObject::getTableName());
+            $complex_content_object_item_condition);
         $content_object_condition = new AndCondition($content_object_conditions);
 
         return DataManager::retrieve_active_content_objects(

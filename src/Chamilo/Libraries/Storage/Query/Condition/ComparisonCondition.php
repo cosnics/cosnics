@@ -21,26 +21,19 @@ class ComparisonCondition extends Condition
     const LESS_THAN = 1;
     const LESS_THAN_OR_EQUAL = 2;
 
-    private bool $isAlias;
-
     private ConditionVariable $leftConditionVariable;
 
     private int $operator;
 
     private ?ConditionVariable $rightConditionVariable;
 
-    private ?string $storageUnit;
-
     public function __construct(
-        ConditionVariable $leftConditionVariable, int $operator, ?ConditionVariable $rightConditionVariable,
-        ?string $storageUnit = null, ?bool $isAlias = false
+        ConditionVariable $leftConditionVariable, int $operator, ?ConditionVariable $rightConditionVariable
     )
     {
         $this->leftConditionVariable = $leftConditionVariable;
         $this->operator = $operator;
         $this->rightConditionVariable = $rightConditionVariable;
-        $this->storageUnit = $storageUnit;
-        $this->isAlias = $isAlias;
     }
 
     public function getHashParts(): array
@@ -75,9 +68,6 @@ class ComparisonCondition extends Condition
                 break;
         }
 
-        $hashParts[] = $this->getStorageUnit();
-        $hashParts[] = $this->isAlias();
-
         return $hashParts;
     }
 
@@ -94,16 +84,6 @@ class ComparisonCondition extends Condition
     public function getRightConditionVariable(): ?ConditionVariable
     {
         return $this->rightConditionVariable;
-    }
-
-    public function getStorageUnit(): ?string
-    {
-        return $this->storageUnit;
-    }
-
-    public function isAlias(): bool
-    {
-        return $this->isAlias;
     }
 
 }

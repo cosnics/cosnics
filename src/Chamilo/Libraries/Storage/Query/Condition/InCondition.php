@@ -16,20 +16,14 @@ class InCondition extends Condition
 {
     private ConditionVariable $conditionVariable;
 
-    private bool $isAlias;
-
-    private ?string $storageUnit;
-
     private array $values;
 
     public function __construct(
-        ConditionVariable $conditionVariable, array $values, ?string $storageUnit = null, ?bool $isAlias = false
+        ConditionVariable $conditionVariable, array $values
     )
     {
         $this->conditionVariable = $conditionVariable;
         $this->values = $values;
-        $this->storageUnit = $storageUnit;
-        $this->isAlias = $isAlias;
     }
 
     public function getConditionVariable(): ConditionVariable
@@ -48,24 +42,11 @@ class InCondition extends Condition
         ksort($values);
         $hashParts[] = $values;
 
-        $hashParts[] = $this->getStorageUnit();
-        $hashParts[] = $this->isAlias();
-
         return $hashParts;
-    }
-
-    public function getStorageUnit(): ?string
-    {
-        return $this->storageUnit;
     }
 
     public function getValues(): array
     {
         return $this->values;
-    }
-
-    public function isAlias(): bool
-    {
-        return $this->isAlias;
     }
 }

@@ -111,7 +111,7 @@ class Viewer
         $conditions = [];
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_DYNAMIC_FORM_ELEMENT_ID),
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), null, $subcondition
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_ID), $subcondition
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Value::class, Value::PROPERTY_USER_ID),

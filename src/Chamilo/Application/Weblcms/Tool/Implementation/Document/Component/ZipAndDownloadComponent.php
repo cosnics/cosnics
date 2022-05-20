@@ -118,7 +118,6 @@ class ZipAndDownloadComponent extends Manager
                         ContentObjectPublication::class,
                         ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID),
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    ContentObject::getTableName(),
                     $subselect_condition);
 
                 $condition = new AndCondition($conditions);

@@ -476,7 +476,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new PropertyConditionVariable(
                 CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_ID
             ), new PropertyConditionVariable(Course::class, CourseRelCourseSetting::PROPERTY_ID),
-            Course::getTableName(), $courses_condition
+            $courses_condition
         );
 
         if (!is_null($course_setting_id))

@@ -81,8 +81,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            ContentObject::getTableName(), $subselect_condition
+            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $subselect_condition
         );
 
         $condition = new AndCondition($conditions);
@@ -443,8 +442,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            ContentObject::getTableName(), $subselect_condition
+            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $subselect_condition
         );
 
         $condition = new AndCondition($conditions);
