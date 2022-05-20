@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Exception;
 
 /**
@@ -12,20 +14,11 @@ use Exception;
  */
 class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
-     */
-    public function getConditionVariable(): ConditionPart
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getConditionVariable();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
-    {
-        $distinctConditionVariable = $this->getConditionVariable();
-
         if (!$distinctConditionVariable->hasConditionVariables())
         {
             throw new Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
@@ -39,8 +32,8 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 
         foreach ($distinctConditionVariable->getConditionVariables() as $conditionVariable)
         {
-            $distinctStrings[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $conditionVariable, $enableAliasing
+            $distinctStrings[] = $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $conditionVariable, $enableAliasing
             );
         }
 

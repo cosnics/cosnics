@@ -95,7 +95,7 @@ class CourseCategoryEntityHelper
                 CourseCategory::class,
                 CourseCategory::PROPERTY_CODE));
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 CourseCategory::class,
                 CourseCategory::PROPERTY_ID,
                 self::PROPERTY_COURSE_CATEGORY_ID));

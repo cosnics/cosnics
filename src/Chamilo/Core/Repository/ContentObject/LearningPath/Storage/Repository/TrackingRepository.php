@@ -266,7 +266,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     {
         $properties = new DataClassProperties();
 
-        $properties->add(new FixedPropertyConditionVariable(User::class, User::PROPERTY_ID, 'user_id'));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID, 'user_id'));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_EMAIL));
@@ -435,7 +435,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $properties = new DataClassProperties();
 
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 $treeNodeAttemptClassName,
                 TreeNodeAttempt::PROPERTY_ID,
                 'tree_node_attempt_id'));
@@ -455,7 +455,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         }
 
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 $treeNodeQuestionAttemptClassName,
                 TreeNodeQuestionAttempt::PROPERTY_ID,
                 'tree_node_question_attempt_id'));

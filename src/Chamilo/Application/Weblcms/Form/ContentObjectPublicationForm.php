@@ -934,13 +934,14 @@ class ContentObjectPublicationForm extends BasePublicationForm
             switch ($option)
             {
                 case self::RIGHTS_FOR_ALL :
-                    if (!$weblcms_rights->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id))
+                    if (!$weblcms_rights->invert_location_entity_right(Manager::context(),WeblcmsRights::VIEW_RIGHT, 0, 0, $location_id))
                     {
                         return false;
                     }
                     break;
                 case self::RIGHTS_FOR_ME :
-                    if (!$weblcms_rights->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),
+                    if (!$weblcms_rights->invert_location_entity_right(
+                        Manager::context(),
                         WeblcmsRights::VIEW_RIGHT, Session::get_user_id(), CourseUserEntity::ENTITY_TYPE, $location_id
                     ))
                     {
@@ -952,7 +953,8 @@ class ContentObjectPublicationForm extends BasePublicationForm
                     {
                         foreach ($target_ids as $target_id)
                         {
-                            if (!$weblcms_rights->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),
+                            if (!$weblcms_rights->invert_location_entity_right(
+                                Manager::context(),
                                 WeblcmsRights::VIEW_RIGHT, $target_id, $entity_type, $location_id
                             ))
                             {

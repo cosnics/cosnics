@@ -10,15 +10,6 @@ use Chamilo\Libraries\Storage\Query\ConditionPart;
  */
 interface ConditionPartTranslatorServiceInterface
 {
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\Query\ConditionPart $conditionPart
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
     public function translate(
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing = true
     ): string;

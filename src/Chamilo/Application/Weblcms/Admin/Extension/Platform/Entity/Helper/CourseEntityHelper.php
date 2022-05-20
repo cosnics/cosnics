@@ -86,7 +86,7 @@ class CourseEntityHelper
         $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
         $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_VISUAL_CODE));
         $properties->add(
-            new FixedPropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_ID, self::PROPERTY_COURSE_ID));
 
         $parameters = new RecordRetrievesParameters(
             $properties,

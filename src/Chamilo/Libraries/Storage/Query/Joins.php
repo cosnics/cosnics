@@ -30,7 +30,7 @@ class Joins implements Countable, Hashable
         $this->joins = $joins;
     }
 
-    public function addJoin(Join $join): Joins
+    public function add(Join $join): Joins
     {
         $this->joins[] = $join;
 
@@ -59,22 +59,22 @@ class Joins implements Countable, Hashable
     /**
      * @return \Chamilo\Libraries\Storage\Query\Join[]
      */
-    public function getJoins(): array
+    public function get(): array
     {
         return $this->joins;
     }
 
-    public function mergeWith(Joins $joinsToMerge): Joins
+    public function merge(Joins $joinsToMerge): Joins
     {
-        foreach ($joinsToMerge->getJoins() as $join)
+        foreach ($joinsToMerge->get() as $join)
         {
-            $this->addJoin($join);
+            $this->add($join);
         }
 
         return $this;
     }
 
-    public function prependJoin(Join $join): Joins
+    public function prepend(Join $join): Joins
     {
         array_unshift($this->joins, $join);
 

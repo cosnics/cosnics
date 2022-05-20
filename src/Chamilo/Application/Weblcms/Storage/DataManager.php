@@ -788,7 +788,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $data_class_properties[] = new PropertiesConditionVariable(CourseSetting::class);
 
-        $data_class_properties[] = new FixedPropertyConditionVariable(
+        $data_class_properties[] = new PropertyConditionVariable(
             $course_setting_relation_class, $course_setting_relation_class::PROPERTY_OBJECT_ID, 'object_id'
         );
 
@@ -1498,7 +1498,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ContentObject::class, ContentObject::PROPERTY_CREATION_DATE
         );
 
-        $data_class_properties[] = new FixedPropertyConditionVariable(
+        $data_class_properties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_MODIFICATION_DATE,
             ContentObjectPublication::CONTENT_OBJECT_MODIFICATION_DATE_ALIAS
         );
@@ -1700,7 +1700,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties->add(new PropertiesConditionVariable(CourseSetting::class));
 
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 CourseTool::class, CourseTool::PROPERTY_NAME, CourseSetting::PROPERTY_COURSE_TOOL_NAME
             )
         );

@@ -138,7 +138,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         $dataClassProperties->add(
-            new FixedPropertyConditionVariable(Group::class, Group::PROPERTY_ID, self::PROPERTY_GROUP_ID)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_ID, self::PROPERTY_GROUP_ID)
         );
         $dataClassProperties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 

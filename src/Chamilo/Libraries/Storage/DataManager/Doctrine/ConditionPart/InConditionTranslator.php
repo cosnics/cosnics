@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -13,31 +15,26 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 class InConditionTranslator extends ConditionTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
-     */
-    public function getCondition(): ConditionPart
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        InCondition $inCondition, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getCondition();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
-    {
-        $values = $this->getCondition()->getValues();
+        $values = $inCondition->getValues();
 
         if (count($values) > 0)
         {
             $where_clause = [];
 
-            $where_clause[] = $this->getConditionPartTranslatorService()->translate(
-                    $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
+            $where_clause[] = $conditionPartTranslatorService->translate(
+                    $dataClassDatabase, $inCondition->getConditionVariable(), $enableAliasing
                 ) . ' IN (';
 
             $placeholders = [];
 
             foreach ($values as $value)
             {
-                $placeholders[] = $this->getDataClassDatabase()->quote($value);
+                $placeholders[] = $dataClassDatabase->quote($value);
             }
 
             $where_clause[] = implode(',', $placeholders);

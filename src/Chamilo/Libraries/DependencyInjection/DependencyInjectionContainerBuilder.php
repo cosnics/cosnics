@@ -22,9 +22,24 @@ use Chamilo\Libraries\File\PathBuilder;
 use Chamilo\Libraries\Storage\Cache\ConditionPartCache;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\CaseElementConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\ComparisonConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DateFormatConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\DistinctConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\FunctionConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\InConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\MultipleAggregateConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\NotConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\OperationConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PatternMatchConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertiesConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\PropertyConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\RegularExpressionConditionTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\StaticConditionVariableTranslator;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart\SubselectConditionTranslator;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConditionPartTranslatorFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
@@ -67,11 +82,11 @@ class DependencyInjectionContainerBuilder
     private $builder;
 
     /**
-     * The container extension finder
+     * The classname of the cached container
      *
-     * @var \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface
+     * @var string
      */
-    private $containerExtensionFinder;
+    private $cacheClass;
 
     /**
      * The path to the cache file
@@ -81,23 +96,23 @@ class DependencyInjectionContainerBuilder
     private $cacheFile;
 
     /**
-     * The classname of the cached container
      *
-     * @var string
+     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
      */
-    private $cacheClass;
+    private $classnameUtilities;
 
     /**
      *
-     * @var \Chamilo\Libraries\File\PathBuilder
+     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
      */
-    private $pathBuilder;
+    private $configurablePathBuilder;
 
     /**
+     * The container extension finder
      *
-     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
+     * @var \Chamilo\Libraries\DependencyInjection\Interfaces\ContainerExtensionFinderInterface
      */
-    private $fileConfigurationLocator;
+    private $containerExtensionFinder;
 
     /**
      *
@@ -107,9 +122,15 @@ class DependencyInjectionContainerBuilder
 
     /**
      *
-     * @var \Chamilo\Libraries\File\ConfigurablePathBuilder
+     * @var \Chamilo\Configuration\Service\FileConfigurationLoader
      */
-    private $configurablePathBuilder;
+    private $fileConfigurationLocator;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\File\PathBuilder
+     */
+    private $pathBuilder;
 
     /**
      *
@@ -122,12 +143,6 @@ class DependencyInjectionContainerBuilder
      * @var \Chamilo\Libraries\Utilities\StringUtilities
      */
     private $stringUtilities;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
 
     /**
      * Constructor
@@ -382,8 +397,25 @@ class DependencyInjectionContainerBuilder
 
             $exceptionLoggerFactory = new ExceptionLoggerFactory($this->getFileConfigurationConsulter());
 
+            $storageAliasGenerator = new StorageAliasGenerator($this->getClassnameUtilities());
+
             $conditionPartTranslatorService = new ConditionPartTranslatorService(
-                new ConditionPartTranslatorFactory($this->getClassnameUtilities()), new ConditionPartCache(),
+                new CaseConditionVariableTranslator($storageAliasGenerator),
+                new CaseElementConditionVariableTranslator($storageAliasGenerator),
+                new ComparisonConditionTranslator($storageAliasGenerator),
+                new DateFormatConditionVariableTranslator($storageAliasGenerator),
+                new DistinctConditionVariableTranslator($storageAliasGenerator),
+                new FunctionConditionVariableTranslator($storageAliasGenerator),
+                new InConditionTranslator($storageAliasGenerator),
+                new MultipleAggregateConditionTranslator($storageAliasGenerator),
+                new NotConditionTranslator($storageAliasGenerator),
+                new OperationConditionVariableTranslator($storageAliasGenerator),
+                new PatternMatchConditionTranslator($storageAliasGenerator),
+                new PropertiesConditionVariableTranslator($storageAliasGenerator),
+                new PropertyConditionVariableTranslator($storageAliasGenerator),
+                new RegularExpressionConditionTranslator($storageAliasGenerator),
+                new StaticConditionVariableTranslator($storageAliasGenerator),
+                new SubselectConditionTranslator($storageAliasGenerator), new ConditionPartCache(),
                 $this->getFileConfigurationConsulter()->getSetting(
                     array('Chamilo\Configuration', 'debug', 'enable_query_cache')
                 )

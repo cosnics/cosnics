@@ -126,7 +126,7 @@ class ExporterComponent extends Manager
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID),
-            new StaticColumnConditionVariable($this->get_course_id())
+            new StaticConditionVariable($this->get_course_id(), false)
         );
 
         $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course(

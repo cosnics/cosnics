@@ -85,7 +85,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
         $properties->add(new PropertiesConditionVariable(Course::class));
 
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 CourseType::class,
                 CourseType::PROPERTY_TITLE,
                 Course::PROPERTY_COURSE_TYPE_TITLE));

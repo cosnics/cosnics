@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -14,45 +16,42 @@ class SubselectConditionTranslator extends ConditionTranslator
 {
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\SubselectCondition
+     * @throws \ReflectionException
      */
-    public function getCondition(): ConditionPart
-    {
-        return parent::getCondition();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        SubselectCondition $subselectCondition, ?bool $enableAliasing = true
+    ): string
     {
         $string = [];
 
-        $string[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
+        $string[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $subselectCondition->getConditionVariable(), $enableAliasing
         );
 
         $string[] = 'IN (';
         $string[] = 'SELECT';
 
-        $string[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getCondition()->getSubselectConditionVariable(), $enableAliasing
+        $string[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $subselectCondition->getSubselectConditionVariable(), $enableAliasing
         );
 
         $string[] = 'FROM';
 
-        $class = $this->getCondition()->getSubselectConditionVariable()->getDataClassName();
-        $table = $class::getTableName();
+        $class = $subselectCondition->getSubselectConditionVariable()->getDataClassName();
 
-        $alias = $this->getDataClassDatabase()->getAlias($table);
+        $alias = $this->getStorageAliasGenerator()->getDataClassAlias($class);
 
-        $string[] = $table;
+        $string[] = $class::getTableName();
 
         $string[] = 'AS';
         $string[] = $alias;
 
-        if ($this->getCondition()->getCondition())
+        if ($subselectCondition->getCondition())
         {
             $string[] = 'WHERE ';
-            $string[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->getCondition(), $enableAliasing
+            $string[] = $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $subselectCondition->getCondition(), $enableAliasing
             );
         }
 

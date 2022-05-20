@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
@@ -13,41 +15,22 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 class PatternMatchConditionTranslator extends ConditionTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition
-     */
-    public function getCondition(): ConditionPart
-    {
-        return parent::getCondition();
-    }
-
-    protected function getPattern(): string
-    {
-        return $this->searchString($this->getCondition()->getPattern());
-    }
-
-    /**
-     * Translates a string with wildcard characters "?" (single character) and "*" (any character sequence) to a SQL
-     * pattern for use in a LIKE condition.
-     * Should be suitable for any SQL flavor.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    public function searchString($string)
+    public function processPattern(string $pattern): string
     {
         // Escape SQL wildcard characters, thus prefixing %, ', \ and _ with a backslash
-        $string = preg_replace(['/\\\\/', '/%/', '/\'/', '/_/'], ['\\\\\\\\', '\%', '\\\'', '\_'], $string);
+        $pattern = preg_replace(['/\\\\/', '/%/', '/\'/', '/_/'], ['\\\\\\\\', '\%', '\\\'', '\_'], $pattern);
 
         // Replace asterisks and question marks that are not prefixed with a backslash with the SQL equivalent
-        return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $string);
+        return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $pattern);
     }
 
-    public function translate(?bool $enableAliasing = true): string
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        PatternMatchCondition $patternMatchCondition, ?bool $enableAliasing = true
+    ): string
     {
-        return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
-            ) . ' LIKE ' . $this->getDataClassDatabase()->quote($this->getPattern());
+        return $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $patternMatchCondition->getConditionVariable(), $enableAliasing
+            ) . ' LIKE ' . $dataClassDatabase->quote($this->processPattern($patternMatchCondition->getPattern()));
     }
 }

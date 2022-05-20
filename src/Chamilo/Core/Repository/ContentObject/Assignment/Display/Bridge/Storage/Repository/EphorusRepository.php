@@ -40,7 +40,7 @@ abstract class EphorusRepository extends CommonDataClassRepository
         $properties = new DataClassProperties();
 
         $properties->add(
-            new FixedPropertyConditionVariable(Request::class, Request::PROPERTY_ID, Request::PROPERTY_REQUEST_ID)
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_ID, Request::PROPERTY_REQUEST_ID)
         );
 
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID));

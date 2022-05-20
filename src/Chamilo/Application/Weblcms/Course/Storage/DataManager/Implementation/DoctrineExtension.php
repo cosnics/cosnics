@@ -302,7 +302,7 @@ class DoctrineExtension
         $properties = $this->get_user_properties_for_select();
 
         $properties->add(
-            new FixedPropertyConditionVariable(
+            new PropertyConditionVariable(
                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS, self::PARAM_SUBSCRIPTION_STATUS
             )
         );

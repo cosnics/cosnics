@@ -13,26 +13,28 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 class PropertyConditionVariable extends PropertiesConditionVariable
 {
 
-    /**
-     * The property name of the DataClass object
-     *
-     * @var string
-     */
-    private $property;
+    private ?string $alias;
 
-    /**
-     * Constructor
-     *
-     * @param string $class
-     * @param string $property
-     *
-     * @throws \Exception
-     */
-    public function __construct($class, $property)
+    private string $propertyName;
+
+    public function __construct(string $dataClassName, string $propertyName, ?string $alias = null)
     {
-        parent::__construct($class);
+        parent::__construct($dataClassName);
 
-        $this->property = $property;
+        $this->propertyName = $propertyName;
+        $this->alias = $alias;
+    }
+
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(string $alias): PropertyConditionVariable
+    {
+        $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -44,28 +46,21 @@ class PropertyConditionVariable extends PropertiesConditionVariable
         $hashParts = ConditionVariable::getHashParts();
 
         $hashParts[] = $this->getDataClassName();
-        $hashParts[] = $this->get_property();
+        $hashParts[] = $this->getPropertyName();
+        $hashParts[] = $this->getAlias();
 
         return $hashParts;
     }
 
-    /**
-     * Get the property name of the DataClass object
-     *
-     * @return string
-     */
-    public function get_property()
+    public function getPropertyName(): string
     {
-        return $this->property;
+        return $this->propertyName;
     }
 
-    /**
-     * Set the property name of the DataClass object
-     *
-     * @param string $property
-     */
-    public function set_property($property)
+    public function setPropertyName(string $propertyName): PropertyConditionVariable
     {
-        $this->property = $property;
+        $this->propertyName = $propertyName;
+
+        return $this;
     }
 }

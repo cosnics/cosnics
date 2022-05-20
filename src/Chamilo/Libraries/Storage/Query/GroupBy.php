@@ -33,7 +33,7 @@ class GroupBy implements Hashable
         $this->conditionVariables = $conditionVariables;
     }
 
-    public function addConditionVariable(ConditionVariable $conditionVariable)
+    public function add(ConditionVariable $conditionVariable)
     {
         $this->conditionVariables[] = $conditionVariable;
     }
@@ -42,7 +42,7 @@ class GroupBy implements Hashable
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    public function getConditionVariables(): array
+    public function get(): array
     {
         return $this->conditionVariables;
     }

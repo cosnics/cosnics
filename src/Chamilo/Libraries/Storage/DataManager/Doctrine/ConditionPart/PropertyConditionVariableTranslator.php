@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  *
@@ -15,29 +16,36 @@ class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
+     * @throws \ReflectionException
      */
-    public function getConditionVariable(): ConditionPart
+    public function translate(
+        DataClassDatabaseInterface $dataClassDatabase, PropertyConditionVariable $propertyConditionVariable,
+        ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getConditionVariable();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
-    {
-        $className = $this->getConditionVariable()->getDataClassName();
+        $className = $propertyConditionVariable->getDataClassName();
 
         if ($enableAliasing)
         {
-            $alias = $this->getDataClassDatabase()->getAlias($className::getTableName());
+            $alias = $this->getStorageAliasGenerator()->getDataClassAlias($className);
         }
         else
         {
             $alias = null;
         }
 
-        return $this->getDataClassDatabase()->escapeColumnName(
-            $this->getConditionVariable()->get_property(), $alias
+        $translationParts = [];
+
+        $translationParts[] = $dataClassDatabase->escapeColumnName(
+            $propertyConditionVariable->getPropertyName(), $alias
         );
+
+        if ($propertyConditionVariable->getAlias())
+        {
+            $translationParts[] = 'AS';
+            $translationParts[] = $propertyConditionVariable->getAlias();
+        }
+
+        return implode(' ', $translationParts);
     }
 }

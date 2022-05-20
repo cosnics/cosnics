@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\Query
@@ -12,14 +10,4 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  */
 abstract class ConditionVariableTranslator extends ConditionPartTranslator
 {
-
-    public function getConditionVariable(): ConditionPart
-    {
-        return $this->getConditionPart();
-    }
-    
-    public function setConditionVariable(ConditionVariable $conditionVariable)
-    {
-        $this->setConditionPart($conditionVariable);
-    }
 }

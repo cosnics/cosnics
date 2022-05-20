@@ -132,7 +132,7 @@ class FavouriteRepository
 
         $properties[] = new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_ID);
 
-        $properties[] = new FixedPropertyConditionVariable(User::class, User::PROPERTY_ID, self::PROPERTY_USER_ID);
+        $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_ID, self::PROPERTY_USER_ID);
 
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);

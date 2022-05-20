@@ -1,8 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
  *
@@ -16,21 +16,17 @@ class PropertiesConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable
+     * @throws \ReflectionException
      */
-    public function getConditionVariable(): ConditionPart
+    public function translate(
+        PropertiesConditionVariable $propertiesConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getConditionVariable();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
-    {
-        $className = $this->getConditionVariable()->getDataClassName();
+        $className = $propertiesConditionVariable->getDataClassName();
 
         if ($enableAliasing)
         {
-            return $this->getDataClassDatabase()->getAlias($className::getTableName()) . '.*';
+            return $this->getStorageAliasGenerator()->getDataClassAlias($className) . '.*';
         }
         else
         {

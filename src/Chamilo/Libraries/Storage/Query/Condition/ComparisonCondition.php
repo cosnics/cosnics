@@ -27,12 +27,12 @@ class ComparisonCondition extends Condition
 
     private int $operator;
 
-    private ConditionVariable $rightConditionVariable;
+    private ?ConditionVariable $rightConditionVariable;
 
-    private string $storageUnit;
+    private ?string $storageUnit;
 
     public function __construct(
-        ConditionVariable $leftConditionVariable, int $operator, ConditionVariable $rightConditionVariable,
+        ConditionVariable $leftConditionVariable, int $operator, ?ConditionVariable $rightConditionVariable,
         ?string $storageUnit = null, ?bool $isAlias = false
     )
     {
@@ -91,7 +91,7 @@ class ComparisonCondition extends Condition
         return $this->operator;
     }
 
-    public function getRightConditionVariable(): ConditionVariable
+    public function getRightConditionVariable(): ?ConditionVariable
     {
         return $this->rightConditionVariable;
     }

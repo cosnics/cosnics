@@ -12,10 +12,10 @@ use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use \Twig\Environment;
-use \Twig\RuntimeLoader\FactoryRuntimeLoader;
-use \Twig\Loader\ChainLoader;
-use \Twig\Loader\FilesystemLoader;
+use Twig\Environment;
+use Twig\RuntimeLoader\FactoryRuntimeLoader;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * Builds the SymfonyFormFactory

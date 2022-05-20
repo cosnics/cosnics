@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Architecture\Traits;
 
+use Exception;
+
 /**
  *
  * @package Chamilo\Libraries\Architecture\Traits
@@ -75,6 +77,6 @@ trait ClassFile
         }
 
         fclose($fp);
-        throw new \Exception($file . ' is not a PHP class file');
+        throw new Exception($file . ' is not a PHP class file');
     }
 }

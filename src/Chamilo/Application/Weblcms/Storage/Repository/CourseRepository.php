@@ -378,11 +378,11 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         $properties->add(
-            new FixedPropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME, 'titular_firstname')
+            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME, 'titular_firstname')
         );
 
         $properties->add(
-            new FixedPropertyConditionVariable(User::class, User::PROPERTY_LASTNAME, 'titular_lastname')
+            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME, 'titular_lastname')
         );
 
         $joins = new Joins();

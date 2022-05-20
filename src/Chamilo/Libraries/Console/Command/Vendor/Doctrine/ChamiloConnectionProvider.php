@@ -2,8 +2,9 @@
 namespace Chamilo\Libraries\Console\Command\Vendor\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Tools\Console\ConnectionProvider;
 
-class ChamiloConnectionProvider implements \Doctrine\DBAL\Tools\Console\ConnectionProvider
+class ChamiloConnectionProvider implements ConnectionProvider
 {
 
     private Connection $connection;

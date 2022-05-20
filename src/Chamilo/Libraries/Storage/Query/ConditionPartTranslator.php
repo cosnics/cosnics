@@ -1,8 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Storage\DataManager\Interfaces\ConditionPartTranslatorServiceInterface;
-use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 
 /**
  *
@@ -14,59 +13,26 @@ use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 abstract class ConditionPartTranslator
 {
 
-    private ConditionPart $conditionPart;
-
-    private ConditionPartTranslatorServiceInterface $conditionPartTranslatorService;
-
-    private DataClassDatabaseInterface $dataClassDatabase;
+    private StorageAliasGenerator $storageAliasGenerator;
 
     public function __construct(
-        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService,
-        DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart
+        StorageAliasGenerator $storageAliasGenerator
     )
     {
-        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
-        $this->dataClassDatabase = $dataClassDatabase;
-        $this->conditionPart = $conditionPart;
+        $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
-    public function getConditionPart(): ConditionPart
+    public function getStorageAliasGenerator(): StorageAliasGenerator
     {
-        return $this->conditionPart;
+        return $this->storageAliasGenerator;
     }
 
-    public function setConditionPart(ConditionPart $conditionPart): ConditionPartTranslator
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): ConditionPartTranslator
     {
-        $this->conditionPart = $conditionPart;
+        $this->storageAliasGenerator = $storageAliasGenerator;
 
         return $this;
     }
 
-    public function getConditionPartTranslatorService(): ConditionPartTranslatorServiceInterface
-    {
-        return $this->conditionPartTranslatorService;
-    }
-
-    public function setConditionPartTranslatorService(
-        ConditionPartTranslatorServiceInterface $conditionPartTranslatorService
-    ): ConditionPartTranslator
-    {
-        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
-
-        return $this;
-    }
-
-    public function getDataClassDatabase(): DataClassDatabaseInterface
-    {
-        return $this->dataClassDatabase;
-    }
-
-    public function setDataClassDatabase(DataClassDatabaseInterface $dataClassDatabase): ConditionPartTranslator
-    {
-        $this->dataClassDatabase = $dataClassDatabase;
-
-        return $this;
-    }
-
-    abstract public function translate(?bool $enableAliasing = true): string;
+    //abstract public function translate($conditionPart, ?bool $enableAliasing = true): string;
 }

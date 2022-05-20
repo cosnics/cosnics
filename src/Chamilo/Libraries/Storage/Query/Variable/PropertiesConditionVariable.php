@@ -31,21 +31,6 @@ class PropertiesConditionVariable extends ConditionVariable
         $this->dataClassName = $dataClassName;
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     * @deprecated DO NOT use this anymore!
-     */
-    public function getAlias(): string
-    {
-        /**
-         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $dataClassName
-         */
-        $dataClassName = $this->getDataClassName();
-
-        return DataManager::get_alias($dataClassName::getTableName());
-    }
-
     public function getDataClassName(): string
     {
         return $this->dataClassName;

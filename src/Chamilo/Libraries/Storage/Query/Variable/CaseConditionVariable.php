@@ -29,9 +29,19 @@ class CaseConditionVariable extends ConditionVariable
         $this->alias = $alias;
     }
 
-    public function addCaseElementConditionVariable(CaseElementConditionVariable $caseElementConditionVariable)
+    public function add(CaseElementConditionVariable $caseElementConditionVariable)
     {
         $this->caseElementConditionVariables[] = $caseElementConditionVariable;
+    }
+
+    /**
+     * Get the case_elements
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
+     */
+    public function get()
+    {
+        return $this->caseElementConditionVariables;
     }
 
     public function getAlias(): ?string
@@ -42,26 +52,6 @@ class CaseConditionVariable extends ConditionVariable
     public function setAlias(string $alias): CaseConditionVariable
     {
         $this->alias = $alias;
-
-        return $this;
-    }
-
-    /**
-     * Get the case_elements
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
-     */
-    public function getCaseElementConditionVariables()
-    {
-        return $this->caseElementConditionVariables;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElementConditionVariables
-     */
-    public function setCaseElementConditionVariables(array $caseElementConditionVariables): CaseConditionVariable
-    {
-        $this->caseElementConditionVariables = $caseElementConditionVariables;
 
         return $this;
     }
@@ -84,5 +74,15 @@ class CaseConditionVariable extends ConditionVariable
         $hashParts[] = $this->getAlias();
 
         return $hashParts;
+    }
+
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[] $caseElementConditionVariables
+     */
+    public function set(array $caseElementConditionVariables): CaseConditionVariable
+    {
+        $this->caseElementConditionVariables = $caseElementConditionVariables;
+
+        return $this;
     }
 }

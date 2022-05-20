@@ -1,8 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -14,21 +15,16 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
-     */
-    public function getConditionVariable(): ConditionPart
+    public function translate(
+        DataClassDatabaseInterface $dataClassDatabase, StaticConditionVariable $staticConditionVariable,
+        ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getConditionVariable();
-    }
+        $value = $staticConditionVariable->getValue();
 
-    public function translate(?bool $enableAliasing = true): string
-    {
-        $value = $this->getConditionVariable()->getValue();
-
-        if ($this->getConditionVariable()->getQuote())
+        if ($staticConditionVariable->getQuote())
         {
-            $value = $this->getDataClassDatabase()->quote($value);
+            $value = $dataClassDatabase->quote($value);
         }
 
         return $value;

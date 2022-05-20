@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
 
-use Chamilo\Libraries\Storage\Query\ConditionPart;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
 
 /**
  *
@@ -14,33 +16,27 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  */
 class CaseConditionVariableTranslator extends ConditionVariableTranslator
 {
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable
-     */
-    public function getConditionVariable(): ConditionPart
-    {
-        return parent::getConditionVariable();
-    }
-
-    public function translate(?bool $enableAliasing = true): string
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        CaseConditionVariable $caseConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
         $strings = [];
 
         $strings[] = 'CASE ';
 
-        foreach ($this->getConditionVariable()->getCaseElementConditionVariables() as $caseElement)
+        foreach ($caseConditionVariable->get() as $caseElement)
         {
-            $strings[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $caseElement, $enableAliasing
+            $strings[] = $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $caseElement, $enableAliasing
             );
         }
 
         $strings[] = ' END';
 
-        if ($this->getConditionVariable()->getAlias())
+        if ($caseConditionVariable->getAlias())
         {
-            $value = implode(' ', $strings) . ' AS ' . $this->getConditionVariable()->getAlias();
+            $value = implode(' ', $strings) . ' AS ' . $caseConditionVariable->getAlias();
         }
         else
         {

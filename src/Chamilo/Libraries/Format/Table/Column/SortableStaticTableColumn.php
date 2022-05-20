@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Format\Table\Column;
 
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * This class represents a column for a table that is not sortable Refactoring from ObjectTable to split between a table
@@ -27,10 +28,10 @@ class SortableStaticTableColumn extends TableColumn
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable
+     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
      */
     public function getConditionVariable()
     {
-        return new StaticColumnConditionVariable($this->get_name());
+        return new StaticConditionVariable($this->get_name(), false);
     }
 }

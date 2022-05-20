@@ -77,7 +77,7 @@ class ParametersProcessor
         {
             $dataClassProperties = $parameters->getDataClassProperties();
 
-            foreach ($parameters->getJoins()->getJoins() as $join)
+            foreach ($parameters->getJoins()->get() as $join)
             {
                 if (is_subclass_of($join->getDataClassName(), CompositeDataClass::class))
                 {
@@ -205,7 +205,7 @@ class ParametersProcessor
     {
         if ($groupBy instanceof GroupBy)
         {
-            foreach ($groupBy->getConditionVariables() as $groupByVariable)
+            foreach ($groupBy->get() as $groupByVariable)
             {
                 $queryBuilder->addGroupBy($this->translate($dataClassDatabase, $groupByVariable));
             }
@@ -240,7 +240,7 @@ class ParametersProcessor
 
         if ($joins instanceof Joins)
         {
-            foreach ($joins->getJoins() as $join)
+            foreach ($joins->get() as $join)
             {
                 $joinCondition = $this->translate($dataClassDatabase, $join->getCondition());
                 $joinDataClassName = $join->getDataClassName();

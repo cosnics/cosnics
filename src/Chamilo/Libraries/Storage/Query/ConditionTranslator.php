@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Query;
 
-use Chamilo\Libraries\Storage\Query\Condition\Condition;
-
 /**
  *
  * @package Chamilo\Libraries\Storage\Query
@@ -12,18 +10,4 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
  */
 abstract class ConditionTranslator extends ConditionPartTranslator
 {
-
-    public function getCondition(): ConditionPart
-    {
-        return $this->getConditionPart();
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     */
-    public function setCondition(Condition $condition)
-    {
-        $this->setConditionPart($condition);
-    }
 }

@@ -301,10 +301,10 @@ class CourseManagementRights extends WeblcmsRights
             switch ($option)
             {
                 case self::RIGHT_OPTION_ALL :
-                    $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),$right_id, 0, 0, $location_id);
+                    $succes &= $this->invert_location_entity_right(Manager::context(),$right_id, 0, 0, $location_id);
                     break;
                 case self::RIGHT_OTPION_ME :
-                    $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),$right_id, Session::get_user_id(), 1, $location_id);
+                    $succes &= $this->invert_location_entity_right(Manager::context(),$right_id, Session::get_user_id(), 1, $location_id);
                     break;
                 case self::RIGHT_OPTION_SELECT :
                     if (! array_key_exists(self::PARAM_RIGHT_TARGETS, $values) ||
@@ -317,7 +317,8 @@ class CourseManagementRights extends WeblcmsRights
                     {
                         foreach ($target_ids as $target_id)
                         {
-                            $succes &= $this->invert_location_entity_right(\Chamilo\Application\Weblcms\Manager::context(),
+                            $succes &= $this->invert_location_entity_right(
+                                Manager::context(),
                                 $right_id, 
                                 $target_id, 
                                 $entity_type, 

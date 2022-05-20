@@ -22,11 +22,11 @@ class SubselectCondition extends Condition
 
     private ConditionVariable $subselectConditionVariable;
 
-    private string $subselectStorageUnitName;
+    private ?string $subselectStorageUnitName;
 
     public function __construct(
         ConditionVariable $conditionVariable, ConditionVariable $subselectConditionVariable,
-        string $subselectStorageUnitName, ?Condition $condition = null, ?string $storageUnitName = null
+        ?string $subselectStorageUnitName = null, ?Condition $condition = null, ?string $storageUnitName = null
     )
     {
         $this->conditionVariable = $conditionVariable;
@@ -77,7 +77,7 @@ class SubselectCondition extends Condition
         return $this->subselectConditionVariable;
     }
 
-    public function getSubselectStorageUnitName(): string
+    public function getSubselectStorageUnitName(): ?string
     {
         return $this->subselectStorageUnitName;
     }

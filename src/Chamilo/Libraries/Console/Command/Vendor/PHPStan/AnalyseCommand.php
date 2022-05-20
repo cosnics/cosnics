@@ -2,10 +2,13 @@
 
 namespace Chamilo\Libraries\Console\Command\Vendor\PHPStan;
 
+use Exception;
 use PHPStan\Command\AnalyseApplication;
 use PHPStan\Command\CommandHelper;
 use PHPStan\Command\ErrorFormatter\ErrorFormatter;
 use PHPStan\Command\ErrorsConsoleStyle;
+use PHPStan\Command\InceptionNotSuccessfulException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -19,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AnalyseCommand extends \Symfony\Component\Console\Command\Command
+class AnalyseCommand extends Command
 {
     /**
      * @var \Chamilo\Libraries\Console\Command\Vendor\PHPStan\PHPStanPackages
@@ -147,7 +150,7 @@ class AnalyseCommand extends \Symfony\Component\Console\Command\Command
 
             return $this->analysePaths($input, $output, $paths, $phpStanPackage->getLevel());
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $output->writeln(
                 sprintf('<error>The package %s could not be found in the list of available paths</error>', $packageName)
@@ -172,7 +175,7 @@ class AnalyseCommand extends \Symfony\Component\Console\Command\Command
         {
             $inceptionResult = CommandHelper::begin($input, $output, $paths, null, null, null, null, $level);
         }
-        catch (\PHPStan\Command\InceptionNotSuccessfulException $e)
+        catch (InceptionNotSuccessfulException $e)
         {
             return 1;
         }
@@ -261,7 +264,7 @@ class AnalyseCommand extends \Symfony\Component\Console\Command\Command
 
             return 0;
         }
-        catch (\Exception $ex)
+        catch (Exception $ex)
         {
             $output->writeln(
                 sprintf('<error>The package %s could not be found in the list of available paths</error>', $package)
