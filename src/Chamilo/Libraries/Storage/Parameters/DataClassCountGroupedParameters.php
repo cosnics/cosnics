@@ -16,17 +16,9 @@ use Chamilo\Libraries\Storage\Query\Joins;
 class DataClassCountGroupedParameters extends DataClassParameters
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
-     */
     public function __construct(
-        Condition $condition = null, DataClassProperties $dataClassProperties = null, $havingCondition = null,
-        Joins $joins = null, GroupBy $groupBy = null
+        ?Condition $condition = null, ?DataClassProperties $dataClassProperties = null,
+        ?Condition $havingCondition = null, ?Joins $joins = null, ?GroupBy $groupBy = null
     )
     {
         if (is_null($groupBy))
@@ -39,42 +31,34 @@ class DataClassCountGroupedParameters extends DataClassParameters
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @deprecated Use getHavingCondition() now
      */
-    public function get_having()
+    public function get_having(): ?Condition
     {
         return $this->getHavingCondition();
     }
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
      * @deprecated Use getDataClassProperties() now
      */
-    public function get_properties()
+    public function get_properties(): ?DataClassProperties
     {
         return $this->getDataClassProperties();
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
-     *
      * @deprecated Use setHavingCondition() now
      */
-    public function set_having(Condition $havingCondition = null)
+    public function set_having(?Condition $havingCondition = null)
     {
         $this->setHavingCondition($havingCondition);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     *
      * @deprecated Use setDataClassProperties() now
      */
-    public function set_properties(DataClassProperties $dataClassProperties = null)
+    public function set_properties(?DataClassProperties $dataClassProperties = null)
     {
         $this->setDataClassProperties($dataClassProperties);
     }

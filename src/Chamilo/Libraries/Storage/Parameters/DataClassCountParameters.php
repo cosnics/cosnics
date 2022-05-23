@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
-use Exception;
 
 /**
  *
@@ -17,13 +16,7 @@ use Exception;
 class DataClassCountParameters extends DataClassParameters
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
-     */
-    public function __construct($condition = null, Joins $joins = null, $dataClassProperties = null)
+    public function __construct(?Condition $condition = null, ?Joins $joins = null, $dataClassProperties = null)
     {
         if ($dataClassProperties instanceof ConditionVariable)
         {
@@ -34,49 +27,9 @@ class DataClassCountParameters extends DataClassParameters
     }
 
     /**
-     * Generate an instance based on the input or throw an exception if no compatible input was found
-     *
-     * @param mixed $parameter
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters
-     * @throws Exception
-     */
-    public static function generate($parameter)
-    {
-        // So you think you're being funny, eh? Right back at you ... you dog-blasted, ornery, no-account, long-eared
-        // varmint!
-        if (is_object($parameter) && $parameter instanceof DataClassCountParameters)
-        {
-            return $parameter;
-        }
-
-        // If the parameter is a Condition, generate a new DataClassCountParameters instance using the Condition
-        // provided by the context
-        elseif (is_object($parameter) && $parameter instanceof Condition)
-        {
-            return new self($parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof Joins)
-        {
-            return new self(null, $parameter);
-        }
-        elseif (is_null($parameter))
-        {
-            return new self();
-        }
-        else
-        {
-            throw new Exception('Illegal parameter passed to the DataManager::count() method.');
-        }
-    }
-
-    /**
-     * Get the property of the DataClass object to be used as a parameter
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
      * @deprecated Use DataClassProperties and getDataClassProperties() now
      */
-    public function get_property()
+    public function get_property(): ?ConditionVariable
     {
         $dataClassProperties = $this->getDataClassProperties()->get();
 
@@ -84,13 +37,9 @@ class DataClassCountParameters extends DataClassParameters
     }
 
     /**
-     * Set the property of the DataClass object to be used as a parameter
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     *
      * @deprecated Use DataClassProperties and setDataClassProperties() now
      */
-    public function set_property($property)
+    public function set_property(?ConditionVariable $property)
     {
         $this->getDataClassProperties()->add($property);
     }

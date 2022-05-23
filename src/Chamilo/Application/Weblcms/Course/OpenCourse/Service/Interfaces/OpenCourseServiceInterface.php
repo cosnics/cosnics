@@ -21,11 +21,11 @@ interface OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = []);
+    public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
     /**
      * Returns the closed courses
@@ -33,11 +33,11 @@ interface OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param array $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
+    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
     /**
      * Counts the open courses for the given user

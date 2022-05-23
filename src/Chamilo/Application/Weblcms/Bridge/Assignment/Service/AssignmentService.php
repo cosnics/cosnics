@@ -305,8 +305,8 @@ class AssignmentService
         {
             $job = new Job();
             $job->setProcessorClass(EntryNotificationJobProcessor::class)->setParameter(
-                    EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
-                );
+                EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
+            );
 
             $this->jobProducer->produceJob($job, 'notifications');
         }
@@ -395,13 +395,13 @@ class AssignmentService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findEntriesForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $condition = null, $offset = null,
-        $count = null, $orderProperty = []
+        $count = null, $orderProperty = null
     )
     {
         return $this->assignmentRepository->retrieveEntriesForContentObjectPublicationEntityTypeAndId(
@@ -460,7 +460,7 @@ class AssignmentService
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -480,20 +480,26 @@ class AssignmentService
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
-        $count = null, $orderProperty = []
+        $count = null, $orderProperty = null
     )
     {
-        $orderProperty[] =
-            new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+        if (is_null($orderProperty))
+        {
+            $orderProperty = new OrderBy();
+        }
+
+        $orderProperty->add(
+            new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+        );
 
         return $this->assignmentRepository->findTargetCourseGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $courseGroupIds, $condition, $offset, $count, new OrderBy($orderProperty)
+            $contentObjectPublication, $courseGroupIds, $condition, $offset, $count, $orderProperty
         );
     }
 
@@ -504,7 +510,7 @@ class AssignmentService
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -524,19 +530,24 @@ class AssignmentService
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
-        $count = null, $orderProperty = []
+        $count = null, $orderProperty = null
     )
     {
-        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+        if (is_null($orderProperty))
+        {
+            $orderProperty = new OrderBy();
+        }
+
+        $orderProperty->add(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)));
 
         return $this->assignmentRepository->findTargetPlatformGroupsWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $platformGroupIds, $condition, $offset, $count, new OrderBy($orderProperty)
+            $contentObjectPublication, $platformGroupIds, $condition, $offset, $count, $orderProperty
         );
     }
 
@@ -547,7 +558,7 @@ class AssignmentService
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -567,20 +578,25 @@ class AssignmentService
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
-        $count = null, $orderProperty = []
+        $count = null, $orderProperty = null
     )
     {
-        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        if (is_null($orderProperty))
+        {
+            $orderProperty = new OrderBy();
+        }
+
+        $orderProperty->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)));
+        $orderProperty->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
 
         return $this->assignmentRepository->findTargetUsersWithEntriesForContentObjectPublication(
-            $contentObjectPublication, $userIds, $condition, $offset, $count, new OrderBy($orderProperty)
+            $contentObjectPublication, $userIds, $condition, $offset, $count, $orderProperty
         );
     }
 

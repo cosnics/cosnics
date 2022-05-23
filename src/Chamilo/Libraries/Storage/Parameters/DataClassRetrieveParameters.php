@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Parameters;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -14,34 +15,23 @@ use Chamilo\Libraries\Storage\Query\Joins;
 class DataClassRetrieveParameters extends DataClassParameters
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     */
-    public function __construct(Condition $condition = null, $orderBy = [], Joins $joins = null)
+    public function __construct(?Condition $condition = null, ?OrderBy $orderBy = null, ?Joins $joins = null)
     {
         parent::__construct($condition, $joins, null, $orderBy);
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\OrderProperty[]
      * @deprecated Use getOrderBy() now
      */
-    public function get_order_by()
+    public function get_order_by(): ?OrderBy
     {
         return $this->getOrderBy();
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
-     *
      * @deprecated Use setOrderBy() now
      */
-    public function set_order_by($orderBy = [])
+    public function set_order_by(?OrderBy $orderBy = null)
     {
         $this->setOrderBy($orderBy);
     }

@@ -132,11 +132,11 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param array $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
+    public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return $this->openCourseRepository->findClosedCourses($condition, $offset, $count, $orderBy);
     }
@@ -148,12 +148,12 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
     public function getOpenCourses(
-        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = []
+        User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = null
     )
     {
         if ($this->authorizationChecker->isAuthorized($user, Manager::context(), 'ManageOpenCourses'))

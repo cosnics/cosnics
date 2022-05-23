@@ -75,12 +75,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
             new StaticConditionVariable($forum_topic_id));
 
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
+        $orderBy = OrderBy::generate(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE,
             $creation_date_order);
 
-        $parameters = new DataClassRetrieveParameters($condition,  new OrderBy($order_by));
+        $parameters = new DataClassRetrieveParameters($condition,  $orderBy);
 
         return self::retrieve(ForumPost::class, $parameters);
     }

@@ -65,7 +65,7 @@ class FavouriteRepository
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -76,9 +76,7 @@ class FavouriteRepository
         $properties = [];
 
         $properties[] = new PropertyConditionVariable(UserFavourite::class, UserFavourite::PROPERTY_ID);
-
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_ID, self::PROPERTY_USER_ID);
-
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME);
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);

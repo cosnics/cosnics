@@ -21,11 +21,11 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = []);
+    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
     /**
      * Retrieves the open courses
@@ -33,11 +33,11 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
+    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
     /**
      * Retrieves the courses that are not open
@@ -45,11 +45,11 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = []);
+    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
     /**
      * Counts the open courses by the given user roles

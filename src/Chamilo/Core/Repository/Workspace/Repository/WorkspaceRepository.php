@@ -152,11 +152,11 @@ class WorkspaceRepository
      *
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = [])
+    public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = null)
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(null, $limit, $offset, $orderProperty)
@@ -168,11 +168,11 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = [])
+    public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = null)
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(
@@ -199,12 +199,12 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUser(
-        User $user, $entities, $limit = null, $offset = null, $orderProperty = []
+        User $user, $entities, $limit = null, $offset = null, $orderProperty = null
     )
     {
         return DataManager::retrieves(
@@ -221,12 +221,12 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUserFast(
-        User $user, $limit = null, $offset = null, $orderProperty = []
+        User $user, $limit = null, $offset = null, $orderProperty = null
     )
     {
         $joins = new Joins();
@@ -249,11 +249,11 @@ class WorkspaceRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = [])
+    public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = null)
     {
         return DataManager::retrieves(
             Workspace::class, new DataClassRetrievesParameters(
@@ -268,7 +268,7 @@ class WorkspaceRepository
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
-    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = [])
+    public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = null)
     {
         $condition = new InCondition(
             new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_ID), $identifiers
@@ -286,7 +286,7 @@ class WorkspaceRepository
      * @param integer $right
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */

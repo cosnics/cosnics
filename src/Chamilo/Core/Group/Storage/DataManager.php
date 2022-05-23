@@ -341,7 +341,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function retrieve_groups_and_subgroups(
-        $group_ids, $additional_condition = null, $count = null, $offset = null, $order_by = []
+        $group_ids, $additional_condition = null, $count = null, $offset = null, $order_by = null
     )
     {
         if (count($group_ids) == 0)

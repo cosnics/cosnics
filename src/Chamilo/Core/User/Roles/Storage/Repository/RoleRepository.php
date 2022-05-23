@@ -47,7 +47,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
      *
      * @return Role[]
      */
-    public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = [])
+    public function findRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null)
     {
         return DataManager::retrieves(
             Role::class,

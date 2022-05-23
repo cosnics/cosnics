@@ -153,12 +153,12 @@ class ItemRepository
      */
     public function findItems()
     {
-        $orderBy = [];
-        $orderBy[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT));
-        $orderBy[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
+        $orderBy = new OrderBy();
+        $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT)));
+        $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters(null, null, null,  new OrderBy($orderBy))
+            Item::class, new DataClassRetrievesParameters(null, null, null,  $orderBy)
         );
     }
 
@@ -181,12 +181,12 @@ class ItemRepository
      * @param integer $parentIdentifier
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = []
+        int $parentIdentifier, int $count = null, int $offset = null, OrderBy $orderBy = null
     )
     {
         $condition = new EqualityCondition(
@@ -194,10 +194,15 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
+        if(is_null($orderBy))
+        {
+            $orderBy = new OrderBy();
+        }
+
+        $orderBy->add(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters($condition, $count, $offset,  new OrderBy($orderProperties))
+            Item::class, new DataClassRetrievesParameters($condition, $count, $offset,  $orderBy)
         );
     }
 

@@ -62,7 +62,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_synchronization_data_set($condition = null, $count = null, $offset = null, $order_by = [])
+    public static function retrieve_synchronization_data_set($condition = null, $count = null, $offset = null, $order_by = null)
     {
         $join = new Join(
             ContentObject::class, 

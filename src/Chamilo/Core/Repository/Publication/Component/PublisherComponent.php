@@ -119,13 +119,10 @@ class PublisherComponent extends Manager implements DelegateComponent
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
 
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
-        );
+        $orderBy = OrderBy::generate(ContentObject::class, ContentObject::PROPERTY_ID);
 
         return DataManager::retrieve_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            ContentObject::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
     }
 }

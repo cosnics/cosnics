@@ -30,252 +30,9 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\AssignmentRepository
+class AssignmentRepository
+    extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Repository\AssignmentRepository
 {
-    /**
-     *
-     * @param integer $contentObjectPublicationIdentifier
-     *
-     * @return integer
-     */
-    public function countEntriesForContentObjectPublicationIdentifier($contentObjectPublicationIdentifier)
-    {
-        return $this->countEntries(
-            $this->getContentObjectPublicationConditionByIdentifier($contentObjectPublicationIdentifier)
-        );
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetUsersForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityType(
-            Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForUser(),
-            User::class,
-            $this->getTargetBaseVariable(User::class)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetUsersWithEntriesForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityTypeWithEntries(
-            Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForUser(),
-            User::class,
-            $this->getTargetBaseVariable(User::class)
-        );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     */
-    protected function getDataClassPropertiesForUser()
-    {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-
-        return $properties;
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetCourseGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityType(
-            Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class, $groupIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForCourseGroup(),
-            CourseGroup::class,
-            $this->getTargetBaseVariable(CourseGroup::class)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int[] $courseGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $courseGroupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityTypeWithEntries(
-            Entry::ENTITY_TYPE_COURSE_GROUP,
-            $this->getTargetEntitiesCondition(CourseGroup::class, $courseGroupIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForCourseGroup(),
-            CourseGroup::class,
-            $this->getTargetBaseVariable(CourseGroup::class)
-        );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     */
-    protected function getDataClassPropertiesForCourseGroup()
-    {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
-
-        return $properties;
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param int[] $groupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetPlatformGroupsForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityType(
-            Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class, $groupIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForPlatformGroups(),
-            Group::class,
-            $this->getTargetBaseVariable(Group::class)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int[] $platformGroupIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, array $platformGroupIds, $condition = null, $offset = null,
-        $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityTypeWithEntries(
-            Entry::ENTITY_TYPE_PLATFORM_GROUP,
-            $this->getTargetEntitiesCondition(Group::class, $platformGroupIds, $condition),
-            $this->getContentObjectPublicationCondition($contentObjectPublication),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForPlatformGroups(),
-            Group::class,
-            $this->getTargetBaseVariable(Group::class)
-        );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     */
-    protected function getDataClassPropertiesForPlatformGroups()
-    {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
-
-        return $properties;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityType
-     *
-     * @param int $createdDate
-     *
-     * @return mixed
-     */
-    public function countEntriesByContentObjectPublicationWithCreatedDateLargerThan(
-        ContentObjectPublication $contentObjectPublication, $entityType, $createdDate
-    )
-    {
-        return $this->countEntriesByEntityTypeWithCreatedDateLargerThan(
-            $entityType,
-            $createdDate,
-            $this->getContentObjectPublicationCondition($contentObjectPublication)
-        );
-    }
-
     /**
      *
      * @param ContentObjectPublication $contentObjectPublication
@@ -288,21 +45,6 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     )
     {
         return $this->countDistinctEntriesByEntityType(
-            $entityType, $this->getContentObjectPublicationCondition($contentObjectPublication)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityType
-     *
-     * @return int
-     */
-    public function countEntriesByContentObjectPublicationAndEntityType(
-        ContentObjectPublication $contentObjectPublication, $entityType
-    )
-    {
-        return $this->countEntriesByEntityType(
             $entityType, $this->getContentObjectPublicationCondition($contentObjectPublication)
         );
     }
@@ -325,19 +67,51 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     }
 
     /**
-     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return integer
+     */
+    public function countDistinctScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return parent::countDistinctScoreForEntityTypeAndId(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityType
-     * @param int $entityId
      *
      * @return int
      */
-    public function countLateEntriesByContentObjectPublicationEntityTypeAndId(
-        Assignment $assignment, ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    public function countEntriesByContentObjectPublicationAndEntityType(
+        ContentObjectPublication $contentObjectPublication, $entityType
     )
     {
-        return $this->countLateEntriesByEntityTypeAndId(
-            $assignment, $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        return $this->countEntriesByEntityType(
+            $entityType, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     *
+     * @param int $createdDate
+     *
+     * @return mixed
+     */
+    public function countEntriesByContentObjectPublicationWithCreatedDateLargerThan(
+        ContentObjectPublication $contentObjectPublication, $entityType, $createdDate
+    )
+    {
+        return $this->countEntriesByEntityTypeWithCreatedDateLargerThan(
+            $entityType, $createdDate, $this->getContentObjectPublicationCondition($contentObjectPublication)
         );
     }
 
@@ -361,94 +135,31 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
 
     /**
      *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param integer $contentObjectPublicationIdentifier
      *
      * @return integer
      */
-    public function countDistinctScoreForContentObjectPublicationEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
-    )
+    public function countEntriesForContentObjectPublicationIdentifier($contentObjectPublicationIdentifier)
     {
-        return parent::countDistinctScoreForEntityTypeAndId(
-            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        return $this->countEntries(
+            $this->getContentObjectPublicationConditionByIdentifier($contentObjectPublicationIdentifier)
         );
     }
 
     /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
+     * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityId
      *
      * @return int
      */
-    public function retrieveAverageScoreForContentObjectPublicationEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    public function countLateEntriesByContentObjectPublicationEntityTypeAndId(
+        Assignment $assignment, ContentObjectPublication $contentObjectPublication, $entityType, $entityId
     )
     {
-        return $this->retrieveAverageScoreForEntityTypeAndId(
-            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
-        );
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function retrieveLastScoreForContentObjectPublicationEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
-    )
-    {
-        return $this->retrieveLastScoreForEntityTypeAndId(
-            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
-        );
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieveEntriesForContentObjectPublicationEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityId,
-        Condition $condition = null, $offset = null, $count = null, $orderProperty = []
-    )
-    {
-        return $this->retrieveEntriesForEntityTypeAndId(
-            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication, $condition),
-            $offset, $count,
-            $orderProperty
-        );
-    }
-
-    /**
-     *
-     * @param ContentObjectPublication $contentObjectPublication
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
-        ContentObjectPublication $contentObjectPublication, $entityType,
-        $entityIdentifiers
-    )
-    {
-        return $this->findEntriesByEntityTypeAndIdentifiers(
-            $entityType, $entityIdentifiers, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        return $this->countLateEntriesByEntityTypeAndId(
+            $assignment, $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
         );
     }
 
@@ -467,18 +178,19 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $entityType
-     * @param int $entityIdentifier
      *
-     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer[] $entityIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public function findLastEntryForEntityByContentObjectPublication(
-        ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifier
+    public function findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifiers
     )
     {
-        return $this->findLastEntryForEntity(
-            $entityType, $entityIdentifier, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        return $this->findEntriesByEntityTypeAndIdentifiers(
+            $entityType, $entityIdentifiers, $this->getContentObjectPublicationCondition($contentObjectPublication)
         );
     }
 
@@ -502,8 +214,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
         $joins = new Joins();
         $joins->add(
             new Join(
-                Publication::class,
-                new AndCondition(
+                Publication::class, new AndCondition(
                     [
                         new EqualityCondition(
                             new PropertyConditionVariable(Publication::class, Publication::PROPERTY_PUBLICATION_ID),
@@ -541,6 +252,162 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     }
 
     /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Entry|\Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry|\Chamilo\Libraries\Storage\DataClass\DataClass
+     */
+    public function findLastEntryForEntityByContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifier
+    )
+    {
+        return $this->findLastEntryForEntity(
+            $entityType, $entityIdentifier, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $groupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetCourseGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            $this->getTargetEntitiesCondition(CourseGroup::class, $groupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForCourseGroup(), CourseGroup::class,
+            $this->getTargetBaseVariable(CourseGroup::class)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int[] $courseGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $courseGroupIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_COURSE_GROUP,
+            $this->getTargetEntitiesCondition(CourseGroup::class, $courseGroupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForCourseGroup(), CourseGroup::class,
+            $this->getTargetBaseVariable(CourseGroup::class)
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $groupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetPlatformGroupsForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $groupIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP, $this->getTargetEntitiesCondition(Group::class, $groupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForPlatformGroups(), Group::class, $this->getTargetBaseVariable(Group::class)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int[] $platformGroupIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $platformGroupIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_PLATFORM_GROUP,
+            $this->getTargetEntitiesCondition(Group::class, $platformGroupIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForPlatformGroups(), Group::class, $this->getTargetBaseVariable(Group::class)
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_USER, $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForUser(), User::class, $this->getTargetBaseVariable(User::class)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersWithEntriesForContentObjectPublication(
+        ContentObjectPublication $contentObjectPublication, array $userIds, $condition = null, $offset = null,
+        $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_USER, $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
+            $this->getContentObjectPublicationCondition($contentObjectPublication), $offset, $count, $orderBy,
+            $this->getDataClassPropertiesForUser(), User::class, $this->getTargetBaseVariable(User::class)
+        );
+    }
+
+    /**
      * @param ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
@@ -565,10 +432,8 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     {
         $contentObjectPublicationCondition = new EqualityCondition(
             new PropertyConditionVariable(
-                $this->getEntryClassName(),
-                Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
-            ),
-            new StaticConditionVariable($contentObjectPublicationIdentifier)
+                $this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+            ), new StaticConditionVariable($contentObjectPublicationIdentifier)
         );
 
         $conditions = [];
@@ -592,10 +457,8 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     {
         $contentObjectPublicationCondition = new InCondition(
             new PropertyConditionVariable(
-                $this->getEntryClassName(),
-                Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
-            ),
-            $contentObjectPublicationIdentifiers
+                $this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+            ), $contentObjectPublicationIdentifiers
         );
 
         $conditions = [];
@@ -608,11 +471,38 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     }
 
     /**
-     * @return string
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
      */
-    protected function getEntryClassName()
+    protected function getDataClassPropertiesForCourseGroup()
     {
-        return Entry::class;
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
+
+        return $properties;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForPlatformGroups()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+
+        return $properties;
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForUser()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+
+        return $properties;
     }
 
     /**
@@ -626,8 +516,73 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
     /**
      * @return string
      */
+    protected function getEntryClassName()
+    {
+        return Entry::class;
+    }
+
+    /**
+     * @return string
+     */
     protected function getScoreClassName()
     {
         return Score::class;
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function retrieveAverageScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->retrieveAverageScoreForEntityTypeAndId(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieveEntriesForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId, Condition $condition = null,
+        $offset = null, $count = null, $orderProperty = null
+    )
+    {
+        return $this->retrieveEntriesForEntityTypeAndId(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication, $condition),
+            $offset, $count, $orderProperty
+        );
+    }
+
+    /**
+     *
+     * @param ContentObjectPublication $contentObjectPublication
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function retrieveLastScoreForContentObjectPublicationEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, $entityType, $entityId
+    )
+    {
+        return $this->retrieveLastScoreForEntityTypeAndId(
+            $entityType, $entityId, $this->getContentObjectPublicationCondition($contentObjectPublication)
+        );
     }
 }

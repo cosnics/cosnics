@@ -104,15 +104,19 @@ class CourseRequestForm extends FormValidator
             $this->addElement('category', Translation::get('CourseRequestProperties'));
             if ($this->multiple_users)
             {
-                $order = [];
-                $order[] = new OrderProperty(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
+                $order = new OrderBy();
+                $order->add(
+                    new OrderProperty(
+                        new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
+                    )
                 );
-                $order[] = new OrderProperty(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
+                $order->add(
+                    new OrderProperty(
+                        new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
+                    )
                 );
 
-                $parameters = new DataClassRetrievesParameters(null, null, null, new OrderBy($order));
+                $parameters = new DataClassRetrievesParameters(null, null, null, $order);
                 $users_result = DataManager::retrieves(
                     User::class, $parameters
                 );

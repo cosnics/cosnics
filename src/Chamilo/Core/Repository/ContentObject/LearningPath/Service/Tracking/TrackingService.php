@@ -549,7 +549,7 @@ class TrackingService
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getLearningPathAttemptsWithUser(LearningPath $learningPath, TreeNode $treeNode = null,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = [])
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null)
     {
         return $this->attemptTrackingService->getLearningPathAttemptsWithUser(
             $learningPath,
@@ -587,7 +587,7 @@ class TrackingService
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function getTargetUsersWithLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = [])
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null)
     {
         return $this->attemptTrackingService->getTargetUsersWithLearningPathAttempts(
             $learningPath,

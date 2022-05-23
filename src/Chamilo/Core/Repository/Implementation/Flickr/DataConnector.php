@@ -339,7 +339,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      *

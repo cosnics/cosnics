@@ -104,13 +104,13 @@ class ContentObjectService
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function getContentObjectsByTypeForWorkspace(
         $contentObjectClassName, WorkspaceInterface $workspace, ConditionFilterRenderer $filterConditionRenderer,
-        $offset = null, $count = null, $orderProperty = []
+        $offset = null, $count = null, $orderProperty = null
     )
     {
         $contentObjectClassName = empty($contentObjectClassName) ? ContentObject::class : $contentObjectClassName;
@@ -135,7 +135,7 @@ class ContentObjectService
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      *

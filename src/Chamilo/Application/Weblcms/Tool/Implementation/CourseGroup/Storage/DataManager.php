@@ -237,7 +237,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
      */

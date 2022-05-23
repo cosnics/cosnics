@@ -391,7 +391,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param integer $offset
      * @param integer $count
      *
@@ -399,7 +399,7 @@ class ContentObjectSaver
      * @throws \Exception
      */
     public function findContentObjectAttachments(
-        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = [], $offset = null,
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = null, $offset = null,
         $count = null
     )
     {

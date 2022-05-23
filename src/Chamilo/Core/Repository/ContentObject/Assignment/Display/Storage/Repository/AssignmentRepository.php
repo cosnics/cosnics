@@ -876,7 +876,7 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
      * @param integer $offset
      * @param integer $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
@@ -949,7 +949,7 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $joinCondition
      * @param integer $offset
      * @param integer $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param DataClassProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
@@ -1167,12 +1167,12 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieveEntriesForEntityTypeAndId(
-        $entityType, $entityId, Condition $condition = null, $offset = null, $count = null, $orderProperty = []
+        $entityType, $entityId, Condition $condition = null, $offset = null, $count = null, $orderProperty = null
     )
     {
         $condition = $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition);

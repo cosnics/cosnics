@@ -212,12 +212,12 @@ class GroupRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroups(
-        Condition $condition = null, int $count = null, int $offset = null, array $orderBy = []
+        Condition $condition = null, int $count = null, int $offset = null, array $orderBy = null
     )
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
@@ -232,14 +232,13 @@ class GroupRepository
      */
     public function findGroupsByIdentifiersOrderedByName($groupIdentifiers)
     {
-        $orderProperties = [];
-        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+        $orderBy = OrderBy::generate(Group::class, Group::PROPERTY_NAME);
 
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $groupIdentifiers);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperties))
+            Group::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
     }
 

@@ -454,12 +454,12 @@ class ItemService
      * @param integer $parentIdentifier
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = []
+        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = null
     )
     {
         return $this->getItemRepository()->findItemsByParentIdentifier(

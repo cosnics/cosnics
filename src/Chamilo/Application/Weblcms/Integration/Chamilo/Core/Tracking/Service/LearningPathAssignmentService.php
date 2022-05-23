@@ -283,11 +283,11 @@ class LearningPathAssignmentService extends
         {
             $job = new Job();
             $job->setProcessorClass(EntryNotificationJobProcessor::class)->setParameter(
-                    EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
-                )->setParameter(
-                    EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
-                    $treeNodeAttempt->get_publication_id()
-                );
+                EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
+            )->setParameter(
+                EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
+                $treeNodeAttempt->get_publication_id()
+            );
 
             $this->jobProducer->produceJob($job, 'notifications');
         }
@@ -414,7 +414,7 @@ class LearningPathAssignmentService extends
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -475,7 +475,7 @@ class LearningPathAssignmentService extends
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -496,20 +496,25 @@ class LearningPathAssignmentService extends
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersWithEntriesForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
-        $condition = null, $offset = null, $count = null, $orderProperty = []
+        $condition = null, $offset = null, $count = null, $orderProperty = null
     )
     {
-        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        if (is_null($orderProperty))
+        {
+            $orderProperty = new OrderBy();
+        }
+
+        $orderProperty->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)));
+        $orderProperty->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
 
         return $this->assignmentRepository->findTargetUsersWithEntriesForTreeNodeData(
-            $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, new OrderBy($orderProperty)
+            $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, $orderProperty
         );
     }
 

@@ -13,9 +13,9 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -40,6 +40,293 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
 
     /**
+     * Counts the assessment attempts with the given user
+     *
+     * @param Condition $condition
+     *
+     * @return int
+     */
+    public static function count_assessment_attempts_with_user($condition = null)
+    {
+        $parameters = new DataClassCountParameters($condition, self::get_assessment_attempts_user_joins());
+
+        return self::count(AssessmentAttempt::class, $parameters);
+    }
+
+    /**
+     * Counts the courses that are accessed after a given timestamp
+     *
+     * @param int $timestamp
+     *
+     * @return int
+     */
+    public static function count_courses_with_last_access_after_time($timestamp)
+    {
+        return self::count_courses_with_last_access_against_time(
+            $timestamp, ComparisonCondition::GREATER_THAN_OR_EQUAL
+        );
+    }
+
+    /**
+     * Counts the courses that are accessed against a given timestamp, the operator is given to determine how to handle
+     * the timestamp (before, after, equals...)
+     *
+     * @param int $timestamp
+     *
+     * @param $operator
+     *
+     * @return int
+     */
+    public static function count_courses_with_last_access_against_time($timestamp, $operator)
+    {
+        $having = new ComparisonCondition(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_LAST_ACCESS_DATE)
+            ), $operator, new StaticConditionVariable($timestamp)
+        );
+
+        $parameters = new DataClassCountGroupedParameters(
+            null, new DataClassProperties(
+                array(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
+            ), $having, null,
+            new GroupBy(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
+        );
+
+        return self::count_grouped(CourseVisit::class, $parameters);
+    }
+
+    /**
+     * Counts the courses that are accessed before a given timestamp
+     *
+     * @param int $timestamp
+     *
+     * @return int
+     */
+    public static function count_courses_with_last_access_before_time($timestamp)
+    {
+        return self::count_courses_with_last_access_against_time($timestamp, ComparisonCondition::LESS_THAN_OR_EQUAL);
+    }
+
+    /**
+     * Returns the joins for the assessment attempt with the user table
+     *
+     * @return Joins
+     */
+    public static function get_assessment_attempts_user_joins()
+    {
+        $join_conditions = [];
+
+        $join_conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
+            new PropertyConditionVariable(User::class, User::PROPERTY_ID)
+        );
+
+        $join_condition = new AndCondition($join_conditions);
+
+        $joins = new Joins();
+        $joins->add(new Join(User::class, $join_condition));
+
+        return $joins;
+    }
+
+    /**
+     * Gets the condition to retrieve a course visit tracker by course data
+     *
+     * @param int $course_id
+     * @param int $tool_id
+     * @param int $category_id
+     * @param int $publication_id
+     * @param bool $use_null_values - use null values as actual select values or not - default true
+     *
+     * @return AndCondition
+     */
+    public static function get_course_visit_conditions_by_course_data(
+        $course_id, $tool_id, $category_id, $publication_id, $use_null_values = true
+    )
+    {
+        $conditions = [];
+
+        if (!is_null($course_id) || $use_null_values)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID),
+                !is_null($course_id) ? new StaticConditionVariable($course_id) : null
+            );
+        }
+
+        if (!is_null($tool_id) || $use_null_values)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOOL_ID),
+                !is_null($tool_id) ? new StaticConditionVariable($tool_id) : null
+            );
+        }
+
+        if (!is_null($category_id) || $use_null_values)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_CATEGORY_ID),
+                !is_null($category_id) ? new StaticConditionVariable($category_id) : null
+            );
+        }
+
+        if (!is_null($publication_id) || $use_null_values)
+        {
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_PUBLICATION_ID),
+                !is_null($publication_id) ? new StaticConditionVariable($publication_id) : null
+            );
+        }
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * CourseVisit Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the conditions for the course visit tracker
+     *
+     * @param int $course_id
+     * @param int $tool_id
+     * @param int $user_id
+     * @param int $category_id
+     * @param int $publication_id
+     * @param bool $use_null_values - use null values as actual select values or not - default true
+     *
+     * @return \libraries\storage\AndCondition
+     */
+    public static function get_course_visit_conditions_by_user_and_course_data(
+        $user_id, $course_id, $tool_id, $category_id, $publication_id, $use_null_values = true
+    )
+    {
+        $conditions = [];
+
+        $conditions[] = self::get_course_visit_conditions_by_user_data($user_id);
+        $conditions[] = self::get_course_visit_conditions_by_course_data(
+            $course_id, $tool_id, $category_id, $publication_id, $use_null_values
+        );
+
+        return new AndCondition($conditions);
+    }
+
+    /**
+     * Gets the condition to retrieve a course visit tracker by user data
+     *
+     * @param int $user_id
+     *
+     * @return EqualityCondition
+     */
+    public static function get_course_visit_conditions_by_user_data($user_id)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
+    }
+
+    /**
+     * Returns the select properties for a summary of the course visit tracker
+     *
+     * @return DataClassProperties
+     */
+    public static function get_course_visit_summary_select_properties()
+    {
+        $properties = new DataClassProperties();
+
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MIN,
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_FIRST_ACCESS_DATE),
+                CourseVisit::PROPERTY_FIRST_ACCESS_DATE
+            )
+        );
+
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::MAX,
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_LAST_ACCESS_DATE),
+                CourseVisit::PROPERTY_LAST_ACCESS_DATE
+            )
+        );
+
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::SUM,
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS),
+                CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS
+            )
+        );
+
+        $properties->add(
+            new FunctionConditionVariable(
+                FunctionConditionVariable::SUM,
+                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOTAL_TIME),
+                CourseVisit::PROPERTY_TOTAL_TIME
+            )
+        );
+
+        return $properties;
+    }
+
+    /**
+     * Retrieves all the assessment attempts joined with the user table
+     *
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public static function retrieve_assessment_attempts_with_user(
+        $condition = null, $offset = null, $count = null, $order_by = null
+    )
+    {
+        $properties = new DataClassProperties();
+
+        $properties->add(new PropertiesConditionVariable(AssessmentAttempt::class));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
+
+        $parameters = new RecordRetrievesParameters(
+            $properties, $condition, $count, $offset, $order_by, self::get_assessment_attempts_user_joins()
+        );
+
+        return self::records(AssessmentAttempt::class, $parameters);
+    }
+
+    /**
+     * Returns the summary data of a the access of a course, optionally limited by user
+     *
+     * @param int $course_id
+     * @param int $user_id
+     *
+     * @return string[]
+     */
+    public static function retrieve_course_access_summary_data($course_id, $user_id = null)
+    {
+        $condition = $user_id ? self::get_course_visit_conditions_by_user_and_course_data(
+            $user_id, $course_id, null, null, null, false
+        ) : self::get_course_visit_conditions_by_course_data($course_id, null, null, null, false);
+
+        $parameters = new RecordRetrieveParameters(self::get_course_visit_summary_select_properties(), $condition);
+
+        return self::record(CourseVisit::class, $parameters);
+    }
+
+    /**
+     * **************************************************************************************************************
+     * AssessmentAttempt Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Retrieves a course visit tracker record by user and course data category_id and publication_id can be null, but
      * still need to be a condition because we can also register access to a course without a publication or category
      *
@@ -55,45 +342,47 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
     public static function retrieve_course_visit_by_user_and_course_data(
-        $user_id, $course_id, $tool_id,
-        $category_id = null, $publication_id = null, $useNullValues = true
+        $user_id, $course_id, $tool_id, $category_id = null, $publication_id = null, $useNullValues = true
     )
     {
         $condition = self::get_course_visit_conditions_by_user_and_course_data(
-            $user_id,
-            $course_id,
-            $tool_id,
-            $category_id,
-            $publication_id,
-            $useNullValues
+            $user_id, $course_id, $tool_id, $category_id, $publication_id, $useNullValues
         );
 
         return self::retrieve(CourseVisit::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
-     * Returns the summary data of a the access of a course, optionally limited by user
+     * Retrieves the summary access data for a publication (optionally limited to a user or not)
      *
      * @param int $course_id
-     * @param int $user_id
+     * @param int $tool_id
+     * @param int $category_id
+     * @param int $publication_id
+     * @param int $user_id - [OPTIONAL]
      *
      * @return string[]
      */
-    public static function retrieve_course_access_summary_data($course_id, $user_id = null)
+    public static function retrieve_publication_access_summary_data(
+        $course_id, $tool_id, $category_id, $publication_id, $user_id = null
+    )
     {
         $condition = $user_id ? self::get_course_visit_conditions_by_user_and_course_data(
-            $user_id,
-            $course_id,
-            null,
-            null,
-            null,
-            false
-        ) : self::get_course_visit_conditions_by_course_data($course_id, null, null, null, false);
+            $user_id, $course_id, $tool_id, $category_id, $publication_id, false
+        ) : self::get_course_visit_conditions_by_course_data(
+            $course_id, $tool_id, $category_id, $publication_id, false
+        );
 
         $parameters = new RecordRetrieveParameters(self::get_course_visit_summary_select_properties(), $condition);
 
         return self::record(CourseVisit::class, $parameters);
     }
+
+    /**
+     * **************************************************************************************************************
+     * AssessmentAttempt Helper Functionality *
+     * **************************************************************************************************************
+     */
 
     /**
      * Returns the summary access data for the tools (optionally limited to a user or not)
@@ -144,332 +433,5 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new RecordRetrievesParameters($properties, null, null, null, [], $joins, $group_by);
 
         return self::records(CourseVisit::class, $parameters);
-    }
-
-    /**
-     * Retrieves the summary access data for a publication (optionally limited to a user or not)
-     *
-     * @param int $course_id
-     * @param int $tool_id
-     * @param int $category_id
-     * @param int $publication_id
-     * @param int $user_id - [OPTIONAL]
-     *
-     * @return string[]
-     */
-    public static function retrieve_publication_access_summary_data(
-        $course_id, $tool_id, $category_id, $publication_id,
-        $user_id = null
-    )
-    {
-        $condition = $user_id ? self::get_course_visit_conditions_by_user_and_course_data(
-            $user_id,
-            $course_id,
-            $tool_id,
-            $category_id,
-            $publication_id,
-            false
-        ) : self::get_course_visit_conditions_by_course_data(
-            $course_id,
-            $tool_id,
-            $category_id,
-            $publication_id,
-            false
-        );
-
-        $parameters = new RecordRetrieveParameters(self::get_course_visit_summary_select_properties(), $condition);
-
-        return self::record(CourseVisit::class, $parameters);
-    }
-
-    /**
-     * Counts the courses that are accessed after a given timestamp
-     *
-     * @param int $timestamp
-     *
-     * @return int
-     */
-    public static function count_courses_with_last_access_after_time($timestamp)
-    {
-        return self::count_courses_with_last_access_against_time(
-            $timestamp, ComparisonCondition::GREATER_THAN_OR_EQUAL
-        );
-    }
-
-    /**
-     * Counts the courses that are accessed before a given timestamp
-     *
-     * @param int $timestamp
-     *
-     * @return int
-     */
-    public static function count_courses_with_last_access_before_time($timestamp)
-    {
-        return self::count_courses_with_last_access_against_time($timestamp, ComparisonCondition::LESS_THAN_OR_EQUAL);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * CourseVisit Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the conditions for the course visit tracker
-     *
-     * @param int $course_id
-     * @param int $tool_id
-     * @param int $user_id
-     * @param int $category_id
-     * @param int $publication_id
-     * @param bool $use_null_values - use null values as actual select values or not - default true
-     *
-     * @return \libraries\storage\AndCondition
-     */
-    public static function get_course_visit_conditions_by_user_and_course_data(
-        $user_id, $course_id, $tool_id,
-        $category_id, $publication_id, $use_null_values = true
-    )
-    {
-        $conditions = [];
-
-        $conditions[] = self::get_course_visit_conditions_by_user_data($user_id);
-        $conditions[] = self::get_course_visit_conditions_by_course_data(
-            $course_id,
-            $tool_id,
-            $category_id,
-            $publication_id,
-            $use_null_values
-        );
-
-        return new AndCondition($conditions);
-    }
-
-    /**
-     * Gets the condition to retrieve a course visit tracker by user data
-     *
-     * @param int $user_id
-     *
-     * @return EqualityCondition
-     */
-    public static function get_course_visit_conditions_by_user_data($user_id)
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id)
-        );
-    }
-
-    /**
-     * Gets the condition to retrieve a course visit tracker by course data
-     *
-     * @param int $course_id
-     * @param int $tool_id
-     * @param int $category_id
-     * @param int $publication_id
-     * @param bool $use_null_values - use null values as actual select values or not - default true
-     *
-     * @return AndCondition
-     */
-    public static function get_course_visit_conditions_by_course_data(
-        $course_id, $tool_id, $category_id,
-        $publication_id, $use_null_values = true
-    )
-    {
-        $conditions = [];
-
-        if (!is_null($course_id) || $use_null_values)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID),
-                !is_null($course_id) ? new StaticConditionVariable($course_id) : null
-            );
-        }
-
-        if (!is_null($tool_id) || $use_null_values)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOOL_ID),
-                !is_null($tool_id) ? new StaticConditionVariable($tool_id) : null
-            );
-        }
-
-        if (!is_null($category_id) || $use_null_values)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_CATEGORY_ID),
-                !is_null($category_id) ? new StaticConditionVariable($category_id) : null
-            );
-        }
-
-        if (!is_null($publication_id) || $use_null_values)
-        {
-            $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_PUBLICATION_ID),
-                !is_null($publication_id) ? new StaticConditionVariable($publication_id) : null
-            );
-        }
-
-        return new AndCondition($conditions);
-    }
-
-    /**
-     * Returns the select properties for a summary of the course visit tracker
-     *
-     * @return DataClassProperties
-     */
-    public static function get_course_visit_summary_select_properties()
-    {
-        $properties = new DataClassProperties();
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::MIN,
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_FIRST_ACCESS_DATE),
-                CourseVisit::PROPERTY_FIRST_ACCESS_DATE
-            )
-        );
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::MAX,
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_LAST_ACCESS_DATE),
-                CourseVisit::PROPERTY_LAST_ACCESS_DATE
-            )
-        );
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::SUM,
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS),
-                CourseVisit::PROPERTY_TOTAL_NUMBER_OF_ACCESS
-            )
-        );
-
-        $properties->add(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::SUM,
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_TOTAL_TIME),
-                CourseVisit::PROPERTY_TOTAL_TIME
-            )
-        );
-
-        return $properties;
-    }
-
-    /**
-     * Counts the courses that are accessed against a given timestamp, the operator is given to determine how to handle
-     * the timestamp (before, after, equals...)
-     *
-     * @param int $timestamp
-     *
-     * @param $operator
-     *
-     * @return int
-     */
-    public static function count_courses_with_last_access_against_time($timestamp, $operator)
-    {
-        $having = new ComparisonCondition(
-            new FunctionConditionVariable(
-                FunctionConditionVariable::MAX,
-                new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_LAST_ACCESS_DATE)
-            ),
-            $operator,
-            new StaticConditionVariable($timestamp)
-        );
-
-        $parameters = new DataClassCountGroupedParameters(
-            null,
-            new DataClassProperties(
-                array(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
-            ),
-            $having,
-            null,
-            new GroupBy(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
-        );
-
-        return self::count_grouped(CourseVisit::class, $parameters);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * AssessmentAttempt Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Retrieves all the assessment attempts joined with the user table
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public static function retrieve_assessment_attempts_with_user(
-        $condition = null, $offset = null, $count = null,
-        $order_by = []
-    )
-    {
-        $properties = new DataClassProperties();
-
-        $properties->add(new PropertiesConditionVariable(AssessmentAttempt::class));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
-
-        $parameters = new RecordRetrievesParameters(
-            $properties,
-            $condition,
-            $count,
-            $offset,
-            $order_by,
-            self::get_assessment_attempts_user_joins()
-        );
-
-        return self::records(AssessmentAttempt::class, $parameters);
-    }
-
-    /**
-     * Counts the assessment attempts with the given user
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public static function count_assessment_attempts_with_user($condition = null)
-    {
-        $parameters = new DataClassCountParameters($condition, self::get_assessment_attempts_user_joins());
-
-        return self::count(AssessmentAttempt::class, $parameters);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * AssessmentAttempt Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the joins for the assessment attempt with the user table
-     *
-     * @return Joins
-     */
-    public static function get_assessment_attempts_user_joins()
-    {
-        $join_conditions = [];
-
-        $join_conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID),
-            new PropertyConditionVariable(User::class, User::PROPERTY_ID)
-        );
-
-        $join_condition = new AndCondition($join_conditions);
-
-        $joins = new Joins();
-        $joins->add(new Join(User::class, $join_condition));
-
-        return $joins;
     }
 }

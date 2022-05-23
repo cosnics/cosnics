@@ -201,11 +201,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_active_users($condition = null, $count = null, $offset = null, $order_by = [])
+    public static function retrieve_active_users($condition = null, $count = null, $offset = null, $order_by = null)
     {
         $conditions = [];
         if ($condition)
@@ -244,11 +244,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = []
+    public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = null
     )
     {
         $conditions = [];
@@ -273,11 +273,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = []
+    public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = null
     )
     {
         $conditions = [];

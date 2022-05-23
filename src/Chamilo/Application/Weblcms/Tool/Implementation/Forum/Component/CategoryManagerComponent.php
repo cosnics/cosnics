@@ -130,6 +130,13 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         return DataManager::count_content_object_publications($condition);
     }
 
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
     public function getCategory()
     {
         $category = new ContentObjectPublicationCategory();
@@ -138,13 +145,6 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
         $category->set_allow_change(1);
 
         return $category;
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Configuration\Category\Manager::PARAM_CATEGORY_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function get_category_parameters()
@@ -188,7 +188,7 @@ class CategoryManagerComponent extends Manager implements DelegateComponent, Cat
      * (non-PHPdoc) @see \configuration\category\CategorySupport::get_category_parameters()
      */
 
-    public function retrieve_categories($condition = null, $offset = null, $count = null, $order_property = [])
+    public function retrieve_categories($condition = null, $offset = null, $count = null, $order_property = null)
     {
         if ($condition)
         {

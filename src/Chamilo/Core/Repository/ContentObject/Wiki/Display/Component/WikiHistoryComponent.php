@@ -178,7 +178,7 @@ class WikiHistoryComponent extends Manager implements TableSupport
     }
 
     public function retrieve_content_object_versions_resultset(
-        $condition = null, $order_by = [], $offset = 0, $max_objects = - 1
+        $condition = null, $order_by = null, $offset = 0, $max_objects = - 1
     )
     {
         return DataManager::retrieve_content_objects(

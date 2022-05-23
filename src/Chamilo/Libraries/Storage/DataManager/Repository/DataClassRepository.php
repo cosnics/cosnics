@@ -246,11 +246,6 @@ class DataClassRepository
      */
     public function count($dataClassName, DataClassCountParameters $parameters = null)
     {
-        if (!$parameters instanceof DataClassCountParameters)
-        {
-            $parameters = DataClassCountParameters::generate($parameters);
-        }
-
         if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
             return $this->countCompositeDataClass($dataClassName, $parameters);
@@ -540,11 +535,6 @@ class DataClassRepository
      */
     public function distinct($dataClassName, DataClassDistinctParameters $parameters)
     {
-        if (!$parameters instanceof DataClassDistinctParameters)
-        {
-            $parameters = DataClassDistinctParameters::generate($parameters);
-        }
-
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
@@ -818,11 +808,6 @@ class DataClassRepository
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
     {
-        if (!$parameters instanceof RecordRetrievesParameters)
-        {
-            $parameters = RecordRetrievesParameters::generate($parameters);
-        }
-
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
@@ -1035,11 +1020,6 @@ class DataClassRepository
      */
     public function retrieves($dataClassName, DataClassRetrievesParameters $parameters = null)
     {
-        if (!$parameters instanceof DataClassRetrievesParameters)
-        {
-            $parameters = DataClassRetrievesParameters::generate($parameters);
-        }
-
         if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
             return $this->retrievesCompositeDataClass($dataClassName, $parameters);
@@ -1236,12 +1216,13 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
      * @param Condition $condition
      * @param integer $offset
-     * @param integer $count $param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy[]
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy[]
      *
      * @return boolean
      */
     public function updates(
-        $dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = []
+        $dataClassName, $properties, Condition $condition, $offset = null, $count = null, $orderBy = null
     )
     {
         if ($properties instanceof DataClassProperties)

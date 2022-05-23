@@ -23,10 +23,10 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
@@ -475,8 +475,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $course_rel_course_setting_conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
                 CourseRelCourseSetting::class, CourseRelCourseSetting::PROPERTY_COURSE_ID
-            ), new PropertyConditionVariable(Course::class, CourseRelCourseSetting::PROPERTY_ID),
-            $courses_condition
+            ), new PropertyConditionVariable(Course::class, CourseRelCourseSetting::PROPERTY_ID), $courses_condition
         );
 
         if (!is_null($course_setting_id))
@@ -942,7 +941,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -1066,7 +1065,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_content_object_publication_categories_from_course(
-        $course_id, $tools = [], $order_by = []
+        $course_id, $tools = [], $order_by = null
     )
     {
         $conditions = [];
@@ -1101,7 +1100,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_content_object_publications_from_course($course_id, $order_by = [])
+    public static function retrieve_content_object_publications_from_course($course_id, $order_by = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1285,21 +1284,24 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
                 $conditions[] = $condition;
             }
 
-            $order_by = [];
+            $order_by = new OrderBy();
 
-            $order_by[] = new OrderProperty(
-                new PropertyConditionVariable(
-                    CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT
-                ), SORT_ASC
+            $order_by->add(
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT
+                    ), SORT_ASC
+                )
             );
 
-            $order_by[] = new OrderProperty(
-                new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE), SORT_ASC
+            $order_by->add(
+                new OrderProperty(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE), SORT_ASC
+                )
             );
 
             $parameters = new RecordRetrievesParameters(
-                $properties, new AndCondition($conditions), /* $count = */ null, /* $offset = */ null, new OrderBy($order_by),
-                new Joins(array($join))
+                $properties, new AndCondition($conditions), null, null, $order_by, new Joins(array($join))
             );
 
             $courses = self::records(Course::class, $parameters);

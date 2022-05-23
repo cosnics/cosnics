@@ -327,7 +327,7 @@ class AttemptTrackingService
      */
     public function getLearningPathAttemptsWithUser(
         LearningPath $learningPath, TreeNode $treeNode = null, Condition $condition = null,
-        $offset = 0, $count = 0, $orderBy = []
+        $offset = 0, $count = 0, $orderBy = null
     )
     {
         $treeNodeDataIds = $treeNode instanceof TreeNode ?
@@ -368,7 +368,7 @@ class AttemptTrackingService
      */
     public function getTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, TreeNode $treeNode = null,
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
         $treeNodeDataIds = $treeNode instanceof TreeNode ?

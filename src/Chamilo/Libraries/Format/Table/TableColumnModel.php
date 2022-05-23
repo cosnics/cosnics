@@ -187,7 +187,7 @@ abstract class TableColumnModel extends TableComponent
      * @param integer $columnNumber
      * @param integer $orderDirection
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
     public function get_column_object_table_order($columnNumber, $orderDirection)
     {
@@ -195,7 +195,7 @@ abstract class TableColumnModel extends TableComponent
 
         if ($column)
         {
-            return new OrderBy([new OrderProperty($column->getConditionVariable(), $orderDirection)]);
+            return new OrderProperty($column->getConditionVariable(), $orderDirection);
         }
 
         return null;

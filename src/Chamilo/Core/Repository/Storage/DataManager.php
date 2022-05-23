@@ -397,7 +397,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function count_doubles_in_repository(
-        $condition = null, $count = null, $offset = null, $order_property = []
+        $condition = null, $count = null, $offset = null, $order_property = null
     )
     {
         return count(self::determine_doubles_in_repository($condition));
@@ -1199,7 +1199,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     public static function retrieve_doubles_in_repository(
-        $condition = null, $count = null, $offset = null, $order_property = []
+        $condition = null, $count = null, $offset = null, $order_property = null
     )
     {
         $double_counts = self::determine_doubles_in_repository($condition);
@@ -1277,7 +1277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = [])
+    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = null)
     {
         $join = new Join(
             ContentObject::class, new EqualityCondition(

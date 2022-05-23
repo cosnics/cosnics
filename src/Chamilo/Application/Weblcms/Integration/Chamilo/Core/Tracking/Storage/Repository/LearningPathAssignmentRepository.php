@@ -30,117 +30,6 @@ class LearningPathAssignmentRepository extends
     \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\LearningPathAssignmentRepository
 {
     /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $treeNodeDataIdentifier
-     *
-     * @return integer
-     */
-    public function countEntriesForTreeNodeDataIdentifier(
-        ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier
-    )
-    {
-        return $this->countEntries(
-            $this->getTreeNodeDataConditionByIdentifierAndPublication(
-                $contentObjectPublication, $treeNodeDataIdentifier
-            )
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetUsersForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
-        $condition = null, $offset = null, $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityType(
-            Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForUser(),
-            User::class,
-            $this->getTargetBaseVariable(User::class)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param OrderProperty[] $orderBy
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetUsersWithEntriesForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
-        $condition = null, $offset = null, $count = null,
-        $orderBy = []
-    )
-    {
-        return $this->findTargetsForEntityTypeWithEntries(
-            Entry::ENTITY_TYPE_USER,
-            $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData),
-            $offset,
-            $count,
-            $orderBy,
-            $this->getDataClassPropertiesForUser(),
-            User::class,
-            $this->getTargetBaseVariable(User::class)
-        );
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     */
-    protected function getDataClassPropertiesForUser()
-    {
-        $properties = new DataClassProperties();
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
-        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-
-        return $properties;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return $this->countFeedbackByEntityTypeAndEntityId(
-            $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType
@@ -175,6 +64,25 @@ class LearningPathAssignmentRepository extends
 
     /**
      *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return integer
+     */
+    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return parent::countDistinctFeedbackForEntityTypeAndId(
+            $entityType, $entityId,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
+    }
+
+    /**
+     *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment $assignment
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
@@ -189,6 +97,25 @@ class LearningPathAssignmentRepository extends
     {
         return $this->countDistinctLateEntriesByEntityType(
             $assignment, $entityType,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return integer
+     */
+    public function countDistinctScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return parent::countDistinctScoreForEntityTypeAndId(
+            $entityType, $entityId,
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
     }
@@ -217,119 +144,35 @@ class LearningPathAssignmentRepository extends
     /**
      *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param integer $treeNodeDataIdentifier
+     *
+     * @return integer
+     */
+    public function countEntriesForTreeNodeDataIdentifier(
+        ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier
+    )
+    {
+        return $this->countEntries(
+            $this->getTreeNodeDataConditionByIdentifierAndPublication(
+                $contentObjectPublication, $treeNodeDataIdentifier
+            )
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      * @param integer $entityType
      * @param integer $entityId
      *
      * @return integer
      */
-    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+    public function countFeedbackForTreeNodeDataByEntityTypeAndEntityId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
     )
     {
-        return parent::countDistinctFeedbackForEntityTypeAndId(
+        return $this->countFeedbackByEntityTypeAndEntityId(
             $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctScoreForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return parent::countDistinctScoreForEntityTypeAndId(
-            $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function retrieveAverageScoreForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return $this->retrieveAverageScoreForEntityTypeAndId(
-            $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function retrieveLastScoreForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return $this->retrieveLastScoreForEntityTypeAndId(
-            $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieveEntriesForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
-        Condition $condition = null, $offset = null, $count = null, $orderProperty = []
-    )
-    {
-        return $this->retrieveEntriesForEntityTypeAndId(
-            $entityType, $entityId,
-            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData, $condition), $offset,
-            $count,
-            $orderProperty
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType,
-        $entityIdentifiers
-    )
-    {
-        return $this->findEntriesByEntityTypeAndIdentifiers(
-            $entityType, $entityIdentifiers,
             $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
     }
@@ -345,7 +188,28 @@ class LearningPathAssignmentRepository extends
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
     )
     {
-        return $this->findEntries($this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData));
+        return $this->findEntries(
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer[] $entityIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifiers
+    )
+    {
+        return $this->findEntriesByEntityTypeAndIdentifiers(
+            $entityType, $entityIdentifiers,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
     }
 
     /**
@@ -361,8 +225,78 @@ class LearningPathAssignmentRepository extends
     )
     {
         return $this->findLastEntryForEntity(
-            $entityType, $entityIdentifier, $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+            $entityType, $entityIdentifier,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
+        $condition = null, $offset = null, $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityType(
+            Entry::ENTITY_TYPE_USER, $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData), $offset, $count,
+            $orderBy, $this->getDataClassPropertiesForUser(), User::class, $this->getTargetBaseVariable(User::class)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersWithEntriesForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
+        $condition = null, $offset = null, $count = null, $orderBy = null
+    )
+    {
+        return $this->findTargetsForEntityTypeWithEntries(
+            Entry::ENTITY_TYPE_USER, $this->getTargetEntitiesCondition(User::class, $userIds, $condition),
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData), $offset, $count,
+            $orderBy, $this->getDataClassPropertiesForUser(), User::class, $this->getTargetBaseVariable(User::class)
+        );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     */
+    protected function getDataClassPropertiesForUser()
+    {
+        $properties = new DataClassProperties();
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+
+        return $properties;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEntryAttachmentClassName()
+    {
+        return EntryAttachment::class;
     }
 
     /**
@@ -398,11 +332,31 @@ class LearningPathAssignmentRepository extends
     }
 
     /**
-     * @return string
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param int $treeNodeDataIdentifier
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
-    protected function getEntryAttachmentClassName()
+    protected function getTreeNodeDataConditionByIdentifierAndPublication(
+        ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier, Condition $condition = null
+    )
     {
-        return EntryAttachment::class;
+        $contentObjectPublicationCondition = new EqualityCondition(
+            new PropertyConditionVariable(
+                $this->getEntryClassName(), Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
+            ), new StaticConditionVariable($contentObjectPublication->getId())
+        );
+
+        $conditions = [];
+
+        ($condition instanceof Condition) ? $conditions[] = $condition : null;
+
+        $conditions[] = $contentObjectPublicationCondition;
+
+        $condition = new AndCondition($conditions);
+
+        return $this->getTreeNodeDataConditionByIdentifier($treeNodeDataIdentifier, $condition);
     }
 
     /**
@@ -423,31 +377,62 @@ class LearningPathAssignmentRepository extends
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param int $treeNodeDataIdentifier
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
      *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
+     * @return int
      */
-    protected function getTreeNodeDataConditionByIdentifierAndPublication(
-        ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier, Condition $condition = null
+    public function retrieveAverageScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
     )
     {
-        $contentObjectPublicationCondition = new EqualityCondition(
-            new PropertyConditionVariable(
-                $this->getEntryClassName(),
-                Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID
-            ),
-            new StaticConditionVariable($contentObjectPublication->getId())
+        return $this->retrieveAverageScoreForEntityTypeAndId(
+            $entityType, $entityId,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
         );
+    }
 
-        $conditions = [];
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieveEntriesForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
+        Condition $condition = null, $offset = null, $count = null, $orderProperty = null
+    )
+    {
+        return $this->retrieveEntriesForEntityTypeAndId(
+            $entityType, $entityId,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData, $condition), $offset,
+            $count, $orderProperty
+        );
+    }
 
-        ($condition instanceof Condition) ? $conditions[] = $condition : null;
-
-        $conditions[] = $contentObjectPublicationCondition;
-
-        $condition = new AndCondition($conditions);
-
-        return $this->getTreeNodeDataConditionByIdentifier($treeNodeDataIdentifier, $condition);
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function retrieveLastScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return $this->retrieveLastScoreForEntityTypeAndId(
+            $entityType, $entityId,
+            $this->getTreeNodeDataConditionByPublication($contentObjectPublication, $treeNodeData)
+        );
     }
 }

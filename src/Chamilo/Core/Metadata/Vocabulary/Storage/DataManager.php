@@ -57,7 +57,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      */
     public static function retrieve_vocabulary_users($condition, $count, $offset, $order_property)
     {

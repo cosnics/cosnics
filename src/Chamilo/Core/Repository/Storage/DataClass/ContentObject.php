@@ -87,12 +87,18 @@ class ContentObject extends CompositeDataClass
     const STATE_NORMAL = 2;
     const STATE_RECYCLED = 4;
 
+    private $attachment_ids = [];
+
     /**
      * objects attached to this object.
      */
     private $attachments = [];
 
-    private $attachment_ids = [];
+    /**
+     *
+     * @var ComplexContentObjectPath
+     */
+    private $complex_content_object_path;
 
     /**
      * Objects included into this object.
@@ -111,12 +117,6 @@ class ContentObject extends CompositeDataClass
      * @var \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
      */
     private $synchronization_data;
-
-    /**
-     *
-     * @var ComplexContentObjectPath
-     */
-    private $complex_content_object_path;
 
     /**
      *
@@ -766,6 +766,32 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
+     * Get the default properties of all objects.
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_OWNER_ID,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_TITLE,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_PARENT_ID,
+                self::PROPERTY_TEMPLATE_REGISTRATION_ID,
+                self::PROPERTY_CREATION_DATE,
+                self::PROPERTY_MODIFICATION_DATE,
+                self::PROPERTY_OBJECT_NUMBER,
+                self::PROPERTY_STATE,
+                self::PROPERTY_COMMENT,
+                self::PROPERTY_CONTENT_HASH,
+                self::PROPERTY_CURRENT
+            )
+        );
+    }
+
+    /**
      * @param integer $size
      * @param boolean $isAvailable
      * @param string[] $extraClasses
@@ -835,6 +861,14 @@ class ContentObject extends CompositeDataClass
     static public function getStorageSpaceProperty()
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'repository_content_object';
     }
 
     /**
@@ -966,7 +1000,7 @@ class ContentObject extends CompositeDataClass
         return $this->attachment_ids[$type];
     }
 
-    public function get_attachers($order_by = [], $offset = null, $count = null)
+    public function get_attachers($order_by = null, $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -996,7 +1030,7 @@ class ContentObject extends CompositeDataClass
      * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function get_attachments(
-        $type = self::ATTACHMENT_NORMAL, $order_by = [], $offset = null, $count = null
+        $type = self::ATTACHMENT_NORMAL, $order_by = null, $offset = null, $count = null
     )
     {
         if (!is_array($this->attachments[$type]))
@@ -1035,7 +1069,7 @@ class ContentObject extends CompositeDataClass
         return DataManager::retrieve_by_id(ContentObject::class, $content_object_id);
     }
 
-    public function get_children($order_by = [], $offset = null, $count = null)
+    public function get_children($order_by = null, $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1131,32 +1165,6 @@ class ContentObject extends CompositeDataClass
     }
 
     /**
-     * Get the default properties of all objects.
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_OWNER_ID,
-                self::PROPERTY_TYPE,
-                self::PROPERTY_TITLE,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_PARENT_ID,
-                self::PROPERTY_TEMPLATE_REGISTRATION_ID,
-                self::PROPERTY_CREATION_DATE,
-                self::PROPERTY_MODIFICATION_DATE,
-                self::PROPERTY_OBJECT_NUMBER,
-                self::PROPERTY_STATE,
-                self::PROPERTY_COMMENT,
-                self::PROPERTY_CONTENT_HASH,
-                self::PROPERTY_CURRENT
-            )
-        );
-    }
-
-    /**
      * Returns the description of this object.
      *
      * @return string The description.
@@ -1229,7 +1237,7 @@ class ContentObject extends CompositeDataClass
         );
     }
 
-    public function get_includers($order_by = [], $offset = null, $count = null)
+    public function get_includers($order_by = null, $offset = null, $count = null)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1252,13 +1260,13 @@ class ContentObject extends CompositeDataClass
 
     /**
      *
-     * @param array $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param null $offset
      * @param null $count
      *
      * @return ContentObject[]
      */
-    public function get_includes($order_by = [], $offset = null, $count = null)
+    public function get_includes($order_by = null, $offset = null, $count = null)
     {
         if (!is_array($this->includes))
         {
@@ -1340,6 +1348,8 @@ class ContentObject extends CompositeDataClass
         return $this->owner;
     }
 
+    // create a version
+
     public function get_owner_fullname()
     {
         $owner = $this->get_owner();
@@ -1351,8 +1361,6 @@ class ContentObject extends CompositeDataClass
 
         return Translation::getInstance()->getTranslation('UserUnknown', null, Manager::context());
     }
-
-    // create a version
 
     /**
      * Returns the ID of this object's owner.
@@ -1397,7 +1405,7 @@ class ContentObject extends CompositeDataClass
         return $this->getDefaultProperty(self::PROPERTY_PARENT_ID);
     }
 
-    public function get_parents($order_by = [], $offset = null, $count = null)
+    public function get_parents($order_by = null, $offset = null, $count = null)
     {
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
@@ -1449,6 +1457,8 @@ class ContentObject extends CompositeDataClass
         return $this->getDefaultProperty(self::PROPERTY_STATE);
     }
 
+    // XXX: Keep this around? Override? Make useful?
+
     /**
      *
      * @return \Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData
@@ -1472,19 +1482,9 @@ class ContentObject extends CompositeDataClass
         return $this->synchronization_data;
     }
 
-    // XXX: Keep this around? Override? Make useful?
-
     public function set_synchronization_data($external_sync)
     {
         $this->synchronization_data = $external_sync;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'repository_content_object';
     }
 
     public function get_template_registration()

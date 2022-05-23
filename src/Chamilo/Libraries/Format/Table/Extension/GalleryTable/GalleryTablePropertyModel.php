@@ -104,7 +104,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
      * @param integer $propertyNumber
      * @param integer $orderDirection
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
     public function get_order_property($propertyNumber, $orderDirection)
     {
@@ -112,12 +112,12 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
         if ($property instanceof DataClassGalleryTableProperty)
         {
-            return new OrderBy([
+            return
                 new OrderProperty(
                     new PropertyConditionVariable($property->get_class_name(), $property->get_property()),
                     $orderDirection
-                )
-            ]);
+
+            );
         }
         else
         {

@@ -310,7 +310,7 @@ class CategoryManagerComponent extends Manager implements ImpactViewSupport, Tab
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
      */
-    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = [])
+    public function retrieve_categories($condition, $offset = null, $count = null, $order_property = null)
     {
         if ($condition)
         {

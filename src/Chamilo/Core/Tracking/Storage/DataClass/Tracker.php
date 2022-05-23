@@ -46,7 +46,7 @@ abstract class Tracker extends DataClass
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator The tracker data resultset
      */
     public static function get_data(
-        $class_name, $application, $condition, $offset = null, $max_objects = null, $order_by = []
+        $class_name, $application, $condition, $offset = null, $max_objects = null, $order_by = null
     )
     {
         return DataManager::retrieves(
@@ -89,7 +89,7 @@ abstract class Tracker extends DataClass
      *
      * @return Tracker The tracker
      */
-    public static function get_singular_data($class_name, $application, $condition, $order_by = [])
+    public static function get_singular_data($class_name, $application, $condition, $order_by = null)
     {
         return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
     }

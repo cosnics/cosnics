@@ -448,25 +448,21 @@ class BrowserComponent extends Manager implements DelegateComponent
 
         $condition = new AndCondition($conditions);
 
-        $order = [];
-        $order[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
-            )
-        );
+        $orderBy =
+            OrderBy::generate(ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX);
 
         if (!$this->get_course()->is_course_admin($this->get_user()))
         {
             $publications =
                 WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                    $this->get_location($categoryId), $this->get_entities(), $condition, new OrderBy($order), 0, - 1,
+                    $this->get_location($categoryId), $this->get_entities(), $condition, $orderBy, 0, - 1,
                     $this->get_user_id()
                 );
         }
         else
         {
             $publications = WeblcmsDataManager::retrieve_content_object_publications(
-                $condition, new OrderBy($order)
+                $condition, $orderBy
             );
         }
 

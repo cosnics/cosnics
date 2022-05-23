@@ -603,13 +603,13 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return string[][]
      * @throws \Exception
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
-        int $offset = null, int $count = null, array $orderProperties = []
+        int $offset = null, int $count = null, array $orderProperties = null
     )
     {
         $groupRecords = $this->getRightsRepository()->findRightsLocationEntityRightGroupsWithEntityAndGroupRecords();

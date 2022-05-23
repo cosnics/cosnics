@@ -293,21 +293,23 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $join_condition = new OrCondition($join_conditions);
 
-        $course_type_user_order_alias = self::getInstance()->get_alias(CourseTypeUserOrder::getTableName());
+        $order = new OrderBy();
 
-        $order = [];
-
-        $order[] = new OrderProperty(
-            new PropertyConditionVariable(CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER),
-            SORT_ASC
+        $order->add(
+            new OrderProperty(
+                new PropertyConditionVariable(CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER),
+                SORT_ASC
+            )
         );
 
-        $order[] = new OrderProperty(
-            new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
+        $order->add(
+            new OrderProperty(
+                new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
+            )
         );
 
         return self::retrieve_course_types_with_user_order(
-            $join_condition, $condition, null, null, new OrderBy($order)
+            $join_condition, $condition, null, null, $order
         );
     }
 

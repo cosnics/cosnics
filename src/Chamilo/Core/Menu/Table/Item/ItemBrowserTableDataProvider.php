@@ -87,7 +87,7 @@ class ItemBrowserTableDataProvider extends DataClassTableDataProvider
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */

@@ -781,7 +781,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     private static function get_course_settings_with_values_parameters(
         $course_setting_relation_class, $course_setting_foreign_property, $condition = null, $offset = null,
-        $count = null, $order_by = []
+        $count = null, $order_by = null
     )
     {
         $data_class_properties = [];
@@ -1463,7 +1463,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_content_object_publications(
-        $condition = null, $order_by = [], $offset = 0, $max_objects = - 1
+        $condition = null, $order_by = null, $offset = 0, $max_objects = - 1
     )
     {
         $data_class_properties = [];
@@ -1526,7 +1526,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_content_object_publications_with_view_right_granted_in_category_location(
-        $parent_location, $entities, $condition, $order_by = [], $offset = 0, $max_objects = - 1, $user_id = null
+        $parent_location, $entities, $condition, $order_by = null, $offset = 0, $max_objects = - 1, $user_id = null
     )
     {
         $condition = self::get_content_object_publications_with_view_right_granted_in_category_location_condition(
@@ -1547,15 +1547,20 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseCategory>
      */
     public static function retrieve_course_categories_ordered_by_name(
-        $condition = null, $offset = null, $count = null, $order_by = []
+        $condition = null, $offset = null, $count = null, $order_by = null
     )
     {
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
+        if(is_null($order_by))
+        {
+            $order_by = new OrderBy();
+        }
+
+        $order_by->add(new OrderProperty(
+            new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME))
         );
 
         return DataManager::retrieves(
-            CourseCategory::class, new DataClassRetrievesParameters($condition, $offset, $count, new OrderBy($order_by))
+            CourseCategory::class, new DataClassRetrievesParameters($condition, $offset, $count, $order_by)
         );
     }
 
@@ -1646,7 +1651,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public static function retrieve_course_settings_with_default_values(
-        $condition = null, $offset = null, $count = null, $order_by = []
+        $condition = null, $offset = null, $count = null, $order_by = null
     )
     {
         $data_class_properties = [];
@@ -1946,7 +1951,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_my_publications(
-        $parent_location, $entities, $condition = null, $order_by = [], $offset = 0, $max_objects = - 1, $user_id = null
+        $parent_location, $entities, $condition = null, $order_by = null, $offset = 0, $max_objects = - 1, $user_id = null
     )
     {
         $condition = self::get_my_publications_condition($parent_location, $entities, $user_id, $condition);

@@ -109,7 +109,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $count
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      */
     public static function getContentObjectPublicationsAttributes(
         $identifier, $attributes_type = null, $condition = null, $count = null, $offset = null, $order_property = null

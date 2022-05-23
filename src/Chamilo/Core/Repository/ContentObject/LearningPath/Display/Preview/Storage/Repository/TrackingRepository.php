@@ -423,7 +423,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findLearningPathAttemptsWithUser(
         LearningPath $learningPath, $treeNodeDataIds = [],
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
         return new DataClassIterator(DummyTreeNodeAttempt::class, []);
@@ -459,7 +459,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      */
     public function findTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, $treeNodeDataIds = [],
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = []
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
         return new DataClassIterator(User::class, []);

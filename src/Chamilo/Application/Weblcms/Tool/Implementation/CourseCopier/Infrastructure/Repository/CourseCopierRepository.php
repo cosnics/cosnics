@@ -90,23 +90,27 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
             ), $categoryIds
         );
 
-        $order_by = [];
+        $order_by = new OrderBy();
 
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
+        $order_by->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_PARENT
+                )
             )
         );
 
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+        $order_by->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                )
             )
         );
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            new DataClassRetrievesParameters($condition, null, null, new $order_by)
         );
     }
 

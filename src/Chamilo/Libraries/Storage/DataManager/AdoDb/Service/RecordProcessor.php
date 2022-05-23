@@ -1,11 +1,10 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\Processor;
+namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Service;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\Processor
+ * @package Chamilo\Libraries\Storage\DataManager\AdoDb\Processor
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class RecordProcessor
 {

@@ -3,6 +3,7 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Countable;
 
 /**
@@ -38,6 +39,12 @@ class OrderBy implements Countable, Hashable
     public function count(): int
     {
         return count($this->orderProperties);
+    }
+
+    static public function generate(string $dataClassName, string $propertyName, ?int $direction = SORT_ASC): OrderBy
+    {
+        return new OrderBy([new OrderProperty(new PropertyConditionVariable($dataClassName, $propertyName), $direction)]
+        );
     }
 
     /**

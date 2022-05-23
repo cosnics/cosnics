@@ -2,15 +2,16 @@
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression;
 
 use Countable;
+use function array_merge;
+use function count;
+use function implode;
 
 /**
- * Composite expression is responsible to build a group of similar expression.
  * Based on the Doctrine DBAL Query-builder architecture
+ * Composite expression is responsible to build a group of similar expression.
  *
  * @link www.doctrine-project.org
- * @since 2.1
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @version 3.3.6
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @license MIT
  */
@@ -19,12 +20,19 @@ class CompositeExpression implements Countable
     /**
      * Constant that represents an AND composite expression.
      */
-    const TYPE_AND = 'AND';
+    public const TYPE_AND = 'AND';
 
     /**
      * Constant that represents an OR composite expression.
      */
-    const TYPE_OR = 'OR';
+    public const TYPE_OR = 'OR';
+
+    /**
+     * Each expression part of the composite expression.
+     *
+     * @var self[]|string[]
+     */
+    private $parts = [];
 
     /**
      * The instance type of composite expression.
@@ -34,16 +42,11 @@ class CompositeExpression implements Countable
     private $type;
 
     /**
-     * Each expression part of the composite expression.
-     *
-     * @var array
-     */
-    private $parts = [];
-
-    /**
-     *
      * @param string $type Instance type of composite expression.
-     * @param array $parts Composition of expressions to be joined on composite expression.
+     * @param self[]|string[] $parts Composition of expressions to be joined on composite expression.
+     *
+     * @internal Use the and() / or() factory methods.
+     *
      */
     public function __construct($type, array $parts = [])
     {
@@ -53,12 +56,13 @@ class CompositeExpression implements Countable
     }
 
     /**
+     * Retrieves the string representation of this composite expression.
      *
      * @return string
      */
     public function __toString()
     {
-        if (count($this->parts) === 1)
+        if ($this->count() === 1)
         {
             return (string) $this->parts[0];
         }
@@ -67,30 +71,43 @@ class CompositeExpression implements Countable
     }
 
     /**
+     * Adds an expression to composite expression.
      *
      * @param mixed $part
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
+     * @return CompositeExpression
+     * @deprecated This class will be made immutable. Use with() instead.
+     *
      */
     public function add($part)
     {
-        if (!empty($part) || ($part instanceof self && $part->count() > 0))
+        if ($part === null)
         {
-            $this->parts[] = $part;
+            return $this;
         }
+
+        if ($part instanceof self && count($part) === 0)
+        {
+            return $this;
+        }
+
+        $this->parts[] = $part;
 
         return $this;
     }
 
     /**
+     * Adds multiple parts to composite expression.
      *
-     * @param array $parts
+     * @param self[]|string[] $parts
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
+     * @return CompositeExpression
+     * @deprecated This class will be made immutable. Use with() instead.
+     *
      */
     public function addMultiple(array $parts = [])
     {
-        foreach ((array) $parts as $part)
+        foreach ($parts as $part)
         {
             $this->add($part);
         }
@@ -99,20 +116,55 @@ class CompositeExpression implements Countable
     }
 
     /**
-     *
-     * @return integer
+     * @param self|string $part
+     * @param self|string ...$parts
      */
-    public function count(): int
+    public static function and($part, ...$parts): self
+    {
+        return new self(self::TYPE_AND, array_merge([$part], $parts));
+    }
+
+    /**
+     * Retrieves the amount of expressions on composite expression.
+     *
+     * @return int
+     */
+    public function count()
     {
         return count($this->parts);
     }
 
     /**
+     * Returns the type of this composite expression (AND/OR).
      *
      * @return string
      */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @param self|string $part
+     * @param self|string ...$parts
+     */
+    public static function or($part, ...$parts): self
+    {
+        return new self(self::TYPE_OR, array_merge([$part], $parts));
+    }
+
+    /**
+     * Returns a new CompositeExpression with the given parts added.
+     *
+     * @param self|string $part
+     * @param self|string ...$parts
+     */
+    public function with($part, ...$parts): self
+    {
+        $that = clone $this;
+
+        $that->parts = array_merge($that->parts, [$part], $parts);
+
+        return $that;
     }
 }

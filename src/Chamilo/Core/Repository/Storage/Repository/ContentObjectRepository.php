@@ -310,7 +310,7 @@ class ContentObjectRepository
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      * @param integer $offset
      * @param integer $count
      *
@@ -318,7 +318,7 @@ class ContentObjectRepository
      * @throws \Exception
      */
     public function retrieveContentObjectAttachments(
-        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = [], $offset = null,
+        ContentObject $contentObject, $type = ContentObject::ATTACHMENT_NORMAL, $orderBy = null, $offset = null,
         $count = null
     )
     {

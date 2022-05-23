@@ -18,16 +18,20 @@ class GroupRelUserTableDataProvider extends DataClassTableDataProvider
 
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        $order_property = [];
-        $order_property[] = new OrderProperty(
-            new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
+        $orderBy = new OrderBy();
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
+            )
         );
-        $order_property[] = new OrderProperty(
-            new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
+            )
         );
 
         return DataManager::retrieve_group_rel_users_with_user_join(
-            $condition, $offset, $count, new OrderBy($order_property)
+            $condition, $offset, $count, $orderBy
         );
     }
 }

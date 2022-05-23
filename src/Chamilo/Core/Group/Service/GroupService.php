@@ -263,11 +263,11 @@ class GroupService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
-    public function findGroups($condition, $offset = 0, $count = - 1, array $orderProperty = [])
+    public function findGroups($condition, $offset = 0, $count = - 1, array $orderProperty = null)
     {
         return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderProperty);
     }

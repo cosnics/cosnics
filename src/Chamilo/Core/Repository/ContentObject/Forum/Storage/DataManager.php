@@ -91,12 +91,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ), new StaticConditionVariable($forum_id)
         );
 
-        $forum_post_alias = self::get_alias(ForumPost::getTableName());
-
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
-        );
+        $order_by = OrderBy::generate(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE, SORT_DESC);
 
         $joins = new Joins();
 
@@ -119,7 +114,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $parameters = new RecordRetrieveParameters($properties, $condition, new OrderBy($order_by), $joins);
+        $parameters = new RecordRetrieveParameters($properties, $condition, $order_by, $joins);
 
         try
         {

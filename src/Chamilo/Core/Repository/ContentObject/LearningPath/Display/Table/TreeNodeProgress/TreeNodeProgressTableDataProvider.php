@@ -56,7 +56,7 @@ class TreeNodeProgressTableDataProvider extends TableDataProvider
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \ArrayIterator
      */

@@ -40,11 +40,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = [])
+    public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return $this->findOpenCourses(
             $this->getOpenCoursesCondition($condition, $this->getConditionForRoles($roles)),
@@ -59,11 +59,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
+    public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return $this->findOpenCourses($this->getOpenCoursesCondition($condition), $offset, $count, $orderBy);
     }
@@ -74,11 +74,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param null $offset
      * @param null $count
-     * @param array $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
+    protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         $properties = new DataClassProperties();
         $properties->add(new PropertiesConditionVariable(Course::class));
@@ -108,11 +108,11 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
-    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = [])
+    public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
         return DataManager::retrieves(
             Course::class,

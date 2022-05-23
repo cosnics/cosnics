@@ -102,7 +102,7 @@ abstract class GalleryTable extends Table
      * @param integer $orderIndex
      * @param integer $orderDirection
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
     protected function get_order_property($orderIndex, $orderDirection)
     {

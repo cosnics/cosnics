@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Exception;
 
 /**
  *
@@ -19,20 +18,10 @@ use Exception;
 class RecordRetrievesParameters extends DataClassParameters
 {
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $count
-     * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
-     * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $havingCondition
-     */
     public function __construct(
-        DataClassProperties $dataClassProperties = null, Condition $condition = null, $count = null, $offset = null,
-        $orderBy = [], Joins $joins = null, GroupBy $groupBy = null, Condition $havingCondition = null
+        ?DataClassProperties $dataClassProperties = null, ?Condition $condition = null, ?int $count = null,
+        ?int $offset = null, ?OrderBy $orderBy = null, ?Joins $joins = null, ?GroupBy $groupBy = null,
+        ?Condition $havingCondition = null
     )
     {
         parent::__construct(
@@ -41,91 +30,33 @@ class RecordRetrievesParameters extends DataClassParameters
     }
 
     /**
-     * Generate an instance based on the input or throw an exception if no compatible input was found
-     *
-     * @param mixed $parameter
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters
-     * @throws Exception
-     */
-    public static function generate($parameter = null)
-    {
-        if (is_object($parameter) && $parameter instanceof DataClassRetrievesParameters)
-        {
-            return $parameter;
-        }
-        elseif (is_object($parameter) && $parameter instanceof Condition)
-        {
-            return new self(null, $parameter);
-        }
-        elseif (is_integer($parameter))
-        {
-            return new self(null, null, $parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof OrderBy)
-        {
-            return new self(null, null, null, null, $parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof Joins)
-        {
-            return new self(null, null, null, null, null, $parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof GroupBy)
-        {
-            return new self(null, null, null, null, null, null, $parameter);
-        }
-        elseif (is_object($parameter) && $parameter instanceof DataClassProperties)
-        {
-            return new self($parameter);
-        }
-        elseif (is_null($parameter))
-        {
-            return new self();
-        }
-        else
-        {
-            throw new Exception('Illegal parameter passed to the DataManager::retrieves() method.');
-        }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\GroupBy
      * @deprecated Use getGroupBy() now
      */
-    public function get_group_by()
+    public function get_group_by(): ?GroupBy
     {
         return $this->getGroupBy();
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
      * @deprecated Use getDataClassProperties() now
      */
-    public function get_properties()
+    public function get_properties(): ?DataClassProperties
     {
         return $this->getDataClassProperties();
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
-     *
      * @deprecated Use setGroupBy() now
      */
-    public function set_group_by(GroupBy $groupBy)
+    public function set_group_by(?GroupBy $groupBy = null)
     {
         $this->setGroupBy($groupBy);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
-     *
      * @deprecated Use setDataClassProperties() now
      */
-    public function set_properties(DataClassProperties $dataClassProperties = null)
+    public function set_properties(?DataClassProperties $dataClassProperties = null)
     {
         $this->setDataClassProperties($dataClassProperties);
     }

@@ -52,14 +52,14 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
         $condition = null, $offset = null, $count = null,
-        $orderBy = []
+        $orderBy = null
     )
     {
         return $this->findTargetsForEntityType(
@@ -83,14 +83,14 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function findTargetUsersWithEntriesForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
         $condition = null, $offset = null, $count = null,
-        $orderBy = []
+        $orderBy = null
     )
     {
         return $this->findTargetsForEntityTypeWithEntries(
@@ -240,13 +240,13 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieveEntriesForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
-        Condition $condition = null, $offset = null, $count = null, $orderProperty = []
+        Condition $condition = null, $offset = null, $count = null, $orderProperty = null
     )
     {
         return $this->retrieveEntriesForEntityTypeAndId(

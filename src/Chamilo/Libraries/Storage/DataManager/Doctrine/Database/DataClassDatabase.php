@@ -7,7 +7,7 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
@@ -73,7 +73,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
      */
     protected $recordProcessor;
 
@@ -84,7 +84,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor $parametersProcessor
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor|null $recordProcessor
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor|null $recordProcessor
      */
     public function __construct(
         Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
@@ -586,7 +586,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor
+     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
      */
     public function getRecordProcessor()
     {
@@ -595,7 +595,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Processor\RecordProcessor $recordProcessor
+     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor $recordProcessor
      */
     public function setRecordProcessor(RecordProcessor $recordProcessor)
     {

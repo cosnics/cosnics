@@ -62,7 +62,7 @@ interface RoleServiceInterface
      *
      * @return Role[]
      */
-    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = []);
+    public function getRoles(Condition $condition = null, $count = null, $offset = null, $orderBy = null);
 
     /**
      * Counts the roles

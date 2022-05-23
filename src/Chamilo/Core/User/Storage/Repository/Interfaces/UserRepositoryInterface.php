@@ -46,11 +46,11 @@ interface UserRepositoryInterface
      * @param Condition $condition
      * @param int $count
      * @param int $offset
-     * @param OrderProperty[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = []);
+    public function findUsers(Condition $condition, $count = null, $offset = null, $order_by = null);
 
     /**
      *

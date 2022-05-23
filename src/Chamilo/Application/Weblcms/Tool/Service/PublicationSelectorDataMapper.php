@@ -8,8 +8,6 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
-use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * DataMapper service that changes publications and publication categories for the publication selector
@@ -32,15 +30,12 @@ class PublicationSelectorDataMapper
      */
     public static function getContentObjectPublicationCategoriesForPublicationSelector($course_id, $tools = [])
     {
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
-            )
+        $order_by = OrderBy::generate(
+            ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
         );
 
         $publication_categories_set = DataManager::retrieve_content_object_publication_categories_from_course(
-            $course_id, $tools, new OrderBy($order_by)
+            $course_id, $tools, $order_by
         );
 
         $categories = [];
@@ -77,16 +72,11 @@ class PublicationSelectorDataMapper
         $propertyNames[] = ContentObject::PROPERTY_TITLE;
         $propertyNames[] = ContentObjectPublication::PROPERTY_TOOL;
 
-        $order_by = [];
-
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
-            )
-        );
+        $order_by =
+            OrderBy::generate(ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX);
 
         $publications_set = DataManager::retrieve_content_object_publications_from_course(
-            $course_id, new OrderBy($order_by)
+            $course_id, $order_by
         );
 
         $publications = [];

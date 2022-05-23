@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -70,15 +69,10 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             ), $assessment_attempts_tracker_ids
         );
 
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(
-                QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID
-            )
-        );
+        $order_by = OrderBy::generate(QuestionAttempt::class, QuestionAttempt::PROPERTY_QUESTION_COMPLEX_ID);
 
         $question_attempts_trackers = DataManager::retrieves(
-            QuestionAttempt::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            QuestionAttempt::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
 
         $user_question_statistics = [];
@@ -247,13 +241,11 @@ class AssessmentQuestionsUsersBlock extends ToolBlock
             new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
             new StaticConditionVariable($publication->get_id())
         );
-        $order_by = [];
-        $order_by[] = new OrderProperty(
-            new PropertyConditionVariable(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID)
-        );
+
+        $order_by = OrderBy::generate(AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID);
 
         $assessment_attempts_trackers = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-            AssessmentAttempt::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            AssessmentAttempt::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
 
         $user_question_statistics = [];

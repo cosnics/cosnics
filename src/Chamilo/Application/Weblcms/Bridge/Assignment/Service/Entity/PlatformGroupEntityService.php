@@ -69,7 +69,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
-        $orderProperty = []
+        $orderProperty = null
     )
     {
         return $this->assignmentService->findTargetPlatformGroupsForContentObjectPublication(

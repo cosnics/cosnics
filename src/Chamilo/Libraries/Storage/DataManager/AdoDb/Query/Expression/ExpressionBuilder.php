@@ -2,25 +2,29 @@
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression;
 
 use ADOConnection;
+use function func_get_arg;
+use function func_get_args;
+use function func_num_args;
+use function implode;
+use function sprintf;
 
 /**
  * Based on the Doctrine DBAL Query-builder architecture
+ * ExpressionBuilder class is responsible to dynamically create SQL query parts.
  *
  * @link www.doctrine-project.org
- * @since 2.1
- * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
- * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @version 3.3.6
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @license MIT
  */
 class ExpressionBuilder
 {
-    const EQ = '=';
-    const GT = '>';
-    const GTE = '>=';
-    const LT = '<';
-    const LTE = '<=';
-    const NEQ = '<>';
+    public const EQ = '=';
+    public const GT = '>';
+    public const GTE = '>=';
+    public const LT = '<';
+    public const LTE = '<=';
+    public const NEQ = '<>';
 
     /**
      * The DBAL Connection.
@@ -40,16 +44,23 @@ class ExpressionBuilder
     }
 
     /**
-     * Creates a conjunction of the given boolean expressions.
-     * Example:
-     * [php]
-     * // (u.type = ?) AND (u.role = ?)
-     * $expr->andX('u.type = ?', 'u.role = ?'));
+     * Creates a conjunction of the given expressions.
      *
+     * @param string|CompositeExpression $expression
+     * @param string|CompositeExpression ...$expressions
+     */
+    public function and($expression, ...$expressions): CompositeExpression
+    {
+        return CompositeExpression::and($expression, ...$expressions);
+    }
+
+    /**
      * @param mixed $x Optional clause. Defaults = null, but requires
      *        at least one defined when converting to string.
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
+     * @return CompositeExpression
+     * @deprecated Use `and()` instead.
+     *
      */
     public function andX($x = null)
     {
@@ -72,8 +83,10 @@ class ExpressionBuilder
 
     /**
      * Creates an equality comparison expression with the given arguments.
+     *
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> = <right expr>. Example:
+     *
      * [php]
      * // u.id = ?
      * $expr->eq('u.id', '?');
@@ -92,6 +105,7 @@ class ExpressionBuilder
      * Creates a greater-than comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> > <right expr>. Example:
+     *
      * [php]
      * // u.id > ?
      * $q->where($q->expr()->gt('u.id', '?'));
@@ -110,6 +124,7 @@ class ExpressionBuilder
      * Creates a greater-than-equal comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> >= <right expr>. Example:
+     *
      * [php]
      * // u.id >= ?
      * $q->where($q->expr()->gte('u.id', '?'));
@@ -125,10 +140,10 @@ class ExpressionBuilder
     }
 
     /**
-     * Creates a IN () comparison expression with the given arguments.
+     * Creates an IN () comparison expression with the given arguments.
      *
-     * @param string $x The field in string format to be inspected by IN() comparison.
-     * @param string|array $y The placeholder or the array of values to be used by IN() comparison.
+     * @param string $x The SQL expression to be matched against the set.
+     * @param string|string[] $y The SQL expression or an array of SQL expressions representing the set.
      *
      * @return string
      */
@@ -140,7 +155,7 @@ class ExpressionBuilder
     /**
      * Creates an IS NOT NULL expression with the given arguments.
      *
-     * @param string $x The field in string format to be restricted by IS NOT NULL.
+     * @param string $x The expression to be restricted by IS NOT NULL.
      *
      * @return string
      */
@@ -152,7 +167,7 @@ class ExpressionBuilder
     /**
      * Creates an IS NULL expression with the given arguments.
      *
-     * @param string $x The field in string format to be restricted by IS NULL.
+     * @param string $x The expression to be restricted by IS NULL.
      *
      * @return string
      */
@@ -164,33 +179,37 @@ class ExpressionBuilder
     /**
      * Creates a LIKE() comparison expression with the given arguments.
      *
-     * @param string $x Field in string format to be inspected by LIKE() comparison.
-     * @param mixed $y Argument to be used in LIKE() comparison.
+     * @param string $x The expression to be inspected by the LIKE comparison
+     * @param mixed $y The pattern to compare against
      *
      * @return string
      */
-    public function like($x, $y)
+    public function like($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'LIKE', $y);
+        return $this->comparison($x, 'LIKE', $y) . (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
 
     /**
-     * Quotes a given input parameter.
+     * Builds an SQL literal from a given input parameter.
+     *
+     * The usage of this method is discouraged. Use prepared statements
+     * or {@see AbstractPlatform::quoteStringLiteral()} instead.
      *
      * @param mixed $input The parameter to be quoted.
-     * @param string|null $type The type of the parameter.
+     * @param int|null $type The type of the parameter.
      *
      * @return string
      */
     public function literal($input, $type = null)
     {
-        return $this->connection->Quote($input, $type);
+        return $this->connection->quote($input, $type);
     }
 
     /**
      * Creates a lower-than comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> < <right expr>. Example:
+     *
      * [php]
      * // u.id < ?
      * $q->where($q->expr()->lt('u.id', '?'));
@@ -209,6 +228,7 @@ class ExpressionBuilder
      * Creates a lower-than-equal comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> <= <right expr>. Example:
+     *
      * [php]
      * // u.id <= ?
      * $q->where($q->expr()->lte('u.id', '?'));
@@ -227,6 +247,7 @@ class ExpressionBuilder
      * Creates a non equality comparison expression with the given arguments.
      * First argument is considered the left expression and the second is the right expression.
      * When converted to string, it will generated a <left expr> <> <right expr>. Example:
+     *
      * [php]
      * // u.id <> 1
      * $q->where($q->expr()->neq('u.id', '1'));
@@ -244,8 +265,8 @@ class ExpressionBuilder
     /**
      * Creates a NOT IN () comparison expression with the given arguments.
      *
-     * @param string $x The field in string format to be inspected by NOT IN() comparison.
-     * @param string|array $y The placeholder or the array of values to be used by NOT IN() comparison.
+     * @param string $x The SQL expression to be matched against the set.
+     * @param string|string[] $y The SQL expression or an array of SQL expressions representing the set.
      *
      * @return string
      */
@@ -257,27 +278,35 @@ class ExpressionBuilder
     /**
      * Creates a NOT LIKE() comparison expression with the given arguments.
      *
-     * @param string $x Field in string format to be inspected by NOT LIKE() comparison.
-     * @param mixed $y Argument to be used in NOT LIKE() comparison.
+     * @param string $x The expression to be inspected by the NOT LIKE comparison
+     * @param mixed $y The pattern to compare against
      *
      * @return string
      */
-    public function notLike($x, $y)
+    public function notLike($x, $y/*, ?string $escapeChar = null */)
     {
-        return $this->comparison($x, 'NOT LIKE', $y);
+        return $this->comparison($x, 'NOT LIKE', $y) .
+            (func_num_args() >= 3 ? sprintf(' ESCAPE %s', func_get_arg(2)) : '');
     }
 
     /**
-     * Creates a disjunction of the given boolean expressions.
-     * Example:
-     * [php]
-     * // (u.type = ?) OR (u.role = ?)
-     * $qb->where($qb->expr()->orX('u.type = ?', 'u.role = ?'));
+     * Creates a disjunction of the given expressions.
      *
+     * @param string|CompositeExpression $expression
+     * @param string|CompositeExpression ...$expressions
+     */
+    public function or($expression, ...$expressions): CompositeExpression
+    {
+        return CompositeExpression::or($expression, ...$expressions);
+    }
+
+    /**
      * @param mixed $x Optional clause. Defaults = null, but requires
      *        at least one defined when converting to string.
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\Expression\CompositeExpression
+     * @return CompositeExpression
+     * @deprecated Use `or()` instead.
+     *
      */
     public function orX($x = null)
     {

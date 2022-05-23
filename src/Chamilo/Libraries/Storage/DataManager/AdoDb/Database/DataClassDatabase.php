@@ -9,10 +9,10 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor;
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
@@ -70,7 +70,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor
+     * @var \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor
      */
     protected $recordProcessor;
 
@@ -81,7 +81,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService $conditionPartTranslatorService
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor $parametersProcessor
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor $recordProcessor
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor $recordProcessor
      */
     public function __construct(
         ADOConnection $connection, StorageAliasGenerator $storageAliasGenerator,
@@ -596,7 +596,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor
+     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor
      */
     public function getRecordProcessor()
     {
@@ -605,7 +605,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor $recordProcessor
+     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor $recordProcessor
      */
     public function setRecordProcessor(RecordProcessor $recordProcessor)
     {

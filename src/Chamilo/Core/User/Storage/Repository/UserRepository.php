@@ -326,11 +326,11 @@ class UserRepository implements UserRepositoryInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    public function findUsers(Condition $condition = null, $count = null, $offset = null, $orderBy = [])
+    public function findUsers(Condition $condition = null, $count = null, $offset = null, $orderBy = null)
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
@@ -344,14 +344,15 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUsersByIdentifiersOrderedByName($userIdentifiers)
     {
-        $orderProperties = [];
-        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $orderBy = new OrderBy();
+
+        $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)));
+        $orderBy->add(new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)));
 
         $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIdentifiers);
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperties))
+            User::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
         );
     }
 

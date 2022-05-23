@@ -20,7 +20,7 @@ class FavouriteTableDataProvider extends RecordTableDataProvider
      * @param $condition
      * @param int $offset
      * @param int $count
-     * @param OrderProperty[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

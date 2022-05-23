@@ -185,12 +185,12 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * @param Condition|null $condition
      * @param int $offset
      * @param int $count
-     * @param array $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return DataClassIterator
      */
     public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = [],
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = [])
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null)
     {
         $parameters = new RecordRetrievesParameters(
             $this->getPropertiesForLearningPathAttemptsWithUser(),
@@ -296,7 +296,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * @return DataClassIterator
      */
     public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = [],
-        Condition $condition = null, $offset = 0, $count = 0, $orderBy = [])
+        Condition $condition = null, $offset = 0, $count = 0, $orderBy = null)
     {
         $properties = $this->getPropertiesForLearningPathAttemptsWithUser();
         $condition = $this->getConditionForTargetUsersForLearningPath($learningPath, $condition);

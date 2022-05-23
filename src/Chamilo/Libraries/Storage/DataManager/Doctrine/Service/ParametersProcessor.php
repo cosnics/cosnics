@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -70,7 +71,7 @@ class ParametersProcessor
     /**
      * @throws \Exception
      */
-    protected function handleCompositeDataClassJoins(string $dataClassName, DataClassRetrieveParameters $parameters
+    protected function handleCompositeDataClassJoins(string $dataClassName, DataClassParameters $parameters
     ): ParametersProcessor
     {
         if ($parameters->getJoins() instanceof Joins)
@@ -109,7 +110,7 @@ class ParametersProcessor
 
         if ($dataClassProperties instanceof DataClassProperties)
         {
-            $dataClassPropertyVariable = $dataClassProperties->get()[0];
+            $dataClassPropertyVariable = $dataClassProperties->getFirst();
         }
         else
         {
@@ -172,7 +173,7 @@ class ParametersProcessor
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->where($this->translate($dataClassDatabase, $condition));
+            $queryBuilder->where($this->translateConditionPart($dataClassDatabase, $condition));
         }
 
         return $queryBuilder;
@@ -189,7 +190,7 @@ class ParametersProcessor
         {
             foreach ($properties->get() as $conditionVariable)
             {
-                $queryBuilder->addSelect($this->translate($dataClassDatabase, $conditionVariable));
+                $queryBuilder->addSelect($this->translateConditionPart($dataClassDatabase, $conditionVariable));
             }
         }
 
@@ -207,7 +208,7 @@ class ParametersProcessor
         {
             foreach ($groupBy->get() as $groupByVariable)
             {
-                $queryBuilder->addGroupBy($this->translate($dataClassDatabase, $groupByVariable));
+                $queryBuilder->addGroupBy($this->translateConditionPart($dataClassDatabase, $groupByVariable));
             }
         }
 
@@ -223,7 +224,7 @@ class ParametersProcessor
     {
         if ($condition instanceof Condition)
         {
-            $queryBuilder->having($this->translate($dataClassDatabase, $condition));
+            $queryBuilder->having($this->translateConditionPart($dataClassDatabase, $condition));
         }
 
         return $queryBuilder;
@@ -242,7 +243,7 @@ class ParametersProcessor
         {
             foreach ($joins->get() as $join)
             {
-                $joinCondition = $this->translate($dataClassDatabase, $join->getCondition());
+                $joinCondition = $this->translateConditionPart($dataClassDatabase, $join->getCondition());
                 $joinDataClassName = $join->getDataClassName();
 
                 switch ($join->getType())
@@ -294,15 +295,18 @@ class ParametersProcessor
      * @throws \ReflectionException
      */
     protected function processOrderByCollection(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?array $orderByCollection = []
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?OrderBy $orderBy = null
     ): QueryBuilder
     {
-        foreach ($orderByCollection as $orderBy)
+        if (!is_null($orderBy))
         {
-            $queryBuilder->addOrderBy(
-                $this->translate($dataClassDatabase, $orderBy->getConditionVariable()),
-                ($orderBy->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
-            );
+            foreach ($orderBy->get() as $orderBy)
+            {
+                $queryBuilder->addOrderBy(
+                    $this->translateConditionPart($dataClassDatabase, $orderBy->getConditionVariable()),
+                    ($orderBy->getDirection() == SORT_DESC ? 'DESC' : 'ASC')
+                );
+            }
         }
 
         return $queryBuilder;
@@ -333,7 +337,7 @@ class ParametersProcessor
      * @throws \Exception
      */
     public function setDataClassPropertiesClassName(
-        string $dataClassName, DataClassRetrieveParameters $dataClassRetrieveParameters
+        string $dataClassName, DataClassParameters $dataClassRetrieveParameters
     )
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
@@ -364,7 +368,8 @@ class ParametersProcessor
     /**
      * @throws \ReflectionException
      */
-    protected function translate(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart): string
+    protected function translateConditionPart(DataClassDatabase $dataClassDatabase, ConditionPart $conditionPart
+    ): string
     {
         return $this->getConditionPartTranslatorService()->translate($dataClassDatabase, $conditionPart);
     }

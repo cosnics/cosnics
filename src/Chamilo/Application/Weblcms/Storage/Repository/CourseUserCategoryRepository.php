@@ -15,7 +15,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -94,16 +93,11 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
             )
         );
 
-        $orderBy = [];
-
-        $orderBy[] = new OrderProperty(
-            new PropertyConditionVariable(
-                CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT
-            )
-        );
+        $orderBy =
+            OrderBy::generate(CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT);
 
         return $this->dataClassRepository->retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy), $joins)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins)
         );
     }
 }

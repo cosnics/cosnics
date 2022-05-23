@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupportedSearchFormInterface;
 use Chamilo\Libraries\Platform\Security;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Exception;
 
 /**
@@ -185,7 +186,7 @@ abstract class Table
      * @param integer[] $orderColumns
      * @param integer[] $orderDirections
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy]
      */
     protected function determineOrderProperties($orderColumns, $orderDirections)
     {
@@ -204,7 +205,7 @@ abstract class Table
             }
         }
 
-        return $orderProperties;
+        return new OrderBy($orderProperties);
     }
 
     /**
@@ -402,7 +403,7 @@ abstract class Table
      * @param integer $orderIndex
      * @param integer $orderDirection
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty
      */
     protected function get_order_property($orderIndex, $orderDirection)
     {

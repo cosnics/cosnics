@@ -219,19 +219,14 @@ class ForumViewerComponent extends Manager implements DelegateComponent
 
     private function prepareTopicsAndSubforums()
     {
-        $order_property = [];
-        $order_property[] = new OrderProperty(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
-            )
-        );
+        $orderBy = OrderBy::generate(ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE);
 
         $parameters = new DataClassRetrievesParameters(
             new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                 ), new StaticConditionVariable($this->getForum()->get_id())
-            ), null, null, new OrderBy($order_property)
+            ), null, null, $orderBy
         );
 
         $children = \Chamilo\Core\Repository\Storage\DataManager::retrieve_complex_content_object_items(

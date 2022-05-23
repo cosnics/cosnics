@@ -369,7 +369,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     protected function initialize_questions()
     {
         $question_ids = $this->get_parent()->get_registered_question_ids();
-        $order_by = [];
+        $order_by = new OrderBy();
 
         if (!is_array($question_ids) || count($question_ids) == 0)
         {
@@ -377,11 +377,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $this->get_parent()->register_question_ids($question_ids);
         }
 
-        $order_by[] = new OrderProperty(
+        $order_by->add(new OrderProperty(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
             )
-        );
+        ));
 
         $condition = new InCondition(
             new PropertyConditionVariable(
@@ -391,7 +391,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
             ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+            new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
     }
 

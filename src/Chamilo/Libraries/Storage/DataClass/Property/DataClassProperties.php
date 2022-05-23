@@ -51,6 +51,14 @@ class DataClassProperties implements Hashable
     }
 
     /**
+     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     */
+    public function getFirst()
+    {
+        return $this->properties[0];
+    }
+
+    /**
      *
      * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
      */
