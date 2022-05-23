@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -84,7 +85,7 @@ class ParentChangerComponent extends Manager
                     $size = $complex_content_object_items->count();
                     $old_parent = 0;
 
-                    foreach($complex_content_object_items as $complex_content_object_item)
+                    foreach ($complex_content_object_items as $complex_content_object_item)
                     {
                         if (!$old_parent)
                         {
@@ -184,13 +185,13 @@ class ParentChangerComponent extends Manager
             ), new StaticConditionVariable($parent_id)
         );
         $parameters = new DataClassRetrievesParameters(
-            $condition, null, null, array(
-                new OrderBy(
+            $condition, null, null, new OrderBy(array(
+                new OrderProperty(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                     )
                 )
-            )
+            ))
         );
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
             ComplexContentObjectItem::class, $parameters
@@ -198,7 +199,7 @@ class ParentChangerComponent extends Manager
 
         $i = 1;
 
-        foreach($complex_content_object_items as $complex_content_object_item)
+        foreach ($complex_content_object_items as $complex_content_object_item)
         {
             $complex_content_object_item->set_display_order($i);
             $complex_content_object_item->update();
@@ -217,7 +218,7 @@ class ParentChangerComponent extends Manager
             ComplexContentObjectItem::class, $condition
         );
 
-        foreach($children as $child)
+        foreach ($children as $child)
         {
             $ref_id = $child->get_ref();
             $ref_object = DataManager::retrieve_by_id(

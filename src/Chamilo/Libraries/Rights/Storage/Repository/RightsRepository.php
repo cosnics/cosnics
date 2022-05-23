@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -692,7 +693,7 @@ abstract class RightsRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
@@ -883,13 +884,13 @@ abstract class RightsRepository
         $condition = new AndCondition($conditions);
 
         // order by entity_type to avoid invalid data when looping the rights
-        $orderBy = new OrderBy(
+        $orderBy = new OrderProperty(
             new PropertyConditionVariable(
                 $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
             ), SORT_ASC
         );
 
-        return $this->findRightsLocationEntityRights($condition, null, null, array($orderBy));
+        return $this->findRightsLocationEntityRights($condition, null, null, new OrderBy(array($orderBy)));
     }
 
     /**

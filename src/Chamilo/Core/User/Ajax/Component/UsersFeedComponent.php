@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -123,7 +124,7 @@ class UsersFeedComponent extends Manager
 
         if ($users)
         {
-            foreach($users as $user)
+            foreach ($users as $user)
             {
                 $user_category->add_child($this->getElementForUser($user));
             }
@@ -169,10 +170,10 @@ class UsersFeedComponent extends Manager
         $this->userCount = DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, 100, $this->getOffset(), array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
-            )
+            $condition, 100, $this->getOffset(), new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
+            ))
         );
 
         return DataManager::retrieves(User::class, $parameters);

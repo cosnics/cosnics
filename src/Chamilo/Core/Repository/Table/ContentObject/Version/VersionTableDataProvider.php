@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 class VersionTableDataProvider extends DataClassTableDataProvider
@@ -23,11 +24,11 @@ class VersionTableDataProvider extends DataClassTableDataProvider
     {
         if ($order_property == null)
         {
-            $order_property = array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID, SORT_DESC)
-                )
-            );
+            $order_property = new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID, SORT_DESC)
+                    )
+                ));
         }
 
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);

@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -47,6 +48,29 @@ class BrowserComponent extends Manager
         $calendar_event->set_frequency(CalendarEvent::FREQUENCY_NONE);
 
         return $calendar_event;
+    }
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    /**
+     * "Overrides" the default value of the generic browser component.
+     *
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     */
+    public function getDefaultOrderBy()
+    {
+        return new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                ), SORT_DESC
+            )
+        ]);
     }
 
     protected function getFilter()
@@ -97,27 +121,6 @@ class BrowserComponent extends Manager
         $showActions[] = new SubButtonDivider();
 
         return $showActions;
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_BROWSE_PUBLICATION_TYPE;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
-     * "Overrides" the default value of the generic browser component.
-     *
-     * @return ObjectTableOrder
-     */
-    public function get_default_order_property()
-    {
-        return new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
-            ), SORT_DESC
-        );
     }
 
     public function get_tool_conditions()

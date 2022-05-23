@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -21,47 +22,56 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     const PREFIX = 'portfolio_';
 
     /**
-     * Retrieve all RightsLocationEntityRights instances for a given publication id, location id and a set of rights
+     * Removes the entity rights linked to a location (and optionally an entity type and entity id)
      *
-     * @param int $publication_id
-     * @param string $location_id
-     * @param int[] $rights
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @param RightsLocation $location
+     * @param int $entity_type
+     * @param int $entity_id
+     * @param int $right_id
      */
-    public static function retrieve_rights_location_rights_for_location($publication_id, $location_id, $rights)
+    public static function delete_rights_location_entity_rights(
+        $location, $entity_type = null, $entity_id = null, $right_id = null
+    )
     {
-        if (! is_array($rights))
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($location->get_node_id())
+        );
+
+        $additional_conditions = [];
+        if ($entity_type != null)
         {
-            $rights = array($rights);
+            $additional_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+                ), new StaticConditionVariable($entity_type)
+            );
+        }
+        if ($entity_id != null)
+        {
+            $additional_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+                ), new StaticConditionVariable($entity_id)
+            );
+        }
+        if ($right_id != null)
+        {
+            $additional_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(
+                    RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+                ), new StaticConditionVariable($right_id)
+            );
         }
 
-        $conditions = [];
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location_id));
-        $conditions[] = new InCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_RIGHT_ID),
-            $rights);
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publication_id));
-        $condition = new AndCondition($conditions);
+        if (count($additional_conditions) > 0)
+        {
+            $additional_conditions[] = $condition;
+            $condition = new AndCondition($additional_conditions);
+        }
 
-        $order = new OrderBy(
-            new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
-            SORT_ASC);
-
-        return self::retrieves(
-            RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, array($order)));
+        return self::deletes(RightsLocationEntityRight::class, $condition);
     }
 
     /**
@@ -73,91 +83,87 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $entity_type
      * @param string $location_id
      * @param int $publication_id
+     *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function retrieve_rights_location_entity_right($right, $entity_id, $entity_type, $location_id,
-        $publication_id)
+    public static function retrieve_rights_location_entity_right(
+        $right, $entity_id, $entity_type, $location_id, $publication_id
+    )
     {
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entity_id));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+            ), new StaticConditionVariable($entity_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entity_type));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable($entity_type)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location_id));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($location_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_RIGHT_ID),
-            new StaticConditionVariable($right));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+            ), new StaticConditionVariable($right)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publication_id));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($publication_id)
+        );
         $condition = new AndCondition($conditions);
 
         return self::retrieve(RightsLocationEntityRight::class, new DataClassRetrieveParameters($condition));
     }
 
     /**
-     * Removes the entity rights linked to a location (and optionally an entity type and entity id)
+     * Retrieve all RightsLocationEntityRights instances for a given publication id, location id and a set of rights
      *
-     * @param RightsLocation $location
-     * @param int $entity_type
-     * @param int $entity_id
-     * @param int $right_id
+     * @param int $publication_id
+     * @param string $location_id
+     * @param int[] $rights
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    public static function delete_rights_location_entity_rights($location, $entity_type = null, $entity_id = null,
-        $right_id = null)
+    public static function retrieve_rights_location_rights_for_location($publication_id, $location_id, $rights)
     {
-        $condition = new EqualityCondition(
+        if (!is_array($rights))
+        {
+            $rights = array($rights);
+        }
+
+        $conditions = [];
+        $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location->get_node_id()));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($location_id)
+        );
+        $conditions[] = new InCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+            ), $rights
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($publication_id)
+        );
+        $condition = new AndCondition($conditions);
 
-        $additional_conditions = [];
-        if ($entity_type != null)
-        {
-            $additional_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    RightsLocationEntityRight::class,
-                    RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
-                new StaticConditionVariable($entity_type));
-        }
-        if ($entity_id != null)
-        {
-            $additional_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    RightsLocationEntityRight::class,
-                    RightsLocationEntityRight::PROPERTY_ENTITY_ID),
-                new StaticConditionVariable($entity_id));
-        }
-        if ($right_id != null)
-        {
-            $additional_conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(
-                    RightsLocationEntityRight::class,
-                    RightsLocationEntityRight::PROPERTY_RIGHT_ID),
-                new StaticConditionVariable($right_id));
-        }
+        $order = new OrderProperty(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            ), SORT_ASC
+        );
 
-        if (count($additional_conditions) > 0)
-        {
-            $additional_conditions[] = $condition;
-            $condition = new AndCondition($additional_conditions);
-        }
-
-        return self::deletes(RightsLocationEntityRight::class, $condition);
+        return self::retrieves(
+            RightsLocationEntityRight::class,
+            new DataClassRetrievesParameters($condition, null, null, new OrderBy(array($order)))
+        );
     }
 }

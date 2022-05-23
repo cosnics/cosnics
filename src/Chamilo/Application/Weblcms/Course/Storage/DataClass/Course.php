@@ -27,6 +27,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -64,11 +65,11 @@ class Course extends DataClass
      */
 
     /**
-     * Caches the course admin checks
+     * Caches the groups that are course admins in this course
      *
-     * @var boolean[]
+     * @var \application\weblcms\course\CourseEntityRelation[]
      */
-    private $is_course_admin_cache;
+    private $course_admin_groups_cache;
 
     /**
      * Caches the users that are course admins in this course
@@ -78,11 +79,11 @@ class Course extends DataClass
     private $course_admin_users_cache;
 
     /**
-     * Caches the groups that are course admins in this course
+     * Caches the course admin checks
      *
-     * @var \application\weblcms\course\CourseEntityRelation[]
+     * @var boolean[]
      */
-    private $course_admin_groups_cache;
+    private $is_course_admin_cache;
 
     /**
      * **************************************************************************************************************
@@ -335,182 +336,6 @@ class Course extends DataClass
     }
 
     /**
-     * Returns the available rights for the course management
-     *
-     * @return int[string]
-     */
-    public function get_available_course_management_rights()
-    {
-        return CourseManagementRights::getInstance()->get_base_course_management_rights();
-    }
-
-    public function get_category()
-    {
-        if ($this->get_category_id())
-        {
-            return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
-                CourseCategory::class, $this->get_category_id()
-            );
-        }
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Course Settings Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * gets the category_id of this course object
-     *
-     * @return String $language
-     */
-    public function get_category_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
-    }
-
-    /**
-     * Retrieves the course admin groups for this course
-     *
-     * @return \group\Group[]
-     */
-    public function get_course_admin_groups()
-    {
-        if (!$this->course_admin_groups_cache)
-        {
-            $this->course_admin_groups_cache = DataManager::retrieve_groups_subscribed_as_teacher($this->get_id());
-        }
-
-        return $this->course_admin_groups_cache;
-    }
-
-    /**
-     * Retrieves the course admin users for this course
-     *
-     * @return \core\user\User[]
-     */
-    public function get_course_admin_users()
-    {
-        if (!$this->course_admin_users_cache)
-        {
-            $this->course_admin_users_cache = DataManager::retrieve_teachers_directly_subscribed_to_course(
-                $this->get_id()
-            );
-        }
-
-        return $this->course_admin_users_cache;
-    }
-
-    /**
-     * Gets the course groups of this course
-     *
-     * @return \application\weblcms\CourseGroup[]
-     */
-    public function get_course_groups($as_array = true)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
-            new StaticConditionVariable($this->get_id())
-        );
-
-        return DataManager::retrieves(
-            CourseGroup::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                )
-            )
-        );
-    }
-
-    /**
-     * Retrieves course setting values for the given setting name and tool id
-     *
-     * @param string $setting_name
-     * @param int $tool_id
-     *
-     * @return string[]
-     */
-    public function get_course_setting($setting_name, $tool_id = 0)
-    {
-        return CourseSettingsController::getInstance()->get_course_setting($this, $setting_name, $tool_id);
-    }
-
-    /**
-     * Returns the course type of this course object (lazy loading)
-     *
-     * @return \application\weblcms\course_type\CourseType
-     */
-    public function get_course_type()
-    {
-        if ($this->get_course_type_id() == 0)
-        {
-            return null;
-        }
-
-        return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
-    }
-
-    /**
-     * Returns the course type id of this course object
-     *
-     * @return int
-     */
-    public function get_course_type_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
-    }
-
-    /**
-     * Returns the title for the course type foreign object
-     *
-     * @return String
-     */
-    public function get_course_type_title()
-    {
-        $course_type_title = $this->getOptionalProperty(self::PROPERTY_COURSE_TYPE_TITLE);
-        if (!$course_type_title)
-        {
-            $course_type = $this->get_course_type();
-
-            return ($course_type ? $course_type->get_title() : Translation::get('NoCourseType'));
-        }
-
-        return $course_type_title;
-    }
-
-    /**
-     * Returns the creation date of this course object
-     *
-     * @return int
-     */
-    public function get_creation_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Helper Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Retrieves the default values for a given course setting
-     *
-     * @param string $setting_name
-     * @param int $tool_id
-     *
-     * @return string[]
-     */
-    public function get_default_course_setting($setting_name, $tool_id)
-    {
-        return CourseSettingsController::getInstance()->get_course_type_setting(
-            $this->get_course_type_id(), $setting_name, $tool_id
-        );
-    }
-
-    /**
      * Returns the default properties of this dataclass
      *
      * @return String[] - The property names.
@@ -584,9 +409,191 @@ class Course extends DataClass
 
     /**
      * **************************************************************************************************************
+     * Course Settings Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_course';
+    }
+
+    /**
+     * Returns the available rights for the course management
+     *
+     * @return int[string]
+     */
+    public function get_available_course_management_rights()
+    {
+        return CourseManagementRights::getInstance()->get_base_course_management_rights();
+    }
+
+    public function get_category()
+    {
+        if ($this->get_category_id())
+        {
+            return \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_by_id(
+                CourseCategory::class, $this->get_category_id()
+            );
+        }
+    }
+
+    /**
+     * gets the category_id of this course object
+     *
+     * @return String $language
+     */
+    public function get_category_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CATEGORY_ID);
+    }
+
+    /**
+     * Retrieves the course admin groups for this course
+     *
+     * @return \group\Group[]
+     */
+    public function get_course_admin_groups()
+    {
+        if (!$this->course_admin_groups_cache)
+        {
+            $this->course_admin_groups_cache = DataManager::retrieve_groups_subscribed_as_teacher($this->get_id());
+        }
+
+        return $this->course_admin_groups_cache;
+    }
+
+    /**
+     * Retrieves the course admin users for this course
+     *
+     * @return \core\user\User[]
+     */
+    public function get_course_admin_users()
+    {
+        if (!$this->course_admin_users_cache)
+        {
+            $this->course_admin_users_cache = DataManager::retrieve_teachers_directly_subscribed_to_course(
+                $this->get_id()
+            );
+        }
+
+        return $this->course_admin_users_cache;
+    }
+
+    /**
+     * Gets the course groups of this course
+     */
+    public function get_course_groups($as_array = true)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_COURSE_CODE),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        return DataManager::retrieves(
+            CourseGroup::class, new DataClassRetrievesParameters(
+                $condition, null, null, new OrderBy(array(
+                    new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+                ))
+            )
+        );
+    }
+
+    /**
+     * Retrieves course setting values for the given setting name and tool id
+     *
+     * @param string $setting_name
+     * @param int $tool_id
+     *
+     * @return string[]
+     */
+    public function get_course_setting($setting_name, $tool_id = 0)
+    {
+        return CourseSettingsController::getInstance()->get_course_setting($this, $setting_name, $tool_id);
+    }
+
+    /**
+     * Returns the course type of this course object (lazy loading)
+     *
+     * @return \application\weblcms\course_type\CourseType
+     */
+    public function get_course_type()
+    {
+        if ($this->get_course_type_id() == 0)
+        {
+            return null;
+        }
+
+        return DataManager::retrieve_by_id(CourseType::class, $this->get_course_type_id());
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Helper Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the course type id of this course object
+     *
+     * @return int
+     */
+    public function get_course_type_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
+    }
+
+    /**
+     * Returns the title for the course type foreign object
+     *
+     * @return String
+     */
+    public function get_course_type_title()
+    {
+        $course_type_title = $this->getOptionalProperty(self::PROPERTY_COURSE_TYPE_TITLE);
+        if (!$course_type_title)
+        {
+            $course_type = $this->get_course_type();
+
+            return ($course_type ? $course_type->get_title() : Translation::get('NoCourseType'));
+        }
+
+        return $course_type_title;
+    }
+
+    /**
+     * Returns the creation date of this course object
+     *
+     * @return int
+     */
+    public function get_creation_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CREATION_DATE);
+    }
+
+    /**
+     * **************************************************************************************************************
      * Delegation Functionality *
      * **************************************************************************************************************
      */
+
+    /**
+     * Retrieves the default values for a given course setting
+     *
+     * @param string $setting_name
+     * @param int $tool_id
+     *
+     * @return string[]
+     */
+    public function get_default_course_setting($setting_name, $tool_id)
+    {
+        return CourseSettingsController::getInstance()->get_course_type_setting(
+            $this->get_course_type_id(), $setting_name, $tool_id
+        );
+    }
 
     /**
      * Returns the expiration date of this course
@@ -709,6 +716,12 @@ class Course extends DataClass
     }
 
     /**
+     * **************************************************************************************************************
+     * Getters and Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
      * Gets the subscribed users of this course
      *
      * @return \application\weblcms\course\CourseEntityRelation[]
@@ -732,12 +745,6 @@ class Course extends DataClass
     }
 
     /**
-     * **************************************************************************************************************
-     * Getters and Setters *
-     * **************************************************************************************************************
-     */
-
-    /**
      * Returns the system code of this course object
      *
      * @return String
@@ -745,14 +752,6 @@ class Course extends DataClass
     public function get_system_code()
     {
         return $this->getDefaultProperty(self::PROPERTY_SYSTEM_CODE);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_course';
     }
 
     /**

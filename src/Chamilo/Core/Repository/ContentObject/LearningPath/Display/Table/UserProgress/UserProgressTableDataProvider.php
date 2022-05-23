@@ -7,7 +7,9 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\Learnin
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -18,26 +20,28 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
 {
 
     /**
-     * Returns the data as a resultset
+     * Cleans up the order property by passing the 'completed' and 'started' field to the nodes_completed counter
      *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param OrderBy[] $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @param array $order_property
      */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    protected function cleanupOrderProperty(?OrderBy $orderBy = null)
     {
-        $this->cleanupOrderProperty($order_property);
+        $firstOrderProperty = $orderBy->getFirst();
 
-        return $this->getTrackingService()->getLearningPathAttemptsWithUser(
-            $this->getLearningPath(),
-            $this->getCurrentTreeNode(),
-            $condition,
-            $offset,
-            $count,
-            $order_property);
+        if ($firstOrderProperty instanceof OrderProperty &&
+            $firstOrderProperty->getConditionVariable() instanceof StaticConditionVariable)
+        {
+            $value = $firstOrderProperty->getConditionVariable()->getValue();
+
+            if (in_array($value, array('progress', 'completed', 'started')))
+            {
+                $firstOrderProperty->getConditionVariable()->setValue('nodes_completed');
+                $firstOrderProperty->setDirection(
+                    $value == 'started' ? $firstOrderProperty->getDirection() :
+                        ($firstOrderProperty->getDirection() == SORT_ASC ? SORT_DESC : SORT_ASC)
+                );
+            }
+        }
     }
 
     /**
@@ -50,18 +54,17 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
     public function count_data($condition)
     {
         return $this->getTrackingService()->countLearningPathAttemptsWithUsers(
-            $this->getLearningPath(),
-            $this->getCurrentTreeNode(),
-            $condition);
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition
+        );
     }
 
     /**
      *
-     * @return TrackingService
+     * @return TreeNode
      */
-    protected function getTrackingService()
+    protected function getCurrentTreeNode()
     {
-        return $this->get_component()->getTrackingService();
+        return $this->get_component()->getCurrentTreeNode();
     }
 
     /**
@@ -75,34 +78,29 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
 
     /**
      *
-     * @return TreeNode
+     * @return TrackingService
      */
-    protected function getCurrentTreeNode()
+    protected function getTrackingService()
     {
-        return $this->get_component()->getCurrentTreeNode();
+        return $this->get_component()->getTrackingService();
     }
 
     /**
-     * Cleans up the order property by passing the 'completed' and 'started' field to the nodes_completed counter
+     * Returns the data as a resultset
      *
-     * @param array $order_property
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param OrderProperty[] $order_property
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
-    protected function cleanupOrderProperty($order_property)
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
-        $firstOrderProperty = $order_property[0];
+        $this->cleanupOrderProperty($order_property);
 
-        if ($firstOrderProperty instanceof OrderBy &&
-             $firstOrderProperty->get_property() instanceof StaticColumnConditionVariable)
-        {
-            $value = $firstOrderProperty->get_property()->get_value();
-
-            if (in_array($value, array('progress', 'completed', 'started')))
-            {
-                $firstOrderProperty->get_property()->set_value('nodes_completed');
-                $firstOrderProperty->set_direction(
-                    $value == 'started' ? $firstOrderProperty->get_direction() : ($firstOrderProperty->get_direction() ==
-                         SORT_ASC ? SORT_DESC : SORT_ASC));
-            }
-        }
+        return $this->getTrackingService()->getLearningPathAttemptsWithUser(
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $order_property
+        );
     }
 }

@@ -299,7 +299,7 @@ abstract class Manager extends Application
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
      * @throws \Exception

@@ -46,7 +46,7 @@ interface UserRepositoryInterface
      * @param Condition $condition
      * @param int $count
      * @param int $offset
-     * @param OrderBy[] $order_by
+     * @param OrderProperty[] $order_by
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */

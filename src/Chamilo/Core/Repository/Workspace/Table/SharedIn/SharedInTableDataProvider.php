@@ -24,17 +24,6 @@ class SharedInTableDataProvider extends ShareTableDataProvider
 
     /**
      *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
-    {
-        return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
-            $this->getWorkspaceService(), $this->getSelectedContentObject()
-        );
-    }
-
-    /**
-     *
      * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::count_data()
      */
     public function count_data($condition)
@@ -66,5 +55,16 @@ class SharedInTableDataProvider extends ShareTableDataProvider
     protected function getSelectedContentObject()
     {
         return $this->get_table()->get_component()->getContentObject();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    {
+        return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
+            $this->getWorkspaceService(), $this->getSelectedContentObject()
+        );
     }
 }

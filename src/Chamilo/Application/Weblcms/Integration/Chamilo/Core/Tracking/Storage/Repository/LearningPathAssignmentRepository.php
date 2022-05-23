@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -55,7 +55,7 @@ class LearningPathAssignmentRepository extends
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -86,7 +86,7 @@ class LearningPathAssignmentRepository extends
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -297,7 +297,7 @@ class LearningPathAssignmentRepository extends
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**

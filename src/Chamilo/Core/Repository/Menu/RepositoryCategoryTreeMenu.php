@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -29,6 +30,8 @@ class RepositoryCategoryTreeMenu extends GenericTree
 
     const ROOT_NODE_CLASS = 'category';
 
+    private $additional_items;
+
     /**
      *
      * @var \Chamilo\Core\Repository\Manager
@@ -40,8 +43,6 @@ class RepositoryCategoryTreeMenu extends GenericTree
      * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
      */
     private $workspaceImplementation;
-
-    private $additional_items;
 
     /**
      * Creates a new category navigation menu.
@@ -97,13 +98,13 @@ class RepositoryCategoryTreeMenu extends GenericTree
     public function get_node_children($parent_node_id)
     {
         return DataManager::retrieve_categories(
-            $this->get_retrieve_condition($parent_node_id), null, null, array(
-                new OrderBy(
-                    new PropertyConditionVariable(
-                        RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
+            $this->get_retrieve_condition($parent_node_id), null, null, new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
+                        )
                     )
-                )
-            )
+                ))
         );
     }
 

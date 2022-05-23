@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -26,35 +27,36 @@ class Block extends BlockRenderer
 
     protected function getLoginLogout($user_id, $type)
     {
-        $order_by = new OrderBy(
+        $order_by = new OrderProperty(
             new PropertyConditionVariable(
-                LoginLogout::class,
-                LoginLogout::PROPERTY_DATE));
-        
+                LoginLogout::class, LoginLogout::PROPERTY_DATE
+            )
+        );
+
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class,
-                LoginLogout::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
+                LoginLogout::class, LoginLogout::PROPERTY_USER_ID
+            ), new StaticConditionVariable($user_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                LoginLogout::class,
-                LoginLogout::PROPERTY_TYPE),
-            new StaticConditionVariable($type));
+                LoginLogout::class, LoginLogout::PROPERTY_TYPE
+            ), new StaticConditionVariable($type)
+        );
         $condition = new AndCondition($conditions);
-        
+
         $trackers = DataManager::retrieves(
-            LoginLogout::class,
-            new DataClassRetrievesParameters($condition, 1, 0, array($order_by)));
-        
+            LoginLogout::class, new DataClassRetrievesParameters($condition, 1, 0, new OrderBy(array($order_by)))
+        );
+
         $tracker = $trackers->current();
-        
+
         if (is_null($tracker))
         {
             return 0;
         }
-        
+
         return $tracker->get_date();
     }
 

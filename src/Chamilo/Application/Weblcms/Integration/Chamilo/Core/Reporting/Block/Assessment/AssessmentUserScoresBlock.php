@@ -14,13 +14,14 @@ use Chamilo\Core\User\Manager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -36,43 +37,47 @@ class AssessmentUserScoresBlock extends ToolBlock
     {
         $reporting_data = new ReportingData();
         $course_id = $this->getCourseId();
-        
+
         $users = CourseDataManager::retrieve_all_course_users($course_id);
-        
+
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_COURSE_ID), 
-            new StaticConditionVariable($course_id));
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+            ), new StaticConditionVariable($course_id)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_TOOL), 
-            new StaticConditionVariable(
-                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true)));
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
+            ), new StaticConditionVariable(
+                ClassnameUtilities::getInstance()->getClassNameFromNamespace(Assessment::class, true)
+            )
+        );
         $condition = new AndCondition($conditions);
-        
+
         $order_by = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
-                    ContentObjectPublication::class,
-                    ContentObjectPublication::PROPERTY_MODIFIED_DATE)));
-        
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
+                )
+            )
+        );
+
         $publication_resultset = DataManager::retrieves(
             ContentObjectPublication::class,
-            new DataClassRetrievesParameters($condition, null, null, $order_by));
-        
+            new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
+        );
+
         $publications = [];
         $headings = [];
         $headings[] = Translation::get('Name');
         $headings[] = Translation::get('OfficialCode', null, Manager::context());
-        foreach($publication_resultset as $publication)
+        foreach ($publication_resultset as $publication)
         {
             $publications[] = $publication;
-            
+
             $content_object = $publication->get_content_object();
-            
+
             if ($publication_resultset->count() > 5)
             {
                 $headings[] = substr($content_object->get_title(), 0, 14);
@@ -82,31 +87,30 @@ class AssessmentUserScoresBlock extends ToolBlock
                 $headings[] = $content_object->get_title();
             }
         }
-        
+
         $passingPercentage = Configuration::getInstance()->get_setting(
-            array('Chamilo\Core\Admin', 'passing_percentage'));
-        
+            array('Chamilo\Core\Admin', 'passing_percentage')
+        );
+
         $reporting_data->set_rows($headings);
-        
+
         foreach ($users as $key => $user)
         {
             $reporting_data->add_category($key);
             $reporting_data->add_data_category_row(
-                $key, 
-                Translation::get('Name'), 
-                User::fullname(
-                    $user[User::PROPERTY_FIRSTNAME],
-                    $user[User::PROPERTY_LASTNAME]));
-            
+                $key, Translation::get('Name'), User::fullname(
+                $user[User::PROPERTY_FIRSTNAME], $user[User::PROPERTY_LASTNAME]
+            )
+            );
+
             $reporting_data->add_data_category_row(
-                $key, 
-                Translation::get('OfficialCode', null, Manager::context()),
-                $user[User::PROPERTY_OFFICIAL_CODE]);
-            
+                $key, Translation::get('OfficialCode', null, Manager::context()), $user[User::PROPERTY_OFFICIAL_CODE]
+            );
+
             foreach ($publications as $publication)
             {
                 $content_object = $publication->get_content_object();
-                
+
                 if ($publication_resultset->count() > 5)
                 {
                     $title = substr($content_object->get_title(), 0, 14);
@@ -115,41 +119,40 @@ class AssessmentUserScoresBlock extends ToolBlock
                 {
                     $title = $content_object->get_title();
                 }
-                
+
                 $conditions = [];
-                
+
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class,
-                        AssessmentAttempt::PROPERTY_ASSESSMENT_ID),
-                    new StaticConditionVariable($publication->get_id()));
-                
+                        AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID
+                    ), new StaticConditionVariable($publication->get_id())
+                );
+
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
-                        AssessmentAttempt::class,
-                        AssessmentAttempt::PROPERTY_USER_ID),
-                    new StaticConditionVariable($user[User::PROPERTY_ID]));
+                        AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID
+                    ), new StaticConditionVariable($user[User::PROPERTY_ID])
+                );
                 $condition = new AndCondition($conditions);
-                
+
                 $attempts_by_user = \Chamilo\Libraries\Storage\DataManager\DataManager::retrieves(
-                    AssessmentAttempt::class,
-                    new DataClassRetrievesParameters($condition));
-                
+                    AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
+                );
+
                 if ($attempts_by_user->count() == 0)
                 {
                     if (DataManager::is_publication_target_user(
-                        $user[User::PROPERTY_ID],
-                        $publication->get_id(), 
-                        $course_id))
+                        $user[User::PROPERTY_ID], $publication->get_id(), $course_id
+                    ))
                     {
                         $reporting_data->add_data_category_row($key, $title, null);
                         continue;
                     }
-                    
+
                     $reporting_data->add_data_category_row($key, $title, 'X');
                     continue;
                 }
-                
+
                 $score = $this->get_score($attempts_by_user);
                 if ($score < $passingPercentage)
                 {
@@ -163,6 +166,7 @@ class AssessmentUserScoresBlock extends ToolBlock
             }
         }
         $reporting_data->hide_categories();
+
         return $reporting_data;
     }
 
@@ -174,36 +178,39 @@ class AssessmentUserScoresBlock extends ToolBlock
             $score_type = Request::get('sel');
         }
         $score = null;
-        
+
         switch ($score_type)
         {
             case self::SCORE_TYPE_AVG :
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     $score += $attempt->get_total_score();
                 }
+
                 return number_format($score / count($attempts), 1);
             case self::SCORE_TYPE_MIN :
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_total_score() < $score)
                     {
                         $score = $attempt->get_total_score();
                     }
                 }
+
                 return $score;
             case self::SCORE_TYPE_MAX :
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_total_score() > $score)
                     {
                         $score = $attempt->get_total_score();
                     }
                 }
+
                 return $score;
             case self::SCORE_TYPE_FIRST :
                 $date = null;
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_start_time() < $date)
                     {
@@ -211,10 +218,11 @@ class AssessmentUserScoresBlock extends ToolBlock
                         $score = $attempt->get_total_score();
                     }
                 }
+
                 return $score;
             case self::SCORE_TYPE_LAST :
                 $date = null;
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     if (is_null($score) || $attempt->get_start_time() > $date)
                     {
@@ -222,23 +230,25 @@ class AssessmentUserScoresBlock extends ToolBlock
                         $score = $attempt->get_total_score();
                     }
                 }
+
                 return $score;
             default :
-                foreach($attempts as $attempt)
+                foreach ($attempts as $attempt)
                 {
                     $score += $attempt->get_total_score();
                 }
+
                 return number_format($score / count($attempts), 1);
         }
-    }
-
-    public function retrieve_data()
-    {
-        return $this->count_data();
     }
 
     public function get_views()
     {
         return array(Html::VIEW_TABLE);
+    }
+
+    public function retrieve_data()
+    {
+        return $this->count_data();
     }
 }

@@ -15,7 +15,7 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassRetrievesParameters extends DataClassRetrieveParameters
+class DataClassRetrievesParameters extends DataClassParameters
 {
 
     /**
@@ -23,7 +23,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $count
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param boolean $distinct
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $havingCondition
@@ -34,7 +34,7 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
         $distinct = false, GroupBy $groupBy = null, Condition $havingCondition = null
     )
     {
-        DataClassParameters::__construct(
+        parent::__construct(
             $condition, $joins, null, $orderBy, $groupBy, $havingCondition, $count, $offset, $distinct
         );
     }
@@ -53,23 +53,15 @@ class DataClassRetrievesParameters extends DataClassRetrieveParameters
         {
             return $parameter;
         }
-
-        // If the parameter is a Condition, generate a new DataClassRetrievesParameters instance using the Condition
-        // provided by the context
         elseif (is_object($parameter) && $parameter instanceof Condition)
         {
             return new self($parameter);
         }
-
-        // If it's an integer, assume it will be the count and generate a new DataClassRetrievesParameters
         elseif (is_integer($parameter))
         {
             return new self(null, $parameter);
         }
-
-        // If the parameter is an array, determine whether it's an array of ObjectTableOrder objects and if so generate
-        // a DataClassResultParameters
-        elseif (is_array($parameter) && count($parameter) > 0 && $parameter[0] instanceof OrderBy)
+        elseif (is_object($parameter) && $parameter instanceof OrderBy)
         {
             return new self(null, null, null, $parameter);
         }

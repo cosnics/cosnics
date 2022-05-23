@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -31,17 +32,29 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class RequestRepository extends CommonDataClassRepository
 {
     /**
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     *
+     * @return int
+     */
+    public function countRequestsWithContentObjects(Condition $condition)
+    {
+        return $this->dataClassRepository->count(
+            Request::class, new DataClassCountParameters($condition, $this->getRequestJoins())
+        );
+    }
+
+    /**
      * Retrieves a request by a given guid
      *
      * @param string $guid
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass | Request
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass |
+     *     Request
      */
     public function findRequestByGuid(string $guid)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID),
-            new StaticConditionVariable($guid)
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), new StaticConditionVariable($guid)
         );
 
         return $this->dataClassRepository->retrieve(Request::class, new DataClassRetrieveParameters($condition));
@@ -52,28 +65,16 @@ class RequestRepository extends CommonDataClassRepository
      *
      * @param int $id
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass | Request
+     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass|\Chamilo\Libraries\Storage\DataClass\DataClass |
+     *     Request
      */
     public function findRequestById(int $id)
     {
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Request::class, Request::PROPERTY_ID),
-            new StaticConditionVariable($id)
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_ID), new StaticConditionVariable($id)
         );
 
         return $this->dataClassRepository->retrieve(Request::class, new DataClassRetrieveParameters($condition));
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countRequestsWithContentObjects(Condition $condition)
-    {
-        return $this->dataClassRepository->count(
-            Request::class, new DataClassCountParameters($condition, $this->getRequestJoins())
-        );
     }
 
     /**
@@ -110,36 +111,6 @@ class RequestRepository extends CommonDataClassRepository
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Query\Joins
-     */
-    protected function getRequestJoins()
-    {
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                ContentObject::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID)
-                )
-            )
-        );
-
-        $joins->add(
-            new Join(
-                User::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
-                    new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID)
-                )
-            )
-        );
-
-        return $joins;
-    }
-
-    /**
      * @param int[] $guids
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
@@ -147,8 +118,7 @@ class RequestRepository extends CommonDataClassRepository
     public function findRequestsWithContentObjectsByGuids(array $guids = [])
     {
         $condition = new InCondition(
-            new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID),
-            $guids
+            new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), $guids
         );
 
         $properties = new DataClassProperties();
@@ -183,10 +153,38 @@ class RequestRepository extends CommonDataClassRepository
             new StaticConditionVariable($request->getId())
         );
 
-        $orderBy = [new OrderBy(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
+        $orderBy = [new OrderProperty(new PropertyConditionVariable(Result::class, Result::PROPERTY_PERCENTAGE))];
 
         return $this->dataClassRepository->retrieves(
-            Result::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            Result::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy))
         );
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Joins
+     */
+    protected function getRequestJoins()
+    {
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                ContentObject::class, new EqualityCondition(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_CONTENT_OBJECT_ID)
+                )
+            )
+        );
+
+        $joins->add(
+            new Join(
+                User::class, new EqualityCondition(
+                    new PropertyConditionVariable(User::class, User::PROPERTY_ID),
+                    new PropertyConditionVariable(Request::class, Request::PROPERTY_AUTHOR_ID)
+                )
+            )
+        );
+
+        return $joins;
     }
 }

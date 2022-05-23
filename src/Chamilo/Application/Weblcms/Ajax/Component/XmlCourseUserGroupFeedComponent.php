@@ -21,6 +21,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -207,8 +208,8 @@ class XmlCourseUserGroupFeedComponent extends Manager
             // Order the users alphabetically
             $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
             $order = array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
             );
 
             // Users want to see their students ordered by last name, always, even if the last name is shown first.
@@ -218,7 +219,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
             //            }
 
             $user_result_set = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                User::class, new DataClassRetrievesParameters($user_condition, null, null, $order)
+                User::class, new DataClassRetrievesParameters($user_condition, null, null, new OrderBy($order))
             );
 
             $users = [];
@@ -233,11 +234,11 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                 $group_result_set = DataManager::retrieves(
                     CourseGroup::class, new DataClassRetrievesParameters(
-                        $group_condition, null, null, array(
-                            new OrderBy(
-                                new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
-                            )
-                        )
+                        $group_condition, null, null, new OrderBy(array(
+                                new OrderProperty(
+                                    new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME)
+                                )
+                            ))
                     )
                 );
 

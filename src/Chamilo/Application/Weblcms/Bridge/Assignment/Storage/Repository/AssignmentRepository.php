@@ -19,7 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -52,7 +52,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -81,7 +81,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -124,7 +124,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -153,7 +153,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -194,7 +194,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -223,7 +223,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -418,7 +418,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

@@ -16,29 +16,6 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
     /*
      * Inherited
      */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        $contentObjectService = new ContentObjectService(new ContentObjectRepository());
-
-        /** @var FilterData $filterData */
-        $filterData = $this->get_component()->getFilterData();
-
-        return $contentObjectService->getContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $this->get_component()->getWorkspace(),
-            new ConditionFilterRenderer(
-                $filterData,
-                $this->get_component()->getWorkspace()
-            ),
-            $count,
-            $offset,
-            $order_property
-        );
-    }
-
-    /*
-     * Inherited
-     */
     public function count_data($condition)
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
@@ -47,12 +24,27 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
         $filterData = $this->get_component()->getFilterData();
 
         return $contentObjectService->countContentObjectsByTypeForWorkspace(
-            $filterData->getTypeDataClass(),
-            $this->get_component()->getWorkspace(),
-            new ConditionFilterRenderer(
-                $filterData,
-                $this->get_component()->getWorkspace()
+            $filterData->getTypeDataClass(), $this->get_component()->getWorkspace(), new ConditionFilterRenderer(
+                $filterData, $this->get_component()->getWorkspace()
             )
+        );
+    }
+
+    /*
+     * Inherited
+     */
+
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        $contentObjectService = new ContentObjectService(new ContentObjectRepository());
+
+        /** @var FilterData $filterData */
+        $filterData = $this->get_component()->getFilterData();
+
+        return $contentObjectService->getContentObjectsByTypeForWorkspace(
+            $filterData->getTypeDataClass(), $this->get_component()->getWorkspace(), new ConditionFilterRenderer(
+                $filterData, $this->get_component()->getWorkspace()
+            ), $count, $offset, $order_property
         );
     }
 }

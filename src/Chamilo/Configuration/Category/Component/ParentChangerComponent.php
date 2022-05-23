@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Structure\Breadcrumb;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -23,9 +24,9 @@ use Chamilo\Libraries\Utilities\Utilities;
 class ParentChangerComponent extends Manager
 {
 
-    private $tree;
-
     private $level = 1;
+
+    private $tree;
 
     /**
      * Runs this component and displays its output.
@@ -187,11 +188,11 @@ class ParentChangerComponent extends Manager
         );
 
         $categories = $this->get_parent()->retrieve_categories(
-            $condition, null, null, array(
-                new OrderBy(
+            $condition, null, null, new OrderBy(array(
+                new OrderProperty(
                     new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_DISPLAY_ORDER)
                 )
-            )
+            ))
         );
 
         $i = 1;

@@ -13,8 +13,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -103,7 +103,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
         $user_ids = [];
 
-        foreach($relations as $relation)
+        foreach ($relations as $relation)
         {
             $user_ids[] = $relation->get_user_id();
         }
@@ -143,8 +143,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         else
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                new StaticConditionVariable(0)
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
             );
         }
 
@@ -163,7 +162,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
             )
         );
     }

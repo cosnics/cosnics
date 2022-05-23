@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -196,11 +197,11 @@ class ElementService
 
         return DataManager::retrieves(
             Element::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(
-                        new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)
-                    )
-                )
+                $condition, null, null, new OrderBy(array(
+                        new OrderProperty(
+                            new PropertyConditionVariable(Element::class, Element::PROPERTY_DISPLAY_ORDER)
+                        )
+                    ))
             )
         );
     }

@@ -17,6 +17,7 @@ use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 
@@ -31,11 +32,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     const FORM_SUBMIT = 'submit';
 
     /**
-     * The total number of pages for the assessment
+     * The form that displays the questions per page
      *
-     * @var int
+     * @var AssessmentViewerForm
      */
-    private $total_pages;
+    private $question_form;
 
     /**
      * An array containing all ComplexContentObjectItem objects for individual questions.
@@ -45,11 +46,11 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
     private $questions;
 
     /**
-     * The form that displays the questions per page
+     * The total number of pages for the assessment
      *
-     * @var AssessmentViewerForm
+     * @var int
      */
-    private $question_form;
+    private $total_pages;
 
     /**
      * Runs this component and displays its output.
@@ -211,7 +212,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
         $question_ids = [];
 
-        foreach($questions as $question)
+        foreach ($questions as $question)
         {
             $question_ids[] = $question->get_id();
         }
@@ -317,8 +318,8 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
 
     public function get_submitted_page_number()
     {
-        $regex = '/^(' . AssessmentViewerForm::PAGE_NUMBER . '|' . AssessmentResultViewerForm::PAGE_NUMBER .
-            ')-([0-9]+)/';
+        $regex =
+            '/^(' . AssessmentViewerForm::PAGE_NUMBER . '|' . AssessmentResultViewerForm::PAGE_NUMBER . ')-([0-9]+)/';
         foreach (array_keys($_REQUEST) as $key)
         {
             if (preg_match($regex, $key, $matches))
@@ -376,7 +377,7 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
             $this->get_parent()->register_question_ids($question_ids);
         }
 
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
             )
@@ -389,7 +390,8 @@ class AssessmentViewerComponent extends Manager implements DelegateComponent
         );
 
         $this->questions = DataManager:: retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
+            ComplexContentObjectItem::class,
+            new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
         );
     }
 

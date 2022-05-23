@@ -13,7 +13,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassCountGroupedParameters extends DataClassPropertyParameters
+class DataClassCountGroupedParameters extends DataClassParameters
 {
 
     /**
@@ -34,7 +34,7 @@ class DataClassCountGroupedParameters extends DataClassPropertyParameters
             $groupBy = new GroupBy($dataClassProperties->get());
         }
 
-        DataClassParameters::__construct($condition, $joins, $dataClassProperties, null, $groupBy, $havingCondition);
+        parent::__construct($condition, $joins, $dataClassProperties, null, $groupBy, $havingCondition);
     }
 
     /**

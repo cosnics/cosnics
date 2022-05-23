@@ -21,7 +21,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */
@@ -33,7 +33,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */
@@ -45,7 +45,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */

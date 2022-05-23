@@ -11,6 +11,7 @@ use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -40,14 +41,14 @@ class MostActiveInactiveLastPublicationBlock extends CourseBlock
                 ), new StaticConditionVariable($course->get_id())
             );
             $order_by = array(
-                new OrderBy(
+                new OrderProperty(
                     new PropertyConditionVariable(
                         ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                     )
                 )
             );
             $publications = DataManager::retrieve_content_object_publications(
-                $condition, $order_by, 0, 1
+                $condition, new OrderBy($order_by), 0, 1
             );
 
             if ($publications->count() > 0)

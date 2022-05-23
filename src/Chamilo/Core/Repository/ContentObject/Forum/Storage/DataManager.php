@@ -1,25 +1,26 @@
 <?php
 namespace Chamilo\Core\Repository\ContentObject\Forum\Storage;
 
-use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
-use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\Forum;
 use Chamilo\Core\Repository\ContentObject\Forum\Storage\DataClass\ForumSubscribe;
+use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumPost;
+use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopic;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 
 /**
  * Class for the specific Forum data management, it receives data calls and delegates it to the mdb2 class.
@@ -32,71 +33,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     const PREFIX = 'repository_';
 
     /**
-     * This function retrieves a ForumSubscribe object based on its forum id and user id.
-     *
-     * @param int $forum_id
-     * @param int $user_id
-     * @return ForumSubscribe
-     *
-     */
-    public static function retrieve_subscribe($forum_id, $user_id)
-    {
-        $conditions = [];
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
-            new StaticConditionVariable($forum_id));
-
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_USER_ID),
-            new StaticConditionVariable($user_id));
-
-        $condition = new AndCondition($conditions);
-
-        return self::retrieve(ForumSubscribe::class, new DataClassRetrieveParameters($condition));
-    }
-
-    /**
-     * Gets the list of users who are subscribed to a forum.
-     *
-     * @param $forum_id int
-     *
-     * @return List of subscribed users
-     */
-    public static function retrieve_subscribed_forum_users($forum_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
-            new StaticConditionVariable($forum_id));
-
-        $subscriptions = DataManager::retrieves(
-            ForumSubscribe::class,
-            new DataClassRetrievesParameters($condition));
-
-        $users = [];
-
-        foreach($subscriptions as $subscription)
-        {
-            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
-                User::class,
-                (int) $subscription->get_user_id());
-            $users[$user->get_id()] = $user;
-        }
-
-        return $users;
-    }
-
-    /**
      * Gets the number of subscribers a forum has
      *
      * @param $forum_id int The id of a forum of which this function counts the subscribers.
+     *
      * @return int Returns the number of subscribers of a forum.
      */
     public static function count_forum_subscribers($forum_id)
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
-            new StaticConditionVariable($forum_id));
+            new StaticConditionVariable($forum_id)
+        );
 
         return self::count(ForumSubscribe::class, new DataClassCountParameters($condition));
     }
@@ -114,61 +62,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $forum_subscribe = new ForumSubscribe();
         $forum_subscribe->set_forum_id($forum_id);
         $forum_subscribe->set_user_id($user_id);
+
         return $forum_subscribe->create();
-    }
-
-    /**
-     * Calculates the last post from the forum topics in a forum
-     *
-     * @param int $forum_id
-     *
-     * @return ComplexContentObjectItem
-     */
-    public static function retrieve_last_post_forum_topics($forum_id)
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT),
-            new StaticConditionVariable($forum_id));
-
-        $joins = new Joins();
-
-        $joins->add(
-            new Join(
-                ForumTopic::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
-                    new PropertyConditionVariable(ForumTopic::class, ForumTopic::PROPERTY_ID))));
-
-        $joins->add(
-            new Join(
-                ComplexContentObjectItem::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(ForumTopic::class, ForumTopic::PROPERTY_ID),
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_REF))));
-
-        $joins->add(
-            new Join(
-                Forum::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_PARENT),
-                    new PropertyConditionVariable(Forum::class, Forum::PROPERTY_ID))));
-
-        $forum_post_alias = self::get_alias(ForumPost::getTableName());
-
-        $order_by = [];
-        $order_by[] = new OrderBy(
-            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
-            SORT_DESC);
-
-        $parameters = new DataClassRetrieveParameters($condition, $order_by, $joins);
-
-        return self::retrieve(ForumPost::class, $parameters);
     }
 
     /**
@@ -183,7 +78,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $properties = new DataClassProperties();
 
         $properties->add(
-            new PropertyConditionVariable(ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID));
+            new PropertyConditionVariable(ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID)
+        );
 
         $properties->add(new PropertyConditionVariable(Forum::class, Forum::PROPERTY_LAST_POST));
 
@@ -191,36 +87,39 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT),
-            new StaticConditionVariable($forum_id));
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($forum_id)
+        );
 
         $forum_post_alias = self::get_alias(ForumPost::getTableName());
 
         $order_by = [];
-        $order_by[] = new OrderBy(
-            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
-            SORT_DESC);
+        $order_by[] = new OrderProperty(
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
+        );
 
         $joins = new Joins();
 
         $joins->add(
             new Join(
-                Forum::class,
-                new EqualityCondition(
+                Forum::class, new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_REF),
-                    new PropertyConditionVariable(Forum::class, Forum::PROPERTY_ID))));
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
+                    ), new PropertyConditionVariable(Forum::class, Forum::PROPERTY_ID)
+                )
+            )
+        );
 
         $joins->add(
             new Join(
-                ForumPost::class,
-                new EqualityCondition(
+                ForumPost::class, new EqualityCondition(
                     new PropertyConditionVariable(Forum::class, Forum::PROPERTY_LAST_POST),
-                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_ID))));
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_ID)
+                )
+            )
+        );
 
-        $parameters = new RecordRetrieveParameters($properties, $condition, $order_by, $joins);
+        $parameters = new RecordRetrieveParameters($properties, $condition, new OrderBy($order_by), $joins);
 
         try
         {
@@ -230,5 +129,123 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             return null;
         }
+    }
+
+    /**
+     * Calculates the last post from the forum topics in a forum
+     *
+     * @param int $forum_id
+     *
+     * @return ComplexContentObjectItem
+     */
+    public static function retrieve_last_post_forum_topics($forum_id)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($forum_id)
+        );
+
+        $joins = new Joins();
+
+        $joins->add(
+            new Join(
+                ForumTopic::class, new EqualityCondition(
+                    new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_FORUM_TOPIC_ID),
+                    new PropertyConditionVariable(ForumTopic::class, ForumTopic::PROPERTY_ID)
+                )
+            )
+        );
+
+        $joins->add(
+            new Join(
+                ComplexContentObjectItem::class, new EqualityCondition(
+                    new PropertyConditionVariable(ForumTopic::class, ForumTopic::PROPERTY_ID),
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
+                    )
+                )
+            )
+        );
+
+        $joins->add(
+            new Join(
+                Forum::class, new EqualityCondition(
+                    new PropertyConditionVariable(
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                    ), new PropertyConditionVariable(Forum::class, Forum::PROPERTY_ID)
+                )
+            )
+        );
+
+        $forum_post_alias = self::get_alias(ForumPost::getTableName());
+
+        $order_by = [];
+        $order_by[] = new OrderProperty(
+            new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE), SORT_DESC
+        );
+
+        $parameters = new DataClassRetrieveParameters($condition, new OrderBy($order_by), $joins);
+
+        return self::retrieve(ForumPost::class, $parameters);
+    }
+
+    /**
+     * This function retrieves a ForumSubscribe object based on its forum id and user id.
+     *
+     * @param int $forum_id
+     * @param int $user_id
+     *
+     * @return ForumSubscribe
+     *
+     */
+    public static function retrieve_subscribe($forum_id, $user_id)
+    {
+        $conditions = [];
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
+            new StaticConditionVariable($forum_id)
+        );
+
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_USER_ID),
+            new StaticConditionVariable($user_id)
+        );
+
+        $condition = new AndCondition($conditions);
+
+        return self::retrieve(ForumSubscribe::class, new DataClassRetrieveParameters($condition));
+    }
+
+    /**
+     * Gets the list of users who are subscribed to a forum.
+     *
+     * @param $forum_id int
+     *
+     * @return List of subscribed users
+     */
+    public static function retrieve_subscribed_forum_users($forum_id)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(ForumSubscribe::class, ForumSubscribe::PROPERTY_FORUM_ID),
+            new StaticConditionVariable($forum_id)
+        );
+
+        $subscriptions = DataManager::retrieves(
+            ForumSubscribe::class, new DataClassRetrievesParameters($condition)
+        );
+
+        $users = [];
+
+        foreach ($subscriptions as $subscription)
+        {
+            $user = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(
+                User::class, (int) $subscription->get_user_id()
+            );
+            $users[$user->get_id()] = $user;
+        }
+
+        return $users;
     }
 }

@@ -3,30 +3,30 @@
 namespace Chamilo\Application\Weblcms\Storage\Repository;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
+use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
-use Chamilo\Application\Weblcms\Course\Storage\DataClass\CourseRelCourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
+use Chamilo\Core\User\Storage\DataClass\User;
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\Join;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Core\User\Storage\DataClass\User;
 
 /**
  * The repository class for the Course Entity
@@ -239,10 +239,10 @@ class CourseRepository implements CourseRepositoryInterface
 
         $condition = new AndCondition($conditions);
 
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
+        $orderBy = array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy))
         );
     }
 
@@ -259,10 +259,10 @@ class CourseRepository implements CourseRepositoryInterface
             ), new StaticConditionVariable($courseTypeId)
         );
 
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
+        $orderBy = array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy))
         );
     }
 
@@ -289,10 +289,10 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesForUser(User $user)
     {
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
+        $orderBy = array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)));
 
         return DataManager::retrieve_all_courses_from_user(
-            $user, null, null, null, $orderBy
+            $user, null, null, null, new OrderBy($orderBy)
         );
     }
 
@@ -416,8 +416,7 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $recordRetrievesParameters =
-            new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
+        $recordRetrievesParameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
 
         $courseRecords = DataManager::records(
             Course::class, $recordRetrievesParameters

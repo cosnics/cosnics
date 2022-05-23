@@ -23,7 +23,7 @@ use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -539,14 +539,14 @@ abstract class ContentObjectPublicationListRenderer
      *
      * @see ContentObjectPublicationBrowser::get_publications()
      */
-    public function get_publications($offset = 0, $max_objects = - 1, OrderBy $object_table_order = null)
+    public function get_publications($offset = 0, $max_objects = - 1, OrderProperty $orderBy = null)
     {
-        if (!$object_table_order)
+        if (!$orderBy)
         {
-            $object_table_order = $this->tool_browser->get_default_order_property();
+            $orderBy = $this->tool_browser->getDefaultOrderBy();
         }
 
-        return $this->tool_browser->get_publications($offset, $max_objects, $object_table_order);
+        return $this->tool_browser->get_publications($offset, $max_objects, $orderBy);
     }
 
     public function get_search_condition()

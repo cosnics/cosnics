@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Service;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 
 /**
  * Service to manage activities of content objects
@@ -63,12 +63,12 @@ class ActivityService
      * @param ContentObject $contentObject
      * @param int $offset
      * @param int $count
-     * @param OrderBy|null $orderBy
+     * @param OrderProperty|null $orderBy
      *
      * @return Activity[]
      */
     public function retrieveActivitiesForContentObject(ContentObject $contentObject, $offset, $count,
-        OrderBy $orderBy = null)
+        OrderProperty $orderBy = null)
     {
         $activities = [];
 

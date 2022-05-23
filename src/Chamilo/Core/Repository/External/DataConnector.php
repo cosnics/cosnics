@@ -97,7 +97,7 @@ abstract class DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property ObjectTableOrder
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      */

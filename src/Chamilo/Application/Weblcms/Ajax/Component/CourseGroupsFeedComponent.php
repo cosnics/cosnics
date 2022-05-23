@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -166,9 +167,9 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
 
         return DataManager::retrieves(
             CourseGroup::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
-                )
+                $condition, null, null, new OrderBy(array(
+                    new OrderProperty(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME))
+                ))
             )
         );
     }

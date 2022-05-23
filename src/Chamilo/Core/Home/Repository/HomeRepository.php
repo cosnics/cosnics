@@ -10,72 +10,12 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 class HomeRepository
 {
-
-    /**
-     * Returns a home element by an identifier
-     *
-     * @param int $elementIdentifier
-     *
-     * @return Element
-     */
-    public function findElementByIdentifier($elementIdentifier)
-    {
-        return DataManager::retrieve_by_id(Element::class, $elementIdentifier);
-    }
-
-    /**
-     *
-     * @param integer $userIdentifier
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findElementsByUserIdentifier($userIdentifier)
-    {
-        $parameters = new DataClassRetrievesParameters(
-            $this->getElementsByUserIdentifierCondition($userIdentifier),
-            null,
-            null,
-            array(
-                new OrderBy(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
-                new OrderBy(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))));
-
-        return DataManager::retrieves(Element::class, $parameters);
-    }
-
-    /**
-     * Finds the blocks for a given user
-     *
-     * @param int $userIdentifier
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findBlocksByUserIdentifier($userIdentifier)
-    {
-        $parameters = new DataClassRetrievesParameters(
-            new EqualityCondition(
-                new PropertyConditionVariable(Element::class, Block::PROPERTY_USER_ID),
-                new StaticConditionVariable($userIdentifier)));
-
-        return DataManager::retrieves(Block::class, $parameters);
-    }
-
-    /**
-     *
-     * @param integer $userIdentifier
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
-     */
-    public function getElementsByUserIdentifierCondition($userIdentifier)
-    {
-        return new EqualityCondition(
-            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
-            new StaticConditionVariable($userIdentifier));
-    }
 
     /**
      *
@@ -107,5 +47,68 @@ class HomeRepository
         }
 
         return $blockTypes;
+    }
+
+    /**
+     * Finds the blocks for a given user
+     *
+     * @param int $userIdentifier
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findBlocksByUserIdentifier($userIdentifier)
+    {
+        $parameters = new DataClassRetrievesParameters(
+            new EqualityCondition(
+                new PropertyConditionVariable(Element::class, Block::PROPERTY_USER_ID),
+                new StaticConditionVariable($userIdentifier)
+            )
+        );
+
+        return DataManager::retrieves(Block::class, $parameters);
+    }
+
+    /**
+     * Returns a home element by an identifier
+     *
+     * @param int $elementIdentifier
+     *
+     * @return Element
+     */
+    public function findElementByIdentifier($elementIdentifier)
+    {
+        return DataManager::retrieve_by_id(Element::class, $elementIdentifier);
+    }
+
+    /**
+     *
+     * @param integer $userIdentifier
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findElementsByUserIdentifier($userIdentifier)
+    {
+        $parameters = new DataClassRetrievesParameters(
+            $this->getElementsByUserIdentifierCondition($userIdentifier), null, null, new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_TYPE)),
+                new OrderProperty(new PropertyConditionVariable(Element::class, Element::PROPERTY_SORT))
+            ))
+        );
+
+        return DataManager::retrieves(Element::class, $parameters);
+    }
+
+    /**
+     *
+     * @param integer $userIdentifier
+     *
+     * @return \Chamilo\Libraries\Storage\Query\Condition\EqualityCondition
+     */
+    public function getElementsByUserIdentifierCondition($userIdentifier)
+    {
+        return new EqualityCondition(
+            new PropertyConditionVariable(Element::class, Element::PROPERTY_USER_ID),
+            new StaticConditionVariable($userIdentifier)
+        );
     }
 }

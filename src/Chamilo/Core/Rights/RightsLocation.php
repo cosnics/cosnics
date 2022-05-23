@@ -9,6 +9,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -176,7 +177,9 @@ abstract class RightsLocation extends NestedTreeNode
         );
 
         $locked_parent_condition = new AndCondition($locked_parent_conditions);
-        $order = array(new OrderBy(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE)));
+        $order =
+            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(self::class, self::PROPERTY_LEFT_VALUE)))
+            );
 
         $datamanager = self::package() . '\Storage\DataManager';
 

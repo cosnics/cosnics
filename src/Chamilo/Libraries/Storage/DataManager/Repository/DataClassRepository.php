@@ -1236,7 +1236,7 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
      * @param Condition $condition
      * @param integer $offset
-     * @param integer $count $param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy[]
+     * @param integer $count $param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy[]
      *
      * @return boolean
      */

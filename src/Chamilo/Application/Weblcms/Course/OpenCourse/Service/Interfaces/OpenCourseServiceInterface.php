@@ -21,7 +21,7 @@ interface OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */

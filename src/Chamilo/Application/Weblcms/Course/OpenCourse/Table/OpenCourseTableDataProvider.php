@@ -21,7 +21,7 @@ class OpenCourseTableDataProvider extends CourseTableDataProvider
      * @param $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $order_property
+     * @param OrderProperty[] $order_property
      *
      * @return DataClassIterator
      */

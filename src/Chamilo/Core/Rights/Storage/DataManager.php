@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -268,13 +269,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             // Inheriting children
             $inheriting_condition = new AndCondition([
-                    $condition,
-                    new EqualityCondition(
-                        new PropertyConditionVariable(
-                            $context_location::class_name(), $context_location::PROPERTY_INHERIT
-                        ), new StaticConditionVariable(1)
-                    )
-                ]);
+                $condition,
+                new EqualityCondition(
+                    new PropertyConditionVariable(
+                        $context_location::class_name(), $context_location::PROPERTY_INHERIT
+                    ), new StaticConditionVariable(1)
+                )
+            ]);
             $parameters = new DataClassDistinctParameters(
                 $inheriting_condition, new DataClassProperties(
                     array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
@@ -627,11 +628,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         // order by entity_type to avoid invalid data when looping the rights
-        $order = array(
-            new OrderBy(
+        $order = new OrderBy(array(
+            new OrderProperty(
                 new PropertyConditionVariable($class_name, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE), SORT_ASC
             )
-        );
+        ));
 
         return self::retrieve_rights_location_rights($context, $condition, null, null, $order);
     }

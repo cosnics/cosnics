@@ -13,6 +13,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -74,6 +75,17 @@ class PublisherComponent extends Manager implements DelegateComponent
     }
 
     /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
+
+        return parent::getAdditionalParameters($additionalParameters);
+    }
+
+    /**
      * @return \Chamilo\Core\Repository\Publication\Service\PublicationResultsRenderer
      */
     public function getPublicationResultsRenderer()
@@ -108,23 +120,12 @@ class PublisherComponent extends Manager implements DelegateComponent
         );
 
         $order_by = [];
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID)
         );
 
         return DataManager::retrieve_content_objects(
-            ContentObject::class, new DataClassRetrievesParameters($condition, null, null, $order_by)
+            ContentObject::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_by))
         );
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = \Chamilo\Core\Repository\Manager::PARAM_CONTENT_OBJECT_ID;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 }

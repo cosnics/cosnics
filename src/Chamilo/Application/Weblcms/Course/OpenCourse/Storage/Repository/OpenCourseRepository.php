@@ -21,7 +21,6 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -41,7 +40,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */
@@ -60,7 +59,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */
@@ -109,7 +108,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderBy
+     * @param OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */

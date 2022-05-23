@@ -10,8 +10,8 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -62,11 +62,11 @@ class AttachmentImagesFeedComponent extends AttachmentContentObjectsFeedComponen
     protected function retrieveContentObjects()
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getContentObjectConditions(), 100, $this->getOffset(), array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
-                )
-            )
+            $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+                    )
+                ))
         );
 
         return DataManager::retrieve_active_content_objects(File::class, $parameters);

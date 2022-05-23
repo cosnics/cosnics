@@ -11,8 +11,8 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -30,39 +30,41 @@ class SearchCompleteComponent extends Manager
     public function run()
     {
         $response = [];
-        
+
         $query = Request::get('term');
-        
+
         $conditions = [];
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OWNER_ID),
-            new StaticConditionVariable(Session::get_user_id()));
+            new StaticConditionVariable(Session::get_user_id())
+        );
         $or_conditions[] = new ContainsCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE),
-            $query);
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE), $query
+        );
         $or_conditions[] = new ContainsCondition(
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION),
-            $query);
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_DESCRIPTION), $query
+        );
         $conditions[] = new OrCondition($or_conditions);
         $condition = new AndCondition($conditions);
-        
+
         $parameters = new DataClassRetrievesParameters(
-            $condition, 
-            null, 
-            null, 
-            array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE))));
+            $condition, null, null, new OrderBy(array(
+                new OrderProperty(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+                )
+            ))
+        );
         $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
-        
-        foreach($objects as $object)
+
+        foreach ($objects as $object)
         {
             $response[] = array(
-                'id' => $object->get_id(), 
-                'label' => StringUtilities::getInstance()->truncate($object->get_title(), 23), 
-                'value' => $object->get_title());
+                'id' => $object->get_id(),
+                'label' => StringUtilities::getInstance()->truncate($object->get_title(), 23),
+                'value' => $object->get_title()
+            );
         }
-        
+
         echo json_encode($response);
     }
 }

@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -243,11 +244,11 @@ class CourseCategoryFeedComponent extends AjaxManager
 
         return DataManager::retrieves(
             CourseCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(
-                        new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
-                    )
-                )
+                $condition, null, null, new OrderBy(array(
+                        new OrderProperty(
+                            new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
+                        )
+                    ))
             )
         );
     }
@@ -302,8 +303,9 @@ class CourseCategoryFeedComponent extends AjaxManager
 
         return \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Course::class, new DataClassRetrievesParameters(
-                $condition, 100, $this->get_offset(),
-                array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
+                $condition, 100, $this->get_offset(), new OrderBy(
+                    array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
+                )
             )
         );
     }

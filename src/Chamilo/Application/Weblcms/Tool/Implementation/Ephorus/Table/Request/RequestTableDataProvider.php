@@ -5,6 +5,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -51,11 +52,11 @@ class RequestTableDataProvider extends DataClassTableDataProvider
     {
         if ($order_property == null)
         {
-            $order_property = array(
-                new OrderBy(
+            $order_property = new OrderBy(array(
+                new OrderProperty(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
                 )
-            );
+            ));
         }
 
         return $this->getRequestManager()->findRequestsWithContentObjects(

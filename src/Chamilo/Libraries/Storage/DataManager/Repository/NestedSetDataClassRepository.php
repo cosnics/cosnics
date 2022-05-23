@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -439,16 +440,16 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param integer $sortOrder
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      * @throws \Exception
      * @see NestedSet::build_post_order_ordering()
      */
     protected function getPostOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
-        return array(
-            new OrderBy(
+        return new OrderBy(array(
+            new OrderProperty(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE), $sortOrder
-            )
+            ))
         );
     }
 
@@ -461,16 +462,16 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param \Chamilo\Libraries\Storage\DataClass\NestedSet $nestedSet
      * @param integer $sortOrder
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      * @throws \Exception
      * @see NestedSet::build_pre_order_ordering()
      */
     protected function getPreOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
-        return array(
-            new OrderBy(
+        return new OrderBy(array(
+            new OrderProperty(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE), $sortOrder
-            )
+            ))
         );
     }
 

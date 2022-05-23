@@ -65,7 +65,7 @@ interface PortfolioComplexRights
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $count
      * @param int $offset
-     * @param \libraries\ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
     public function retrieve_portfolio_possible_view_users($condition, $count, $offset, $order_property);

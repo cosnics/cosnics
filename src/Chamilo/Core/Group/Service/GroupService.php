@@ -263,7 +263,7 @@ class GroupService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */

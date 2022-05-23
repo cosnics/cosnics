@@ -26,6 +26,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -43,9 +44,9 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
      */
     private $buttonToolbarRenderer;
 
-    private $html;
-
     private $feedback_allowed;
+
+    private $html;
 
     private $publication;
 
@@ -277,13 +278,13 @@ class ViewerComponent extends Manager implements DelegateComponent, FeedbackSupp
     public function retrieve_feedbacks($count, $offset)
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->get_feedback_conditions(), $count, $offset, array(
-                new OrderBy(
-                    new PropertyConditionVariable(
-                        Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
+            $this->get_feedback_conditions(), $count, $offset, new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE
+                        )
                     )
-                )
-            )
+                ))
         );
 
         return DataManager::retrieves(

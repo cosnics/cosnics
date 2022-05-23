@@ -20,6 +20,7 @@ use Chamilo\Libraries\Format\Structure\ProgressBarRenderer;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -56,7 +57,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         $condition = new AndCondition($conditions);
 
         $order_by = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )
@@ -64,7 +65,7 @@ class LearningPathProgressUsersBlock extends ToolBlock
         );
 
         $publication_resultset = \Chamilo\Application\Weblcms\Storage\DataManager::retrieve_content_object_publications(
-            $condition, $order_by
+            $condition, new OrderBy($order_by)
         );
 
         $publications = [];

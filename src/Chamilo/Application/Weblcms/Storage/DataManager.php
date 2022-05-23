@@ -34,7 +34,6 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -53,11 +52,12 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -775,7 +775,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return RecordRetrievesParameters
      */
@@ -860,7 +860,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $order_by = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
                     CourseModuleLastAccess::class, CourseModuleLastAccess::PROPERTY_ACCESS_DATE
                 )
@@ -868,7 +868,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $course_module_access = self::retrieve(
-            CourseModuleLastAccess::class, new DataClassRetrieveParameters($condition, $order_by)
+            CourseModuleLastAccess::class, new DataClassRetrieveParameters($condition, new OrderBy($order_by))
         );
 
         if (!$course_module_access)
@@ -1456,7 +1456,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieves content object publications joined with the repository content object table
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param int $offset
      * @param int $max_objects
      *
@@ -1518,7 +1518,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param RightsLocation $parent_location
      * @param RightsEntity[] $entities
      * @param Condition $condition
-     * @param ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param int $offset
      * @param int $max_objects
      * @param int $user_id
@@ -1542,7 +1542,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseCategory>
      */
@@ -1550,12 +1550,12 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_by = []
     )
     {
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_NAME)
         );
 
         return DataManager::retrieves(
-            CourseCategory::class, new DataClassRetrievesParameters($condition, $offset, $count, $order_by)
+            CourseCategory::class, new DataClassRetrievesParameters($condition, $offset, $count, new OrderBy($order_by))
         );
     }
 
@@ -1641,7 +1641,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -1793,14 +1793,14 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $object_table_order = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT),
                 $order_direction
             )
         );
 
         return self::retrieve(
-            CourseTypeUserCategory::class, new DataClassRetrieveParameters($condition, $object_table_order)
+            CourseTypeUserCategory::class, new DataClassRetrieveParameters($condition, new OrderBy($object_table_order))
         );
     }
 
@@ -1848,14 +1848,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins->add(new Join(CourseUserCategory::class, $join_condition));
 
         $order_by = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
                     CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_SORT
                 )
             )
         );
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, $order_by, $joins);
+        $parameters =
+            new RecordRetrievesParameters($properties, $condition, null, null, new OrderBy($order_by), $joins);
 
         return self::records(CourseTypeUserCategory::class, $parameters);
     }
@@ -1937,7 +1938,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param RightsLocation $parent_location
      * @param RightsEntity[] $entities
      * @param Condition $condition
-     * @param ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param int $offset
      * @param int $max_objects
      * @param int $user_id
@@ -1945,8 +1946,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_my_publications(
-        $parent_location, $entities, $condition = null, $order_by = [], $offset = 0, $max_objects = - 1,
-        $user_id = null
+        $parent_location, $entities, $condition = null, $order_by = [], $offset = 0, $max_objects = - 1, $user_id = null
     )
     {
         $condition = self::get_my_publications_condition($parent_location, $entities, $user_id, $condition);
@@ -2130,8 +2130,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        $parameters =
-            new RecordRetrievesParameters($properties, $condition, null, null, [], new Joins(array($join)));
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], new Joins(array($join)));
 
         return self::records(ContentObjectPublication::class, $parameters);
     }
@@ -2303,7 +2302,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
@@ -2401,7 +2400,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\group\Group>
@@ -2503,7 +2502,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param OrderBy $order_by
+     * @param OrderProperty $order_by
      * @param Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator

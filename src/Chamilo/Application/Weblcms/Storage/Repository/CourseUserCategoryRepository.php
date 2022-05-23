@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -50,26 +51,20 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class,
-                CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
-            ),
-            new StaticConditionVariable($courseUserCategory->getId())
+                CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_COURSE_USER_CATEGORY_ID
+            ), new StaticConditionVariable($courseUserCategory->getId())
         );
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                CourseTypeUserCategory::class,
-                CourseTypeUserCategory::PROPERTY_COURSE_TYPE_ID
-            ),
-            new StaticConditionVariable($courseType->getId())
+                CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_COURSE_TYPE_ID
+            ), new StaticConditionVariable($courseType->getId())
         );
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                Course::class,
-                Course::PROPERTY_ID
-            ),
-            $subscribedCourseIds
+                Course::class, Course::PROPERTY_ID
+            ), $subscribedCourseIds
         );
 
         $condition = new AndCondition($conditions);
@@ -78,10 +73,8 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                CourseTypeUserCategoryRelCourse::class,
-                new EqualityCondition(
-                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID),
-                    new PropertyConditionVariable(
+                CourseTypeUserCategoryRelCourse::class, new EqualityCondition(
+                    new PropertyConditionVariable(Course::class, Course::PROPERTY_ID), new PropertyConditionVariable(
                         CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_ID
                     )
                 )
@@ -90,13 +83,11 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $joins->add(
             new Join(
-                CourseTypeUserCategory::class,
-                new EqualityCondition(
+                CourseTypeUserCategory::class, new EqualityCondition(
                     new PropertyConditionVariable(
                         CourseTypeUserCategoryRelCourse::class,
                         CourseTypeUserCategoryRelCourse::PROPERTY_COURSE_TYPE_USER_CATEGORY_ID
-                    ),
-                    new PropertyConditionVariable(
+                    ), new PropertyConditionVariable(
                         CourseTypeUserCategory::class, CourseTypeUserCategory::PROPERTY_ID
                     )
                 )
@@ -105,14 +96,14 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
 
         $orderBy = [];
 
-        $orderBy[] = new OrderBy(
+        $orderBy[] = new OrderProperty(
             new PropertyConditionVariable(
                 CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT
             )
         );
 
         return $this->dataClassRepository->retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, $orderBy, $joins)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderBy), $joins)
         );
     }
 }

@@ -83,7 +83,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
      */
@@ -194,9 +194,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<User>
      */
     public static function retrieve_course_group_users($course_group_id, $condition = null, $offset = null, $count = null,
         $order_property = null)
@@ -237,7 +237,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $order_property
+     * @param OrderProperty[] $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
      */

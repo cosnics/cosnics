@@ -17,21 +17,23 @@ class WorkspaceTableDataProvider extends DataClassTableDataProvider
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
-    {
-        $workspaceService = new WorkspaceService(new WorkspaceRepository());
-        return $workspaceService->getAllWorkspaces($limit, $offset, $orderProperty);
-    }
-
-    /**
-     *
      * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
      */
     public function count_data($condition)
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
+
         return $workspaceService->countAllWorkspaces();
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    {
+        $workspaceService = new WorkspaceService(new WorkspaceRepository());
+
+        return $workspaceService->getAllWorkspaces($limit, $offset, $orderProperty);
     }
 }

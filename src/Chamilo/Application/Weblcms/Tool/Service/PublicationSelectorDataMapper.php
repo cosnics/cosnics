@@ -8,6 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -32,19 +33,19 @@ class PublicationSelectorDataMapper
     public static function getContentObjectPublicationCategoriesForPublicationSelector($course_id, $tools = [])
     {
         $order_by = [];
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(
                 ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
             )
         );
 
         $publication_categories_set = DataManager::retrieve_content_object_publication_categories_from_course(
-            $course_id, $tools, $order_by
+            $course_id, $tools, new OrderBy($order_by)
         );
 
         $categories = [];
 
-        foreach($publication_categories_set as $category)
+        foreach ($publication_categories_set as $category)
         {
             $properties = $category->getDefaultProperties();
             $glyphNamespace = 'Chamilo\Application\Weblcms\Tool\Implementation\\' .
@@ -78,14 +79,14 @@ class PublicationSelectorDataMapper
 
         $order_by = [];
 
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
             )
         );
 
         $publications_set = DataManager::retrieve_content_object_publications_from_course(
-            $course_id, $order_by
+            $course_id, new OrderBy($order_by)
         );
 
         $publications = [];
@@ -95,7 +96,7 @@ class PublicationSelectorDataMapper
             return $publications_set;
         }
 
-        foreach($publications_set as $publication)
+        foreach ($publications_set as $publication)
         {
             $publicationProperties = [];
 

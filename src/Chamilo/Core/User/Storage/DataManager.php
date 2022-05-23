@@ -201,7 +201,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -244,7 +244,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -273,7 +273,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $count int
      * @param $offset int
-     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderProperty[]
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

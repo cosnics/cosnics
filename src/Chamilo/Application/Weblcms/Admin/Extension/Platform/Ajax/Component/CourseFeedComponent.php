@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Translation\Translation;
@@ -101,7 +102,7 @@ class CourseFeedComponent extends AjaxManager
         $courses = $this->retrieve_courses();
         if ($courses)
         {
-            foreach($courses as $course)
+            foreach ($courses as $course)
             {
                 $course_category->add_child($this->get_element_for_course($course));
             }
@@ -173,7 +174,7 @@ class CourseFeedComponent extends AjaxManager
         );
         $parameters = new DataClassRetrievesParameters(
             $condition, 100, $this->get_offset(),
-            array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
+            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))))
         );
 
         return DataManager::retrieves(Course::class, $parameters);

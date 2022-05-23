@@ -5,6 +5,7 @@ use Chamilo\Libraries\Format\Table\Column\ActionsTableColumn;
 use Chamilo\Libraries\Format\Table\Column\TableColumn;
 use Chamilo\Libraries\Format\Table\Interfaces\TableColumnModelActionsColumnSupport;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 
 /**
  * This class represents a column model for a table Refactoring from ObjectTable to split between a table based on a
@@ -194,8 +195,10 @@ abstract class TableColumnModel extends TableComponent
 
         if ($column)
         {
-            return new OrderBy($column->getConditionVariable(), $orderDirection);
+            return new OrderBy([new OrderProperty($column->getConditionVariable(), $orderDirection)]);
         }
+
+        return null;
     }
 
     /**

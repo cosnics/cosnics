@@ -603,7 +603,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
      *
      * @return string[][]
      * @throws \Exception

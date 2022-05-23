@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\Joins;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassDistinctParameters extends DataClassPropertyParameters
+class DataClassDistinctParameters extends DataClassParameters
 {
 
     /**
@@ -20,14 +20,13 @@ class DataClassDistinctParameters extends DataClassPropertyParameters
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      */
     public function __construct(
-        Condition $condition = null, DataClassProperties $dataClassProperties = null, Joins $joins = null,
-        $orderBy = []
+        Condition $condition = null, DataClassProperties $dataClassProperties = null, Joins $joins = null, $orderBy = []
     )
     {
-        DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy);
+        parent::__construct($condition, $joins, $dataClassProperties, $orderBy);
     }
 
     /**

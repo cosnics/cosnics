@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -424,11 +425,11 @@ class AttachmentContentObjectsFeedComponent extends Manager
     protected function retrieveContentObjects()
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getContentObjectConditions(), 100, $this->getOffset(), array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
-                )
-            )
+            $this->getContentObjectConditions(), 100, $this->getOffset(), new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE)
+                    )
+                ))
         );
 
         return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);

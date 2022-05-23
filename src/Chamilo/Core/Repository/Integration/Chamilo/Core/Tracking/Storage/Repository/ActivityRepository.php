@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -57,7 +57,7 @@ class ActivityRepository extends CommonDataClassRepository
      *
      * @return Activity[]
      */
-    public function filterActivities($activities, $offset = null, $count = null, OrderBy $orderBy = null)
+    public function filterActivities($activities, $offset = null, $count = null, OrderProperty $orderBy = null)
     {
         usort(
             $activities,

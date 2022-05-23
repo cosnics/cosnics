@@ -41,6 +41,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -324,6 +325,30 @@ class BrowserComponent extends Manager implements DelegateComponent
         return $this->buttonToolbarRenderer;
     }
 
+    /**
+     * Returns the default object table order for the browser.
+     * Can be "overridden" by the individual component to force
+     * a different order if needed. Because the individual component is not an actual implementation but merely this
+     * parent, there is a check if the method exists.
+     *
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
+     */
+    public function getDefaultOrderBy()
+    {
+        if (method_exists($this->get_parent(), 'getDefaultOrderBy'))
+        {
+            return $this->get_parent()->getDefaultOrderBy();
+        }
+
+        return new OrderBy([
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                )
+            )
+        ]);
+    }
+
     public function getIntroductionText()
     {
         if (!isset($this->introductionText))
@@ -343,28 +368,6 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         return $actionSelector->getActionButton($label, $glyph);
-    }
-
-    /**
-     * Returns the default object table order for the browser.
-     * Can be "overridden" by the individual component to force
-     * a different order if needed. Because the individual component is not an actual implementation but merely this
-     * parent, there is a check if the method exists.
-     *
-     * @return ObjectTableOrder
-     */
-    public function get_default_order_property()
-    {
-        if (method_exists($this->get_parent(), 'get_default_order_property'))
-        {
-            return $this->get_parent()->get_default_order_property();
-        }
-
-        return new OrderBy(
-            new PropertyConditionVariable(
-                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
-            )
-        );
     }
 
     public function get_publication_conditions()

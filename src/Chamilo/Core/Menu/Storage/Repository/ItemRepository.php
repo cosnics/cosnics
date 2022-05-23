@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -153,11 +154,11 @@ class ItemRepository
     public function findItems()
     {
         $orderBy = [];
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT));
-        $orderBy[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
+        $orderBy[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_PARENT));
+        $orderBy[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters(null, null, null, $orderBy)
+            Item::class, new DataClassRetrievesParameters(null, null, null,  new OrderBy($orderBy))
         );
     }
 
@@ -180,7 +181,7 @@ class ItemRepository
      * @param integer $parentIdentifier
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
@@ -193,10 +194,10 @@ class ItemRepository
             new StaticConditionVariable($parentIdentifier)
         );
 
-        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
+        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT));
 
         return $this->getDataClassRepository()->retrieves(
-            Item::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties)
+            Item::class, new DataClassRetrievesParameters($condition, $count, $offset,  new OrderBy($orderProperties))
         );
     }
 
@@ -217,7 +218,7 @@ class ItemRepository
             new StaticConditionVariable(CategoryItem::class)
         );
 
-        $orderBy = array(new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)));
+        $orderBy =  new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))));
 
         return $this->getDataClassRepository()->retrieves(
             Item::class, new DataClassRetrievesParameters(

@@ -5,6 +5,7 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 class GroupRelUserTableDataProvider extends DataClassTableDataProvider
@@ -18,13 +19,15 @@ class GroupRelUserTableDataProvider extends DataClassTableDataProvider
     public function retrieve_data($condition, $offset, $count, $order_property = null)
     {
         $order_property = [];
-        $order_property[] = new OrderBy(
+        $order_property[] = new OrderProperty(
             new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
         );
-        $order_property[] = new OrderBy(
+        $order_property[] = new OrderProperty(
             new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
         );
 
-        return DataManager::retrieve_group_rel_users_with_user_join($condition, $offset, $count, $order_property);
+        return DataManager::retrieve_group_rel_users_with_user_join(
+            $condition, $offset, $count, new OrderBy($order_property)
+        );
     }
 }

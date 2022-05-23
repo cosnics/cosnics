@@ -3,57 +3,84 @@ namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Countable;
 
 /**
- * Describes the order by functionality of a query.
- * Uses ConditionVariable to define the property
  *
  * @package Chamilo\Libraries\Storage\Query
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
- * @author Magali Gillard <magali.gillard@ehb.be>
- * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class OrderBy implements Hashable
+class OrderBy implements Countable, Hashable
 {
     use HashableTrait;
 
-    private ConditionVariable $conditionVariable;
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     */
+    private array $orderProperties;
 
-    private int $direction;
-
-    public function __construct(ConditionVariable $conditionVariable, ?int $direction = SORT_ASC)
+    /**
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
+     */
+    public function __construct(array $orderProperties = [])
     {
-        $this->conditionVariable = $conditionVariable;
-        $this->direction = $direction;
+        $this->orderProperties = $orderProperties;
     }
 
-    public function getConditionVariable(): ConditionVariable
+    public function add(OrderProperty $orderProperty): OrderBy
     {
-        return $this->conditionVariable;
-    }
-
-    public function setConditionVariable(ConditionVariable $conditionVariable): OrderBy
-    {
-        $this->conditionVariable = $conditionVariable;
+        $this->orderProperties[] = $orderProperty;
 
         return $this;
     }
 
-    public function getDirection(): int
+    public function count(): int
     {
-        return $this->direction;
+        return count($this->orderProperties);
     }
 
-    public function setDirection(int $direction): OrderBy
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty[]
+     */
+    public function get(): array
     {
-        $this->direction = $direction;
+        return $this->orderProperties;
+    }
 
-        return $this;
+    public function getFirst(): OrderProperty
+    {
+        return $this->orderProperties[0];
     }
 
     public function getHashParts(): array
     {
-        return array($this->getConditionVariable()->getHashParts(), $this->getDirection());
+        $hashes = [];
+
+        foreach ($this->orderProperties as $orderProperty)
+        {
+            $hashes[] = $orderProperty->getHashParts();
+        }
+
+        sort($hashes);
+
+        return $hashes;
+    }
+
+    public function merge(OrderBy $orderByToMerge): OrderBy
+    {
+        foreach ($orderByToMerge->get() as $orderProperty)
+        {
+            $this->add($orderProperty);
+        }
+
+        return $this;
+    }
+
+    public function prepend(OrderProperty $orderProperty): OrderBy
+    {
+        array_unshift($this->orderProperties, $orderProperty);
+
+        return $this;
     }
 }

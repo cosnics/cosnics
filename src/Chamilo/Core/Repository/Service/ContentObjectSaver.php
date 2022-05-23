@@ -391,7 +391,7 @@ class ContentObjectSaver
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param integer $offset
      * @param integer $count
      *

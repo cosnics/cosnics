@@ -20,7 +20,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     const SORT_RELEVANCE = 'relevance';
 
     //
-    private $vimeo;
 
     private $consumer_key;
 
@@ -29,6 +28,8 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     private $token;
 
     private $user;
+
+    private $vimeo;
 
     /**
      *
@@ -50,22 +51,22 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     /**
      *
-     * @param $order_properties ObjectTableOrder
+     * @param $order_properties \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return string null
      */
     public function convert_order_property($order_properties)
     {
-        if (count($order_properties) > 0)
+        if ($order_properties->count() > 0)
         {
-            $order_property = $order_properties[0]->get_property();
+            $order_property = $order_properties->getFirst()->getConditionVariable()->getPropertyName();
             if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
             }
             else
             {
-                $sorting_direction = $order_properties[0]->get_direction();
+                $sorting_direction = $order_properties->getFirst()->getDirection();
 
                 if ($sorting_direction == SORT_ASC)
                 {
@@ -277,7 +278,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderProperty
      * @param $offset int
      * @param $count int
      *
@@ -318,7 +319,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property ObjectTableOrder
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      *

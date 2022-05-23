@@ -6,6 +6,7 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -50,11 +51,11 @@ class EntryRequestTableDataProvider extends DataClassTableDataProvider
     {
         if ($order_property == null)
         {
-            $order_property = array(
-                new OrderBy(
-                    new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
-                )
-            );
+            $order_property = new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
+                    )
+                ));
         }
 
         return $this->getDataProvider()->findAssignmentEntriesWithEphorusRequests(

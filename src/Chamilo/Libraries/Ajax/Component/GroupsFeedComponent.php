@@ -10,6 +10,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -81,13 +82,12 @@ abstract class GroupsFeedComponent extends Manager
             $translator = $this->getTranslator();
             // Add group category
             $group_category = new AdvancedElementFinderElement(
-                'groups', $glyph->getClassNamesString(),
-                $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES),
+                'groups', $glyph->getClassNamesString(), $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES),
                 $translator->trans('Groups', [], Utilities::COMMON_LIBRARIES)
             );
             $elements->add_element($group_category);
 
-            foreach($groups as $group)
+            foreach ($groups as $group)
             {
                 $group_category->add_child($this->get_group_element($group));
             }
@@ -191,10 +191,10 @@ abstract class GroupsFeedComponent extends Manager
         $this->user_count = $this->getUserService()->countUsers($condition);
 
         return $this->getUserService()->findUsers(
-            $condition, $this->get_offset(), 100, array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
+            $condition, $this->get_offset(), 100, new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ))
         );
     }
 }

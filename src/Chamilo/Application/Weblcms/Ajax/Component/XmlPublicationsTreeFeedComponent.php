@@ -12,6 +12,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -34,14 +35,14 @@ class XmlPublicationsTreeFeedComponent extends Manager
 
         $categories_tree = DataManager::retrieves(
             ContentObjectPublicationCategory::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(
-                        new PropertyConditionVariable(
-                            ContentObjectPublicationCategory::class,
-                            ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                $condition, null, null, new OrderBy(array(
+                        new OrderProperty(
+                            new PropertyConditionVariable(
+                                ContentObjectPublicationCategory::class,
+                                ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                            )
                         )
-                    )
-                )
+                    ))
             )
         );
 

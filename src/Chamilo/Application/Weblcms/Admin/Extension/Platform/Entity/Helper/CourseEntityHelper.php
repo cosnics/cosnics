@@ -16,7 +16,6 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -70,11 +69,11 @@ class CourseEntityHelper
     /**
      * Returns the data as a resultset
      *
-     * @param \libraries\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -102,7 +101,7 @@ class CourseEntityHelper
     /**
      * Counts the data
      *
-     * @param \libraries\Condition $condition
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return int
      */

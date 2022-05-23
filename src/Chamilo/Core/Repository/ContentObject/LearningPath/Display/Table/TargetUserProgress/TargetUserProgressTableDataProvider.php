@@ -32,7 +32,7 @@ class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $order_property
+     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

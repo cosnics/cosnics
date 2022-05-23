@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -56,7 +57,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
             $glyph = new FontAwesomeGlyph('chalkboard', [], null, 'fas');
 
             /** @var Course $course */
-            foreach($courses as $course)
+            foreach ($courses as $course)
             {
                 $advancedElementFinderElements->add_element(
                     new AdvancedElementFinderElement(
@@ -91,7 +92,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            array(new OrderBy(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE)))
+            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE))))
         );
 
         return DataManager::retrieves(Course::class, $parameters);

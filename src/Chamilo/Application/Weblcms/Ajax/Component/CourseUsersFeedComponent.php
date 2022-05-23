@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -94,7 +95,7 @@ class CourseUsersFeedComponent extends Manager
         $users = $this->retrieve_users();
         if ($users)
         {
-            foreach($users as $user)
+            foreach ($users as $user)
             {
                 $user_category->add_child(
                     new AdvancedElementFinderElement(
@@ -189,7 +190,7 @@ class CourseUsersFeedComponent extends Manager
 
         $group_users = [];
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $group_user_ids = $group->get_users(true, true);
 
@@ -234,10 +235,10 @@ class CourseUsersFeedComponent extends Manager
             \Chamilo\Core\User\Storage\DataManager::count(User::class, new DataClassCountParameters($condition));
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, 100, $this->get_offset(), array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
+            $condition, 100, $this->get_offset(), new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ))
         );
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(User::class, $parameters);

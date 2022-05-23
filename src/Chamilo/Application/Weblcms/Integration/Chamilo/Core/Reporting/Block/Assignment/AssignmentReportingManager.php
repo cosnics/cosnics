@@ -20,7 +20,7 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -382,7 +382,7 @@ abstract class AssignmentReportingManager extends ToolBlock
 
         $condition = new AndCondition($conditions);
         $order_by = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublication::class, ContentObjectPublication::PROPERTY_MODIFIED_DATE
                 )

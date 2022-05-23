@@ -18,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -37,7 +38,7 @@ class EndingAssignments extends Block
 
         $courses = CourseDataManager::retrieve_all_courses_from_user($this->getUser());
 
-        foreach($courses as $course)
+        foreach ($courses as $course)
         {
             $course_ids[$course->get_id()] = $course->get_id();
         }
@@ -45,17 +46,13 @@ class EndingAssignments extends Block
         $conditions = [];
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_COURSE_ID
-            ),
-            $course_ids
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_COURSE_ID
+            ), $course_ids
         );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_TOOL
-            ),
-            new StaticConditionVariable('assignment')
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_TOOL
+            ), new StaticConditionVariable('assignment')
         );
 
         $subselect_condition = new EqualityCondition(
@@ -65,28 +62,20 @@ class EndingAssignments extends Block
 
         $conditions[] = new SubselectCondition(
             new PropertyConditionVariable(
-                ContentObjectPublication::class,
-                ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
-            ),
-            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-            $subselect_condition
+                ContentObjectPublication::class, ContentObjectPublication::PROPERTY_CONTENT_OBJECT_ID
+            ), new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $subselect_condition
         );
         $condition = new AndCondition($conditions);
 
         $publications = DataManager::retrieves(
-            ContentObjectPublication::class,
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                array(
-                    new OrderBy(
+            ContentObjectPublication::class, new DataClassRetrievesParameters(
+                $condition, null, null, new OrderBy(array(
+                    new OrderProperty(
                         new PropertyConditionVariable(
-                            ContentObjectPublication::class,
-                            ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                            ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
                         )
                     )
-                )
+                ))
             )
         );
 
@@ -134,11 +123,8 @@ class EndingAssignments extends Block
         {
             $end_date = DatetimeUtilities::format_locale_date(
                 Translation::get('DateFormatShort', null, Utilities::COMMON_LIBRARIES) . ', ' . Translation::get(
-                    'TimeNoSecFormat',
-                    null,
-                    Utilities::COMMON_LIBRARIES
-                ),
-                $item['end_time']
+                    'TimeNoSecFormat', null, Utilities::COMMON_LIBRARIES
+                ), $item['end_time']
             );
 
             $html[] = '<a href="' . $item['link'] . '">' . $item['title'] . '</a>: ' . Translation::get('Until') . ' ' .

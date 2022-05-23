@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -348,7 +349,9 @@ class Calculator
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
             Group::class, new DataClassRetrieveParameters(
-                $condition, array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
+                $condition, new OrderBy(
+                    array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA)))
+                )
             )
         );
 
@@ -376,11 +379,11 @@ class Calculator
 
         $group = \Chamilo\Core\Group\Storage\DataManager::retrieve(
             Group::class, new DataClassRetrieveParameters(
-                $condition, array(
-                    new OrderBy(
-                        new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), SORT_ASC
-                    )
-                )
+                $condition, new OrderBy(array(
+                        new OrderProperty(
+                            new PropertyConditionVariable(Group::class, Group::PROPERTY_DISK_QUOTA), SORT_ASC
+                        )
+                    ))
             )
         );
 

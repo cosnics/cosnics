@@ -19,7 +19,7 @@ class ActivityTableDataProvider extends DataClassTableDataProvider
      * @param $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

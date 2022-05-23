@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -186,13 +187,14 @@ class PanelToolListRenderer extends ToolListRenderer
             );
 
             $orderProperty = array(
-                new OrderBy(
+                new OrderProperty(
                     new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
                 )
             );
 
             $this->sections = DataManager::retrieves(
-                CourseSection::class, new DataClassRetrievesParameters($condition, null, null, $orderProperty)
+                CourseSection::class,
+                new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperty))
             );
         }
 
@@ -293,7 +295,8 @@ class PanelToolListRenderer extends ToolListRenderer
                         '\Manager';
                     $url = $parent->get_url(
                         array(
-                            'tool_action' => null, Manager::PARAM_COMPONENT_ACTION => null,
+                            'tool_action' => null,
+                            Manager::PARAM_COMPONENT_ACTION => null,
                             Manager::PARAM_TOOL => $publication->get_tool(),
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => $class::ACTION_VIEW,
                             \Chamilo\Application\Weblcms\Tool\Manager::PARAM_PUBLICATION_ID => $publication->get_id()
@@ -379,8 +382,11 @@ class PanelToolListRenderer extends ToolListRenderer
 
             $toolUrl = $parent->get_url(
                 array(Manager::PARAM_TOOL => $tool->get_name()), array(
-                    Manager::PARAM_COMPONENT_ACTION, \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
-                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE, Manager::PARAM_CATEGORY, true
+                    Manager::PARAM_COMPONENT_ACTION,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION,
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_BROWSER_TYPE,
+                    Manager::PARAM_CATEGORY,
+                    true
                 )
             );
 

@@ -19,20 +19,21 @@ class UserViewTableDataProvider extends DataClassTableDataProvider
 
     /**
      *
-     * @see \libraries\format\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(UserView::class, $parameters);
-    }
-
-    /**
-     *
      * @see \libraries\format\TableDataProvider::count_data()
      */
     public function count_data($condition)
     {
         return DataManager::count(UserView::class, new DataClassCountParameters($condition));
+    }
+
+    /**
+     *
+     * @see \libraries\format\TableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+
+        return DataManager::retrieves(UserView::class, $parameters);
     }
 }

@@ -25,6 +25,7 @@ use Chamilo\Libraries\Format\Structure\Toolbar;
 use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\Utilities;
@@ -117,6 +118,15 @@ class BrowserComponent extends Manager implements TableSupport
     public function add_additional_breadcrumbs(BreadcrumbTrail $breadcrumbtrail)
     {
         $breadcrumbtrail->add_help('repo_viewer_browser');
+    }
+
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PROPERTY_CATEGORY;
+        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
+        $additionalParameters[] = self::PARAM_IN_WORKSPACES;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**
@@ -232,18 +242,10 @@ class BrowserComponent extends Manager implements TableSupport
     protected function getWorkspacesForUser()
     {
         return $this->workspaceService->getWorkspacesForUser(
-            $this->getUser(), RightsService::RIGHT_USE, null, null,
-            array(new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME)))
+            $this->getUser(), RightsService::RIGHT_USE, null, null, new OrderBy(
+                array(new OrderProperty(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME)))
+            )
         );
-    }
-
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PROPERTY_CATEGORY;
-        $additionalParameters[] = self::PARAM_WORKSPACE_ID;
-        $additionalParameters[] = self::PARAM_IN_WORKSPACES;
-
-        return parent::getAdditionalParameters($additionalParameters);
     }
 
     /**

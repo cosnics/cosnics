@@ -16,6 +16,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
+use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
+use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
@@ -32,24 +34,22 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
-use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
-use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
-use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
-use Chamilo\Libraries\Storage\Query\GroupBy;
 
 class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 {
@@ -59,9 +59,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     const PREFIX = 'repository_';
 
-    private static $helper_types;
-
     private static $applications = [];
+
+    private static $helper_types;
 
     private static $number_of_categories;
 
@@ -1066,10 +1066,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         {
             $parameters->set_condition(
                 new AndCondition(
-                    [$parameters->get_condition(), new InCondition(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
-                        ContentObject::get_active_status_types()
-                    )]
+                    [
+                        $parameters->get_condition(),
+                        new InCondition(
+                            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+                            ContentObject::get_active_status_types()
+                        )
+                    ]
                 )
             );
         }
@@ -1111,31 +1114,35 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrieveParameters(
-            $condition, array(
-                new OrderBy(
+            $condition, new OrderBy(array(
+                new OrderProperty(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
                 )
-            )
+            ))
         );
 
         return self::retrieve(ContentObject::class, $parameters);
     }
 
-    public static function retrieve_categories($condition = null, $offset = null, $count = null, $order_property = null)
+    public static function retrieve_categories($condition = null, $offset = null, $count = null, $orderBy = null)
     {
-        if ($order_property instanceof OrderBy)
+        if (!$orderBy instanceof OrderBy)
         {
-            $order_property = array($order_property);
+            $orderBy = new OrderBy();
         }
 
-        $order_property[] = new OrderBy(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT)
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_PARENT)
+            )
         );
-        $order_property[] = new OrderBy(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER)
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER)
+            )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
         return self::retrieves(RepositoryCategory::class, $parameters);
     }
@@ -1148,18 +1155,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     public static function retrieve_content_object_versions(ContentObject $object)
     {
         $parameters = new DataClassRetrievesParameters();
-        $parameters->set_condition(
+        $parameters->setCondition(
             new EqualityCondition(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_OBJECT_NUMBER),
                 new StaticConditionVariable($object->get_object_number())
             )
         );
-        $parameters->set_order_by(
-            array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                )
-            )
+        $parameters->setOrderBy(
+            new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+                    )
+                ))
         );
 
         return self::retrieve_content_objects($object::class_name(), $parameters);
@@ -1270,8 +1277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         return self::retrieve(SynchronizationData::class, $parameters);
     }
 
-    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = []
-    )
+    public static function retrieve_external_syncs($condition = null, $count = null, $offset = null, $order_by = [])
     {
         $join = new Join(
             ContentObject::class, new EqualityCondition(
@@ -1304,11 +1310,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrieveParameters(
-            $condition, array(
-                new OrderBy(
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                )
-            )
+            $condition, new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+                    )
+                ))
         );
 
         return self::retrieve($object::class_name(), $parameters);

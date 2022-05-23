@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\ForumTopic\Storage\DataClass\ForumTopi
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass as DataClass2;
@@ -17,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -75,11 +76,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($forum_topic_id));
 
         $order_by = [];
-        $order_by[] = new OrderBy(
+        $order_by[] = new OrderProperty(
             new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CREATION_DATE),
             $creation_date_order);
 
-        $parameters = new DataClassRetrieveParameters($condition, $order_by);
+        $parameters = new DataClassRetrieveParameters($condition,  new OrderBy($order_by));
 
         return self::retrieve(ForumPost::class, $parameters);
     }

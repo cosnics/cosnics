@@ -23,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -474,11 +475,11 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             new StaticConditionVariable($this->course->get_id())
         );
         $order_property = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(CourseSection::class, CourseSection::PROPERTY_DISPLAY_ORDER)
             )
         );
-        $parameters = new DataClassRetrievesParameters($condition, null, null, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy($order_property));
         $sections = DataManager::retrieves(CourseSection::class, $parameters);
 
         foreach ($sections as $section)

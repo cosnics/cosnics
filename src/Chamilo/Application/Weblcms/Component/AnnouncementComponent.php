@@ -18,7 +18,7 @@ use Chamilo\Libraries\Format\Table\Column\SortableStaticTableColumn;
 use Chamilo\Libraries\Format\Table\SortableTableFromArray;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -86,7 +86,7 @@ class AnnouncementComponent extends Manager
                 $publications =
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
                         $location, $entities, $condition, array(
-                            new OrderBy(
+                            new OrderProperty(
                                 new PropertyConditionVariable(
                                     ContentObjectPublication::class,
                                     ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX

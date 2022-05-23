@@ -37,15 +37,17 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     /**
      *
+     * @var array
+     */
+    private $licenses;
+
+    /**
+     *
      * @var string
      */
     private $secret;
 
-    /**
-     *
-     * @var array
-     */
-    private $licenses;
+    private $session_token;
 
     /**
      * The id of the user on Flickr
@@ -53,8 +55,6 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
      * @var string
      */
     private $user_id;
-
-    private $session_token;
 
     /**
      *
@@ -81,15 +81,15 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
 
     /**
      *
-     * @param $order_properties ObjectTableOrder
+     * @param $order_properties \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return string null
      */
     public function convert_order_property($order_properties)
     {
-        if (count($order_properties) > 0)
+        if ($order_properties->count() > 0)
         {
-            $order_property = $order_properties[0]->get_property();
+            $order_property = $order_properties->getFirst()->getConditionVariable()->getPropertyName();
             if ($order_property == self::SORT_RELEVANCE)
             {
                 return $order_property;
@@ -339,7 +339,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderProperty[]
      * @param $offset int
      * @param $count int
      *
@@ -442,7 +442,7 @@ class DataConnector extends \Chamilo\Core\Repository\External\DataConnector
     /**
      *
      * @param $condition mixed
-     * @param $order_property ObjectTableOrder
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
      * @param $offset int
      * @param $count int
      *

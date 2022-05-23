@@ -45,7 +45,7 @@ abstract class DataClassParameters implements Hashable
     /**
      * The ordering of the DataClass objects to be applied to the result set
      *
-     * @var \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @var \Chamilo\Libraries\Storage\Query\OrderProperty[]
      */
     private $orderBy;
 
@@ -84,7 +84,7 @@ abstract class DataClassParameters implements Hashable
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $havingCondition
      * @param integer $count
@@ -332,7 +332,7 @@ abstract class DataClassParameters implements Hashable
     /**
      * Get the ordering of the DataClass objects to be applied to the result set
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderProperty[]
      */
     public function getOrderBy()
     {
@@ -342,7 +342,7 @@ abstract class DataClassParameters implements Hashable
     /**
      * Set the ordering of the DataClass objects to be applied to the result set
      *
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      */
     public function setOrderBy($orderBy = [])
     {

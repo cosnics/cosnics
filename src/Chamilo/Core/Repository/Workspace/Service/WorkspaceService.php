@@ -9,6 +9,7 @@ use Chamilo\Core\Rights\Entity\UserEntity;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use InvalidArgumentException;
 
@@ -274,9 +275,11 @@ class WorkspaceService
     {
         if (is_null($orderProperty))
         {
-            $orderProperty = array(
-                new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC)
-            );
+            $orderProperty = new OrderBy(array(
+                new OrderProperty(
+                    new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC
+                )
+            ));
         }
 
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUser(
@@ -295,9 +298,9 @@ class WorkspaceService
     {
         if (is_null($orderProperty))
         {
-            $orderProperty = array(
-                new OrderBy(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC)
-            );
+            $orderProperty = new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(Workspace::class, Workspace::PROPERTY_NAME), SORT_ASC)
+            ));
         }
 
         return $this->getWorkspaceRepository()->findWorkspaceFavouritesByUserFast(

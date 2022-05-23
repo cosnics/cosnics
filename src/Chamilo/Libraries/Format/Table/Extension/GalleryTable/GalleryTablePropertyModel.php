@@ -4,6 +4,7 @@ namespace Chamilo\Libraries\Format\Table\Extension\GalleryTable;
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty;
 use Chamilo\Libraries\Format\Table\TableComponent;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -19,11 +20,11 @@ abstract class GalleryTablePropertyModel extends TableComponent
     const DEFAULT_ORDER_PROPERTY_INDEX = 0;
 
     /**
-     * The properties in the table.
+     * The direction in which the table is currently sorted.
      *
-     * @var \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty[]
+     * @var integer
      */
-    private $properties;
+    private $orderDirection;
 
     /**
      * The property by which the table is currently sorted.
@@ -33,11 +34,11 @@ abstract class GalleryTablePropertyModel extends TableComponent
     private $orderProperty;
 
     /**
-     * The direction in which the table is currently sorted.
+     * The properties in the table.
      *
-     * @var integer
+     * @var \Chamilo\Libraries\Format\Table\Extension\GalleryTable\Property\DataClassGalleryTableProperty[]
      */
-    private $orderDirection;
+    private $properties;
 
     /**
      *
@@ -76,6 +77,16 @@ abstract class GalleryTablePropertyModel extends TableComponent
     }
 
     /**
+     * Returns the index of the default property to order objects by
+     *
+     * @return integer
+     */
+    public function getDefaultOrderBy()
+    {
+        return $this->orderProperty;
+    }
+
+    /**
      * Gets the default order direction.
      *
      * @return integer
@@ -86,17 +97,7 @@ abstract class GalleryTablePropertyModel extends TableComponent
     }
 
     /**
-     * Returns the index of the default property to order objects by
-     *
-     * @return integer
-     */
-    public function get_default_order_property()
-    {
-        return $this->orderProperty;
-    }
-
-    /**
-     * Returns an ObjectTableOrder with the given order column index.
+     * Returns an \Chamilo\Libraries\Storage\Query\OrderBy with the given order column index.
      * If the selected index is not sortable, the default
      * column index will be used. If the default column is not sortable then no order will be given
      *
@@ -111,13 +112,16 @@ abstract class GalleryTablePropertyModel extends TableComponent
 
         if ($property instanceof DataClassGalleryTableProperty)
         {
-            return new OrderBy(
-                new PropertyConditionVariable($property->get_class_name(), $property->get_property()), $orderDirection
-            );
+            return new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable($property->get_class_name(), $property->get_property()),
+                    $orderDirection
+                )
+            ]);
         }
         else
         {
-            $defaultProperty = $this->get_property($this->get_default_order_property());
+            $defaultProperty = $this->get_property($this->getDefaultOrderBy());
 
             if ($propertyNumber != $defaultProperty)
             {

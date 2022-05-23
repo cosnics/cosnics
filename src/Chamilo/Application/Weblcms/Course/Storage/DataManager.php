@@ -34,7 +34,7 @@ use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -942,7 +942,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -1287,18 +1287,18 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
             $order_by = [];
 
-            $order_by[] = new OrderBy(
+            $order_by[] = new OrderProperty(
                 new PropertyConditionVariable(
                     CourseTypeUserCategoryRelCourse::class, CourseTypeUserCategoryRelCourse::PROPERTY_SORT
                 ), SORT_ASC
             );
 
-            $order_by[] = new OrderBy(
+            $order_by[] = new OrderProperty(
                 new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE), SORT_ASC
             );
 
             $parameters = new RecordRetrievesParameters(
-                $properties, new AndCondition($conditions), /* $count = */ null, /* $offset = */ null, $order_by,
+                $properties, new AndCondition($conditions), /* $count = */ null, /* $offset = */ null, new OrderBy($order_by),
                 new Joins(array($join))
             );
 
@@ -1316,7 +1316,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $offset int
      * @param $max_objects int
-     * @param $order_by \libraries\ObjectTableOrder
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Exception
@@ -1354,7 +1354,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param ObjectTableOrder[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return bool
      */
@@ -1494,7 +1494,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $max_objects
-     * @param \libraries\ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param int $user_status
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<Course>
@@ -1518,7 +1518,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param Condition $condition
      * @param int $offset
      * @param int $max_objects
-     * @param ObjectTableOrder[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param int $user_status
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
@@ -1554,7 +1554,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \libraries\ObjectTableOrder $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      * @throws \Exception

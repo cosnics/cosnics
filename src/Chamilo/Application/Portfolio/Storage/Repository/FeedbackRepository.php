@@ -8,6 +8,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -39,20 +40,24 @@ class FeedbackRepository
      * @param integer $publicationIdentifier
      * @param integer $complexContentObjectIdentifier
      * @param integer $userIdentifier
+     *
      * @return integer
      */
-    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(int $publicationIdentifier,
-        int $complexContentObjectIdentifier = null, int $userIdentifier = null)
+    public function countFeedbackForPublicationComplexContentObjectAndUserIdentifiers(
+        int $publicationIdentifier, int $complexContentObjectIdentifier = null, int $userIdentifier = null
+    )
     {
         return $this->getDataClassRepository()->count(
-            Feedback::class,
-            new DataClassCountParameters(
-                $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier)));
+            Feedback::class, new DataClassCountParameters(
+                $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier)
+            )
+        );
     }
 
     /**
      *
      * @param integer $identifier
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback
      */
     public function findFeedbackByIdentfier($identifier)
@@ -67,20 +72,22 @@ class FeedbackRepository
      * @param integer $userIdentifier
      * @param integer $count
      * @param integer $offset
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\Feedback[]
      */
     public function findFeedbackForPublicationComplexContentObjectUserIdentifiersCountAndOffset(
-        int $publicationIdentifier, int $complexContentObjectIdentifier = null, int $userIdentifier = null, int $count = null,
-        int $offset = null)
+        int $publicationIdentifier, int $complexContentObjectIdentifier = null, int $userIdentifier = null,
+        int $count = null, int $offset = null
+    )
     {
         $parameters = new DataClassRetrievesParameters(
             $this->getFeedbackConditions($publicationIdentifier, $complexContentObjectIdentifier, $userIdentifier),
-            $count,
-            $offset,
-            array(
-                new OrderBy(
-                    new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE),
-                    SORT_DESC)));
+            $count, $offset, new OrderBy([
+                new OrderProperty(
+                    new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_MODIFICATION_DATE), SORT_DESC
+                )
+            ])
+        );
 
         return $this->getDataClassRepository()->retrieves(Feedback::class, $parameters);
     }
@@ -108,25 +115,30 @@ class FeedbackRepository
      * @param integer $publicationIdentifier
      * @param integer $complexContentObjectIdentifier
      * @param integer $userIdentifier
+     *
      * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
      */
-    private function getFeedbackConditions(int $publicationIdentifier, int $complexContentObjectIdentifier = null,
-        int $userIdentifier = null)
+    private function getFeedbackConditions(
+        int $publicationIdentifier, int $complexContentObjectIdentifier = null, int $userIdentifier = null
+    )
     {
         $conditions = [];
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_COMPLEX_CONTENT_OBJECT_ID),
-            $complexContentObjectIdentifier ? new StaticConditionVariable($complexContentObjectIdentifier) : null);
+            $complexContentObjectIdentifier ? new StaticConditionVariable($complexContentObjectIdentifier) : null
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publicationIdentifier));
+            new StaticConditionVariable($publicationIdentifier)
+        );
 
         if ($userIdentifier)
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(Feedback::class, Feedback::PROPERTY_USER_ID),
-                new StaticConditionVariable($userIdentifier));
+                new StaticConditionVariable($userIdentifier)
+            );
         }
 
         return new AndCondition($conditions);

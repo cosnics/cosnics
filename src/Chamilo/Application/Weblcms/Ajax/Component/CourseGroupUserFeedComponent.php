@@ -20,6 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -306,12 +307,13 @@ class CourseGroupUserFeedComponent extends Manager
     protected function retrieveUsers()
     {
         $order = array(
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC),
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC)
         );
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
-            User::class, new DataClassRetrievesParameters($this->getUserCondition(), 100, $this->getOffset(), $order)
+            User::class,
+            new DataClassRetrievesParameters($this->getUserCondition(), 100, $this->getOffset(), new OrderBy($order))
         );
     }
 }

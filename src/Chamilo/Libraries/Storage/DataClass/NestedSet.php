@@ -7,11 +7,12 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -158,15 +159,17 @@ abstract class NestedSet extends DataClass
      *
      * @param integer $sort_order
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPostOrderBy()
      */
     public function build_post_order_ordering($sort_order = SORT_ASC)
     {
-        return array(
-            new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE), $sort_order)
-        );
+        return new OrderBy(array(
+            new OrderProperty(
+                new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE), $sort_order
+            )
+        ));
     }
 
     /**
@@ -177,15 +180,17 @@ abstract class NestedSet extends DataClass
      *
      * @param integer $sort_order
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy[]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPreOrderBy()
      */
     public function build_pre_order_ordering($sort_order = SORT_ASC)
     {
-        return array(
-            new OrderBy(new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), $sort_order)
-        );
+        return new OrderBy(array(
+                new OrderProperty(
+                    new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), $sort_order
+                )
+            ));
     }
 
     /**
@@ -389,7 +394,7 @@ abstract class NestedSet extends DataClass
                 // We have to copy the content of this result set into a temporary array
                 $need_their_related_data_removed = array($nested_set);
 
-                foreach($descendants as $descendant)
+                foreach ($descendants as $descendant)
                 {
                     $need_their_related_data_removed[] = $descendant;
                 }
@@ -480,7 +485,7 @@ abstract class NestedSet extends DataClass
             )
         );
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $update = false;
 
@@ -540,6 +545,22 @@ abstract class NestedSet extends DataClass
             implode('', $left_updates) . ", " . " SET " . self::PROPERTY_RIGHT_VALUE . " = CASE " .
             implode('', $right_updates) . ", " . " WHERE " . self::PROPERTY_ID . " IN ( " .
             implode(', ', $where_condition) . ")";
+    }
+
+    /**
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return string[]
+     * @done Domain method
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
+        $extendedPropertyNames[] = self::PROPERTY_LEFT_VALUE;
+        $extendedPropertyNames[] = self::PROPERTY_RIGHT_VALUE;
+
+        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**
@@ -616,22 +637,6 @@ abstract class NestedSet extends DataClass
             get_class($this),
             new DataClassRetrievesParameters($this->build_offspring_condition(false, false, $condition))
         );
-    }
-
-    /**
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[]
-     * @done Domain method
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        $extendedPropertyNames[] = self::PROPERTY_PARENT_ID;
-        $extendedPropertyNames[] = self::PROPERTY_LEFT_VALUE;
-        $extendedPropertyNames[] = self::PROPERTY_RIGHT_VALUE;
-
-        return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
     /**

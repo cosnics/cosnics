@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -325,7 +326,7 @@ class UserRepository implements UserRepositoryInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
@@ -344,13 +345,13 @@ class UserRepository implements UserRepositoryInterface
     public function findUsersByIdentifiersOrderedByName($userIdentifiers)
     {
         $orderProperties = [];
-        $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $orderProperties[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
 
         $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $userIdentifiers);
 
         return $this->getDataClassRepository()->retrieves(
-            User::class, new DataClassRetrievesParameters($condition, null, null, $orderProperties)
+            User::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperties))
         );
     }
 
@@ -366,12 +367,12 @@ class UserRepository implements UserRepositoryInterface
     )
     {
         $orderProperties = array(
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
         );
 
         $parameters = new DataClassRetrievesParameters(
-            $this->getUserConditionForSearchQuery($searchQuery), $count, $offset, $orderProperties
+            $this->getUserConditionForSearchQuery($searchQuery), $count, $offset, new OrderBy($orderProperties)
         );
 
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);
@@ -390,13 +391,13 @@ class UserRepository implements UserRepositoryInterface
     )
     {
         $orderProperties = array(
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
         );
 
         $parameters = new DataClassRetrievesParameters(
             $this->getUserConditionForSearchQueryAndUserIdentifiers($searchQuery, $userIdentifiers), $count, $offset,
-            $orderProperties
+            new OrderBy($orderProperties)
         );
 
         return $this->getDataClassRepository()->retrieves(User::class, $parameters);

@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -30,14 +31,14 @@ class CategoryMenu extends HtmlMenu
 {
     const TREE_NAME = __CLASS__;
 
-    private $current_item;
-
     /**
      * The array renderer used to determine the breadcrumbs.
      */
     private $array_renderer;
 
     private $category_manager;
+
+    private $current_item;
 
     /**
      * Creates a new category navigation menu.
@@ -121,14 +122,16 @@ class CategoryMenu extends HtmlMenu
         );
 
         $objects = $this->category_manager->retrieve_categories(
-            $condition, null, null, array(new OrderBy(
-                new PropertyConditionVariable(
-                    $category_class_name::class_name(), $category_class_name::PROPERTY_DISPLAY_ORDER
+            $condition, null, null, new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            $category_class_name::class_name(), $category_class_name::PROPERTY_DISPLAY_ORDER
+                        )
+                    )
                 ))
-            )
         );
 
-        foreach($objects as $object)
+        foreach ($objects as $object)
         {
             if ($object)
             {

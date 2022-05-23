@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -184,7 +185,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
         return DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
             )
         );
     }

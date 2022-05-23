@@ -33,6 +33,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -448,7 +449,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         $condition = new AndCondition($conditions);
 
         $order = [];
-        $order[] = new OrderBy(
+        $order[] = new OrderProperty(
             new PropertyConditionVariable(
                 ContentObjectPublication::class, ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
             )
@@ -458,14 +459,14 @@ class BrowserComponent extends Manager implements DelegateComponent
         {
             $publications =
                 WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                    $this->get_location($categoryId), $this->get_entities(), $condition, $order, 0, - 1,
+                    $this->get_location($categoryId), $this->get_entities(), $condition, new OrderBy($order), 0, - 1,
                     $this->get_user_id()
                 );
         }
         else
         {
             $publications = WeblcmsDataManager::retrieve_content_object_publications(
-                $condition, $order
+                $condition, new OrderBy($order)
             );
         }
 
@@ -791,7 +792,7 @@ class BrowserComponent extends Manager implements DelegateComponent
         );
 
         $order = array(
-            new OrderBy(
+            new OrderProperty(
                 new PropertyConditionVariable(
                     ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
                 )

@@ -34,7 +34,7 @@ class ContentObjectRepository
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $count
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
@@ -94,7 +94,7 @@ class ContentObjectRepository
      * @param ConditionFilterRenderer $filterConditionRenderer
      * @param int $count
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */

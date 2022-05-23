@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
  *
  * @package user.lib.user_manager.component.admin_user_browser
  */
+
 /**
  * Data provider for a user browser table.
  * This class implements some functions to allow user browser tables to retrieve
@@ -20,23 +21,6 @@ class AdminUserTableDataProvider extends DataClassTableDataProvider
 {
 
     /**
-     * Gets the users
-     *
-     * @param $user String
-     * @param $category String
-     * @param $offset int
-     * @param $count int
-     * @param $order_property string
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return DataManager::retrieves(
-            User::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
-    }
-
-    /**
      * Gets the number of users in the table
      *
      * @return int
@@ -44,5 +28,23 @@ class AdminUserTableDataProvider extends DataClassTableDataProvider
     public function count_data($condition)
     {
         return DataManager::count(User::class, new DataClassCountParameters($condition));
+    }
+
+    /**
+     * Gets the users
+     *
+     * @param $user String
+     * @param $category String
+     * @param $offset int
+     * @param $count int
+     * @param $order_property string
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
+     */
+    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    {
+        return DataManager::retrieves(
+            User::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+        );
     }
 }

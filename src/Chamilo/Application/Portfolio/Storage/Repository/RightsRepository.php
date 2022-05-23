@@ -14,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -44,6 +45,7 @@ class RightsRepository
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight $locationEntityRight
+     *
      * @return boolean
      */
     public function createRightsLocationEntityRight(RightsLocationEntityRight $locationEntityRight)
@@ -58,6 +60,7 @@ class RightsRepository
      * @param integer $entityType
      * @param string $locationId
      * @param integer $publicationId
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight
      */
     public function findRightsLocationEntityRight($right, $entityId, $entityType, $locationId, $publicationId)
@@ -66,39 +69,42 @@ class RightsRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_ID),
-            new StaticConditionVariable($entityId));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
+            ), new StaticConditionVariable($entityId)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
-            new StaticConditionVariable($entityType));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            ), new StaticConditionVariable($entityType)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($locationId));
-        $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable(RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID),
-            new StaticConditionVariable($right));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($locationId)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publicationId));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+            ), new StaticConditionVariable($right)
+        );
+        $conditions[] = new EqualityCondition(
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($publicationId)
+        );
 
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            RightsLocationEntityRight::class,
-            new DataClassRetrieveParameters($condition));
+            RightsLocationEntityRight::class, new DataClassRetrieveParameters($condition)
+        );
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
      * @param integer[] $rights
+     *
      * @return \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight[]
      */
     public function findRightsLocationEntityRightsForLocationAndRights(RightsLocation $location, $rights)
@@ -107,71 +113,79 @@ class RightsRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location->get_node_id()));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($location->get_node_id())
+        );
         $conditions[] = new InCondition(
-            new PropertyConditionVariable(RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID),
-            $rights);
+            new PropertyConditionVariable(
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+            ), $rights
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($location->get_publication_id()));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($location->get_publication_id())
+        );
 
         $condition = new AndCondition($conditions);
 
-        $order = new OrderBy(
+        $order = new OrderProperty(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_ENTITY_TYPE),
-            SORT_ASC);
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
+            ), SORT_ASC
+        );
 
         return $this->getDataClassRepository()->retrieves(
             RightsLocationEntityRight::class,
-            new DataClassRetrievesParameters($condition, null, null, array($order)));
+            new DataClassRetrievesParameters($condition, null, null, new OrderBy([$order]))
+        );
     }
 
     /**
      *
      * @param \Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation $location
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $entitiesCondition
+     *
      * @return string[]
      */
-    public function findRightsLocationEntityRightsRecordsForLocation(RightsLocation $location,
-        Condition $entitiesCondition)
+    public function findRightsLocationEntityRightsRecordsForLocation(
+        RightsLocation $location, Condition $entitiesCondition
+    )
     {
         $conditions = [];
 
         $conditions[] = $entitiesCondition;
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_LOCATION_ID),
-            new StaticConditionVariable($location->get_node_id()));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_LOCATION_ID
+            ), new StaticConditionVariable($location->get_node_id())
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
-                RightsLocationEntityRight::class,
-                RightsLocationEntityRight::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($location->get_publication_id()));
+                RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_PUBLICATION_ID
+            ), new StaticConditionVariable($location->get_publication_id())
+        );
 
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->records(
-            RightsLocationEntityRight::class,
-            new RecordRetrievesParameters(
+            RightsLocationEntityRight::class, new RecordRetrievesParameters(
                 new DataClassProperties(
                     array(
                         new PropertyConditionVariable(
-                            RightsLocationEntityRight::class,
-                            RightsLocationEntityRight::PROPERTY_RIGHT_ID))),
-                $condition));
+                            RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
+                        )
+                    )
+                ), $condition
+            )
+        );
     }
 
     /**
      *
      * @param integer $publicationIdentifier
      * @param integer $nodeIdentifier
+     *
      * @return string[]
      */
     public function findRightsLocationForPublicationIdentifierAndNodeIdentifier($publicationIdentifier, $nodeIdentifier)
@@ -180,18 +194,21 @@ class RightsRepository
 
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_PUBLICATION_ID),
-            new StaticConditionVariable($publicationIdentifier));
+            new StaticConditionVariable($publicationIdentifier)
+        );
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_NODE_ID),
-            new StaticConditionVariable($nodeIdentifier));
+            new StaticConditionVariable($nodeIdentifier)
+        );
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->record(
-            RightsLocation::class,
-            new RecordRetrieveParameters(
+            RightsLocation::class, new RecordRetrieveParameters(
                 new DataClassProperties(
-                    array(new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT))),
-                $condition));
+                    array(new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT))
+                ), $condition
+            )
+        );
     }
 
     /**

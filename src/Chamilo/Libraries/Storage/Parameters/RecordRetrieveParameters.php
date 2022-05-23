@@ -16,14 +16,14 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RecordRetrieveParameters extends DataClassRetrieveParameters
+class RecordRetrieveParameters extends DataClassParameters
 {
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      */
@@ -32,7 +32,7 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
         GroupBy $groupBy = null
     )
     {
-        DataClassParameters::__construct($condition, $joins, $dataClassProperties, $orderBy, $groupBy);
+        parent::__construct($condition, $joins, $dataClassProperties, $orderBy, $groupBy);
     }
 
     /**
@@ -45,23 +45,15 @@ class RecordRetrieveParameters extends DataClassRetrieveParameters
      */
     public static function generate($parameter = null)
     {
-        // So you think you're being funny, eh? Right back at you ... you dog-blasted, ornery, no-account, long-eared
-        // varmint!
         if (is_object($parameter) && $parameter instanceof RecordRetrieveParameters)
         {
             return $parameter;
         }
-
-        // If the parameter is a Condition, generate a new DataClassRetrievesParameters instance using the Condition
-        // provided by the context
         elseif (is_object($parameter) && $parameter instanceof Condition)
         {
             return new self(null, $parameter);
         }
-
-        // If the parameter is an array, determine whether it's an array of ObjectTableOrder objects and if so generate
-        // a DataClassResultParameters
-        elseif (is_array($parameter) && count($parameter) > 0 && $parameter[0] instanceof OrderBy)
+        elseif (is_object($parameter) && $parameter instanceof OrderBy)
         {
             return new self(null, null, $parameter);
         }

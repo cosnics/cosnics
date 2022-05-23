@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -88,7 +89,7 @@ class PlatformgroupMenuRenderer extends GenericTree
         // fetch groups
         $parameters = new DataClassRetrievesParameters(
             $condition, null, null,
-            array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
         );
 
         return DataManager::retrieves(Group::class, $parameters);

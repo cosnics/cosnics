@@ -202,7 +202,7 @@ class PublicationService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
      *
      * @return string[]
      */

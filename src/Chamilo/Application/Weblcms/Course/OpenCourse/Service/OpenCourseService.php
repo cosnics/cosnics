@@ -148,7 +148,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      *
      * @return DataClassIterator
      */

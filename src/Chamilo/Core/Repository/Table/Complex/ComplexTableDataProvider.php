@@ -7,6 +7,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -28,11 +29,18 @@ class ComplexTableDataProvider extends DataClassTableDataProvider
         );
     }
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieve_data($condition, $offset, $count, $orderBy = null)
     {
-        $order_property[] = new OrderBy(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+        if (is_null($orderBy))
+        {
+            $orderBy = new OrderBy();
+        }
+
+        $orderBy->add(
+            new OrderProperty(
+                new PropertyConditionVariable(
+                    ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                )
             )
         );
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);

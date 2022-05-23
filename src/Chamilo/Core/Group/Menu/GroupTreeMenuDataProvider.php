@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuItem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -17,34 +18,11 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_tree_menu_data()
+     * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_id_param()
      */
-    public function get_tree_menu_data()
+    public function get_id_param()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable(0));
-        $group = DataManager::retrieves(
-            Group::class,
-            new DataClassRetrievesParameters(
-                $condition,
-                1,
-                null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))))->current();
-
-        $menu_item = new TreeMenuItem();
-        $menu_item->set_title($group->get_name());
-        $menu_item->set_id($group->get_id());
-        // $menu_item['url'] = $this->get_url($group->get_id());
-        $menu_item->set_url($this->get_url());
-
-        if ($group->has_children())
-        {
-            $this->get_menu_items($menu_item, $group->get_id());
-        }
-
-        $menu_item->set_class('home');
-        return $menu_item;
+        return self::PARAM_ID;
     }
 
     /**
@@ -56,16 +34,16 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
     {
         $condition = new EqualityCondition(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable($parentId));
+            new StaticConditionVariable($parentId)
+        );
         $groups = DataManager::retrieves(
-            Group::class,
-            new DataClassRetrievesParameters(
-                $condition,
-                null,
-                null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))));
+            Group::class, new DataClassRetrievesParameters(
+                $condition, null, null,
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+            )
+        );
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $group_id = $group->get_id();
 
@@ -85,10 +63,33 @@ class GroupTreeMenuDataProvider extends TreeMenuDataProvider
 
     /**
      *
-     * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_id_param()
+     * @see \Chamilo\Libraries\Format\Menu\TreeMenu\TreeMenuDataProvider::get_tree_menu_data()
      */
-    public function get_id_param()
+    public function get_tree_menu_data()
     {
-        return self::PARAM_ID;
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
+        );
+        $group = DataManager::retrieves(
+            Group::class, new DataClassRetrievesParameters(
+                $condition, 1, null,
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
+            )
+        )->current();
+
+        $menu_item = new TreeMenuItem();
+        $menu_item->set_title($group->get_name());
+        $menu_item->set_id($group->get_id());
+        // $menu_item['url'] = $this->get_url($group->get_id());
+        $menu_item->set_url($this->get_url());
+
+        if ($group->has_children())
+        {
+            $this->get_menu_items($menu_item, $group->get_id());
+        }
+
+        $menu_item->set_class('home');
+
+        return $menu_item;
     }
 }

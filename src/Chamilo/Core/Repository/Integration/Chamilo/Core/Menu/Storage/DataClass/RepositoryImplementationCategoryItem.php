@@ -8,6 +8,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -55,6 +56,11 @@ class RepositoryImplementationCategoryItem extends Item
         return new FontAwesomeGlyph('globe', [], null, 'fas');
     }
 
+    public static function getTypeName(): string
+    {
+        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
+    }
+
     public function get_children()
     {
         if (!isset($this->children))
@@ -65,7 +71,7 @@ class RepositoryImplementationCategoryItem extends Item
             );
             $parameters = new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Item::class, Item::PROPERTY_SORT))))
             );
             $items = DataManager::retrieves(Item::class, $parameters);
             $this->children = $items;
@@ -77,11 +83,6 @@ class RepositoryImplementationCategoryItem extends Item
     public function set_children($children)
     {
         $this->children = $children;
-    }
-
-    public static function getTypeName(): string
-    {
-        return ClassnameUtilities::getInstance()->getClassNameFromNamespace(self::class);
     }
 
     public function has_children()

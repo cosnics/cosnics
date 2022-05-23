@@ -15,6 +15,7 @@ use Chamilo\Libraries\Format\Structure\ToolbarItem;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -33,14 +34,14 @@ abstract class BlogLayout
     use DependencyInjectionContainerTrait;
 
     /**
-     * @var \Chamilo\Libraries\Architecture\Application\Application
-     */
-    private $parent;
-
-    /**
      * @var \Chamilo\Core\Repository\ContentObject\Blog\Storage\DataClass\Blog
      */
     private $blog;
+
+    /**
+     * @var \Chamilo\Libraries\Architecture\Application\Application
+     */
+    private $parent;
 
     /**
      * @param \Chamilo\Libraries\Architecture\Application\Application $parent
@@ -62,7 +63,7 @@ abstract class BlogLayout
         $html = [];
 
         $complexBlogItems = $this->retrieve_complex_blog_items();
-        foreach($complexBlogItems as $complexBlogItem)
+        foreach ($complexBlogItems as $complexBlogItem)
         {
             $html[] = $this->renderBlogItem($complexBlogItem);
         }
@@ -190,13 +191,13 @@ abstract class BlogLayout
         );
 
         $parameters = new DataClassRetrievesParameters(
-            $condition, null, null, array(
-                new OrderBy(
-                    new PropertyConditionVariable(
-                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
+            $condition, null, null, new OrderBy(array(
+                    new OrderProperty(
+                        new PropertyConditionVariable(
+                            ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ADD_DATE
+                        )
                     )
-                )
-            )
+                ))
         );
 
         return DataManager::retrieves(

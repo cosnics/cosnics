@@ -22,6 +22,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -211,7 +212,7 @@ class GroupRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
@@ -232,13 +233,13 @@ class GroupRepository
     public function findGroupsByIdentifiersOrderedByName($groupIdentifiers)
     {
         $orderProperties = [];
-        $orderProperties[] = new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+        $orderProperties[] = new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
         $condition =
             new InCondition(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID), $groupIdentifiers);
 
         return $this->getNestedSetDataClassRepository()->retrieves(
-            Group::class, new DataClassRetrievesParameters($condition, null, null, $orderProperties)
+            Group::class, new DataClassRetrievesParameters($condition, null, null, new OrderBy($orderProperties))
         );
     }
 
@@ -288,7 +289,7 @@ class GroupRepository
         return $this->getNestedSetDataClassRepository()->retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
             )
         );
     }

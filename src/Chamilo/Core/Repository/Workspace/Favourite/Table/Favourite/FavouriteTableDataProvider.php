@@ -18,29 +18,15 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
 
     /**
      *
-     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
-     */
-    private $workspaceService;
-
-    /**
-     *
      * @var \Chamilo\Core\Repository\Workspace\Service\EntityService
      */
     private $entityService;
 
     /**
      *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
+     * @var \Chamilo\Core\Repository\Workspace\Service\WorkspaceService
      */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
-    {
-        return $this->getWorkspaceService()->getWorkspaceFavouritesByUser(
-            $this->getEntityService(), 
-            $this->get_component()->get_user(), 
-            $limit, 
-            $offset, 
-            $orderProperty);
-    }
+    private $workspaceService;
 
     /**
      *
@@ -49,8 +35,8 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
     public function count_data($condition)
     {
         return $this->getWorkspaceService()->countWorkspaceFavouritesByUser(
-            $this->getEntityService(), 
-            $this->get_component()->get_user());
+            $this->getEntityService(), $this->get_component()->get_user()
+        );
     }
 
     /**
@@ -59,11 +45,11 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
      */
     private function getEntityService()
     {
-        if (! isset($this->entityService))
+        if (!isset($this->entityService))
         {
             $this->entityService = new EntityService();
         }
-        
+
         return $this->entityService;
     }
 
@@ -73,11 +59,22 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
      */
     private function getWorkspaceService()
     {
-        if (! isset($this->workspaceService))
+        if (!isset($this->workspaceService))
         {
             $this->workspaceService = new WorkspaceService(new WorkspaceRepository());
         }
-        
+
         return $this->workspaceService;
+    }
+
+    /**
+     *
+     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
+     */
+    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    {
+        return $this->getWorkspaceService()->getWorkspaceFavouritesByUser(
+            $this->getEntityService(), $this->get_component()->get_user(), $limit, $offset, $orderProperty
+        );
     }
 }

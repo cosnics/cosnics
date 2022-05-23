@@ -17,6 +17,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -36,22 +37,22 @@ class GroupMenu extends HtmlMenu
     const TREE_NAME = __CLASS__;
 
     /**
-     * The string passed to sprintf() to format category URLs
-     */
-    private $urlFmt;
-
-    /**
      * The array renderer used to determine the breadcrumbs.
      */
     private $array_renderer;
 
-    private $include_root;
-
     private $current_category;
+
+    private $hide_current_category;
+
+    private $include_root;
 
     private $show_complete_tree;
 
-    private $hide_current_category;
+    /**
+     * The string passed to sprintf() to format category URLs
+     */
+    private $urlFmt;
 
     /**
      * Creates a new category navigation menu.
@@ -74,13 +75,13 @@ class GroupMenu extends HtmlMenu
         if ($current_category == '0' || is_null($current_category))
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-                new StaticConditionVariable(0)
+                new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
             );
             $group = DataManager::retrieves(
                 Group::class, new DataClassRetrievesParameters(
-                    $condition, 1, null,
-                    array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                    $condition, 1, null, new OrderBy(
+                        array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                    )
                 )
             )->current();
             $this->current_category = $group;
@@ -140,13 +141,12 @@ class GroupMenu extends HtmlMenu
         $include_root = $this->include_root;
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID),
-            new StaticConditionVariable(0)
+            new PropertyConditionVariable(Group::class, Group::PROPERTY_PARENT_ID), new StaticConditionVariable(0)
         );
         $group = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, 1, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
             )
         )->current();
         if (!$include_root)
@@ -199,11 +199,11 @@ class GroupMenu extends HtmlMenu
         $groups = DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
                 $condition, null, null,
-                array(new OrderBy(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME)))
+                new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME))))
             )
         );
 
-        foreach($groups as $group)
+        foreach ($groups as $group)
         {
             $group_id = $group->get_id();
 

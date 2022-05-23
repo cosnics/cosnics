@@ -10,6 +10,7 @@ use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Theme\ThemePathBuilder;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -133,7 +134,7 @@ class CourseSettingsConnector
         $categories = [];
 
         $categories_result_set = DataManager::retrieve_course_categories_ordered_by_name();
-        foreach($categories_result_set as $category)
+        foreach ($categories_result_set as $category)
         {
             $categories[$category->get_id()] = $category->get_name();
         }
@@ -223,8 +224,8 @@ class CourseSettingsConnector
         );
 
         $order = array(
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
-            new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME)),
+            new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME))
         );
 
         $format = Configuration::getInstance()->get_setting(array('Chamilo\Core\User', 'fullname_format'));
@@ -234,10 +235,10 @@ class CourseSettingsConnector
         }
 
         $users_result_set = \Chamilo\Core\User\Storage\DataManager::retrieve_active_users(
-            $condition, null, null, $order
+            $condition, null, null, new OrderBy($order)
         );
 
-        foreach($users_result_set as $user)
+        foreach ($users_result_set as $user)
         {
             $users[$user->get_id()] = $user->get_fullname() . ' (' . $user->get_official_code() . ')';
         }

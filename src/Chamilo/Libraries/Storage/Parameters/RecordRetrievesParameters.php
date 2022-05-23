@@ -16,7 +16,7 @@ use Exception;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RecordRetrievesParameters extends DataClassRetrievesParameters
+class RecordRetrievesParameters extends DataClassParameters
 {
 
     /**
@@ -25,7 +25,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param \Chamilo\Libraries\Storage\Query\Joins $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $havingCondition
@@ -35,7 +35,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
         $orderBy = [], Joins $joins = null, GroupBy $groupBy = null, Condition $havingCondition = null
     )
     {
-        DataClassParameters::__construct(
+        parent::__construct(
             $condition, $joins, $dataClassProperties, $orderBy, $groupBy, $havingCondition, $count, $offset
         );
     }
@@ -50,29 +50,19 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
      */
     public static function generate($parameter = null)
     {
-        // So you think you're being funny, eh? Right back at you ... you dog-blasted, ornery, no-account, long-eared
-        // varmint!
         if (is_object($parameter) && $parameter instanceof DataClassRetrievesParameters)
         {
             return $parameter;
         }
-
-        // If the parameter is a Condition, generate a new DataClassRetrievesParameters instance using the Condition
-        // provided by the context
         elseif (is_object($parameter) && $parameter instanceof Condition)
         {
             return new self(null, $parameter);
         }
-
-        // If it's an integer, assume it will be the count and generate a new DataClassRetrievesParameters
         elseif (is_integer($parameter))
         {
             return new self(null, null, $parameter);
         }
-
-        // If the parameter is an array, determine whether it's an array of ObjectTableOrder objects and if so generate
-        // a DataClassResultParameters
-        elseif (is_array($parameter) && count($parameter) > 0 && $parameter[0] instanceof OrderBy)
+        elseif (is_object($parameter) && $parameter instanceof OrderBy)
         {
             return new self(null, null, null, null, $parameter);
         }

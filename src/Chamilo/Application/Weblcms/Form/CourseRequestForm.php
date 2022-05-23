@@ -14,6 +14,7 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -33,19 +34,19 @@ class CourseRequestForm extends FormValidator
 
     const TYPE_VIEW = 3;
 
+    private $course;
+
     private $form_type;
 
-    private $course;
+    private $multiple_users;
 
     private $parent;
 
     private $request;
 
-    private $user_id;
-
-    private $multiple_users;
-
     private $request_user_id;
+
+    private $user_id;
 
     public function __construct(
         $form_type, $action, $course, $parent, $request, $multiple_users = false, $request_user_id = null
@@ -104,26 +105,26 @@ class CourseRequestForm extends FormValidator
             if ($this->multiple_users)
             {
                 $order = [];
-                $order[] = new OrderBy(
+                $order[] = new OrderProperty(
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
                 );
-                $order[] = new OrderBy(
+                $order[] = new OrderProperty(
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
                 );
 
-                $parameters = new DataClassRetrievesParameters(null, null, null, $order);
+                $parameters = new DataClassRetrievesParameters(null, null, null, new OrderBy($order));
                 $users_result = DataManager::retrieves(
                     User::class, $parameters
                 );
                 $users = [];
-                foreach($users_result as $user)
+                foreach ($users_result as $user)
                 {
                     $user_name = $user->get_fullname();
                     $users[$user->get_id()] = $user_name;
                 }
                 $this->addElement(
-                    'select', CommonRequest::PROPERTY_USER_ID,
-                    Translation::get('User', null, Manager::context()), $users
+                    'select', CommonRequest::PROPERTY_USER_ID, Translation::get('User', null, Manager::context()),
+                    $users
                 );
             }
             else

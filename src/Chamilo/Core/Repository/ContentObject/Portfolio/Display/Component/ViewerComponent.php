@@ -27,6 +27,7 @@ use Chamilo\Libraries\Format\Structure\ActionBar\SplitDropdownButton;
 use Chamilo\Libraries\Format\Structure\ActionBar\SubButton;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -102,6 +103,17 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         $date_format = Translation::get('DateTimeFormatLong', null, Utilities::COMMON_LIBRARIES);
 
         return DatetimeUtilities::format_locale_date($date_format, $date);
+    }
+
+    /**
+     *
+     * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
+     */
+    public function getAdditionalParameters(array $additionalParameters = []): array
+    {
+        $additionalParameters[] = self::PARAM_STEP;
+
+        return parent::getAdditionalParameters($additionalParameters);
     }
 
     public function getButtonToolBar()
@@ -516,17 +528,6 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
 
     /**
      *
-     * @see \Chamilo\Libraries\Architecture\Application\Application::getAdditionalParameters()
-     */
-    public function getAdditionalParameters(array $additionalParameters = []): array
-    {
-        $additionalParameters[] = self::PARAM_STEP;
-
-        return parent::getAdditionalParameters($additionalParameters);
-    }
-
-    /**
-     *
      * @see \core\repository\content_object\portfolio\feedback\FeedbackSupport::get_feedback()
      */
     public function get_feedback()
@@ -618,8 +619,9 @@ class ViewerComponent extends ItemComponent implements FeedbackSupport, Feedback
         $html = [];
 
         $last_activities = DataManager::retrieve_activities(
-            $this->get_current_content_object(), null, 0, 1,
-            array(new OrderBy(new PropertyConditionVariable(Activity::class, Activity::PROPERTY_DATE)))
+            $this->get_current_content_object(), null, 0, 1, new OrderBy(
+                array(new OrderProperty(new PropertyConditionVariable(Activity::class, Activity::PROPERTY_DATE)))
+            )
         );
 
         $last_activity = $last_activities->current();

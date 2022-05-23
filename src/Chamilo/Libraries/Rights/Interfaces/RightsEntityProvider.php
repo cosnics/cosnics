@@ -22,7 +22,7 @@ interface RightsEntityProvider
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperties
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */

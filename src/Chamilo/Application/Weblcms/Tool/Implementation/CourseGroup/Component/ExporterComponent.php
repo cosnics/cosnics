@@ -16,15 +16,16 @@ use Chamilo\Libraries\Architecture\Exceptions\NotAllowedException;
 use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -43,9 +44,9 @@ class ExporterComponent extends Manager
 {
     const PROPERTY_SORT_NAME = 'SortName';
 
-    private $current_tab;
-
     private $course_group;
+
+    private $current_tab;
 
     /**
      * Runs this component and displays its output.
@@ -91,6 +92,43 @@ class ExporterComponent extends Manager
     }
 
     /**
+     * Renders the worksheet
+     *
+     * @return string - the path to the rendered worksheet
+     */
+    public function render()
+    {
+        $excel = new Spreadsheet();
+        $worksheet = $excel->getSheet(0)->setTitle('Export');
+
+        $this->get_data($worksheet);
+
+        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
+
+        $temp_dir = Path::getInstance()->getTemporaryPath() . 'excel/';
+
+        if (!is_dir($temp_dir))
+        {
+            mkdir($temp_dir, 0777, true);
+        }
+
+        $filename = 'export_course_group_' . $this->get_course_id();
+
+        if ($this->course_group)
+        {
+            $filename .= '_' . $this->course_group->get_id();
+        }
+
+        $filename .= '_' . time();
+
+        $file_path = $temp_dir . $filename;
+
+        $objWriter->save($file_path);
+
+        return $file_path;
+    }
+
+    /**
      * Exports the users with the new exporter
      *
      * @return string
@@ -98,59 +136,24 @@ class ExporterComponent extends Manager
     public function export_users()
     {
         $user_records = CourseDataManager::retrieve_all_course_users(
-            $this->get_course_id(),
-            null,
-            null,
-            null,
-            array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
+            $this->get_course_id(), null, null, null, new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ))
         );
 
         $users = [];
 
-        foreach($user_records as $user_record)
+        foreach ($user_records as $user_record)
         {
             $users[] = DataClass::factory(User::class, $user_record);
         }
 
         $exporter = new UserExporter(
-            new ExcelUserExportRenderer(),
-            array(new CourseGroupUserExportExtender($this->get_course_id()))
+            new ExcelUserExportRenderer(), array(new CourseGroupUserExportExtender($this->get_course_id()))
         );
 
         return $exporter->export($users);
-    }
-
-    /**
-     * Sends the exported file as download
-     *
-     * @param $file_path string
-     */
-    public function send_as_download($file_path)
-    {
-        // Determines the filename that the user will see when they download the
-        // file
-        $course = $this->get_course();
-
-        if ($this->course_group)
-        {
-            $filename = $course->get_title() . '_' . $this->course_group->get_name() . "_" . date('Ymd') . '.xlsx';
-        }
-        else
-        {
-            $filename = $course->get_title() . date('Ymd') . '.xlsx';
-        }
-
-        // Make safe name
-        $filename = Filesystem::create_safe_name($filename);
-        $filename = preg_replace('/[\s]+/', '_', $filename);
-
-        $type = 'application/vnd.openxmlformats';
-
-        // Send file for download
-        Filesystem::file_send_for_download($file_path, true, $filename, $type);
     }
 
     /**
@@ -185,6 +188,60 @@ class ExporterComponent extends Manager
     }
 
     /**
+     * Gets the course group subscriptions for the given course group
+     *
+     * @param $worksheet
+     */
+    private function get_course_group_subscription($worksheet)
+    {
+        // $data = WeblcmsDataManager ::
+        // retrieve_all_course_users($this->get_course_id(),
+        // $this->get_condition(), null, null, null);
+        $data = DataManager::retrieve_course_group_users_with_subscription_time(
+            $this->course_group->get_id(), null, null, null, new OrderBy(array(
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ))
+        );
+
+        $table = $this->get_users_table($data);
+        $title = Translation::get('SubscriptionList');
+        $rowcount = 0;
+        $this->render_table($worksheet, $title, $this->course_group->get_description(), $table, $rowcount);
+    }
+
+    /**
+     * Retrieves the course groups when exporting all the course groups
+     *
+     * @param $worksheet
+     */
+    protected function get_course_groups_tab($worksheet)
+    {
+        $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
+        $course_groups = $courseGroupRoot->get_children(false);
+
+        $this->handle_course_groups($course_groups, $worksheet);
+    }
+
+    /**
+     * Gets the data for the worksheet
+     *
+     * @param $worksheet Worksheet
+     */
+    public function get_data($worksheet)
+    {
+        if ($this->course_group)
+        {
+            // subscription overview for one course group
+            $this->get_course_group_subscription($worksheet);
+        }
+        else
+        {
+            $this->get_course_groups_tab($worksheet);
+        }
+    }
+
+    /**
      * Gets the export data for the users
      *
      * @param $data User
@@ -195,18 +252,14 @@ class ExporterComponent extends Manager
     {
         $table = [];
         $table[0][User::PROPERTY_OFFICIAL_CODE] = Translation::get(
-            'OfficialCode',
-            null,
-            \Chamilo\Core\User\Manager::context()
+            'OfficialCode', null, \Chamilo\Core\User\Manager::context()
         );
         $table[0][User::PROPERTY_USERNAME] = Translation::get('Username', null, \Chamilo\Core\User\Manager::context());
         $table[0][User::PROPERTY_LASTNAME] = Translation::get('Lastname', null, \Chamilo\Core\User\Manager::context());
         $table[0][self::PROPERTY_SORT_NAME] =
             Translation::get('SortName', null, \Chamilo\Application\Weblcms\Manager::context());
         $table[0][User::PROPERTY_FIRSTNAME] = Translation::get(
-            'Firstname',
-            null,
-            \Chamilo\Core\User\Manager::context()
+            'Firstname', null, \Chamilo\Core\User\Manager::context()
         );
 
         $table[0][User::PROPERTY_EMAIL] = Translation::get('Email', null, \Chamilo\Core\User\Manager::context());
@@ -214,7 +267,7 @@ class ExporterComponent extends Manager
         $table[0]['Course Groups'] = Translation::get('CourseGroups');
 
         $index = 0;
-        foreach($data as $block_data)
+        foreach ($data as $block_data)
         {
             // if (!$block_data instanceof User)
             // {
@@ -224,11 +277,10 @@ class ExporterComponent extends Manager
             $index ++;
             // get the list of course_groups the user is subscribed
             $course_groups = DataManager::retrieve_course_groups_from_user(
-                $block_data[User::PROPERTY_ID],
-                $this->get_course_id()
+                $block_data[User::PROPERTY_ID], $this->get_course_id()
             );
             $course_groups_subscribed = [];
-            foreach($course_groups as $course_group)
+            foreach ($course_groups as $course_group)
             {
                 $course_groups_subscribed[] = $course_group->get_name();
             }
@@ -267,19 +319,6 @@ class ExporterComponent extends Manager
     }
 
     /**
-     * Retrieves the course groups when exporting all the course groups
-     *
-     * @param $worksheet
-     */
-    protected function get_course_groups_tab($worksheet)
-    {
-        $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
-        $course_groups = $courseGroupRoot->get_children(false);
-
-        $this->handle_course_groups($course_groups, $worksheet);
-    }
-
-    /**
      * Handles a resultset of course groups and their children
      *
      * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_groups
@@ -290,116 +329,26 @@ class ExporterComponent extends Manager
      */
     protected function handle_course_groups(DataClassIterator $course_groups, $worksheet, $rowcount = 0)
     {
-        foreach($course_groups as $course_group)
+        foreach ($course_groups as $course_group)
         {
             $course_group_users = DataManager::retrieve_course_group_users_with_subscription_time(
-                $course_group->get_id(),
-                null,
-                null,
-                null,
-                array(
-                    new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                    new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-                )
+                $course_group->get_id(), null, null, null, new OrderBy(array(
+                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+                ))
             );
 
             $users_table = $this->get_users_table($course_group_users);
             $title = $course_group->get_name();
 
             $rowcount = $this->render_table(
-                $worksheet,
-                $title,
-                $course_group->get_description(),
-                $users_table,
-                $rowcount
+                $worksheet, $title, $course_group->get_description(), $users_table, $rowcount
             );
 
             $rowcount = $this->handle_course_groups($course_group->get_children(), $worksheet, $rowcount);
         }
 
         return $rowcount;
-    }
-
-    /**
-     * Renders the worksheet
-     *
-     * @return string - the path to the rendered worksheet
-     */
-    public function render()
-    {
-        $excel = new Spreadsheet();
-        $worksheet = $excel->getSheet(0)->setTitle('Export');
-
-        $this->get_data($worksheet);
-
-        $objWriter = IOFactory::createWriter($excel, 'Xlsx');
-
-        $temp_dir = Path::getInstance()->getTemporaryPath() . 'excel/';
-
-        if (!is_dir($temp_dir))
-        {
-            mkdir($temp_dir, 0777, true);
-        }
-
-        $filename = 'export_course_group_' . $this->get_course_id();
-
-        if ($this->course_group)
-        {
-            $filename .= '_' . $this->course_group->get_id();
-        }
-
-        $filename .= '_' . time();
-
-        $file_path = $temp_dir . $filename;
-
-        $objWriter->save($file_path);
-
-        return $file_path;
-    }
-
-    /**
-     * Gets the data for the worksheet
-     *
-     * @param $worksheet Worksheet
-     */
-    public function get_data($worksheet)
-    {
-        if ($this->course_group)
-        {
-            // subscription overview for one course group
-            $this->get_course_group_subscription($worksheet);
-        }
-        else
-        {
-            $this->get_course_groups_tab($worksheet);
-        }
-    }
-
-    /**
-     * Gets the course group subscriptions for the given course group
-     *
-     * @param $worksheet
-     */
-    private function get_course_group_subscription($worksheet)
-    {
-        // $data = WeblcmsDataManager ::
-        // retrieve_all_course_users($this->get_course_id(),
-        // $this->get_condition(), null, null, null);
-        $data = DataManager::retrieve_course_group_users_with_subscription_time(
-            $this->course_group->get_id(),
-            null,
-            null,
-            null,
-            array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
-        );
-
-        $table = $this->get_users_table($data);
-        $title = Translation::get('SubscriptionList');
-        $rowcount = 0;
-        $this->render_table($worksheet, $title, $this->course_group->get_description(), $table, $rowcount);
     }
 
     /**
@@ -482,9 +431,7 @@ class ExporterComponent extends Manager
             $worksheet->setCellValueByColumnAndRow($column2 + 2, $block_row, $entry[self::PROPERTY_SORT_NAME]);
             $worksheet->setCellValueByColumnAndRow($column2 + 3, $block_row, $entry[User::PROPERTY_EMAIL]);
             $worksheet->setCellValueByColumnAndRow(
-                $column2 + 4,
-                $block_row,
-                $entry[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
+                $column2 + 4, $block_row, $entry[CourseGroupUserRelation::PROPERTY_SUBSCRIPTION_TIME]
             );
             $worksheet->setCellValueByColumnAndRow($column2 + 5, $block_row, $entry['Course Groups']);
             // if ($i == 1)
@@ -492,5 +439,35 @@ class ExporterComponent extends Manager
 
         // $block_row++;
         return $block_row;
+    }
+
+    /**
+     * Sends the exported file as download
+     *
+     * @param $file_path string
+     */
+    public function send_as_download($file_path)
+    {
+        // Determines the filename that the user will see when they download the
+        // file
+        $course = $this->get_course();
+
+        if ($this->course_group)
+        {
+            $filename = $course->get_title() . '_' . $this->course_group->get_name() . "_" . date('Ymd') . '.xlsx';
+        }
+        else
+        {
+            $filename = $course->get_title() . date('Ymd') . '.xlsx';
+        }
+
+        // Make safe name
+        $filename = Filesystem::create_safe_name($filename);
+        $filename = preg_replace('/[\s]+/', '_', $filename);
+
+        $type = 'application/vnd.openxmlformats';
+
+        // Send file for download
+        Filesystem::file_send_for_download($file_path, true, $filename, $type);
     }
 }

@@ -18,7 +18,6 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\CaseConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
-use Chamilo\Libraries\Storage\Query\Variable\FixedPropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -373,7 +372,7 @@ class DoctrineExtension
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      * @param int|null $offset
      * @param int|null $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[]|null $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -411,11 +410,11 @@ class DoctrineExtension
         usort(
             $users, function ($user1, $user2) use ($orderProperties) {
 
-            $orderProperty = $orderProperties[0];
+            $orderProperty = $orderProperties->getFirst();
 
             return strcmp(
-                $user1[$orderProperty->getConditionVariable()->get_property()],
-                $user2[$orderProperty->getConditionVariable()->get_property()]
+                $user1[$orderProperty->getConditionVariable()->getPropertyName()],
+                $user2[$orderProperty->getConditionVariable()->getPropertyName()]
             );
         }
         );

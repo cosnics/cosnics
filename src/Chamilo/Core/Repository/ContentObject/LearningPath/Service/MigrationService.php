@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Exception;
@@ -31,24 +32,21 @@ use Exception;
 class MigrationService
 {
     /**
-     * @var LearningPathService
+     * The ComplexContentObjectItemsMapping for the given learning path
+     *
+     * @var array
      */
-    protected $learningPathService;
-
-    /**
-     * @var TreeNodeDataService
-     */
-    protected $treeNodeDataService;
-
-    /**
-     * @var TrackingRepository
-     */
-    protected $trackingRepository;
+    protected $complexContentObjectItemsMappingForLearningPath;
 
     /**
      * @var ContentObjectRepository
      */
     protected $contentObjectRepository;
+
+    /**
+     * @var LearningPathService
+     */
+    protected $learningPathService;
 
     /**
      * Cache for the sections that are converted from learning paths
@@ -58,11 +56,14 @@ class MigrationService
     protected $sectionFromLearningPathCache;
 
     /**
-     * The ComplexContentObjectItemsMapping for the given learning path
-     *
-     * @var array
+     * @var TrackingRepository
      */
-    protected $complexContentObjectItemsMappingForLearningPath;
+    protected $trackingRepository;
+
+    /**
+     * @var TreeNodeDataService
+     */
+    protected $treeNodeDataService;
 
     /**
      * @param LearningPathService $learningPathService
@@ -72,8 +73,7 @@ class MigrationService
      */
     public function __construct(
         LearningPathService $learningPathService, TreeNodeDataService $treeNodeDataService,
-        TrackingRepository $trackingRepository,
-        ContentObjectRepository $contentObjectRepository
+        TrackingRepository $trackingRepository, ContentObjectRepository $contentObjectRepository
     )
     {
         ini_set('memory_limit', - 1);
@@ -82,120 +82,6 @@ class MigrationService
         $this->treeNodeDataService = $treeNodeDataService;
         $this->trackingRepository = $trackingRepository;
         $this->contentObjectRepository = $contentObjectRepository;
-    }
-
-    /**
-     * Migrates the old learning paths to the new structure
-     */
-    public function migrateLearningPaths()
-    {
-        $learningPaths = $this->learningPathService->getLearningPaths();
-        foreach ($learningPaths as $learningPath)
-        {
-            $this->complexContentObjectItemsMappingForLearningPath = [];
-
-            $user = new User();
-            $user->setId($learningPath->get_owner_id());
-
-            $learningPathTreeNodeData = $this->treeNodeDataService->createTreeNodeDataForLearningPath(
-                $learningPath, $user
-            );
-
-            $this->complexContentObjectItemsMappingForLearningPath[0] =
-                $learningPathTreeNodeData->getId();
-
-            $this->migrateLearningPath($learningPath, $learningPath->getId(), $learningPathTreeNodeData);
-
-            if ($this->hasLearningPathPrerequisites())
-            {
-                $learningPath->setEnforceDefaultTraversingOrder(true);
-                $this->contentObjectRepository->update($learningPath);
-
-                echo 'Learning Path Prerequisites ' . $learningPath->getId() . PHP_EOL;
-            }
-
-            $this->fixLearningPathTracking($learningPath);
-        }
-    }
-
-    /**
-     * Migrates a single learning path, recursively
-     *
-     * @param LearningPath $learningPath
-     * @param int $parentId
-     * @param TreeNodeData $parentTreeNodeData
-     */
-    protected function migrateLearningPath(
-        LearningPath $learningPath, $parentId, TreeNodeData $parentTreeNodeData = null
-    )
-    {
-        $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
-        foreach($complexContentObjectItems as $complexContentObjectItem)
-        {
-            /** @var ComplexContentObjectItem $complexContentObjectItem */
-
-            try
-            {
-                $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
-            }
-            catch (Exception $ex)
-            {
-                continue;
-            }
-
-            if ($childContentObject instanceof LearningPath)
-            {
-                /** @var LearningPath $childContentObject */
-
-                $contentObject = $this->getOrCreateSectionForLearningPath($childContentObject);
-                $treeNodeData = $this->createTreeNodeDataForContentObject(
-                    $learningPath, $contentObject, $parentTreeNodeData
-                );
-
-                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
-            }
-            else
-            {
-                if (!$childContentObject instanceof LearningPathItem)
-                {
-                    echo(
-                        'The given complex content object item does not reference a learning path item ' .
-                        $complexContentObjectItem->getId()
-                    );
-
-                    continue;
-                }
-
-                /** @var LearningPathItem $childContentObject */
-
-                try
-                {
-                    $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
-                }
-                catch (Exception $ex)
-                {
-                    continue;
-                }
-
-                if ($contentObject instanceof LearningPath)
-                {
-                    $contentObject = $this->getOrCreateSectionForLearningPath($contentObject);
-                }
-
-                $treeNodeData = $this->createTreeNodeDataForContentObject(
-                    $learningPath, $contentObject, $parentTreeNodeData,
-                    $childContentObject
-                );
-
-                if($contentObject instanceof Section)
-                {
-                    $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
-                }
-            }
-
-            $this->complexContentObjectItemsMappingForLearningPath[$complexContentObjectItem->getId()] =
-                $treeNodeData->getId();
-        }
     }
 
     /**
@@ -211,8 +97,8 @@ class MigrationService
      * @throws \Exception
      */
     protected function createTreeNodeDataForContentObject(
-        LearningPath $learningPath, ContentObject $contentObject,
-        TreeNodeData $parentTreeNodeData = null, LearningPathItem $learningPathItem = null
+        LearningPath $learningPath, ContentObject $contentObject, TreeNodeData $parentTreeNodeData = null,
+        LearningPathItem $learningPathItem = null
     )
     {
         $parentId = !is_null($parentTreeNodeData) ? $parentTreeNodeData->getId() : 0;
@@ -242,6 +128,66 @@ class MigrationService
         echo "Create TreeNodeData " . $treeNodeData->getId() . PHP_EOL;
 
         return $treeNodeData;
+    }
+
+    /**
+     * Change the tracking tables to match the new identifiers from the
+     * ComplexContentObject identifiers to the TreeNodeData identifers
+     *
+     * @param LearningPath $learningPath
+     */
+    protected function fixLearningPathTracking(LearningPath $learningPath)
+    {
+        $treeNodeAttempts = $this->trackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
+
+        foreach ($treeNodeAttempts as $treeNodeAttempt)
+        {
+            $newLearningPathItemId =
+                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->getTreeNodeDataId()];
+
+            if (!$newLearningPathItemId)
+            {
+                //                echo 'New learning path item id not found for id ' .
+                //                    $treeNodeAttempt->get_learning_path_item_id() . PHP_EOL;
+
+                continue;
+            }
+
+            $treeNodeAttempt->setTreeNodeDataId($newLearningPathItemId);
+            $this->trackingRepository->update($treeNodeAttempt);
+        }
+
+        $this->trackingRepository->clearTreeNodeAttemptCache();
+    }
+
+    /**
+     * Returns the complex content object items for a given parent
+     *
+     * @param int $parentId
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    protected function getComplexContentObjectItemsForParent(
+        $parentId
+    )
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(
+                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+            ), new StaticConditionVariable($parentId)
+        );
+
+        return $this->contentObjectRepository->findAll(
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
+                $condition, null, null, new OrderBy(array(
+                        new OrderProperty(
+                            new PropertyConditionVariable(
+                                ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
+                            )
+                        )
+                    ))
+            )
+        );
     }
 
     /**
@@ -282,39 +228,6 @@ class MigrationService
     }
 
     /**
-     * Returns the complex content object items for a given parent
-     *
-     * @param int $parentId
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    protected function getComplexContentObjectItemsForParent(
-        $parentId
-    )
-    {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(
-                ComplexContentObjectItem::class,
-                ComplexContentObjectItem::PROPERTY_PARENT
-            ),
-            new StaticConditionVariable($parentId)
-        );
-
-        return $this->contentObjectRepository->findAll(
-            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
-                $condition, null, null, array(
-                    new OrderBy(
-                        new PropertyConditionVariable(
-                            ComplexContentObjectItem::class,
-                            ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
-                        )
-                    )
-                )
-            )
-        );
-    }
-
-    /**
      * Checks if the learning path has prerequisites, uses the mapping from ComplexContentObjectItem classes
      *
      * @return bool
@@ -327,16 +240,14 @@ class MigrationService
             new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexLearningPathItem::class, ComplexLearningPathItem::PROPERTY_PREREQUISITES
-                ),
-                null
+                ), null
             )
         );
 
         $conditions[] = new InCondition(
             new PropertyConditionVariable(
                 ComplexLearningPathItem::class, ComplexLearningPathItem::PROPERTY_ID
-            ),
-            array_keys($this->complexContentObjectItemsMappingForLearningPath)
+            ), array_keys($this->complexContentObjectItemsMappingForLearningPath)
         );
 
         $condition = new AndCondition($conditions);
@@ -347,33 +258,112 @@ class MigrationService
     }
 
     /**
-     * Change the tracking tables to match the new identifiers from the
-     * ComplexContentObject identifiers to the TreeNodeData identifers
+     * Migrates a single learning path, recursively
      *
      * @param LearningPath $learningPath
+     * @param int $parentId
+     * @param TreeNodeData $parentTreeNodeData
      */
-    protected function fixLearningPathTracking(LearningPath $learningPath)
+    protected function migrateLearningPath(
+        LearningPath $learningPath, $parentId, TreeNodeData $parentTreeNodeData = null
+    )
     {
-        $treeNodeAttempts =
-            $this->trackingRepository->findTreeNodeAttemptsForLearningPath($learningPath);
-
-        foreach ($treeNodeAttempts as $treeNodeAttempt)
+        $complexContentObjectItems = $this->getComplexContentObjectItemsForParent($parentId);
+        foreach ($complexContentObjectItems as $complexContentObjectItem)
         {
-            $newLearningPathItemId =
-                $this->complexContentObjectItemsMappingForLearningPath[$treeNodeAttempt->getTreeNodeDataId()];
+            /** @var ComplexContentObjectItem $complexContentObjectItem */
 
-            if (!$newLearningPathItemId)
+            try
             {
-//                echo 'New learning path item id not found for id ' .
-//                    $treeNodeAttempt->get_learning_path_item_id() . PHP_EOL;
-
+                $childContentObject = $this->contentObjectRepository->findById($complexContentObjectItem->get_ref());
+            }
+            catch (Exception $ex)
+            {
                 continue;
             }
 
-            $treeNodeAttempt->setTreeNodeDataId($newLearningPathItemId);
-            $this->trackingRepository->update($treeNodeAttempt);
-        }
+            if ($childContentObject instanceof LearningPath)
+            {
+                /** @var LearningPath $childContentObject */
 
-        $this->trackingRepository->clearTreeNodeAttemptCache();
+                $contentObject = $this->getOrCreateSectionForLearningPath($childContentObject);
+                $treeNodeData = $this->createTreeNodeDataForContentObject(
+                    $learningPath, $contentObject, $parentTreeNodeData
+                );
+
+                $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
+            }
+            else
+            {
+                if (!$childContentObject instanceof LearningPathItem)
+                {
+                    echo('The given complex content object item does not reference a learning path item ' .
+                        $complexContentObjectItem->getId());
+
+                    continue;
+                }
+
+                /** @var LearningPathItem $childContentObject */
+
+                try
+                {
+                    $contentObject = $this->contentObjectRepository->findById($childContentObject->get_reference());
+                }
+                catch (Exception $ex)
+                {
+                    continue;
+                }
+
+                if ($contentObject instanceof LearningPath)
+                {
+                    $contentObject = $this->getOrCreateSectionForLearningPath($contentObject);
+                }
+
+                $treeNodeData = $this->createTreeNodeDataForContentObject(
+                    $learningPath, $contentObject, $parentTreeNodeData, $childContentObject
+                );
+
+                if ($contentObject instanceof Section)
+                {
+                    $this->migrateLearningPath($learningPath, $complexContentObjectItem->get_ref(), $treeNodeData);
+                }
+            }
+
+            $this->complexContentObjectItemsMappingForLearningPath[$complexContentObjectItem->getId()] =
+                $treeNodeData->getId();
+        }
+    }
+
+    /**
+     * Migrates the old learning paths to the new structure
+     */
+    public function migrateLearningPaths()
+    {
+        $learningPaths = $this->learningPathService->getLearningPaths();
+        foreach ($learningPaths as $learningPath)
+        {
+            $this->complexContentObjectItemsMappingForLearningPath = [];
+
+            $user = new User();
+            $user->setId($learningPath->get_owner_id());
+
+            $learningPathTreeNodeData = $this->treeNodeDataService->createTreeNodeDataForLearningPath(
+                $learningPath, $user
+            );
+
+            $this->complexContentObjectItemsMappingForLearningPath[0] = $learningPathTreeNodeData->getId();
+
+            $this->migrateLearningPath($learningPath, $learningPath->getId(), $learningPathTreeNodeData);
+
+            if ($this->hasLearningPathPrerequisites())
+            {
+                $learningPath->setEnforceDefaultTraversingOrder(true);
+                $this->contentObjectRepository->update($learningPath);
+
+                echo 'Learning Path Prerequisites ' . $learningPath->getId() . PHP_EOL;
+            }
+
+            $this->fixLearningPathTracking($learningPath);
+        }
     }
 }

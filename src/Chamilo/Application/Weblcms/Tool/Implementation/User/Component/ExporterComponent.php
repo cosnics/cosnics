@@ -16,15 +16,16 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Exceptions\UserException;
 use Chamilo\Libraries\File\Filesystem;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticColumnConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
 /**
@@ -40,8 +41,7 @@ class ExporterComponent extends Manager
         $userExportParameters = $this->getUserExportParameters();
 
         $exporter = new UserExporter(
-            new ExcelUserExportRenderer(),
-            array(
+            new ExcelUserExportRenderer(), array(
                 new CourseUserExportExtender($this->get_course_id()),
                 new CourseGroupUserExportExtender($this->get_course_id())
             )
@@ -50,40 +50,61 @@ class ExporterComponent extends Manager
         $file_path = $exporter->export($userExportParameters->getUsers());
 
         Filesystem::file_send_for_download(
-            $file_path,
-            true,
-            $userExportParameters->getExportFilename(),
-            'application/vnd.openxmlformats'
+            $file_path, true, $userExportParameters->getExportFilename(), 'application/vnd.openxmlformats'
         );
 
         Filesystem::remove($file_path);
     }
 
     /**
-     * Returns a list of users to export
+     * Creates a safe name from a possible unsafe name
      *
-     * @return \Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters
+     * @param string $unsafeName
      *
-     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
+     * @return string
      */
-    protected function getUserExportParameters()
+    protected function createSafeName($unsafeName)
     {
-        $tab = $this->getRequest()->get(self::PARAM_TAB);
+        $stringUtilities = StringUtilities::getInstance();
+        $string = $stringUtilities->createString($unsafeName);
+        $safeName = $string->toLowerCase()->toAscii()->underscored();
 
-        switch ($tab)
+        return (string) $safeName;
+    }
+
+    /**
+     * Determines the status for a group in the current course
+     *
+     * @param Group $group
+     *
+     * @return int
+     */
+    protected function determineGroupStatus($group)
+    {
+        $parentIds = [];
+
+        $parents = $group->get_ancestors(true);
+        foreach ($parents as $parent)
         {
-            case UnsubscribeBrowserComponent::TAB_ALL:
-                return $this->exportAllUsers();
-            case UnsubscribeBrowserComponent::TAB_USERS:
-                return $this->exportIndividualSubscribedUsers();
-            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_SUBGROUPS:
-            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS:
-                return $this->exportPlatformGroupUsers();
+            $parentIds[] = $parent->getId();
         }
 
-        throw new UserException(
-            $this->getTranslator()->trans('ExportTypeNotFound', null, 'Chamilo\Application\Weblcms')
+        $condition = new InCondition(
+            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
+            $parentIds
         );
+
+        $directlySubscribedGroups = CourseDataManager::retrieve_groups_directly_subscribed_to_course($condition);
+
+        foreach ($directlySubscribedGroups as $directlySubscribedGroup)
+        {
+            if ($directlySubscribedGroup[CourseEntityRelation::PROPERTY_STATUS] == CourseEntityRelation::STATUS_TEACHER)
+            {
+                return CourseEntityRelation::STATUS_TEACHER;
+            }
+        }
+
+        return CourseEntityRelation::STATUS_STUDENT;
     }
 
     /**
@@ -94,16 +115,16 @@ class ExporterComponent extends Manager
     protected function exportAllUsers()
     {
         $user_records = CourseDataManager::retrieve_all_course_users(
-            $this->get_course_id(), null, null, null, array(
-                new OrderBy(new StaticConditionVariable('subscription_status', false)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
+            $this->get_course_id(), null, null, null, new OrderBy(array(
+                    new OrderProperty(new StaticConditionVariable('subscription_status', false)),
+                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                    new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+                ))
         );
 
         $users = [];
 
-        foreach($user_records as $user_record)
+        foreach ($user_records as $user_record)
         {
             $users[] = DataClass::factory(User::class, $user_record);
         }
@@ -130,15 +151,15 @@ class ExporterComponent extends Manager
         );
 
         $individualUsers = CourseDataManager::retrieve_users_directly_subscribed_to_course(
-            $condition, null, null, array(
-                new OrderBy(
+            $condition, null, null, new OrderBy(array(
+                new OrderProperty(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class, CourseEntityRelation::PROPERTY_STATUS
                     )
                 ),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
-            )
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+            ))
         );
 
         $users = [];
@@ -200,17 +221,16 @@ class ExporterComponent extends Manager
         }
         else
         {
-            $condition =
-                new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $groupUsersIds);
+            $condition = new InCondition(new PropertyConditionVariable(User::class, User::PROPERTY_ID), $groupUsersIds);
 
             $orderBy = array(
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
-                new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME)),
+                new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME))
             );
 
             $groupUsers = DataManager::retrieves(
                 User::class, new DataClassRetrievesParameters(
-                    $condition, null, null, $orderBy
+                    $condition, null, null, new OrderBy($orderBy)
                 )
             );
 
@@ -234,53 +254,29 @@ class ExporterComponent extends Manager
     }
 
     /**
-     * Determines the status for a group in the current course
+     * Returns a list of users to export
      *
-     * @param Group $group
+     * @return \Chamilo\Application\Weblcms\Tool\Implementation\User\Domain\UserExportParameters
      *
-     * @return int
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      */
-    protected function determineGroupStatus($group)
+    protected function getUserExportParameters()
     {
-        $parentIds = [];
+        $tab = $this->getRequest()->get(self::PARAM_TAB);
 
-        $parents = $group->get_ancestors(true);
-        foreach($parents as $parent)
+        switch ($tab)
         {
-            $parentIds[] = $parent->getId();
+            case UnsubscribeBrowserComponent::TAB_ALL:
+                return $this->exportAllUsers();
+            case UnsubscribeBrowserComponent::TAB_USERS:
+                return $this->exportIndividualSubscribedUsers();
+            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_SUBGROUPS:
+            case UnsubscribeBrowserComponent::TAB_PLATFORM_GROUPS_USERS:
+                return $this->exportPlatformGroupUsers();
         }
 
-        $condition = new InCondition(
-            new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID),
-            $parentIds
+        throw new UserException(
+            $this->getTranslator()->trans('ExportTypeNotFound', null, 'Chamilo\Application\Weblcms')
         );
-
-        $directlySubscribedGroups = CourseDataManager::retrieve_groups_directly_subscribed_to_course($condition);
-
-        foreach($directlySubscribedGroups as $directlySubscribedGroup)
-        {
-            if ($directlySubscribedGroup[CourseEntityRelation::PROPERTY_STATUS] == CourseEntityRelation::STATUS_TEACHER)
-            {
-                return CourseEntityRelation::STATUS_TEACHER;
-            }
-        }
-
-        return CourseEntityRelation::STATUS_STUDENT;
-    }
-
-    /**
-     * Creates a safe name from a possible unsafe name
-     *
-     * @param string $unsafeName
-     *
-     * @return string
-     */
-    protected function createSafeName($unsafeName)
-    {
-        $stringUtilities = StringUtilities::getInstance();
-        $string = $stringUtilities->createString($unsafeName);
-        $safeName = $string->toLowerCase()->toAscii()->underscored();
-
-        return (string) $safeName;
     }
 }

@@ -210,7 +210,7 @@ class FavouriteService
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param OrderBy[] $orderProperty
+     * @param OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

@@ -2,6 +2,7 @@
 
 namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Service;
 
+use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\EntryAttachment;
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Feedback;
@@ -11,7 +12,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Reposi
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository;
 use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
-use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Service\NotificationProcessor\EntryNotificationJobProcessor;
 use Chamilo\Core\Queue\Service\JobProducer;
 use Chamilo\Core\Queue\Storage\Entity\Job;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
@@ -21,6 +21,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -32,18 +33,19 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  * @author Sven Vanpoucke - Hogeschool Gent
  */
-class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
+class LearningPathAssignmentService extends
+    \Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Service\LearningPathAssignmentService
 {
+    /**
+     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository
+     */
+    protected $assignmentEphorusRepository;
+
     /**
      *
      * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentRepository
      */
     protected $assignmentRepository;
-
-    /**
-     * @var \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository
-     */
-    protected $assignmentEphorusRepository;
 
     /**
      * @var \Chamilo\Core\Queue\Service\JobProducer
@@ -56,37 +58,28 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @param \Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\Repository\LearningPathAssignmentEphorusRepository $learningPathAssignmentEphorusRepository
      * @param \Chamilo\Core\Queue\Service\JobProducer $jobProducer
      */
-    public function __construct(LearningPathAssignmentRepository $assignmentRepository, LearningPathAssignmentEphorusRepository $learningPathAssignmentEphorusRepository, JobProducer $jobProducer)
+    public function __construct(
+        LearningPathAssignmentRepository $assignmentRepository,
+        LearningPathAssignmentEphorusRepository $learningPathAssignmentEphorusRepository, JobProducer $jobProducer
+    )
     {
         parent::__construct($assignmentRepository, $learningPathAssignmentEphorusRepository);
         $this->jobProducer = $jobProducer;
     }
 
     /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param integer $treeNodeDataIdentifier
-     *
-     * @return integer
-     */
-    public function countEntriesForTreeNodeDataIdentifier(ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier)
-    {
-        return $this->assignmentRepository->countEntriesForTreeNodeDataIdentifier($contentObjectPublication, $treeNodeDataIdentifier);
-    }
-
-    /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return integer
+     * @return int
      */
-    public function countDistinctEntriesByTreeNodeDataAndEntityType(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType)
+    public function countAssignmentEntriesWithEphorusRequestsByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null
+    )
     {
-        return $this->assignmentRepository->countDistinctEntriesByTreeNodeDataAndEntityType(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType
+        return $this->assignmentEphorusRepository->countAssignmentEntriesWithRequestsByTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $condition
         );
     }
 
@@ -97,12 +90,45 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      *
      * @return integer
      */
-    public function countDistinctFeedbackByTreeNodeDataAndEntityType(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType)
+    public function countDistinctEntriesByTreeNodeDataAndEntityType(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
+    )
+    {
+        return $this->assignmentRepository->countDistinctEntriesByTreeNodeDataAndEntityType(
+            $contentObjectPublication, $treeNodeData, $entityType
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param integer $entityType
+     *
+     * @return integer
+     */
+    public function countDistinctFeedbackByTreeNodeDataAndEntityType(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
+    )
     {
         return $this->assignmentRepository->countDistinctFeedbackByTreeNodeDataAndEntityType(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType
+            $contentObjectPublication, $treeNodeData, $entityType
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return integer
+     */
+    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return $this->assignmentRepository->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId
         );
     }
 
@@ -115,7 +141,8 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @return int
      */
     public function countDistinctLateEntriesByTreeNodeDataAndEntityType(
-        Assignment $assignment, ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType
+        Assignment $assignment, ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        $entityType
     )
     {
         return $this->assignmentRepository->countDistinctLateEntriesByTreeNodeDataAndEntityType(
@@ -124,82 +151,54 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     }
 
     /**
-     *
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param integer $entityType
+     * @param integer $entityId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return integer
      */
-    public function findTargetUsersForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null,
-        $orderProperty = null
+    public function countDistinctScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
     )
     {
-        return $this->assignmentRepository->findTargetUsersForTreeNodeData(
-            $contentObjectPublication,
-            $treeNodeData,
-            $userIds,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
+        return $this->assignmentRepository->countDistinctScoreForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId
         );
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param int[] $userIds
-     * @param Condition $condition
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
      * @return int
      */
-    public function countTargetUsersForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null
+    public function countEntriesForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
+        Condition $condition = null
     )
     {
-        return $this->findTargetUsersForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds, $condition)->count();
+        return $this->assignmentRepository->countEntriesForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId, $condition
+        );
     }
 
     /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param array $userIds
      *
-     * @return int
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param integer $treeNodeDataIdentifier
+     *
+     * @return integer
      */
-    public function countTargetUsersWithEntriesForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = []
+    public function countEntriesForTreeNodeDataIdentifier(
+        ContentObjectPublication $contentObjectPublication, $treeNodeDataIdentifier
     )
     {
-        return $this->findTargetUsersWithEntriesForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds)->count();
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param int[] $userIds
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findTargetUsersWithEntriesForTreeNodeData(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null, $offset = null, $count = null, $orderProperty = []
-    )
-    {
-        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
-        $orderProperty[] = new OrderBy(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
-
-        return $this->assignmentRepository->findTargetUsersWithEntriesForTreeNodeData(
-            $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, $orderProperty
+        return $this->assignmentRepository->countEntriesForTreeNodeDataIdentifier(
+            $contentObjectPublication, $treeNodeDataIdentifier
         );
     }
 
@@ -223,175 +222,32 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
+     * @param int[] $userIds
+     * @param Condition $condition
      *
      * @return int
      */
-    public function countEntriesForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType,
-        $entityId, Condition $condition = null
+    public function countTargetUsersForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [], $condition = null
     )
     {
-        return $this->assignmentRepository->countEntriesForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId,
-            $condition
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
-    )
-    {
-        return $this->assignmentRepository->countDistinctFeedbackForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return integer
-     */
-    public function countDistinctScoreForTreeNodeDataEntityTypeAndId(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId)
-    {
-        return $this->assignmentRepository->countDistinctScoreForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function getAverageScoreForTreeNodeDataEntityTypeAndId(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId)
-    {
-        return $this->assignmentRepository->retrieveAverageScoreForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     *
-     * @return int
-     */
-    public function getLastScoreForTreeNodeDataEntityTypeAndId(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId)
-    {
-        return $this->assignmentRepository->retrieveLastScoreForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId
-        );
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer $entityId
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer $offset
-     * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findEntriesForTreeNodeDataEntityTypeAndId(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType,
-        $entityId, $condition, $offset, $count, $orderProperty
-    )
-    {
-        return $this->assignmentRepository->retrieveEntriesForTreeNodeDataEntityTypeAndId(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityId,
-            $condition,
-            $offset,
-            $count,
-            $orderProperty
-        );
+        return $this->findTargetUsersForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds, $condition)
+            ->count();
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param integer $entityType
-     * @param integer[] $entityIdentifiers
+     * @param array $userIds
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return int
      */
-    public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType,
-        $entityIdentifiers
+    public function countTargetUsersWithEntriesForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = []
     )
     {
-        return $this->assignmentRepository->findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
-            $contentObjectPublication,
-            $treeNodeData,
-            $entityType,
-            $entityIdentifiers
-        );
-    }
-
-    /**
-     *
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function findEntriesByTreeNodeData(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData)
-    {
-        return $this->assignmentRepository->findEntriesByTreeNodeData($contentObjectPublication, $treeNodeData);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param int $entityType
-     * @param int $entityIdentifier
-     *
-     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
-     */
-    public function findLastEntryForEntity(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier)
-    {
-        return $this->assignmentRepository->findLastEntryForEntityByTreeNodeData(
-            $contentObjectPublication, $treeNodeData, $entityType, $entityIdentifier
-        );
+        return $this->findTargetUsersWithEntriesForTreeNodeData($contentObjectPublication, $treeNodeData, $userIds)
+            ->count();
     }
 
     /**
@@ -410,8 +266,8 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function createEntry(
-        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId,
-        $ipAddress
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        TreeNodeAttempt $treeNodeAttempt, $entityType, $entityId, $userId, $contentObjectId, $ipAddress
     )
     {
         /** @var \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry */
@@ -423,83 +279,20 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
 
         $entry = $this->createEntryByInstance($entry, $entityType, $entityId, $userId, $contentObjectId, $ipAddress);
 
-        if($entry instanceof Entry)
+        if ($entry instanceof Entry)
         {
             $job = new Job();
-            $job->setProcessorClass(EntryNotificationJobProcessor::class)
-                ->setParameter(EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId())
-                ->setParameter(EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID, $treeNodeAttempt->get_publication_id());
+            $job->setProcessorClass(EntryNotificationJobProcessor::class)->setParameter(
+                    EntryNotificationJobProcessor::PARAM_ENTRY_ID, $entry->getId()
+                )->setParameter(
+                    EntryNotificationJobProcessor::PARAM_CONTENT_OBJECT_PUBLICATION_ID,
+                    $treeNodeAttempt->get_publication_id()
+                );
 
             $this->jobProducer->produceJob($job, 'notifications');
         }
 
         return $entry;
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function countAssignmentEntriesWithEphorusRequestsByTreeNodeData(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, Condition $condition = null)
-    {
-        return $this->assignmentEphorusRepository->countAssignmentEntriesWithRequestsByTreeNodeData($contentObjectPublication, $treeNodeData, $condition);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
-     */
-    public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, RecordRetrievesParameters $recordRetrievesParameters = null)
-    {
-        return $this->assignmentEphorusRepository->findAssignmentEntriesWithRequestsByTreeNodeData($contentObjectPublication, $treeNodeData, $recordRetrievesParameters);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     * @param int[] $entryIds
-     *
-     * @return Request[]
-     */
-    public function findEphorusRequestsForAssignmentEntriesByTreeNodeData(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $entryIds = [])
-    {
-        if(empty($entryIds))
-        {
-            return [];
-        }
-
-        return $this->assignmentEphorusRepository->findEphorusRequestsForAssignmentEntriesByTreeNodeData($contentObjectPublication, $treeNodeData, $entryIds);
-    }
-
-    /**
-     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
-     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
-     */
-    public function deleteEntriesByTreeNodeData(ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData)
-    {
-        $entries = $this->findEntriesByTreeNodeData($contentObjectPublication, $treeNodeData);
-        foreach($entries as $entry)
-        {
-            $this->deleteEntry($entry);
-        }
-    }
-
-
-    /**
-     * Creates a new instance for an entry
-     *
-     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
-     */
-    protected function createEntryInstance()
-    {
-        return new Entry(
-        );
     }
 
     /**
@@ -511,14 +304,13 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     }
 
     /**
-     * Creates a new instance for a score
+     * Creates a new instance for an entry
      *
-     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
      */
-    protected function createScoreInstance()
+    protected function createEntryInstance()
     {
-        return new Score(
-        );
+        return new Entry();
     }
 
     /**
@@ -528,8 +320,7 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createFeedbackInstance()
     {
-        return new Feedback(
-        );
+        return new Feedback();
     }
 
     /**
@@ -539,7 +330,203 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
      */
     protected function createNoteInstance()
     {
-        return new Note(
+        return new Note();
+    }
+
+    /**
+     * Creates a new instance for a score
+     *
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Score
+     */
+    protected function createScoreInstance()
+    {
+        return new Score();
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     */
+    public function deleteEntriesByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
+    {
+        $entries = $this->findEntriesByTreeNodeData($contentObjectPublication, $treeNodeData);
+        foreach ($entries as $entry)
+        {
+            $this->deleteEntry($entry);
+        }
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     */
+    public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
+        RecordRetrievesParameters $recordRetrievesParameters = null
+    )
+    {
+        return $this->assignmentEphorusRepository->findAssignmentEntriesWithRequestsByTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $recordRetrievesParameters
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
+    )
+    {
+        return $this->assignmentRepository->findEntriesByTreeNodeData($contentObjectPublication, $treeNodeData);
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer[] $entityIdentifiers
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifiers
+    )
+    {
+        return $this->assignmentRepository->findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityIdentifiers
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findEntriesForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
+        $condition, $offset, $count, $orderProperty
+    )
+    {
+        return $this->assignmentRepository->retrieveEntriesForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId, $condition, $offset, $count,
+            $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $entryIds
+     *
+     * @return Request[]
+     */
+    public function findEphorusRequestsForAssignmentEntriesByTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $entryIds = []
+    )
+    {
+        if (empty($entryIds))
+        {
+            return [];
+        }
+
+        return $this->assignmentEphorusRepository->findEphorusRequestsForAssignmentEntriesByTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $entryIds
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int $entityType
+     * @param int $entityIdentifier
+     *
+     * @return \Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry
+     */
+    public function findLastEntryForEntity(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifier
+    )
+    {
+        return $this->assignmentRepository->findLastEntryForEntityByTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityIdentifier
+        );
+    }
+
+    /**
+     *
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param integer $offset
+     * @param integer $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
+        $condition = null, $offset = null, $count = null, $orderProperty = null
+    )
+    {
+        return $this->assignmentRepository->findTargetUsersForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, $orderProperty
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
+     * @param int[] $userIds
+     * @param Condition $condition
+     * @param int $offset
+     * @param int $count
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function findTargetUsersWithEntriesForTreeNodeData(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
+        $condition = null, $offset = null, $count = null, $orderProperty = []
+    )
+    {
+        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
+        $orderProperty[] = new OrderProperty(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
+
+        return $this->assignmentRepository->findTargetUsersWithEntriesForTreeNodeData(
+            $contentObjectPublication, $treeNodeData, $userIds, $condition, $offset, $count, new OrderBy($orderProperty)
+        );
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function getAverageScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return $this->assignmentRepository->retrieveAverageScoreForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId
         );
     }
 
@@ -554,16 +541,33 @@ class LearningPathAssignmentService extends \Chamilo\Core\Repository\ContentObje
     /**
      * @return string
      */
-    public function getScoreClassName()
+    public function getFeedbackClassName()
     {
-        return Score::class;
+        return Feedback::class;
+    }
+
+    /**
+     * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
+     * @param TreeNodeData $treeNodeData
+     * @param integer $entityType
+     * @param integer $entityId
+     *
+     * @return int
+     */
+    public function getLastScoreForTreeNodeDataEntityTypeAndId(
+        ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId
+    )
+    {
+        return $this->assignmentRepository->retrieveLastScoreForTreeNodeDataEntityTypeAndId(
+            $contentObjectPublication, $treeNodeData, $entityType, $entityId
+        );
     }
 
     /**
      * @return string
      */
-    public function getFeedbackClassName()
+    public function getScoreClassName()
     {
-        return Feedback::class;
+        return Score::class;
     }
 }

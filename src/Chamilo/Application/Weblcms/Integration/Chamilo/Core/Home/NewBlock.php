@@ -14,10 +14,11 @@ use Chamilo\Application\Weblcms\Storage\DataManager as WeblcmsDataManager;
 use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -174,14 +175,14 @@ abstract class NewBlock extends Block
 
                 $publications =
                     WeblcmsDataManager::retrieve_content_object_publications_with_view_right_granted_in_category_location(
-                        $location, $entities, $condition, array(
-                            new OrderBy(
-                                new PropertyConditionVariable(
-                                    ContentObjectPublication::class,
-                                    ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                        $location, $entities, $condition, new OrderBy(array(
+                                new OrderProperty(
+                                    new PropertyConditionVariable(
+                                        ContentObjectPublication::class,
+                                        ContentObjectPublication::PROPERTY_DISPLAY_ORDER_INDEX
+                                    )
                                 )
-                            )
-                        )
+                            ))
                     );
 
                 if ($publications == 0)

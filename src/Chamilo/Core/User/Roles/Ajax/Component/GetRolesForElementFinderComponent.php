@@ -11,6 +11,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultD
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\Ajax\AjaxResultGenerator;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
@@ -91,7 +92,7 @@ class GetRolesForElementFinderComponent extends Manager implements AjaxResultDat
     {
         return $this->getRoleService()->getRoles(
             $this->getCondition(), 100, $this->ajaxResultGenerator->getOffset(),
-            array(new OrderBy(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE)))
+            new OrderBy(array(new OrderProperty(new PropertyConditionVariable(Role::class, Role::PROPERTY_ROLE))))
         );
     }
 

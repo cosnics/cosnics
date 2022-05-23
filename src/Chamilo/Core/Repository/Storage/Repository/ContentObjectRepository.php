@@ -19,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -309,7 +310,7 @@ class ContentObjectRepository
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      * @param string $type
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderBy
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderBy
      * @param integer $offset
      * @param integer $count
      *
@@ -394,11 +395,11 @@ class ContentObjectRepository
             );
         }
 
-        $orderBy = array(
-            new OrderBy(
+        $orderBy = new OrderBy(array(
+            new OrderProperty(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
             )
-        );
+        ));
 
         $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $orderBy);
 

@@ -17,7 +17,7 @@ use Chamilo\Libraries\Storage\Query\ConditionPart;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -360,7 +360,7 @@ class ParametersProcessor
      *
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Database\DataClassDatabase $dataClassDatabase
      * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder $queryBuilder
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderByCollection
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderByCollection
      *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder
      */
@@ -372,7 +372,7 @@ class ParametersProcessor
         {
             $orderByCollection = [];
         }
-        elseif (!is_array($orderByCollection) && $orderByCollection instanceof OrderBy)
+        elseif (!is_array($orderByCollection) && $orderByCollection instanceof OrderProperty)
         {
             $orderByCollection = array($orderByCollection);
         }

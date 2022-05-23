@@ -30,7 +30,7 @@ class DataClassCountParameters extends DataClassParameters
             $dataClassProperties = new DataClassProperties(array($dataClassProperties));
         }
 
-        DataClassParameters::__construct($condition, $joins, $dataClassProperties);
+        parent::__construct($condition, $joins, $dataClassProperties);
     }
 
     /**

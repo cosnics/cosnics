@@ -8,7 +8,7 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -65,19 +65,19 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity[] $content_object_activities
      * @param $offset
      * @param $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty $order_property
      *
      * @return \ArrayIterator
      */
-    public static function filterActivities($content_object_activities, $offset, $count, OrderBy $order_property
+    public static function filterActivities($content_object_activities, $offset, $count, OrderProperty $order_property
     ): ArrayIterator
     {
         usort(
             $content_object_activities, function (Activity $activity_a, Activity $activity_b) use ($order_property) {
-            switch ($order_property->get_property()->get_property())
+            switch ($order_property->getConditionVariable()->getPropertyName())
             {
                 case Activity::PROPERTY_TYPE :
-                    if ($order_property->get_direction() == SORT_ASC)
+                    if ($order_property->getDirection() == SORT_ASC)
                     {
                         return strcmp($activity_a->get_type_string(), $activity_b->get_type_string());
                     }
@@ -87,7 +87,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     }
                     break;
                 case Activity::PROPERTY_CONTENT :
-                    if ($order_property->get_direction() == SORT_ASC)
+                    if ($order_property->getDirection() == SORT_ASC)
                     {
                         return strcmp($activity_a->get_content(), $activity_b->get_content());
                     }
@@ -97,7 +97,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     }
                     break;
                 case Activity::PROPERTY_DATE :
-                    if ($order_property->get_direction() == SORT_ASC)
+                    if ($order_property->getDirection() == SORT_ASC)
                     {
                         return ($activity_a->get_date() < $activity_b->get_date()) ? - 1 : 1;
                     }
@@ -147,7 +147,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition
      * @param $offset
      * @param $count
-     * @param null $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \ArrayIterator
      * @throws \Exception
@@ -192,7 +192,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
         }
 
-        $order_property = $order_property[0];
+        $order_property = $order_property->getFirst();
 
         return self::filterActivities($content_object_activities, $offset, $count, $order_property);
     }

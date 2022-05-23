@@ -4,7 +4,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Service;
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\Repository\ActivityRepository;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 
 /**
  * Service to manage activities of learning path tree nodes
@@ -67,12 +67,12 @@ class ActivityService
      * @param TreeNode $treeNode
      * @param int $offset
      * @param int $count
-     * @param OrderBy|null $orderBy
+     * @param OrderProperty|null $orderBy
      *
      * @return \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity[]
      */
     public function retrieveActivitiesForTreeNode(
-        TreeNode $treeNode, $offset = null, $count = null, OrderBy $orderBy = null
+        TreeNode $treeNode, $offset = null, $count = null, OrderProperty $orderBy = null
     )
     {
         $activities = [];

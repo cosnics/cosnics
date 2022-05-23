@@ -32,7 +32,7 @@ abstract class GalleryTable extends Table
     {
         $this->table = new GalleryHTMLTable(
             $this->get_name(), array($this, 'countData'), array($this, 'getData'), array($this, 'get_property_model'),
-            $this->get_property_model()->get_default_order_property() + ($this->has_form_actions() ? 1 : 0),
+            $this->get_property_model()->getDefaultOrderBy() + ($this->has_form_actions() ? 1 : 0),
             $this->get_default_row_count(), $this->get_property_model()->get_default_order_direction(),
             !$this->prohibits_order_direction(), !$this->prohibits_page_selection()
         );
@@ -97,7 +97,7 @@ abstract class GalleryTable extends Table
     }
 
     /**
-     * Returns the order property as ObjectTableOrder
+     * Returns the order property as \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @param integer $orderIndex
      * @param integer $orderDirection

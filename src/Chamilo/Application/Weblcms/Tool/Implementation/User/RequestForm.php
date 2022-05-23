@@ -12,6 +12,7 @@ use Chamilo\Libraries\Format\Form\FormValidatorHtmlEditorOptions;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
@@ -27,17 +28,17 @@ class RequestForm extends FormValidator
 
     const TYPE_VIEW = 3;
 
+    private $course;
+
     private $form_type;
 
-    private $course;
+    private $multiple_users;
 
     private $parent;
 
     private $request;
 
     private $user_id;
-
-    private $multiple_users;
 
     public function __construct($form_type, $action, $course, $parent, $request, $multiple_users = false)
     {
@@ -87,20 +88,19 @@ class RequestForm extends FormValidator
             if ($this->multiple_users)
             {
                 $order = [];
-                $order[] = new OrderBy(
+                $order[] = new OrderProperty(
                     new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME), SORT_ASC
                 );
-                $order[] = new OrderBy(
+                $order[] = new OrderProperty(
                     new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME), SORT_ASC
                 );
 
                 $users_result = \Chamilo\Core\User\Storage\DataManager::retrieves(
-                    User::class,
-                    new DataClassRetrievesParameters(null, null, null, $order)
+                    User::class, new DataClassRetrievesParameters(null, null, null, new OrderBy($order))
                 );
 
                 $users = [];
-                foreach($users_result as $user)
+                foreach ($users_result as $user)
                 {
                     $user_name = $user->get_fullname();
                     $users[$user->get_id()] = $user_name;

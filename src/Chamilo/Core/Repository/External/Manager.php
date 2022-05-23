@@ -625,7 +625,7 @@ abstract class Manager extends Application implements NoContextComponent
     /**
      *
      * @param $condition mixed
-     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderBy
+     * @param $order_property \Chamilo\Libraries\Storage\Query\OrderProperty
      * @param $offset int
      * @param $count int
      *

@@ -69,7 +69,7 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt>
      */

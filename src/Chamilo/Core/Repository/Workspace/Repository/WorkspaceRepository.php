@@ -18,7 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -152,7 +152,7 @@ class WorkspaceRepository
      *
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -168,7 +168,7 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -199,7 +199,7 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -221,7 +221,7 @@ class WorkspaceRepository
      * @param integer[] $entities
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -249,7 +249,7 @@ class WorkspaceRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -286,7 +286,7 @@ class WorkspaceRepository
      * @param integer $right
      * @param integer $limit
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -305,7 +305,7 @@ class WorkspaceRepository
      * @param int[] $excludedWorkspaceIdentifiers
      * @param int $limit
      * @param int $offset
-     * @param OrderBy $orderProperty
+     * @param OrderProperty $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
@@ -491,7 +491,7 @@ class WorkspaceRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $limit
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */

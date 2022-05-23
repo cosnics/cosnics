@@ -18,6 +18,51 @@ abstract class Tracker extends DataClass
     private $event;
 
     /**
+     * Write the values of the properties from the tracker to the database
+     *
+     * @return boolean
+     */
+    public function run(array $parameters = [])
+    {
+        $this->validate_parameters($parameters);
+
+        return $this->create();
+    }
+
+    public static function count_data($class_name, $application, $condition)
+    {
+        return DataManager::count($class_name, new DataClassCountParameters($condition));
+    }
+
+    /**
+     *
+     * @param $type string
+     * @param $application string
+     * @param $condition Condition
+     * @param $offset int
+     * @param $max_objects int
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     *
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator The tracker data resultset
+     */
+    public static function get_data(
+        $class_name, $application, $condition, $offset = null, $max_objects = null, $order_by = []
+    )
+    {
+        return DataManager::retrieves(
+            $class_name, new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by)
+        );
+    }
+
+    /**
+     * inherited
+     */
+    public function get_data_manager()
+    {
+        return DataManager::getInstance();
+    }
+
+    /**
      *
      * @return Event
      */
@@ -36,34 +81,32 @@ abstract class Tracker extends DataClass
     }
 
     /**
-     * inherited
+     *
+     * @param $type string
+     * @param $application string
+     * @param $condition Condition
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
+     *
+     * @return Tracker The tracker
      */
-    public function get_data_manager()
+    public static function get_singular_data($class_name, $application, $condition, $order_by = [])
     {
-        return DataManager::getInstance();
+        return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
     }
 
     /**
      *
-     * @deprecated Use run() instead
-     */
-    public function track(array $parameters = [])
-    {
-        return $this->run($parameters);
-    }
-
-    abstract public function validate_parameters(array $parameters = []);
-
-    /**
-     * Write the values of the properties from the tracker to the database
+     * @param $type string
+     * @param $application string
      *
-     * @return boolean
+     * @return Tracker The tracker object
      */
-    public function run(array $parameters = [])
-    {
-        $this->validate_parameters($parameters);
-        return $this->create();
-    }
+    // public static function factory($type, $context)
+    // {
+    // $class = $context . '\Storage\DataClass\\' .
+    // StringUtilities::getInstance()->createString($type)->upperCamelize();
+    // return new $class();
+    // }
 
     /**
      * Removes tracker items with a given condition
@@ -77,50 +120,12 @@ abstract class Tracker extends DataClass
 
     /**
      *
-     * @param $type string
-     * @param $application string
-     * @return Tracker The tracker object
+     * @deprecated Use run() instead
      */
-    // public static function factory($type, $context)
-    // {
-    // $class = $context . '\Storage\DataClass\\' .
-    // StringUtilities::getInstance()->createString($type)->upperCamelize();
-    // return new $class();
-    // }
-
-    /**
-     *
-     * @param $type string
-     * @param $application string
-     * @param $condition Condition
-     * @param $offset int
-     * @param $max_objects int
-     * @param $order_by ObjectTableOrder
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator The tracker data resultset
-     */
-    public static function get_data($class_name, $application, $condition, $offset = null, $max_objects = null,
-        $order_by = [])
+    public function track(array $parameters = [])
     {
-        return DataManager::retrieves(
-            $class_name,
-            new DataClassRetrievesParameters($condition, $max_objects, $offset, $order_by));
+        return $this->run($parameters);
     }
 
-    /**
-     *
-     * @param $type string
-     * @param $application string
-     * @param $condition Condition
-     * @param $order_by ObjectTableOrder
-     * @return Tracker The tracker
-     */
-    public static function get_singular_data($class_name, $application, $condition, $order_by = [])
-    {
-        return DataManager::retrieve($class_name, new DataClassRetrieveParameters($condition, $order_by));
-    }
-
-    public static function count_data($class_name, $application, $condition)
-    {
-        return DataManager::count($class_name, new DataClassCountParameters($condition));
-    }
+    abstract public function validate_parameters(array $parameters = []);
 }

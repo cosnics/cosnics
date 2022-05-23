@@ -15,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
 
@@ -153,8 +154,9 @@ class CourseTypeFeedComponent extends Manager
     public function retrieveCourseTypes()
     {
         $parameters = new DataClassRetrievesParameters(
-            $this->getCourseTypeConditions(), null, null,
-            array(new OrderBy(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)))
+            $this->getCourseTypeConditions(), null, null, new OrderBy(
+                array(new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_TITLE)))
+            )
         );
 
         return DataManager::retrieves(CourseType::class, $parameters);

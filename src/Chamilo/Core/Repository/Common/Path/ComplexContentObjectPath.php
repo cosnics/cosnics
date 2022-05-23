@@ -13,6 +13,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -31,13 +32,13 @@ abstract class ComplexContentObjectPath
      *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
-    private $nodes = [];
+    private $children;
 
     /**
      *
      * @var \Chamilo\Core\Repository\Common\Path\ComplexContentObjectPathNode[]
      */
-    private $children;
+    private $nodes = [];
 
     /**
      *
@@ -96,12 +97,12 @@ abstract class ComplexContentObjectPath
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                 ), new StaticConditionVariable($root_content_object->get_id())
             );
-            $order = new OrderBy(
+            $order = new OrderProperty(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
                 ), SORT_ASC
             );
-            $parameters = new DataClassRetrievesParameters($condition, null, null, array($order));
+            $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy(array($order)));
 
             $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class, $parameters

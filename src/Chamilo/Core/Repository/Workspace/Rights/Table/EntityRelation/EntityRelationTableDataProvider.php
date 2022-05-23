@@ -17,15 +17,17 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class EntityRelationTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
-    {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
-        return DataManager::retrieves(WorkspaceEntityRelation::class, $parameters);
-    }
-
     public function count_data($condition)
     {
         $parameters = new DataClassCountParameters($condition);
+
         return DataManager::count(WorkspaceEntityRelation::class, $parameters);
+    }
+
+    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
+    {
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperty);
+
+        return DataManager::retrieves(WorkspaceEntityRelation::class, $parameters);
     }
 }

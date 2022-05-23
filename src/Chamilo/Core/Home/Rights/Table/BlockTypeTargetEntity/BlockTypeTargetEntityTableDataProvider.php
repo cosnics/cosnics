@@ -53,7 +53,7 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_property
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
      * @return \ArrayIterator
      */
@@ -61,7 +61,8 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
     {
         $blockTypes = $this->blockTypeRightsService->getBlockTypesWithTargetEntities();
 
-        $compareModifier = !empty($order_property) && $order_property[0]->get_direction() != SORT_DESC ? 1 : - 1;
+        $compareModifier =
+            !is_null($order_property) && $order_property->getFirst()->getDirection() != SORT_DESC ? 1 : - 1;
 
         usort(
             $blockTypes, function ($item1, $item2) use ($compareModifier) {

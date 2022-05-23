@@ -16,6 +16,7 @@ use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -151,8 +152,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             new SubselectCondition(
                 new PropertyConditionVariable(
                     CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_COURSE_TYPE_ID
-                ), new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID),
-                $subcondition
+                ), new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_ID), $subcondition
             )
         );
         $conditions[] = $user_condition;
@@ -251,10 +251,10 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         );
 
         $order = array(
-            new OrderBy(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER))
+            new OrderProperty(new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER))
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, null, null, $order);
+        $parameters = new DataClassRetrievesParameters($condition, null, null, new OrderBy($order));
 
         return DataManager::retrieves(CourseType::class, $parameters);
     }
@@ -297,16 +297,18 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $order = [];
 
-        $order[] = new OrderBy(
+        $order[] = new OrderProperty(
             new PropertyConditionVariable(CourseTypeUserOrder::class, CourseTypeUserOrder::PROPERTY_DISPLAY_ORDER),
             SORT_ASC
         );
 
-        $order[] = new OrderBy(
+        $order[] = new OrderProperty(
             new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
         );
 
-        return self::retrieve_course_types_with_user_order($join_condition, $condition, null, null, $order);
+        return self::retrieve_course_types_with_user_order(
+            $join_condition, $condition, null, null, new OrderBy($order)
+        );
     }
 
     /**
@@ -343,7 +345,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      * @param $offset int
      * @param $max_objects int
-     * @param $order_by \libraries\ObjectTableOrder
+     * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */

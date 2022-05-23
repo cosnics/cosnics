@@ -519,7 +519,7 @@ class DataManager
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer|null $offset
      * @param integer|null $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy[] $order_by
+     * @param \Chamilo\Libraries\Storage\Query\OrderProperty[] $order_by
      *
      * @return boolean
      * @throws \Exception

@@ -7,7 +7,7 @@ use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\OrderProperty;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -232,7 +232,7 @@ class ContentObjectRelationService
      * @param User $user
      * @param int $limit
      * @param int $offset
-     * @param OrderBy $orderBy
+     * @param OrderProperty $orderBy
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
