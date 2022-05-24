@@ -22,4 +22,3 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         return DataManager::count(Request::class, $parameters);
     }
 }
-?>

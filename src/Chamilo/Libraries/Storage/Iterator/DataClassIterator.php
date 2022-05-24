@@ -1,16 +1,20 @@
 <?php
 namespace Chamilo\Libraries\Storage\Iterator;
 
-use ArrayIterator;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
  * @package Chamilo\Libraries\Storage\Iterator
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
+ *
+ * @psalm-template TKey of array-key
+ * @psalm-template T
+ * @template-extends ArrayCollection<TKey,T>
  */
-class DataClassIterator extends ArrayIterator
+class DataClassIterator extends ArrayCollection
 {
     const POSITION_FIRST = 1;
     const POSITION_INVALID = 5;
@@ -22,7 +26,7 @@ class DataClassIterator extends ArrayIterator
      *
      * @var string
      */
-    private $dataClassName;
+    private string $dataClassName;
 
     /**
      * DataClassIterator constructor.
@@ -30,27 +34,32 @@ class DataClassIterator extends ArrayIterator
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      */
-    public function __construct($dataClassName, $dataClasses)
+    public function __construct(string $dataClassName, array $dataClasses = [])
     {
         parent::__construct($dataClasses);
         $this->dataClassName = $dataClassName;
     }
 
     /**
+     * @return array
+     * @psalm-return array<TKey,T>
      *
-     * @return string
+     * @deprecated Backwards compatibility with ArrayIterator, use ArrayCollection::toArray() now
      */
-    public function getCacheClassName()
+    public function getArrayCopy(): array
     {
-        $compositeDataClassName = CompositeDataClass::class;
+        return $this->toArray();
+    }
+
+    public function getCacheClassName(): string
+    {
         $className = $this->getDataClassName();
 
-        $isCompositeDataClass = is_subclass_of($className, $compositeDataClassName);
-        $isExtensionClass = get_parent_class($className) !== $compositeDataClassName;
+        $isCompositeDataClass = is_subclass_of($className, CompositeDataClass::class);
+        $isExtensionClass = get_parent_class($className) !== CompositeDataClass::class;
 
         if ($isCompositeDataClass && $isExtensionClass)
         {
-
             return $className::parentClassName();
         }
         else
@@ -59,11 +68,7 @@ class DataClassIterator extends ArrayIterator
         }
     }
 
-    /**
-     *
-     * @return integer
-     */
-    public function getCurrentEntryPositionType()
+    public function getCurrentEntryPositionType(): int
     {
         if ($this->count() == 1)
         {
@@ -87,68 +92,51 @@ class DataClassIterator extends ArrayIterator
         }
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function getDataClassName()
+    protected function getDataClassName(): string
     {
         return $this->dataClassName;
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     */
-    protected function setDataClassName($dataClassName)
+    protected function setDataClassName(string $dataClassName): DataClassIterator
     {
         $this->dataClassName = $dataClassName;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function hasOnlyOneEntry()
+    public function hasOnlyOneEntry(): bool
     {
         return $this->count() == 1;
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isCurrentEntryFirst()
+    public function isCurrentEntryFirst(): bool
     {
         return $this->isCurrentEntryOnPosition(self::POSITION_FIRST);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isCurrentEntryInTheMiddle()
+    public function isCurrentEntryInTheMiddle(): bool
     {
         return $this->isCurrentEntryOnPosition(self::POSITION_MIDDLE);
     }
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isCurrentEntryLast()
+    public function isCurrentEntryLast(): bool
     {
         return $this->isCurrentEntryOnPosition(self::POSITION_LAST);
     }
 
-    /**
-     *
-     * @param integer $position
-     *
-     * @return boolean
-     */
-    public function isCurrentEntryOnPosition($position)
+    public function isCurrentEntryOnPosition(int $position): bool
     {
         return ($this->getCurrentEntryPositionType() === $position || $this->hasOnlyOneEntry());
+    }
+
+    /**
+     * @return mixed
+     * @psalm-return T|false
+     *
+     * @deprecated Backwards compatibility with ArrayIterator, use ArrayCollection::first() now
+     */
+    public function rewind()
+    {
+        return $this->first();
     }
 }

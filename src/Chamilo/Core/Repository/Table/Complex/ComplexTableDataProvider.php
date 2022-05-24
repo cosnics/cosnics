@@ -43,7 +43,7 @@ class ComplexTableDataProvider extends DataClassTableDataProvider
                 )
             )
         );
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
         return DataManager::retrieve_complex_content_object_items(ComplexContentObjectItem::class, $parameters);
     }

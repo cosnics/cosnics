@@ -205,7 +205,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         return \Chamilo\Core\User\Roles\Storage\DataManager::retrieves(
             Role::class,
-            new DataClassRetrievesParameters($condition, null, null, [], $joins));
+            new DataClassRetrievesParameters($condition, null, null, null, $joins));
     }
 
     /**

@@ -18,6 +18,7 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -31,9 +32,14 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     const VIEW_RIGHT = 1;
 
     /**
-     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     * @var \Chamilo\Core\User\Storage\DataClass\User[]
      */
-    private $userEntityProvider;
+    private $authorizedUsersCache = [];
+
+    /**
+     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     */
+    private $configurationConsulter;
 
     /**
      * @var \Chamilo\Core\Group\Integration\Chamilo\Libraries\Rights\Service\GroupEntityProvider
@@ -46,24 +52,19 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     private $groupService;
 
     /**
-     * @var integer[]
-     */
-    private $targetUsersCache = [];
-
-    /**
-     * @var \Chamilo\Core\User\Storage\DataClass\User[]
-     */
-    private $authorizedUsersCache = [];
-
-    /**
      * @var \Chamilo\Core\Repository\Quota\Service\StorageSpaceCalculator
      */
     private $storageSpaceCalculator;
 
     /**
-     * @var \Chamilo\Configuration\Service\ConfigurationConsulter
+     * @var integer[]
      */
-    private $configurationConsulter;
+    private $targetUsersCache = [];
+
+    /**
+     * @var \Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider
+     */
+    private $userEntityProvider;
 
     /**
      * @param \Chamilo\Core\Repository\Quota\Rights\Storage\Repository\RightsRepository $rightsRepository
@@ -603,18 +604,19 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
     /**
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return string[][]
      * @throws \Exception
      */
     public function getRightsLocationEntityRightGroupsWithEntityAndGroup(
-        int $offset = null, int $count = null, array $orderProperties = null
+        int $offset = null, int $count = null, ?OrderBy $orderBy = null
     )
     {
-        $groupRecords = $this->getRightsRepository()->findRightsLocationEntityRightGroupsWithEntityAndGroupRecords();
+        $groupRecordCollection =
+            $this->getRightsRepository()->findRightsLocationEntityRightGroupsWithEntityAndGroupRecords();
 
-        foreach ($groupRecords as &$groupRecord)
+        foreach ($groupRecordCollection as &$groupRecord)
         {
             $entityType = $groupRecord[RightsLocationEntityRight::PROPERTY_ENTITY_TYPE];
             $entityIdentifier = $groupRecord[RightsLocationEntityRight::PROPERTY_ENTITY_ID];
@@ -643,26 +645,28 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
             $groupRecord[EntityTableColumnModel::PROPERTY_GROUP_PATH] = $this->getGroupService()->getGroupPath($group);
         }
 
-        $orderProperty = array_shift($orderProperties);
-        $orderPropertyValue = $orderProperty->getConditionVariable()->get_value();
+        $orderProperty = $orderBy->getFirst();
+        $orderPropertyValue = $orderProperty->getConditionVariable()->getValue();
         $orderDirection = $orderProperty->getDirection();
 
-        $groupRecords->uasort(
-            function ($groupRecordOne, $groupRecordTwo) use ($orderPropertyValue, $orderDirection) {
+        $groupRecords = $groupRecordCollection->toArray();
 
-                if ($orderDirection == SORT_DESC)
-                {
-                    return strcmp(
-                        $groupRecordTwo[$orderPropertyValue], $groupRecordOne[$orderPropertyValue]
-                    );
-                }
-                else
-                {
-                    return strcmp(
-                        $groupRecordOne[$orderPropertyValue], $groupRecordTwo[$orderPropertyValue]
-                    );
-                }
+        uasort(
+            $groupRecords, function ($groupRecordOne, $groupRecordTwo) use ($orderPropertyValue, $orderDirection) {
+
+            if ($orderDirection == SORT_DESC)
+            {
+                return strcmp(
+                    $groupRecordTwo[$orderPropertyValue], $groupRecordOne[$orderPropertyValue]
+                );
             }
+            else
+            {
+                return strcmp(
+                    $groupRecordOne[$orderPropertyValue], $groupRecordTwo[$orderPropertyValue]
+                );
+            }
+        }
         );
 
         return array_slice($groupRecords, $offset, $count);

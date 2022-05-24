@@ -36,7 +36,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 
@@ -55,7 +55,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
 
         return $this->dataClassRepository->retrieves(
             CourseGroupPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 

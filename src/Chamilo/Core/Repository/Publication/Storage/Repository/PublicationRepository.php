@@ -167,8 +167,8 @@ class PublicationRepository
         $properties->merge($baseRecordRetrievesParameters->get_properties());
 
         $recordRetrievesParameters = new RecordRetrievesParameters(
-            $properties, $baseRecordRetrievesParameters->get_condition(), $baseRecordRetrievesParameters->get_count(),
-            $baseRecordRetrievesParameters->get_offset(), $baseRecordRetrievesParameters->get_order_by(),
+            $properties, $baseRecordRetrievesParameters->get_condition(), $baseRecordRetrievesParameters->getCount(),
+            $baseRecordRetrievesParameters->getOffset(), $baseRecordRetrievesParameters->getOrderBy(),
             $this->getPublicationJoins(
                 $baseRecordRetrievesParameters->get_joins(), $publicationClassName, $contentObjectTypeClassName
             ), $baseRecordRetrievesParameters->get_group_by()

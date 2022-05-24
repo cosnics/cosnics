@@ -461,7 +461,7 @@ abstract class RightsRepository
         $joins = $this->getLocationWithGrantedRightsJoins($userIdentifier, $entities);
 
         return $this->getDataClassRepository()->records(
-            $rightsLocationClassName, new RecordRetrievesParameters($properties, $condition, null, $joins)
+            $rightsLocationClassName, new RecordRetrievesParameters($properties, $condition, null, null, null, $joins)
         );
     }
 
@@ -553,7 +553,7 @@ abstract class RightsRepository
         }
 
         $parameters = new RecordRetrievesParameters(
-            $properties, $condition, null, null, [], $this->getRightsLocationEntityRightJoins()
+            $properties, $condition, null, null, null, $this->getRightsLocationEntityRightJoins()
         );
 
         return $this->getDataClassRepository()->records($rightsLocationClassName, $parameters);
@@ -698,7 +698,7 @@ abstract class RightsRepository
      * @return \Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight[]
      */
     public function findRightsLocationEntityRights(
-        Condition $condition = null, int $offset = null, int $count = null, array $orderBy = null
+        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
     )
     {
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();

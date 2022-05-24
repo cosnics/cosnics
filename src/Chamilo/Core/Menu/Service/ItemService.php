@@ -6,6 +6,7 @@ use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Core\Menu\Storage\Repository\ItemRepository;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Service\DisplayOrderHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
@@ -454,16 +455,16 @@ class ItemService
      * @param integer $parentIdentifier
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Menu\Storage\DataClass\Item[]
      */
     public function findItemsByParentIdentifier(
-        int $parentIdentifier, int $count = null, int $offset = null, array $orderProperties = null
+        int $parentIdentifier, int $count = null, int $offset = null, ?OrderBy $orderBy = null
     )
     {
         return $this->getItemRepository()->findItemsByParentIdentifier(
-            $parentIdentifier, $count, $offset, $orderProperties
+            $parentIdentifier, $count, $offset, $orderBy
         );
     }
 

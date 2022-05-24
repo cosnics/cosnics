@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Rights\Interfaces;
 
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * @package Chamilo\Libraries\Rights\Entity
@@ -22,12 +23,12 @@ interface RightsEntityProvider
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function findEntityItems(
-        Condition $condition = null, int $offset = null, int $count = null, array $orderProperties = null
+        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
     );
 
     /**

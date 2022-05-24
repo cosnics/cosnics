@@ -261,7 +261,7 @@ class CourseGroupEntity implements NestedRightsEntity
      * @param $condition Condition
      * @param $offset int
      * @param $count int
-     * @param $order_property Array
+     * @param $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

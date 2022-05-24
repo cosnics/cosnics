@@ -90,7 +90,7 @@ class GroupMembershipRepository
         $condition = new AndCondition($conditions);
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, [])
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, null)
         );
     }
 
@@ -129,7 +129,7 @@ class GroupMembershipRepository
         );
 
         return $this->getDataClassRepository()->retrieve(
-            GroupRelUser::class, new DataClassRetrieveParameters($condition, [], $joins)
+            GroupRelUser::class, new DataClassRetrieveParameters($condition, null, $joins)
         );
     }
 

@@ -227,7 +227,7 @@ class ContentObjectRepository
         }
 
         $usedStorageSpaceRecord = $this->getDataClassRepository()->record(
-            $contentObjectType, new RecordRetrieveParameters($dataClassProperties, $condition, [], $joins)
+            $contentObjectType, new RecordRetrieveParameters($dataClassProperties, $condition, null, $joins)
         );
 
         return $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];

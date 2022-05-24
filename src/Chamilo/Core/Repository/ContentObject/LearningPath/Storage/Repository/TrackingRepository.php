@@ -291,7 +291,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param array $orderBy
+     * @param $orderBy
      *
      * @return DataClassIterator
      */
@@ -479,7 +479,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         return $this->dataClassRepository->records(
             $treeNodeAttemptClassName,
-            new RecordRetrievesParameters($properties, $condition, null, null, [], $joins));
+            new RecordRetrievesParameters($properties, $condition, null, null, null, $joins));
     }
 
     /**

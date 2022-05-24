@@ -167,7 +167,7 @@ class CourseUsersFeedComponent extends Manager
 
         $groups = \Chamilo\Application\Weblcms\Course\Storage\DataManager::retrieves(
             Group::class, new DataClassRetrievesParameters(
-                new AndCondition($groupConditions), null, null, [], new Joins(
+                new AndCondition($groupConditions), null, null, null, new Joins(
                     new Join(
                         CourseEntityRelation::class, new EqualityCondition(
                             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID),

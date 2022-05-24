@@ -78,7 +78,7 @@ class PlatformGroupEntity implements NestedRightsEntity
     /**
      * Function that can be filled in extensions of this class to limit the platform groups
      *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
      */
     public function get_condition($condition)
     {
@@ -244,10 +244,10 @@ class PlatformGroupEntity implements NestedRightsEntity
     /**
      * Retrieves the items for this entity
      *
-     * @param $condition Condition
+     * @param $condition
      * @param $offset int
      * @param $count int
-     * @param $order_property Array
+     * @param $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

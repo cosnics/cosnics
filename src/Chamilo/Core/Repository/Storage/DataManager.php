@@ -643,8 +643,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $parameters = new DataClassCountGroupedParameters(
             $condition, new DataClassProperties(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
-        ), $having, null, new GroupBy(
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
+        ), $having, null, new GroupBy([
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)]
             )
         );
 

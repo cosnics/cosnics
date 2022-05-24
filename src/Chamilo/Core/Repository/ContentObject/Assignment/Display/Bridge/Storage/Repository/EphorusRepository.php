@@ -138,7 +138,7 @@ abstract class EphorusRepository extends CommonDataClassRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            Request::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            Request::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 

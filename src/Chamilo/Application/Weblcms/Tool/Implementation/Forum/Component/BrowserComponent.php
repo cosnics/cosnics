@@ -787,13 +787,14 @@ class BrowserComponent extends Manager implements DelegateComponent
             ), new StaticConditionVariable($this->get_parent()->get_tool_id())
         );
 
-        $order = array(
-            new OrderProperty(
-                new PropertyConditionVariable(
-                    ContentObjectPublicationCategory::class, ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+        $order = new OrderBy(array(
+                new OrderProperty(
+                    new PropertyConditionVariable(
+                        ContentObjectPublicationCategory::class,
+                        ContentObjectPublicationCategory::PROPERTY_DISPLAY_ORDER
+                    )
                 )
-            )
-        );
+            ));
 
         $categories = WeblcmsDataManager::retrieves(
             ContentObjectPublicationCategory::class,

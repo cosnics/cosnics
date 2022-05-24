@@ -516,7 +516,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassRetrievesParameters($condition, null, null, [], $joins);
+        $parameters = new DataClassRetrievesParameters($condition, null, null, null, $joins);
 
         return self::retrieves(CourseGroup::class, $parameters);
     }

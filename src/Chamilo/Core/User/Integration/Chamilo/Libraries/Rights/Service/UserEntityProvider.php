@@ -9,6 +9,7 @@ use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementF
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Rights\Interfaces\RightsEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -66,15 +67,15 @@ class UserEntityProvider implements RightsEntityProvider
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\User\Storage\DataClass\User[]
      */
     public function findEntityItems(
-        Condition $condition = null, int $offset = null, int $count = null, array $orderProperties = null
+        Condition $condition = null, int $offset = null, int $count = null, ?OrderBy $orderBy = null
     )
     {
-        return $this->getUserService()->findUsers($condition, $offset, $count, $orderProperties);
+        return $this->getUserService()->findUsers($condition, $offset, $count, $orderBy);
     }
 
     /**

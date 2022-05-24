@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Manages the communication between the repository and the publications of content objects. This service is used
@@ -157,13 +158,13 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
-        array $orderProperties = null
+        ?OrderBy $orderBy = null
     )
     {
         $publicationAttributes = [];
@@ -181,9 +182,9 @@ class PublicationAggregator implements PublicationAggregatorInterface
         }
 
         // Sort the publication attributes
-        if (count($orderProperties) > 0)
+        if (count($orderBy) > 0)
         {
-            $orderProperty = $orderProperties[0];
+            $orderProperty = $orderBy[0];
 
             usort(
                 $publicationAttributes,

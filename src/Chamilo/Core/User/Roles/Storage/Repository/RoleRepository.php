@@ -43,7 +43,7 @@ class RoleRepository extends DataManagerRepository implements RoleRepositoryInte
      * @param Condition $condition
      * @param int $offset
      * @param int $count
-     * @param array $orderBy
+     * @param $orderBy
      *
      * @return Role[]
      */

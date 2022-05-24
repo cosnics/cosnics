@@ -553,7 +553,7 @@ abstract class AssignmentRepository
         );
 
         return $this->dataClassRepository->retrieves(
-            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            $this->getEntryAttachmentClassName(), new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 
@@ -627,7 +627,7 @@ abstract class AssignmentRepository
 
         return $this->dataClassRepository->records(
             $this->getEntryClassName(),
-            new RecordRetrievesParameters($dataClassProperties, $condition, null, null, [], $joins, $groupBy)
+            new RecordRetrievesParameters($dataClassProperties, $condition, null, null, null, $joins, $groupBy)
         );
     }
 
@@ -937,7 +937,7 @@ abstract class AssignmentRepository
         );
 
         $parameters = new RecordRetrieveParameters(
-            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), [], $joins
+            $properties, $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition), null, $joins
         );
 
         $record = $this->dataClassRepository->record($this->getEntryClassName(), $parameters);

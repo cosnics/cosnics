@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -263,13 +264,13 @@ class GroupService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
-    public function findGroups($condition, $offset = 0, $count = - 1, array $orderProperty = null)
+    public function findGroups($condition, $offset = 0, $count = - 1, ?OrderBy $orderBy = null)
     {
-        return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderProperty);
+        return $this->getGroupRepository()->findGroups($condition, $count, $offset, $orderBy);
     }
 
     /**

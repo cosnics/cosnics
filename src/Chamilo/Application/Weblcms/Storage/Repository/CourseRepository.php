@@ -328,7 +328,7 @@ class CourseRepository implements CourseRepositoryInterface
         );
 
         return DataManager::retrieves(
-            Course::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            Course::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 
@@ -416,7 +416,7 @@ class CourseRepository implements CourseRepositoryInterface
             )
         );
 
-        $recordRetrievesParameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
+        $recordRetrievesParameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
         $courseRecords = DataManager::records(
             Course::class, $recordRetrievesParameters

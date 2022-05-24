@@ -13,6 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Form\FormValidator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Symfony\Component\Translation\Translator;
 
 /**
@@ -195,17 +196,17 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
-        array $orderProperties = null
+        ?OrderBy $orderBy = null
     )
     {
         $publicationRecords = $this->getPublicationService()->findPublicationRecordsForTypeAndIdentifier(
-            $type, $objectIdentifier, $condition, $count, $offset, $orderProperties
+            $type, $objectIdentifier, $condition, $count, $offset, $orderBy
         );
 
         $publicationAttributes = [];

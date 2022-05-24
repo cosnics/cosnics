@@ -25,6 +25,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Symfony\Component\Translation\Translator;
 
@@ -304,17 +305,17 @@ class PublicationAggregator implements PublicationAggregatorInterface
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return \Chamilo\Core\Repository\Publication\Storage\DataClass\Attributes[]
      */
     public function getContentObjectPublicationsAttributes(
         int $type, int $objectIdentifier, Condition $condition = null, int $count = null, int $offset = null,
-        array $orderProperties = null
+        ?OrderBy $orderBy = null
     )
     {
         return Manager::getContentObjectPublicationsAttributes(
-            $objectIdentifier, $type, $condition, $count, $offset, $orderProperties
+            $objectIdentifier, $type, $condition, $count, $offset, $orderBy
         );
     }
 

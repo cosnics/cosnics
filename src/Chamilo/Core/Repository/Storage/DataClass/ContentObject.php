@@ -1023,7 +1023,7 @@ class ContentObject extends CompositeDataClass
 
     /**
      * @param string $type
-     * @param array $order_by
+     * @param $order_by
      * @param null $offset
      * @param null $count
      *

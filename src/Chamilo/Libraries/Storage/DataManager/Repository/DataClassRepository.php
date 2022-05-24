@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
+use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
+use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
@@ -32,6 +34,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -47,12 +50,6 @@ class DataClassRepository
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    private $dataClassRepositoryCache;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
      */
     private $dataClassDatabase;
@@ -62,6 +59,12 @@ class DataClassRepository
      * @var \Chamilo\Libraries\Storage\DataClass\DataClassFactory
      */
     private $dataClassFactory;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
+     */
+    private $dataClassRepositoryCache;
 
     /**
      *
@@ -297,7 +300,7 @@ class DataClassRepository
     protected function countCompositeDataClass($dataClassName, DataClassCountParameters $parameters)
     {
         $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-        $parameters = $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
+        $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
 
         return $this->countClass($parentDataClassName, $dataClassName, $parameters);
     }
@@ -622,6 +625,33 @@ class DataClassRepository
 
     /**
      *
+     * @return boolean
+     */
+    public function getQueryCacheEnabled()
+    {
+        return $this->queryCacheEnabled;
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    protected function isQueryCacheEnabled()
+    {
+        return (bool) $this->getQueryCacheEnabled();
+    }
+
+    /**
+     *
+     * @param boolean $queryCacheEnabled
+     */
+    public function setQueryCacheEnabled($queryCacheEnabled)
+    {
+        $this->queryCacheEnabled = $queryCacheEnabled;
+    }
+
+    /**
+     *
      * @param string $dataClassName
      *
      * @return boolean
@@ -641,33 +671,6 @@ class DataClassRepository
     {
         return $this->isCompositeDataClass($dataClassName) &&
             get_parent_class($dataClassName) !== CompositeDataClass::class;
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    protected function isQueryCacheEnabled()
-    {
-        return (bool) $this->getQueryCacheEnabled();
-    }
-
-    /**
-     *
-     * @return boolean
-     */
-    public function getQueryCacheEnabled()
-    {
-        return $this->queryCacheEnabled;
-    }
-
-    /**
-     *
-     * @param boolean $queryCacheEnabled
-     */
-    public function setQueryCacheEnabled($queryCacheEnabled)
-    {
-        $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
     /**
@@ -831,14 +834,15 @@ class DataClassRepository
     }
 
     /**
+     * @template retrieveDataClassName
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     * @param class-string<retrieveDataClassName> $dataClassName
+     * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @return retrieveDataClassName
      * @throws \Exception
      */
-    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters = null)
+    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters = null)
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
@@ -853,10 +857,12 @@ class DataClassRepository
     /**
      * Retrieve an instance of a DataClass object from the storage layer by it's unique identifier
      *
-     * @param string $dataClassName
+     * @template retrieveById
+     *
+     * @param class-string<retrieveById> $dataClassName
      * @param integer $identifier
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return retrieveById
      * @throws \Exception
      */
     public function retrieveById($dataClassName, $identifier)
@@ -874,15 +880,16 @@ class DataClassRepository
     }
 
     /**
+     * @template retrieveClass
      *
      * @param string $cacheDataClassName
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param class-string<retrieveClass> $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @return retrieveClass
      * @throws \Exception
      */
-    protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassParameters $parameters)
+    protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassRetrieveParameters $parameters)
     {
 
         if ($this->isQueryCacheEnabled())
@@ -919,11 +926,12 @@ class DataClassRepository
     }
 
     /**
+     * @template retrieveCompositeDataClass
      *
-     * @param string $dataClassName
+     * @param class-string<retrieveCompositeDataClass> $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @return retrieveCompositeDataClass
      * @throws \Exception
      */
     protected function retrieveCompositeDataClass($dataClassName, DataClassRetrieveParameters $parameters)
@@ -935,7 +943,7 @@ class DataClassRepository
             $dataClassName = $this->determineCompositeDataClassType($dataClassName, $parameters);
         }
 
-        $parameters = $this->setCompositeDataClassParameters($parentClassName, $dataClassName, $parameters);
+        $this->setCompositeDataClassParameters($parentClassName, $dataClassName, $parameters);
 
         return $this->retrieveClass($parentClassName, $dataClassName, $parameters);
     }
@@ -1012,13 +1020,15 @@ class DataClassRepository
     /**
      * Retrieve a DataClassIterator of DataClass object instances from the storage layer
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @template tRetrieves
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @param class-string<tRetrieves> $dataClassName
+     * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     *
+     * @return DataClassIterator<tRetrieves>
      * @throws \Exception
      */
-    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters = null)
+    public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters = null)
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class))
         {
@@ -1076,13 +1086,12 @@ class DataClassRepository
     protected function retrievesCompositeDataClass($dataClassName, DataClassRetrievesParameters $parameters)
     {
         $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
-        $parameters = $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
+        $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
 
         return $this->retrievesClass($parentDataClassName, $dataClassName, $parameters);
     }
 
     /**
-     *
      * @param string $parentDataClassName
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
@@ -1132,8 +1141,6 @@ class DataClassRepository
                 $parameters->setCondition($condition);
             }
         }
-
-        return $parameters;
     }
 
     /**
@@ -1217,7 +1224,7 @@ class DataClassRepository
      * @param Condition $condition
      * @param integer $offset
      * @param integer $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy[]
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy []
      *
      * @return boolean
      */

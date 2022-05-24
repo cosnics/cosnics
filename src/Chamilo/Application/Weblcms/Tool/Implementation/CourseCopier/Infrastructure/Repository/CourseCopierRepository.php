@@ -110,7 +110,7 @@ class CourseCopierRepository implements CourseCopierRepositoryInterface
 
         return DataManager::retrieves(
             ContentObjectPublicationCategory::class,
-            new DataClassRetrievesParameters($condition, null, null, new $order_by)
+            new DataClassRetrievesParameters($condition, null, null, $order_by)
         );
     }
 

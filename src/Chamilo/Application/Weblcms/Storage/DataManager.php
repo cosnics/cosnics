@@ -1692,7 +1692,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $condition Condition
      * @param $offset int
      * @param $count int
-     * @param $order_by int
+     * @param $order_by
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -1902,7 +1902,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $condition = new AndCondition($conditions);
 
-        $parameters = new DataClassRetrieveParameters($condition, [], $joins);
+        $parameters = new DataClassRetrieveParameters($condition, null, $joins);
 
         return self::retrieve(ContentObjectPublication::class, $parameters);
     }
@@ -2135,7 +2135,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
         }
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], new Joins(array($join)));
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, new Joins(array($join)));
 
         return self::records(ContentObjectPublication::class, $parameters);
     }
@@ -2507,7 +2507,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $offset
      * @param int $count
-     * @param OrderProperty $order_by
+     * @param OrderBy $order_by
      * @param Condition $condition
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator

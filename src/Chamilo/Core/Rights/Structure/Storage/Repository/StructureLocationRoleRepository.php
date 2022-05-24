@@ -111,7 +111,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
         );
 
         return DataManager::records(
-            StructureLocation::class, new RecordRetrievesParameters($properties, null, null, null, [], $joins)
+            StructureLocation::class, new RecordRetrievesParameters($properties, null, null, null, null, $joins)
         );
     }
 }

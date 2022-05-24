@@ -7,16 +7,17 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -43,27 +44,21 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
+     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
+     */
+    protected $conditionPartTranslatorService;
+
+    /**
+     *
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
 
     /**
      *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    protected $storageAliasGenerator;
-
-    /**
-     *
      * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
      */
     protected $exceptionLogger;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
-     */
-    protected $conditionPartTranslatorService;
 
     /**
      *
@@ -76,6 +71,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
      * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
      */
     protected $recordProcessor;
+
+    /**
+     *
+     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
+     */
+    protected $storageAliasGenerator;
 
     /**
      *
@@ -103,11 +104,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return string
      */
-    protected function buildBasicRecordsSql($dataClassName, DataClassRetrievesParameters $parameters)
+    protected function buildBasicRecordsSql(string $dataClassName, DataClassParameters $parameters)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
@@ -435,13 +436,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      *
      * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      */
-    protected function fetchRecord($dataClassName, DataClassRetrieveParameters $parameters)
+    protected function fetchRecord($dataClassName, DataClassParameters $parameters)
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 

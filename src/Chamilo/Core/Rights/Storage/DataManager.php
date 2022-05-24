@@ -193,7 +193,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         $joins = new Joins(array($join));
 
-        $parameters = new RecordRetrievesParameters($properties, $entities_condition, null, null, [], $joins);
+        $parameters = new RecordRetrievesParameters($properties, $entities_condition, null, null, null, $joins);
         $result_set = $context_dm::records($context_location::class_name(), $parameters);
 
         $granted_rights = [];
@@ -717,7 +717,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition = new AndCondition($conditions);
         }
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
         $result_set = $context_dm::records($context_location::class_name(), $parameters);
 
         $target_entities = [];

@@ -95,7 +95,7 @@ class CalendarEventDataProviderRepository
             $condition,
             null,
             null,
-            [],
+            null,
             new Joins($joins));
     }
 }

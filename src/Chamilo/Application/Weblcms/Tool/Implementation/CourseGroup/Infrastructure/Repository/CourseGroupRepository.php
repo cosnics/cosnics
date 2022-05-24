@@ -85,7 +85,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
         );
 
         return $this->dataClassRepository->retrieves(
-            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            CourseGroupUserRelation::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 

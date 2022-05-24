@@ -9,6 +9,7 @@ use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Integration\Chamilo\Libraries\Rights\Service\UserEntityProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Utilities\DatetimeUtilities;
 use Symfony\Component\Translation\Translator;
 
@@ -279,16 +280,16 @@ class PublicationService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return string[]
      * @throws \Exception
      */
     public function findPublicationRecords(
-        Condition $condition = null, int $count = null, int $offset = null, array $orderProperties = null
+        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
     )
     {
-        return $this->getPublicationRepository()->findPublicationRecords($condition, $count, $offset, $orderProperties);
+        return $this->getPublicationRepository()->findPublicationRecords($condition, $count, $offset, $orderBy);
     }
 
     /**
@@ -334,21 +335,21 @@ class PublicationService
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param integer $count
      * @param integer $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
      * @return string[]
      * @throws \Exception
      */
     public function findVisiblePublicationRecordsForUserIdentifier(
         int $userIdentifier, Condition $condition = null, int $count = null, int $offset = null,
-        array $orderProperties = null
+        ?OrderBy $orderBy = null
     )
     {
         $publicationIdentifiers =
             $this->getRightsService()->findPublicationIdentifiersWithViewRightForUserIdentifier($userIdentifier);
 
         return $this->getPublicationRepository()->findVisiblePublicationRecordsForPublicationIdentifiers(
-            $publicationIdentifiers, $condition, $count, $offset, $orderProperties
+            $publicationIdentifiers, $condition, $count, $offset, $orderBy
         );
     }
 

@@ -1018,7 +1018,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
 
         $joins = self::get_course_rel_group_joins();
 
-        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, [], $joins);
+        $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
         $direct_subscribed_groups = self::records(CourseEntityRelation::class, $parameters);
 
@@ -1060,7 +1060,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param int $course_id
      * @param array $tools
-     * @param array $order_by
+     * @param $order_by
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */
@@ -1667,7 +1667,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $condition Condition
      * @param $offset int
      * @param $count int
-     * @param $order_property order
+     * @param $order_property
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

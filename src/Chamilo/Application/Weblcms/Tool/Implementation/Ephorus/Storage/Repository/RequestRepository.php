@@ -127,7 +127,7 @@ class RequestRepository extends CommonDataClassRepository
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));
 
         $recordRetrievesParameters =
-            new RecordRetrievesParameters($properties, $condition, null, null, [], $this->getRequestJoins());
+            new RecordRetrievesParameters($properties, $condition, null, null, null, $this->getRequestJoins());
 
         $records = $this->dataClassRepository->records(Request::class, $recordRetrievesParameters);
 

@@ -259,7 +259,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
         );
 
         return $this->getDataClassRepository()->retrieves(
-            RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, [], $joins)
+            RightsLocationEntityRight::class, new DataClassRetrievesParameters($condition, null, null, null, $joins)
         );
     }
 

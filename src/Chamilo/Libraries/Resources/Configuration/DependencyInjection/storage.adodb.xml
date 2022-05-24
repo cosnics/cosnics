@@ -50,7 +50,7 @@
         <!-- Utilities -->
 
         <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Factory\ConditionPartTranslatorFactory"/>
-        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Processor\RecordProcessor"/>
+        <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\RecordProcessor"/>
         <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor"/>
 
         <service id="Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService">

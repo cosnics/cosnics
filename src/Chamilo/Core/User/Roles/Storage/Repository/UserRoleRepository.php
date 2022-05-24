@@ -46,7 +46,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 
         return DataManager::retrieves(
             Role::class,
-            new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, [], $joins)
+            new DataClassRetrievesParameters($this->getConditionForUser($userId), null, null, null, $joins)
         );
     }
 
@@ -93,7 +93,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
 
         return \Chamilo\Core\User\Storage\DataManager::retrieves(
             User::class,
-            new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, [], $joins)
+            new DataClassRetrievesParameters($this->getConditionForRole($roleId), null, null, null, $joins)
         );
     }
 

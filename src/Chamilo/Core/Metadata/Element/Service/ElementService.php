@@ -127,7 +127,7 @@ class ElementService
         return DataManager::retrieves(
             Vocabulary::class, new DataClassRetrievesParameters(
                 $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, null,
-                [], $join
+                null, $join
             )
         );
     }
@@ -159,7 +159,7 @@ class ElementService
 
         return DataManager::retrieve(
             Vocabulary::class, new DataClassRetrieveParameters(
-                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), [], $join
+                $this->getElementInstanceConditionForSchemaInstanceAndElement($schemaInstance, $element), null, $join
             )
         );
     }

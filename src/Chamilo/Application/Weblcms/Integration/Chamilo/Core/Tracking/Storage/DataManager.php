@@ -90,7 +90,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             null, new DataClassProperties(
                 array(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
             ), $having, null,
-            new GroupBy(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
+            new GroupBy([new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)])
         );
 
         return self::count_grouped(CourseVisit::class, $parameters);
@@ -430,7 +430,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $group_by = new GroupBy();
         $group_by->add($course_tool_name_variable);
 
-        $parameters = new RecordRetrievesParameters($properties, null, null, null, [], $joins, $group_by);
+        $parameters = new RecordRetrievesParameters($properties, null, null, null, null, $joins, $group_by);
 
         return self::records(CourseVisit::class, $parameters);
     }

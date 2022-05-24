@@ -41,10 +41,6 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * added to $select. New tables to be added to $table_aliases using $x_ref. New joins to be added to
      * $join_declarations. Subselects are not catered for.
      *
-     * @param $condition type conditions to be applied to the query.
-     * @param $offset type the required offset.
-     * @param $max_objects type the required number ob rows.
-     * @param $order_by type the order in which the rows are to be returned.
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
      */

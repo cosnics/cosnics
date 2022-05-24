@@ -217,7 +217,7 @@ class GroupRepository
      * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
      */
     public function findGroups(
-        Condition $condition = null, int $count = null, int $offset = null, array $orderBy = null
+        Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
     )
     {
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);

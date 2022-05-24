@@ -19,7 +19,7 @@ class CourseGroupTableDataProvider extends DataClassTableDataProvider
      *
      * @param $offset int
      * @param $count int
-     * @param $order_property string
+     * @param $order_property
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
      */
     public function retrieve_data($condition, $offset, $count, $order_property = null)

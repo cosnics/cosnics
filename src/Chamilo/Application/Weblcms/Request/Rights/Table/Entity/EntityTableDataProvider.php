@@ -22,4 +22,3 @@ class EntityTableDataProvider extends DataClassTableDataProvider
         return DataManager::count(RightsLocationEntityRightGroup::class, $parameters);
     }
 }
-?>

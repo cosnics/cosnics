@@ -491,7 +491,7 @@ class WorkspaceRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $limit
      * @param int $offset
-     * @param \Chamilo\Libraries\Storage\Query\OrderProperty $orderProperty
+     * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */

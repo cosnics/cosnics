@@ -10,7 +10,6 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -45,7 +44,7 @@ class DataClassRepositoryCache
     /**
      *
      * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
+     * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @param mixed $value
      *
      * @return boolean
@@ -196,16 +195,16 @@ class DataClassRepositoryCache
     /**
      *
      * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $dataClassIterator
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
      * @return boolean
      * @throws \Exception
      */
     public function addForDataClassIterator(
-        DataClassIterator $dataClassIterator, DataClassRetrievesParameters $parameters
+        DataClassIterator $dataClassIterator, DataClassParameters $parameters
     )
     {
-        if (!$parameters instanceof DataClassRetrievesParameters)
+        if (!$parameters instanceof DataClassParameters)
         {
             throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
         }
