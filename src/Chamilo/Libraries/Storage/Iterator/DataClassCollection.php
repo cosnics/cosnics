@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\Iterator;
 
-use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -14,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @psalm-template T
  * @template-extends ArrayCollection<TKey,T>
  */
-class DataClassIterator extends ArrayCollection
+class DataClassCollection extends ArrayCollection
 {
     const POSITION_FIRST = 1;
     const POSITION_INVALID = 5;
@@ -22,16 +21,9 @@ class DataClassIterator extends ArrayCollection
     const POSITION_MIDDLE = 4;
     const POSITION_SINGLE = 3;
 
-    /**
-     *
-     * @var string
-     */
     private string $dataClassName;
 
     /**
-     * DataClassIterator constructor.
-     *
-     * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      */
     public function __construct(string $dataClassName, array $dataClasses = [])
@@ -49,23 +41,6 @@ class DataClassIterator extends ArrayCollection
     public function getArrayCopy(): array
     {
         return $this->toArray();
-    }
-
-    public function getCacheClassName(): string
-    {
-        $className = $this->getDataClassName();
-
-        $isCompositeDataClass = is_subclass_of($className, CompositeDataClass::class);
-        $isExtensionClass = get_parent_class($className) !== CompositeDataClass::class;
-
-        if ($isCompositeDataClass && $isExtensionClass)
-        {
-            return $className::parentClassName();
-        }
-        else
-        {
-            return $className;
-        }
     }
 
     public function getCurrentEntryPositionType(): int
@@ -97,7 +72,7 @@ class DataClassIterator extends ArrayCollection
         return $this->dataClassName;
     }
 
-    protected function setDataClassName(string $dataClassName): DataClassIterator
+    protected function setDataClassName(string $dataClassName): DataClassCollection
     {
         $this->dataClassName = $dataClassName;
 
@@ -112,11 +87,6 @@ class DataClassIterator extends ArrayCollection
     public function isCurrentEntryFirst(): bool
     {
         return $this->isCurrentEntryOnPosition(self::POSITION_FIRST);
-    }
-
-    public function isCurrentEntryInTheMiddle(): bool
-    {
-        return $this->isCurrentEntryOnPosition(self::POSITION_MIDDLE);
     }
 
     public function isCurrentEntryLast(): bool

@@ -82,7 +82,7 @@ abstract class NestedTreeNode extends NestedSet
      *        connected with parent_id
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Libraries\Storage\DataClass\DataClass>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @done Migrated to NestedSetDataClassRepository::findDescendants()
      * @throws \ReflectionException
      */
@@ -105,7 +105,7 @@ abstract class NestedTreeNode extends NestedSet
      * @param boolean $includeSelf - if put on true, the current object will be included in the parents list
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @done Migrated to NestedSetDataClassRepository::findAncestors()
      * @throws \ReflectionException
      */

@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Cache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -109,6 +109,31 @@ class DataClassRepositoryCache
     }
 
     /**
+     * @return boolean
+     * @throws \Exception
+     */
+    public function addForDataClassCollection(
+       string $dataClassName, DataClassCollection $dataClassCollection, DataClassParameters $parameters
+    )
+    {
+        if (!$parameters instanceof DataClassParameters)
+        {
+            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
+        }
+
+        if (!$dataClassCollection instanceof DataClassCollection)
+        {
+            $type = is_object($dataClassCollection) ? get_class($dataClassCollection) : gettype($dataClassCollection);
+            throw new Exception(
+                'DataClassRepositoryCache::addForDataClassCollection only allows for caching of DataClassCollection objects. Currently trying to add: ' .
+                $type . '.'
+            );
+        }
+
+        return $this->add($this->getCacheClassName($dataClassName), $parameters, $dataClassCollection);
+    }
+
+    /**
      *
      * @param string $className
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
@@ -190,35 +215,6 @@ class DataClassRepositoryCache
         }
 
         return $this->add($className, $parameters, $propertyValues);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $dataClassIterator
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForDataClassIterator(
-        DataClassIterator $dataClassIterator, DataClassParameters $parameters
-    )
-    {
-        if (!$parameters instanceof DataClassParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
-
-        if (!$dataClassIterator instanceof DataClassIterator)
-        {
-            $type = is_object($dataClassIterator) ? get_class($dataClassIterator) : gettype($dataClassIterator);
-            throw new Exception(
-                'DataClassRepositoryCache::addForDataClassIterator only allows for caching of DataClassIterator objects. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
-        return $this->add($dataClassIterator->getCacheClassName(), $parameters, $dataClassIterator);
     }
 
     /**
@@ -319,7 +315,7 @@ class DataClassRepositoryCache
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function get($class, DataClassParameters $parameters)
     {
@@ -331,6 +327,21 @@ class DataClassRepositoryCache
 
         {
             return false;
+        }
+    }
+
+    protected function getCacheClassName($dataClassName): string
+    {
+        $isCompositeDataClass = is_subclass_of($dataClassName, CompositeDataClass::class);
+        $isExtensionClass = get_parent_class($dataClassName) !== CompositeDataClass::class;
+
+        if ($isCompositeDataClass && $isExtensionClass)
+        {
+            return $dataClassName::parentClassName();
+        }
+        else
+        {
+            return $dataClassName;
         }
     }
 

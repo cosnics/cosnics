@@ -176,7 +176,7 @@ class CourseGroupEntityService implements EntityServiceInterface
         {
             $this->targetCourseGroupIds[$id] = [];
 
-            /** @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $courseGroups */
+            /** @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection $courseGroups */
             $courseGroups = DataManager::retrieve_publication_target_course_groups(
                 $contentObjectPublication->getId(), $contentObjectPublication->get_course_id()
             );
@@ -267,7 +267,7 @@ class CourseGroupEntityService implements EntityServiceInterface
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
@@ -283,7 +283,7 @@ class CourseGroupEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {

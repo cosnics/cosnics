@@ -21,7 +21,7 @@ use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTab;
 use Chamilo\Libraries\Format\Tabs\DynamicVisualTabsRenderer;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
@@ -290,11 +290,11 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     /**
      * Handles a resultset of course groups and their children
      *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_groups
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $course_groups
      *
      * @return string
      */
-    protected function handle_course_groups(DataClassIterator $course_groups)
+    protected function handle_course_groups(DataClassCollection $course_groups)
     {
         $html = [];
 

@@ -281,7 +281,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_assessment_attempts_with_user(
         $condition = null, $offset = null, $count = null, $order_by = null
@@ -390,7 +390,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_id
      * @param int $user_id = null
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_tools_access_summary_data($course_id = null, $user_id = null)
     {

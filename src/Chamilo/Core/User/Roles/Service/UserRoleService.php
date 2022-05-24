@@ -123,7 +123,7 @@ class UserRoleService implements UserRoleServiceInterface
      *
      * @param string $roleName
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Exception
      */
     public function getUsersForRole($roleName)

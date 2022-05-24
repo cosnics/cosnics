@@ -54,7 +54,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
@@ -85,7 +85,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersWithEntriesForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, array $userIds,
@@ -242,7 +242,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieveEntriesForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
@@ -264,7 +264,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType,
@@ -282,7 +282,7 @@ class AssignmentRepository extends \Chamilo\Core\Repository\ContentObject\Assign
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param TreeNodeData $treeNodeData
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData

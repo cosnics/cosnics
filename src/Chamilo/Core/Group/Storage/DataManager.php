@@ -5,7 +5,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -116,7 +116,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $user_id
      * @param bool $only_retrieve_ids
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
      * @deprecated Replaced by GroupService::findAllSubscribedGroupIdentifiersForUserIdentifier() and
      *     GroupService::findAllSubscribedGroupsForUserIdentifier()
      */
@@ -218,7 +218,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 else
                 {
                     // If the user is not a member of any group
-                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassIterator(Group::class, []);
+                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassCollection(Group::class, []);
                 }
             }
         }
@@ -238,7 +238,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     public static function retrieve_direct_subscribed_groups($user_id)
     {
@@ -400,7 +400,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // If the provided group_ids do not exist or were empty
-        return new DataClassIterator(Group::class, []);
+        return new DataClassCollection(Group::class, []);
     }
 
     public static function retrieve_user_groups($user_id)

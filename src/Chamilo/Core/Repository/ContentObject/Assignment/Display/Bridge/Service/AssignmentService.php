@@ -130,7 +130,7 @@ abstract class AssignmentService
      *
      * @param integer[] $entryIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByIdentifiers($entryIdentifiers)
     {

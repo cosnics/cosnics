@@ -77,7 +77,7 @@ class PublicationAccessBlock extends ToolBlock
     /**
      * Retrieves the course visit records for the given publication
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit>
      */
     public function retrieve_course_visits()
     {

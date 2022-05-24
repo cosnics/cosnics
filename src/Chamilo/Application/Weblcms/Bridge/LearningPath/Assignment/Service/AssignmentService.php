@@ -266,7 +266,7 @@ class AssignmentService extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
@@ -281,7 +281,7 @@ class AssignmentService extends
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifiers
@@ -302,7 +302,7 @@ class AssignmentService extends
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
@@ -342,7 +342,7 @@ class AssignmentService extends
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
@@ -363,7 +363,7 @@ class AssignmentService extends
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersWithEntriesForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],

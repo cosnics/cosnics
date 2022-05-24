@@ -143,7 +143,7 @@ class LastAccessToToolsBlock extends ToolAccessBlock
     /**
      * Returns the summary data for this course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieve_course_summary_data()
     {

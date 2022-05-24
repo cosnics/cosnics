@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Ajax\Manager;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -42,9 +42,9 @@ class GetWorkspacesWithCopyRightComponent extends Manager
      * Processes the workspaces to an array
      *
      * @param array $workspacesDataArray
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace> $workspaces
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace> $workspaces
      */
-    protected function processWorkspaces(&$workspacesDataArray = [], DataClassIterator $workspaces)
+    protected function processWorkspaces(&$workspacesDataArray = [], DataClassCollection $workspaces)
     {
         $rightService = RightsService::getInstance();
 

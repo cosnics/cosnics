@@ -3,7 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\TreeN
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 
@@ -31,6 +31,6 @@ class TreeNodeTableDataProvider extends DataClassTableDataProvider
         /** @var TreeNode $treeNode */
         $treeNode = $this->get_component()->getCurrentTreeNode();
 
-        return new DataClassIterator(TreeNode::class, array_values($treeNode->getChildNodes()));
+        return new DataClassCollection(TreeNode::class, array_values($treeNode->getChildNodes()));
     }
 }

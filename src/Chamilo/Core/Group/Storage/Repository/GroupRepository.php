@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -94,7 +94,7 @@ class GroupRepository
     /**
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
      * @throws \Exception
      */
     public function deleteGroup(Group $group)
@@ -105,7 +105,7 @@ class GroupRepository
     /**
      * @param integer $userIdentifier
      *
-     * @return string[][]|DataClassIterator
+     * @return string[][]|DataClassCollection
      * @throws \Exception
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
@@ -191,13 +191,13 @@ class GroupRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator|string[][] $directlySubscribedGroupNestingValues
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection|string[][] $directlySubscribedGroupNestingValues
      *
      * @return string[]
      * @throws \Exception
      */
     public function findGroupIdentifiersForDirectlySubscribedGroupNestingValues(
-        DataClassIterator $directlySubscribedGroupNestingValues
+        DataClassCollection $directlySubscribedGroupNestingValues
     )
     {
         $parameters = new DataClassDistinctParameters(
@@ -214,7 +214,7 @@ class GroupRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroups(
         Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
@@ -228,7 +228,7 @@ class GroupRepository
     /**
      * @param $groupIdentifiers
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroupsByIdentifiersOrderedByName($groupIdentifiers)
     {
@@ -245,10 +245,10 @@ class GroupRepository
     /**
      * @param string[][] $directlySubscribedGroupNestingValues
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroupsForDirectlySubscribedGroupNestingValues(
-        DataClassIterator $directlySubscribedGroupNestingValues
+        DataClassCollection $directlySubscribedGroupNestingValues
     )
     {
         $parameters = new DataClassRetrievesParameters(
@@ -262,7 +262,7 @@ class GroupRepository
      * @param string $searchQuery
      * @param integer $parentIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroupsForSearchQueryAndParentIdentifier(string $searchQuery = null, int $parentIdentifier = 0)
     {
@@ -309,7 +309,7 @@ class GroupRepository
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $includeSelf
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection|\Chamilo\Libraries\Storage\DataClass\NestedSet[]
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
     {
@@ -362,7 +362,7 @@ class GroupRepository
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
     {
@@ -370,12 +370,12 @@ class GroupRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator|string[][] $directlySubscribedGroupNestingValues
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection|string[][] $directlySubscribedGroupNestingValues
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\OrCondition
      */
     protected function getDirectlySubscribedGroupNestingValuesConditions(
-        DataClassIterator $directlySubscribedGroupNestingValues
+        DataClassCollection $directlySubscribedGroupNestingValues
     )
     {
         $treeConditions = [];

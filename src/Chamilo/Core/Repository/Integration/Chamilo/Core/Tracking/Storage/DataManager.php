@@ -132,7 +132,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity>
      * @throws \Exception
      */
     public static function retrieveDirectActivitiesForContentObject(ContentObject $contentObject)

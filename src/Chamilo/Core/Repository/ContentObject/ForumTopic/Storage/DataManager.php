@@ -110,7 +110,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $forum_topic_id int The id of the topic of which this function retrieves all posts.
      * @param Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator Returns a result set of posts.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection Returns a result set of posts.
      */
     public static function retrieve_forum_posts($forum_topic_id, $condition = null)
     {
@@ -147,7 +147,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve all the posts of a topic based on the topic id.
      *
      * @param $forum_topic_id int The id of the topic of which this function retrieves all posts.
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator Returns a result set of posts.
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection Returns a result set of posts.
      */
     public static function is_attached_to_forum_topic($forum_topic_id, $attachment_id)
     {
@@ -300,7 +300,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
     /*
      * This method retrieves an array of the attached content objects of a particular post. @param int $forum_post_id
-     * the id of the forum post. @param int $offset @param int $max_objects @param int $order_by @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A
+     * the id of the forum post. @param int $offset @param int $max_objects @param int $order_by @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection A
      * resultset of content objects.
      */
     public static function retrieve_attached_object_from_forum_post($forum_post_id, $offset = null, $max_objects = null,
@@ -365,7 +365,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * Retrieve a subscribtion by its user id.
      *
      * @param $forum_topic_id int The id of the forum topic of which the function will retrieve the subscribtions.
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      *
      */
     public static function retrieve_subscribes($forum_topic_id)

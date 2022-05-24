@@ -108,7 +108,7 @@ class CourseGroupsFeedComponent extends GroupsFeedComponent
     /**
      * Returns all the groups for this feed
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieve_groups()
     {

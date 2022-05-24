@@ -90,7 +90,7 @@ class ContentObjectRelationRepository
     /**
      *
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
@@ -101,7 +101,7 @@ class ContentObjectRelationRepository
      *
      * @param int $contentObjectId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     // TODO: Where is this used? A content object number should be passed !
     public function findContentObjectRelationsForContentObjectById($contentObjectId)

@@ -85,7 +85,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseGroup>
      */
     public static function retrieve_course_groups_and_subgroups($group_ids, $condition = null, $offset = null, $count = null,
         $order_by = null)
@@ -196,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<User>
      */
     public static function retrieve_course_group_users($course_group_id, $condition = null, $offset = null, $count = null,
         $order_property = null)
@@ -239,7 +239,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\user\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\user\User>
      */
     public static function retrieve_course_group_users_with_subscription_time($course_group_id, $condition = null,
         $offset = null, $count = null, $order_property = null)
@@ -486,7 +486,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $user_id
      * @param null $course_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseGroup>
      */
     public static function retrieve_course_groups_from_user($user_id, $course_id = null)
     {

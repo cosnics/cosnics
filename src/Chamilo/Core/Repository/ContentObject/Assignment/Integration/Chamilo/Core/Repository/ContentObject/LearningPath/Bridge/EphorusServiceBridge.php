@@ -70,7 +70,7 @@ class EphorusServiceBridge implements EphorusServiceBridgeInterface
     /**
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequests(RecordRetrievesParameters $recordRetrievesParameters = null
     )

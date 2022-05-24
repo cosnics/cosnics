@@ -19,7 +19,7 @@ class GetCoursesForElementFinderComponent
     /**
      * Retrieves the courses for the current request
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function getCourses()
     {

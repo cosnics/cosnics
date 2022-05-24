@@ -432,7 +432,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters = null
@@ -448,7 +448,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | Entry[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | Entry[]
      */
     public function findEntriesByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $entityType = null
@@ -465,7 +465,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifiers
@@ -486,7 +486,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $condition = null, $offset = null,
@@ -501,7 +501,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
     /**
      * @param int[] $contentObjectPublicationIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntryStatisticsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers = [])
     {
@@ -515,7 +515,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param $entityType
      * @param $entityId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntryStatisticsForEntityByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
@@ -566,7 +566,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetCourseGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
@@ -586,7 +586,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
@@ -616,7 +616,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
@@ -636,7 +636,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
@@ -664,7 +664,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
@@ -684,7 +684,7 @@ class AssignmentService extends \Chamilo\Core\Repository\ContentObject\Assignmen
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTargetUsersWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,

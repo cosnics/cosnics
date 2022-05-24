@@ -64,7 +64,7 @@ class CourseSettingsController
     /**
      * Caches the course settings joined with the tools
      *
-     * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting>
+     * @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting>
      */
     private $course_settings_cache;
 
@@ -718,7 +718,7 @@ class CourseSettingsController
      * @param $setting_type int
      * @param $object_id int
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function retrieve_course_setting_objects($settingType, $objectIdentifiers)
     {

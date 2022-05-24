@@ -12,7 +12,7 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -67,7 +67,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $publication_id
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\AssessmentAttempt>
      */
     protected function get_assessment_attempts($publication_id, $user_id = null)
     {
@@ -208,7 +208,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int[] $assessment_attempt_ids
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\QuestionAttempt>
      */
     protected function get_question_attempts($question_cid = null, $assessment_attempt_ids = [])
     {
@@ -251,7 +251,7 @@ abstract class AssessmentBlock extends ToolBlock
      * @param int $question_cid
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function get_question_attempts_from_publication_and_question(
         $publication_id, $question_cid, $user_id = null
@@ -269,7 +269,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         if (count($assessment_attempt_ids) == 0)
         {
-            return new DataClassIterator(AssessmentAttempt::class, []);
+            return new DataClassCollection(AssessmentAttempt::class, []);
         }
 
         $question_attempts = $this->get_question_attempts($question_cid, $assessment_attempt_ids);

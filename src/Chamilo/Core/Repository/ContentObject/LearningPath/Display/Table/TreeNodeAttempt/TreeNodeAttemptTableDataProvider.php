@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\Tracking\Tracking
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 
@@ -61,6 +61,6 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     )
     {
-        return new DataClassIterator(TreeNodeAttempt::class, array_slice($this->getAllData(), $offset, $count));
+        return new DataClassCollection(TreeNodeAttempt::class, array_slice($this->getAllData(), $offset, $count));
     }
 }

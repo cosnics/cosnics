@@ -252,7 +252,7 @@ class PublicationRepository
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $records
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $records
      *
      * @param string $publicationClassName
      * @param string $contentObjectTypeClassName

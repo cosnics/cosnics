@@ -29,7 +29,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
      *
      * @param int $userId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      * @throws \Exception
      */
     public function findRolesForUser($userId)
@@ -76,7 +76,7 @@ class UserRoleRepository extends DataManagerRepository implements UserRoleReposi
      *
      * @param int $roleId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\User\Storage\DataClass\User>
      * @throws \Exception
      */
     public function findUsersForRole($roleId)

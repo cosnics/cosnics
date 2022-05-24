@@ -301,7 +301,7 @@ abstract class Manager extends Application
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Group\Storage\DataClass\GroupRelUser>
      * @throws \Exception
      */
     public static function retrieve_group_rel_users(

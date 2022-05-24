@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use InvalidArgumentException;
@@ -141,7 +141,7 @@ class GroupService
 
         $deletedGroups = $this->getGroupRepository()->deleteGroup($group);
 
-        if (!$deletedGroups instanceof DataClassIterator)
+        if (!$deletedGroups instanceof DataClassCollection)
         {
             return false;
         }
@@ -177,7 +177,7 @@ class GroupService
     /**
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      *
      * @throws \Exception
      */
@@ -266,7 +266,7 @@ class GroupService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroups($condition, $offset = 0, $count = - 1, ?OrderBy $orderBy = null)
     {
@@ -277,13 +277,13 @@ class GroupService
      *
      * @param integer[] $groupIdentifiers
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroupsByIdentifiers($groupIdentifiers)
     {
         if (empty($groupIdentifiers))
         {
-            return new DataClassIterator(Group::class, []);
+            return new DataClassCollection(Group::class, []);
         }
 
         return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);
@@ -293,7 +293,7 @@ class GroupService
      * @param string $searchQuery
      * @param integer $parentIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findGroupsForSearchQueryAndParentIdentifier(string $searchQuery = null, int $parentIdentifier = 0)
     {

@@ -162,7 +162,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntitiesWithEntriesByEntityType(TreeNode $treeNode, $entityType)
     {
@@ -406,7 +406,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param integer[] $entryIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByIdentifiers($entryIdentifiers)
     {
@@ -536,7 +536,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNodeEntityTypeAndIdentifiers(TreeNode $treeNode, $entityType, $entityIdentifiers)
     {
@@ -549,7 +549,7 @@ class AssignmentServiceBridge implements AssignmentServiceBridgeInterface
      *
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode $treeNode
      *
-     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findEntriesByTreeNode(TreeNode $treeNode)
     {

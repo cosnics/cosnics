@@ -160,7 +160,7 @@ interface CourseRepositoryInterface
      * 
      * @param $courseId
      * @param $status
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findUsersByStatus($courseId, $status);
 
@@ -169,7 +169,7 @@ interface CourseRepositoryInterface
      * 
      * @param $courseId
      * @param $status
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status);
 
@@ -183,7 +183,7 @@ interface CourseRepositoryInterface
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findAllUsersFromCourse(Course $course);
 }

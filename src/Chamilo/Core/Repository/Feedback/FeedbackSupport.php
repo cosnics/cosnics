@@ -10,11 +10,11 @@ interface FeedbackSupport
 {
 
     /**
-     * Retrieve a DataClassIterator of Feedback objects
+     * Retrieve a DataClassCollection of Feedback objects
      * 
      * @param integer $count
      * @param integer $offset
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieve_feedbacks($count, $offset);
 

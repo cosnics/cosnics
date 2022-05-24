@@ -379,7 +379,7 @@ class CourseService implements CourseServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function getAllUsersFromCourse(Course $course)
     {

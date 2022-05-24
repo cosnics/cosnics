@@ -13,7 +13,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 
 /**
  * Test the LearningPathService class
@@ -298,7 +298,7 @@ class LearningPathServiceTest extends ChamiloTestCase
     public function testGetLearningPaths()
     {
         $learningPath = new LearningPath();
-        $resultSet = new DataClassIterator(LearningPath::class, [$learningPath]);
+        $resultSet = new DataClassCollection(LearningPath::class, [$learningPath]);
 
         $this->contentObjectRepositoryMock->expects($this->once())->method('findAll')->with(LearningPath::class)->will(
             $this->returnValue($resultSet)

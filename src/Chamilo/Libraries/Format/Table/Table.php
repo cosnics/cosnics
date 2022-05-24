@@ -186,7 +186,7 @@ abstract class Table
      * @param integer[] $orderColumns
      * @param integer[] $orderDirections
      *
-     * @return \Chamilo\Libraries\Storage\Query\OrderBy]
+     * @return \Chamilo\Libraries\Storage\Query\OrderBy
      */
     protected function determineOrderProperties($orderColumns, $orderDirections)
     {

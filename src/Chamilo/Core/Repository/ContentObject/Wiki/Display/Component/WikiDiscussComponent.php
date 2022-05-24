@@ -201,7 +201,7 @@ class WikiDiscussComponent extends Manager implements DelegateComponent, Feedbac
      * @param int $count
      * @param int $offset
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieve_feedbacks($count, $offset)
     {

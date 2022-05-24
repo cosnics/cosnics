@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Storage\Repository\Inter
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataManagerRepositoryInterface;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -23,7 +23,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
@@ -35,7 +35,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
@@ -47,7 +47,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
@@ -84,7 +84,7 @@ interface OpenCourseRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @param Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function getRolesForOpenCourse(Course $course);
 

@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -42,7 +42,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findOpenCoursesByRoles($roles = [], Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
@@ -61,7 +61,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findAllOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
@@ -76,7 +76,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param null $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
@@ -110,7 +110,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function findClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
@@ -177,7 +177,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      *
      * @param Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function getRolesForOpenCourse(Course $course)
     {

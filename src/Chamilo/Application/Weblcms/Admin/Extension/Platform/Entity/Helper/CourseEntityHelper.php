@@ -75,7 +75,7 @@ class CourseEntityHelper
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {

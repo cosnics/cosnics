@@ -5,7 +5,7 @@ use Chamilo\Core\Menu\Storage\DataClass\Item;
 use Chamilo\Core\Menu\Storage\DataClass\ItemTitle;
 use Chamilo\Libraries\Cache\Doctrine\Provider\FilesystemCache;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 
 /**
  * @package Chamilo\Core\Menu\Service
@@ -137,7 +137,7 @@ class ItemCacheService
     /**
      * @param $parentIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findItemsByParentIdentifier(int $parentIdentifier)
     {
@@ -145,7 +145,7 @@ class ItemCacheService
         $parentKeyExists = array_key_exists($parentIdentifier, $groupedItems);
         $parentIdentifierItems = $parentKeyExists ? $groupedItems[$parentIdentifier] : [];
 
-        return new DataClassIterator(Item::class, $parentIdentifierItems);
+        return new DataClassCollection(Item::class, $parentIdentifierItems);
     }
 
     /**

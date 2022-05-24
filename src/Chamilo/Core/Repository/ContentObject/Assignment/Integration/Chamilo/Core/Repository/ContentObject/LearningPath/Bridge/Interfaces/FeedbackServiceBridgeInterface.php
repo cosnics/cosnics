@@ -49,7 +49,7 @@ interface FeedbackServiceBridgeInterface
     /**
      * @param Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
      */
     public function getFeedbackByEntry(Entry $entry);
 

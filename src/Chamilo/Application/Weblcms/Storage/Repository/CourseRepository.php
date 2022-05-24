@@ -73,7 +73,7 @@ class CourseRepository implements CourseRepositoryInterface
     /**
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      */
@@ -449,7 +449,7 @@ class CourseRepository implements CourseRepositoryInterface
      * @param $courseId
      * @param $status
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findDirectSubscribedGroupsByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {
@@ -484,7 +484,7 @@ class CourseRepository implements CourseRepositoryInterface
      * @param $courseId
      * @param $status
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findUsersByStatus($courseId, $status = CourseEntityRelation::STATUS_STUDENT)
     {

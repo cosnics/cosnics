@@ -327,6 +327,9 @@ abstract class DataClass
         return $this->properties[$propertiesType];
     }
 
+    /**
+     * @return mixed
+     */
     public function getSpecificProperty(string $propertiesType, string $propertyName)
     {
         $properties = $this->getSpecificProperties($propertiesType);

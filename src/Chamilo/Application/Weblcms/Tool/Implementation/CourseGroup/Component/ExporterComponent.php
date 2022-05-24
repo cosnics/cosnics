@@ -17,7 +17,7 @@ use Chamilo\Libraries\File\Filesystem;
 use Chamilo\Libraries\File\Path;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
@@ -321,13 +321,13 @@ class ExporterComponent extends Manager
     /**
      * Handles a resultset of course groups and their children
      *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassIterator $course_groups
+     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $course_groups
      * @param $worksheet
      * @param int $rowcount
      *
      * @return string
      */
-    protected function handle_course_groups(DataClassIterator $course_groups, $worksheet, $rowcount = 0)
+    protected function handle_course_groups(DataClassCollection $course_groups, $worksheet, $rowcount = 0)
     {
         foreach ($course_groups as $course_group)
         {

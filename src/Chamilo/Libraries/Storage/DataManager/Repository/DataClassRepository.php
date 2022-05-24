@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
-use Chamilo\Core\Repository\ContentObject\Announcement\Storage\DataClass\Announcement;
-use Chamilo\Core\Repository\ContentObject\Link\Storage\DataClass\Link;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
@@ -14,7 +12,7 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -34,7 +32,6 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -143,11 +140,11 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function __records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new DataClassIterator(
+        return new DataClassCollection(
             $dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters)
         );
     }
@@ -171,7 +168,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function __retrievesClass($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -183,7 +180,7 @@ class DataClassRepository
             $dataClasses[] = $this->getDataClassFactory()->getDataClass($dataClassName, $record);
         }
 
-        return new DataClassIterator($dataClassName, $dataClasses);
+        return new DataClassCollection($dataClassName, $dataClasses);
     }
 
     /**
@@ -806,7 +803,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
@@ -817,8 +814,8 @@ class DataClassRepository
 
             if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataClassRepositoryCache->addForDataClassIterator(
-                    $this->__records($dataClassName, $parameters), $parameters
+                $dataClassRepositoryCache->addForDataClassCollection(
+                    $dataClassName, $this->__records($dataClassName, $parameters), $parameters
                 );
             }
 
@@ -1018,14 +1015,14 @@ class DataClassRepository
     }
 
     /**
-     * Retrieve a DataClassIterator of DataClass object instances from the storage layer
+     * Retrieve a DataClassCollection of DataClass object instances from the storage layer
      *
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
      * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return DataClassIterator<tRetrieves>
+     * @return DataClassCollection<tRetrieves>
      * @throws \Exception
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters = null)
@@ -1046,7 +1043,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     protected function retrievesClass(
@@ -1059,15 +1056,15 @@ class DataClassRepository
 
             if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
-                $dataClassRepositoryCache->addForDataClassIterator(
-                    $this->__retrievesClass($dataClassName, $parameters), $parameters
+                $dataClassRepositoryCache->addForDataClassCollection(
+                    $dataClassName, $this->__retrievesClass($dataClassName, $parameters), $parameters
                 );
             }
 
-            $dataClassIterator = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
-            $dataClassIterator->rewind();
+            $dataClassCollection = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
+            $dataClassCollection->rewind();
 
-            return $dataClassIterator;
+            return $dataClassCollection;
         }
         else
         {
@@ -1080,7 +1077,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     protected function retrievesCompositeDataClass($dataClassName, DataClassRetrievesParameters $parameters)

@@ -314,7 +314,7 @@ class ContentObjectRepository
      * @param integer $offset
      * @param integer $count
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public function retrieveContentObjectAttachments(
@@ -347,7 +347,7 @@ class ContentObjectRepository
      * @param string $contentObjectType
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public function retrieveContentObjects(string $contentObjectType, DataClassRetrievesParameters $parameters)
@@ -362,7 +362,7 @@ class ContentObjectRepository
      * @param boolean $includeLast
      * @param boolean $includeSelf
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \ReflectionException
      * @throws \Exception
      */

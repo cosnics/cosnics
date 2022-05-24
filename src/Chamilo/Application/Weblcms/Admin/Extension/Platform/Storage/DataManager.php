@@ -7,7 +7,7 @@ use Chamilo\Application\Weblcms\Admin\Extension\Platform\Manager;
 use Chamilo\Application\Weblcms\Admin\Extension\Platform\Storage\DataClass\Admin;
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -151,7 +151,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * @param $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public static function retrieve_courses($user)
@@ -221,7 +221,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         else
         {
-            return new DataClassIterator(Course::class, []);
+            return new DataClassCollection(Course::class, []);
         }
     }
 

@@ -94,7 +94,7 @@ class RepositoryImplementationCategoryItemRenderer extends ItemRenderer
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Instance\Storage\DataClass\Instance>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Instance\Storage\DataClass\Instance>
      * @todo This shouldn't really be here like this
      */
     protected function findInstances()

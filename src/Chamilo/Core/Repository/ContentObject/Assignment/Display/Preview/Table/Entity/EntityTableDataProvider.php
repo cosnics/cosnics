@@ -3,7 +3,7 @@
 namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table\Entity;
 
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 
@@ -47,6 +47,6 @@ class EntityTableDataProvider
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     )
     {
-        return new DataClassIterator(User::class, $this->generateUsers());
+        return new DataClassCollection(User::class, $this->generateUsers());
     }
 }

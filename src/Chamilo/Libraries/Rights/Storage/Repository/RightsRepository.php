@@ -8,7 +8,7 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -148,7 +148,7 @@ abstract class RightsRepository
     {
         $deletedLocations = $this->getNestedSetDataClassRepository()->delete($rightsLocation);
 
-        if (!$deletedLocations instanceof DataClassIterator)
+        if (!$deletedLocations instanceof DataClassCollection)
         {
             return false;
         }

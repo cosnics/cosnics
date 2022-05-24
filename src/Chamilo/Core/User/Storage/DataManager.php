@@ -29,7 +29,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function count_active_users($condition = null)
     {
@@ -52,7 +52,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function count_approval_users($condition = null)
     {
@@ -75,7 +75,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function count_approved_users($condition = null)
     {
@@ -203,7 +203,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $offset int
      * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_active_users($condition = null, $count = null, $offset = null, $order_by = null)
     {
@@ -246,7 +246,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $offset int
      * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_approval_users($condition = null, $count = null, $offset = null, $order_by = null
     )
@@ -275,7 +275,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $offset int
      * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_approved_users($condition = null, $count = null, $offset = null, $order_by = null
     )
@@ -430,11 +430,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * Retrieve a DataClassIterator of Users based on a set of email addresses
+     * Retrieve a DataClassCollection of Users based on a set of email addresses
      *
      * @param $email string[]
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @deprecated Should no longer return an array, calls should be changed to use a while-loop now instead of a for
      *             each-loop
      */
@@ -448,11 +448,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     }
 
     /**
-     * Retrieve a DataClassIterator of Users based on a set of official codes
+     * Retrieve a DataClassCollection of Users based on a set of official codes
      *
      * @param $official_codes string[]
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_users_by_official_codes($official_codes)
     {

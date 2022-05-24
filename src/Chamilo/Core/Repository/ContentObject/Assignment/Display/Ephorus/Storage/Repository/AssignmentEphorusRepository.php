@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -30,7 +30,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return ContentObject[] | DataClassIterator
+     * @return ContentObject[] | DataClassCollection
      */
     public function findAssignmentEntriesWithRequests(RecordRetrievesParameters $recordRetrievesParameters = null)
     {
@@ -77,7 +77,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
                 $this->dataClassRepository->getDataClassFactory()->getDataClass(ContentObject::class, $record);
         }
 
-        return new DataClassIterator(ContentObject::class, $dataClasses);
+        return new DataClassCollection(ContentObject::class, $dataClasses);
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|Request[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|Request[]
      */
     public function findEphorusRequestsForAssignmentEntries(array $entryIds = [], Condition $condition = null)
     {

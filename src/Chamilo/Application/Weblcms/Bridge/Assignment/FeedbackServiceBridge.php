@@ -141,7 +141,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
      *
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function getFeedbackByEntry(Entry $entry)
     {

@@ -51,7 +51,7 @@ class LanguageRepository
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findLanguagesAsRecords()
     {

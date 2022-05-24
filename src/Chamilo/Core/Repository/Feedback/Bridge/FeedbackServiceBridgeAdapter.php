@@ -5,7 +5,7 @@ namespace Chamilo\Core\Repository\Feedback\Bridge;
 use Chamilo\Core\Repository\Feedback\FeedbackSupport;
 use Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use RuntimeException;
 
 /**
@@ -59,7 +59,7 @@ class FeedbackServiceBridgeAdapter implements FeedbackServiceBridgeInterface
      * @param int $count
      * @param int $offset
      *
-     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback[] | mixed[] | DataClassIterator
+     * @return \Chamilo\Core\Repository\Feedback\Storage\DataClass\Feedback[] | mixed[] | DataClassCollection
      */
     public function getFeedback($count = null, $offset = null)
     {

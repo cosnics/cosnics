@@ -95,7 +95,7 @@ abstract class GroupsFeedComponent extends Manager
 
         // Add users
         /**
-         * @var \Chamilo\Libraries\Storage\Iterator\DataClassIterator $users
+         * @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection $users
          */
         $users = $this->retrieve_users();
         if ($users && $users->count() > 0)
@@ -152,7 +152,7 @@ abstract class GroupsFeedComponent extends Manager
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Group\Storage\DataClass\Group>
      */
     abstract public function retrieve_groups();
 

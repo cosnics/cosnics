@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -185,7 +185,7 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      *
      * @throws \Exception
      */
@@ -205,7 +205,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $this->userSubscribedGroups[$userIdentifier] = new DataClassIterator(Group::class, []);
+                $this->userSubscribedGroups[$userIdentifier] = new DataClassCollection(Group::class, []);
             }
         }
 
@@ -215,7 +215,7 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return string[][]|DataClassIterator
+     * @return string[][]|DataClassCollection
      * @throws \Exception
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
@@ -252,7 +252,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $includeSelf
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
     {
@@ -289,7 +289,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassIterator
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
     {

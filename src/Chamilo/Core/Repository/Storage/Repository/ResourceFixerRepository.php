@@ -52,7 +52,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return ContentObject[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return ContentObject[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findContentObjectsWithResourceTags($offset = 0)
     {
@@ -102,7 +102,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentMatchingQuestion[] | DataClassIterator
+     * @return AssessmentMatchingQuestion[] | DataClassCollection
      */
     public function findAssessmentMatchingQuestions($offset = 0)
     {
@@ -124,7 +124,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentMatchNumericQuestion[] | DataClassIterator
+     * @return AssessmentMatchNumericQuestion[] | DataClassCollection
      */
     public function findAssessmentMatchNumericQuestions($offset = 0)
     {
@@ -146,7 +146,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentMatchTextQuestion[] | DataClassIterator
+     * @return AssessmentMatchTextQuestion[] | DataClassCollection
      */
     public function findAssessmentMatchTextQuestions($offset = 0)
     {
@@ -168,7 +168,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentMatrixQuestion[] | DataClassIterator
+     * @return AssessmentMatrixQuestion[] | DataClassCollection
      */
     public function findAssessmentMatrixQuestions($offset = 0)
     {
@@ -190,7 +190,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentMultipleChoiceQuestion[] | DataClassIterator
+     * @return AssessmentMultipleChoiceQuestion[] | DataClassCollection
      */
     public function findAssessmentMultipleChoiceQuestions($offset = 0)
     {
@@ -212,7 +212,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentRatingQuestion[] | DataClassIterator
+     * @return AssessmentRatingQuestion[] | DataClassCollection
      */
     public function findAssessmentRatingQuestions($offset = 0)
     {
@@ -234,7 +234,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return AssessmentSelectQuestion[] | DataClassIterator
+     * @return AssessmentSelectQuestion[] | DataClassCollection
      */
     public function findAssessmentSelectQuestions($offset = 0)
     {
@@ -256,7 +256,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return FillInBlanksQuestion[] | DataClassIterator
+     * @return FillInBlanksQuestion[] | DataClassCollection
      */
     public function findFillInBlanksQuestions($offset = 0)
     {
@@ -278,7 +278,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return ForumPost[] | DataClassIterator
+     * @return ForumPost[] | DataClassCollection
      */
     public function findForumPosts($offset = 0)
     {
@@ -300,7 +300,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return HotspotQuestion[] | DataClassIterator
+     * @return HotspotQuestion[] | DataClassCollection
      */
     public function findHotspotQuestions($offset = 0)
     {
@@ -322,7 +322,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return OrderingQuestion[] | DataClassIterator
+     * @return OrderingQuestion[] | DataClassCollection
      */
     public function findOrderingQuestions($offset = 0)
     {
@@ -344,7 +344,7 @@ class ResourceFixerRepository
      *
      * @param int $offset
      *
-     * @return Workspace[] | DataClassIterator
+     * @return Workspace[] | DataClassCollection
      */
     public function findWorkspaces($offset = 0)
     {

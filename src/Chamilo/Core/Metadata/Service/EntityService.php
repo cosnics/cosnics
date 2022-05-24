@@ -170,7 +170,7 @@ class EntityService
     /**
      * @param $entity
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */

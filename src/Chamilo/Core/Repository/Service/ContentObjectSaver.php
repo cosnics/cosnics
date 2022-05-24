@@ -395,7 +395,7 @@ class ContentObjectSaver
      * @param integer $offset
      * @param integer $count
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public function findContentObjectAttachments(

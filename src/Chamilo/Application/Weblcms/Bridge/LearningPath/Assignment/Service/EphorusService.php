@@ -55,7 +55,7 @@ class EphorusService extends
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,

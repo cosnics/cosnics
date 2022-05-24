@@ -1415,7 +1415,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_all_courses_with_course_categories(User $user)
     {
@@ -1460,7 +1460,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $offset
      * @param int $max_objects
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_content_object_publications(
         $condition = null, $order_by = null, $offset = 0, $max_objects = - 1
@@ -1523,7 +1523,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $max_objects
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_content_object_publications_with_view_right_granted_in_category_location(
         $parent_location, $entities, $condition, $order_by = null, $offset = 0, $max_objects = - 1, $user_id = null
@@ -1544,7 +1544,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseCategory>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseCategory>
      */
     public static function retrieve_course_categories_ordered_by_name(
         $condition = null, $offset = null, $count = null, $order_by = null
@@ -1585,7 +1585,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $course_type_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_course_settings_with_course_type_values($courseTypeIdentifiers)
     {
@@ -1612,7 +1612,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      *
      * @param int $course_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_course_settings_with_course_values($courseIdentifiers)
     {
@@ -1648,7 +1648,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_course_settings_with_default_values(
         $condition = null, $offset = null, $count = null, $order_by = null
@@ -1694,7 +1694,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param $count int
      * @param $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_course_settings_with_tools(
         $condition = null, $offset = null, $count = null, $order_by = null
@@ -1817,7 +1817,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $course_type_id
      * @param int $user_id
      *
-     * @return  \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory>
+     * @return  \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\CourseUserCategory>
      */
     public static function retrieve_course_user_categories_from_course_type($course_type_id, $user_id)
     {
@@ -1948,7 +1948,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param int $max_objects
      * @param int $user_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public static function retrieve_my_publications(
         $parent_location, $entities, $condition = null, $order_by = null, $offset = 0, $max_objects = - 1, $user_id = null
@@ -1968,7 +1968,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param string $tool
      * @param int $category_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_new_publication_icon_ids(
         $course_id, $user_id, $is_teacher = false, $tool = null, $category_id = null
@@ -2310,7 +2310,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<CourseGroup>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseGroup>
      */
     public static function retrieve_publication_target_course_groups(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
@@ -2408,7 +2408,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\group\Group>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\group\Group>
      */
     public static function retrieve_publication_target_platform_groups(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null
@@ -2510,7 +2510,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param OrderBy $order_by
      * @param Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public static function retrieve_publication_target_users(
         $publication_id, $course_id, $offset = null, $count = null, $order_by = null, $condition = null

@@ -65,7 +65,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator|\Chamilo\Libraries\Storage\DataClass\DataClass[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
@@ -106,7 +106,7 @@ class PlatformGroupEntityService implements EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication)
     {

@@ -182,7 +182,7 @@ class CourseGroupPublicationCategoryService
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $toolName
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator | \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
      */
     public function getPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
     {

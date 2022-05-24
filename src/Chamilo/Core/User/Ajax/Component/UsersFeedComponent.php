@@ -161,7 +161,7 @@ class UsersFeedComponent extends Manager
     /**
      * Retrieves the users
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieveUsers()
     {

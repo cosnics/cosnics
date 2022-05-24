@@ -194,7 +194,7 @@ class CourseCategoryFeedComponent extends AjaxManager
     /**
      * Returns all the groups for this feed
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory>
      */
     public function retrieve_course_categories()
     {

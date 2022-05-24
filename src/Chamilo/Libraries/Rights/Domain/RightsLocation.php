@@ -81,7 +81,7 @@ abstract class RightsLocation extends NestedSet
      *
      * @param int $right_id - [OPTIONAL] default null
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      * @deprecated Use RightsService::findRightsLocationRightsEntitiesForLocationAndRight() now
      */

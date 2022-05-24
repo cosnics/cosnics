@@ -8,7 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Common
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -80,7 +80,7 @@ class RequestRepository extends CommonDataClassRepository
     /**
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
     {
@@ -107,13 +107,13 @@ class RequestRepository extends CommonDataClassRepository
                 $this->dataClassRepository->getDataClassFactory()->getDataClass(ContentObject::class, $record);
         }
 
-        return new DataClassIterator(ContentObject::class, $dataClasses);
+        return new DataClassCollection(ContentObject::class, $dataClasses);
     }
 
     /**
      * @param int[] $guids
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findRequestsWithContentObjectsByGuids(array $guids = [])
     {
@@ -138,13 +138,13 @@ class RequestRepository extends CommonDataClassRepository
                 $this->dataClassRepository->getDataClassFactory()->getDataClass(ContentObject::class, $record);
         }
 
-        return new DataClassIterator(ContentObject::class, $dataClasses);
+        return new DataClassCollection(ContentObject::class, $dataClasses);
     }
 
     /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
      *
-     * @return Result[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return Result[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findResultsForRequest(Request $request)
     {

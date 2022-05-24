@@ -104,7 +104,7 @@ class WorkspaceCategoryItemRenderer extends ItemRenderer
     /**
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      * @todo This shouldn't really be here like this
      */
     protected function findWorkspaces(User $user)

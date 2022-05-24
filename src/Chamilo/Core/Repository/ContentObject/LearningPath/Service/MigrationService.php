@@ -165,7 +165,7 @@ class MigrationService
      *
      * @param int $parentId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     protected function getComplexContentObjectItemsForParent(
         $parentId

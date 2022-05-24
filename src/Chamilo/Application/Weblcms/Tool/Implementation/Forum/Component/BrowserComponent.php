@@ -404,7 +404,7 @@ class BrowserComponent extends Manager implements DelegateComponent
      *
      * @param ContentObjectPublicationCategory $category
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication>
      */
     public function getForumPublicationsForCategory(ContentObjectPublicationCategory $category = null)
     {

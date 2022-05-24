@@ -104,7 +104,7 @@ class ActivityRepository extends CommonDataClassRepository
      *
      * @param ContentObject $contentObject
      *
-     * @return Activity[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return Activity[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function retrieveActivitiesForContentObject(ContentObject $contentObject)
     {

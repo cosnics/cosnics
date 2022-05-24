@@ -48,7 +48,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      *
      * @param LearningPath $learningPath
      *
-     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
@@ -77,7 +77,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      *
      * @param int[] $contentObjectIds
      *
-     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTreeNodesDataByContentObjects($contentObjectIds)
     {
@@ -97,7 +97,7 @@ class TreeNodeDataRepository extends CommonDataClassRepository
      *
      * @param int $userId
      *
-     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findTreeNodesDataByUserId($userId)
     {

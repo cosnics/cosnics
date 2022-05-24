@@ -24,7 +24,7 @@ class CalendarRendererProviderRepository
      *
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Application\Calendar\Storage\DataClass\Visibility>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Calendar\Storage\DataClass\Visibility>
      * @throws \Exception
      */
     public function findVisibilitiesByUserIdentifier($userIdentifier)

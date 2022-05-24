@@ -339,7 +339,7 @@ class DataManager
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters|null $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public static function records($class, $parameters = null)
@@ -433,12 +433,12 @@ class DataManager
     }
 
     /**
-     * Retrieve a DataClassIterator of DataClass object instances from the storage layer
+     * Retrieve a DataClassCollection of DataClass object instances from the storage layer
      *
      * @param $class string
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters|null $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
     public static function retrieves($class, $parameters = null)

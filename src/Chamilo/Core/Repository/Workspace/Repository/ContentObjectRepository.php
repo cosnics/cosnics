@@ -36,7 +36,7 @@ class ContentObjectRepository
      * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInPersonalWorkspace($contentObjectClassName, WorkspaceInterface $personalWorkspace,
         ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
@@ -96,7 +96,7 @@ class ContentObjectRepository
      * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAllInWorkspace($contentObjectClassName, WorkspaceInterface $workspace,
         ConditionFilterRenderer $filterConditionRenderer, $count, $offset, $orderProperty)
@@ -172,7 +172,7 @@ class ContentObjectRepository
      * @param $contentObjectClassName
      * @param DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     public function findAll($contentObjectClassName, DataClassRetrievesParameters $parameters)
     {

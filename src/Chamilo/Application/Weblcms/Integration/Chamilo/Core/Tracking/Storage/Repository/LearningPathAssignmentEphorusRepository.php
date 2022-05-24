@@ -26,7 +26,7 @@ class LearningPathAssignmentEphorusRepository extends
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function findAssignmentEntriesWithRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,

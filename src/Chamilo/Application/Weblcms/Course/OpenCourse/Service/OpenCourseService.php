@@ -9,7 +9,7 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\Rights\Structure\Service\Interfaces\AuthorizationCheckerInterface;
 use Chamilo\Core\User\Roles\Service\Interfaces\UserRoleServiceInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Exception;
 
@@ -134,7 +134,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
@@ -150,7 +150,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassIterator
+     * @return DataClassCollection
      */
     public function getOpenCourses(
         User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = null
@@ -171,7 +171,7 @@ class OpenCourseService implements OpenCourseServiceInterface
      *
      * @param Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      */
     public function getRolesForOpenCourse(Course $course)
     {

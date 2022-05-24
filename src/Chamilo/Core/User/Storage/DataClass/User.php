@@ -314,7 +314,7 @@ class User extends DataClass
     /**
      * @param false $only_retrieve_ids
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
+     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Group\Storage\DataClass\Group>|integer[]
      */
     public function get_groups($only_retrieve_ids = false)
     {
