@@ -77,7 +77,7 @@ abstract class EphorusRepository extends CommonDataClassRepository
                 $this->dataClassRepository->getDataClassFactory()->getDataClass(ContentObject::class, $record);
         }
 
-        return new DataClassCollection(ContentObject::class, $dataClasses);
+        return new DataClassCollection($dataClasses);
     }
 
     /**

@@ -205,7 +205,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $this->userSubscribedGroups[$userIdentifier] = new DataClassCollection(Group::class, []);
+                $this->userSubscribedGroups[$userIdentifier] = new DataClassCollection([]);
             }
         }
 

@@ -269,7 +269,7 @@ abstract class AssessmentBlock extends ToolBlock
 
         if (count($assessment_attempt_ids) == 0)
         {
-            return new DataClassCollection(AssessmentAttempt::class, []);
+            return new DataClassCollection([]);
         }
 
         $question_attempts = $this->get_question_attempts($question_cid, $assessment_attempt_ids);

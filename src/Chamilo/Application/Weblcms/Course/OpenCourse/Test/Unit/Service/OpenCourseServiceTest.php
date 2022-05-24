@@ -196,7 +196,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
 
     public function testGetClosedCourses()
     {
-        $iterator = new DataClassCollection(Course::class, [new Course()]);
+        $iterator = new DataClassCollection([new Course()]);
 
         $this->openCourseRepositoryMock->expects($this->once())->method('findClosedCourses')->will(
             $this->returnValue($iterator)
@@ -210,7 +210,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $user = new User();
         $context = 'Chamilo\Application\Weblcms\Course\OpenCourse';
         $action = 'ManageOpenCourses';
-        $iterator = new DataClassCollection(Course::class, [new Course()]);
+        $iterator = new DataClassCollection([new Course()]);
 
         $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->with($user, $context, $action)
             ->will(
@@ -230,7 +230,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     public function testGetOpenCoursesNoManager()
     {
         $user = new User();
-        $iterator = new DataClassCollection(Course::class, [new Course()]);
+        $iterator = new DataClassCollection([new Course()]);
         $roles = array(new Role());
 
         $this->authorizationCheckerMock->expects($this->once())->method('isAuthorized')->will(
@@ -253,7 +253,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
     public function testGetRolesForOpenCourse()
     {
         $course = new Course();
-        $resultSet = new DataClassCollection(Role::class, array(new Role()));
+        $resultSet = new DataClassCollection(array(new Role()));
 
         $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->with($course)->will(
             $this->returnValue($resultSet)
@@ -268,7 +268,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
         $course = new Course();
 
         $roles = array(new Role());
-        $resultSet = new DataClassCollection(Role::class, $roles);
+        $resultSet = new DataClassCollection($roles);
 
         $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->with($course)->will(
             $this->returnValue($resultSet)
@@ -284,7 +284,7 @@ class OpenCourseServiceTest extends ChamiloTestCase
 
     public function testIsCourseOpenForUserReturnsFalse()
     {
-        $resultSet = new DataClassCollection(Role::class, array(new Role()));
+        $resultSet = new DataClassCollection(array(new Role()));
 
         $this->openCourseRepositoryMock->expects($this->once())->method('getRolesForOpenCourse')->will(
             $this->returnValue($resultSet)

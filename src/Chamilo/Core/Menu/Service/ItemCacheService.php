@@ -145,7 +145,7 @@ class ItemCacheService
         $parentKeyExists = array_key_exists($parentIdentifier, $groupedItems);
         $parentIdentifierItems = $parentKeyExists ? $groupedItems[$parentIdentifier] : [];
 
-        return new DataClassCollection(Item::class, $parentIdentifierItems);
+        return new DataClassCollection($parentIdentifierItems);
     }
 
     /**

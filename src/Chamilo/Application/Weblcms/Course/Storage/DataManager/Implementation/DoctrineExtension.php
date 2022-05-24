@@ -11,8 +11,8 @@ use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
-use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
@@ -419,7 +419,7 @@ class DoctrineExtension
         }
         );
 
-        return new DataClassCollection(User::class, array_slice($users, $offset, $count));
+        return new DataClassCollection(array_slice($users, $offset, $count));
     }
 
     /**
@@ -467,7 +467,6 @@ class DoctrineExtension
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
         return new DataClassCollection(
-            CourseEntityRelation::class,
             $this->getDataClassDatabase()->records(CourseEntityRelation::class, $parameters)
         );
     }

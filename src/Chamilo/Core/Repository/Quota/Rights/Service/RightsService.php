@@ -409,7 +409,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         }
         else
         {
-            return new DataClassCollection(RightsLocationEntityRight::class, []);
+            return new DataClassCollection([]);
         }
     }
 

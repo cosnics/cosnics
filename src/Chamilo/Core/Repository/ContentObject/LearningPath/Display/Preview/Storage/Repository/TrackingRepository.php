@@ -389,7 +389,7 @@ class TrackingRepository implements TrackingRepositoryInterface
             }
         }
 
-        return new DataClassCollection(TreeNodeAttempt::class, $allData);
+        return new DataClassCollection($allData);
     }
 
     /**
@@ -426,7 +426,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
-        return new DataClassCollection(DummyTreeNodeAttempt::class, []);
+        return new DataClassCollection([]);
     }
 
     /**
@@ -462,7 +462,7 @@ class TrackingRepository implements TrackingRepositoryInterface
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
-        return new DataClassCollection(User::class, []);
+        return new DataClassCollection([]);
     }
 
     /**

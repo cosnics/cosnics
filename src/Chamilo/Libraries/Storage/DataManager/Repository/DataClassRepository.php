@@ -144,9 +144,7 @@ class DataClassRepository
      */
     protected function __records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new DataClassCollection(
-            $dataClassName, $this->getDataClassDatabase()->records($dataClassName, $parameters)
-        );
+        return new DataClassCollection($this->getDataClassDatabase()->records($dataClassName, $parameters));
     }
 
     /**
@@ -180,7 +178,7 @@ class DataClassRepository
             $dataClasses[] = $this->getDataClassFactory()->getDataClass($dataClassName, $record);
         }
 
-        return new DataClassCollection($dataClassName, $dataClasses);
+        return new DataClassCollection($dataClasses);
     }
 
     /**

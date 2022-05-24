@@ -218,7 +218,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 else
                 {
                     // If the user is not a member of any group
-                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassCollection(Group::class, []);
+                    self::$allSubscribedGroupsCache[$cacheId] = new DataClassCollection([]);
                 }
             }
         }
@@ -400,7 +400,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // If the provided group_ids do not exist or were empty
-        return new DataClassCollection(Group::class, []);
+        return new DataClassCollection([]);
     }
 
     public static function retrieve_user_groups($user_id)

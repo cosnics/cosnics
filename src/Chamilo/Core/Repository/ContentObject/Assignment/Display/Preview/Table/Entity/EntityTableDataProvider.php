@@ -47,6 +47,6 @@ class EntityTableDataProvider
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     )
     {
-        return new DataClassCollection(User::class, $this->generateUsers());
+        return new DataClassCollection($this->generateUsers());
     }
 }

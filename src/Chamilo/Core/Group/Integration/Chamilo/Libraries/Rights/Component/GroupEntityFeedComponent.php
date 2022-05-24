@@ -98,7 +98,7 @@ class GroupEntityFeedComponent extends Manager
 
         if (count($userIdentifiers) == 0)
         {
-            return new DataClassCollection(User::class, []);
+            return new DataClassCollection([]);
         }
 
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);

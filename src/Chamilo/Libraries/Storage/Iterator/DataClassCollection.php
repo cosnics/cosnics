@@ -21,15 +21,12 @@ class DataClassCollection extends ArrayCollection
     const POSITION_MIDDLE = 4;
     const POSITION_SINGLE = 3;
 
-    private string $dataClassName;
-
     /**
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
      */
-    public function __construct(string $dataClassName, array $dataClasses = [])
+    public function __construct(array $dataClasses = [])
     {
         parent::__construct($dataClasses);
-        $this->dataClassName = $dataClassName;
     }
 
     /**
@@ -65,18 +62,6 @@ class DataClassCollection extends ArrayCollection
         {
             return self::POSITION_MIDDLE;
         }
-    }
-
-    protected function getDataClassName(): string
-    {
-        return $this->dataClassName;
-    }
-
-    protected function setDataClassName(string $dataClassName): DataClassCollection
-    {
-        $this->dataClassName = $dataClassName;
-
-        return $this;
     }
 
     public function hasOnlyOneEntry(): bool

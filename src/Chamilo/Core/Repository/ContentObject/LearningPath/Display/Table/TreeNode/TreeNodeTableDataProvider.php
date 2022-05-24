@@ -31,6 +31,6 @@ class TreeNodeTableDataProvider extends DataClassTableDataProvider
         /** @var TreeNode $treeNode */
         $treeNode = $this->get_component()->getCurrentTreeNode();
 
-        return new DataClassCollection(TreeNode::class, array_values($treeNode->getChildNodes()));
+        return new DataClassCollection(array_values($treeNode->getChildNodes()));
     }
 }

@@ -100,7 +100,7 @@ class Viewer
 
         if (!$form)
         {
-            return new DataClassCollection(Value::class, []);
+            return new DataClassCollection([]);
         }
 
         $subcondition = new EqualityCondition(

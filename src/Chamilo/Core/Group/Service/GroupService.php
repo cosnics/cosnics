@@ -283,7 +283,7 @@ class GroupService
     {
         if (empty($groupIdentifiers))
         {
-            return new DataClassCollection(Group::class, []);
+            return new DataClassCollection([]);
         }
 
         return $this->groupRepository->findGroupsByIdentifiersOrderedByName($groupIdentifiers);

@@ -118,7 +118,7 @@ class TreeBuilderTest extends ChamiloTestCase
             $treeNodesData[] = $treeNodeData;
         }
 
-        $resultSet = new DataClassCollection(ContentObject::class, $contentObjects);
+        $resultSet = new DataClassCollection($contentObjects);
 
         $this->treeNodeDataRepositoryMock->expects($this->once())
             ->method('findTreeNodesDataForLearningPath')

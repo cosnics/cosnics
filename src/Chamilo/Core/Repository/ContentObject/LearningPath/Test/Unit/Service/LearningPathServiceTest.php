@@ -298,7 +298,7 @@ class LearningPathServiceTest extends ChamiloTestCase
     public function testGetLearningPaths()
     {
         $learningPath = new LearningPath();
-        $resultSet = new DataClassCollection(LearningPath::class, [$learningPath]);
+        $resultSet = new DataClassCollection([$learningPath]);
 
         $this->contentObjectRepositoryMock->expects($this->once())->method('findAll')->with(LearningPath::class)->will(
             $this->returnValue($resultSet)

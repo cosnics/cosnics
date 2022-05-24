@@ -61,6 +61,6 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
         ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
     )
     {
-        return new DataClassCollection(TreeNodeAttempt::class, array_slice($this->getAllData(), $offset, $count));
+        return new DataClassCollection(array_slice($this->getAllData(), $offset, $count));
     }
 }

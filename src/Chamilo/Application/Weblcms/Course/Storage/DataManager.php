@@ -1028,7 +1028,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
          */
         if ($direct_subscribed_groups->count() == 0)
         {
-            return new DataClassCollection(Group::class, []);
+            return new DataClassCollection([]);
         }
 
         foreach ($direct_subscribed_groups as $direct_subscribed_group)
@@ -1309,7 +1309,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             return $courses;
         }
 
-        return new DataClassCollection(Course::class, []);
+        return new DataClassCollection([]);
     }
 
     /**

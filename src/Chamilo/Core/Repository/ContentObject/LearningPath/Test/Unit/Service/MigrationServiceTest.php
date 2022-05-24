@@ -28,9 +28,9 @@ use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 class MigrationServiceTest extends ChamiloTestCase
 {
     /**
-     * @var MigrationService
+     * @var ContentObjectRepository | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $migrationService;
+    protected $contentObjectRepositoryMock;
 
     /**
      * @var LearningPathService | \PHPUnit_Framework_MockObject_MockObject
@@ -38,9 +38,9 @@ class MigrationServiceTest extends ChamiloTestCase
     protected $learningPathServiceMock;
 
     /**
-     * @var TreeNodeDataService | \PHPUnit_Framework_MockObject_MockObject
+     * @var MigrationService
      */
-    protected $treeNodeDataServiceMock;
+    protected $migrationService;
 
     /**
      * @var TrackingRepository | \PHPUnit_Framework_MockObject_MockObject
@@ -48,48 +48,9 @@ class MigrationServiceTest extends ChamiloTestCase
     protected $trackingRepositoryMock;
 
     /**
-     * @var ContentObjectRepository | \PHPUnit_Framework_MockObject_MockObject
+     * @var TreeNodeDataService | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $contentObjectRepositoryMock;
-
-    /**
-     * Setup before each test
-     */
-    protected function setUp(): void
-    {
-        $this->learningPathServiceMock = $this->getMockBuilder(LearningPathService::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $this->treeNodeDataServiceMock = $this->getMockBuilder(TreeNodeDataService::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $this->trackingRepositoryMock = $this->getMockBuilder(TrackingRepository::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $this->contentObjectRepositoryMock = $this->getMockBuilder(ContentObjectRepository::class)
-            ->disableOriginalConstructor()->getMock();
-
-        $this->migrationService = new MigrationService(
-            $this->learningPathServiceMock, $this->treeNodeDataServiceMock, $this->trackingRepositoryMock,
-            $this->contentObjectRepositoryMock
-        );
-
-        ob_start();
-    }
-
-    /**
-     * Tear down after each test
-     */
-    protected function tearDown(): void
-    {
-        unset($this->learningPathServiceMock);
-        unset($this->treeNodeDataServiceMock);
-        unset($this->trackingRepositoryMock);
-        unset($this->contentObjectRepositoryMock);
-        unset($this->migrationService);
-
-        ob_get_clean();
-    }
+    protected $treeNodeDataServiceMock;
 
     /**
      * Prepares the learning path data
@@ -112,13 +73,13 @@ class MigrationServiceTest extends ChamiloTestCase
         $treeNodeData->setLearningPathId((int) $learningPathA->getId());
         $treeNodeData->setContentObjectId((int) $learningPathA->getId());
 
-        $this->learningPathServiceMock->expects($this->once())
-            ->method('getLearningPaths')
-            ->will($this->returnValue([$learningPathA]));
+        $this->learningPathServiceMock->expects($this->once())->method('getLearningPaths')->will(
+                $this->returnValue([$learningPathA])
+            );
 
-        $this->treeNodeDataServiceMock->expects($this->exactly(1))
-            ->method('createTreeNodeDataForLearningPath')
-            ->will($this->returnValue($treeNodeData));
+        $this->treeNodeDataServiceMock->expects($this->exactly(1))->method('createTreeNodeDataForLearningPath')->will(
+                $this->returnValue($treeNodeData)
+            );
 
         $learningPathB = new LearningPath();
         $learningPathB->setId(2);
@@ -187,12 +148,18 @@ class MigrationServiceTest extends ChamiloTestCase
         $arrayResultSets = [];
         foreach ($resultSets as $resultSet)
         {
-            $arrayResultSets[] = new DataClassCollection(ComplexContentObjectItem::class, $resultSet);
+            $arrayResultSets[] = new DataClassCollection($resultSet);
         }
 
         $contentObjects = [
-            $learningPathB, $learningPathItemA, $pageA, $learningPathC, $learningPathD, $learningPathE,
-            $learningPathItemB, $pageB
+            $learningPathB,
+            $learningPathItemA,
+            $pageA,
+            $learningPathC,
+            $learningPathD,
+            $learningPathE,
+            $learningPathItemB,
+            $pageB
         ];
 
         return [
@@ -203,28 +170,80 @@ class MigrationServiceTest extends ChamiloTestCase
     }
 
     /**
+     * Setup before each test
+     */
+    protected function setUp(): void
+    {
+        $this->learningPathServiceMock =
+            $this->getMockBuilder(LearningPathService::class)->disableOriginalConstructor()->getMock();
+
+        $this->treeNodeDataServiceMock =
+            $this->getMockBuilder(TreeNodeDataService::class)->disableOriginalConstructor()->getMock();
+
+        $this->trackingRepositoryMock =
+            $this->getMockBuilder(TrackingRepository::class)->disableOriginalConstructor()->getMock();
+
+        $this->contentObjectRepositoryMock =
+            $this->getMockBuilder(ContentObjectRepository::class)->disableOriginalConstructor()->getMock();
+
+        $this->migrationService = new MigrationService(
+            $this->learningPathServiceMock, $this->treeNodeDataServiceMock, $this->trackingRepositoryMock,
+            $this->contentObjectRepositoryMock
+        );
+
+        ob_start();
+    }
+
+    /**
+     * Tear down after each test
+     */
+    protected function tearDown(): void
+    {
+        unset($this->learningPathServiceMock);
+        unset($this->treeNodeDataServiceMock);
+        unset($this->trackingRepositoryMock);
+        unset($this->contentObjectRepositoryMock);
+        unset($this->migrationService);
+
+        ob_get_clean();
+    }
+
+    public function testLearningPathPrerequisites()
+    {
+        $testData = $this->prepareLearningPathData();
+
+        $this->contentObjectRepositoryMock->expects($this->any())->method('findAll')->will(
+                $this->returnValue(new DataClassCollection([]))
+            );
+
+        $this->contentObjectRepositoryMock->expects($this->once())->method('countAll')->with(
+                ComplexLearningPathItem::class
+            )->will($this->returnValue(5));
+
+        $this->migrationService->migrateLearningPaths();
+
+        $this->assertTrue($testData['learningPathA']->enforcesDefaultTraversingOrder());
+    }
+
+    /**
      * Migrates the following Learning Path
      */
     public function testMigrateLearningPaths()
     {
         $testData = $this->prepareLearningPathData();
 
-        $this->contentObjectRepositoryMock->expects($this->exactly(5))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will(new ConsecutiveCalls($testData['resultSets']));
+        $this->contentObjectRepositoryMock->expects($this->exactly(5))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will(new ConsecutiveCalls($testData['resultSets']));
 
-        $this->contentObjectRepositoryMock->expects($this->exactly(8))
-            ->method('findById')
-            ->will(new ConsecutiveCalls($testData['contentObjects']));
+        $this->contentObjectRepositoryMock->expects($this->exactly(8))->method('findById')->will(
+                new ConsecutiveCalls($testData['contentObjects'])
+            );
 
         $sectionId = 20;
-        $this->contentObjectRepositoryMock->expects($this->exactly(4))
-            ->method('create')
-            ->will(
+        $this->contentObjectRepositoryMock->expects($this->exactly(4))->method('create')->will(
                 $this->returnCallback(
-                    function (Section $section) use (&$sectionId)
-                    {
+                    function (Section $section) use (&$sectionId) {
                         $section->setId($sectionId);
                         $sectionId ++;
 
@@ -233,111 +252,7 @@ class MigrationServiceTest extends ChamiloTestCase
                 )
             );
 
-        $this->treeNodeDataServiceMock->expects($this->exactly(6))
-            ->method('createTreeNodeData');
-
-        $this->migrationService->migrateLearningPaths();
-    }
-
-    public function testLearningPathPrerequisites()
-    {
-        $testData = $this->prepareLearningPathData();
-
-        $this->contentObjectRepositoryMock->expects($this->any())
-            ->method('findAll')
-            ->will($this->returnValue(new DataClassCollection(ComplexLearningPathItem::class, [])));
-
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('countAll')
-            ->with(ComplexLearningPathItem::class)
-            ->will($this->returnValue(5));
-
-        $this->migrationService->migrateLearningPaths();
-
-        $this->assertTrue($testData['learningPathA']->enforcesDefaultTraversingOrder());
-    }
-
-    public function testMigrateLearningPathsWithChildContentObjectNotFound()
-    {
-        $testData = $this->prepareLearningPathData();
-
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will(new ConsecutiveCalls($testData['resultSets']));
-
-        $this->contentObjectRepositoryMock->expects($this->at(1))
-            ->method('findById')
-            ->will($this->throwException(new Exception()));
-
-        for ($i = 2; $i <= 5; $i ++)
-        {
-            $this->contentObjectRepositoryMock->expects($this->at($i))
-                ->method('findById')
-                ->will($this->returnValue($testData['contentObjects'][1]));
-        }
-
-        $this->migrationService->migrateLearningPaths();
-    }
-
-    public function testMigrateLearningPathsWithNoLearningPathItem()
-    {
-        $testData = $this->prepareLearningPathData();
-
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will(new ConsecutiveCalls($testData['resultSets']));
-
-        $this->contentObjectRepositoryMock->expects($this->any())
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][2]));
-
-        $this->migrationService->migrateLearningPaths();
-    }
-
-    public function testMigrateLearningPathsWithInvalidReferenceForLearningPathItem()
-    {
-        $testData = $this->prepareLearningPathData();
-
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will(new ConsecutiveCalls($testData['resultSets']));
-
-        for ($i = 1; $i <= 3; $i ++)
-        {
-            $this->contentObjectRepositoryMock->expects($this->at($i))
-                ->method('findById')
-                ->will($this->returnValue($testData['contentObjects'][1]));
-        }
-
-        $this->contentObjectRepositoryMock->expects($this->at(4))
-            ->method('findById')
-            ->will($this->throwException(new Exception()));
-
-        $this->migrationService->migrateLearningPaths();
-    }
-
-    /**
-     * @expectedException \Exception
-     */
-    public function testMigrateLearningPathsSectionCreateFails()
-    {
-        $testData = $this->prepareLearningPathData();
-
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will($this->returnValue($testData['resultSets'][3]));
-
-        $this->contentObjectRepositoryMock->expects($this->any())
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][0]));
-
-        $this->contentObjectRepositoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(false));
+        $this->treeNodeDataServiceMock->expects($this->exactly(6))->method('createTreeNodeData');
 
         $this->migrationService->migrateLearningPaths();
     }
@@ -346,34 +261,30 @@ class MigrationServiceTest extends ChamiloTestCase
     {
         $testData = $this->prepareLearningPathData();
 
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will($this->returnValue($testData['resultSets'][4]));
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will($this->returnValue($testData['resultSets'][4]));
 
-        $this->contentObjectRepositoryMock->expects($this->at(1))
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][1]));
+        $this->contentObjectRepositoryMock->expects($this->at(1))->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][1])
+            );
 
-        $this->contentObjectRepositoryMock->expects($this->at(2))
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][2]));
+        $this->contentObjectRepositoryMock->expects($this->at(2))->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][2])
+            );
 
         $attempt = new LearningPathTreeNodeAttempt();
         $attempt->setTreeNodeDataId(75);
 
-        $this->trackingRepositoryMock->expects($this->once())
-            ->method('findTreeNodeAttemptsForLearningPath')
-            ->with($testData['learningPathA'])
-            ->will($this->returnValue([$attempt]));
+        $this->trackingRepositoryMock->expects($this->once())->method('findTreeNodeAttemptsForLearningPath')->with(
+                $testData['learningPathA']
+            )->will($this->returnValue([$attempt]));
 
-        $this->treeNodeDataServiceMock->expects($this->once())
-            ->method('createTreeNodeData')
-            ->will(
+        $this->treeNodeDataServiceMock->expects($this->once())->method('createTreeNodeData')->will(
                 $this->returnCallback(
-                    function (TreeNodeData $treeNodeData)
-                    {
+                    function (TreeNodeData $treeNodeData) {
                         $treeNodeData->setId(108);
+
                         return true;
                     }
                 )
@@ -388,29 +299,106 @@ class MigrationServiceTest extends ChamiloTestCase
     {
         $testData = $this->prepareLearningPathData();
 
-        $this->contentObjectRepositoryMock->expects($this->exactly(1))
-            ->method('findAll')
-            ->with(ComplexContentObjectItem::class)
-            ->will($this->returnValue($testData['resultSets'][4]));
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will($this->returnValue($testData['resultSets'][4]));
 
-        $this->contentObjectRepositoryMock->expects($this->at(1))
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][1]));
+        $this->contentObjectRepositoryMock->expects($this->at(1))->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][1])
+            );
 
-        $this->contentObjectRepositoryMock->expects($this->at(2))
-            ->method('findById')
-            ->will($this->returnValue($testData['contentObjects'][2]));
+        $this->contentObjectRepositoryMock->expects($this->at(2))->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][2])
+            );
 
         $attempt = new LearningPathTreeNodeAttempt();
         $attempt->setTreeNodeDataId(78);
 
-        $this->trackingRepositoryMock->expects($this->once())
-            ->method('findTreeNodeAttemptsForLearningPath')
-            ->with($testData['learningPathA'])
-            ->will($this->returnValue([$attempt]));
+        $this->trackingRepositoryMock->expects($this->once())->method('findTreeNodeAttemptsForLearningPath')->with(
+                $testData['learningPathA']
+            )->will($this->returnValue([$attempt]));
 
         $this->migrationService->migrateLearningPaths();
         $this->assertEquals(78, $attempt->getTreeNodeDataId());
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testMigrateLearningPathsSectionCreateFails()
+    {
+        $testData = $this->prepareLearningPathData();
+
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will($this->returnValue($testData['resultSets'][3]));
+
+        $this->contentObjectRepositoryMock->expects($this->any())->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][0])
+            );
+
+        $this->contentObjectRepositoryMock->expects($this->once())->method('create')->will($this->returnValue(false));
+
+        $this->migrationService->migrateLearningPaths();
+    }
+
+    public function testMigrateLearningPathsWithChildContentObjectNotFound()
+    {
+        $testData = $this->prepareLearningPathData();
+
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will(new ConsecutiveCalls($testData['resultSets']));
+
+        $this->contentObjectRepositoryMock->expects($this->at(1))->method('findById')->will(
+                $this->throwException(new Exception())
+            );
+
+        for ($i = 2; $i <= 5; $i ++)
+        {
+            $this->contentObjectRepositoryMock->expects($this->at($i))->method('findById')->will(
+                    $this->returnValue($testData['contentObjects'][1])
+                );
+        }
+
+        $this->migrationService->migrateLearningPaths();
+    }
+
+    public function testMigrateLearningPathsWithInvalidReferenceForLearningPathItem()
+    {
+        $testData = $this->prepareLearningPathData();
+
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will(new ConsecutiveCalls($testData['resultSets']));
+
+        for ($i = 1; $i <= 3; $i ++)
+        {
+            $this->contentObjectRepositoryMock->expects($this->at($i))->method('findById')->will(
+                    $this->returnValue($testData['contentObjects'][1])
+                );
+        }
+
+        $this->contentObjectRepositoryMock->expects($this->at(4))->method('findById')->will(
+                $this->throwException(new Exception())
+            );
+
+        $this->migrationService->migrateLearningPaths();
+    }
+
+    public function testMigrateLearningPathsWithNoLearningPathItem()
+    {
+        $testData = $this->prepareLearningPathData();
+
+        $this->contentObjectRepositoryMock->expects($this->exactly(1))->method('findAll')->with(
+                ComplexContentObjectItem::class
+            )->will(new ConsecutiveCalls($testData['resultSets']));
+
+        $this->contentObjectRepositoryMock->expects($this->any())->method('findById')->will(
+                $this->returnValue($testData['contentObjects'][2])
+            );
+
+        $this->migrationService->migrateLearningPaths();
     }
 
 }

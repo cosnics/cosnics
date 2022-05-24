@@ -221,7 +221,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
         else
         {
-            return new DataClassCollection(Course::class, []);
+            return new DataClassCollection([]);
         }
     }
 

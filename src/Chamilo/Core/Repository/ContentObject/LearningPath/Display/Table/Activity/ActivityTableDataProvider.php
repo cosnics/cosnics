@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Activ
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService;
-use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
@@ -44,9 +43,9 @@ class ActivityTableDataProvider
     )
     {
         return new DataClassCollection(
-            Activity::class, $this->getActivityService()->retrieveActivitiesForTreeNode(
-            $this->getCurrentTreeNode(), $offset, $count, $orderBy->getFirst()
-        )
+            $this->getActivityService()->retrieveActivitiesForTreeNode(
+                $this->getCurrentTreeNode(), $offset, $count, $orderBy->getFirst()
+            )
         );
     }
 }
