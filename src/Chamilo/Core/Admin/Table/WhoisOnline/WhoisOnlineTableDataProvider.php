@@ -4,13 +4,16 @@ namespace Chamilo\Core\Admin\Table\WhoisOnline;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
-use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
  * @package admin.lib.admin_manager.component.whois_online_table
  */
+
 /**
  * Data provider for a user browser table.
  * This class implements some functions to allow user browser tables to retrieve
@@ -19,33 +22,21 @@ use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 class WhoisOnlineTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * Gets the users
-     *
-     * @param $user String
-     * @param $category String
-     * @param $offset int
-     * @param $count int
-     * @param $order_property
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
-        return DataManager::retrieves(
-            User::class,
-            $parameters);
-    }
-
-    /**
-     * Gets the number of users in the table
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(
-            User::class,
-            new DataClassCountParameters($condition));
+            User::class, new DataClassCountParameters($condition)
+        );
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
+
+        return DataManager::retrieves(
+            User::class, $parameters
+        );
     }
 }

@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\UserView\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -17,22 +19,16 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class UserViewTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     *
-     * @see \libraries\format\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(UserView::class, new DataClassCountParameters($condition));
     }
 
-    /**
-     *
-     * @see \libraries\format\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
         return DataManager::retrieves(UserView::class, $parameters);
     }

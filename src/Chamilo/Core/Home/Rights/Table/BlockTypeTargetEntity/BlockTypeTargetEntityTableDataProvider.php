@@ -8,6 +8,7 @@ use Chamilo\Core\Home\Rights\Storage\Repository\RightsRepository;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Format\Table\Table;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Builds the table for the BlockTypeTargetEntity data class
@@ -35,34 +36,18 @@ class BlockTypeTargetEntityTableDataProvider extends RecordTableDataProvider
         $this->blockTypeRightsService = new BlockTypeRightsService(new RightsRepository(), new HomeRepository());
     }
 
-    /**
-     * Counts the data
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
-        return $this->retrieve_data($condition, null, null)->count();
+        return $this->retrieveData($condition, null, null)->count();
     }
 
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \ArrayIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $blockTypes = $this->blockTypeRightsService->getBlockTypesWithTargetEntities();
 
-        $compareModifier =
-            !is_null($order_property) && $order_property->getFirst()->getDirection() != SORT_DESC ? 1 : - 1;
+        $compareModifier = !is_null($orderBy) && $orderBy->getFirst()->getDirection() != SORT_DESC ? 1 : - 1;
 
         usort(
             $blockTypes, function ($item1, $item2) use ($compareModifier) {

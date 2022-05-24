@@ -3,6 +3,7 @@ namespace Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\Targe
 
 use Chamilo\Core\Repository\ContentObject\LearningPath\Display\Table\UserProgress\UserProgressTableDataProvider;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -12,36 +13,21 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 class TargetUserProgressTableDataProvider extends UserProgressTableDataProvider
 {
 
-    /**
-     * Counts the data
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getTrackingService()->countTargetUsersWithLearningPathAttempts(
             $this->getLearningPath(), $condition
         );
     }
 
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param ?\Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        $this->cleanupOrderProperty($order_property);
+        $this->cleanupOrderBy($orderBy);
 
         return $this->getTrackingService()->getTargetUsersWithLearningPathAttempts(
-            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $order_property
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $orderBy
         );
     }
 }

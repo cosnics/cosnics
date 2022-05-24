@@ -64,7 +64,7 @@ class OrderBy implements Countable, Hashable
     {
         $hashes = [];
 
-        foreach ($this->orderProperties as $orderProperty)
+        foreach ($this->get() as $orderProperty)
         {
             $hashes[] = $orderProperty->getHashParts();
         }

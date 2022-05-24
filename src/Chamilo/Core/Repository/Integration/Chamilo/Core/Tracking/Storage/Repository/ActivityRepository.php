@@ -29,23 +29,7 @@ class ActivityRepository extends CommonDataClassRepository
     public function countActivitiesForContentObject(ContentObject $contentObject)
     {
         return $this->dataClassRepository->count(
-            Activity::class,
-            new DataClassCountParameters($this->getActivityConditionForContentObject($contentObject))
-        );
-    }
-
-    /**
-     * Retrieves the activities for a specific content object without keeping track of the activities of his children
-     *
-     * @param ContentObject $contentObject
-     *
-     * @return Activity[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieveActivitiesForContentObject(ContentObject $contentObject)
-    {
-        return $this->dataClassRepository->retrieves(
-            Activity::class,
-            new DataClassRetrievesParameters($this->getActivityConditionForContentObject($contentObject))
+            Activity::class, new DataClassCountParameters($this->getActivityConditionForContentObject($contentObject))
         );
     }
 
@@ -53,51 +37,50 @@ class ActivityRepository extends CommonDataClassRepository
      * @param Activity[] $activities
      * @param $offset
      * @param $count
-     * @param $orderBy
+     * @param $orderProperty
      *
      * @return Activity[]
      */
-    public function filterActivities($activities, $offset = null, $count = null, OrderProperty $orderBy = null)
+    public function filterActivities($activities, $offset = null, $count = null, OrderProperty $orderProperty = null)
     {
         usort(
-            $activities,
-            function (Activity $activity_a, Activity $activity_b) use ($orderBy) {
-                switch ($orderBy->get_property()->get_property())
-                {
-                    case Activity::PROPERTY_TYPE :
-                        if ($orderBy->get_direction() == SORT_ASC)
-                        {
-                            return strcmp($activity_a->get_type_string(), $activity_b->get_type_string());
-                        }
-                        else
-                        {
-                            return strcmp($activity_b->get_type_string(), $activity_a->get_type_string());
-                        }
-                        break;
-                    case Activity::PROPERTY_CONTENT :
-                        if ($orderBy->get_direction() == SORT_ASC)
-                        {
-                            return strcmp($activity_a->get_content(), $activity_b->get_content());
-                        }
-                        else
-                        {
-                            return strcmp($activity_b->get_content(), $activity_a->get_content());
-                        }
-                        break;
-                    case Activity::PROPERTY_DATE :
-                        if ($orderBy->get_direction() == SORT_ASC)
-                        {
-                            return ($activity_a->get_date() < $activity_b->get_date()) ? - 1 : 1;
-                        }
-                        else
-                        {
-                            return ($activity_a->get_date() > $activity_b->get_date()) ? - 1 : 1;
-                        }
-                        break;
-                }
-
-                return 1;
+            $activities, function (Activity $activity_a, Activity $activity_b) use ($orderProperty) {
+            switch ($orderProperty->getConditionVariable()->getPropertyName())
+            {
+                case Activity::PROPERTY_TYPE :
+                    if ($orderProperty->getDirection() == SORT_ASC)
+                    {
+                        return strcmp($activity_a->get_type_string(), $activity_b->get_type_string());
+                    }
+                    else
+                    {
+                        return strcmp($activity_b->get_type_string(), $activity_a->get_type_string());
+                    }
+                    break;
+                case Activity::PROPERTY_CONTENT :
+                    if ($orderProperty->getDirection() == SORT_ASC)
+                    {
+                        return strcmp($activity_a->get_content(), $activity_b->get_content());
+                    }
+                    else
+                    {
+                        return strcmp($activity_b->get_content(), $activity_a->get_content());
+                    }
+                    break;
+                case Activity::PROPERTY_DATE :
+                    if ($orderProperty->getDirection() == SORT_ASC)
+                    {
+                        return ($activity_a->get_date() < $activity_b->get_date()) ? - 1 : 1;
+                    }
+                    else
+                    {
+                        return ($activity_a->get_date() > $activity_b->get_date()) ? - 1 : 1;
+                    }
+                    break;
             }
+
+            return 1;
+        }
         );
 
         return array_splice($activities, $offset, $count);
@@ -113,6 +96,21 @@ class ActivityRepository extends CommonDataClassRepository
         return new EqualityCondition(
             new PropertyConditionVariable(Activity::class, Activity::PROPERTY_CONTENT_OBJECT_ID),
             new StaticConditionVariable($contentObject->getId())
+        );
+    }
+
+    /**
+     * Retrieves the activities for a specific content object without keeping track of the activities of his children
+     *
+     * @param ContentObject $contentObject
+     *
+     * @return Activity[] | \Chamilo\Libraries\Storage\Iterator\DataClassIterator
+     */
+    public function retrieveActivitiesForContentObject(ContentObject $contentObject)
+    {
+        return $this->dataClassRepository->retrieves(
+            Activity::class,
+            new DataClassRetrievesParameters($this->getActivityConditionForContentObject($contentObject))
         );
     }
 }

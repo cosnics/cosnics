@@ -7,6 +7,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Service\ActivityService;
 use Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Table data provider for the schema
@@ -16,12 +17,8 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 class ActivityTableDataProvider
     extends \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Table\Activity\ActivityTableDataProvider
 {
-    /**
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+
+    public function countData(?Condition $condition = null): int
     {
         return $this->getActivityService()->countActivitiesForTreeNode($this->getCurrentTreeNode());
     }
@@ -42,19 +39,13 @@ class ActivityTableDataProvider
         return $this->get_component()->getCurrentTreeNode();
     }
 
-    /**
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param null $order_property
-     *
-     * @return \ArrayIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return new DataClassIterator(
             Activity::class, $this->getActivityService()->retrieveActivitiesForTreeNode(
-            $this->getCurrentTreeNode(), $offset, $count, $order_property[0]
+            $this->getCurrentTreeNode(), $offset, $count, $orderBy->getFirst()
         )
         );
     }

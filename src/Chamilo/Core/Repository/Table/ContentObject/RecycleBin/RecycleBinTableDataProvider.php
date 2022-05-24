@@ -6,23 +6,25 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class RecycleBinTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         $parameters = new DataClassCountParameters($condition);
 
         return DataManager::count_active_content_objects(ContentObject::class, $parameters);
     }
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
-        $objects = DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
-
-        return $objects;
+        return DataManager::retrieve_active_content_objects(ContentObject::class, $parameters);
     }
 }

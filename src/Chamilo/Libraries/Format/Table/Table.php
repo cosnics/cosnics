@@ -178,7 +178,7 @@ abstract class Table
      */
     public function countData()
     {
-        return $this->get_data_provider()->count_data($this->get_condition());
+        return $this->get_data_provider()->countData($this->get_condition());
     }
 
     /**
@@ -221,7 +221,7 @@ abstract class Table
      */
     public function getData($offset, $count, $orderColumns, $orderDirections)
     {
-        $resultSet = $this->get_data_provider()->retrieve_data(
+        $resultSet = $this->get_data_provider()->retrieveData(
             $this->get_condition(), $offset, $count, $this->determineOrderProperties($orderColumns, $orderDirections)
         );
 

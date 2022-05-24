@@ -3,6 +3,8 @@ namespace Chamilo\Application\Portfolio\Table\User;
 
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -30,6 +32,11 @@ class UserTableDataProvider extends DataClassTableDataProvider
         $this->userService = $userService;
     }
 
+    public function countData(?Condition $condition = null): int
+    {
+        return $this->getUserService()->countUsers($condition);
+    }
+
     /**
      *
      * @return \Chamilo\Core\User\Service\UserService
@@ -48,21 +55,10 @@ class UserTableDataProvider extends DataClassTableDataProvider
         $this->userService = $userService;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        return $this->getUserService()->findUsers($condition, $offset, $count, $orderProperty);
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
-    {
-        return $this->getUserService()->countUsers($condition);
+        return $this->getUserService()->findUsers($condition, $offset, $count, $orderBy);
     }
 }

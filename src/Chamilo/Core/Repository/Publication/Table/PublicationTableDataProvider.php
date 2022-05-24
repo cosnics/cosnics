@@ -5,19 +5,13 @@ namespace Chamilo\Core\Repository\Publication\Table;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregator;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class PublicationTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return $this->getPublicationAggregator()->getContentObjectPublicationsAttributes(
-            PublicationAggregator::ATTRIBUTES_TYPE_USER, $this->get_component()->getUser()->getId(), $condition, $count,
-            $offset, $order_property
-        );
-    }
-
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getPublicationAggregator()->countPublicationAttributes(
             PublicationAggregator::ATTRIBUTES_TYPE_USER, $this->get_component()->getUser()->getId(), $condition
@@ -32,5 +26,15 @@ class PublicationTableDataProvider extends DataClassTableDataProvider
         $dependencyInjectionContainer = DependencyInjectionContainerBuilder::getInstance()->createContainer();
 
         return $dependencyInjectionContainer->get(PublicationAggregator::class);
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return $this->getPublicationAggregator()->getContentObjectPublicationsAttributes(
+            PublicationAggregator::ATTRIBUTES_TYPE_USER, $this->get_component()->getUser()->getId(), $condition, $count,
+            $offset, $orderBy
+        );
     }
 }

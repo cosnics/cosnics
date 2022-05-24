@@ -55,7 +55,7 @@ class GroupBy implements Hashable
     {
         $hashes = [];
 
-        foreach ($this->getConditionVariables() as $conditionVariable)
+        foreach ($this->get() as $conditionVariable)
         {
             $hashes[] = $conditionVariable->getHashParts();
         }

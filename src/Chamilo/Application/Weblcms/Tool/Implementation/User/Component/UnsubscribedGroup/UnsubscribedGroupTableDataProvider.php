@@ -6,6 +6,8 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * * *************************************************************************** Data provider for an unsubscribed
@@ -16,17 +18,19 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class UnsubscribedGroupTableDataProvider extends DataClassTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return DataManager::retrieves(
-            Group::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
-    }
-
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(
-            Group::class,
-            new DataClassCountParameters($condition));
+            Group::class, new DataClassCountParameters($condition)
+        );
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return DataManager::retrieves(
+            Group::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+        );
     }
 }

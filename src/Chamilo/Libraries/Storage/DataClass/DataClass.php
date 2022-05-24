@@ -30,7 +30,7 @@ abstract class DataClass
     /**
      * @var string[]
      */
-    private array $errors;
+    private ?array $errors;
 
     /**
      * @var \Chamilo\Libraries\Storage\DataClass\Listeners\DataClassListener[]

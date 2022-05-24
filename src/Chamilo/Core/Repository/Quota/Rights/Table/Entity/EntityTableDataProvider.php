@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\Quota\Rights\Table\Entity;
 use Chamilo\Core\Repository\Quota\Rights\Service\RightsService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
 use Chamilo\Libraries\Format\Table\Table;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class EntityTableDataProvider extends RecordTableDataProvider
 {
@@ -23,12 +25,7 @@ class EntityTableDataProvider extends RecordTableDataProvider
         $this->rightsService = $rightsService;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return integer
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getRightsService()->countAllRightsLocationEntityRightGroups();
     }
@@ -49,10 +46,12 @@ class EntityTableDataProvider extends RecordTableDataProvider
         $this->rightsService = $rightsService;
     }
 
-    public function retrieve_data($condition, $offset, $count, $orderProperties = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return $this->getRightsService()->getRightsLocationEntityRightGroupsWithEntityAndGroup(
-            $count, $offset, $orderProperties
+            $count, $offset, $orderBy
         );
     }
 }

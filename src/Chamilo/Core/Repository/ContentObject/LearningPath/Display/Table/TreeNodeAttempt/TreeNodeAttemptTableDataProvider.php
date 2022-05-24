@@ -8,6 +8,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Table\TableDataProvider;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * Shows the progress of some tree nodes for a user in the learning path
@@ -23,14 +24,7 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
      */
     protected $data;
 
-    /**
-     * Counts the data
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return count($this->getAllData());
     }
@@ -63,17 +57,9 @@ class TreeNodeAttemptTableDataProvider extends TableDataProvider
         return $this->data;
     }
 
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator<\Chamilo\Core\Repository\ContentObject\LearningPath\Display\Attempt\TreeNodeAttempt>
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return new DataClassIterator(TreeNodeAttempt::class, array_slice($this->getAllData(), $offset, $count));
     }

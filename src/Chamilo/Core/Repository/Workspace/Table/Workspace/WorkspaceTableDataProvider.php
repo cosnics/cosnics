@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\Workspace\Table\Workspace;
 use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -15,25 +17,19 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 class WorkspaceTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
 
         return $workspaceService->countAllWorkspaces();
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $workspaceService = new WorkspaceService(new WorkspaceRepository());
 
-        return $workspaceService->getAllWorkspaces($limit, $offset, $orderProperty);
+        return $workspaceService->getAllWorkspaces($count, $offset, $orderBy);
     }
 }

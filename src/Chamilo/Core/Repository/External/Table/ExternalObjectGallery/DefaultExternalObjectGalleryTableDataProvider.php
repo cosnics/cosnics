@@ -2,21 +2,23 @@
 namespace Chamilo\Core\Repository\External\Table\ExternalObjectGallery;
 
 use Chamilo\Libraries\Format\Table\Extension\GalleryTable\Extension\DataClassGalleryTable\DataClassGalleryTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class DefaultExternalObjectGalleryTableDataProvider extends DataClassGalleryTableDataProvider
 {
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return $this->get_component()->retrieve_external_repository_objects(
-            $condition, 
-            $order_property, 
-            $offset, 
-            $count);
-    }
-
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->get_component()->count_external_repository_objects($condition);
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return $this->get_component()->retrieve_external_repository_objects(
+            $condition, $orderBy, $offset, $count
+        );
     }
 }

@@ -2,6 +2,8 @@
 namespace Chamilo\Application\Weblcms\Admin\Extension\Platform\Table\Entity;
 
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -10,33 +12,19 @@ use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider
 class EntityTableDataProvider extends RecordTableDataProvider
 {
 
-    /**
-     * Returns the data as a resultset
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function countData(?Condition $condition = null): int
     {
         $helper_class = $this->get_table()->get_helper_class_name();
-        return $helper_class::retrieve_table_data($condition, $count, $offset, $order_property);
+
+        return $helper_class::count_table_data($condition);
     }
 
-    /**
-     * Counts the data
-     * 
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $helper_class = $this->get_table()->get_helper_class_name();
-        return $helper_class::count_table_data($condition);
+
+        return $helper_class::retrieve_table_data($condition, $count, $offset, $orderBy);
     }
 }

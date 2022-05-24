@@ -21,44 +21,25 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class CourseTypeTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Counts the number of objects for this table
-     *
-     * @return int
-     */
-    public function count_data($condition = null)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(CourseType::class, new DataClassCountParameters($condition));
     }
 
-    /**
-     * Retrieves the objects for this table
-     *
-     * @param Condition $condition
-     * @param $offset int
-     * @param $count int
-     * @param $order_property String
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition = null, $offset = null, $count = null, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        if ($order_property == null)
+        if ($orderBy == null)
         {
-            $order_property = new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
-                    )
-                ));
+            $orderBy = new OrderBy(array(
+                new OrderProperty(
+                    new PropertyConditionVariable(CourseType::class, CourseType::PROPERTY_DISPLAY_ORDER)
+                )
+            ));
         }
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_property);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
         return DataManager::retrieves(CourseType::class, $parameters);
     }

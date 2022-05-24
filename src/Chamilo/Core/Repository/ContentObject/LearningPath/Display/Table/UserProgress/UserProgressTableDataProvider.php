@@ -24,7 +24,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
      *
      * @param array $order_property
      */
-    protected function cleanupOrderProperty(?OrderBy $orderBy = null)
+    protected function cleanupOrderBy(?OrderBy $orderBy = null)
     {
         $firstOrderProperty = $orderBy->getFirst();
 
@@ -44,14 +44,7 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
         }
     }
 
-    /**
-     * Counts the data
-     *
-     * @param Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getTrackingService()->countLearningPathAttemptsWithUsers(
             $this->getLearningPath(), $this->getCurrentTreeNode(), $condition
@@ -85,22 +78,14 @@ class UserProgressTableDataProvider extends RecordTableDataProvider
         return $this->get_component()->getTrackingService();
     }
 
-    /**
-     * Returns the data as a resultset
-     *
-     * @param Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        $this->cleanupOrderProperty($order_property);
+        $this->cleanupOrderBy($orderBy);
 
         return $this->getTrackingService()->getLearningPathAttemptsWithUser(
-            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $order_property
+            $this->getLearningPath(), $this->getCurrentTreeNode(), $condition, $offset, $count, $orderBy
         );
     }
 }

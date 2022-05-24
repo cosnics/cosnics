@@ -4,6 +4,8 @@ namespace Chamilo\Core\Admin\Announcement\Table\Publication;
 use Chamilo\Core\Admin\Announcement\Component\BrowserComponent;
 use Chamilo\Core\Admin\Announcement\Service\PublicationService;
 use Chamilo\Libraries\Format\Table\Extension\RecordTable\RecordTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 class PublicationTableDataProvider extends RecordTableDataProvider
 {
@@ -24,6 +26,23 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         $this->publicationService = $publicationService;
     }
 
+    public function countData(?Condition $condition = null): int
+    {
+        $type = $this->get_component()->getType();
+        switch ($type)
+        {
+            case BrowserComponent::TYPE_FROM_ME :
+            case BrowserComponent::TYPE_ALL :
+                return $this->getPublicationService()->countPublications($condition);
+                break;
+            default :
+                return $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
+                    $this->get_component()->getUser()->getId(), $condition
+                );
+                break;
+        }
+    }
+
     /**
      * @return \Chamilo\Core\Admin\Announcement\Service\PublicationService
      */
@@ -40,7 +59,9 @@ class PublicationTableDataProvider extends RecordTableDataProvider
         $this->publicationService = $publicationService;
     }
 
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $type = $this->get_component()->getType();
         switch ($type)
@@ -48,29 +69,12 @@ class PublicationTableDataProvider extends RecordTableDataProvider
             case BrowserComponent::TYPE_FROM_ME :
             case BrowserComponent::TYPE_ALL :
                 return $this->getPublicationService()->findPublicationRecords(
-                    $condition, $count, $offset, $order_property
+                    $condition, $count, $offset, $orderBy
                 );
                 break;
             default :
                 return $this->getPublicationService()->findVisiblePublicationRecordsForUserIdentifier(
-                    $this->get_component()->getUser()->getId(), $condition, $count, $offset, $order_property
-                );
-                break;
-        }
-    }
-
-    public function count_data($condition)
-    {
-        $type = $this->get_component()->getType();
-        switch ($type)
-        {
-            case BrowserComponent::TYPE_FROM_ME :
-            case BrowserComponent::TYPE_ALL :
-                return $this->getPublicationService()->countPublications($condition);
-                break;
-            default :
-                return $this->getPublicationService()->countVisiblePublicationsForUserIdentifier(
-                    $this->get_component()->getUser()->getId(), $condition
+                    $this->get_component()->getUser()->getId(), $condition, $count, $offset, $orderBy
                 );
                 break;
         }

@@ -6,6 +6,8 @@ use Chamilo\Core\User\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -20,31 +22,17 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class AdminUserTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * Gets the number of users in the table
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(User::class, new DataClassCountParameters($condition));
     }
 
-    /**
-     * Gets the users
-     *
-     * @param $user String
-     * @param $category String
-     * @param $offset int
-     * @param $count int
-     * @param $order_property string
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return DataManager::retrieves(
-            User::class, new DataClassRetrievesParameters($condition, $count, $offset, $order_property)
+            User::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
         );
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -20,29 +21,23 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     *
-     * @see \libraries\format\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(
             ComplexContentObjectItem::class, new DataClassCountParameters($condition)
         );
     }
 
-    /**
-     *
-     * @see \libraries\format\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $orderProperties = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        if (is_null($orderProperties))
+        if (is_null($orderBy))
         {
-            $orderProperties = new OrderBy();
+            $orderBy = new OrderBy();
         }
 
-        $orderProperties->add(
+        $orderBy->add(
             new OrderProperty(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER
@@ -50,7 +45,7 @@ class AnswerFeedbackTypeTableDataProvider extends DataClassTableDataProvider
             )
         );
 
-        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderProperties);
+        $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $orderBy);
 
         return DataManager::retrieves(
             ComplexContentObjectItem::class, $parameters

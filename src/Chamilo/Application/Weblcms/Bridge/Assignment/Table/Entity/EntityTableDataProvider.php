@@ -2,6 +2,9 @@
 
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity;
 
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
+
 /**
  *
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Integration\Chamilo\Core\Repository\ContentObject\LearningPath\Table\Entity
@@ -12,34 +15,7 @@ namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity;
 class EntityTableDataProvider
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableDataProvider
 {
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param null $order_property
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return $this->getTable()->getEntityService()->retrieveEntities(
-            $this->getTable()->getContentObjectPublication(), $condition, $offset, $count, $order_property
-        );
-    }
-
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getTable()->getEntityService()->countEntities(
             $this->getTable()->getContentObjectPublication(), $condition
@@ -47,10 +23,20 @@ class EntityTableDataProvider
     }
 
     /**
-     * @return \Chamilo\Libraries\Format\Table\Table | \Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\User\EntityTable
+     * @return \Chamilo\Libraries\Format\Table\Table |
+     *     \Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entity\User\EntityTable
      */
     protected function getTable()
     {
         return $this->get_table();
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return $this->getTable()->getEntityService()->retrieveEntities(
+            $this->getTable()->getContentObjectPublication(), $condition, $offset, $count, $orderBy
+        );
     }
 }

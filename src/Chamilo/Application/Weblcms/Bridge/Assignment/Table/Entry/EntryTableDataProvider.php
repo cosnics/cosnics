@@ -3,6 +3,8 @@
 namespace Chamilo\Application\Weblcms\Bridge\Assignment\Table\Entry;
 
 use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -15,18 +17,10 @@ use Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass
 class EntryTableDataProvider
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entry\EntryTableDataProvider
 {
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param int $offset
-     * @param int $count
-     * @param null $orderProperty
-     *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator
-     */
-    public function retrieve_data($condition, $offset, $count, $orderProperty = null)
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $learningPathAssignmentService = $this->getTable()->getAssignmentService();
 
@@ -37,15 +31,11 @@ class EntryTableDataProvider
             $condition,
             $offset,
             $count,
-            $orderProperty
+            $orderBy
         );
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         $learningPathAssignmentService = $this->getTable()->getAssignmentService();
 

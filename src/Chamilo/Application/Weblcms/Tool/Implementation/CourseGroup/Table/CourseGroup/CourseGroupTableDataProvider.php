@@ -6,6 +6,8 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataMana
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -14,28 +16,17 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class CourseGroupTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * Gets the users
-     *
-     * @param $offset int
-     * @param $count int
-     * @param $order_property
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching learning objects.
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return DataManager::retrieves(
-            CourseGroup::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
-    }
-
-    /**
-     * Gets the number of users in the table
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(CourseGroup::class, new DataClassCountParameters($condition));
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return DataManager::retrieves(
+            CourseGroup::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+        );
     }
 }

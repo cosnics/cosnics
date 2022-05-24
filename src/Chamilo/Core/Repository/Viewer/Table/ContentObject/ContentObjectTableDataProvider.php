@@ -6,6 +6,8 @@ use Chamilo\Core\Repository\Viewer\Filter\Renderer\ConditionFilterRenderer;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectService;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  * This class represents a data provider for a publication candidate table
@@ -13,10 +15,7 @@ use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataPr
 class ContentObjectTableDataProvider extends DataClassTableDataProvider
 {
 
-    /*
-     * Inherited
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
 
@@ -30,11 +29,9 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
         );
     }
 
-    /*
-     * Inherited
-     */
-
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         $contentObjectService = new ContentObjectService(new ContentObjectRepository());
 
@@ -43,8 +40,8 @@ class ContentObjectTableDataProvider extends DataClassTableDataProvider
 
         return $contentObjectService->getContentObjectsByTypeForWorkspace(
             $filterData->getTypeDataClass(), $this->get_component()->getWorkspace(), new ConditionFilterRenderer(
-                $filterData, $this->get_component()->getWorkspace()
-            ), $count, $offset, $order_property
+            $filterData, $this->get_component()->getWorkspace()
+        ), $count, $offset, $orderBy
         );
     }
 }

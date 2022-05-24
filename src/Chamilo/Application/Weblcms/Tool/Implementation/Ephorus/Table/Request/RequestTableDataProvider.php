@@ -4,6 +4,7 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Table\Request;
 use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -17,14 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class RequestTableDataProvider extends DataClassTableDataProvider
 {
 
-    private $extension;
-
-    /**
-     * Returns the count of the objects
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getRequestManager()->countRequestsWithContentObjects($condition);
     }
@@ -37,22 +31,13 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         return $this->get_component()->getRequestManager();
     }
 
-    /**
-     * Gets the objects to display in the table.
-     * For now, objects are composed in the code itself from several source
-     * objects.
-     *
-     * @param $offset
-     * @param $count
-     * @param null $order_property
-     *
-     * @return mixed
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
-        if ($order_property == null)
+        if ($orderBy == null)
         {
-            $order_property = new OrderBy(array(
+            $orderBy = new OrderBy(array(
                 new OrderProperty(
                     new PropertyConditionVariable(Request::class, Request::PROPERTY_REQUEST_TIME)
                 )
@@ -60,7 +45,7 @@ class RequestTableDataProvider extends DataClassTableDataProvider
         }
 
         return $this->getRequestManager()->findRequestsWithContentObjects(
-            new RecordRetrievesParameters(null, $condition, $count, $offset, $order_property)
+            new RecordRetrievesParameters(null, $condition, $count, $offset, $orderBy)
         );
     }
 }

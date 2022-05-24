@@ -6,6 +6,7 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -17,19 +18,16 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class ComplexTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * Gets the number of content objects in the table
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count_complex_content_object_items(
             ComplexContentObjectItem::class, new DataClassCountParameters($condition)
         );
     }
 
-    public function retrieve_data($condition, $offset, $count, $orderBy = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         if (is_null($orderBy))
         {

@@ -72,7 +72,7 @@ class ActivityService
      * @return \Chamilo\Core\Repository\Integration\Chamilo\Core\Tracking\Storage\DataClass\Activity[]
      */
     public function retrieveActivitiesForTreeNode(
-        TreeNode $treeNode, $offset = null, $count = null, OrderProperty $orderBy = null
+        TreeNode $treeNode, $offset = null, $count = null, OrderProperty $orderProperty = null
     )
     {
         $activities = [];
@@ -103,6 +103,6 @@ class ActivityService
             }
         }
 
-        return $this->activityRepository->filterActivities($activities, $offset, $count, $orderBy);
+        return $this->activityRepository->filterActivities($activities, $offset, $count, $orderProperty);
     }
 }

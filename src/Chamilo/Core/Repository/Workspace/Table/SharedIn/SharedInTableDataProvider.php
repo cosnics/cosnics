@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRelationRepository;
 use Chamilo\Core\Repository\Workspace\Service\ContentObjectRelationService;
 use Chamilo\Core\Repository\Workspace\Table\Share\ShareTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -22,11 +24,7 @@ class SharedInTableDataProvider extends ShareTableDataProvider
      */
     protected $contentObjectRelationService;
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getContentObjectRelationService()->countWorkspacesForContentObject(
             $this->getSelectedContentObject()
@@ -57,11 +55,9 @@ class SharedInTableDataProvider extends ShareTableDataProvider
         return $this->get_table()->get_component()->getContentObject();
     }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return $this->getContentObjectRelationService()->getWorkspacesForContentObject(
             $this->getWorkspaceService(), $this->getSelectedContentObject()

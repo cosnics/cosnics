@@ -4,6 +4,8 @@ namespace Chamilo\Core\Repository\ContentObject\Assignment\Display\Preview\Table
 
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\Iterator\DataClassIterator;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -16,11 +18,7 @@ class EntityTableDataProvider
     extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Table\Entity\EntityTableDataProvider
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return 10;
     }
@@ -45,11 +43,9 @@ class EntityTableDataProvider
         return $users;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Format\Table\TableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return new DataClassIterator(User::class, $this->generateUsers());
     }

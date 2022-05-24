@@ -6,11 +6,14 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Extension\DataClassTable\DataClassTableDataProvider;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
  * @package application.lib.weblcms.weblcms_manager.component.admin_course_type_browser
  */
+
 /**
  * Data provider for a repository browser table.
  * This class implements some functions to allow repository browser tables
@@ -19,28 +22,17 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 class AdminRequestTableDataProvider extends DataClassTableDataProvider
 {
 
-    /**
-     * Gets the coursetypes
-     *
-     * @param $offset int
-     * @param $count int
-     * @param $order_property
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassIterator A set of matching coursetypes.
-     */
-    public function retrieve_data($condition, $offset, $count, $order_property = null)
-    {
-        return DataManager::retrieves(
-            CourseRequest::class,
-            new DataClassRetrievesParameters($condition, $count, $offset, $order_property));
-    }
-
-    /**
-     * Gets the number of coursetypes in the table
-     *
-     * @return int
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return DataManager::count(CourseRequest::class, new DataClassCountParameters($condition));
+    }
+
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
+    {
+        return DataManager::retrieves(
+            CourseRequest::class, new DataClassRetrievesParameters($condition, $count, $offset, $orderBy)
+        );
     }
 }

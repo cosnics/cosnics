@@ -5,6 +5,8 @@ use Chamilo\Core\Repository\Workspace\Repository\WorkspaceRepository;
 use Chamilo\Core\Repository\Workspace\Service\EntityService;
 use Chamilo\Core\Repository\Workspace\Service\WorkspaceService;
 use Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\OrderBy;
 
 /**
  *
@@ -28,11 +30,7 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
      */
     private $workspaceService;
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::count_data()
-     */
-    public function count_data($condition)
+    public function countData(?Condition $condition = null): int
     {
         return $this->getWorkspaceService()->countWorkspaceFavouritesByUser(
             $this->getEntityService(), $this->get_component()->get_user()
@@ -67,14 +65,12 @@ class FavouriteTableDataProvider extends WorkspaceTableDataProvider
         return $this->workspaceService;
     }
 
-    /**
-     *
-     * @see \Chamilo\Core\Repository\Workspace\Table\Workspace\WorkspaceTableDataProvider::retrieve_data()
-     */
-    public function retrieve_data($condition, $offset, $limit, $orderProperty = null)
+    public function retrieveData(
+        ?Condition $condition = null, ?int $offset = null, ?int $count = null, ?OrderBy $orderBy = null
+    )
     {
         return $this->getWorkspaceService()->getWorkspaceFavouritesByUser(
-            $this->getEntityService(), $this->get_component()->get_user(), $limit, $offset, $orderProperty
+            $this->getEntityService(), $this->get_component()->get_user(), $count, $offset, $orderBy
         );
     }
 }
