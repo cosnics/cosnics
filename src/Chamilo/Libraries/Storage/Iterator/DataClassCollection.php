@@ -15,4 +15,5 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class DataClassCollection extends ArrayCollection
 {
+
 }
