@@ -1080,7 +1080,7 @@ class DataClassRepository
      * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
      * @throws \Exception
      */
-    protected function retrievesCompositeDataClass($dataClassName, DataClassRetrievesParameters $parameters)
+    protected function retrievesCompositeDataClass(string $dataClassName, DataClassRetrievesParameters $parameters)
     {
         $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClassName);
         $this->setCompositeDataClassParameters($parentDataClassName, $dataClassName, $parameters);
