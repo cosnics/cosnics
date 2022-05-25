@@ -298,7 +298,7 @@ class Renderer extends CourseListRenderer
                 while (!is_null($course_type) &&
                 $this->count_courses_for_course_type($course_type[CourseType::PROPERTY_ID]) == 0);
 
-                $this->course_types->rewind();
+                $this->course_types->first();
 
                 $selected_course_type_id = $course_type[CourseType::PROPERTY_ID];
             }

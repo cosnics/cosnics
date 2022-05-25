@@ -133,7 +133,7 @@ abstract class Manager extends Application
         if ($application instanceof FeedbackNotificationSupport)
         {
             $notifications = $application->retrieve_notifications();
-            $notifications = $notifications->getArrayCopy();
+            $notifications = $notifications->toArray();
 
             $this->getNotificationService()->notify($feedback, $notifications);
         }

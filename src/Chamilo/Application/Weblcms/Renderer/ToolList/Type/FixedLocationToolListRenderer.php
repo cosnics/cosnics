@@ -512,7 +512,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
 
         $tabs = new DynamicTabsRenderer('admin');
 
-        $sections->rewind();
+        $sections->first();
 
         if ($sections->count() == 0)
         {
@@ -564,7 +564,7 @@ class FixedLocationToolListRenderer extends ToolListRenderer
             $selectedTab = $this->get_parent()->getRequest()->get(self::PARAM_SELECTED_TAB);
 
             if ((isset($selectedTab) && $section->getId() == $selectedTab) ||
-                (!isset($selectedTab) && $sections->isCurrentEntryFirst()))
+                (!isset($selectedTab) && $sections->key() === 0))
             {
                 $active = 'active';
             }

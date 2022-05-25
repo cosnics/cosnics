@@ -282,7 +282,7 @@ abstract class AssessmentBlock extends ToolBlock
             );
         }
 
-        $question_attempts->rewind();
+        $question_attempts->first();
 
         return $question_attempts;
     }

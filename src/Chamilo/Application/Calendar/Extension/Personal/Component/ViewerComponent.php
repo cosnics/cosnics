@@ -273,13 +273,13 @@ class ViewerComponent extends Manager implements DelegateComponent
             {
                 if ($users->count() == 1)
                 {
-                    $user = array_pop($users->getArrayCopy());
+                    $user = array_pop($users->toArray());
 
                     return $user->get_firstname() . ' ' . $user->get_lastname();
                 }
                 else
                 {
-                    $group = array_pop($groups->getArrayCopy());
+                    $group = array_pop($groups->toArray());
 
                     return $group->get_name();
                 }

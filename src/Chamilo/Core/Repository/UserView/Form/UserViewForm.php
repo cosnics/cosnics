@@ -193,7 +193,7 @@ class UserViewForm extends FormValidator
             $user_view_type->create();
         }
 
-        $types->rewind();
+        $types->first();
         foreach($types as $type)
         {
             if (in_array($type->get_content_object_template_id(), $to_delete))

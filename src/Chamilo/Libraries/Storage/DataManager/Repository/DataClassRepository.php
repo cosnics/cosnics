@@ -149,12 +149,14 @@ class DataClassRepository
 
     /**
      *
-     * @param string $dataClassName
+     * @template tInternalRetrieveClass
+     *
+     * @param class-string<tInternalRetrieveClass> $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @return tInternalRetrieveClass
      */
-    protected function __retrieveClass($dataClassName, DataClassRetrieveParameters $parameters)
+    protected function __retrieveClass(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
         $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
 
@@ -818,7 +820,7 @@ class DataClassRepository
             }
 
             $recordIterator = $dataClassRepositoryCache->get($dataClassName, $parameters);
-            $recordIterator->rewind();
+            $recordIterator->first();
 
             return $recordIterator;
         }
@@ -881,7 +883,7 @@ class DataClassRepository
      * @param class-string<retrieveClass> $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
      *
-     * @return retrieveClass
+     * @return retrieveClass|bool
      * @throws \Exception
      */
     protected function retrieveClass($cacheDataClassName, $dataClassName, DataClassRetrieveParameters $parameters)
@@ -1060,7 +1062,7 @@ class DataClassRepository
             }
 
             $dataClassCollection = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
-            $dataClassCollection->rewind();
+            $dataClassCollection->first();
 
             return $dataClassCollection;
         }

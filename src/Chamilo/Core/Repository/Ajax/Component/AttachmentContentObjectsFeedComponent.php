@@ -72,7 +72,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
      */
     protected function addContentObjectElement(AdvancedElementFinderElement $myRepositoryElement)
     {
-        $this->addContentObjectsToParentElement($myRepositoryElement, $this->retrieveContentObjects()->getArrayCopy());
+        $this->addContentObjectsToParentElement($myRepositoryElement, $this->retrieveContentObjects()->toArray());
     }
 
     /**

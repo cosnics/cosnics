@@ -180,7 +180,7 @@ abstract class AssessmentQuestionOptionsBlock extends AssessmentBlock
             $this->get_answers_count_from_attempt($question_attempt, $answers);
         }
 
-        $this->question_attempts->rewind();
+        $this->question_attempts->first();
 
         return $answers;
     }

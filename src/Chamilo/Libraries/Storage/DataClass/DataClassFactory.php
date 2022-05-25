@@ -12,12 +12,14 @@ class DataClassFactory
 
     /**
      *
-     * @param string $dataClassName
+     * @template tGetDataClass
+     *
+     * @param class-string<tGetDataClass> $dataClassName
      * @param string[] $record
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|\Chamilo\Libraries\Storage\DataClass\CompositeDataClass
+     * @return tGetDataClass
      */
-    public function getDataClass($dataClassName, $record)
+    public function getDataClass(string $dataClassName, array $record = [])
     {
         $dataClassName =
             (is_subclass_of($dataClassName, CompositeDataClass::class) ? $record[CompositeDataClass::PROPERTY_TYPE] :

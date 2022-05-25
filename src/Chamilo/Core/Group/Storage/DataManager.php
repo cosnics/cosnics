@@ -227,7 +227,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
 
         if (!$only_retrieve_ids)
         {
-            $groups->rewind();
+            $groups->first();
         }
 
         return $groups;

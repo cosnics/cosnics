@@ -752,7 +752,7 @@ class BrowserComponent extends Manager implements DelegateComponent
 
                     $table->setCellContents(
                         $row, 5, $this->getForumActions(
-                        $publication, $publications->isCurrentEntryFirst(), $publications->isCurrentEntryLast()
+                        $publication, $publications->key() === 0, $publications->key() === $publications->count() - 1
                     )
                     );
                     $table->setCellAttributes($row, 5, array('class' => 'text-center'));
