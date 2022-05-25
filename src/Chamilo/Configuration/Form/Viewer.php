@@ -5,7 +5,7 @@ use Chamilo\Configuration\Form\Storage\DataClass\Element;
 use Chamilo\Configuration\Form\Storage\DataClass\Instance;
 use Chamilo\Configuration\Form\Storage\DataClass\Value;
 use Chamilo\Configuration\Form\Storage\DataManager;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -79,7 +79,7 @@ class Viewer
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Configuration\Form\Storage\DataClass\Value>
      * @throws \Chamilo\Libraries\Architecture\Exceptions\UserException
      * @throws \ReflectionException
      */
@@ -100,7 +100,7 @@ class Viewer
 
         if (!$form)
         {
-            return new DataClassCollection([]);
+            return new ArrayCollection([]);
         }
 
         $subcondition = new EqualityCondition(

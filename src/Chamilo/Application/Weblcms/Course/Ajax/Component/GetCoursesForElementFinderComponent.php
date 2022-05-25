@@ -86,7 +86,7 @@ class GetCoursesForElementFinderComponent extends Manager implements AjaxResultD
     /**
      * Retrieves the courses for the current request
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function getCourses()
     {

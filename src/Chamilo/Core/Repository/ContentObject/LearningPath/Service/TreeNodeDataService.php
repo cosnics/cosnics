@@ -37,7 +37,7 @@ class TreeNodeDataService
      *
      * @param LearningPath $learningPath
      *
-     * @return TreeNodeData[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeData[] | \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTreeNodesDataForLearningPath(LearningPath $learningPath)
     {
@@ -49,7 +49,7 @@ class TreeNodeDataService
      *
      * @param int[] $contentObjectIds
      *
-     * @return TreeNodeData[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeData[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function getTreeNodesDataByContentObjects($contentObjectIds)
     {
@@ -61,7 +61,7 @@ class TreeNodeDataService
      *
      * @param int $userId
      *
-     * @return TreeNodeData[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeData[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function getTreeNodesDataByUserId($userId)
     {

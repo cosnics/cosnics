@@ -400,7 +400,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\RepositoryCategory>
      */
     protected function retrieveCategories()
     {
@@ -420,7 +420,7 @@ class AttachmentContentObjectsFeedComponent extends Manager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Storage\DataClass\ContentObject>
      */
     protected function retrieveContentObjects()
     {

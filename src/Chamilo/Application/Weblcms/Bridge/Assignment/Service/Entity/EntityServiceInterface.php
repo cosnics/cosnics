@@ -27,7 +27,7 @@ interface EntityServiceInterface
      * @param int $count
      * @param array $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieveEntities(
         ContentObjectPublication $contentObjectPublication, Condition $condition = null, $offset = null, $count = null,
@@ -52,7 +52,7 @@ interface EntityServiceInterface
     /**
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | DataClass[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | DataClass[]
      */
     public function retrieveEntitiesWithEntries(ContentObjectPublication $contentObjectPublication);
 

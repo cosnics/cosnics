@@ -84,7 +84,7 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getActiveAvailabilitiesForUserAndCalendarType(User $user, $calendarType)
     {
@@ -96,7 +96,7 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param boolean $isAvailable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAvailabilitiesForUser(User $user, $isAvailable = null)
     {
@@ -109,7 +109,7 @@ class AvailabilityService
      * @param string $calendarType
      * @param boolean $isAvailable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {
@@ -194,7 +194,7 @@ class AvailabilityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getInactiveAvailabilitiesForUserAndCalendarType(User $user, $calendarType)
     {

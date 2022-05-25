@@ -363,7 +363,7 @@ class LearningPathAssignmentService extends
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|\Chamilo\Core\Repository\Storage\DataClass\ContentObject[]
      */
     public function findAssignmentEntriesWithEphorusRequestsByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData,
@@ -380,7 +380,7 @@ class LearningPathAssignmentService extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData $treeNodeData
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntriesByTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData
@@ -395,7 +395,7 @@ class LearningPathAssignmentService extends
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntriesByTreeNodeDataEntityTypeAndIdentifiers(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityIdentifiers
@@ -416,7 +416,7 @@ class LearningPathAssignmentService extends
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntriesForTreeNodeDataEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $entityType, $entityId,
@@ -477,7 +477,7 @@ class LearningPathAssignmentService extends
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],
@@ -498,7 +498,7 @@ class LearningPathAssignmentService extends
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersWithEntriesForTreeNodeData(
         ContentObjectPublication $contentObjectPublication, TreeNodeData $treeNodeData, $userIds = [],

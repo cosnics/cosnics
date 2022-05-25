@@ -52,7 +52,7 @@ abstract class AssignmentReportingManager extends ToolBlock
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $publication_resultset
+     * @param \Doctrine\Common\Collections\ArrayCollection $publication_resultset
      * @param int $entityType
      *
      * @return array

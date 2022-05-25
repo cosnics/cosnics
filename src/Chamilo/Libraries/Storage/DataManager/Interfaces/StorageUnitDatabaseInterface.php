@@ -11,75 +11,26 @@ interface StorageUnitDatabaseInterface
 {
 
     /**
-     *
-     * @param integer $type
-     * @param string $storageUnitName
-     * @param string $property
      * @param string[] $attributes
-     *
-     * @return boolean
      */
-    public function alter($type, $storageUnitName, $property, $attributes);
+    public function alter(int $type, string $storageUnitName, string $property, array $attributes = []): bool;
+
+    public function alterIndex(int $type, string $storageUnitName, ?string $indexName = null, array $columns = []
+    ): bool;
 
     /**
-     *
-     * @param integer $type
-     * @param string $storageUnitName
-     * @param string $name
-     * @param string[] $columns
-     *
-     * @return boolean
-     */
-    public function alterIndex($type, $storageUnitName, $name, $columns);
-
-    /**
-     *
-     * @param string $storageUnitName
      * @param string[][] $properties
      * @param string[][][] $indexes
-     *
-     * @return boolean
      */
-    public function create($storageUnitName, $properties, $indexes);
+    public function create(string $storageUnitName, array $properties = [], array $indexes = []): bool;
 
-    /**
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function drop($storageUnitName);
+    public function drop(string $storageUnitName): bool;
 
-    /**
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function exists($storageUnitName);
+    public function exists(string $storageUnitName): bool;
 
-    /**
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function optimize($storageUnitName);
+    public function optimize(string $storageUnitName): bool;
 
-    /**
-     *
-     * @param string $oldStorageUnitName
-     * @param string $newStorageUnitName
-     *
-     * @return boolean
-     */
-    public function rename($oldStorageUnitName, $newStorageUnitName);
+    public function rename(string $oldStorageUnitName, string $newStorageUnitName): bool;
 
-    /**
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function truncate($storageUnitName);
+    public function truncate(string $storageUnitName, ?bool $optimize = true): bool;
 }

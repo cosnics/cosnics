@@ -27,7 +27,7 @@ interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @param int $userId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Roles\Storage\DataClass\Role>
      */
     public function findRolesForUser($userId);
 
@@ -36,7 +36,7 @@ interface UserRoleRepositoryInterface extends DataManagerRepositoryInterface
      *
      * @param int $roleId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\User\Storage\DataClass\User>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\User\Storage\DataClass\User>
      */
     public function findUsersForRole($roleId);
 }

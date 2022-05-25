@@ -43,7 +43,7 @@ abstract class Tracker extends DataClass
      * @param $max_objects int
      * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection The tracker data resultset
+     * @return \Doctrine\Common\Collections\ArrayCollection The tracker data resultset
      */
     public static function get_data(
         $class_name, $application, $condition, $offset = null, $max_objects = null, $order_by = null

@@ -17,7 +17,7 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Rights\Form\RightsForm;
 use Chamilo\Libraries\Rights\Storage\Repository\RightsRepository;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Symfony\Component\Translation\Translator;
 
@@ -356,7 +356,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
      * @return \Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup[]
      */
     public function findRightsLocationEntityRightGroupsForRightsLocationEntityRights(
-        DataClassCollection $locationEntityRights
+        ArrayCollection $locationEntityRights
     )
     {
         $locationEntityRightIdentifiers = [];
@@ -409,7 +409,7 @@ class RightsService extends \Chamilo\Libraries\Rights\Service\RightsService
         }
         else
         {
-            return new DataClassCollection([]);
+            return new ArrayCollection([]);
         }
     }
 

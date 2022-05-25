@@ -359,7 +359,7 @@ class AssignmentService
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | Entry[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | Entry[]
      */
     public function findEntriesByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $entityType = null
@@ -376,7 +376,7 @@ class AssignmentService
      * @param integer $entityType
      * @param integer[] $entityIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntriesByContentObjectPublicationEntityTypeAndIdentifiers(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityIdentifiers
@@ -397,7 +397,7 @@ class AssignmentService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntriesForContentObjectPublicationEntityTypeAndId(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId, $condition = null, $offset = null,
@@ -412,7 +412,7 @@ class AssignmentService
     /**
      * @param int[] $contentObjectPublicationIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntryStatisticsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers = [])
     {
@@ -426,7 +426,7 @@ class AssignmentService
      * @param $entityType
      * @param $entityId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntryStatisticsForEntityByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $entityType, $entityId
@@ -462,7 +462,7 @@ class AssignmentService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetCourseGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
@@ -482,7 +482,7 @@ class AssignmentService
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetCourseGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $courseGroupIds = [], $condition = null, $offset = null,
@@ -512,7 +512,7 @@ class AssignmentService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetPlatformGroupsForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
@@ -532,7 +532,7 @@ class AssignmentService
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetPlatformGroupsWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $platformGroupIds = [], $condition = null, $offset = null,
@@ -560,7 +560,7 @@ class AssignmentService
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,
@@ -580,7 +580,7 @@ class AssignmentService
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersWithEntriesForContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, $userIds = [], $condition = null, $offset = null,

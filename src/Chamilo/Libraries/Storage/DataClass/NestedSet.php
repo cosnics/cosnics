@@ -609,7 +609,7 @@ abstract class NestedSet extends DataClass
      * @param boolean $include_self
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findAncestors()
      */
@@ -627,7 +627,7 @@ abstract class NestedSet extends DataClass
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Libraries\Storage\DataClass\DataClass>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
@@ -643,7 +643,7 @@ abstract class NestedSet extends DataClass
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Libraries\Storage\DataClass\DataClass>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\DataClass>
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
@@ -719,7 +719,7 @@ abstract class NestedSet extends DataClass
      * @param boolean $include_self
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findSiblings()
      */

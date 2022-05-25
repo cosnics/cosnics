@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\Tracki
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Utilities\UUID;
 
@@ -95,7 +95,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @param LearningPath $learningPath
      * @param User $user
      *
-     * @return TreeNodeAttempt[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeAttempt[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findTreeNodeAttempts(LearningPath $learningPath, User $user)
     {
@@ -109,7 +109,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | TreeNodeAttempt[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | TreeNodeAttempt[]
      */
     public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath)
     {
@@ -190,7 +190,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      *
-     * @return TreeNodeQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeQuestionAttempt[] | \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTreeNodeQuestionAttempts(TreeNodeAttempt $treeNodeAttempt)
     {
@@ -343,7 +343,7 @@ class TrackingRepository implements TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(
         LearningPath $learningPath
@@ -389,7 +389,7 @@ class TrackingRepository implements TrackingRepositoryInterface
             }
         }
 
-        return new DataClassCollection($allData);
+        return new ArrayCollection($allData);
     }
 
     /**
@@ -419,14 +419,14 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findLearningPathAttemptsWithUser(
         LearningPath $learningPath, $treeNodeDataIds = [],
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
-        return new DataClassCollection([]);
+        return new ArrayCollection([]);
     }
 
     /**
@@ -455,14 +455,14 @@ class TrackingRepository implements TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findTargetUsersWithLearningPathAttempts(
         LearningPath $learningPath, $treeNodeDataIds = [],
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null
     )
     {
-        return new DataClassCollection([]);
+        return new ArrayCollection([]);
     }
 
     /**

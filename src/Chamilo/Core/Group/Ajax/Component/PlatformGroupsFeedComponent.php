@@ -114,7 +114,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
     /**
      * Returns all the groups for this feed
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieve_groups()
     {

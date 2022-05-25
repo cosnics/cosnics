@@ -9,7 +9,7 @@ class LastAccessToToolsPlatformBlock extends ToolAccessBlock
     /**
      * Returns the summary data for this course
      * 
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieve_course_summary_data()
     {

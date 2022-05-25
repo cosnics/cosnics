@@ -226,7 +226,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param boolean $includeSelf
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     public function findAncestors(NestedSet $nestedSet, bool $includeSelf = true, Condition $condition = null)
@@ -244,7 +244,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param boolean $recursive
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      * @see NestedSet::get_children()
      * @see NestedSet::get_descendants()
@@ -274,7 +274,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @param boolean $includeSelf
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Chamilo\Libraries\Storage\DataClass\NestedSet[]|\Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      * @see NestedSet::get_siblings()
      */

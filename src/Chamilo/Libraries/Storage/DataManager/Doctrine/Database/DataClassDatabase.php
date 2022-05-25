@@ -25,8 +25,8 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
+use Doctrine\DBAL\Types\Type;
 use Exception;
-use PDOException;
 
 /**
  * This class provides basic functionality for database connections Create Table, Get next id, Insert, Update, Delete,
@@ -42,55 +42,22 @@ class DataClassDatabase implements DataClassDatabaseInterface
 {
     use ClassContext;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
-     */
-    protected $conditionPartTranslatorService;
+    protected ConditionPartTranslatorService $conditionPartTranslatorService;
 
-    /**
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
-     */
-    protected $exceptionLogger;
+    protected ExceptionLoggerInterface $exceptionLogger;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor
-     */
-    protected $parametersProcessor;
+    protected ParametersProcessor $parametersProcessor;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
-     */
-    protected $recordProcessor;
+    protected RecordProcessor $recordProcessor;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    protected $storageAliasGenerator;
+    protected StorageAliasGenerator $storageAliasGenerator;
 
-    /**
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor $parametersProcessor
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor|null $recordProcessor
-     */
     public function __construct(
         Connection $connection, StorageAliasGenerator $storageAliasGenerator, ExceptionLoggerInterface $exceptionLogger,
         ConditionPartTranslatorService $conditionPartTranslatorService, ParametersProcessor $parametersProcessor,
-        RecordProcessor $recordProcessor = null
+        RecordProcessor $recordProcessor
     )
     {
         $this->connection = $connection;
@@ -102,13 +69,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return string
+     * @throws \ReflectionException
      */
-    protected function buildBasicRecordsSql(string $dataClassName, DataClassParameters $parameters)
+    protected function buildBasicRecordsSql(string $dataClassName, DataClassParameters $parameters): string
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
@@ -124,14 +87,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     *
-     * @return string
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    protected function buildRecordsSql($dataClassName, RecordRetrievesParameters $parameters)
+    protected function buildRecordsSql(string $dataClassName, RecordRetrievesParameters $parameters): string
     {
         if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
         {
@@ -144,14 +103,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
-     * @return string
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    protected function buildRetrievesSql($dataClassName, DataClassRetrievesParameters $parameters)
+    protected function buildRetrievesSql(string $dataClassName, DataClassRetrievesParameters $parameters): string
     {
         return $this->buildBasicRecordsSql(
             $dataClassName,
@@ -159,68 +114,55 @@ class DataClassDatabase implements DataClassDatabaseInterface
         );
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     *
-     * @return integer
-     * @throws \Doctrine\DBAL\Exception
-     */
-    public function count($dataClassName, DataClassCountParameters $parameters)
+    public function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-        );
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountParameters($parameters),
-            $dataClassName
-        );
-
-        $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-        if (!$result instanceof PDOException)
+        try
         {
+            $queryBuilder = $this->getConnection()->createQueryBuilder();
+
+            $queryBuilder->from(
+                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+            );
+
+            $queryBuilder = $this->getParametersProcessor()->processParameters(
+                $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountParameters($parameters),
+                $dataClassName
+            );
+
+            $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
             $record = $result->fetchNumeric();
 
             return (int) $record[0];
         }
-        else
+        catch (Exception $exception)
         {
-            $this->handleError($result);
+            $this->handleError($exception);
 
-            return false;
+            // TODO: Do something more useful when DataClassDatabase::count() throws an error
+            exit;
         }
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     *
-     * @return integer[]|false
-     * @throws \Doctrine\DBAL\Exception
+     * @return int[]
      */
-    public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters)
+    public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-        );
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountGroupedParameters($parameters),
-            $dataClassName
-        );
-
-        $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-        if (!$result instanceof PDOException)
+        try
         {
+            $queryBuilder = $this->getConnection()->createQueryBuilder();
+
+            $queryBuilder->from(
+                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+            );
+
+            $queryBuilder = $this->getParametersProcessor()->processParameters(
+                $this, $queryBuilder,
+                $this->getParametersProcessor()->handleDataClassCountGroupedParameters($parameters), $dataClassName
+            );
+
+            $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
+
             $counts = [];
 
             while ($record = $result->fetchNumeric())
@@ -230,43 +172,37 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $counts;
         }
-        else
+        catch (Exception $exception)
         {
-            $this->handleError($result);
+            $this->handleError($exception);
 
-            return false;
+            // TODO: Do something more useful when DataClassDatabase::countGrouped() throws an error
+            exit;
         }
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @param boolean $autoAssignIdentifier
-     *
-     * @return boolean
-     */
-    public function create(DataClass $dataClass, $autoAssignIdentifier = true)
+    public function create(DataClass $dataClass, ?bool $autoAssignIdentifier = true): bool
     {
-        if ($dataClass instanceof CompositeDataClass)
-        {
-            $parentClass = $dataClass->parentClassName();
-            $objectTableName = $parentClass::getTableName();
-        }
-        else
-        {
-            $objectTableName = $dataClass->getTableName();
-        }
-
-        $objectProperties = $dataClass->getDefaultProperties();
-
-        if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
-        {
-            $objectProperties[DataClass::PROPERTY_ID] = null;
-            unset($objectProperties[DataClass::PROPERTY_ID]);
-        }
-
         try
         {
+            if ($dataClass instanceof CompositeDataClass)
+            {
+                $parentClass = $dataClass->parentClassName();
+                $objectTableName = $parentClass::getTableName();
+            }
+            else
+            {
+                $objectTableName = $dataClass->getTableName();
+            }
+
+            $objectProperties = $dataClass->getDefaultProperties();
+
+            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
+            {
+                $objectProperties[DataClass::PROPERTY_ID] = null;
+                unset($objectProperties[DataClass::PROPERTY_ID]);
+            }
+
             $this->getConnection()->insert($objectTableName, $objectProperties);
 
             if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
@@ -294,16 +230,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $dataClassName
-     * @param string[] $record
-     *
-     * @return boolean
+     * @param mixed[] $record
      */
-    public function createRecord($dataClassName, $record)
+    public function createRecord(string $dataClassName, array $record): bool
     {
         try
         {
             $this->getConnection()->insert($dataClassName::getTableName(), $record);
+
+            return true;
         }
         catch (Exception $exception)
         {
@@ -311,67 +246,52 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return false;
         }
-
-        return true;
     }
 
-    /**
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return boolean
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \Exception
-     */
-    public function delete($dataClassName, Condition $condition = null)
+    public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
-        $queryBuilder = new QueryBuilder($this->getConnection());
-        $queryBuilder->delete($dataClassName::getTableName(), $this->getAlias($dataClassName::getTableName()));
-
-        if (isset($condition))
+        try
         {
-            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
-        }
+            $queryBuilder = new QueryBuilder($this->getConnection());
+            $queryBuilder->delete($dataClassName::getTableName(), $this->getAlias($dataClassName::getTableName()));
 
-        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
+            if (isset($condition))
+            {
+                $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
+            }
 
-        if (!$statement instanceof PDOException)
-        {
+            $this->getConnection()->executeQuery($queryBuilder->getSQL());
+
             return true;
         }
-        else
+        catch (Exception $exception)
         {
-            $this->handleError($statement);
+            $this->handleError($exception);
 
             return false;
         }
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     *
-     * @return string[]|false
-     * @throws \Doctrine\DBAL\Exception
+     * @return string[]
      */
-    public function distinct($dataClassName, DataClassDistinctParameters $parameters)
+    public function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-        );
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassDistinctParameters($parameters),
-            $dataClassName
-        );
-
-        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-        if (!$statement instanceof PDOException)
+        try
         {
+            $queryBuilder = $this->getConnection()->createQueryBuilder();
+
+            $queryBuilder->from(
+                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+            );
+
+            $queryBuilder = $this->getParametersProcessor()->processParameters(
+                $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassDistinctParameters($parameters),
+                $dataClassName
+            );
+
+            $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
+
             $distinctElements = [];
 
             while ($record = $statement->fetchAssociative())
@@ -388,11 +308,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $distinctElements;
         }
-        else
+        catch (Exception $exception)
         {
-            $this->handleError($statement);
+            $this->handleError($exception);
 
-            return false;
+            // TODO: Do something more useful when DataClassDatabase::distinct() throws an error
+            exit;
         }
     }
 
@@ -414,14 +335,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    /**
-     *
-     * @param string $columnName
-     * @param string|null $storageUnitAlias
-     *
-     * @return string
-     */
-    public function escapeColumnName($columnName, $storageUnitAlias = null)
+    public function escapeColumnName(string $columnName, ?string $storageUnitAlias = null): string
     {
         if (!empty($storageUnitAlias))
         {
@@ -434,220 +348,157 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      */
-    protected function fetchRecord($dataClassName, DataClassParameters $parameters)
+    protected function fetchRecord(string $dataClassName, DataClassParameters $parameters): array
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-        );
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this, $queryBuilder, $parameters, $dataClassName
-        );
-
-        $sqlQuery = $queryBuilder->getSQL();
-
-        $statement = $this->getConnection()->executeQuery($sqlQuery);
-
-        if (!$statement instanceof PDOException)
+        try
         {
+            $queryBuilder = $this->getConnection()->createQueryBuilder();
+
+            $queryBuilder->from(
+                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
+            );
+
+            $queryBuilder = $this->getParametersProcessor()->processParameters(
+                $this, $queryBuilder, $parameters, $dataClassName
+            );
+
+            $sqlQuery = $queryBuilder->getSQL();
+
+            $statement = $this->getConnection()->executeQuery($sqlQuery);
             $record = $statement->fetchAssociative();
-        }
-        else
-        {
-            $this->handleError($statement);
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+
+            if (!is_array($record) || empty($record))
+            {
+                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            }
+
+            return $record;
         }
 
-        if ($record instanceof PDOException)
+        catch (Exception $exception)
         {
-            $this->handleError($record);
+            $this->handleError($exception);
+
             throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
         }
-
-        if (is_null($record) || !is_array($record) || empty($record))
-        {
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-        }
-
-        //return $this->processRecord($record);
-        return $record;
     }
 
     /**
-     *
-     * @param \Doctrine\DBAL\Result $result
-     *
-     * @return string[][]
      * @throws \Doctrine\DBAL\Exception
      */
-    protected function fetchRecords(Result $result)
+    protected function fetchRecords(Result $result): array
     {
         $records = [];
 
         while ($record = $result->fetchAssociative())
         {
-            //$records[] = $this->processRecord($record);
             $records[] = $record;
         }
 
         return $records;
     }
 
-    /**
-     * @param string $dataClassStorageUnitName
-     *
-     * @return string
-     */
-    public function getAlias($dataClassStorageUnitName)
+    public function getAlias(string $dataClassStorageUnitName): string
     {
         return $this->getStorageAliasGenerator()->getTableAlias($dataClassStorageUnitName);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService
-     */
-    public function getConditionPartTranslatorService()
+    public function getConditionPartTranslatorService(): ConditionPartTranslatorService
     {
         return $this->conditionPartTranslatorService;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService $conditionPartTranslatorService
-     */
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService)
+    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService
+    ): DataClassDatabase
     {
         $this->conditionPartTranslatorService = $conditionPartTranslatorService;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Doctrine\DBAL\Connection
-     */
-    public function getConnection()
+    public function getConnection(): Connection
     {
         return $this->connection;
     }
 
-    /**
-     *
-     * @param \Doctrine\DBAL\Connection $connection
-     */
-    public function setConnection(Connection $connection)
+    public function setConnection(Connection $connection): DataClassDatabase
     {
         $this->connection = $connection;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface
-     */
-    public function getExceptionLogger()
+    public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface $exceptionLogger
-     */
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger)
+    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger): DataClassDatabase
     {
         $this->exceptionLogger = $exceptionLogger;
+
+        return $this;
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor
-     */
-    public function getParametersProcessor()
+    public function getParametersProcessor(): ParametersProcessor
     {
         return $this->parametersProcessor;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor $parametersProcessor
-     */
-    public function setParametersProcessor(ParametersProcessor $parametersProcessor)
+    public function setParametersProcessor(ParametersProcessor $parametersProcessor): DataClassDatabase
     {
         $this->parametersProcessor = $parametersProcessor;
+
+        return $this;
     }
 
     /**
      *
      * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor
      */
-    public function getRecordProcessor()
+    public function getRecordProcessor(): RecordProcessor
     {
         return $this->recordProcessor;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor $recordProcessor
-     */
-    public function setRecordProcessor(RecordProcessor $recordProcessor)
+    public function setRecordProcessor(RecordProcessor $recordProcessor): DataClassDatabase
     {
         $this->recordProcessor = $recordProcessor;
+
+        return $this;
     }
 
     /**
-     *
-     * @param string $sql
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return \Doctrine\DBAL\Result
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      */
-    protected function getRecordsResult($sql, $dataClassName, $parameters)
+    protected function getRecordsResult(string $sql, string $dataClassName, DataClassParameters $parameters): Result
     {
         try
         {
             return $this->getConnection()->executeQuery($sql);
         }
-        catch (PDOException $exception)
+        catch (Exception $exception)
         {
             $this->handleError($exception);
             throw new DataClassNoResultException($dataClassName, $parameters, $sql);
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    public function getStorageAliasGenerator()
+    public function getStorageAliasGenerator(): StorageAliasGenerator
     {
         return $this->storageAliasGenerator;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator $storageAliasGenerator
-     */
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator)
+    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): DataClassDatabase
     {
         $this->storageAliasGenerator = $storageAliasGenerator;
+
+        return $this;
     }
 
-    /**
-     *
-     * @param \Exception $exception
-     */
     protected function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
@@ -656,22 +507,14 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context(), 3);
     }
 
-    /**
-     *
-     * @param string $dataClassName
-     *
-     * @return string
-     */
-    protected function prepareTableName($dataClassName)
+    protected function prepareTableName(string $dataClassName): string
     {
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
             get_parent_class($dataClassName) == CompositeDataClass::class)
@@ -695,45 +538,29 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $tableName;
     }
 
-    /**
-     * Processes a given record by transforming to the correct type
-     *
-     * @param mixed[] $record
-     *
-     * @return mixed[]
-     */
-    protected function processRecord($record)
+    protected function processRecord(array $record): array
     {
-        if ($this->getRecordProcessor() instanceof RecordProcessor)
-        {
-            return $this->getRecordProcessor()->processRecord($record);
-        }
-
-        return $record;
+        return $this->getRecordProcessor()->processRecord($record);
     }
 
     /**
      *
-     * @param string $value
-     * @param string|null $type
+     * @param mixed $value
+     * @param int|string|Type|null $type
      *
-     * @return string
+     * @return mixed
      */
-    public function quote($value, $type = null)
+    public function quote($value, ?string $type = null)
     {
         return $this->getConnection()->quote($value, $type);
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
      */
-    public function record($dataClassName, RecordRetrieveParameters $parameters)
+    public function record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
         if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
         {
@@ -746,16 +573,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
-     *
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Doctrine\DBAL\Exception
-     * @throws \Exception
+     * @throws \ReflectionException
      */
-    public function records($dataClassName, RecordRetrievesParameters $parameters)
+    public function records(string $dataClassName, RecordRetrievesParameters $parameters): array
     {
         $statement = $this->getRecordsResult(
             $this->buildRecordsSql($dataClassName, $parameters), $dataClassName, $parameters
@@ -765,16 +588,10 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     *
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
-     * @throws \Exception
      */
-    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters)
+    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array
     {
         return $this->fetchRecord(
             $dataClassName,
@@ -783,16 +600,12 @@ class DataClassDatabase implements DataClassDatabaseInterface
     }
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      * @throws \Doctrine\DBAL\Exception
-     * @throws \Exception
      */
-    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters)
+    public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array
     {
         $statement = $this->getRecordsResult(
             $this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters
@@ -811,24 +624,24 @@ class DataClassDatabase implements DataClassDatabaseInterface
      */
     public function transactional($function)
     {
-        // Rather than directly using Doctrine's version of transactional, we implement
-        // an intermediate function that throws an exception if the function returns #f.
-        // This mediates between Chamilo's convention of returning #f to signal failure
-        // versus Doctrine's use of Exceptions.
-        $throwOnFalse = function ($connection) use ($function) {
-            $result = call_user_func($function, $connection);
-            if (!$result)
-            {
-                throw new Exception();
-            }
-            else
-            {
-                return $result;
-            }
-        };
-
         try
         {
+            // Rather than directly using Doctrine's version of transactional, we implement
+            // an intermediate function that throws an exception if the function returns #f.
+            // This mediates between Chamilo's convention of returning #f to signal failure
+            // versus Doctrine's use of Exceptions.
+            $throwOnFalse = function ($connection) use ($function) {
+                $result = call_user_func($function, $connection);
+                if (!$result)
+                {
+                    throw new Exception();
+                }
+                else
+                {
+                    return $result;
+                }
+            };
+
             return $this->getConnection()->transactional($throwOnFalse);
         }
         catch (Exception $e)
@@ -837,93 +650,74 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translateCondition(Condition $condition, bool $enableAliasing = true)
+    public function translateCondition(Condition $condition, bool $enableAliasing = true): string
     {
         return $this->getConditionPartTranslatorService()->translate($this, $condition, $enableAliasing);
     }
 
     /**
-     * @param string $dataClassStorageUnitName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param string[] $propertiesToUpdate
-     *
-     * @return boolean
-     * @throws \Doctrine\DBAL\Exception
      */
-    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate)
+    public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool
     {
-        $queryBuilder = $this->getConnection()->createQueryBuilder();
-        $queryBuilder->update($dataClassStorageUnitName);
-
-        foreach ($propertiesToUpdate as $key => $value)
+        try
         {
-            $queryBuilder->set($key, $this->escape($value));
+            $queryBuilder = $this->getConnection()->createQueryBuilder();
+            $queryBuilder->update($dataClassStorageUnitName);
+
+            foreach ($propertiesToUpdate as $key => $value)
+            {
+                $queryBuilder->set($key, $this->escape($value));
+            }
+
+            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
+
+            $this->getConnection()->executeQuery($queryBuilder->getSQL());
+
+            return true;
         }
-
-        $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition, false));
-
-        $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-        if ($statement instanceof PDOException)
+        catch (Exception $exception)
         {
-            $this->handleError($statement);
+            $this->handleError($exception);
 
             return false;
         }
-
-        return true;
     }
 
-    /**
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return boolean
-     * @throws \Doctrine\DBAL\Exception
-     */
-    public function updates($dataClassName, DataClassProperties $properties, Condition $condition)
+    public function updates(string $dataClassName, DataClassProperties $properties, Condition $condition): bool
     {
-        if (count($properties->get()) > 0)
+        try
         {
-            $conditionPartTranslatorService = $this->getConditionPartTranslatorService();
-            $queryBuilder = $this->getConnection()->createQueryBuilder();
-
-            $queryBuilder->update($dataClassName::getTableName());
-
-            foreach ($properties->get() as $dataClassProperty)
+            if (count($properties->get()) > 0)
             {
-                $queryBuilder->set(
-                    $conditionPartTranslatorService->translate(
-                        $this, $dataClassProperty->get_property(), false
-                    ), $conditionPartTranslatorService->translate(
-                    $this, $dataClassProperty->get_value(), false
-                )
-                );
+                $conditionPartTranslatorService = $this->getConditionPartTranslatorService();
+                $queryBuilder = $this->getConnection()->createQueryBuilder();
+
+                $queryBuilder->update($dataClassName::getTableName());
+
+                foreach ($properties->get() as $dataClassProperty)
+                {
+                    $queryBuilder->set(
+                        $conditionPartTranslatorService->translate(
+                            $this, $dataClassProperty->get_property(), false
+                        ), $conditionPartTranslatorService->translate(
+                        $this, $dataClassProperty->get_value(), false
+                    )
+                    );
+                }
+
+                $queryBuilder->where($conditionPartTranslatorService->translate($this, $condition, false));
+
+                $this->getConnection()->executeQuery($queryBuilder->getSQL());
             }
 
-            $queryBuilder->where($conditionPartTranslatorService->translate($this, $condition, false));
-
-            $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
-
-            if (!$statement instanceof PDOException)
-            {
-                return true;
-            }
-            else
-            {
-                $this->handleError($statement);
-
-                return false;
-            }
+            return true;
         }
+        catch (Exception $exception)
+        {
+            $this->handleError($exception);
 
-        return true;
+            return false;
+        }
     }
 }

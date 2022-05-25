@@ -4,7 +4,7 @@ namespace Chamilo\Libraries\Storage\Cache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -112,8 +112,8 @@ class DataClassRepositoryCache
      * @return boolean
      * @throws \Exception
      */
-    public function addForDataClassCollection(
-       string $dataClassName, DataClassCollection $dataClassCollection, DataClassParameters $parameters
+    public function addForArrayCollection(
+       string $dataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
     )
     {
         if (!$parameters instanceof DataClassParameters)
@@ -121,16 +121,16 @@ class DataClassRepositoryCache
             throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
         }
 
-        if (!$dataClassCollection instanceof DataClassCollection)
+        if (!$arrayCollection instanceof ArrayCollection)
         {
-            $type = is_object($dataClassCollection) ? get_class($dataClassCollection) : gettype($dataClassCollection);
+            $type = is_object($arrayCollection) ? get_class($arrayCollection) : gettype($arrayCollection);
             throw new Exception(
-                'DataClassRepositoryCache::addForDataClassCollection only allows for caching of DataClassCollection objects. Currently trying to add: ' .
+                'DataClassRepositoryCache::addForArrayCollection only allows for caching of ArrayCollection objects. Currently trying to add: ' .
                 $type . '.'
             );
         }
 
-        return $this->add($this->getCacheClassName($dataClassName), $parameters, $dataClassCollection);
+        return $this->add($this->getCacheClassName($dataClassName), $parameters, $arrayCollection);
     }
 
     /**
@@ -315,7 +315,7 @@ class DataClassRepositoryCache
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Doctrine\Common\Collections\ArrayCollection
      */
     public function get($class, DataClassParameters $parameters)
     {

@@ -16,7 +16,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use PHPUnit\Framework\MockObject\Stub\ConsecutiveCalls;
 
@@ -148,7 +148,7 @@ class MigrationServiceTest extends ChamiloTestCase
         $arrayResultSets = [];
         foreach ($resultSets as $resultSet)
         {
-            $arrayResultSets[] = new DataClassCollection($resultSet);
+            $arrayResultSets[] = new ArrayCollection($resultSet);
         }
 
         $contentObjects = [
@@ -213,7 +213,7 @@ class MigrationServiceTest extends ChamiloTestCase
         $testData = $this->prepareLearningPathData();
 
         $this->contentObjectRepositoryMock->expects($this->any())->method('findAll')->will(
-                $this->returnValue(new DataClassCollection([]))
+                $this->returnValue(new ArrayCollection([]))
             );
 
         $this->contentObjectRepositoryMock->expects($this->once())->method('countAll')->with(

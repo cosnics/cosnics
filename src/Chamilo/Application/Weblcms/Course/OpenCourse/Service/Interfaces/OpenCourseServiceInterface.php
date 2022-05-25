@@ -3,7 +3,7 @@ namespace Chamilo\Application\Weblcms\Course\OpenCourse\Service\Interfaces;
 
 use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -23,7 +23,7 @@ interface OpenCourseServiceInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function getOpenCourses(User $user, Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
@@ -35,7 +35,7 @@ interface OpenCourseServiceInterface
      * @param int $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function getClosedCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null);
 
@@ -63,7 +63,7 @@ interface OpenCourseServiceInterface
      *
      * @param Course $course
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getRolesForOpenCourse(Course $course);
 

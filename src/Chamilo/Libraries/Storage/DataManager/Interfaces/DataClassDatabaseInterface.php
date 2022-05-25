@@ -11,6 +11,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Doctrine\DBAL\Types\Type;
 
 /**
  *
@@ -21,121 +22,65 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 interface DataClassDatabaseInterface
 {
 
+    public function count(string $dataClassName, DataClassCountParameters $parameters): int;
+
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     *
-     * @return integer
+     * @return int[]
      */
-    public function count($dataClassName, DataClassCountParameters $parameters);
+    public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array;
+
+    public function create(DataClass $dataClass, ?bool $autoAssignIdentifier = true): bool;
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
-     *
-     * @return integer[]
+     * @param mixed[] $record
      */
-    public function countGrouped($dataClassName, DataClassCountGroupedParameters $parameters);
+    public function createRecord(string $dataClassName, array $record): bool;
+
+    public function delete(string $dataClassName, ?Condition $condition = null): bool;
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @param boolean $autoAssignIdentifier
-     *
-     * @return boolean
-     */
-    public function create(DataClass $dataClass, $autoAssignIdentifier = true);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param string[] $record
-     *
-     * @return boolean
-     */
-    public function createRecord($dataClassName, $record);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return boolean
-     */
-    public function delete($dataClassName, Condition $condition = null);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     *
-     * @return string[]|string[][]
-     */
-    public function distinct($dataClassName, DataClassDistinctParameters $parameters);
-
-    /**
-     *
-     * @param string $columnName
-     * @param string $storageUnitAlias
-     *
-     * @return string
-     */
-    public function escapeColumnName($columnName, $storageUnitAlias = null);
-
-    /**
-     *
-     * @param string $dataClassStorageUnitName
-     *
-     * @return string
-     */
-    public function getAlias($dataClassStorageUnitName);
-
-    /**
-     *
-     * @param string $value
-     * @param string $type
-     *
-     * @return string
-     */
-    public function quote($value, $type = null);
-
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     *
      * @return string[]
      */
-    public function record($dataClassName, RecordRetrieveParameters $parameters);
+    public function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array;
+
+    public function escapeColumnName(string $columnName, ?string $storageUnitAlias = null): string;
+
+    public function getAlias(string $dataClassStorageUnitName): string;
 
     /**
      *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
+     * @param mixed $value
+     * @param int|string|Type|null $type
      *
-     * @return string[][]
+     * @return mixed
      */
-    public function records($dataClassName, RecordRetrievesParameters $parameters);
+    public function quote($value, ?string $type = null);
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     *
      * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieve($dataClassName, DataClassRetrieveParameters $parameters);
+    public function record(string $dataClassName, RecordRetrieveParameters $parameters): array;
 
     /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
-     *
      * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function retrieves($dataClassName, DataClassRetrievesParameters $parameters);
+    public function records(string $dataClassName, RecordRetrievesParameters $parameters): array;
+
+    /**
+     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     */
+    public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array;
+
+    /**
+     * @return string[][]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
+     */
+    public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array;
 
     /**
      *
@@ -143,37 +88,16 @@ interface DataClassDatabaseInterface
      *
      * @return mixed
      * @throws \Exception
+     * @throws \Throwable
      */
     public function transactional($function);
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translateCondition(Condition $condition, bool $enableAliasing = true);
+    public function translateCondition(Condition $condition, bool $enableAliasing = true): string;
 
     /**
-     *
-     * @param string $dataClassStorageUnitName
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param string[] $propertiesToUpdate
-     *
-     * @return boolean
-     * @throws \Exception
      */
-    public function update($dataClassStorageUnitName, Condition $condition, $propertiesToUpdate);
+    public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool;
 
-    /**
-     *
-     * @param string $dataClassName
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function updates($dataClassName, DataClassProperties $properties, Condition $condition);
+    public function updates(string $dataClassName, DataClassProperties $properties, Condition $condition): bool;
 }

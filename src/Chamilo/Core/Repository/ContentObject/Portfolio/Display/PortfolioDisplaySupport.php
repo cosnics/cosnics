@@ -129,7 +129,7 @@ interface PortfolioDisplaySupport
      *
      * @param ComplexContentObjectPathNode $node
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node);
 
@@ -143,11 +143,11 @@ interface PortfolioDisplaySupport
     public function retrieve_portfolio_feedback($feedback_id);
 
     /**
-     * Retrieve a DataClassCollection of Feedback objects
+     * Retrieve a ArrayCollection of Feedback objects
      *
      * @param \core\repository\common\path\ComplexContentObjectPathNode $node
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieve_portfolio_feedbacks(ComplexContentObjectPathNode $node, $count, $offset);
 

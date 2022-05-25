@@ -180,7 +180,7 @@ abstract class BlogLayout
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieve_complex_blog_items()
     {

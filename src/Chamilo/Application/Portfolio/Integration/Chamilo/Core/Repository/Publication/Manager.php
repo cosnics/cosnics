@@ -273,7 +273,7 @@ class Manager implements PublicationInterface
      * @param int $offset
      * @param int $max_objects
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public static function retrieve_content_object_publications(
         $condition = null, $order_by = null, $offset = 0, $max_objects = - 1

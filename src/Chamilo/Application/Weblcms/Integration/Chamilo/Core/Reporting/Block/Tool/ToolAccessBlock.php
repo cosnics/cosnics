@@ -140,7 +140,7 @@ abstract class ToolAccessBlock extends ToolBlock
     /**
      * Returns the summary data for this course
      * 
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     abstract public function retrieve_course_summary_data();
 }

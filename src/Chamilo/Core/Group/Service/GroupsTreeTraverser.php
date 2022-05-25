@@ -6,7 +6,7 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\Repository\GroupRepository;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\PropertyMapper;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Group\Service
@@ -185,7 +185,7 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
      *
      * @throws \Exception
      */
@@ -205,7 +205,7 @@ class GroupsTreeTraverser
             }
             else
             {
-                $this->userSubscribedGroups[$userIdentifier] = new DataClassCollection([]);
+                $this->userSubscribedGroups[$userIdentifier] = new ArrayCollection([]);
             }
         }
 
@@ -215,7 +215,7 @@ class GroupsTreeTraverser
     /**
      * @param integer $userIdentifier
      *
-     * @return string[][]|DataClassCollection
+     * @return string[][]|ArrayCollection
      * @throws \Exception
      */
     public function findDirectlySubscribedGroupNestingValuesForUserIdentifier(int $userIdentifier)
@@ -252,7 +252,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $includeSelf
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
      */
     public function findParentGroupsForGroup(Group $group, bool $includeSelf = true)
     {
@@ -289,7 +289,7 @@ class GroupsTreeTraverser
      * @param \Chamilo\Core\Group\Storage\DataClass\Group $group
      * @param boolean $recursiveSubgroups
      *
-     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|DataClassCollection
+     * @return \Chamilo\Core\Group\Storage\DataClass\Group[]|ArrayCollection
      */
     public function findSubGroupsForGroup(Group $group, bool $recursiveSubgroups = false)
     {

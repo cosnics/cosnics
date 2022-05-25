@@ -103,7 +103,7 @@ class Connector
      * 
      * @param int $course_type_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseUserCategory>
+     * @return \Doctrine\Common\Collections\ArrayCollection<CourseUserCategory>
      */
     private function get_user_course_categories_for_course_type($course_type_id)
     {

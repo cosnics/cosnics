@@ -165,7 +165,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     /**
      * This function generates the posts table of a topic.
      *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $posts A Resultset of posts.
+     * @param \Doctrine\Common\Collections\ArrayCollection $posts A Resultset of posts.
      * @param HTML_Table $table A HTML_Table object in which the posts will be added.
      * @param int $row The row number where this function will start adding content.
      */

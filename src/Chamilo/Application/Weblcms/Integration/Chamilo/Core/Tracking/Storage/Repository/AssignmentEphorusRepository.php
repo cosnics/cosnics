@@ -23,7 +23,7 @@ class AssignmentEphorusRepository extends
      * @param \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication $contentObjectPublication
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Chamilo\Core\Repository\Storage\DataClass\ContentObject[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findAssignmentEntriesWithRequestsByContentObjectPublication(
         ContentObjectPublication $contentObjectPublication, RecordRetrievesParameters $recordRetrievesParameters = null

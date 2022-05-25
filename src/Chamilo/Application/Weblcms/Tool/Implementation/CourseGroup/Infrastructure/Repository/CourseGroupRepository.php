@@ -50,7 +50,7 @@ class CourseGroupRepository extends CommonDataClassRepository implements CourseG
      * @param \Chamilo\Application\Weblcms\Course\Storage\DataClass\Course $course
      * @param array $userIds
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|CourseGroup[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|CourseGroup[]
      */
     public function findCourseGroupUserRelationsForCourseAndUserIds(Course $course, array $userIds = [])
     {

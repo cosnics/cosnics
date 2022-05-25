@@ -7,7 +7,7 @@ use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -374,7 +374,7 @@ class DoctrineExtension
      * @param int|null $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperties
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieve_all_course_users(
         $course_id, $condition = null, $offset = null, $count = null, $orderProperties = null
@@ -419,7 +419,7 @@ class DoctrineExtension
         }
         );
 
-        return new DataClassCollection(array_slice($users, $offset, $count));
+        return new ArrayCollection(array_slice($users, $offset, $count));
     }
 
     /**
@@ -427,7 +427,7 @@ class DoctrineExtension
      *
      * @param $course_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function retrieve_direct_subscribed_groups_with_tree_values($course_id)
     {
@@ -466,7 +466,7 @@ class DoctrineExtension
 
         $parameters = new RecordRetrievesParameters($properties, $condition, null, null, null, $joins);
 
-        return new DataClassCollection(
+        return new ArrayCollection(
             $this->getDataClassDatabase()->records(CourseEntityRelation::class, $parameters)
         );
     }

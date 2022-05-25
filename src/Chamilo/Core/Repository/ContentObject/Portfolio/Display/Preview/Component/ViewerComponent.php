@@ -133,7 +133,7 @@ class ViewerComponent extends \Chamilo\Core\Repository\ContentObject\Portfolio\D
      *
      * @param ComplexContentObjectPathNode $node
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrievePortfolioNotifications(ComplexContentObjectPathNode $node)
     {

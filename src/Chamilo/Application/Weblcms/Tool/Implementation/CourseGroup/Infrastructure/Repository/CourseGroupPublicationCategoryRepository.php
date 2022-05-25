@@ -27,7 +27,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $toolName
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | \Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublicationCategory[]
      */
     public function findPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
     {
@@ -46,7 +46,7 @@ class CourseGroupPublicationCategoryRepository extends CommonDataClassRepository
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClass\CourseGroup $courseGroup
      * @param string $toolName
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | CourseGroupPublicationCategory[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | CourseGroupPublicationCategory[]
      */
     public function findCourseGroupPublicationCategoriesForCourseGroup(CourseGroup $courseGroup, $toolName = null)
     {

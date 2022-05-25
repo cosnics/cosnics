@@ -154,7 +154,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findAllWorkspaces($limit = null, $offset = null, $orderProperty = null)
     {
@@ -170,7 +170,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findSharedWorkspacesForEntities($entities, $limit = null, $offset = null, $orderProperty = null)
     {
@@ -201,7 +201,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUser(
         User $user, $entities, $limit = null, $offset = null, $orderProperty = null
@@ -223,7 +223,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspaceFavouritesByUserFast(
         User $user, $limit = null, $offset = null, $orderProperty = null
@@ -251,7 +251,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesByCreator(User $user, $limit = null, $offset = null, $orderProperty = null)
     {
@@ -266,7 +266,7 @@ class WorkspaceRepository
      *
      * @param integer[] $identifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesByIdentifiers($identifiers, $limit = null, $offset = null, $orderProperty = null)
     {
@@ -288,7 +288,7 @@ class WorkspaceRepository
      * @param integer $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesForUser(User $user, $entities, $right, $limit, $offset, $orderProperty = null)
     {
@@ -307,7 +307,7 @@ class WorkspaceRepository
      * @param int $offset
      * @param OrderProperty $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function findWorkspacesForUserWithExcludedWorkspaces(
         User $user, $entities, $right, $excludedWorkspaceIdentifiers, $limit, $offset, $orderProperty = null
@@ -493,7 +493,7 @@ class WorkspaceRepository
      * @param int $offset
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     protected function retrieveWorkspacesForUser(
         User $user, $entities, $right, Condition $condition = null, $limit = null, $offset = null, $orderProperty = null

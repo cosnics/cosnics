@@ -12,7 +12,6 @@ use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -32,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -45,40 +45,17 @@ class DataClassRepository
 
     const ALIAS_MAX_SORT = 'max_sort';
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface
-     */
-    private $dataClassDatabase;
+    private DataClassDatabaseInterface $dataClassDatabase;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClassFactory
-     */
-    private $dataClassFactory;
+    private DataClassFactory $dataClassFactory;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache
-     */
-    private $dataClassRepositoryCache;
+    private DataClassRepositoryCache $dataClassRepositoryCache;
 
-    /**
-     *
-     * @var boolean
-     */
-    private $queryCacheEnabled;
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache $dataClassRepositoryCache
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface $dataClassDatabase
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClassFactory $dataClassFactory
-     * @param boolean $queryCacheEnabled
-     */
+    private bool $queryCacheEnabled;
+    
     public function __construct(
         DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
-        DataClassFactory $dataClassFactory, $queryCacheEnabled = true
+        DataClassFactory $dataClassFactory, bool $queryCacheEnabled = true
     )
     {
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
@@ -140,11 +117,11 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function __records($dataClassName, RecordRetrievesParameters $parameters)
     {
-        return new DataClassCollection($this->getDataClassDatabase()->records($dataClassName, $parameters));
+        return new ArrayCollection($this->getDataClassDatabase()->records($dataClassName, $parameters));
     }
 
     /**
@@ -168,7 +145,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function __retrievesClass($dataClassName, DataClassRetrievesParameters $parameters)
     {
@@ -180,7 +157,7 @@ class DataClassRepository
             $dataClasses[] = $this->getDataClassFactory()->getDataClass($dataClassName, $record);
         }
 
-        return new DataClassCollection($dataClasses);
+        return new ArrayCollection($dataClasses);
     }
 
     /**
@@ -803,7 +780,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     public function records($dataClassName, RecordRetrievesParameters $parameters = null)
@@ -814,7 +791,7 @@ class DataClassRepository
 
             if (!$dataClassRepositoryCache->exists($dataClassName, $parameters))
             {
-                $dataClassRepositoryCache->addForDataClassCollection(
+                $dataClassRepositoryCache->addForArrayCollection(
                     $dataClassName, $this->__records($dataClassName, $parameters), $parameters
                 );
             }
@@ -1015,14 +992,14 @@ class DataClassRepository
     }
 
     /**
-     * Retrieve a DataClassCollection of DataClass object instances from the storage layer
+     * Retrieve a ArrayCollection of DataClass object instances from the storage layer
      *
      * @template tRetrieves
      *
      * @param class-string<tRetrieves> $dataClassName
      * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return DataClassCollection<tRetrieves>
+     * @return ArrayCollection<tRetrieves>
      * @throws \Exception
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters = null)
@@ -1043,7 +1020,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     protected function retrievesClass(
@@ -1056,15 +1033,15 @@ class DataClassRepository
 
             if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
-                $dataClassRepositoryCache->addForDataClassCollection(
+                $dataClassRepositoryCache->addForArrayCollection(
                     $dataClassName, $this->__retrievesClass($dataClassName, $parameters), $parameters
                 );
             }
 
-            $dataClassCollection = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
-            $dataClassCollection->first();
+            $arrayCollection = $dataClassRepositoryCache->get($cacheDataClassName, $parameters);
+            $arrayCollection->first();
 
-            return $dataClassCollection;
+            return $arrayCollection;
         }
         else
         {
@@ -1077,7 +1054,7 @@ class DataClassRepository
      * @param string $dataClassName
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     protected function retrievesCompositeDataClass(string $dataClassName, DataClassRetrievesParameters $parameters)

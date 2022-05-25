@@ -37,9 +37,9 @@ class Assessment extends ContentObject implements ComplexContentObjectSupport
     private $question_count;
 
     /**
-     * An DataClassCollection containing all ComplexContentObjectItem objects for individual questions.
+     * An ArrayCollection containing all ComplexContentObjectItem objects for individual questions.
      *
-     * @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     private $questions;
 

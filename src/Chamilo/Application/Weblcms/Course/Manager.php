@@ -87,7 +87,7 @@ abstract class Manager extends Application
     /**
      * Retrieves the selected course Use this function if you want to retrieve the selected course as a resultset
      * 
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<Course>
+     * @return \Doctrine\Common\Collections\ArrayCollection<Course>
      */
     protected function get_selected_courses()
     {

@@ -58,7 +58,7 @@ class AvailabilityRepository
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAvailabilitiesForUser(User $user, $isAvailable = null)
     {
@@ -87,7 +87,7 @@ class AvailabilityRepository
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      * @param string $calendarType
      * @param boolean $isAvailable
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findAvailabilitiesForUserAndCalendarType(User $user, $calendarType, $isAvailable = null)
     {

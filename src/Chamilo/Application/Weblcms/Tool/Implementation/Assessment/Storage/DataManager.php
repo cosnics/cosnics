@@ -42,7 +42,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * $join_declarations. Subselects are not catered for.
      *
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public static function retrieve_assessment_raw_export_data(
         $condition = null, $offset = null, $max_objects = null, $order_by = null

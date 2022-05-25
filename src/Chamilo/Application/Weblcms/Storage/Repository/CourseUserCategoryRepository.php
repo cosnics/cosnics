@@ -40,7 +40,7 @@ class CourseUserCategoryRepository extends CommonDataClassRepository
      * @param \Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType $courseType
      * @param array $subscribedCourseIds
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection|Course[]
+     * @return \Doctrine\Common\Collections\ArrayCollection|Course[]
      */
     public function findCoursesForUserByCourseUserCategoryAndCourseType(
         CourseUserCategory $courseUserCategory, CourseType $courseType, $subscribedCourseIds = []

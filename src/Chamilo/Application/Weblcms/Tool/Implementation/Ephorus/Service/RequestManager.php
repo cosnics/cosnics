@@ -11,7 +11,7 @@ use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Core\User\Service\UserService;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Exception;
@@ -146,7 +146,7 @@ class RequestManager
      *
      * @return int
      */
-    public function changeDocumentsVisibility(DataClassCollection $requests)
+    public function changeDocumentsVisibility(ArrayCollection $requests)
     {
         $failures = 0;
 
@@ -236,7 +236,7 @@ class RequestManager
     /**
      * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters $recordRetrievesParameters
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
     {
@@ -246,7 +246,7 @@ class RequestManager
     /**
      * @param int|int[] $guids
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findRequestsWithContentObjectsByGuids($guids)
     {
@@ -261,7 +261,7 @@ class RequestManager
     /**
      * @param \Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Request $request
      *
-     * @return Result[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return Result[] | \Doctrine\Common\Collections\ArrayCollection
      */
     public function findResultsForRequest(Request $request)
     {

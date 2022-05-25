@@ -593,7 +593,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param null $max_objects
      * @param null $order_by
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight>
      */
     public static function retrieve_rights_location_rights(
         $context, $condition = null, $offset = null, $max_objects = null, $order_by = null

@@ -24,151 +24,76 @@ class StorageUnitRepository
     const ALTER_STORAGE_UNIT_DROP_INDEX = 6;
     const ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY = 4;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface
-     */
-    private $storageUnitDatabase;
+    private StorageUnitDatabaseInterface $storageUnitDatabase;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface $storageUnitDatabase
-     */
     public function __construct(StorageUnitDatabaseInterface $storageUnitDatabase)
     {
         $this->storageUnitDatabase = $storageUnitDatabase;
     }
 
     /**
-     * Alter a storage unit
-     *
-     * @param integer $type
-     * @param string $storageUnitName
-     * @param string $property
-     * @param string[] $attributes
-     *
-     * @return boolean
+     * @param string[][] $attributes
      */
-    public function alter($type, $storageUnitName, $property, $attributes = [])
+    public function alter(int $type, string $storageUnitName, string $property, array $attributes = []): bool
     {
         return $this->getStorageUnitDatabase()->alter($type, $storageUnitName, $property, $attributes);
     }
 
-    /**
-     * Alter a storage unit index
-     *
-     * @param integer $type
-     * @param string $storageUnitName
-     * @param string $indexName
-     * @param string[] $columns
-     *
-     * @return boolean
-     */
-    public function alterIndex($type, $storageUnitName, $indexName = null, $columns = [])
+    public function alterIndex(int $type, string $storageUnitName, ?string $indexName = null, array $columns = []): bool
     {
         return $this->getStorageUnitDatabase()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }
 
     /**
-     * Create a storage unit
-     *
-     * @param string $storageUnitName
-     * @param string[] $properties
-     * @param string[] $indexes
-     *
-     * @return boolean
+     * @param string[][] $properties
+     * @param string[][][] $indexes
      */
-    public function create($storageUnitName, $properties, $indexes)
+    public function create(string $storageUnitName, array $properties = [], array $indexes = []): bool
     {
         return $this->getStorageUnitDatabase()->create($storageUnitName, $properties, $indexes);
     }
 
-    /**
-     * Drop a storage unit
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function drop($storageUnitName)
+    public function drop(string $storageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->drop($storageUnitName);
     }
 
-    /**
-     * Determine whether a storage unit exists
-     *
-     * @param string $storageUnitName
-     *
-     * @return boolean
-     */
-    public function exists($storageUnitName)
+    public function exists(string $storageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->exists($storageUnitName);
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface
-     */
-    public function getStorageUnitDatabase()
+    public function getStorageUnitDatabase(): StorageUnitDatabaseInterface
     {
         return $this->storageUnitDatabase;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Interfaces\StorageUnitDatabaseInterface $storageUnitDatabase
-     */
-    public function setStorageUnitDatabase($storageUnitDatabase)
+    public function setStorageUnitDatabase(StorageUnitDatabaseInterface $storageUnitDatabase): StorageUnitRepository
     {
         $this->storageUnitDatabase = $storageUnitDatabase;
+
+        return $this;
     }
 
-    /**
-     * Optimize a storage unit
-     *
-     * @param $storageUnitName string
-     *
-     * @return boolean
-     */
-    public function optimize($storageUnitName)
+    public function optimize(string $storageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->optimize($storageUnitName);
     }
 
     /**
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package()
+    public static function package(): string
     {
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
     }
 
-    /**
-     * Rename a storage unit
-     *
-     * @param string $oldStorageUnitName
-     * @param string $newStorageUnitName
-     *
-     * @return boolean
-     */
-    public function rename($oldStorageUnitName, $newStorageUnitName)
+    public function rename(string $oldStorageUnitName, string $newStorageUnitName): bool
     {
         return $this->getStorageUnitDatabase()->rename($oldStorageUnitName, $newStorageUnitName);
     }
 
-    /**
-     * Truncate a storage unit and optionally optimize it afterwards
-     *
-     * @param $storageUnitName string
-     * @param $optimize boolean
-     *
-     * @return boolean
-     */
-    public function truncate($storageUnitName, $optimize = true)
+    public function truncate(string $storageUnitName, ?bool $optimize = true): bool
     {
         if (!$this->getStorageUnitDatabase()->truncate($storageUnitName))
         {

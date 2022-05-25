@@ -86,7 +86,7 @@ class ContentObjectRelationService
      *
      * @param ContentObject $contentObject
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getContentObjectRelationsForContentObject(ContentObject $contentObject)
     {
@@ -205,7 +205,7 @@ class ContentObjectRelationService
      *
      * @param \Chamilo\Core\Repository\Workspace\Service\WorkspaceService $workspaceService
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getWorkspacesForContentObject(WorkspaceService $workspaceService, ContentObject $contentObject)
     {
@@ -234,7 +234,7 @@ class ContentObjectRelationService
      * @param int $offset
      * @param OrderProperty $orderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user, $limit = null, $offset = null, $orderBy = null)
@@ -264,7 +264,7 @@ class ContentObjectRelationService
      * @param ContentObject[] $contentObjects
      * @param User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function countAvailableWorkspacesForContentObjectsAndUser(WorkspaceService $workspaceService, $contentObjects, 
         User $user)

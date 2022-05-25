@@ -36,7 +36,7 @@ class PublicationRepository extends CommonDataClassRepository
     /**
      * @param int[] $contentObjectPublicationIdentifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | \Chamilo\Application\Weblcms\Tool\Implementation\Assignment\Storage\DataClass\Publication[]
      */
     public function findPublicationsByContentObjectPublicationIdentifiers($contentObjectPublicationIdentifiers)
     {

@@ -160,7 +160,7 @@ class PropertyProviderService
     /**
      * @param \Chamilo\Core\Metadata\Entity\DataClassEntity $entity
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      * @throws \Exception
      */
     public function getProviderLinksForEntity(DataClassEntity $entity)

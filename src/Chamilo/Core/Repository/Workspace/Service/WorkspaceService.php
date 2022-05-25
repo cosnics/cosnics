@@ -176,7 +176,7 @@ class WorkspaceService
 
     /**
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getAllWorkspaces()
     {
@@ -221,7 +221,7 @@ class WorkspaceService
      *
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getSharedWorkspacesForUser(User $user, $limit, $offset, $orderProperty = null)
     {
@@ -267,7 +267,7 @@ class WorkspaceService
      * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspaceFavouritesByUser(
         EntityService $entityService, User $user, $limit = null, $offset = null, $orderProperty = null
@@ -292,7 +292,7 @@ class WorkspaceService
      * @param EntityService $entityService
      * @param \Chamilo\Core\User\Storage\DataClass\User $user
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspaceFavouritesByUserFast(User $user, $limit = null, $offset = null, $orderProperty = null)
     {
@@ -333,7 +333,7 @@ class WorkspaceService
      * @param $offset
      * @param null $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesByCreator(User $user, $limit, $offset, $orderProperty = null)
     {
@@ -344,7 +344,7 @@ class WorkspaceService
      *
      * @param integer[] $identifiers
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesByIdentifiers($identifiers)
     {
@@ -359,7 +359,7 @@ class WorkspaceService
      * @param $offset
      * @param null $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesForUser(
         User $user, $right = RightsService::RIGHT_VIEW, $limit = null, $offset = null, $orderProperty = null
@@ -381,7 +381,7 @@ class WorkspaceService
      * @param $offset
      * @param null $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     public function getWorkspacesForUserWithExcludedWorkspaces(
         User $user, $right = RightsService::RIGHT_VIEW, $excludedWorkspaceIdentifiers = [], $limit, $offset,

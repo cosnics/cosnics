@@ -40,7 +40,7 @@ class Renderer extends CourseListRenderer
     /**
      * The course type list
      *
-     * @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection<CourseType>
+     * @var \Doctrine\Common\Collections\ArrayCollection<CourseType>
      */
     protected $course_types;
 
@@ -361,7 +361,7 @@ class Renderer extends CourseListRenderer
     /**
      * Parsers the courses in a structure in course type / course category
      *
-     * @param \Chamilo\Libraries\Storage\Iterator\DataClassCollection $courses
+     * @param \Doctrine\Common\Collections\ArrayCollection $courses
      *
      * @return string[][][][]
      */
@@ -380,7 +380,7 @@ class Renderer extends CourseListRenderer
     /**
      * Retrieves the course types
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     protected function retrieve_course_types()
     {

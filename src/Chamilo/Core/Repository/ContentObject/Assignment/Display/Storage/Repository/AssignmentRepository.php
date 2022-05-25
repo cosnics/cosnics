@@ -573,7 +573,7 @@ abstract class AssignmentRepository
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | EntryAttachment[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | EntryAttachment[]
      */
     public function findAttachmentsByEntry(Entry $entry)
     {
@@ -591,7 +591,7 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param int $entityType
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntries(Condition $condition, $entityType = null)
     {
@@ -608,7 +608,7 @@ abstract class AssignmentRepository
     /**
      * @param \Chamilo\Core\Repository\Storage\DataClass\ContentObject $contentObject
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | Entry[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | Entry[]
      */
     public function findEntriesByContentObjectId(ContentObject $contentObject)
     {
@@ -629,7 +629,7 @@ abstract class AssignmentRepository
      *
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function findEntriesByEntityTypeAndIdentifiers(
         $entityType, $entityIdentifiers, Condition $condition
@@ -695,7 +695,7 @@ abstract class AssignmentRepository
     /**
      * @param int $attachmentId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | EntryAttachment[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | EntryAttachment[]
      */
     public function findEntryAttachmentsByAttachmentId($attachmentId)
     {
@@ -713,7 +713,7 @@ abstract class AssignmentRepository
     /**
      * @param int $userId
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | EntryAttachment[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | EntryAttachment[]
      */
     public function findEntryAttachmentsByUserId($userId)
     {
@@ -745,7 +745,7 @@ abstract class AssignmentRepository
      * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntryStatistics(
         DataClassProperties $dataClassProperties = null, Condition $condition = null, Joins $joins = null,
@@ -820,7 +820,7 @@ abstract class AssignmentRepository
      * @param int $entityId
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntryStatisticsForEntity($entityType, $entityId, Condition $condition = null)
     {
@@ -834,7 +834,7 @@ abstract class AssignmentRepository
     /**
      * @param \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findFeedbackByEntry(Entry $entry)
     {
@@ -881,7 +881,7 @@ abstract class AssignmentRepository
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     protected function findTargetsForEntityType(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
@@ -954,7 +954,7 @@ abstract class AssignmentRepository
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      *
      * TODO: changed from records to dataclass so remove properties in calls
      */
@@ -1147,7 +1147,7 @@ abstract class AssignmentRepository
      *
      * @param integer[] $entryIdentifiers []
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieveEntriesByIdentifiers($entryIdentifiers)
     {
@@ -1169,7 +1169,7 @@ abstract class AssignmentRepository
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderProperty
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function retrieveEntriesForEntityTypeAndId(
         $entityType, $entityId, Condition $condition = null, $offset = null, $count = null, $orderProperty = null

@@ -11,7 +11,7 @@ use Chamilo\Libraries\Architecture\JsonAjaxResult;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElements;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -98,7 +98,7 @@ class GroupEntityFeedComponent extends Manager
 
         if (count($userIdentifiers) == 0)
         {
-            return new DataClassCollection([]);
+            return new ArrayCollection([]);
         }
 
         $searchQuery = $this->getRequest()->request->get(self::PARAM_SEARCH_QUERY);

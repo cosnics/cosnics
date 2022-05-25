@@ -6,7 +6,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 
 /**
@@ -56,7 +56,7 @@ interface TrackingRepositoryInterface
      * @param LearningPath $learningPath
      * @param User $user
      *
-     * @return TreeNodeAttempt[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeAttempt[]|\Doctrine\Common\Collections\ArrayCollection
      */
     public function findTreeNodeAttempts(LearningPath $learningPath, User $user);
 
@@ -65,7 +65,7 @@ interface TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | TreeNodeAttempt[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | TreeNodeAttempt[]
      */
     public function findTreeNodeAttemptsForLearningPath(LearningPath $learningPath);
 
@@ -94,7 +94,7 @@ interface TrackingRepositoryInterface
      *
      * @param TreeNodeAttempt $treeNodeAttempt
      *
-     * @return TreeNodeQuestionAttempt[] | \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return TreeNodeQuestionAttempt[] | \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTreeNodeQuestionAttempts(TreeNodeAttempt $treeNodeAttempt);
 
@@ -109,7 +109,7 @@ interface TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findLearningPathAttemptsWithUser(LearningPath $learningPath, $treeNodeDataIds = [],
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null);
@@ -136,7 +136,7 @@ interface TrackingRepositoryInterface
      * @param int $count
      * @param array $orderBy
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findTargetUsersWithLearningPathAttempts(LearningPath $learningPath, $treeNodeDataIds = [],
         Condition $condition = null, $offset = 0, $count = 0, $orderBy = null);
@@ -157,7 +157,7 @@ interface TrackingRepositoryInterface
      *
      * @param LearningPath $learningPath
      *
-     * @return DataClassCollection
+     * @return ArrayCollection
      */
     public function findLearningPathAttemptsWithTreeNodeAttemptsAndTreeNodeQuestionAttempts(LearningPath $learningPath);
 }

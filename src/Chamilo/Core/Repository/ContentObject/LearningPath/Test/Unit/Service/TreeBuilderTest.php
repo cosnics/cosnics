@@ -12,7 +12,7 @@ use Chamilo\Core\Repository\ContentObject\Section\Storage\DataClass\Section;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Workspace\Repository\ContentObjectRepository;
 use Chamilo\Libraries\Architecture\Test\TestCases\ChamiloTestCase;
-use Chamilo\Libraries\Storage\Iterator\DataClassCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Tests the TreeBuilder class
@@ -118,7 +118,7 @@ class TreeBuilderTest extends ChamiloTestCase
             $treeNodesData[] = $treeNodeData;
         }
 
-        $resultSet = new DataClassCollection($contentObjects);
+        $resultSet = new ArrayCollection($contentObjects);
 
         $this->treeNodeDataRepositoryMock->expects($this->once())
             ->method('findTreeNodesDataForLearningPath')

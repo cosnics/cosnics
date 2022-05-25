@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class RecordRetrieveParameters extends DataClassParameters
+class RecordRetrieveParameters extends DataClassRetrieveParameters
 {
 
     public function __construct(
@@ -23,7 +23,9 @@ class RecordRetrieveParameters extends DataClassParameters
         ?Joins $joins = null, ?GroupBy $groupBy = null
     )
     {
-        parent::__construct($condition, $joins, $dataClassProperties, $orderBy, $groupBy);
+        parent::__construct($condition, $orderBy, $joins);
+        $this->setDataClassProperties($dataClassProperties);
+        $this->setGroupBy($groupBy);
     }
 
     /**

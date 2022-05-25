@@ -953,7 +953,7 @@ class CourseGroupForm extends FormValidator
         $max_num_members = $course_group->get_max_number_of_members();
 
         // randomize course_users
-        /** @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection $course_users_data_set */
+        /** @var \Doctrine\Common\Collections\ArrayCollection $course_users_data_set */
         $course_users_data_set = CourseDataManager::retrieve_all_course_users($course_code);
         $course_users = [];
         foreach($course_users_data_set as $course_user)
@@ -1001,7 +1001,7 @@ class CourseGroupForm extends FormValidator
      */
     public function random_user_subscription_to_course_groups($parent_course_group)
     {
-        /** @var \Chamilo\Libraries\Storage\Iterator\DataClassCollection $course_users_drs */
+        /** @var \Doctrine\Common\Collections\ArrayCollection $course_users_drs */
         $course_users_drs = CourseDataManager::retrieve_all_course_users(
             $parent_course_group->get_course_code()
         );

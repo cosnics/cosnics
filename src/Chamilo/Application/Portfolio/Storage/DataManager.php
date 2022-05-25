@@ -84,7 +84,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param string $location_id
      * @param int $publication_id
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public static function retrieve_rights_location_entity_right(
         $right, $entity_id, $entity_type, $location_id, $publication_id
@@ -128,7 +128,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      * @param string $location_id
      * @param int[] $rights
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public static function retrieve_rights_location_rights_for_location($publication_id, $location_id, $rights)
     {

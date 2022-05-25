@@ -186,7 +186,7 @@ class AttemptSummaryCalculator
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersWithoutLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {
@@ -231,7 +231,7 @@ class AttemptSummaryCalculator
      * @param LearningPath $learningPath
      * @param TreeNode $treeNode
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findTargetUsersWithPartialLearningPathAttempts(LearningPath $learningPath, TreeNode $treeNode)
     {

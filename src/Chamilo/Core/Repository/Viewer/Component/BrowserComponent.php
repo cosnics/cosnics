@@ -237,7 +237,7 @@ class BrowserComponent extends Manager implements TableSupport
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace>
      */
     protected function getWorkspacesForUser()
     {

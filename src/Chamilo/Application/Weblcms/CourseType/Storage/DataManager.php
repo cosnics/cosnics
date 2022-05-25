@@ -241,7 +241,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     /**
      * Retrieves the active course types
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     public static function retrieve_active_course_types()
     {
@@ -270,7 +270,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      *
      * @param $user_id int
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     public static function retrieve_active_course_types_with_user_order($user_id)
     {
@@ -349,7 +349,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * @param $max_objects int
      * @param $order_by \Chamilo\Libraries\Storage\Query\OrderBy
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     public static function retrieve_course_types_with_user_order(
         $join_condition = null, $condition = null, $offset = null, $max_objects = null, $order_by = null

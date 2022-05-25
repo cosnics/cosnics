@@ -94,7 +94,7 @@ class FeedbackServiceBridge implements FeedbackServiceBridgeInterface
     /**
      * @param Entry|\Chamilo\Application\Weblcms\Bridge\LearningPath\Assignment\Storage\DataClass\Entry $entry
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
+     * @return \Doctrine\Common\Collections\ArrayCollection | \Chamilo\Application\Weblcms\Bridge\Assignment\Storage\DataClass\Feedback[]
      */
     public function getFeedbackByEntry(Entry $entry)
     {

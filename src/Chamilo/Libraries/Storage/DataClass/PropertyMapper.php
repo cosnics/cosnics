@@ -108,7 +108,7 @@ class PropertyMapper
 
     /**
      *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Chamilo\Libraries\Storage\Iterator\DataClassCollection $dataClasses
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
      * @param string $propertyName
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]

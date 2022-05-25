@@ -72,7 +72,7 @@ abstract class Manager extends Application
      * Retrieves the selected course types Use this function if you want to retrieve the selected course types as a
      * resultset
      * 
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
+     * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType>
      */
     protected function get_selected_course_types()
     {

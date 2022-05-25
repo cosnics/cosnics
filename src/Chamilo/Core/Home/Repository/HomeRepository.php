@@ -54,7 +54,7 @@ class HomeRepository
      *
      * @param int $userIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findBlocksByUserIdentifier($userIdentifier)
     {
@@ -84,7 +84,7 @@ class HomeRepository
      *
      * @param integer $userIdentifier
      *
-     * @return \Chamilo\Libraries\Storage\Iterator\DataClassCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findElementsByUserIdentifier($userIdentifier)
     {
