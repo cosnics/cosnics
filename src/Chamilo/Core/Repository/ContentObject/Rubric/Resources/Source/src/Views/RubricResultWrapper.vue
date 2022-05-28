@@ -1,6 +1,6 @@
 <template>
     <div id="app" v-if="rubric">
-        <rubric-result :rubric="rubric" :rubric-evaluation="rubricEvaluation" :rubric-entry-url="rubricEntryUrl"></rubric-result>
+        <rubric-result :rubric="rubric" :rubric-evaluation="rubricEvaluation" :rubric-entry-url="rubricEntryUrl" :can-create-from-existing-rubric="canCreateFromExistingRubric"></rubric-result>
     </div>
 </template>
 
@@ -23,6 +23,7 @@
         @Prop({type: Object, required: true}) readonly rubricData!: object;
         @Prop({type: Array, required: true}) readonly rubricResults!: any[];
         @Prop({type: String, default: ''}) readonly rubricEntryUrl!: string;
+        @Prop({type: Boolean, default: false}) readonly canCreateFromExistingRubric!: boolean;
 
         initData() {
             const convertedRubricData = convertRubricData(this.rubricData);

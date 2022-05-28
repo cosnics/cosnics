@@ -33,17 +33,26 @@ class TreeNodeResultJSONModel
     protected $comment;
 
     /**
+     * @var int
+     *
+     * @Type("integer")
+     */
+    protected $score;
+
+    /**
      * CriteriumResultJSONModel constructor.
      *
      * @param int $treeNodeId
      * @param int $levelId
      * @param string|null $comment
+     * @param int|null $score
      */
-    public function __construct(int $treeNodeId, int $levelId, string $comment = null)
+    public function __construct(int $treeNodeId, int $levelId, string $comment = null, int $score = null)
     {
         $this->treeNodeId = $treeNodeId;
         $this->levelId = $levelId;
         $this->comment = $comment;
+        $this->score = $score;
     }
 
     /**
@@ -68,5 +77,13 @@ class TreeNodeResultJSONModel
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    /**
+     * @return int
+     */
+    public function getScore(): ?int
+    {
+        return $this->score;
     }
 }

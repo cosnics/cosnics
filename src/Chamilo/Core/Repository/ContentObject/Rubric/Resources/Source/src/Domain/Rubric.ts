@@ -39,6 +39,10 @@ export default class Rubric extends TreeNode {
         return 'rubric';
     }
 
+    get useWeights() {
+        return this.useScores && (this.useRelativeWeights || this.hasAbsoluteWeights);
+    }
+
     get rubricLevels(): Level[] {
         return this.levels.filter(level => !level.criteriumId);
     }

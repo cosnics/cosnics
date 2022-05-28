@@ -12,10 +12,10 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric from '../Domain/Rubric';
-    import Cluster from '../Domain/Cluster';
-    import Category from '../Domain/Category';
-    import Criterium from '../Domain/Criterium';
+    import Rubric from '../../Domain/Rubric';
+    import Cluster from '../../Domain/Cluster';
+    import Category from '../../Domain/Category';
+    import Criterium from '../../Domain/Criterium';
 
     @Component({})
     export default class TreeNodeTitle extends Vue {
@@ -100,6 +100,7 @@
 
     .treenode-title {
         max-width: 22.2rem;
+        z-index: 1;
     }
 
     .criterium-title.mod-no-category {

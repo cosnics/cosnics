@@ -37,9 +37,9 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Rubric from '../Domain/Rubric';
-    import DataConnector from '../Connector/DataConnector';
-    import OnOffSwitch from './OnOffSwitch.vue';
+    import Rubric from '../../../Domain/Rubric';
+    import DataConnector from '../../../Connector/DataConnector';
+    import OnOffSwitch from '../../OnOffSwitch.vue';
     import Levels from './Levels.vue';
 
     @Component({
@@ -93,6 +93,7 @@
 <style lang="scss">
     .rubrics-wrapper-levels {
         margin-left: -1.5em;
+        margin-right: -1.5em;
         max-width: 52em;
         width: 100%;
     }

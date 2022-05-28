@@ -66,7 +66,7 @@ export default class Choice {
             choiceObject = choice;
         }
 
-        let newChoice = new Choice(
+        const newChoice = new Choice(
             choiceObject.selected,
             choiceObject.feedback
         );
@@ -74,4 +74,5 @@ export default class Choice {
         newChoice.fixedScore = choiceObject.fixed_score;
 
         return newChoice;
-    }}
+    }
+}
