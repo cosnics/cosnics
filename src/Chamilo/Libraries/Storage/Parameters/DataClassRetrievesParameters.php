@@ -14,7 +14,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassRetrievesParameters extends DataClassParameters
+class DataClassRetrievesParameters extends DataClassBasicRetrieveParameters
 {
 
     public function __construct(

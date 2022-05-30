@@ -18,11 +18,8 @@ use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
-use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
-use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Doctrine\DBAL\Types\Type;
 use Exception;
@@ -65,66 +62,15 @@ class DataClassDatabase implements DataClassDatabaseInterface
         $this->recordProcessor = $recordProcessor;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
-    protected function buildBasicRecordsSql(string $dataClassName, DataClassRetrievesParameters $parameters): string
-    {
-        $queryBuilder = new QueryBuilder();
-
-        $queryBuilder->from(
-            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-        );
-
-        $queryBuilder = $this->getParametersProcessor()->processParameters(
-            $this, $queryBuilder, $parameters, $dataClassName
-        );
-
-        return $queryBuilder->getSQL();
-    }
-
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
-    protected function buildRecordsSql(string $dataClassName, RecordRetrievesParameters $parameters): string
-    {
-        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
-        {
-            return $this->buildRetrievesSql($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->buildBasicRecordsSql($dataClassName, $parameters);
-        }
-    }
-
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
-    protected function buildRetrievesSql(string $dataClassName, DataClassRetrievesParameters $parameters): string
-    {
-        return $this->buildBasicRecordsSql(
-            $dataClassName,
-            $this->getParametersProcessor()->handleDataClassRetrievesParameters($dataClassName, $parameters)
-        );
-    }
-
     public function count(string $dataClassName, DataClassCountParameters $parameters): int
     {
         try
         {
             $queryBuilder = new QueryBuilder();
 
-            $queryBuilder->from(
-                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-            );
+            $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
 
-            $queryBuilder = $this->getParametersProcessor()->processParameters(
-                $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassCountParameters($parameters),
-                $dataClassName
-            );
+            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
@@ -157,14 +103,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $queryBuilder = new QueryBuilder();
 
-            $queryBuilder->from(
-                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-            );
+            $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
 
-            $queryBuilder = $this->getParametersProcessor()->processParameters(
-                $this, $queryBuilder,
-                $this->getParametersProcessor()->handleDataClassCountGroupedParameters($parameters), $dataClassName
-            );
+            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
@@ -194,11 +135,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    public function create(string $dataClassName, array $record): bool
+    public function create(string $dataClassStorageUnitName, array $record): bool
     {
         try
         {
-            $insertSql = $this->getConnection()->GetInsertSQL($dataClassName::getTableName(), $record);
+            $insertSql = $this->getConnection()->GetInsertSQL($dataClassStorageUnitName, $record);
             $result = $this->getConnection()->Execute($insertSql);
 
             if ($result === false)
@@ -247,14 +188,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             $queryBuilder = new QueryBuilder();
 
-            $queryBuilder->from(
-                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-            );
+            $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
 
-            $queryBuilder = $this->getParametersProcessor()->processParameters(
-                $this, $queryBuilder, $this->getParametersProcessor()->handleDataClassDistinctParameters($parameters),
-                $dataClassName
-            );
+            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 
@@ -320,82 +256,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    protected function fetchRecord(string $dataClassName, DataClassParameters $parameters): array
-    {
-        try
-        {
-            $queryBuilder = new QueryBuilder();
-
-            $queryBuilder->from(
-                $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
-            );
-
-            $queryBuilder = $this->getParametersProcessor()->processParameters(
-                $this, $queryBuilder, $parameters, $dataClassName
-            );
-
-            $sqlQuery = $queryBuilder->getSQL();
-
-            /**
-             *
-             * @var \ADORecordSet $statement
-             */
-            $statement =
-                $this->getConnection()->SelectLimit($sqlQuery, $parameters->getCount(), $parameters->getOffset());
-
-            if ($statement instanceof ADORecordSet)
-            {
-                $record = $statement->FetchRow();
-            }
-            else
-            {
-                $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
-                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-            }
-
-            if ($record === false)
-            {
-                $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
-                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-            }
-
-            if (!is_array($record) || empty($record))
-            {
-                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
-            }
-
-            return $this->processRecord($record);
-        }
-        catch (Exception $exception)
-        {
-            $this->handleError($exception);
-
-            throw new DataClassNoResultException($dataClassName, $parameters);
-        }
-    }
-
-    /**
-     *
-     * @param \ADORecordSet $statement
-     *
-     * @return string[][]
-     */
-    protected function fetchRecords(ADORecordSet $statement): array
-    {
-        $records = [];
-
-        while ($record = $statement->FetchRow())
-        {
-            $records[] = $this->processRecord($record);
-        }
-
-        return $records;
-    }
-
     public function getAlias(string $dataClassStorageUnitName): string
     {
         return $this->getStorageAliasGenerator()->getTableAlias($dataClassStorageUnitName);
@@ -406,24 +266,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->conditionPartTranslatorService;
     }
 
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService
-    ): DataClassDatabase
-    {
-        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
-
-        return $this;
-    }
-
     public function getConnection(): ADOConnection
     {
         return $this->connection;
-    }
-
-    public function setConnection(ADOConnection $connection): DataClassDatabase
-    {
-        $this->connection = $connection;
-
-        return $this;
     }
 
     public function getExceptionLogger(): ExceptionLoggerInterface
@@ -431,16 +276,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->exceptionLogger;
     }
 
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger): DataClassDatabase
+    public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int
     {
-        $this->exceptionLogger = $exceptionLogger;
-
-        return $this;
-    }
-
-    public function getLastInsertedIdentifier(string $dataClassName): int
-    {
-        return $this->getConnection()->Insert_ID($dataClassName::getTableName());
+        return $this->getConnection()->Insert_ID($dataClassStorageUnitName);
     }
 
     public function getParametersProcessor(): ParametersProcessor
@@ -448,42 +286,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->parametersProcessor;
     }
 
-    public function setParametersProcessor(ParametersProcessor $parametersProcessor): DataClassDatabase
-    {
-        $this->parametersProcessor = $parametersProcessor;
-
-        return $this;
-    }
-
     public function getRecordProcessor(): RecordProcessor
     {
         return $this->recordProcessor;
-    }
-
-    public function setRecordProcessor(RecordProcessor $recordProcessor): DataClassDatabase
-    {
-        $this->recordProcessor = $recordProcessor;
-
-        return $this;
-    }
-
-    /**
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    protected function getRecordsResult(string $sql, string $dataClassName, DataClassParameters $parameters
-    ): ADORecordSet
-    {
-        $recordSet = $this->getConnection()->SelectLimit($sql, $parameters->getCount(), $parameters->getOffset());
-
-        if ($recordSet === false)
-        {
-            $this->handleError(new Exception('No Records Found. Query: ' . $sql));
-            throw new DataClassNoResultException($dataClassName, $parameters, $sql);
-        }
-        else
-        {
-            return $recordSet;
-        }
     }
 
     public function getStorageAliasGenerator(): StorageAliasGenerator
@@ -491,18 +296,17 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->storageAliasGenerator;
     }
 
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): DataClassDatabase
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-
-        return $this;
-    }
-
     protected function handleError(Exception $exception)
     {
         $this->getExceptionLogger()->logException(
             new Exception('[Message: ' . $exception->getMessage() . '] [Information: {USER INFO GOES HERE}]')
         );
+    }
+
+    protected function handleQueryBuilderFrom(QueryBuilder $queryBuilder, string $dataClassName): void
+    {
+        $preparedTableName = $this->prepareTableName($dataClassName);
+        $queryBuilder->from($preparedTableName, $this->getAlias($preparedTableName));
     }
 
     /**
@@ -560,68 +364,105 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     */
-    public function record(string $dataClassName, RecordRetrieveParameters $parameters): array
-    {
-        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
-        {
-            return $this->retrieve($dataClassName, $parameters);
-        }
-        else
-        {
-            return $this->fetchRecord($dataClassName, $parameters);
-        }
-    }
-
-    /**
-     * @return string[][]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
-     */
-    public function records(string $dataClassName, RecordRetrievesParameters $parameters): array
-    {
-        $statement = $this->getRecordsResult(
-            $this->buildRecordsSql($dataClassName, $parameters), $dataClassName, $parameters
-        );
-
-        return $this->fetchRecords($statement);
-    }
-
-    /**
-     * @return string[]
-     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array
     {
-        return $this->fetchRecord(
-            $dataClassName,
-            $this->getParametersProcessor()->handleDataClassRetrieveParameters($dataClassName, $parameters)
-        );
+        try
+        {
+            $queryBuilder = new QueryBuilder();
+
+            $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
+
+            $queryBuilder = $this->getParametersProcessor()->run(
+                $this, $queryBuilder, $parameters, $dataClassName
+            );
+
+            $sqlQuery = $queryBuilder->getSQL();
+
+            /**
+             *
+             * @var \ADORecordSet $statement
+             */
+            $statement =
+                $this->getConnection()->SelectLimit($sqlQuery, $parameters->getCount(), $parameters->getOffset());
+
+            if ($statement instanceof ADORecordSet)
+            {
+                $record = $statement->FetchRow();
+            }
+            else
+            {
+                $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
+                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            }
+
+            if ($record === false)
+            {
+                $this->handleError(new Exception('No record found. Query: ' . $sqlQuery));
+                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            }
+
+            if (!is_array($record) || empty($record))
+            {
+                throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            }
+
+            return $this->processRecord($record);
+        }
+        catch (Exception $exception)
+        {
+            $this->handleError($exception);
+
+            throw new DataClassNoResultException($dataClassName, $parameters);
+        }
     }
 
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array
     {
-        $statement = $this->getRecordsResult(
-            $this->buildRetrievesSql($dataClassName, $parameters), $dataClassName, $parameters
+        $queryBuilder = new QueryBuilder();
+
+        $queryBuilder->from(
+            $this->prepareTableName($dataClassName), $this->getAlias($this->prepareTableName($dataClassName))
         );
 
-        return $this->fetchRecords($statement);
+        $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
+        $sql = $queryBuilder->getSQL();
+
+        $recordSet = $this->getConnection()->SelectLimit(
+            $sql, $parameters->getCount(), $parameters->getOffset()
+        );
+
+        if ($recordSet === false)
+        {
+            $this->handleError(new Exception('No Records Found. Query: ' . $sql));
+            throw new DataClassNoResultException($dataClassName, $parameters, $sql);
+        }
+        else
+        {
+            $records = [];
+
+            while ($record = $recordSet->FetchRow())
+            {
+                $records[] = $this->processRecord($record);
+            }
+
+            return $records;
+        }
     }
 
     /**
-     *
      * @param callable $function
      *
+     * @return mixed
      * @throws \Exception
      * @throws \Throwable
      */
-    public function transactional($function)
+    public function transactional(callable $function)
     {
         $throwOnFalse = function ($connection) use ($function) {
             $result = call_user_func($function, $connection);
@@ -689,25 +530,27 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return true;
     }
 
-    public function updates(string $dataClassName, DataClassProperties $properties, Condition $condition): bool
+    public function updates(string $dataClassStorageUnitName, DataClassProperties $properties, Condition $condition
+    ): bool
     {
         if (count($properties->get()) > 0)
         {
+            $conditionPartTranslatorService = $this->getConditionPartTranslatorService();
             $queryBuilder = new QueryBuilder();
-            $queryBuilder->update($dataClassName::getTableName());
+            $queryBuilder->update($dataClassStorageUnitName);
 
             foreach ($properties->get() as $dataClassProperty)
             {
                 $queryBuilder->set(
-                    $this->getConditionPartTranslatorService()->translate(
-                        $this, $dataClassProperty->get_property()
-                    ), $this->getConditionPartTranslatorService()->translate(
-                    $this, $dataClassProperty->get_value()
+                    $conditionPartTranslatorService->translate(
+                        $this, $dataClassProperty->getPropertyConditionVariable(), false
+                    ), $conditionPartTranslatorService->translate(
+                    $this, $dataClassProperty->getValueConditionVariable(), false
                 )
                 );
             }
 
-            $queryBuilder->where($this->getConditionPartTranslatorService()->translate($this, $condition));
+            $queryBuilder->where($conditionPartTranslatorService->translate($this, $condition));
 
             $statement = $this->getConnection()->Execute($queryBuilder->getSQL());
 

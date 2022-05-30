@@ -5,6 +5,7 @@ use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataManager;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 class NoOfUsersBlock extends Block
@@ -20,7 +21,7 @@ class NoOfUsersBlock extends Block
         $reporting_data->add_data_category_row(
             Translation::get('GetNumberOfUsers'),
             Translation::get('Count'),
-            DataManager::count(User::class));
+            DataManager::count(User::class, new DataClassCountParameters()));
 
         return $reporting_data;
     }

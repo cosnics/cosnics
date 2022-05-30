@@ -7,6 +7,7 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Reporting\Block\CourseB
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataManager as WeblcmsTrackingDataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Translation\Translation;
 
 class MostActiveInactiveLastVisitBlock extends CourseBlock
@@ -16,7 +17,7 @@ class MostActiveInactiveLastVisitBlock extends CourseBlock
     {
         $reporting_data = new ReportingData();
         
-        $course_count = $courses = CourseDataManager::count(Course::class);
+        $course_count = $courses = CourseDataManager::count(Course::class, new DataClassCountParameters());
         
         $reporting_data->set_categories(
             array(

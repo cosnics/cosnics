@@ -517,17 +517,14 @@ class DataManager
      * @param string $class
      * @param mixed $properties
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     * @param integer|null $offset
-     * @param integer|null $count
-     * @param \Chamilo\Libraries\Storage\Query\OrderBy $order_by
      *
      * @return boolean
      * @throws \Exception
      */
     public static function updates(
-        $class, $properties, Condition $condition, $offset = null, $count = null, $order_by = null
+        $class, $properties, Condition $condition
     )
     {
-        return self::getDataClassRepository()->updates($class, $properties, $condition, $offset, $count, $order_by);
+        return self::getDataClassRepository()->updates($class, $properties, $condition);
     }
 }

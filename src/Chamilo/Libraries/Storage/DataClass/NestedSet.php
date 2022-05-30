@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
+use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -973,7 +974,7 @@ abstract class NestedSet extends DataClass
                 );
 
                 $res = DataManager::updates(
-                    get_class($nested_set), $properties, $update_condition
+                    get_class($nested_set), new DataClassProperties($properties), $update_condition
                 );
 
                 if (!$res)
@@ -1066,7 +1067,7 @@ abstract class NestedSet extends DataClass
         );
 
         $res = DataManager::updates(
-            get_class($this), $properties, $update_condition
+            get_class($this), new DataClassProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1100,7 +1101,7 @@ abstract class NestedSet extends DataClass
         $properties[] = $right_value_data_class_property;
 
         $res = DataManager::updates(
-            get_class($this), $properties, $update_condition
+            get_class($this), new DataClassProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1160,7 +1161,7 @@ abstract class NestedSet extends DataClass
         );
 
         $res = DataManager::updates(
-            get_class($this), $properties, $update_condition
+            get_class($this), new DataClassProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1194,7 +1195,7 @@ abstract class NestedSet extends DataClass
         );
 
         $res = DataManager::updates(
-            get_class($this), $properties, $update_condition
+            get_class($this), new DataClassProperties($properties), $update_condition
         );
 
         if (!$res)

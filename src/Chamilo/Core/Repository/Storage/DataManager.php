@@ -83,13 +83,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE)] =
+        $properties[] = new DataClassProperty(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::MINUS, new StaticConditionVariable(ContentObject::STATE_INACTIVE)
-            );
+            ));
 
-        return self::updates(ContentObject::class, $properties, $condition);
+        return self::updates(ContentObject::class, new DataClassProperties($properties), $condition);
     }
 
     public static function check_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
@@ -437,13 +437,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE)] =
+        $properties[] = new DataClassProperty(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::ADDITION, new StaticConditionVariable(ContentObject::STATE_INACTIVE)
-            );
+            ));
 
-        return self::updates(ContentObject::class, $properties, $condition);
+        return self::updates(ContentObject::class, new DataClassProperties($properties), $condition);
     }
 
     /**
@@ -672,14 +672,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $properties = new DataClassProperty(
+        $properties = new DataClassProperties();
+        $properties->add(new DataClassProperty(
             new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER),
             new OperationConditionVariable(
                 new PropertyConditionVariable(
                     RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
                 ), OperationConditionVariable::MINUS, new StaticConditionVariable(1)
             )
-        );
+        ));
 
         self::updates(RepositoryCategory::class, $properties, $condition);
     }

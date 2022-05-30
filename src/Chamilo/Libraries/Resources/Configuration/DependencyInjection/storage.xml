@@ -13,6 +13,7 @@
         <service id="Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator"/>
         <service id="Chamilo\Libraries\Storage\DataClass\PropertyMapper"/>
         <service id="Chamilo\Libraries\Storage\Service\DisplayOrderHandler"/>
+        <service id="Chamilo\Libraries\Storage\Service\ParametersHandler"/>
         <service id="Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator"/>
         <service id="Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository"/>
 

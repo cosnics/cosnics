@@ -12,7 +12,7 @@ use Chamilo\Libraries\Storage\Query\OrderBy;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassRetrieveParameters extends DataClassParameters
+class DataClassRetrieveParameters extends DataClassBasicRetrieveParameters
 {
 
     public function __construct(?Condition $condition = null, ?OrderBy $orderBy = null, ?Joins $joins = null)

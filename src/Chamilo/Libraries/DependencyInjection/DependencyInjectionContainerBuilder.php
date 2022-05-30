@@ -43,9 +43,11 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\DataSourceName;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Factory\ConnectionFactory;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
+use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
+use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Chamilo\Libraries\Utilities\StringUtilities;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -431,8 +433,9 @@ class DependencyInjectionContainerBuilder
                                 new DataClassRepositoryCache(), new DataClassDatabase(
                                 $connectionFactory->getConnection(), $storageAliasGenerator,
                                 $exceptionLoggerFactory->createExceptionLogger(), $conditionPartTranslatorService,
-                                new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator)
-                            ), new DataClassFactory()
+                                new ParametersProcessor($conditionPartTranslatorService, $storageAliasGenerator),
+                                new RecordProcessor()
+                            ), new DataClassFactory(), new ParametersHandler()
                             )
                         )
                     ), $this->getConfigurablePathBuilder()

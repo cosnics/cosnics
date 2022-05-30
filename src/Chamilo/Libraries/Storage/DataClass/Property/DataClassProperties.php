@@ -19,33 +19,31 @@ class DataClassProperties implements Hashable
      *
      * @var \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    private $properties;
+    private array $properties;
 
     /**
-     * Constructor
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $properties
      */
-    public function __construct($properties = [])
+    public function __construct(array $properties = [])
     {
-        $this->properties = (is_array($properties) ? $properties : func_get_args());
+        $this->properties = $properties;
     }
 
     /**
      *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
      */
-    public function add($property)
+    public function add($property): DataClassProperties
     {
         $this->properties[] = $property;
+
+        return $this;
     }
 
     /**
-     * Gets the properties
-     *
      * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty[]|\Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    public function get()
+    public function get(): array
     {
         return $this->properties;
     }
@@ -79,17 +77,10 @@ class DataClassProperties implements Hashable
     }
 
     /**
-     * Merges the given dataclass properties into this one
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassPropertiesToMerge
      */
-    public function merge(DataClassProperties $dataClassPropertiesToMerge = null)
+    public function merge(DataClassProperties $dataClassPropertiesToMerge)
     {
-        if (!$dataClassPropertiesToMerge instanceof DataClassProperties)
-        {
-            return;
-        }
-
         foreach ($dataClassPropertiesToMerge->get() as $property)
         {
             $this->add($property);

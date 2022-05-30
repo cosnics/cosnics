@@ -31,6 +31,7 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Storage\Service\ParametersHandler;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -51,31 +52,40 @@ class DataClassRepository
 
     private DataClassRepositoryCache $dataClassRepositoryCache;
 
+    private ParametersHandler $parametersHandler;
+
     private bool $queryCacheEnabled;
 
     public function __construct(
         DataClassRepositoryCache $dataClassRepositoryCache, DataClassDatabaseInterface $dataClassDatabase,
-        DataClassFactory $dataClassFactory, bool $queryCacheEnabled = true
+        DataClassFactory $dataClassFactory, ParametersHandler $parametersHandler, bool $queryCacheEnabled = true
     )
     {
         $this->dataClassRepositoryCache = $dataClassRepositoryCache;
         $this->dataClassDatabase = $dataClassDatabase;
         $this->dataClassFactory = $dataClassFactory;
+        $this->parametersHandler = $parametersHandler;
         $this->queryCacheEnabled = $queryCacheEnabled;
     }
 
     protected function __countClass(string $dataClassName, DataClassCountParameters $parameters): int
     {
+        $this->getParametersHandler()->handleDataClassCountParameters($parameters);
+
         return $this->getDataClassDatabase()->count($dataClassName, $parameters);
     }
 
     protected function __countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
     {
+        $this->getParametersHandler()->handleDataClassCountGroupedParameters($parameters);
+
         return $this->getDataClassDatabase()->countGrouped($dataClassName, $parameters);
     }
 
     protected function __distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
+        $this->getParametersHandler()->handleDataClassDistinctParameters($parameters);
+
         return $this->getDataClassDatabase()->distinct($dataClassName, $parameters);
     }
 
@@ -85,7 +95,12 @@ class DataClassRepository
      */
     protected function __record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
-        return $this->getDataClassDatabase()->record($dataClassName, $parameters);
+        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        {
+            $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
+        }
+
+        return $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
     }
 
     /**
@@ -93,7 +108,12 @@ class DataClassRepository
      */
     protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
-        return new ArrayCollection($this->getDataClassDatabase()->records($dataClassName, $parameters));
+        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        {
+            $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
+        }
+
+        return new ArrayCollection($this->getDataClassDatabase()->retrieves($dataClassName, $parameters));
     }
 
     /**
@@ -107,6 +127,8 @@ class DataClassRepository
      */
     protected function __retrieveClass(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
+        $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
+
         $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
 
         return $this->getDataClassFactory()->getDataClass($dataClassName, $record);
@@ -125,6 +147,8 @@ class DataClassRepository
     protected function __retrievesClass(string $dataClassName, DataClassRetrievesParameters $parameters
     ): ArrayCollection
     {
+        $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
+
         $records = $this->getDataClassDatabase()->retrieves($dataClassName, $parameters);
         $dataClasses = [];
 
@@ -262,7 +286,6 @@ class DataClassRepository
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
-        $objectProperties[DataClass::PROPERTY_ID] = null;
         unset($objectProperties[DataClass::PROPERTY_ID]);
 
         $dataClassCreated = $this->getDataClassDatabase()->create($objectTableName, $objectProperties);
@@ -459,6 +482,11 @@ class DataClassRepository
         return $this->dataClassRepositoryCache;
     }
 
+    public function getParametersHandler(): ParametersHandler
+    {
+        return $this->parametersHandler;
+    }
+
     protected function isCompositeDataClass(string $dataClassName): bool
     {
         return is_subclass_of($dataClassName, CompositeDataClass::class);
@@ -531,7 +559,7 @@ class DataClassRepository
             $displayOrderPropertyVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($direction)
         );
 
-        $properties = new DataClassProperties([]);
+        $properties = new DataClassProperties();
 
         $properties->add(new DataClassProperty($displayOrderPropertyVariable, $updateVariable));
 
@@ -665,7 +693,6 @@ class DataClassRepository
         string $cacheDataClassName, string $dataClassName, DataClassRetrieveParameters $parameters
     )
     {
-
         if ($this->isQueryCacheEnabled())
         {
             $dataClassRepositoryCache = $this->getDataClassRepositoryCache();
@@ -740,7 +767,7 @@ class DataClassRepository
             )
         );
 
-        return $this->getDataClassDatabase()->record($compositeDataClass::class_name(), $parameters);
+        return $this->getDataClassDatabase()->retrieve($compositeDataClass::class_name(), $parameters);
     }
 
     /**
@@ -759,7 +786,7 @@ class DataClassRepository
             ), $condition
         );
 
-        $record = $this->getDataClassDatabase()->record($dataClassName, $parameters);
+        $record = $this->getDataClassDatabase()->retrieve($dataClassName, $parameters);
 
         return (int) $record[self::ALIAS_MAX_SORT];
     }
@@ -945,7 +972,7 @@ class DataClassRepository
 
     public function updates(string $dataClassName, DataClassProperties $properties, Condition $condition): bool
     {
-        if (!$this->getDataClassDatabase()->updates($dataClassName, $properties, $condition))
+        if (!$this->getDataClassDatabase()->updates($dataClassName::getTableName(), $properties, $condition))
         {
             return false;
         }

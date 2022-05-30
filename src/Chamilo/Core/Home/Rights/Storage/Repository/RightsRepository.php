@@ -92,7 +92,7 @@ class RightsRepository
      */
     public function findElementTargetEntities()
     {
-        return DataManager::retrieves(ElementTargetEntity::class);
+        return DataManager::retrieves(ElementTargetEntity::class, new DataClassRetrievesParameters());
     }
 
     /**
@@ -102,7 +102,7 @@ class RightsRepository
      */
     public function findBlockTypeTargetEntities()
     {
-        return DataManager::retrieves(BlockTypeTargetEntity::class);
+        return DataManager::retrieves(BlockTypeTargetEntity::class, new DataClassRetrievesParameters());
     }
 
     /**

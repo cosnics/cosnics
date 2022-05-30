@@ -20,71 +20,74 @@ class DataClassProperty implements Hashable
 
     use HashableTrait;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $property;
+    private ConditionVariable $propertyConditionVariable;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
-     */
-    private $value;
+    private ConditionVariable $valueConditionVariable;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $value
-     */
-    public function __construct($property, $value)
+    public function __construct(ConditionVariable $propertyConditionVariable, ConditionVariable $valueConditionVariable)
     {
-        $this->set_property($property);
-        $this->set_value($value);
+        $this->propertyConditionVariable = $propertyConditionVariable;
+        $this->valueConditionVariable = $valueConditionVariable;
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Architecture\Interfaces\Hashable::getHashParts()
-     */
     public function getHashParts(): array
     {
-        return array(__CLASS__, $this->get_property(), $this->get_value());
+        return array(__CLASS__, $this->getPropertyConditionVariable(), $this->getValueConditionVariable());
+    }
+
+    public function getPropertyConditionVariable(): ConditionVariable
+    {
+        return $this->propertyConditionVariable;
+    }
+
+    public function setPropertyConditionVariable(ConditionVariable $propertyConditionVariable): DataClassProperty
+    {
+        $this->propertyConditionVariable = $propertyConditionVariable;
+
+        return $this;
+    }
+
+    public function getValueConditionVariable(): ConditionVariable
+    {
+        return $this->valueConditionVariable;
+    }
+
+    public function setValueConditionVariable(ConditionVariable $valueConditionVariable): DataClassProperty
+    {
+        $this->valueConditionVariable = $valueConditionVariable;
+
+        return $this;
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @deprecated Use DataClassProperty::getPropertyConditionVariable() now
      */
-    public function get_property()
+    public function get_property(): ConditionVariable
     {
-        return $this->property;
+        return $this->getPropertyConditionVariable();
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $property
+     * @deprecated Use DataClassProperty::getValueConditionVariable() now
      */
-    public function set_property(ConditionVariable $property)
+    public function get_value(): ConditionVariable
     {
-        $this->property = $property;
+        return $this->getValueConditionVariable();
     }
 
     /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable
+     * @deprecated Use DataClassProperty::setPropertyConditionVariable() now
      */
-    public function get_value()
+    public function set_property(ConditionVariable $propertyConditionVariable): DataClassProperty
     {
-        return $this->value;
+        return $this->setPropertyConditionVariable($propertyConditionVariable);
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable $value
+     * @deprecated Use DataClassProperty::setValueConditionVariable() now
      */
-    public function set_value(ConditionVariable $value)
+    public function set_value(ConditionVariable $valueConditionVariable): DataClassProperty
     {
-        $this->value = $value;
+        return $this->setValueConditionVariable($valueConditionVariable);
     }
 }
