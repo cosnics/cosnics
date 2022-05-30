@@ -40,7 +40,7 @@ class WorkspaceRepository
      */
     public function countAllWorkspaces()
     {
-        return DataManager::count(Workspace::class);
+        return DataManager::count(Workspace::class, new DataClassCountParameters());
     }
 
     /**

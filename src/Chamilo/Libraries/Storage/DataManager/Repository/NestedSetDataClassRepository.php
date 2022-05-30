@@ -90,7 +90,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @see NestedSet::create()
      * @see NestedTreeNode::create()
      */
-    public function create(DataClass $nestedSet, int $previousNestedSetIdentifier = 0)
+    public function create(DataClass $nestedSet, int $previousNestedSetIdentifier = 0): bool
     {
         if ($previousNestedSetIdentifier)
         {
@@ -168,7 +168,7 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @throws \Exception
      * @see NestedSet::delete()
      */
-    public function delete(DataClass $nestedSet, Condition $condition = null)
+    public function delete(DataClass $nestedSet, Condition $condition = null): bool
     {
         // Deleting a node from a nested set requires multiple updates which have to be performed atomically and
         // consistently. Use a transaction to guarantee this.

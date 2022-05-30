@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Storage\Cache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
@@ -59,36 +59,24 @@ class DataClassRepositoryCache
         return true;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters $parameters
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters = null)
+    public function addForArrayCollection(
+        string $dataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
+    ): bool
     {
-        if (!$parameters instanceof DataClassRetrieveParameters && $parameters != null)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
+        return $this->add($this->getCacheClassName($dataClassName), $parameters, $arrayCollection);
+    }
 
-        if (!$object instanceof DataClass)
-        {
-            $type = is_object($object) ? get_class($object) : gettype($object);
-            throw new Exception(
-                'DataClassRepositoryCache::addForDataClass only allows for caching of DataClass objects. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
+    /**
+     * @throws \ReflectionException
+     */
+    public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters): bool
+    {
         $className = $this->getDataClassCacheClassName($object);
 
         foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
         {
             $value = $object->getDefaultProperty($cacheableProperty);
-            if (isset($value) && !is_null($value))
+            if (isset($value))
             {
                 $cacheablePropertyParameters = new DataClassRetrieveParameters(
                     new EqualityCondition(
@@ -100,64 +88,13 @@ class DataClassRepositoryCache
             }
         }
 
-        if ($parameters instanceof DataClassRetrieveParameters)
-        {
-            $this->set($className, $parameters->hash(), $object);
-        }
+        $this->set($className, $parameters->hash(), $object);
 
         return true;
     }
 
-    /**
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForArrayCollection(
-       string $dataClassName, ArrayCollection $arrayCollection, DataClassParameters $parameters
-    )
+    public function addForDataClassCount(string $className, DataClassCountParameters $parameters, int $count): bool
     {
-        if (!$parameters instanceof DataClassParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
-
-        if (!$arrayCollection instanceof ArrayCollection)
-        {
-            $type = is_object($arrayCollection) ? get_class($arrayCollection) : gettype($arrayCollection);
-            throw new Exception(
-                'DataClassRepositoryCache::addForArrayCollection only allows for caching of ArrayCollection objects. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
-        return $this->add($this->getCacheClassName($dataClassName), $parameters, $arrayCollection);
-    }
-
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters $parameters
-     * @param integer $count
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForDataClassCount($className, $parameters, $count)
-    {
-        if (!$parameters instanceof DataClassCountParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
-
-        if (!is_integer($count))
-        {
-            $type = is_object($count) ? get_class($count) : gettype($count);
-            throw new Exception(
-                'DataClassRepositoryCache::addForDataClassCount only allows for caching of integers. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
         return $this->add($className, $parameters, $count);
     }
 
@@ -189,31 +126,10 @@ class DataClassRepositoryCache
         return $this->add($className, $parameters, $counts);
     }
 
-    /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     * @param string[] $propertyValues
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForDataClassDistinct($className, $parameters, $propertyValues)
+    public function addForDataClassDistinct(
+        string $className, DataClassDistinctParameters $parameters, array $propertyValues
+    ): bool
     {
-        if (!$parameters instanceof DataClassDistinctParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
-
-        if (!is_array($propertyValues))
-        {
-            $type = is_object($propertyValues) ? get_class($propertyValues) : gettype($propertyValues);
-            throw new Exception(
-                'DataClassRepositoryCache::addForDataClassDistinct only allows for caching of string arrays. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
         return $this->add($className, $parameters, $propertyValues);
     }
 
@@ -230,29 +146,9 @@ class DataClassRepositoryCache
         return true;
     }
 
-    /**
-     *
-     * @param string $className
-     * @param string[] $record
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addForRecord($className, $record, RecordRetrieveParameters $parameters = null)
+    public function addForRecord(string $className, array $record, RecordRetrieveParameters $parameters): bool
     {
-        if (!is_array($record))
-        {
-            throw new Exception(
-                'DataClassRepositoryCache::addForRecord only allows for caching of records. Currently trying to add: ' .
-                gettype($record) . '.'
-            );
-        }
-
-        if ($parameters instanceof RecordRetrieveParameters)
-        {
-            $this->set($className, $parameters->hash(), $record);
-        }
+        $this->set($className, $parameters->hash(), $record);
 
         return true;
     }
@@ -315,7 +211,7 @@ class DataClassRepositoryCache
      * @param string $class
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Doctrine\Common\Collections\ArrayCollection
+     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Doctrine\Common\Collections\ArrayCollection|array
      */
     public function get($class, DataClassParameters $parameters)
     {

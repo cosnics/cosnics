@@ -424,8 +424,6 @@ abstract class DataClass
 
     /**
      * @param mixed $value
-     *
-     * @throws \Exception
      */
     public function setDefaultProperty(string $name, $value)
     {
@@ -455,9 +453,6 @@ abstract class DataClass
         return $this;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function setId(int $id): DataClass
     {
         if (strlen($id) > 0)

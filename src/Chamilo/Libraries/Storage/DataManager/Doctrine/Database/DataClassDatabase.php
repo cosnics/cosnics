@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
@@ -71,7 +70,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @throws \ReflectionException
      */
-    protected function buildBasicRecordsSql(string $dataClassName, DataClassParameters $parameters): string
+    protected function buildBasicRecordsSql(string $dataClassName, DataClassRetrievesParameters $parameters): string
     {
         $queryBuilder = $this->getConnection()->createQueryBuilder();
 
@@ -181,62 +180,11 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    public function create(DataClass $dataClass, ?bool $autoAssignIdentifier = true): bool
+    public function create(string $dataClassStorageUnitName, array $record): bool
     {
         try
         {
-            if ($dataClass instanceof CompositeDataClass)
-            {
-                $parentClass = $dataClass->parentClassName();
-                $objectTableName = $parentClass::getTableName();
-            }
-            else
-            {
-                $objectTableName = $dataClass->getTableName();
-            }
-
-            $objectProperties = $dataClass->getDefaultProperties();
-
-            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
-            {
-                $objectProperties[DataClass::PROPERTY_ID] = null;
-                unset($objectProperties[DataClass::PROPERTY_ID]);
-            }
-
-            $this->getConnection()->insert($objectTableName, $objectProperties);
-
-            if ($autoAssignIdentifier && in_array(DataClass::PROPERTY_ID, $dataClass->getDefaultPropertyNames()))
-            {
-                $dataClass->setId($this->getConnection()->lastInsertId($objectTableName));
-            }
-
-            if ($dataClass instanceof CompositeDataClass && $dataClass->isExtended())
-            {
-                $objectProperties = $dataClass->getAdditionalProperties();
-                $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
-
-                $this->getConnection()->insert($dataClass->getTableName(), $objectProperties);
-            }
-
-            return true;
-        }
-        catch (Exception $exception)
-        {
-            $this->handleError($exception);
-
-            return false;
-        }
-    }
-
-    /**
-     *
-     * @param mixed[] $record
-     */
-    public function createRecord(string $dataClassName, array $record): bool
-    {
-        try
-        {
-            $this->getConnection()->insert($dataClassName::getTableName(), $record);
+            $this->getConnection()->insert($dataClassStorageUnitName, $record);
 
             return true;
         }
@@ -319,9 +267,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param string $text
+     * @param mixed $text
      *
-     * @return string
+     * @return mixed
      */
     protected function escape($text)
     {
@@ -377,17 +325,18 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
             return $record;
         }
-
         catch (Exception $exception)
         {
             $this->handleError($exception);
 
-            throw new DataClassNoResultException($dataClassName, $parameters, $sqlQuery);
+            throw new DataClassNoResultException($dataClassName, $parameters);
         }
     }
 
     /**
+     * @return string[][]
      * @throws \Doctrine\DBAL\Exception
+     *
      */
     protected function fetchRecords(Result $result): array
     {
@@ -411,24 +360,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->conditionPartTranslatorService;
     }
 
-    public function setConditionPartTranslatorService(ConditionPartTranslatorService $conditionPartTranslatorService
-    ): DataClassDatabase
-    {
-        $this->conditionPartTranslatorService = $conditionPartTranslatorService;
-
-        return $this;
-    }
-
     public function getConnection(): Connection
     {
         return $this->connection;
-    }
-
-    public function setConnection(Connection $connection): DataClassDatabase
-    {
-        $this->connection = $connection;
-
-        return $this;
     }
 
     public function getExceptionLogger(): ExceptionLoggerInterface
@@ -436,23 +370,24 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return $this->exceptionLogger;
     }
 
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger): DataClassDatabase
+    public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int
     {
-        $this->exceptionLogger = $exceptionLogger;
+        try
+        {
+            return $this->getConnection()->lastInsertId($dataClassStorageUnitName);
+        }
+        catch (Exception $exception)
+        {
+            $this->handleError($exception);
 
-        return $this;
+            // TODO: Do something more useful when DataClassDatabase::getLastInsertedIdentifier() throws an error
+            exit;
+        }
     }
 
     public function getParametersProcessor(): ParametersProcessor
     {
         return $this->parametersProcessor;
-    }
-
-    public function setParametersProcessor(ParametersProcessor $parametersProcessor): DataClassDatabase
-    {
-        $this->parametersProcessor = $parametersProcessor;
-
-        return $this;
     }
 
     /**
@@ -462,13 +397,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function getRecordProcessor(): RecordProcessor
     {
         return $this->recordProcessor;
-    }
-
-    public function setRecordProcessor(RecordProcessor $recordProcessor): DataClassDatabase
-    {
-        $this->recordProcessor = $recordProcessor;
-
-        return $this;
     }
 
     /**
@@ -490,13 +418,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function getStorageAliasGenerator(): StorageAliasGenerator
     {
         return $this->storageAliasGenerator;
-    }
-
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): DataClassDatabase
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-
-        return $this;
     }
 
     protected function handleError(Exception $exception)
@@ -558,7 +479,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Doctrine\DBAL\Exception
      */
     public function record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
@@ -590,6 +510,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Exception
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array
     {
@@ -616,13 +537,13 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      *
-     * @param mixed $function
+     * @param callable $function
      *
      * @return mixed
      * @throws \Exception
      * @throws \Throwable
      */
-    public function transactional($function)
+    public function transactional(callable $function)
     {
         try
         {

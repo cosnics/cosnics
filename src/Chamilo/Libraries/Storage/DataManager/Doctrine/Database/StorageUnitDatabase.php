@@ -303,35 +303,14 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         return $this->connection;
     }
 
-    public function setConnection(Connection $connection): StorageUnitDatabase
-    {
-        $this->connection = $connection;
-
-        return $this;
-    }
-
     public function getExceptionLogger(): ExceptionLoggerInterface
     {
         return $this->exceptionLogger;
     }
 
-    public function setExceptionLogger(ExceptionLoggerInterface $exceptionLogger): StorageUnitDatabase
-    {
-        $this->exceptionLogger = $exceptionLogger;
-
-        return $this;
-    }
-
     public function getStorageAliasGenerator(): StorageAliasGenerator
     {
         return $this->storageAliasGenerator;
-    }
-
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): StorageUnitDatabase
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-
-        return $this;
     }
 
     public function handleError(Exception $exception)

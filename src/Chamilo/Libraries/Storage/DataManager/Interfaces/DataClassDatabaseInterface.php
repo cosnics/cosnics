@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
-use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -29,13 +28,7 @@ interface DataClassDatabaseInterface
      */
     public function countGrouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array;
 
-    public function create(DataClass $dataClass, ?bool $autoAssignIdentifier = true): bool;
-
-    /**
-     *
-     * @param mixed[] $record
-     */
-    public function createRecord(string $dataClassName, array $record): bool;
+    public function create(string $dataClassStorageUnitName, array $record): bool;
 
     public function delete(string $dataClassName, ?Condition $condition = null): bool;
 
@@ -47,6 +40,8 @@ interface DataClassDatabaseInterface
     public function escapeColumnName(string $columnName, ?string $storageUnitAlias = null): string;
 
     public function getAlias(string $dataClassStorageUnitName): string;
+
+    public function getLastInsertedIdentifier(string $dataClassStorageUnitName): int;
 
     /**
      *
@@ -84,13 +79,13 @@ interface DataClassDatabaseInterface
 
     /**
      *
-     * @param mixed $function
+     * @param callable $function
      *
      * @return mixed
      * @throws \Exception
      * @throws \Throwable
      */
-    public function transactional($function);
+    public function transactional(callable $function);
 
     public function translateCondition(Condition $condition, bool $enableAliasing = true): string;
 
