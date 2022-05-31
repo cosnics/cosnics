@@ -5,18 +5,16 @@ use stdClass;
 
 /**
  * @package Chamilo\Libraries\Storage\DataClass
- *
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  */
 class PropertyMapper
 {
     /**
-     * @param \stdClass $class
      * @param string[] $propertyNames
      *
      * @return boolean|string
      */
-    public function determineClassKeyValue($class, $propertyNames)
+    public function determineClassKeyValue(stdClass $class, array $propertyNames)
     {
         $keyValue = $class;
         $numberOfProperties = count($propertyNames);
@@ -51,13 +49,11 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param \stdClass[] $dataClasses
-     * @param string $propertyName
      *
      * @return \stdClass[][]
      */
-    public function groupClassByProperty($dataClasses, $propertyName)
+    public function groupClassByProperty(array $dataClasses, string $propertyName): array
     {
         $mappedDataClasses = [];
 
@@ -67,7 +63,7 @@ class PropertyMapper
             {
                 $propertyValue = $dataClass->$propertyName;
 
-                if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
+                if (isset($propertyValue) && $propertyValue !== '')
                 {
                     if (!array_key_exists($dataClass->$propertyName, $mappedDataClasses))
                     {
@@ -83,13 +79,11 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
-     * @param string $methodName
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
-    public function groupDataClassByMethod($dataClasses, $methodName)
+    public function groupDataClassByMethod(array $dataClasses, string $methodName): array
     {
         $mappedDataClasses = [];
 
@@ -107,13 +101,11 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
-     * @param string $propertyName
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[][]
      */
-    public function groupDataClassByProperty($dataClasses, $propertyName)
+    public function groupDataClassByProperty($dataClasses, string $propertyName): array
     {
         $mappedDataClasses = [];
 
@@ -123,7 +115,7 @@ class PropertyMapper
             {
                 $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-                if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
+                if (isset($propertyValue) && $propertyValue !== '')
                 {
                     if (!array_key_exists($dataClass->getDefaultProperty($propertyName), $mappedDataClasses))
                     {
@@ -139,13 +131,11 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param string[][] $records
-     * @param string $propertyName
      *
      * @return string[][]
      */
-    public function groupRecordsByProperty($records, $propertyName)
+    public function groupRecordsByProperty(array $records, string $propertyName): array
     {
         $mappedRecords = [];
 
@@ -169,13 +159,12 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param \stdClass[] $classes
      * @param string[] $propertyNames
      *
      * @return \stdClass[]
      */
-    public function mapClassByProperties(array $classes, array $propertyNames)
+    public function mapClassByProperties(array $classes, array $propertyNames): array
     {
         $mappedClasses = [];
 
@@ -193,13 +182,11 @@ class PropertyMapper
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
-     * @param string $methodName
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function mapDataClassByMethod($dataClasses, $methodName)
+    public function mapDataClassByMethod($dataClasses, string $methodName): array
     {
         $mappedDataClasses = [];
 
@@ -217,13 +204,11 @@ class PropertyMapper
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[] $dataClasses
-     * @param string $propertyName
+     * @param \Chamilo\Libraries\Storage\DataClass\DataClass[]|\Doctrine\Common\Collections\ArrayCollection $dataClasses
      *
      * @return \Chamilo\Libraries\Storage\DataClass\DataClass[]
      */
-    public function mapDataClassByProperty($dataClasses, $propertyName)
+    public function mapDataClassByProperty($dataClasses, string $propertyName): array
     {
         $mappedDataClasses = [];
 
@@ -231,7 +216,7 @@ class PropertyMapper
         {
             $propertyValue = $dataClass->getDefaultProperty($propertyName);
 
-            if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
+            if (isset($propertyValue) && $propertyValue !== '')
             {
                 $mappedDataClasses[$propertyValue] = $dataClass;
             }
@@ -241,13 +226,11 @@ class PropertyMapper
     }
 
     /**
-     *
      * @param string[][] $records
-     * @param string $propertyName
      *
      * @return string[][]
      */
-    public function mapRecordsByProperty($records, $propertyName)
+    public function mapRecordsByProperty(array $records, string $propertyName): array
     {
         $mappedRecords = [];
 
@@ -255,7 +238,7 @@ class PropertyMapper
         {
             $propertyValue = $record[$propertyName];
 
-            if (isset($propertyValue) && $propertyValue !== '' && !is_null($propertyValue))
+            if (isset($propertyValue) && $propertyValue !== '')
             {
                 $mappedRecords[$propertyValue] = $record;
             }

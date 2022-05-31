@@ -2,11 +2,10 @@
 namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Translation\Translation;
-use Exception;
 
 /**
  * Dataclass listener which manipulates the crud methods to support common functionality for sort order logic
@@ -17,72 +16,31 @@ use Exception;
 class DisplayOrderDataClassListener extends DataClassListener
 {
 
-    /**
-     * The DataClass (must implement the necessary interface)
-     *
-     * @var \Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport
-     */
-    private $data_class;
+    private bool $checkDisplayOrderCondition;
 
-    /**
-     * Keeps track of the old display order to know whether or not the display orders need to be adapted
-     *
-     * @var integer
-     */
-    private $old_display_order;
+    private DisplayOrderDataClassListenerSupport $dataClass;
 
-    /**
-     * Keeps track of the old display order condition when a property from the display order context changes so that we
-     * can fix the display orders in the old context
-     *
-     * @var \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    private $old_display_order_condition;
+    private int $oldDisplayOrder;
 
-    /**
-     * Keeps track of whether or not the old display order condition needs to be checked if it's still different then
-     * the current display order condition
-     *
-     * @var boolean
-     */
-    private $check_display_order_condition;
+    private Condition $oldDisplayOrderCondition;
 
-    /**
-     * Constructs this dataclass listener and checks if the dataclass implements the necessary functions
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport $dataClass
-     *
-     * @throws \Exception
-     */
     public function __construct(DisplayOrderDataClassListenerSupport $dataClass)
     {
-        if (!$dataClass instanceof DisplayOrderDataClassListenerSupport)
-        {
-            throw new Exception(
-                Translation::get('InterfaceRequired', array('INTERFACE' => 'DisplayOrderDataClassListener'))
-            );
-        }
-
-        $this->data_class = $dataClass;
+        $this->dataClass = $dataClass;
     }
 
-    /**
-     * Returns the display order condition based on the display order context properties
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    protected function get_display_order_condition()
+    protected function getDisplayOrderCondition(): ?Condition
     {
-        $data_class = $this->data_class;
-        $properties = $this->data_class->get_display_order_context_properties();
+        $data_class = $this->dataClass;
+        $properties = $this->dataClass->getDisplayOrderContextProperties();
 
         $conditions = [];
 
         foreach ($properties as $property)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($property->getDataClassName(), $property->get_property()),
-                new StaticConditionVariable($data_class->getDefaultProperty($property->get_property()))
+                new PropertyConditionVariable($property->getDataClassName(), $property->getPropertyName()),
+                new StaticConditionVariable($data_class->getDefaultProperty($property->getPropertyName()))
             );
         }
 
@@ -90,15 +48,13 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @param boolean $success
-     *
-     * @return boolean
      * @throws \ReflectionException
+     * @throws \Exception
      */
-    public function on_after_delete($success)
+    public function onAfterDelete(bool $success): bool
     {
-        $data_class = $this->data_class;
-        $display_order_property = $data_class->get_display_order_property()->get_property();
+        $data_class = $this->dataClass;
+        $display_order_property = $data_class->getDisplayOrderProperty()->getPropertyName();
 
         /**
          * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
@@ -108,27 +64,21 @@ class DisplayOrderDataClassListener extends DataClassListener
         if ($success)
         {
             $success = $data_manager::move_display_orders(
-                $data_class->get_display_order_property()->getDataClassName(), $display_order_property,
-                $data_class->getDefaultProperty($display_order_property), null, $this->get_display_order_condition()
+                $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property,
+                $data_class->getDefaultProperty($display_order_property), null, $this->getDisplayOrderCondition()
             );
         }
 
         return $success;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
-     */
-    public function on_after_set_property($name, $value)
+    public function onAfterSetProperty(string $name, string $value): bool
     {
-        if ($this->check_display_order_condition)
+        if ($this->checkDisplayOrderCondition)
         {
-            if ($this->get_display_order_condition()->hash() == $this->old_display_order_condition->hash())
+            if ($this->getDisplayOrderCondition()->hash() == $this->oldDisplayOrderCondition->hash())
             {
-                unset($this->old_display_order_condition);
+                unset($this->oldDisplayOrderCondition);
             }
         }
 
@@ -136,15 +86,13 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     *
-     * @return boolean
      * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
-     * @done See DisplayOrderHandler::prepareCreate();
      */
-    public function on_before_create()
+    public function onBeforeCreate(): bool
     {
-        $data_class = $this->data_class;
+        $data_class = $this->dataClass;
 
         /**
          * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
@@ -152,61 +100,55 @@ class DisplayOrderDataClassListener extends DataClassListener
         $data_manager = $data_class->package() . '\Storage\DataManager';
 
         $data_class->setDefaultProperty(
-            $data_class->get_display_order_property()->get_property(), $data_manager::retrieve_next_value(
-            $data_class->get_display_order_property()->getDataClassName(),
-            $data_class->get_display_order_property()->get_property(), $this->get_display_order_condition()
+            $data_class->getDisplayOrderProperty()->getPropertyName(), $data_manager::retrieve_next_value(
+            $data_class->getDisplayOrderProperty()->getDataClassName(),
+            $data_class->getDisplayOrderProperty()->getPropertyName(), $this->getDisplayOrderCondition()
         )
         );
 
         return true;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
-     */
-    public function on_before_set_property($name, $value)
+    public function onBeforeSetProperty(string $name, string $value): bool
     {
-        $initial_value = $this->data_class->getDefaultProperty($name);
-        if (is_null($initial_value) || ($initial_value == $value && !isset($this->old_display_order_condition)))
+        $initial_value = $this->dataClass->getDefaultProperty($name);
+        if (is_null($initial_value) || ($initial_value == $value && !isset($this->oldDisplayOrderCondition)))
         {
             return true;
         }
 
-        $data_class = $this->data_class;
+        $data_class = $this->dataClass;
 
-        if ($name == $data_class->get_display_order_property()->get_property())
+        if ($name == $data_class->getDisplayOrderProperty()->getPropertyName())
         {
-            if (!isset($this->old_display_order))
+            if (!isset($this->oldDisplayOrder))
             {
-                $this->old_display_order = $initial_value;
+                $this->oldDisplayOrder = $initial_value;
             }
             else
             {
-                if ($this->old_display_order == $value)
+                if ($this->oldDisplayOrder == $value)
                 {
-                    unset($this->old_display_order);
+                    unset($this->oldDisplayOrder);
                 }
             }
         }
 
         $display_order_context_properties = [];
-        foreach ($data_class->get_display_order_context_properties() as $display_order_context_property)
+        foreach ($data_class->getDisplayOrderContextProperties() as $display_order_context_property)
         {
-            $display_order_context_properties[] = $display_order_context_property->get_property();
+            $display_order_context_properties[] = $display_order_context_property->getPropertyName();
         }
 
         if (in_array($name, $display_order_context_properties))
         {
-            if (!isset($this->old_display_order_condition))
+            if (!isset($this->oldDisplayOrderCondition))
             {
-                $this->old_display_order_condition = $this->get_display_order_condition();
+                $this->oldDisplayOrderCondition = $this->getDisplayOrderCondition();
             }
             else
             {
-                $this->check_display_order_condition = true;
+                $this->checkDisplayOrderCondition = true;
             }
         }
 
@@ -214,14 +156,14 @@ class DisplayOrderDataClassListener extends DataClassListener
     }
 
     /**
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public function on_before_update()
+    public function onBeforeUpdate(): bool
     {
-        $data_class = $this->data_class;
-        $display_order_property = $data_class->get_display_order_property()->get_property();
+        $data_class = $this->dataClass;
+        $display_order_property = $data_class->getDisplayOrderProperty()->getPropertyName();
         $display_order_value = $data_class->getDefaultProperty($display_order_property);
 
         /**
@@ -229,46 +171,46 @@ class DisplayOrderDataClassListener extends DataClassListener
          */
         $data_manager = $data_class->package() . '\Storage\DataManager';
 
-        if (isset($this->old_display_order_condition))
+        if (isset($this->oldDisplayOrderCondition))
         {
-            $original_value = $this->old_display_order ?: $display_order_value;
+            $original_value = $this->oldDisplayOrder ?: $display_order_value;
 
             if (!$data_manager::move_display_orders(
-                $data_class->get_display_order_property()->getDataClassName(), $display_order_property, $original_value, null,
-                $this->old_display_order_condition
+                $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property, $original_value,
+                null, $this->oldDisplayOrderCondition
             ))
             {
                 return false;
             }
 
             $next_display_order = $data_manager::retrieve_next_value(
-                $data_class->get_display_order_property()->getDataClassName(),
-                $data_class->get_display_order_property()->get_property(), $this->get_display_order_condition()
+                $data_class->getDisplayOrderProperty()->getDataClassName(),
+                $data_class->getDisplayOrderProperty()->getPropertyName(), $this->getDisplayOrderCondition()
             );
 
-            if (!isset($this->old_display_order) || is_null($display_order_value))
+            if (!isset($this->oldDisplayOrder) || is_null($display_order_value))
             {
                 $data_class->setDefaultProperty($display_order_property, $next_display_order);
             }
             else
             {
-                $this->old_display_order = $next_display_order;
+                $this->oldDisplayOrder = $next_display_order;
             }
 
-            unset($this->old_display_order_condition);
+            unset($this->oldDisplayOrderCondition);
         }
 
-        if (isset($this->old_display_order) && !is_null($display_order_value))
+        if (isset($this->oldDisplayOrder) && !is_null($display_order_value))
         {
             if (!$data_manager::move_display_orders(
-                $data_class->get_display_order_property()->getDataClassName(), $display_order_property,
-                $this->old_display_order, $display_order_value, $this->get_display_order_condition()
+                $data_class->getDisplayOrderProperty()->getDataClassName(), $display_order_property,
+                $this->oldDisplayOrder, $display_order_value, $this->getDisplayOrderCondition()
             ))
             {
                 return false;
             }
 
-            unset($this->old_display_order);
+            unset($this->oldDisplayOrder);
         }
 
         return true;

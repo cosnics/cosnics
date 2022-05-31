@@ -218,7 +218,7 @@ class ExporterComponent extends Manager
     protected function get_course_groups_tab($worksheet)
     {
         $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
-        $course_groups = $courseGroupRoot->get_children(false);
+        $course_groups = $courseGroupRoot->get_children();
 
         $this->handle_course_groups($course_groups, $worksheet);
     }
@@ -345,7 +345,7 @@ class ExporterComponent extends Manager
                 $worksheet, $title, $course_group->get_description(), $users_table, $rowcount
             );
 
-            $rowcount = $this->handle_course_groups($course_group->get_children(), $worksheet, $rowcount);
+            $rowcount = $this->handle_course_groups($course_group->get_descendants(), $worksheet, $rowcount);
         }
 
         return $rowcount;

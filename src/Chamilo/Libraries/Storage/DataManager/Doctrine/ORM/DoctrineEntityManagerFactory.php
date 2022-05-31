@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
-use Chamilo\Libraries\File\Path;
+use Chamilo\Libraries\File\ConfigurablePathBuilder;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\ChamiloNamingStrategy;
 use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Setup;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 
 /**
  * Initializes the Doctrine entity manager for use with annotations, caching and the chamilo naming strategy
@@ -20,63 +20,44 @@ use Doctrine\ORM\Tools\Setup;
 class DoctrineEntityManagerFactory
 {
 
-    /**
-     * The mapping driver for the entity manager
-     *
-     * @var \Doctrine\Persistence\Mapping\Driver\MappingDriver
-     */
-    protected $mappingDriver;
+    protected ConfigurablePathBuilder $configurablePathBuilder;
+
+    protected Connection $doctrineConnection;
 
     /**
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $doctrineConnection;
-
-    /**
-     * The event listeners
-     *
      * @var object[]
      */
-    protected $eventListeners;
+    protected array $eventListeners;
 
-    /**
-     * Constructor
-     *
-     * @param \Doctrine\Persistence\Mapping\Driver\MappingDriver $mappingDriver
-     * @param \Doctrine\DBAL\Connection $doctrineConnection
-     */
-    public function __construct(MappingDriver $mappingDriver, Connection $doctrineConnection)
+    protected MappingDriver $mappingDriver;
+
+    public function __construct(
+        MappingDriver $mappingDriver, Connection $doctrineConnection, ConfigurablePathBuilder $configurablePathBuilder
+    )
     {
         $this->doctrineConnection = $doctrineConnection;
         $this->mappingDriver = $mappingDriver;
+        $this->configurablePathBuilder = $configurablePathBuilder;
         $this->eventListeners = [];
     }
 
     /**
-     * Adds an event listener to the entity manager
-     *
      * @param string|array $events
-     * @param object $eventListener
      */
-    public function addEventListener($events, $eventListener)
+    public function addEventListener($events, object $eventListener)
     {
         $this->eventListeners[] = array('events' => $events, 'listener' => $eventListener);
     }
 
     /**
-     * Creates and returns the entity manager
-     *
-     * @return \Doctrine\ORM\EntityManager
      * @throws \Doctrine\ORM\ORMException
      */
-    public function createEntityManager()
+    public function createEntityManager(): EntityManager
     {
-        $devMode = false;
-        $cache = $devMode ? new ArrayCache() : null;
         $cache = new ArrayCache();
 
-        $configuration = Setup::createConfiguration($devMode, Path::getInstance()->getCachePath(__NAMESPACE__), $cache);
+        $configuration =
+            Setup::createConfiguration(false, $this->configurablePathBuilder->getCachePath(__NAMESPACE__), $cache);
 
         $configuration->setMetadataDriverImpl($this->mappingDriver);
         $configuration->setNamingStrategy(new ChamiloNamingStrategy());

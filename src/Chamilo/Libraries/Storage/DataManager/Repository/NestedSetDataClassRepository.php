@@ -36,7 +36,6 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return integer
      * @throws \Exception
      * @see NestedSet::count_ancestors()
-     * @see NestedTreeNode::count_parents()
      */
     public function countAncestors(NestedSet $nestedSet, bool $includeSelf = true, Condition $condition = null)
     {
@@ -55,7 +54,6 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @throws \Exception
      * @see NestedSet::count_children()
      * @see NestedSet::count_descendants()
-     * @see NestedTreeNode::count_children()
      */
     public function countDescendants(NestedSet $nestedSet, bool $recursive = true, Condition $condition = null)
     {
@@ -89,7 +87,6 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return bool
      * @throws \Exception
      * @see NestedSet::create()
-     * @see NestedTreeNode::create()
      */
     public function create(DataClass $nestedSet, int $previousNestedSetIdentifier = 0): bool
     {
@@ -575,7 +572,6 @@ class NestedSetDataClassRepository extends DataClassRepository
      * @return bool|mixed
      * @throws \Exception
      * @see NestedSet::move()
-     * @see NestedTreeNode::move()
      */
     public function move(NestedSet $nestedSet, $newParentId = 0, $newPreviousId = 0, $condition = null)
     {

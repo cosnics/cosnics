@@ -58,45 +58,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     }
 
     /**
-     * **************************************************************************************************************
-     * Extended functionality *
-     * **************************************************************************************************************
-     */
-
-    public function getGlyph()
-    {
-        switch ($this->get_value_type())
-        {
-            case self::VALUE_TYPE_FREE :
-                return new FontAwesomeGlyph('file', [], null, 'fas');
-                break;
-            case self::VALUE_TYPE_VOCABULARY_PREDEFINED :
-                return new FontAwesomeGlyph('globe', [], null, 'fas');
-                break;
-            case self::VALUE_TYPE_VOCABULARY_USER :
-                return new FontAwesomeGlyph('user', [], null, 'fas');
-                break;
-            case self::VALUE_TYPE_VOCABULARY_BOTH :
-                return new FontAwesomeGlyph('book', [], null, 'fas');
-                break;
-        }
-    }
-
-    /**
-     *
-     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema
-     */
-    public function getSchema()
-    {
-        if (!isset($this->schema))
-        {
-            $this->schema = DataManager::retrieve_by_id(Schema::class, $this->get_schema_id());
-        }
-
-        return $this->schema;
-    }
-
-    /**
      * Get the default properties
      *
      * @param array $extendedPropertyNames
@@ -190,6 +151,53 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     }
 
     /**
+     * **************************************************************************************************************
+     * Extended functionality *
+     * **************************************************************************************************************
+     */
+
+    public function getGlyph()
+    {
+        switch ($this->get_value_type())
+        {
+            case self::VALUE_TYPE_FREE :
+                return new FontAwesomeGlyph('file', [], null, 'fas');
+                break;
+            case self::VALUE_TYPE_VOCABULARY_PREDEFINED :
+                return new FontAwesomeGlyph('globe', [], null, 'fas');
+                break;
+            case self::VALUE_TYPE_VOCABULARY_USER :
+                return new FontAwesomeGlyph('user', [], null, 'fas');
+                break;
+            case self::VALUE_TYPE_VOCABULARY_BOTH :
+                return new FontAwesomeGlyph('book', [], null, 'fas');
+                break;
+        }
+    }
+
+    /**
+     *
+     * @return \Chamilo\Core\Metadata\Storage\DataClass\Schema
+     */
+    public function getSchema()
+    {
+        if (!isset($this->schema))
+        {
+            $this->schema = DataManager::retrieve_by_id(Schema::class, $this->get_schema_id());
+        }
+
+        return $this->schema;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'metadata_element';
+    }
+
+    /**
      * Returns the display_name
      *
      * @return string
@@ -210,21 +218,14 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     }
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(new PropertyConditionVariable(self::class, self::PROPERTY_SCHEMA_ID));
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
@@ -281,14 +282,6 @@ class Element extends DataClass implements DisplayOrderDataClassListenerSupport
     public function get_schema_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_SCHEMA_ID);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'metadata_element';
     }
 
     /**

@@ -108,21 +108,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         }
     }
 
-    public function get_add_date()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_ADD_DATE);
-    }
-
-    /**
-     * Retrieves the allowed types to add to this complex learning object item
-     *
-     * @return Array of learning object types
-     */
-    public function get_allowed_types()
-    {
-        return [];
-    }
-
     /**
      * Get the default property names
      *
@@ -141,27 +126,43 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         );
     }
 
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'repository_complex_content_object_item';
+    }
+
+    public function get_add_date()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_ADD_DATE);
+    }
+
+    /**
+     * Retrieves the allowed types to add to this complex learning object item
+     *
+     * @return Array of learning object types
+     */
+    public function get_allowed_types()
+    {
+        return [];
+    }
+
     public function get_display_order()
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_PARENT));
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(ComplexContentObjectItem::class, self::PROPERTY_DISPLAY_ORDER);
     }
@@ -193,14 +194,6 @@ class ComplexContentObjectItem extends CompositeDataClass implements DisplayOrde
         }
 
         return $this->reference_object;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'repository_complex_content_object_item';
     }
 
     public function get_user_id()

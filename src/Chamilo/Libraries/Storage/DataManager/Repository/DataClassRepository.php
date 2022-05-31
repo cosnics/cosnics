@@ -657,8 +657,6 @@ class DataClassRepository
     }
 
     /**
-     * Retrieve an instance of a DataClass object from the storage layer by it's unique identifier
-     *
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
@@ -911,7 +909,6 @@ class DataClassRepository
     }
 
     /**
-     *
      * @param callable $function
      *
      * @return mixed

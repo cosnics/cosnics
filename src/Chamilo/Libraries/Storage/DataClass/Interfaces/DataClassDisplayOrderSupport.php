@@ -21,12 +21,9 @@ interface DataClassDisplayOrderSupport
     /**
      * @return string[]
      */
-    public function getDisplayOrderContextPropertyNames();
+    public function getDisplayOrderContextPropertyNames(): array;
 
-    /**
-     * @return string
-     */
-    public function getDisplayOrderPropertyName();
+    public function getDisplayOrderPropertyName(): string;
 
     public function getId(): ?int;
 

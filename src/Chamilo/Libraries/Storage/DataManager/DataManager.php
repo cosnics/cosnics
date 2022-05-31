@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager;
 
-use Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
@@ -9,9 +8,15 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
@@ -27,201 +32,128 @@ class DataManager
     use ClassContext;
 
     /**
-     * Instance of this class for the singleton pattern
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\DataManager
-     */
-    public static $instance;
-
-    /**
-     *
-     * @param integer $type
-     * @param string $table_name
-     * @param string $property
      * @param string[][] $attributes
      *
-     * @return boolean
      * @throws \Exception
      */
-    public static function alter_storage_unit($type, $table_name, $property, $attributes = [])
+    public static function alter_storage_unit(
+        int $type, string $storageUnitName, string $property, array $attributes = []
+    ): bool
     {
-        return self::getStorageUnitRepository()->alter($type, $table_name, $property, $attributes);
+        return self::getStorageUnitRepository()->alter($type, $storageUnitName, $property, $attributes);
     }
 
     /**
-     *
-     * @param integer $type
-     * @param string $table_name
-     * @param string|null $name
-     * @param string[] $columns
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function alter_storage_unit_index($type, $table_name, $name = null, $columns = [])
+    public static function alter_storage_unit_index(
+        int $type, string $storageUnitName, ?string $indexName = null, array $columns = []
+    ): bool
     {
-        return self::getStorageUnitRepository()->alterIndex($type, $table_name, $name, $columns);
+        return self::getStorageUnitRepository()->alterIndex($type, $storageUnitName, $indexName, $columns);
     }
 
     /**
-     * Changes the display orders by a given mapping array
-     *
-     * @param string $class_name
-     * @param string $display_order_property
-     * @param int[] $display_order_mapping
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $display_order_condition
-     *
-     * @return bool
-     *
      * @throws \Exception
-     * @example $display_order_mapping[$old_display_order] = $new_display_order;
+     * @example $displayOrderMapping[$oldDisplayOrder] = $newDisplayOrder;
      */
     public static function change_display_orders_by_mapping_array(
-        $class_name, $display_order_property, $display_order_mapping = [], $display_order_condition = null
-    )
+        string $dataClassName, string $displayOrderProperty, ?array $displayOrderMapping = [],
+        ?Condition $displayOrderCondition = null
+    ): bool
     {
         return self::getDataClassRepository()->changeDisplayOrdersByMappingArray(
-            $class_name, $display_order_property, $display_order_mapping, $display_order_condition
+            $dataClassName, $displayOrderProperty, $displayOrderMapping, $displayOrderCondition
         );
     }
 
     /**
-     * Count the number of instances of a DataClass object in the storage layer
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountParameters|null $parameters
-     *
-     * @return int
+     * @throws \Exception
+     */
+    public static function count(string $dataClassName, DataClassCountParameters $parameters): int
+    {
+        return self::getDataClassRepository()->count($dataClassName, $parameters);
+    }
+
+    /**
+     * @return int[]
+     * @throws \Exception
+     */
+    public static function count_grouped(string $dataClassName, DataClassCountGroupedParameters $parameters): array
+    {
+        return self::getDataClassRepository()->countGrouped($dataClassName, $parameters);
+    }
+
+    /**
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function count($class, $parameters = null)
+    public static function create(DataClass $dataClass): bool
     {
-        return self::getDataClassRepository()->count($class, $parameters);
+        return self::getDataClassRepository()->create($dataClass);
     }
 
     /**
-     * Count the number of instances of a DataClass object in the storage layer, based on a specific property ad grouped
-     * by another property in the storage layer
-     *
-     * @param $class string
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters
-     *
-     * @return integer[]
      * @throws \Exception
      */
-    public static function count_grouped($class, DataClassCountGroupedParameters $parameters)
+    public static function create_record(string $dataClassName, array $record): bool
     {
-        return self::getDataClassRepository()->countGrouped($class, $parameters);
+        return self::getDataClassRepository()->createRecord($dataClassName, $record);
     }
 
     /**
-     * Write an instance of a DataClass object to the storage layer
+     * @param string[][] $properties
+     * @param string[][][] $indexes
      *
-     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function create(DataClass $object)
+    public static function create_storage_unit(string $storageUnitName, array $properties = [], array $indexes = []
+    ): bool
     {
-        return self::getDataClassRepository()->create($object);
+        return self::getStorageUnitRepository()->create($storageUnitName, $properties, $indexes);
     }
 
     /**
-     * @param string $class_name
-     * @param string[] $record
-     *
-     * @return bool
-     * @throws \Exception
-     */
-    public static function create_record($class_name, $record)
-    {
-        return self::getDataClassRepository()->createRecord($class_name, $record);
-    }
-
-    /**
-     * Create a storage unit in the storage layer
-     *
-     * @param $name string
-     * @param string[] $properties
-     * @param string[] $indexes
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public static function create_storage_unit($name, $properties, $indexes)
-    {
-        return self::getStorageUnitRepository()->create($name, $properties, $indexes);
-    }
-
-    /**
-     * Delete an instance of a DataClass object from the storage layer
-     *
-     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
-     *
-     * @return boolean
      * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function delete(DataClass $object)
+    public static function delete(DataClass $dataClass): bool
     {
-        return self::getDataClassRepository()->delete($object);
+        return self::getDataClassRepository()->delete($dataClass);
     }
 
     /**
-     * Deletes any given number of instance of the DataClass object from the storage layer
-     *
-     * @param $class string
-     * @param $condition \Chamilo\Libraries\Storage\Query\Condition\Condition
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function deletes($class, Condition $condition)
+    public static function deletes(string $dataClassName, Condition $condition): bool
     {
-        return self::getDataClassRepository()->deletes($class, $condition);
+        return self::getDataClassRepository()->deletes($dataClassName, $condition);
     }
 
     /**
-     *
-     * @param string $className
-     * @param integer $identifier
-     *
-     * @return string
-     * @throws ObjectNotExistException
+     * @throws \Chamilo\Libraries\Architecture\Exceptions\ObjectNotExistException
      * @throws Exception
      */
-    public static function determineDataClassType($className, $identifier)
+    public static function determineDataClassType(string $dataClassName, int $identifier): string
     {
-        return self::getDataClassRepository()->determineDataClassType($className, $identifier);
+        return self::getDataClassRepository()->determineDataClassType($dataClassName, $identifier);
     }
 
     /**
-     * Retrieve all distinct values of a specific DataClass' property from the storage layer
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters $parameters
-     *
      * @return string[]
      * @throws \Exception
      */
-    public static function distinct($class, $parameters)
+    public static function distinct(string $dataClassName, DataClassDistinctParameters $parameters): array
     {
-        return self::getDataClassRepository()->distinct($class, $parameters);
+        return self::getDataClassRepository()->distinct($dataClassName, $parameters);
     }
 
     /**
-     * Drop a storage unit from the storage layer
-     *
-     * @param string $name
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function drop_storage_unit($name)
+    public static function drop_storage_unit(string $storageUnitName): bool
     {
-        return self::getStorageUnitRepository()->drop($name);
+        return self::getStorageUnitRepository()->drop($storageUnitName);
     }
 
     /**
@@ -255,243 +187,177 @@ class DataManager
     }
 
     /**
-     * Get the alias of a storage unit in the storage layer
-     *
-     * @param $storage_unit_name string
-     *
-     * @return string
      * @throws \Exception
      */
-    public static function get_alias($storage_unit_name)
+    public static function get_alias(string $dataClassStorageUnitName): string
     {
-        return self::getDataClassRepository()->getAlias($storage_unit_name);
+        return self::getDataClassRepository()->getAlias($dataClassStorageUnitName);
     }
 
     /**
-     * Generic function to move display orders Usage Start & End value: Subset of display orders Start value only: all
-     * display orders from given start until the end
-     *
-     * @param string $class_name
-     * @param string $display_order_property
-     * @param integer $start
-     * @param integer|null $end
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $display_order_condition
-     *
-     * @return bool
      * @throws \Exception
      */
     public static function move_display_orders(
-        $class_name, $display_order_property, $start = 1, $end = null, $display_order_condition = null
-    )
+        string $dataClassName, string $displayOrderProperty, ?int $start = 1, ?int $end = null,
+        ?Condition $displayOrderCondition = null
+    ): bool
     {
         return self::getDataClassRepository()->moveDisplayOrders(
-            $class_name, $display_order_property, $start, $end, $display_order_condition
+            $dataClassName, $displayOrderProperty, $start, $end, $displayOrderCondition
         );
     }
 
     /**
-     * Optimize a storage unit in the storage layer
-     *
-     * @param $name string
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function optimize_storage_unit($name)
+    public static function optimize_storage_unit(string $storageUnitName): bool
     {
-        return self::getStorageUnitRepository()->optimize($name);
+        return self::getStorageUnitRepository()->optimize($storageUnitName);
     }
 
     /**
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters|null $parameters
-     *
-     * @return string[]
      * @throws \Exception
      */
-    public static function record($class, RecordRetrieveParameters $parameters = null)
+    public static function record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
-        return self::getDataClassRepository()->record($class, $parameters);
+        return self::getDataClassRepository()->record($dataClassName, $parameters);
     }
 
     /**
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters|null $parameters
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
-    public static function records($class, $parameters = null)
+    public static function records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
-        return self::getDataClassRepository()->records($class, $parameters);
+        return self::getDataClassRepository()->records($dataClassName, $parameters);
     }
 
     /**
-     * Rename a storage unit
-     *
-     * @param string $old_name
-     * @param string $new_name
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function rename_storage_unit($old_name, $new_name)
+    public static function rename_storage_unit(string $oldStorageUnitName, string $newStorageUnitName): bool
     {
-        return self::getStorageUnitRepository()->rename($old_name, $new_name);
+        return self::getStorageUnitRepository()->rename($oldStorageUnitName, $newStorageUnitName);
     }
 
     /**
-     * Retrieve an instance of a DataClass object from the storage layer by a set of parameters
+     * @template retrieveDataClassName
      *
-     * @param $class string
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters|null $parameters
+     * @param class-string<retrieveDataClassName> $dataClassName
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return retrieveDataClassName
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function retrieve($class, DataClassRetrieveParameters $parameters = null)
+    public static function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
-        return self::getDataClassRepository()->retrieve($class, $parameters);
+        return self::getDataClassRepository()->retrieve($dataClassName, $parameters);
     }
 
     /**
-     * Retrieve an instance of a DataClass object from the storage layer by it's unique identifier
+     * @template retrieveById
      *
-     * @param $class string
-     * @param $id int
+     * @param class-string<retrieveById> $dataClassName
+     * @param integer $identifier
      *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass
+     * @return retrieveById
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function retrieve_by_id($class, $id)
+    public static function retrieve_by_id(string $dataClassName, int $identifier)
     {
-        return self::getDataClassRepository()->retrieveById($class, $id);
+        return self::getDataClassRepository()->retrieveById($dataClassName, $identifier);
     }
 
     /**
-     * Retrieve the additional properties for a specific CompositeDataClass instance
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\CompositeDataClass $object
-     *
-     * @return string[]
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $object)
+    public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $compositeDataClass
+    ): array
     {
-        return self::getDataClassRepository()->retrieveCompositeDataClassAdditionalProperties($object);
+        return self::getDataClassRepository()->retrieveCompositeDataClassAdditionalProperties($compositeDataClass);
     }
 
     /**
-     * Get the highest value of a specific property of a DataClass in the storage layer
-     *
-     * @param string $class
-     * @param string $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return int
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
-    public static function retrieve_maximum_value($class, $property, Condition $condition = null)
+    public static function retrieve_maximum_value(string $dataClassName, string $property, ?Condition $condition = null
+    ): int
     {
-        return self::getDataClassRepository()->retrieveMaximumValue($class, $property, $condition);
+        return self::getDataClassRepository()->retrieveMaximumValue($dataClassName, $property, $condition);
     }
 
     /**
-     * Return the next value - based on the highest value - of a specific property of a DataClass in the storage layer
-     *
-     * @param string $class
-     * @param string $property
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return int
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
-    public static function retrieve_next_value($class, $property, Condition $condition = null)
+    public static function retrieve_next_value(string $dataClassName, string $property, ?Condition $condition = null
+    ): int
     {
-        return self::getDataClassRepository()->retrieveNextValue($class, $property, $condition);
+        return self::getDataClassRepository()->retrieveNextValue($dataClassName, $property, $condition);
     }
 
     /**
-     * Retrieve a ArrayCollection of DataClass object instances from the storage layer
+     * @template tRetrieves
      *
-     * @param $class string
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters|null $parameters
+     * @param class-string<tRetrieves> $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection<tRetrieves>
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
-    public static function retrieves($class, $parameters = null)
+    public static function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
-        return self::getDataClassRepository()->retrieves($class, $parameters);
+        return self::getDataClassRepository()->retrieves($dataClassName, $parameters);
     }
 
     /**
-     * Determine whether a storage unit exists in the storage layer
-     *
-     * @param $name string
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function storage_unit_exists($name)
+    public static function storage_unit_exists(string $storageUnitName): bool
     {
-        return self::getStorageUnitRepository()->exists($name);
+        return self::getStorageUnitRepository()->exists($storageUnitName);
     }
 
     /**
-     * Executes the function within the context of a transaction.
+     * @param callable $function
      *
-     * @param $function
-     *
-     * @return bool|mixed
+     * @return mixed
+     * @throws \Throwable
      * @throws \Exception
      */
-    public static function transactional($function)
+    public static function transactional(callable $function)
     {
         return self::getDataClassRepository()->transactional($function);
     }
 
     /**
-     * Truncate a storage unit in the storage layer and optionally optimize it afterwards
-     *
-     * @param $name string
-     * @param $optimize boolean
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function truncate_storage_unit($name, $optimize = true)
+    public static function truncate_storage_unit(string $storageUnitName, ?bool $optimize = true): bool
     {
-        return self::getStorageUnitRepository()->truncate($name, $optimize);
+        return self::getStorageUnitRepository()->truncate($storageUnitName, $optimize);
     }
 
     /**
-     * Update an instance of a DataClass object in the storage layer
-     *
-     * @param $object \Chamilo\Libraries\Storage\DataClass\DataClass
-     *
-     * @return boolean
+     * @throws \ReflectionException
      * @throws \Exception
      */
-    public static function update(DataClass $object)
+    public static function update(DataClass $dataClass): bool
     {
-        return self::getDataClassRepository()->update($object);
+        return self::getDataClassRepository()->update($dataClass);
     }
 
     /**
-     * Updates any given number of properties for a specific DataClass property in the storage layer
-     *
-     * @param string $class
-     * @param mixed $properties
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
-     *
-     * @return boolean
      * @throws \Exception
      */
-    public static function updates(
-        $class, $properties, Condition $condition
-    )
+    public static function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
-        return self::getDataClassRepository()->updates($class, $properties, $condition);
+        return self::getDataClassRepository()->updates($dataClassName, $properties, $condition);
     }
 }

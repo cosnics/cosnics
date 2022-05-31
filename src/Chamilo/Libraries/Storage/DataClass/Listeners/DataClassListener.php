@@ -9,116 +9,60 @@ namespace Chamilo\Libraries\Storage\DataClass\Listeners;
  */
 abstract class DataClassListener
 {
-    const AFTER_CREATE = 'on_after_create';
-    const AFTER_DELETE = 'on_after_delete';
-    const AFTER_SET_PROPERTY = 'on_after_set_property';
-    const AFTER_UPDATE = 'on_after_update';
-    const BEFORE_CREATE = 'on_before_create';
-    const BEFORE_DELETE = 'on_before_delete';
-    const BEFORE_SET_PROPERTY = 'on_before_set_property';
-    const BEFORE_UPDATE = 'on_before_update';
+    const AFTER_CREATE = 'onAfterCreate';
+    const AFTER_DELETE = 'onAfterDelete';
+    const AFTER_SET_PROPERTY = 'onAfterSetProperty';
+    const AFTER_UPDATE = 'onAfterUpdate';
+    const BEFORE_CREATE = 'onBeforeCreate';
+    const BEFORE_DELETE = 'onBeforeDelete';
+    const BEFORE_SET_PROPERTY = 'onBeforeSetProperty';
+    const BEFORE_UPDATE = 'onBeforeUpdate';
     const GET_DEPENDENCIES = 'onGetDependencies';
 
+    public function onAfterCreate(bool $success): bool
+    {
+        return true;
+    }
+
+    public function onAfterDelete(bool $success): bool
+    {
+        return true;
+    }
+
+    public function onAfterSetProperty(string $name, string $value): bool
+    {
+        return true;
+    }
+
+    public function onAfterUpdate(bool $success): bool
+    {
+        return true;
+    }
+
+    public function onBeforeCreate(): bool
+    {
+        return true;
+    }
+
+    public function onBeforeDelete(): bool
+    {
+        return true;
+    }
+
+    public function onBeforeSetProperty(string $name, string $value): bool
+    {
+        return true;
+    }
+
+    public function onBeforeUpdate(): bool
+    {
+        return true;
+    }
+
     /**
-     * Calls this function to return the dependencies of this class
-     *
      * @param string[] $dependencies
-     *
-     * @return boolean
      */
-    public function onGetDependencies(&$dependencies = [])
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function after the creation of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
-     */
-    public function on_after_create($success)
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function after the deletion of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
-     */
-    public function on_after_delete($success)
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function after a property is set
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
-     */
-    public function on_after_set_property($name, $value)
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function after the update of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
-     */
-    public function on_after_update($success)
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function before the creation of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_create()
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function before the deletion of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_delete()
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function before a property is set
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
-     */
-    public function on_before_set_property($name, $value)
-    {
-        return true;
-    }
-
-    /**
-     * Calls this function before the update of a dataclass in the database
-     *
-     * @return boolean
-     */
-    public function on_before_update()
+    public function onGetDependencies(array &$dependencies = []): bool
     {
         return true;
     }

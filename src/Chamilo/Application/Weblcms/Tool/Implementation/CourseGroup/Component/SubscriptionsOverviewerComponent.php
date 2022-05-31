@@ -162,7 +162,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
     private function get_course_groups_tab()
     {
         $courseGroupRoot = DataManager::retrieve_course_group_root($this->get_course_id());
-        $course_groups = $courseGroupRoot->get_children(false);
+        $course_groups = $courseGroupRoot->get_children();
 
         return $this->handle_course_groups($course_groups);
     }
@@ -305,7 +305,7 @@ class SubscriptionsOverviewerComponent extends Manager implements TableSupport
             $table = new CourseGroupUserTable($this);
             $html[] = '<h4>' . $course_group->get_name() . '</h4>' . $table->as_html();
 
-            $children = $course_group->get_children(false);
+            $children = $course_group->get_children();
             $html[] = $this->handle_course_groups($children);
         }
 

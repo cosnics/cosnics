@@ -275,7 +275,7 @@ class CourseCopier implements CourseCopierInterface
     {
         $currentRootCourseGroup = $this->courseCopierRepository->findRootCourseGroupForCourse($currentCourse->getId());
 
-        $courseGroups = $currentRootCourseGroup->get_children(false);
+        $courseGroups = $currentRootCourseGroup->get_children();
 
         foreach ($targetCourseIds as $targetCourseId)
         {
@@ -317,7 +317,7 @@ class CourseCopier implements CourseCopierInterface
     {
         $oldId = $courseGroup->getId();
 
-        $courseGroupChildren = $courseGroup->get_children(false);
+        $courseGroupChildren = $courseGroup->get_children();
 
         $courseGroup->setId(null);
         $courseGroup->set_course_code($targetCourseId);

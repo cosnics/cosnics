@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\ForeignObject;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -15,96 +16,52 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class ManyToManyForeignObjectsParameters extends ForeignObjectsParameters
 {
 
-    /**
-     * The class name of the relation object
-     *
-     * @var string
-     */
-    private $relation_class;
+    private int $baseKey;
 
-    /**
-     * The property that describes the base object in the relation class
-     *
-     * @var integer
-     */
-    private $base_key;
+    private string $relationClass;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $baseObject
-     * @param string $foreignClass
-     * @param string $relationClass
-     * @param integer $baseKey
-     * @param integer $foreignKey
-     *
-     * @throws \ReflectionException
-     */
-    public function __construct($baseObject, $foreignClass, $relationClass, $baseKey = null, $foreignKey = null)
+    public function __construct(
+        DataClass $baseObject, string $foreignClass, string $relationClass, ?int $baseKey = null,
+        ?string $foreignKey = null
+    )
     {
         parent::__construct($baseObject, $foreignClass, $foreignKey);
-        $this->set_relation_class($relationClass);
-        $this->set_base_key($baseKey);
+        $this->setRelationClass($relationClass);
+        $this->setBaseKey($baseKey);
     }
 
-    /**
-     * Returns the foreign key
-     *
-     * @return integer
-     */
-    public function get_base_key()
+    public function getBaseKey(): int
     {
-        return $this->base_key;
+        return $this->baseKey;
     }
 
-    /**
-     * Sets the foreign key If no foreign key is given, the foreign key is generated using the base class table name
-     *
-     * @param integer $baseKey
-     *
-     * @throws \ReflectionException
-     */
-    public function set_base_key($baseKey)
+    public function setBaseKey(?int $baseKey)
     {
         if (is_null($baseKey))
         {
-            $baseKey = $this->generate_key($this->get_base_object()->getTableName());
+            $baseKey = $this->generateKey($this->getBaseObject()->getTableName());
         }
 
-        $this->base_key = $baseKey;
+        $this->baseKey = $baseKey;
     }
 
-    /**
-     * Returns the condition for the foreign objects retrieval
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\Condition
-     */
-    public function get_condition()
+    public function getCondition(): Condition
     {
-        $relation_class = $this->get_relation_class();
+        $relation_class = $this->getRelationClass();
 
         return new EqualityCondition(
-            new PropertyConditionVariable($relation_class, $this->get_base_key()),
-            new StaticConditionVariable($this->get_base_object()->getDefaultProperty(DataClass::PROPERTY_ID))
+            new PropertyConditionVariable($relation_class, $this->getBaseKey()),
+            new StaticConditionVariable($this->getBaseObject()->getDefaultProperty(DataClass::PROPERTY_ID))
         );
     }
 
-    /**
-     * Returns the class name of the foreign object
-     *
-     * @return string
-     */
-    public function get_relation_class()
+    public function getRelationClass(): string
     {
-        return $this->relation_class;
+        return $this->relationClass;
     }
 
-    /**
-     * Sets the class name of the foreign object
-     *
-     * @param string $relationClass
-     */
-    public function set_relation_class($relationClass)
+    public function setRelationClass(string $relationClass)
     {
-        $this->relation_class = $relationClass;
+        $this->relationClass = $relationClass;
     }
 }

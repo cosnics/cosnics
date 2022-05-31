@@ -35,41 +35,22 @@ use InvalidArgumentException;
 class MappingDriverFactory
 {
 
-    /**
-     * The root path of chamilo
-     *
-     * @var string
-     */
-    private $chamiloRootPath;
+    private ?string $chamiloRootPath;
 
-    /**
-     * The doctrine configuration class
-     *
-     * @var \Doctrine\ORM\Configuration
-     */
-    private $doctrineConfiguration;
+    private Configuration $doctrineConfiguration;
 
-    /**
-     * Constructor
-     *
-     * @param \Doctrine\ORM\Configuration $doctrineConfiguration
-     * @param string $chamiloRootPath
-     */
-    public function __construct(Configuration $doctrineConfiguration, $chamiloRootPath = null)
+    public function __construct(Configuration $doctrineConfiguration, ?string $chamiloRootPath = null)
     {
         $this->doctrineConfiguration = $doctrineConfiguration;
         $this->chamiloRootPath = !is_null($chamiloRootPath) ? $chamiloRootPath : Path::getInstance()->getBasePath();
     }
 
     /**
-     * Helper function to create absolute mapping paths based on given relative mapping paths
-     *
-     * @param string $type
-     * @param string[] $mappingPaths
+     * @param string[] $mappingPaths
      *
      * @return string[]
      */
-    protected function createAbsoluteMappingPaths($type, $mappingPaths)
+    protected function createAbsoluteMappingPaths(string $type, array $mappingPaths): array
     {
         foreach ($mappingPaths as $index => $mappingPath)
         {
@@ -88,15 +69,9 @@ class MappingDriverFactory
     }
 
     /**
-     * Creates the mapping configuration based on a given configuration array.
-     * The configuration array is
-     * processed and validated with the configuration processor
-     *
      * @param string[] $mappingConfiguration
-     *
-     * @return \Doctrine\Persistence\Mapping\Driver\MappingDriverChain
      */
-    public function createMappingDriver(array $mappingConfiguration = [])
+    public function createMappingDriver(array $mappingConfiguration = []): MappingDriverChain
     {
         $mappingConfiguration = $this->processConfiguration($mappingConfiguration);
 
@@ -150,13 +125,11 @@ class MappingDriverFactory
     }
 
     /**
-     * Processes the given configuration
-     *
      * @param string[] $mappingConfiguration
      *
      * @return string[][][]
      */
-    protected function processConfiguration(array $mappingConfiguration = [])
+    protected function processConfiguration(array $mappingConfiguration = []): array
     {
         $doctrineORMMappingsConfiguration = new DoctrineORMMappingsConfiguration();
         $treeNode = $doctrineORMMappingsConfiguration->getConfigTreeBuilder()->buildTree();

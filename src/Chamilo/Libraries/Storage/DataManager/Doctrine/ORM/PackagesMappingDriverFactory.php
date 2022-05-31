@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ORM;
 
 use Chamilo\Libraries\DependencyInjection\Configuration\LibrariesConfiguration;
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\Config\Definition\Processor;
@@ -18,34 +19,12 @@ use Symfony\Component\Yaml\Parser;
 class PackagesMappingDriverFactory
 {
 
-    /**
-     * The mapping driver factory service
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory
-     */
-    private $mappingDriverFactory;
+    private MappingDriverFactory $mappingDriverFactory;
 
-    /**
-     * The configuration processor
-     *
-     * @var \Symfony\Component\Config\Definition\Processor
-     */
-    private $processor;
+    private Processor $processor;
 
-    /**
-     * The YAML Parser
-     *
-     * @var \Symfony\Component\Yaml\Parser
-     */
-    private $yamlParser;
+    private Parser $yamlParser;
 
-    /**
-     * Constructor
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\Doctrine\ORM\MappingDriverFactory $mappingDriverFactory
-     * @param \Symfony\Component\Config\Definition\Processor $processor
-     * @param \Symfony\Component\Yaml\Parser $yamlParser
-     */
     public function __construct(MappingDriverFactory $mappingDriverFactory, Processor $processor, Parser $yamlParser)
     {
         $this->mappingDriverFactory = $mappingDriverFactory;
@@ -54,19 +33,14 @@ class PackagesMappingDriverFactory
     }
 
     /**
-     * Creates the mapping driver for the given packages.
-     * The packages are defined with the namespace and the location
-     * of the config file.
-     *
      * @param string[] $packages
      *
-     * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      * @example $packages = array(
      *          'application/weblcms' => Path::getInstance()->getBasePath() .
      *          'application/weblcms/resources/configuration/config.yml'
      *          )
      */
-    public function createMappingDriverForPackages($packages = [])
+    public function createMappingDriverForPackages(array $packages = []): MappingDriver
     {
         if (empty($packages))
         {

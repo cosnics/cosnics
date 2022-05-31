@@ -49,15 +49,12 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     /**
      * @return string[]
      */
-    public function getDisplayOrderContextPropertyNames()
+    public function getDisplayOrderContextPropertyNames(): array
     {
         return array(self::PROPERTY_PARENT);
     }
 
-    /**
-     * @return string
-     */
-    public function getDisplayOrderPropertyName()
+    public function getDisplayOrderPropertyName(): string
     {
         return self::PROPERTY_SORT;
     }

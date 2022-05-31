@@ -15,37 +15,18 @@ use RuntimeException;
 class DoctrineProxyCacheService extends FileBasedCacheService
 {
 
-    /**
-     * The EntityManager
-     *
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private $entityManager;
+    private EntityManager $entityManager;
 
-    /**
-     * Constructor
-     *
-     * @param \Doctrine\ORM\EntityManager $entityManager
-     */
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * Returns the path to the cache directory or file
-     *
-     * @return string
-     */
-    function getCachePath()
+    function getCachePath(): string
     {
         return $this->entityManager->getConfiguration()->getProxyDir();
     }
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Cache\FileBasedCacheService::warmUp()
-     */
     public function warmUp()
     {
         if (!is_dir($proxyCacheDir = $this->entityManager->getConfiguration()->getProxyDir()))

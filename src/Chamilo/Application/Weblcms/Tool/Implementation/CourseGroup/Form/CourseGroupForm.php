@@ -395,7 +395,7 @@ class CourseGroupForm extends FormValidator
 
     public function build_editing_form()
     {
-        if ($this->course_group->count_children(false) > 0)
+        if ($this->course_group->count_children() > 0)
         {
             $tabs_renderer = new DynamicFormTabsRenderer('course_groups', $this);
 
@@ -440,7 +440,7 @@ class CourseGroupForm extends FormValidator
     public function build_extended_editing_form()
     {
         $counter = 1; // Index 1 means the first child, index 0 is the 'parent' course group.
-        $data_set = $this->course_group->get_children(false);
+        $data_set = $this->course_group->get_children();
 
         foreach($data_set as $next)
         {
@@ -1017,7 +1017,7 @@ class CourseGroupForm extends FormValidator
         }
 
         /** @var CourseGroup[] $course_groups */
-        $course_groups = $parent_course_group->get_children(false);
+        $course_groups = $parent_course_group->get_children();
 
         $max_number_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
         $user_number_subscriptions = [];
@@ -1168,7 +1168,7 @@ class CourseGroupForm extends FormValidator
 
         $counter = 1;
 
-        $data_set = $this->course_group->get_children(false);
+        $data_set = $this->course_group->get_children();
 
         if ($this->course_group->getErrors() == null)
         {
@@ -1225,7 +1225,7 @@ class CourseGroupForm extends FormValidator
                 );
                 if ($parent_course_group->get_max_number_of_members() > 0)
                 {
-                    $parent_course_group_children = $parent_course_group->get_children(false);
+                    $parent_course_group_children = $parent_course_group->get_children();
                     $total_size = 0;
 
                     foreach($parent_course_group_children as $child_group)

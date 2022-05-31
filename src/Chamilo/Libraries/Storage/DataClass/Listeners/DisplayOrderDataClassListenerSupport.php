@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass\Listeners;
 
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+
 /**
  * Interface that makes sure that dataclasses who use the display order data class listener also support the correct
  * functionality
@@ -17,25 +19,16 @@ interface DisplayOrderDataClassListenerSupport
     public function getDefaultProperty(string $name);
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties();
+    public function getDisplayOrderContextProperties(): array;
+
+    public function getDisplayOrderProperty(): PropertyConditionVariable;
 
     /**
-     * Returns the property for the display order
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     */
-    public function get_display_order_property();
-
-    /**
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public static function package();
+    public static function package(): string;
 
     /**
      * @param mixed $value

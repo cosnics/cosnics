@@ -304,23 +304,16 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     {
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER);
     }
-
+    
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return [];
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }

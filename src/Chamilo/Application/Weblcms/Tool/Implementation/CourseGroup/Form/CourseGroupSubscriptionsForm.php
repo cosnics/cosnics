@@ -163,7 +163,7 @@ class CourseGroupSubscriptionsForm extends FormValidator
         // check for max group subscription per member
 
         $parent_course_group = $this->course_group->get_parent();
-        $course_groups = $parent_course_group->get_children(false);
+        $course_groups = $parent_course_group->get_children();
 
         $max_group_subscriptions = $parent_course_group->get_max_number_of_course_group_per_member();
         $user_number_of_subscriptions = [];

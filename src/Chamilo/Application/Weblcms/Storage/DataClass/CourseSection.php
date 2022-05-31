@@ -63,6 +63,43 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
      */
 
     /**
+     * Returns the default properties of this dataclass
+     *
+     * @return String[] - The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_COURSE_ID,
+                self::PROPERTY_NAME,
+                self::PROPERTY_TYPE,
+                self::PROPERTY_VISIBLE,
+                self::PROPERTY_DISPLAY_ORDER
+            )
+        );
+    }
+
+    protected function getDependencies(array $dependencies = []): array
+    {
+        $id = $this->get_id();
+
+        return array(
+            CourseToolRelCourseSection::class => new EqualityCondition(
+                new PropertyConditionVariable(
+                    CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
+                ), new StaticConditionVariable($id)
+            )
+        );
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Inherited Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
      *
      * @return string
      */
@@ -84,6 +121,30 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     }
 
     /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_course_section';
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Getters and Setters *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * Returns the type property of this object
+     *
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_TYPE);
+    }
+
+    /**
      * Returns the course_id property of this object
      *
      * @return String
@@ -92,50 +153,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     {
         return $this->getDefaultProperty(self::PROPERTY_COURSE_ID);
     }
-
-    /**
-     * **************************************************************************************************************
-     * Inherited Functionality *
-     * **************************************************************************************************************
-     */
-
-    /**
-     * Returns the default properties of this dataclass
-     *
-     * @return String[] - The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_COURSE_ID,
-                self::PROPERTY_NAME,
-                self::PROPERTY_TYPE,
-                self::PROPERTY_VISIBLE,
-                self::PROPERTY_DISPLAY_ORDER
-            )
-        );
-    }
-
-
-    protected function getDependencies(array $dependencies = []): array
-    {
-        $id = $this->get_id();
-
-        return array(
-            CourseToolRelCourseSection::class => new EqualityCondition(
-                new PropertyConditionVariable(
-                    CourseToolRelCourseSection::class, CourseToolRelCourseSection::PROPERTY_SECTION_ID
-                ), new StaticConditionVariable($id)
-            )
-        );
-    }
-
-    /**
-     * **************************************************************************************************************
-     * Getters and Setters *
-     * **************************************************************************************************************
-     */
 
     /**
      * Returns the display_order property of this object
@@ -148,21 +165,14 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     }
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID));
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
@@ -175,24 +185,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_course_section';
-    }
-
-    /**
-     * Returns the type property of this object
-     *
-     * @return int
-     */
-    public function getType()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_TYPE);
     }
 
     /**
@@ -249,6 +241,11 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
         return $this->getDefaultProperty(self::PROPERTY_VISIBLE);
     }
 
+    public function setType($type)
+    {
+        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
+    }
+
     /**
      * Sets the course_id property of this object
      *
@@ -285,11 +282,6 @@ class CourseSection extends DataClass implements DisplayOrderDataClassListenerSu
     public function set_type($type)
     {
         $this->setType($type);
-    }
-
-    public function setType($type)
-    {
-        $this->setDefaultProperty(self::PROPERTY_TYPE, $type);
     }
 
     /**

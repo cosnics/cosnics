@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\DataClass\ForeignObject;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
+use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -15,32 +16,21 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class OneToManyForeignObjectsParameters extends ForeignObjectsParameters
 {
 
-    /**
-     *
-     * @see \Chamilo\Libraries\Storage\DataClass\ForeignObject\ForeignObjectsParameters::get_condition()
-     */
-    public function get_condition()
+    public function getCondition(): Condition
     {
         return new EqualityCondition(
-            new PropertyConditionVariable($this->get_foreign_class(), $this->get_foreign_key()),
-            new StaticConditionVariable($this->get_base_object()->getDefaultProperty(DataClass::PROPERTY_ID))
+            new PropertyConditionVariable($this->getForeignClass(), $this->getForeignKey()),
+            new StaticConditionVariable($this->getBaseObject()->getDefaultProperty(DataClass::PROPERTY_ID))
         );
     }
 
-    /**
-     * Sets the foreign key property
-     *
-     * @param string $foreignKey
-     *
-     * @throws \ReflectionException
-     */
-    public function set_foreign_key($foreignKey)
+    public function setForeignKey(?string $foreignKey)
     {
         if (is_null($foreignKey))
         {
-            $foreignKey = $this->generate_key($this->get_base_object()->getTableName());
+            $foreignKey = $this->generateKey($this->getBaseObject()->getTableName());
         }
 
-        parent::set_foreign_key($foreignKey);
+        parent::setForeignKey($foreignKey);
     }
 }

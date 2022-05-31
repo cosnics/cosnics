@@ -120,8 +120,7 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         if (!$recursive)
         {
             $parameters = new DataClassDistinctParameters(
-                $condition,
-                new RetrieveProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
+                $condition, new RetrieveProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
             );
 
             return DataManager::distinct(self::class, $parameters);
@@ -147,21 +146,14 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     }
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(new PropertyConditionVariable(self::class, self::PROPERTY_PARENT));
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }

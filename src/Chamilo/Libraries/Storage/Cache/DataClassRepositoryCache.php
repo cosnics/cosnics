@@ -14,7 +14,6 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 
 /**
  *
@@ -29,27 +28,19 @@ class DataClassRepositoryCache
     /**
      * The cache
      *
-     * @var mixed[][]
+     * @var array[][]
      */
-    private $cache;
+    private array $cache;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->cache = [];
     }
 
     /**
-     *
-     * @param string $className
-     * @param ?\Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
      * @param mixed $value
-     *
-     * @return boolean
      */
-    private function add($className, DataClassParameters $parameters = null, $value)
+    private function add(string $className, ?DataClassParameters $parameters, $value): bool
     {
         if (!$this->exists($className, $parameters))
         {
@@ -99,30 +90,14 @@ class DataClassRepositoryCache
     }
 
     /**
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters $parameters
      * @param integer[] $counts
      *
-     * @return boolean
      * @throws \Exception
      */
-    public function addForDataClassCountGrouped($className, $parameters, $counts)
+    public function addForDataClassCountGrouped(
+        string $className, DataClassCountGroupedParameters $parameters, array $counts
+    ): bool
     {
-        if (!$parameters instanceof DataClassCountGroupedParameters)
-        {
-            throw new Exception('Illegal parameters passed to the DataClassRepositoryCache');
-        }
-
-        if (!is_array($counts))
-        {
-            $type = is_object($counts) ? get_class($counts) : gettype($counts);
-            throw new Exception(
-                'DataClassRepositoryCache::addForDataClassCountGrouped only allows for caching of integer arrays. Currently trying to add: ' .
-                $type . '.'
-            );
-        }
-
         return $this->add($className, $parameters, $counts);
     }
 
@@ -133,13 +108,7 @@ class DataClassRepositoryCache
         return $this->add($className, $parameters, $propertyValues);
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Exception\DataClassNoResultException $exception
-     *
-     * @return boolean
-     */
-    public function addForNoResult(DataClassNoResultException $exception)
+    public function addForNoResult(DataClassNoResultException $exception): bool
     {
         $this->set($exception->get_class_name(), $exception->get_parameters()->hash(), false);
 
@@ -154,19 +123,10 @@ class DataClassRepositoryCache
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     *
-     * @return boolean
-     * @throws \Exception
+     * @throws \ReflectionException
      */
-    public function deleteForDataClass(DataClass $object)
+    public function deleteForDataClass(DataClass $object): bool
     {
-        if (!$object instanceof DataClass)
-        {
-            throw new Exception('Not a DataClass');
-        }
-
         $className = $this->getDataClassCacheClassName($object);
 
         foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
@@ -183,15 +143,7 @@ class DataClassRepositoryCache
         return true;
     }
 
-    /**
-     * Returns whether a DataClass object exists in the cache
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return boolean
-     */
-    public function exists($class, DataClassParameters $parameters)
+    public function exists(string $class, DataClassParameters $parameters): bool
     {
         $hash = $parameters->hash();
 
@@ -205,15 +157,7 @@ class DataClassRepositoryCache
         }
     }
 
-    /**
-     * Get a DataClass object from the cache
-     *
-     * @param string $class
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     *
-     * @return \Chamilo\Libraries\Storage\DataClass\DataClass|boolean|\Doctrine\Common\Collections\ArrayCollection|array
-     */
-    public function get($class, DataClassParameters $parameters)
+    public function get(string $class, DataClassParameters $parameters)
     {
         if ($this->exists($class, $parameters))
         {
@@ -226,7 +170,7 @@ class DataClassRepositoryCache
         }
     }
 
-    protected function getCacheClassName($dataClassName): string
+    protected function getCacheClassName(string $dataClassName): string
     {
         $isCompositeDataClass = is_subclass_of($dataClassName, CompositeDataClass::class);
         $isExtensionClass = get_parent_class($dataClassName) !== CompositeDataClass::class;
@@ -242,13 +186,9 @@ class DataClassRepositoryCache
     }
 
     /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $object
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    private function getDataClassCacheClassName(DataClass $object)
+    private function getDataClassCacheClassName(DataClass $object): string
     {
         $compositeDataClassName = CompositeDataClass::class;
 
@@ -271,25 +211,14 @@ class DataClassRepositoryCache
     }
 
     /**
-     * Set the cache value for a specific DataClass object type, hash
-     *
-     * @param string $class
-     * @param string $hash
      * @param mixed $value
      */
-    private function set($class, $hash, $value)
+    private function set(string $class, string $hash, $value)
     {
         $this->cache[$class][$hash] = $value;
     }
 
-    /**
-     * Clear the cache for a specific DataClass type
-     *
-     * @param string $class
-     *
-     * @return boolean
-     */
-    public function truncate($class)
+    public function truncate(string $class): bool
     {
         if (isset($this->cache[$class]))
         {
@@ -300,13 +229,9 @@ class DataClassRepositoryCache
     }
 
     /**
-     * Clear the cache for a set of specific DataClass types
-     *
      * @param string[] $classes
-     *
-     * @return boolean
      */
-    public function truncates($classes = [])
+    public function truncates(array $classes = []): bool
     {
         foreach ($classes as $class)
         {

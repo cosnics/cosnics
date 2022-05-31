@@ -12,18 +12,13 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 class OneToOneForeignObjectsParameters extends ForeignObjectsParameters
 {
 
-    /**
-     * Sets the foreign key property
-     *
-     * @param string $foreignKey
-     */
-    public function set_foreign_key($foreignKey)
+    public function setForeignKey(?string $foreignKey)
     {
         if (is_null($foreignKey))
         {
             $foreignKey = DataClass::PROPERTY_ID;
         }
 
-        parent::set_foreign_key($foreignKey);
+        parent::setForeignKey($foreignKey);
     }
 }

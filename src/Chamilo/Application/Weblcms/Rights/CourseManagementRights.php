@@ -159,7 +159,7 @@ class CourseManagementRights extends WeblcmsRights
                 return false;
             }
             
-            $groups = $base_group->get_parents(true);
+            $groups = $base_group->get_ancestors();
             $group_ids = [];
             foreach ($groups as $group)
             {
@@ -360,7 +360,7 @@ class CourseManagementRights extends WeblcmsRights
         
         $succes = true;
         
-        $location_children = $location->get_children();
+        $location_children = $location->get_descendants();
         foreach($location_children as $child)
         {
             $child->set_context($location->get_context());

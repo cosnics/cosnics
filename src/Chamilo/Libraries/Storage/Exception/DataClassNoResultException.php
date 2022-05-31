@@ -1,7 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\Exception;
 
-use Chamilo\Libraries\Translation\Translation;
+use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Exception;
 
 /**
@@ -14,78 +14,40 @@ use Exception;
 class DataClassNoResultException extends Exception
 {
 
-    /**
-     * The fully qualified class name of the DataClass object retrieval for which no result was found
-     *
-     * @var string
-     */
-    private $class_name;
+    private string $dataClassName;
 
-    /**
-     * The parameters of the DataClass object retrieval for which no result was found
-     *
-     * @var \Chamilo\Libraries\Storage\Parameters\DataClassParameters
-     */
-    private $parameters;
+    private DataClassParameters $parameters;
 
-    /**
-     * Constructor
-     *
-     * @param string $className
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     * @param string $message
-     * @param integer $code
-     * @param \Exception $previous
-     */
-    public function __construct($className, $parameters, $message = null, $code = null, $previous = null)
+    public function __construct(
+        string $dataClassName, DataClassParameters $parameters, ?string $message = null, ?int $code = null,
+        ?Exception $previous = null
+    )
     {
-        $this->class_name = $className;
-        $this->parameters = $parameters;
-
-        $message = Translation::get(
-            'DataClassNoResultException', array('CLASS_NAME' => $className, 'MESSAGE' => $message)
-        );
+        $message = 'No result was found for ' . $dataClassName . '. Additional information: ' . $message;
 
         parent::__construct($message, $code, $previous);
+
+        $this->dataClassName = $dataClassName;
+        $this->parameters = $parameters;
     }
 
-    /**
-     * Get the fully qualified class name of the DataClass object retrieval for which no result was found
-     *
-     * @return string
-     */
-    public function get_class_name()
+    public function get_class_name(): string
     {
-        return $this->class_name;
+        return $this->dataClassName;
     }
 
-    /**
-     * Set the fully qualified class name of the DataClass object retrieval for which no result was found
-     *
-     * @param $className string
-     */
-    public function set_class_name($className)
-    {
-        $this->class_name = $className;
-    }
-
-    /**
-     * Get the parameters of the DataClass object retrieval for which no result was found
-     *
-     * @return \Chamilo\Libraries\Storage\Parameters\DataClassParameters
-     */
-    public function get_parameters()
+    public function get_parameters(): DataClassParameters
     {
         return $this->parameters;
     }
 
-    /**
-     * Set the parameters of the DataClass object retrieval for which no result was found
-     *
-     * @param \Chamilo\Libraries\Storage\Parameters\DataClassParameters $parameters
-     */
-    public function set_parameters($parameters)
+    public function set_parameters(DataClassParameters $parameters)
     {
         $this->parameters = $parameters;
+    }
+
+    public function set_class_name(string $dataClassName)
+    {
+        $this->dataClassName = $dataClassName;
     }
 }

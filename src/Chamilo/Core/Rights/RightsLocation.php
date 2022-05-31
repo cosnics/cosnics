@@ -3,7 +3,7 @@ namespace Chamilo\Core\Rights;
 
 use Chamilo\Core\Rights\Storage\DataManager;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
@@ -20,7 +20,7 @@ use Exception;
  *
  * @deprecated Use \Chamilo\Libraries\Rights\Domain\RightsLocation now
  */
-abstract class RightsLocation extends NestedTreeNode
+abstract class RightsLocation extends NestedSet
 {
     const PROPERTY_IDENTIFIER = 'identifier';
     const PROPERTY_INHERIT = 'inherit';
@@ -59,7 +59,7 @@ abstract class RightsLocation extends NestedTreeNode
      * @return boolean
      * @deprecated Use RightsService::deleteRightsLocationEntityRightsForLocation() now
      */
-    public function delete_related_content()
+    public function delete_related_content(): bool
     {
         return $this->clear_rights();
     }
@@ -96,7 +96,7 @@ abstract class RightsLocation extends NestedTreeNode
     /**
      * @return string[]
      */
-    public function getSubTreePropertyNames()
+    public function getSubTreePropertyNames(): array
     {
         return array(self::PROPERTY_TREE_TYPE, self::PROPERTY_TREE_IDENTIFIER);
     }
@@ -193,7 +193,7 @@ abstract class RightsLocation extends NestedTreeNode
      * Should be used as the
      * basic set of condition whenever one makes a query.
      */
-    public function get_nested_set_condition_array()
+    public function get_nested_set_condition_array(): array
     {
         $conditions = parent::get_nested_set_condition_array();
 
@@ -302,7 +302,7 @@ abstract class RightsLocation extends NestedTreeNode
     /**
      * @return bool
      */
-    public function is_root()
+    public function is_root(): bool
     {
         $parent = $this->get_parent();
 

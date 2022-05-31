@@ -6,7 +6,6 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use InvalidArgumentException;
 
@@ -19,19 +18,14 @@ use InvalidArgumentException;
 class ImplementationNotifierDataClassListener extends DataClassListener
 {
 
-    /**
-     * The DataClass (must implement the necessary interface)
-     *
-     * @var \Chamilo\Libraries\Storage\DataClass\DataClass
-     */
-    private $data_class;
+    private string $context;
+
+    private DataClass $dataClass;
 
     /**
-     * The context for which the implementation packages must be searched
-     *
-     * @var string
+     * @var string[]
      */
-    private $context;
+    private array $implementationPackages;
 
     /**
      * The mapping between the methods of the data class listener and the methods of the datamanager, at least one
@@ -39,39 +33,29 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @var string[]
      */
-    private $method_mapping;
+    private array $methodMapping;
 
     /**
-     * Cache for the implementation packages
-     *
-     * @var string[]
-     */
-    private $implementation_packages;
-
-    /**
-     * Constructs this dataclass listener and checks if the dataclass implements the necessary functions
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     * @param string $context
      * @param string[] $methodMapping
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct(DataClass $dataClass, $context, array $methodMapping = [])
+    public function __construct(DataClass $dataClass, string $context, array $methodMapping)
     {
-        $this->set_data_class($dataClass);
-        $this->set_context($context);
-        $this->set_method_mapping($methodMapping);
+        $this->setDataClass($dataClass);
+        $this->setContext($context);
+        $this->setMethodMapping($methodMapping);
     }
 
     /**
-     * Determines the implementation packages based on the given context
-     *
      * @return string[]
+     *
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function get_implementation_packages()
+    protected function getImplementationPackages(): array
     {
-        if (!isset($this->implementation_packages))
+        if (!isset($this->implementationPackages))
         {
             $pattern = '\\\Integration\\' . $this->context;
 
@@ -84,37 +68,33 @@ class ImplementationNotifierDataClassListener extends DataClassListener
             $package_registrations = DataManager::retrieves(
                 Registration::class, new DataClassRetrievesParameters($condition)
             );
-            foreach($package_registrations as $package_registration)
+            foreach ($package_registrations as $package_registration)
             {
                 $packages[] = $package_registration->get_context();
             }
 
-            $this->implementation_packages = $packages;
+            $this->implementationPackages = $packages;
         }
 
-        return $this->implementation_packages;
+        return $this->implementationPackages;
     }
 
     /**
-     * Notifies the implementation packages for the given data class listener method
-     *
-     * @param string $dataClassListenerMethod
-     * @param string[] $parameters
-     *
-     * @return boolean
+     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function notify_implementation_packages($dataClassListenerMethod, array $parameters = [])
+    protected function notifyImplementationPackages(string $dataClassListenerMethod, array $parameters = []): bool
     {
-        if (!array_key_exists($dataClassListenerMethod, $this->method_mapping))
+        if (!array_key_exists($dataClassListenerMethod, $this->methodMapping))
         {
             return true;
         }
 
-        array_unshift($parameters, $this->data_class);
+        array_unshift($parameters, $this->dataClass);
 
-        $method = $this->method_mapping[$dataClassListenerMethod];
+        $method = $this->methodMapping[$dataClassListenerMethod];
 
-        $packages = $this->get_implementation_packages();
+        $packages = $this->getImplementationPackages();
 
         foreach ($packages as $package)
         {
@@ -135,117 +115,92 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     }
 
     /**
-     * Calls this function after the creation of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_after_create($success)
+    public function onAfterCreate(bool $success): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function after the deletion of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_after_delete($success)
+    public function onAfterDelete(bool $success): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function after a property is set
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_after_set_property($name, $value)
+    public function onAfterSetProperty(string $name, string $value): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function after the update of a dataclass in the database
-     *
-     * @param boolean $success
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_after_update($success)
+    public function onAfterUpdate(bool $success): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function before the creation of a dataclass in the database
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_before_create()
+    public function onBeforeCreate(): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function before the deletion of a dataclass in the database
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_before_delete()
+    public function onBeforeDelete(): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function before a property is set
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_before_set_property($name, $value)
+    public function onBeforeSetProperty(string $name, string $value): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function before the update of a dataclass in the database
-     *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_before_update()
+    public function onBeforeUpdate(): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, func_get_args());
+        return $this->notifyImplementationPackages(__FUNCTION__, func_get_args());
     }
 
     /**
-     * Calls this function to return the dependencies of this class
-     *
      * @param string[] $dependencies
      *
-     * @return boolean
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
-    public function on_getDependencies(&$dependencies = [])
+    public function onGetDependencies(array &$dependencies = []): bool
     {
-        return $this->notify_implementation_packages(__FUNCTION__, array(&$dependencies));
+        return $this->notifyImplementationPackages(__FUNCTION__, array(&$dependencies));
     }
 
     /**
-     * Sets the context
-     *
-     * @param string $context
-     *
      * @throws \InvalidArgumentException
      */
-    public function set_context($context)
+    public function setContext(string $context)
     {
         if (empty($context))
         {
@@ -255,21 +210,9 @@ class ImplementationNotifierDataClassListener extends DataClassListener
         $this->context = $context;
     }
 
-    /**
-     * Sets the data class
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $data_class
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function set_data_class($data_class)
+    public function setDataClass(DataClass $dataClass)
     {
-        if (!$data_class instanceof DataClass)
-        {
-            throw new InvalidArgumentException('The data class should be an instance of DataClass');
-        }
-
-        $this->data_class = $data_class;
+        $this->dataClass = $dataClass;
     }
 
     /**
@@ -279,9 +222,9 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      *
      * @throws \InvalidArgumentException
      */
-    public function set_method_mapping($methodMapping)
+    public function setMethodMapping(array $methodMapping)
     {
-        if (!is_array($methodMapping) || count($methodMapping) == 0)
+        if (count($methodMapping) == 0)
         {
             throw new InvalidArgumentException('The method mapping should at least contain 1 method');
         }
@@ -296,6 +239,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
             }
         }
 
-        $this->method_mapping = $methodMapping;
+        $this->methodMapping = $methodMapping;
     }
 }

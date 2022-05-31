@@ -30,7 +30,7 @@ class CourseGroupEntityTableCellRenderer extends LocationEntityTableCellRenderer
             case CourseGroupEntityTableColumnModel::COLUMN_USERS :
                 return $entity_item->count_members();
             case CourseGroupEntityTableColumnModel::COLUMN_SUBGROUPS :
-                return $entity_item->count_children(true);
+                return $entity_item->count_descendants();
         }
         
         return parent::render_cell($column, $entity_item);

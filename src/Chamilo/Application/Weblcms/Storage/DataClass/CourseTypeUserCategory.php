@@ -89,16 +89,6 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
         return $success;
     }
 
-    public function get_course_type_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
-    }
-
-    public function get_course_user_category_id()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_USER_CATEGORY_ID);
-    }
-
     /**
      * Get the default properties of all user course user categories.
      *
@@ -128,11 +118,27 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     }
 
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
-     * @return Condition
+     * @return string
      */
-    public function get_display_order_context_properties()
+    public static function getTableName(): string
+    {
+        return 'weblcms_course_type_user_category';
+    }
+
+    public function get_course_type_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_TYPE_ID);
+    }
+
+    public function get_course_user_category_id()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_USER_CATEGORY_ID);
+    }
+
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
     {
         return array(
             new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_TYPE_ID),
@@ -140,12 +146,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
         );
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_SORT);
     }
@@ -153,14 +154,6 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     public function get_sort()
     {
         return $this->getDefaultProperty(self::PROPERTY_SORT);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_course_type_user_category';
     }
 
     public function get_user_id()

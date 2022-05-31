@@ -105,7 +105,7 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
      *
      * @return string
      */
-    public function get_parent_id()
+    public function get_parent_id(): int
     {
         return $this->parent_id;
     }

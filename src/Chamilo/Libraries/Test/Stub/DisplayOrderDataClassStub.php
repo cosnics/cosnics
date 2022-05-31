@@ -32,10 +32,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
      */
     protected $parentId;
 
-    /**
-     * @return string
-     */
-    public function getDisplayOrderPropertyName()
+    public function getDisplayOrderPropertyName(): string
     {
         return self::PROPERTY_SORT;
     }
@@ -43,7 +40,7 @@ Class DisplayOrderDataClassStub implements DataClassDisplayOrderSupport
     /**
      * @return string[]
      */
-    public function getDisplayOrderContextPropertyNames()
+    public function getDisplayOrderContextPropertyNames(): array
     {
         return [self::PROPERTY_PARENT_ID];
     }

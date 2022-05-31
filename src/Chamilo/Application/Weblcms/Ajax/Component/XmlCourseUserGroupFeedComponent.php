@@ -259,7 +259,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
                     if ($group_parent_id != 0)
                     {
-                        $tree_parents = $group->get_parents(false);
+                        $tree_parents = $group->get_ancestors(false);
 
                         foreach ($tree_parents as $tree_parent)
                         {
@@ -340,7 +340,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
     function dump_platform_group($group)
     {
-        $children = $group->get_children(false);
+        $children = $group->get_children();
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         if ($children && count($children) > 0)

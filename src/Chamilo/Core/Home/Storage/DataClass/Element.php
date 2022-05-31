@@ -77,6 +77,20 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return $configurationVariables;
     }
 
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_TYPE,
+                self::PROPERTY_PARENT_ID,
+                self::PROPERTY_TITLE,
+                self::PROPERTY_SORT,
+                self::PROPERTY_USER_ID,
+                self::PROPERTY_CONFIGURATION
+            )
+        );
+    }
+
     /**
      *
      * @return integer
@@ -109,6 +123,14 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
     }
 
     /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'home_element';
+    }
+
+    /**
      *
      * @return string
      */
@@ -135,36 +157,17 @@ abstract class Element extends CompositeDataClass implements DisplayOrderDataCla
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);
     }
 
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_TYPE,
-                self::PROPERTY_PARENT_ID,
-                self::PROPERTY_TITLE,
-                self::PROPERTY_SORT,
-                self::PROPERTY_USER_ID,
-                self::PROPERTY_CONFIGURATION
-            )
-        );
-    }
-
-    public function get_display_order_context_properties()
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
+     */
+    public function getDisplayOrderContextProperties(): array
     {
         return array(new PropertyConditionVariable(Element::class, self::PROPERTY_PARENT_ID));
     }
 
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(Element::class, self::PROPERTY_SORT);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'home_element';
     }
 
     /**

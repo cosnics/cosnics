@@ -148,7 +148,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
      *
      * @return Condition
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties()
     {
         return array(
             new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
@@ -162,7 +162,7 @@ class ContentObjectPublicationCategory extends PlatformCategory
      *
      * @return string
      */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty()
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }

@@ -88,7 +88,7 @@ abstract class CompositeDataClass extends DataClass
     }
 
     /**
-     * @return string
+     * @return mixed
      * @throws \ReflectionException
      */
     public function getAdditionalProperty(string $name)

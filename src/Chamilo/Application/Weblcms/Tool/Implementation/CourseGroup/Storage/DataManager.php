@@ -436,7 +436,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             return true; // If the parent is the root course group, allow it.
         }
 
-        $all_groups = $course_group->get_children(false);
+        $all_groups = $course_group->get_children();
 
         $num_groups = 0;
         $max_groups = $course_group->get_max_number_of_course_group_per_member();
@@ -563,7 +563,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 $course_groups_recursive[$course_group->get_id()] = $course_group;
             }
 
-            $parents = $course_group->get_parents(false);
+            $parents = $course_group->get_ancestors(false);
 
             foreach($parents as $parent)
             {

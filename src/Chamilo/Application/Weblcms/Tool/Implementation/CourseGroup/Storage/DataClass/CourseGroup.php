@@ -4,13 +4,13 @@ namespace Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\Da
 
 use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataManager;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
-use Chamilo\Libraries\Storage\DataClass\NestedTreeNode;
+use Chamilo\Libraries\Storage\DataClass\NestedSet;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 /**
  *
@@ -24,7 +24,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  * constants, for standardization purposes. It is recommended that the names of these constants start with the string
  * "PROPERTY_".
  */
-class CourseGroup extends NestedTreeNode
+class CourseGroup extends NestedSet
 {
     const PROPERTY_COURSE_CODE = 'course_id';
 
@@ -78,7 +78,7 @@ class CourseGroup extends NestedTreeNode
         return count($members);
     }
 
-    public function create($previousId = 0, $unusedVariable = null): bool
+    public function create(int $position = self::AS_LAST_CHILD_OF, $reference_node = null): bool
     {
         if (!$this->get_parent_id())
         {
@@ -93,24 +93,6 @@ class CourseGroup extends NestedTreeNode
     }
 
     /**
-     * @return string[]
-     */
-    public function getSubTreePropertyNames()
-    {
-        return array(CourseGroup::PROPERTY_COURSE_CODE);
-    }
-
-    /**
-     * Gets the course code of the course in which this course_group was created
-     *
-     * @return string
-     */
-    public function get_course_code()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
-    }
-
-    /**
      * Get the default properties of all course_groups.
      *
      * @return array The property names.
@@ -119,9 +101,15 @@ class CourseGroup extends NestedTreeNode
     {
         return parent::getDefaultPropertyNames(
             array(
-                self::PROPERTY_ID, self::PROPERTY_COURSE_CODE, self::PROPERTY_NAME, self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_MAX_NUMBER_OF_MEMBERS, self::PROPERTY_SELF_REG, self::PROPERTY_SELF_UNREG,
-                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER, self::PROPERTY_RANDOM_REG
+                self::PROPERTY_ID,
+                self::PROPERTY_COURSE_CODE,
+                self::PROPERTY_NAME,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_MAX_NUMBER_OF_MEMBERS,
+                self::PROPERTY_SELF_REG,
+                self::PROPERTY_SELF_UNREG,
+                self::PROPERTY_MAX_NUMBER_OF_COURSE_GROUP_PER_MEMBER,
+                self::PROPERTY_RANDOM_REG
             )
         );
     }
@@ -135,6 +123,33 @@ class CourseGroup extends NestedTreeNode
                 ), new StaticConditionVariable($this->get_id())
             )
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSubTreePropertyNames(): array
+    {
+        return array(CourseGroup::PROPERTY_COURSE_CODE);
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_course_group';
+    }
+
+    /**
+     * Gets the course code of the course in which this course_group was created
+     *
+     * @return string
+     */
+    public function get_course_code()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
     /**
@@ -212,7 +227,7 @@ class CourseGroup extends NestedTreeNode
 
             $users = [];
 
-            foreach($course_group_user_relations as $relation)
+            foreach ($course_group_user_relations as $relation)
             {
                 if ($include_users)
                 {
@@ -243,6 +258,8 @@ class CourseGroup extends NestedTreeNode
      * @param $recursive_subgroups boolean - Include the direct subgroups or include all the subgroups
      *
      * @return InCondition
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
     private function get_members_condition($include_subgroups = false, $recursive_subgroups = false)
     {
@@ -251,9 +268,16 @@ class CourseGroup extends NestedTreeNode
 
         if ($include_subgroups)
         {
-            $subgroups = $this->get_children($recursive_subgroups);
+            if ($recursive_subgroups)
+            {
+                $subgroups = $this->get_children();
+            }
+            else
+            {
+                $subgroups = $this->get_descendants();
+            }
 
-            foreach($subgroups as $subgroup)
+            foreach ($subgroups as $subgroup)
             {
                 $groups[] = $subgroup->get_id();
             }
@@ -276,12 +300,7 @@ class CourseGroup extends NestedTreeNode
         return $this->getDefaultProperty(self::PROPERTY_NAME);
     }
 
-    /**
-     * Inherited method which specifies how to identify the tree this location is situated in.
-     * Should be used as the
-     * basic set of condition whenever one makes a query.
-     */
-    public function get_nested_set_condition_array()
+    public function get_nested_set_condition_array(): array
     {
         $conditions = parent::get_nested_set_condition_array();
         $conditions[] = new EqualityCondition(
@@ -462,14 +481,5 @@ class CourseGroup extends NestedTreeNode
         }
 
         return false;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_course_group';
     }
 }

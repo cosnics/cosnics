@@ -9,7 +9,6 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Architecture\Application\Application;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\File\FileLogger;
 use Chamilo\Libraries\File\Path;
@@ -66,13 +65,13 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
 
     const TYPE_FILE = 'file';
 
-    private $target_course_groups;
+    private $publisher;
 
-    private $target_users;
+    private $target_course_groups;
 
     private $target_groups;
 
-    private $publisher;
+    private $target_users;
 
     public function __construct($default_properties = [], $optional_properties = [])
     {
@@ -171,6 +170,36 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return DataManager::deletes(Feedback::class, $condition);
     }
 
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_COURSE_ID,
+                self::PROPERTY_TOOL,
+                self::PROPERTY_CATEGORY_ID,
+                self::PROPERTY_FROM_DATE,
+                self::PROPERTY_TO_DATE,
+                self::PROPERTY_HIDDEN,
+                self::PROPERTY_PUBLISHER_ID,
+                self::PROPERTY_PUBLICATION_DATE,
+                self::PROPERTY_MODIFIED_DATE,
+                self::PROPERTY_DISPLAY_ORDER_INDEX,
+                self::PROPERTY_EMAIL_SENT,
+                self::PROPERTY_SHOW_ON_HOMEPAGE,
+                self::PROPERTY_ALLOW_COLLABORATION
+            )
+        );
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_content_object_publication';
+    }
+
     /**
      * @return \Chamilo\Libraries\Format\Theme\ThemePathBuilder
      */
@@ -245,33 +274,10 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $redirect->getUrl();
     }
 
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_COURSE_ID,
-                self::PROPERTY_TOOL,
-                self::PROPERTY_CATEGORY_ID,
-                self::PROPERTY_FROM_DATE,
-                self::PROPERTY_TO_DATE,
-                self::PROPERTY_HIDDEN,
-                self::PROPERTY_PUBLISHER_ID,
-                self::PROPERTY_PUBLICATION_DATE,
-                self::PROPERTY_MODIFIED_DATE,
-                self::PROPERTY_DISPLAY_ORDER_INDEX,
-                self::PROPERTY_EMAIL_SENT,
-                self::PROPERTY_SHOW_ON_HOMEPAGE,
-                self::PROPERTY_ALLOW_COLLABORATION
-            )
-        );
-    }
-
     /**
-     * Returns the properties that define the context for the display order (the properties on which has to be limited)
-     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[]
      */
-    public function get_display_order_context_properties()
+    public function getDisplayOrderContextProperties(): array
     {
         return array(
             new PropertyConditionVariable(self::class, self::PROPERTY_COURSE_ID),
@@ -285,12 +291,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         return $this->getDefaultProperty(self::PROPERTY_DISPLAY_ORDER_INDEX);
     }
 
-    /**
-     * Returns the property for the display order
-     *
-     * @return string
-     */
-    public function get_display_order_property()
+    public function getDisplayOrderProperty(): PropertyConditionVariable
     {
         return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER_INDEX);
     }
@@ -351,15 +352,6 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
     public function get_show_on_homepage()
     {
         return $this->getDefaultProperty(self::PROPERTY_SHOW_ON_HOMEPAGE);
-    }
-
-    /**
-     *
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_content_object_publication';
     }
 
     /**
@@ -633,8 +625,8 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
         );
 
         $mail = new Mail(
-            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null,
-            null, $mailFiles
+            $subject, $body, $unique_email, true, [], [], $user->get_fullname(), $user->get_email(), null, null,
+            $mailFiles
         );
 
         $mailerFactory = new MailerFactory(Configuration::getInstance());

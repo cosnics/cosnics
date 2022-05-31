@@ -168,7 +168,7 @@ abstract class RightsLocation extends NestedSet
     /**
      * @return bool
      */
-    public function is_root()
+    public function is_root(): bool
     {
         $parent = $this->getParentId();
 
