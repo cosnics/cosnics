@@ -42,6 +42,14 @@ class Joins implements Countable, Hashable
         return count($this->joins);
     }
 
+    /**
+     * @return \Chamilo\Libraries\Storage\Query\Join[]
+     */
+    public function get(): array
+    {
+        return $this->joins;
+    }
+
     public function getHashParts(): array
     {
         $hashes = [];
@@ -54,14 +62,6 @@ class Joins implements Countable, Hashable
         sort($hashes);
 
         return $hashes;
-    }
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Join[]
-     */
-    public function get(): array
-    {
-        return $this->joins;
     }
 
     public function merge(Joins $joinsToMerge): Joins

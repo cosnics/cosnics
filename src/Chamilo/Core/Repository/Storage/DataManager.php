@@ -25,8 +25,6 @@ use Chamilo\Libraries\Architecture\Interfaces\ComplexContentObjectSupport;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Platform\Session\Session;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -45,6 +43,9 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -83,13 +84,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[] = new DataClassProperty(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+        $properties[] = new UpdateProperty(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::MINUS, new StaticConditionVariable(ContentObject::STATE_INACTIVE)
-            ));
+            )
+        );
 
-        return self::updates(ContentObject::class, new DataClassProperties($properties), $condition);
+        return self::updates(ContentObject::class, new UpdateProperties($properties), $condition);
     }
 
     public static function check_category_name(WorkspaceInterface $workspace, $parent_id, $category_name)
@@ -437,13 +440,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[] = new DataClassProperty(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
+        $properties[] = new UpdateProperty(
+            new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
             new OperationConditionVariable(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_STATE),
                 OperationConditionVariable::ADDITION, new StaticConditionVariable(ContentObject::STATE_INACTIVE)
-            ));
+            )
+        );
 
-        return self::updates(ContentObject::class, new DataClassProperties($properties), $condition);
+        return self::updates(ContentObject::class, new UpdateProperties($properties), $condition);
     }
 
     /**
@@ -641,11 +646,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassCountGroupedParameters(
-            $condition, new DataClassProperties(
+            $condition, new RetrieveProperties(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
         ), $having, null, new GroupBy([
-                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)]
-            )
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
+                ])
         );
 
         return self::count_grouped(ContentObject::class, $parameters);
@@ -672,15 +677,17 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $condition = new AndCondition($conditions);
 
-        $properties = new DataClassProperties();
-        $properties->add(new DataClassProperty(
-            new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER),
-            new OperationConditionVariable(
-                new PropertyConditionVariable(
-                    RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
-                ), OperationConditionVariable::MINUS, new StaticConditionVariable(1)
+        $properties = new UpdateProperties();
+        $properties->add(
+            new UpdateProperty(
+                new PropertyConditionVariable(RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER),
+                new OperationConditionVariable(
+                    new PropertyConditionVariable(
+                        RepositoryCategory::class, RepositoryCategory::PROPERTY_DISPLAY_ORDER
+                    ), OperationConditionVariable::MINUS, new StaticConditionVariable(1)
+                )
             )
-        ));
+        );
 
         self::updates(RepositoryCategory::class, $properties, $condition);
     }
@@ -850,7 +857,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
                 $property = new FunctionConditionVariable(FunctionConditionVariable::SUM, $operation, 'disk_space');
             }
-            $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
+            $parameters = new RecordRetrieveParameters(new RetrieveProperties($property));
 
             if ($owner)
             {
@@ -905,7 +912,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new StaticConditionVariable($object->get_object_number())
         );
         $parameters = new DataClassDistinctParameters(
-            $condition, new DataClassProperties(
+            $condition, new RetrieveProperties(
                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
             )
         );
@@ -1010,9 +1017,9 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
      */
     public static function moveContentObjectToNewParent(ContentObject $contentObject, $newParentId = 0)
     {
-        $properties = new DataClassProperties();
+        $properties = new UpdateProperties();
         $properties->add(
-            new DataClassProperty(
+            new UpdateProperty(
                 new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_PARENT_ID),
                 new StaticConditionVariable($newParentId)
             )
@@ -1164,10 +1171,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $parameters->setOrderBy(
             new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                    )
-                ))
+                new OrderProperty(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+                )
+            ))
         );
 
         return self::retrieve_content_objects($object::class_name(), $parameters);
@@ -1312,10 +1319,10 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
         $parameters = new DataClassRetrieveParameters(
             $condition, new OrderBy(array(
-                    new OrderProperty(
-                        new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
-                    )
-                ))
+                new OrderProperty(
+                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), SORT_DESC
+                )
+            ))
         );
 
         return self::retrieve($object::class_name(), $parameters);

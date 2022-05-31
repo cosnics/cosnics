@@ -5,7 +5,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ParametersProcessor;
 use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\RecordProcessor;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Type;
@@ -350,7 +350,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \Exception
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters): array
     {
@@ -487,8 +486,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    public function updates(string $dataClassStorageUnitName, DataClassProperties $properties, Condition $condition
-    ): bool
+    public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
     {
         try
         {

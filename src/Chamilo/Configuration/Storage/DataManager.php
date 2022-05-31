@@ -3,7 +3,6 @@ namespace Chamilo\Configuration\Storage;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EndsWithCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\StartsWithCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -71,7 +71,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $parameters = new DataClassDistinctParameters(
             $condition,
-            new DataClassProperties(array(new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)))
+            new RetrieveProperties(array(new PropertyConditionVariable(Setting::class, Setting::PROPERTY_CONTEXT)))
         );
 
         return self::distinct(Setting::class, $parameters);

@@ -15,8 +15,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTypeUserCategoryRelCourse;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -35,9 +33,11 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 /**
@@ -435,7 +435,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         }
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($conditions), new DataClassProperties(
+            new AndCondition($conditions), new RetrieveProperties(
                 array(
                     new PropertyConditionVariable(
                         CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID
@@ -630,7 +630,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      */
     protected static function get_courses_with_course_type_properties()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertiesConditionVariable(Course::class));
         $properties->add(
@@ -697,7 +697,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($courseConditions), new DataClassProperties(
+            new AndCondition($courseConditions), new RetrieveProperties(
                 array(
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID)
                 )
@@ -1000,7 +1000,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
         $left_value_variable = new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE);
         $right_value_variable = new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE);
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add($left_value_variable);
         $properties->add($right_value_variable);
@@ -1240,7 +1240,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
     {
         if (count($course_ids) > 0)
         {
-            $properties = new DataClassProperties();
+            $properties = new RetrieveProperties();
 
             $properties->add(new PropertiesConditionVariable(Course::class));
             $properties->add(
@@ -1382,7 +1382,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             $condition = $entityTypeCondition;
         }
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
@@ -1583,7 +1583,7 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
             $condition = $entityTypeCondition;
         }
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE));
@@ -1835,17 +1835,17 @@ class DataManager extends \Chamilo\Application\Weblcms\Storage\DataManager
      * Updates the courses from a given course type with the given properties
      *
      * @param int $course_type_id
-     * @param DataClassProperties $properties
+     * @param RetrieveProperties $properties
      *
      * @return bool
      * @throws \Exception
      *
      */
     public static function update_courses_from_course_type_with_properties(
-        $course_type_id = 0, DataClassProperties $properties = null
+        $course_type_id = 0, RetrieveProperties $properties = null
     )
     {
-        if (!$properties instanceof DataClassProperties || !count($properties->get()) > 0)
+        if (!$properties instanceof RetrieveProperties || !count($properties->get()) > 0)
         {
             throw new Exception('No valid properties selected to update the courses from a course type');
         }

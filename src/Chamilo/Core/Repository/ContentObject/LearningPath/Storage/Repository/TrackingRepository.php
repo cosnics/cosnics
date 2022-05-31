@@ -8,9 +8,7 @@ use Chamilo\Core\Repository\ContentObject\LearningPath\Domain\TreeNode;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\LearningPath;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -23,9 +21,11 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -221,7 +221,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
         $parameters = new DataClassCountParameters(
             $condition,
             $this->getJoinsForTreeNodeAttemptsWithUser($learningPath, $treeNodeDataIds),
-            new DataClassProperties(array(new FunctionConditionVariable(
+            new RetrieveProperties(array(new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
                 new PropertyConditionVariable(
                     $this->trackingParameters->getTreeNodeAttemptClassName(),
@@ -259,11 +259,11 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
     /**
      * Returns the properties needed to retrieve the data for learning path attempts with users
      *
-     * @return DataClassProperties
+     * @return RetrieveProperties
      */
     protected function getPropertiesForLearningPathAttemptsWithUser()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID, 'user_id'));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
@@ -431,7 +431,7 @@ class TrackingRepository extends CommonDataClassRepository implements TrackingRe
 
         $treeNodeQuestionAttemptClassName = $this->trackingParameters->getTreeNodeQuestionAttemptClassName();
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(
             new PropertyConditionVariable(

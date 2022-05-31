@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationGroup;
 use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\PublicationUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -40,7 +40,7 @@ class CalendarEventDataProviderRepository
             new StaticConditionVariable($user->getId()));
 
         return new RecordRetrievesParameters(
-            new DataClassProperties(array(new PropertiesConditionVariable(Publication::class))),
+            new RetrieveProperties(array(new PropertiesConditionVariable(Publication::class))),
             $condition);
     }
 
@@ -91,7 +91,7 @@ class CalendarEventDataProviderRepository
             Join::TYPE_LEFT);
 
         return new RecordRetrievesParameters(
-            new DataClassProperties(array(new PropertiesConditionVariable(Publication::class))),
+            new RetrieveProperties(array(new PropertiesConditionVariable(Publication::class))),
             $condition,
             null,
             null,

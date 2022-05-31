@@ -11,7 +11,6 @@ use Chamilo\Libraries\Ajax\Component\GroupsFeedComponent;
 use Chamilo\Libraries\Format\Form\Element\AdvancedElementFinder\AdvancedElementFinderElement;
 use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
@@ -20,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -150,7 +150,7 @@ class PlatformGroupsFeedComponent extends GroupsFeedComponent
 
             $subscribed_group_ids = \Chamilo\Application\Weblcms\Course\Storage\DataManager::distinct(
                 CourseEntityRelation::class, new DataClassDistinctParameters(
-                    new AndCondition($groupConditions), new DataClassProperties(
+                    new AndCondition($groupConditions), new RetrieveProperties(
                         array(
                             new PropertyConditionVariable(
                                 CourseEntityRelation::class, CourseEntityRelation::PROPERTY_ENTITY_ID

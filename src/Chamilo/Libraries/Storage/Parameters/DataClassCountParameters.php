@@ -1,9 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
@@ -16,31 +16,29 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class DataClassCountParameters extends DataClassParameters
 {
 
-    public function __construct(?Condition $condition = null, ?Joins $joins = null, $dataClassProperties = null)
+    public function __construct(?Condition $condition = null, ?Joins $joins = null, $retrieveProperties = null)
     {
-        if ($dataClassProperties instanceof ConditionVariable)
+        if ($retrieveProperties instanceof ConditionVariable)
         {
-            $dataClassProperties = new DataClassProperties(array($dataClassProperties));
+            $retrieveProperties = new RetrieveProperties(array($retrieveProperties));
         }
 
-        parent::__construct($condition, $joins, $dataClassProperties);
+        parent::__construct($condition, $joins, $retrieveProperties);
     }
 
     /**
-     * @deprecated Use DataClassProperties and getDataClassProperties() now
+     * @deprecated Use getRetrieveProperties()->getFirst() now
      */
     public function get_property(): ?ConditionVariable
     {
-        $dataClassProperties = $this->getDataClassProperties()->get();
-
-        return array_shift($dataClassProperties);
+        return $this->getRetrieveProperties()->getFirst();
     }
 
     /**
-     * @deprecated Use DataClassProperties and setDataClassProperties() now
+     * @deprecated Use getRetrieveProperties()->add now
      */
     public function set_property(?ConditionVariable $property)
     {
-        $this->getDataClassProperties()->add($property);
+        $this->getRetrieveProperties()->add($property);
     }
 }

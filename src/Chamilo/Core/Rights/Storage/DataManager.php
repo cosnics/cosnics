@@ -3,7 +3,6 @@ namespace Chamilo\Core\Rights\Storage;
 
 use Chamilo\Core\Rights\RightsLocationEntityRight;
 use Chamilo\Core\Rights\RightsUtil;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -16,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -56,7 +56,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = new Joins(array($join));
 
         $parameters = new DataClassCountParameters(
-            $condition, $joins, new DataClassProperties(
+            $condition, $joins, new RetrieveProperties(
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
@@ -130,7 +130,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $context_class = ($context . '\Storage\DataClass\RightsLocationEntityRight');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable($context_class, $context_class::PROPERTY_LOCATION_ID));
 
         $conditions[] = $entity_condition;
@@ -168,7 +168,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new PropertyConditionVariable($context_entity_right::class_name(), $context_entity_right::PROPERTY_RIGHT_ID)
         );
@@ -258,7 +258,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
 
             $parameters = new DataClassDistinctParameters(
-                $condition, new DataClassProperties(
+                $condition, new RetrieveProperties(
                 array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
             ), $joins
             );
@@ -277,7 +277,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 )
             ]);
             $parameters = new DataClassDistinctParameters(
-                $inheriting_condition, new DataClassProperties(
+                $inheriting_condition, new RetrieveProperties(
                     array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
                 )
             );
@@ -309,7 +309,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             );
 
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($non_inheriting_conditions), new DataClassProperties(
+                new AndCondition($non_inheriting_conditions), new RetrieveProperties(
                 array(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER))
             ), $joins
             );
@@ -326,7 +326,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_IDENTIFIER));
@@ -371,7 +371,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(
             new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE)
@@ -408,7 +408,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     {
         $context_location = ($context . '\Storage\DataClass\RightsLocation');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable($context_location, $context_location::PROPERTY_PARENT_ID));
@@ -673,7 +673,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $context_entity_right = ($context . '\Storage\DataClass\RightsLocationEntityRight');
         $context_dm = ($context . '\Storage\DataManager');
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new PropertyConditionVariable(
                 $context_entity_right::class_name(), $context_entity_right::PROPERTY_ENTITY_TYPE

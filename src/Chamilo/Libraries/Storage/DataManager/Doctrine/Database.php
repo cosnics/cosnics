@@ -400,7 +400,7 @@ class Database
     /**
      *
      * @param string $class
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $properties
+     * @param \Chamilo\Libraries\Storage\Query\RetrieveProperties $properties
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      *
      * @return boolean

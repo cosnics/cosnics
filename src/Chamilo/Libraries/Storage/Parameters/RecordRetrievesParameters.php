@@ -1,11 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  *
@@ -19,7 +19,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
 {
 
     public function __construct(
-        ?DataClassProperties $dataClassProperties = null, ?Condition $condition = null, ?int $count = null,
+        ?RetrieveProperties $retrieveProperties = null, ?Condition $condition = null, ?int $count = null,
         ?int $offset = null, ?OrderBy $orderBy = null, ?Joins $joins = null, ?GroupBy $groupBy = null,
         ?Condition $havingCondition = null
     )
@@ -27,7 +27,7 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
         parent::__construct(
             $condition, $count, $offset, $orderBy, $joins, false, $groupBy, $havingCondition
         );
-        $this->setDataClassProperties($dataClassProperties);
+        $this->setRetrieveProperties($retrieveProperties);
     }
 
     /**
@@ -39,11 +39,11 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     }
 
     /**
-     * @deprecated Use getDataClassProperties() now
+     * @deprecated Use getRetrieveProperties() now
      */
-    public function get_properties(): ?DataClassProperties
+    public function get_properties(): ?RetrieveProperties
     {
-        return $this->getDataClassProperties();
+        return $this->getRetrieveProperties();
     }
 
     /**
@@ -55,10 +55,10 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     }
 
     /**
-     * @deprecated Use setDataClassProperties() now
+     * @deprecated Use setRetrieveProperties() now
      */
-    public function set_properties(?DataClassProperties $dataClassProperties = null)
+    public function set_properties(?RetrieveProperties $retrieveProperties = null)
     {
-        $this->setDataClassProperties($dataClassProperties);
+        $this->setRetrieveProperties($retrieveProperties);
     }
 }

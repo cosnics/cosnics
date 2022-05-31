@@ -2,10 +2,10 @@
 namespace Chamilo\Core\Repository\Storage\Repository;
 
 use Chamilo\Core\Repository\Storage\DataClass\TemplateRegistration;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
@@ -62,7 +62,7 @@ class TemplateRegistrationRepository
     {
         return $this->getDataClassRepository()->records(
             TemplateRegistration::class, new RecordRetrievesParameters(
-                new DataClassProperties(array(new PropertiesConditionVariable(TemplateRegistration::class)))
+                new RetrieveProperties(array(new PropertiesConditionVariable(TemplateRegistration::class)))
             )
         );
     }

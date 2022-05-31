@@ -12,11 +12,11 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -117,7 +117,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $columnIdentifiers = self::distinct(
             Element::class, new DataClassDistinctParameters(
                 $columnCondition,
-                new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))
+                new RetrieveProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))
             )
         );
 

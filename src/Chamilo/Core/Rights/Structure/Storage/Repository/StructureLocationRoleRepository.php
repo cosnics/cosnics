@@ -6,7 +6,6 @@ use Chamilo\Core\Rights\Structure\Storage\DataClass\StructureLocationRole;
 use Chamilo\Core\Rights\Structure\Storage\DataManager;
 use Chamilo\Core\Rights\Structure\Storage\Repository\Interfaces\StructureLocationRoleRepositoryInterface;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -14,6 +13,7 @@ use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -81,7 +81,7 @@ class StructureLocationRoleRepository extends DataManagerRepository implements S
      */
     public function retrieveStructureLocationsAndRoles()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_CONTEXT));
         $properties->add(new PropertyConditionVariable(StructureLocation::class, StructureLocation::PROPERTY_ACTION));

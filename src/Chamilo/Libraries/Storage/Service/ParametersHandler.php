@@ -3,7 +3,6 @@
 namespace Chamilo\Libraries\Storage\Service;
 
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassBasicRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
@@ -11,6 +10,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -24,7 +24,7 @@ class ParametersHandler
     {
         if ($parameters->getJoins() instanceof Joins)
         {
-            $dataClassProperties = $parameters->getDataClassProperties();
+            $retrieveProperties = $parameters->getRetrieveProperties();
 
             foreach ($parameters->getJoins()->get() as $join)
             {
@@ -32,7 +32,7 @@ class ParametersHandler
                 {
                     if (is_subclass_of($dataClassName, $join->getDataClassName()))
                     {
-                        $dataClassProperties->add(new PropertiesConditionVariable($join->getDataClassName()));
+                        $retrieveProperties->add(new PropertiesConditionVariable($join->getDataClassName()));
                     }
                 }
             }
@@ -44,8 +44,8 @@ class ParametersHandler
     public function handleDataClassCountGroupedParameters(DataClassCountGroupedParameters $parameters
     ): ParametersHandler
     {
-        $dataClassProperties = $parameters->getDataClassProperties();
-        $dataClassProperties->add(
+        $retrieveProperties = $parameters->getRetrieveProperties();
+        $retrieveProperties->add(
             new FunctionConditionVariable(FunctionConditionVariable::COUNT, new StaticConditionVariable(1))
         );
 
@@ -54,11 +54,11 @@ class ParametersHandler
 
     public function handleDataClassCountParameters(DataClassCountParameters $parameters): ParametersHandler
     {
-        $dataClassProperties = $parameters->getDataClassProperties();
+        $retrieveProperties = $parameters->getRetrieveProperties();
 
-        if ($dataClassProperties instanceof DataClassProperties)
+        if ($retrieveProperties instanceof RetrieveProperties)
         {
-            $dataClassPropertyVariable = $dataClassProperties->getFirst();
+            $dataClassPropertyVariable = $retrieveProperties->getFirst();
         }
         else
         {
@@ -67,17 +67,17 @@ class ParametersHandler
 
         $countVariable = new FunctionConditionVariable(FunctionConditionVariable::COUNT, $dataClassPropertyVariable);
 
-        $parameters->setDataClassProperties(new DataClassProperties(array($countVariable)));
+        $parameters->setRetrieveProperties(new RetrieveProperties(array($countVariable)));
 
         return $this;
     }
 
     public function handleDataClassDistinctParameters(DataClassDistinctParameters $parameters): ParametersHandler
     {
-        $existingConditionVariables = $parameters->getDataClassProperties()->get();
+        $existingConditionVariables = $parameters->getRetrieveProperties()->get();
 
-        $parameters->setDataClassProperties(
-            new DataClassProperties(array(new DistinctConditionVariable($existingConditionVariables)))
+        $parameters->setRetrieveProperties(
+            new RetrieveProperties(array(new DistinctConditionVariable($existingConditionVariables)))
         );
 
         return $this;
@@ -126,8 +126,8 @@ class ParametersHandler
             $propertiesClassName = $dataClassName;
         }
 
-        $dataClassRetrieveParameters->setDataClassProperties(
-            new DataClassProperties(
+        $dataClassRetrieveParameters->setRetrieveProperties(
+            new RetrieveProperties(
                 array(new PropertiesConditionVariable($propertiesClassName))
             )
         );

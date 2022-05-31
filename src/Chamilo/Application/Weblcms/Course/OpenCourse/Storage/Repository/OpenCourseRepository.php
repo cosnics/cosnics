@@ -7,9 +7,7 @@ use Chamilo\Application\Weblcms\Course\Storage\DataManager;
 use Chamilo\Application\Weblcms\CourseType\Storage\DataClass\CourseType;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseEntityRelation;
 use Chamilo\Core\User\Roles\Storage\DataClass\Role;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataManagerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -21,9 +19,11 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Repository to manage the data open courses
@@ -80,7 +80,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
      */
     protected function findOpenCourses(Condition $condition = null, $offset = null, $count = null, $orderBy = null)
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertiesConditionVariable(Course::class));
 
         $properties->add(
@@ -325,7 +325,7 @@ class OpenCourseRepository extends DataManagerRepository implements OpenCourseRe
 
         $distinctParameters = new DataClassDistinctParameters(
             $condition,
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(
                     new PropertyConditionVariable(CourseEntityRelation::class, CourseEntityRelation::PROPERTY_COURSE_ID))));
 

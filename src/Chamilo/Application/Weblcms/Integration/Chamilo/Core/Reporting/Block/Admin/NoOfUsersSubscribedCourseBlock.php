@@ -7,13 +7,13 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Core\Reporting\ReportingData;
 use Chamilo\Core\Reporting\Viewer\Rendition\Block\Type\Html;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Translation\Translation;
 
 class NoOfUsersSubscribedCourseBlock extends CourseBlock
 {
@@ -33,7 +33,7 @@ class NoOfUsersSubscribedCourseBlock extends CourseBlock
                         CourseEntityRelation::PROPERTY_ENTITY_TYPE),
                     new StaticConditionVariable(CourseEntityRelation::ENTITY_TYPE_USER)),
                 null,
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,

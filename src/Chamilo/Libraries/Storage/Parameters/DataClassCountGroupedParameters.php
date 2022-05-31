@@ -1,10 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\Parameters;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  *
@@ -17,16 +17,16 @@ class DataClassCountGroupedParameters extends DataClassParameters
 {
 
     public function __construct(
-        ?Condition $condition = null, ?DataClassProperties $dataClassProperties = null,
+        ?Condition $condition = null, ?RetrieveProperties $retrieveProperties = null,
         ?Condition $havingCondition = null, ?Joins $joins = null, ?GroupBy $groupBy = null
     )
     {
         if (is_null($groupBy))
         {
-            $groupBy = new GroupBy($dataClassProperties->get());
+            $groupBy = new GroupBy($retrieveProperties->get());
         }
 
-        parent::__construct($condition, $joins, $dataClassProperties, null, $groupBy, $havingCondition);
+        parent::__construct($condition, $joins, $retrieveProperties, null, $groupBy, $havingCondition);
     }
 
     /**
@@ -40,11 +40,11 @@ class DataClassCountGroupedParameters extends DataClassParameters
 
     /**
      *
-     * @deprecated Use getDataClassProperties() now
+     * @deprecated Use getRetrieveProperties() now
      */
-    public function get_properties(): ?DataClassProperties
+    public function get_properties(): ?RetrieveProperties
     {
-        return $this->getDataClassProperties();
+        return $this->getRetrieveProperties();
     }
 
     /**
@@ -56,10 +56,10 @@ class DataClassCountGroupedParameters extends DataClassParameters
     }
 
     /**
-     * @deprecated Use setDataClassProperties() now
+     * @deprecated Use setRetrieveProperties() now
      */
-    public function set_properties(?DataClassProperties $dataClassProperties = null)
+    public function set_properties(?RetrieveProperties $retrieveProperties = null)
     {
-        $this->setDataClassProperties($dataClassProperties);
+        $this->setRetrieveProperties($retrieveProperties);
     }
 }

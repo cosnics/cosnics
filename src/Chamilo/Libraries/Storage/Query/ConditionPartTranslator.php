@@ -15,9 +15,7 @@ abstract class ConditionPartTranslator
 
     private StorageAliasGenerator $storageAliasGenerator;
 
-    public function __construct(
-        StorageAliasGenerator $storageAliasGenerator
-    )
+    public function __construct(StorageAliasGenerator $storageAliasGenerator)
     {
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
@@ -25,13 +23,6 @@ abstract class ConditionPartTranslator
     public function getStorageAliasGenerator(): StorageAliasGenerator
     {
         return $this->storageAliasGenerator;
-    }
-
-    public function setStorageAliasGenerator(StorageAliasGenerator $storageAliasGenerator): ConditionPartTranslator
-    {
-        $this->storageAliasGenerator = $storageAliasGenerator;
-
-        return $this;
     }
 
     //abstract public function translate($conditionPart, ?bool $enableAliasing = true): string;

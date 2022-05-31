@@ -5,10 +5,10 @@ use Chamilo\Configuration\Configuration;
 use Chamilo\Core\Repository\Quota\Calculator;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -67,7 +67,7 @@ class CalculatorCacheService extends DoctrinePhpFileCacheService
                 'disk_quota'
             );
 
-            $parameters = new RecordRetrieveParameters(new DataClassProperties($property));
+            $parameters = new RecordRetrieveParameters(new RetrieveProperties($property));
 
             $record = DataManager::record(User::class, $parameters);
             $totalQuota = $record['disk_quota'];

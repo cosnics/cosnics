@@ -7,17 +7,17 @@ use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface;
 use Chamilo\Core\Repository\Workspace\PersonalWorkspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceContentObjectRelation;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 class ExportParameters
 {
@@ -89,7 +89,7 @@ class ExportParameters
 
                         $parameters = new DataClassDistinctParameters(
                             $condition,
-                            new DataClassProperties(
+                            new RetrieveProperties(
                                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
                     }
                     else
@@ -114,7 +114,7 @@ class ExportParameters
 
                         $parameters = new DataClassDistinctParameters(
                             $condition,
-                            new DataClassProperties(
+                            new RetrieveProperties(
                                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))),
                             $joins);
                     }
@@ -148,7 +148,7 @@ class ExportParameters
 
                         $parameters = new DataClassDistinctParameters(
                             $condition,
-                            new DataClassProperties(
+                            new RetrieveProperties(
                                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))));
                     }
                     else
@@ -183,7 +183,7 @@ class ExportParameters
 
                         $parameters = new DataClassDistinctParameters(
                             $condition,
-                            new DataClassProperties(
+                            new RetrieveProperties(
                                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))),
                             $joins);
                     }

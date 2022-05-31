@@ -11,7 +11,6 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Application\Weblcms\Storage\Repository\Interfaces\CourseRepositoryInterface;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -24,6 +23,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -369,7 +369,7 @@ class CourseRepository implements CourseRepositoryInterface
      */
     public function findCoursesWithTitularAndCourseSettings(Condition $condition = null)
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertiesConditionVariable(Course::class));
         $properties->add(new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_NAME));
         $properties->add(new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_TOOL_ID));

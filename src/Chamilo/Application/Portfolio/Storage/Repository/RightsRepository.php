@@ -3,7 +3,6 @@ namespace Chamilo\Application\Portfolio\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocation;
 use Chamilo\Application\Portfolio\Storage\DataClass\RightsLocationEntityRight;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -15,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -170,7 +170,7 @@ class RightsRepository
 
         return $this->getDataClassRepository()->records(
             RightsLocationEntityRight::class, new RecordRetrievesParameters(
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_RIGHT_ID
@@ -204,7 +204,7 @@ class RightsRepository
 
         return $this->getDataClassRepository()->record(
             RightsLocation::class, new RecordRetrieveParameters(
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_INHERIT))
                 ), $condition
             )

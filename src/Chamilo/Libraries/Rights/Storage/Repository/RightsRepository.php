@@ -5,10 +5,8 @@ use Chamilo\Libraries\Rights\Domain\RightsLocation;
 use Chamilo\Libraries\Rights\Domain\RightsLocationEntityRight;
 use Chamilo\Libraries\Rights\Service\RightsService;
 use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -24,9 +22,11 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Rights\Storage\Repository
@@ -100,7 +100,7 @@ abstract class RightsRepository
         $joins = $this->getLocationWithGrantedRightsJoins($userIdentifier, $entities);
 
         $parameters = new DataClassCountParameters(
-            $condition, $joins, new DataClassProperties(
+            $condition, $joins, new RetrieveProperties(
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT, new PropertyConditionVariable(
@@ -260,7 +260,7 @@ abstract class RightsRepository
         $rightsLocationClassName = $this->getRightsLocationClassName();
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $properties = new DataClassProperties(
+        $properties = new RetrieveProperties(
             [
                 new PropertyConditionVariable(
                     $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_RIGHT_ID
@@ -332,7 +332,7 @@ abstract class RightsRepository
         $parameters = new DataClassDistinctParameters(
             new AndCondition(
                 $conditions
-            ), new DataClassProperties(
+            ), new RetrieveProperties(
                 array(
                     new PropertyConditionVariable(
                         $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
@@ -361,7 +361,7 @@ abstract class RightsRepository
     {
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new PropertyConditionVariable(
                 $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_LOCATION_ID
@@ -419,7 +419,7 @@ abstract class RightsRepository
             )
         );
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_PARENT_ID));
@@ -449,7 +449,7 @@ abstract class RightsRepository
 
         $condition = $this->getLocationWithGrantedRightsCondition($rights, $types, $treeType, $treeIdentifier);
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(
             new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_TYPE)
@@ -492,7 +492,7 @@ abstract class RightsRepository
         );
 
         $parameters = new DataClassDistinctParameters(
-            new AndCondition($nonInheritingConditions), new DataClassProperties(
+            new AndCondition($nonInheritingConditions), new RetrieveProperties(
             array(
                 new PropertyConditionVariable(
                     $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
@@ -522,7 +522,7 @@ abstract class RightsRepository
         $rightsLocationClassName = $this->getRightsLocationClassName();
         $rightsLocationEntityRightClassName = $this->getRightsLocationEntityRightClassName();
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new PropertyConditionVariable(
                 $rightsLocationEntityRightClassName, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
@@ -805,7 +805,7 @@ abstract class RightsRepository
             }
 
             $parameters = new DataClassDistinctParameters(
-                new AndCondition($conditions), new DataClassProperties(
+                new AndCondition($conditions), new RetrieveProperties(
                 array(
                     new PropertyConditionVariable(
                         $rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER
@@ -835,7 +835,7 @@ abstract class RightsRepository
     public function findRightsLocationRecordsByIdentifiersAndType(array $identifiers, int $type)
     {
         $rightsLocationClassName = $this->getRightsLocationClassName();
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable($rightsLocationClassName, RightsLocation::PROPERTY_IDENTIFIER));

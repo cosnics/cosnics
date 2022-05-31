@@ -1,8 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataClass;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -14,6 +12,9 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -188,10 +189,10 @@ abstract class NestedSet extends DataClass
     public function build_pre_order_ordering($sort_order = SORT_ASC)
     {
         return new OrderBy(array(
-                new OrderProperty(
-                    new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), $sort_order
-                )
-            ));
+            new OrderProperty(
+                new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE), $sort_order
+            )
+        ));
     }
 
     /**
@@ -961,20 +962,20 @@ abstract class NestedSet extends DataClass
 
                 $properties = [];
 
-                $properties[] = new DataClassProperty(
+                $properties[] = new UpdateProperty(
                     $left_value_variable, new OperationConditionVariable(
                         $left_value_variable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
-                $properties[] = new DataClassProperty(
+                $properties[] = new UpdateProperty(
                     $right_value_variable, new OperationConditionVariable(
                         $right_value_variable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
                 $res = DataManager::updates(
-                    get_class($nested_set), new DataClassProperties($properties), $update_condition
+                    get_class($nested_set), new UpdateProperties($properties), $update_condition
                 );
 
                 if (!$res)
@@ -1052,7 +1053,7 @@ abstract class NestedSet extends DataClass
         $left_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE);
         $right_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_RIGHT_VALUE);
 
-        $right_value_data_class_property = new DataClassProperty(
+        $right_value_data_class_property = new UpdateProperty(
             $right_value_variable, new OperationConditionVariable(
                 $right_value_variable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
             )
@@ -1060,14 +1061,14 @@ abstract class NestedSet extends DataClass
 
         $properties = [];
         $properties[] = $right_value_data_class_property;
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $left_value_variable, new OperationConditionVariable(
                 $left_value_variable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
             )
         );
 
         $res = DataManager::updates(
-            get_class($this), new DataClassProperties($properties), $update_condition
+            get_class($this), new UpdateProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1101,7 +1102,7 @@ abstract class NestedSet extends DataClass
         $properties[] = $right_value_data_class_property;
 
         $res = DataManager::updates(
-            get_class($this), new DataClassProperties($properties), $update_condition
+            get_class($this), new RetrieveProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1153,7 +1154,7 @@ abstract class NestedSet extends DataClass
         $left_value_variable = new PropertyConditionVariable(self::class_name(), self::PROPERTY_LEFT_VALUE);
 
         $properties = [];
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $left_value_variable, new OperationConditionVariable(
                 $left_value_variable, OperationConditionVariable::ADDITION,
                 new StaticConditionVariable($number_of_elements * 2)
@@ -1161,7 +1162,7 @@ abstract class NestedSet extends DataClass
         );
 
         $res = DataManager::updates(
-            get_class($this), new DataClassProperties($properties), $update_condition
+            get_class($this), new UpdateProperties($properties), $update_condition
         );
 
         if (!$res)
@@ -1187,7 +1188,7 @@ abstract class NestedSet extends DataClass
 
         $properties = [];
 
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $right_value_variable, new OperationConditionVariable(
                 $right_value_variable, OperationConditionVariable::ADDITION,
                 new StaticConditionVariable($number_of_elements * 2)
@@ -1195,7 +1196,7 @@ abstract class NestedSet extends DataClass
         );
 
         $res = DataManager::updates(
-            get_class($this), new DataClassProperties($properties), $update_condition
+            get_class($this), new UpdateProperties($properties), $update_condition
         );
 
         if (!$res)

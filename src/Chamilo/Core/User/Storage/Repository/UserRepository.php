@@ -6,7 +6,6 @@ use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Core\User\Storage\DataClass\UserSetting;
 use Chamilo\Core\User\Storage\Repository\Interfaces\UserRepositoryInterface;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
@@ -20,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Storage\Service\SearchQueryConditionGenerator;
@@ -290,11 +290,11 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUserIdentifiers()
     {
-        $dataClassProperties = new DataClassProperties();
-        $dataClassProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
+        $retrieveProperties = new RetrieveProperties();
+        $retrieveProperties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
 
         return $this->getDataClassRepository()->distinct(
-            User::class, new DataClassDistinctParameters(null, $dataClassProperties)
+            User::class, new DataClassDistinctParameters(null, $retrieveProperties)
         );
     }
 
@@ -311,7 +311,7 @@ class UserRepository implements UserRepositoryInterface
 
         return $this->getDataClassRepository()->distinct(
             User::class, new DataClassDistinctParameters(
-                $condition, new DataClassProperties(
+                $condition, new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             User::class, User::PROPERTY_ID

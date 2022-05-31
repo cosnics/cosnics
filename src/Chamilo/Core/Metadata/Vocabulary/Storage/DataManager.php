@@ -3,12 +3,12 @@ namespace Chamilo\Core\Metadata\Vocabulary\Storage;
 
 use Chamilo\Core\Metadata\Storage\DataClass\Vocabulary;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -45,7 +45,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             new DataClassCountParameters(
                 $condition,
                 $joins,
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,
@@ -70,7 +70,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     ComparisonCondition::EQUAL,
                     new PropertyConditionVariable(User::class, User::PROPERTY_ID))));
 
-        $properties = new DataClassProperties(
+        $properties = new RetrieveProperties(
             array(
                 new FunctionConditionVariable(
                     FunctionConditionVariable::DISTINCT,

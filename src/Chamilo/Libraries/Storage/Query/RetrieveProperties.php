@@ -6,26 +6,23 @@ use Chamilo\Libraries\Architecture\Traits\HashableTrait;
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 
 /**
- * Describes the group by functionality of a query.
- * Uses ConditionVariable to define the group_by's
  *
- * @package Chamilo\Libraries\Storage\Query
- * @author Sven Vanpoucke <sven.vanpoucke@hogent.be>
+ * @package Chamilo\Libraries\Storage\DataClass\Property
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class GroupBy implements Hashable
+class RetrieveProperties implements Hashable
 {
     use HashableTrait;
 
     /**
+     *
      * @var \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
     private array $conditionVariables;
 
     /**
-     *
      * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
      */
     public function __construct(array $conditionVariables = [])
@@ -33,13 +30,14 @@ class GroupBy implements Hashable
         $this->conditionVariables = $conditionVariables;
     }
 
-    public function add(ConditionVariable $conditionVariable)
+    public function add(ConditionVariable $conditionVariable): RetrieveProperties
     {
         $this->conditionVariables[] = $conditionVariable;
+
+        return $this;
     }
 
     /**
-     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
     public function get(): array
@@ -47,20 +45,35 @@ class GroupBy implements Hashable
         return $this->conditionVariables;
     }
 
+    public function getFirst(): ConditionVariable
+    {
+        return $this->conditionVariables[0];
+    }
+
     /**
      * @return string[]
      */
     public function getHashParts(): array
     {
-        $hashes = [];
+        $hashParts = [];
 
-        foreach ($this->get() as $conditionVariable)
+        $hashParts[] = __CLASS__;
+
+        foreach ($this->get() as $property)
         {
-            $hashes[] = $conditionVariable->getHashParts();
+            $hashParts[] = $property->getHashParts();
         }
 
-        sort($hashes);
+        sort($hashParts);
 
-        return $hashes;
+        return $hashParts;
+    }
+
+    public function merge(RetrieveProperties $retrievePropertiesToMerge)
+    {
+        foreach ($retrievePropertiesToMerge->get() as $conditionVariable)
+        {
+            $this->add($conditionVariable);
+        }
     }
 }

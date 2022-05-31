@@ -5,7 +5,6 @@ use Chamilo\Application\Calendar\Extension\Personal\Storage\DataClass\Publicatio
 use Chamilo\Core\Repository\Publication\PublicationInterface;
 use Chamilo\Core\Repository\Publication\Service\PublicationAggregatorInterface;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -18,6 +17,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -151,7 +151,7 @@ class PublicationRepository
 
         return $this->getDataClassRepository()->record(
             Publication::class, new RecordRetrieveParameters(
-                new DataClassProperties(new PropertiesConditionVariable(Publication::class)), $condition
+                new RetrieveProperties(new PropertiesConditionVariable(Publication::class)), $condition
             )
         );
     }
@@ -169,31 +169,31 @@ class PublicationRepository
         Condition $condition = null, int $count = null, int $offset = null, ?OrderBy $orderBy = null
     )
     {
-        $data_class_properties = [];
+        $retrieveProperties = [];
 
-        $data_class_properties[] = new PropertiesConditionVariable(Publication::class);
+        $retrieveProperties[] = new PropertiesConditionVariable(Publication::class);
 
-        $data_class_properties[] = new PropertyConditionVariable(
+        $retrieveProperties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_TITLE
         );
 
-        $data_class_properties[] = new PropertyConditionVariable(
+        $retrieveProperties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_DESCRIPTION
         );
 
-        $data_class_properties[] = new PropertyConditionVariable(
+        $retrieveProperties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_TYPE
         );
 
-        $data_class_properties[] = new PropertyConditionVariable(
+        $retrieveProperties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_CURRENT
         );
 
-        $data_class_properties[] = new PropertyConditionVariable(
+        $retrieveProperties[] = new PropertyConditionVariable(
             ContentObject::class, ContentObject::PROPERTY_OWNER_ID
         );
 
-        $properties = new DataClassProperties($data_class_properties);
+        $properties = new RetrieveProperties($retrieveProperties);
 
         $parameters = new RecordRetrievesParameters(
             $properties, $condition, $count, $offset, $orderBy, $this->getContentObjectPublicationJoins()

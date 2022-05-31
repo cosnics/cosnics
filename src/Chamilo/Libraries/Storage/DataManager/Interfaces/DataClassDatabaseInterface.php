@@ -1,13 +1,13 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\Interfaces;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -59,7 +59,6 @@ interface DataClassDatabaseInterface
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array;
 
@@ -80,5 +79,5 @@ interface DataClassDatabaseInterface
      */
     public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool;
 
-    public function updates(string $dataClassStorageUnitName, DataClassProperties $properties, Condition $condition): bool;
+    public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool;
 }

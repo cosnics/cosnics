@@ -8,8 +8,6 @@ use Chamilo\Libraries\Storage\Cache\DataClassRepositoryCache;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClassFactory;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Exception\DataClassNoResultException;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
@@ -26,6 +24,9 @@ use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
@@ -95,7 +96,7 @@ class DataClassRepository
      */
     protected function __record(string $dataClassName, RecordRetrieveParameters $parameters): array
     {
-        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
         {
             $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
         }
@@ -108,7 +109,7 @@ class DataClassRepository
      */
     protected function __records(string $dataClassName, RecordRetrievesParameters $parameters): ArrayCollection
     {
-        if (!$parameters->getDataClassProperties() instanceof DataClassProperties)
+        if (!$parameters->getRetrieveProperties() instanceof RetrieveProperties)
         {
             $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
         }
@@ -125,7 +126,7 @@ class DataClassRepository
      * @return tInternalRetrieveClass
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function __retrieveClass(string $dataClassName, DataClassRetrieveParameters $parameters)
+    protected function __retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
         $this->getParametersHandler()->handleDataClassRetrieveParameters($dataClassName, $parameters);
 
@@ -144,8 +145,7 @@ class DataClassRepository
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \ReflectionException
      */
-    protected function __retrievesClass(string $dataClassName, DataClassRetrievesParameters $parameters
-    ): ArrayCollection
+    protected function __retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
         $this->getParametersHandler()->handleDataClassRetrievesParameters($dataClassName, $parameters);
 
@@ -177,10 +177,10 @@ class DataClassRepository
 
             $displayOrderPropertyVariable = new PropertyConditionVariable($dataClassName, $displayOrderProperty);
 
-            $properties = new DataClassProperties([]);
+            $properties = new UpdateProperties();
 
             $properties->add(
-                new DataClassProperty($displayOrderPropertyVariable, new StaticConditionVariable($newDisplayOrder))
+                new UpdateProperty($displayOrderPropertyVariable, new StaticConditionVariable($newDisplayOrder))
             );
 
             $conditions = [];
@@ -398,7 +398,7 @@ class DataClassRepository
     ): string
     {
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE))
             ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
         );
@@ -421,7 +421,7 @@ class DataClassRepository
         );
 
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE))
             ), $condition
         );
@@ -559,9 +559,9 @@ class DataClassRepository
             $displayOrderPropertyVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($direction)
         );
 
-        $properties = new DataClassProperties();
+        $properties = new UpdateProperties();
 
-        $properties->add(new DataClassProperty($displayOrderPropertyVariable, $updateVariable));
+        $properties->add(new UpdateProperty($displayOrderPropertyVariable, $updateVariable));
 
         return $this->updates($dataClassName, $properties, $condition);
     }
@@ -702,7 +702,7 @@ class DataClassRepository
                 try
                 {
                     $dataClassRepositoryCache->addForDataClass(
-                        $this->__retrieveClass($dataClassName, $parameters), $parameters
+                        $this->__retrieve($dataClassName, $parameters), $parameters
                     );
                 }
                 catch (DataClassNoResultException $exception)
@@ -717,7 +717,7 @@ class DataClassRepository
         {
             try
             {
-                return $this->__retrieveClass($dataClassName, $parameters);
+                return $this->__retrieve($dataClassName, $parameters);
             }
             catch (DataClassNoResultException $exception)
             {
@@ -760,7 +760,7 @@ class DataClassRepository
         }
 
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
+            new RetrieveProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
             new EqualityCondition(
                 new PropertyConditionVariable($compositeDataClass::class_name(), $compositeDataClass::PROPERTY_ID),
                 new StaticConditionVariable($compositeDataClass->getId())
@@ -776,7 +776,7 @@ class DataClassRepository
     public function retrieveMaximumValue(string $dataClassName, string $property, ?Condition $condition = null): int
     {
         $parameters = new RecordRetrieveParameters(
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::MAX, new PropertyConditionVariable($dataClassName, $property),
@@ -836,7 +836,7 @@ class DataClassRepository
             if (!$dataClassRepositoryCache->exists($cacheDataClassName, $parameters))
             {
                 $dataClassRepositoryCache->addForArrayCollection(
-                    $dataClassName, $this->__retrievesClass($dataClassName, $parameters), $parameters
+                    $dataClassName, $this->__retrieves($dataClassName, $parameters), $parameters
                 );
             }
 
@@ -847,7 +847,7 @@ class DataClassRepository
         }
         else
         {
-            return $this->__retrievesClass($dataClassName, $parameters);
+            return $this->__retrieves($dataClassName, $parameters);
         }
     }
 
@@ -970,7 +970,7 @@ class DataClassRepository
         return $result;
     }
 
-    public function updates(string $dataClassName, DataClassProperties $properties, Condition $condition): bool
+    public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
         if (!$this->getDataClassDatabase()->updates($dataClassName::getTableName(), $properties, $condition))
         {

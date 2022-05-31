@@ -7,8 +7,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\DataClass\Re
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -20,9 +18,11 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Application\Weblcms\Tool\Implementation\Ephorus\Storage\Repository
@@ -84,7 +84,7 @@ class RequestRepository extends CommonDataClassRepository
      */
     public function findRequestsWithContentObjects(RecordRetrievesParameters $recordRetrievesParameters)
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertiesConditionVariable(Request::class));
         $properties->add(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TITLE));
@@ -96,7 +96,7 @@ class RequestRepository extends CommonDataClassRepository
         $joins = $this->getRequestJoins();
 
         $recordRetrievesParameters->setJoins($joins);
-        $recordRetrievesParameters->setDataClassProperties($properties);
+        $recordRetrievesParameters->setRetrieveProperties($properties);
 
         $records = $this->dataClassRepository->records(Request::class, $recordRetrievesParameters);
 
@@ -121,7 +121,7 @@ class RequestRepository extends CommonDataClassRepository
             new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID), $guids
         );
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertiesConditionVariable(ContentObject::class));
         $properties->add(new PropertyConditionVariable(Request::class, Request::PROPERTY_GUID));

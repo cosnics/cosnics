@@ -9,14 +9,14 @@ use Chamilo\Core\Repository\Instance\Storage\DataClass\SynchronizationData;
 use Chamilo\Core\Repository\Manager;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Libraries\Architecture\ClassnameUtilities;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\SubselectCondition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -151,13 +151,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             new PropertyConditionVariable(
                 SynchronizationData::class, SynchronizationData::PROPERTY_STATE
             ), new StaticConditionVariable(SynchronizationData::STATE_INACTIVE)
         );
 
-        return self::updates(SynchronizationData::class, new DataClassProperties($properties), $condition);
+        return self::updates(SynchronizationData::class, new UpdateProperties($properties), $condition);
     }
 
     public static function activate_instance_objects($external_instance_id, $user_id, $external_user_id)
@@ -185,13 +185,13 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = new AndCondition($conditions);
 
         $properties = [];
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             new PropertyConditionVariable(
                 SynchronizationData::class, SynchronizationData::PROPERTY_STATE
             ), new StaticConditionVariable(SynchronizationData::STATE_ACTIVE)
         );
 
-        return self::updates(SynchronizationData::class, new DataClassProperties($properties), $condition);
+        return self::updates(SynchronizationData::class, new UpdateProperties($properties), $condition);
     }
 
     /**

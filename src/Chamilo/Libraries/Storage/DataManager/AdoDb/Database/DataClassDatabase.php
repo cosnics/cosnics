@@ -7,7 +7,6 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
 use Chamilo\Libraries\Architecture\ErrorHandler\ExceptionLogger\ExceptionLoggerInterface;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ParametersProcessor;
@@ -21,6 +20,7 @@ use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 
@@ -530,8 +530,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return true;
     }
 
-    public function updates(string $dataClassStorageUnitName, DataClassProperties $properties, Condition $condition
-    ): bool
+    public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
     {
         if (count($properties->get()) > 0)
         {

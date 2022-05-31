@@ -10,11 +10,11 @@ use Chamilo\Application\Weblcms\Storage\DataClass\CourseSetting;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -186,13 +186,13 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
             return false;
         }
 
-        $properties = new DataClassProperties();
+        $properties = new UpdateProperties();
 
         $copied_settings = CourseSettingsConnector::get_copied_settings_for_course();
         foreach ($copied_settings as $setting_name => $property)
         {
             $properties->add(
-                new DataClassProperty(
+                new UpdateProperty(
                     new PropertyConditionVariable(Course::class, $property),
                     new StaticConditionVariable($this->get_course_setting($setting_name))
                 )
@@ -215,6 +215,39 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     }
 
     /**
+     * Returns the default properties of this dataclass
+     *
+     * @param string[] $extendedPropertyNames
+     *
+     * @return string[]
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_TITLE,
+                self::PROPERTY_ACTIVE,
+                self::PROPERTY_DESCRIPTION,
+                self::PROPERTY_DISPLAY_ORDER
+            )
+        );
+    }
+
+    /**
+     * **************************************************************************************************************
+     * Course Settings Functionality *
+     * **************************************************************************************************************
+     */
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_course_type';
+    }
+
+    /**
      * Returns the available rights for the course management
      *
      * @return int[string]
@@ -223,12 +256,6 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     {
         return CourseManagementRights::getInstance()->get_all_course_management_rights();
     }
-
-    /**
-     * **************************************************************************************************************
-     * Course Settings Functionality *
-     * **************************************************************************************************************
-     */
 
     /**
      * Retrieves course setting values for the given setting name and tool id
@@ -256,25 +283,6 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
     public function get_default_course_setting($setting_name, $tool_id)
     {
         return CourseSettingsController::getInstance()->get_default_setting($setting_name, $tool_id);
-    }
-
-    /**
-     * Returns the default properties of this dataclass
-     *
-     * @param string[] $extendedPropertyNames
-     *
-     * @return string[]
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_TITLE,
-                self::PROPERTY_ACTIVE,
-                self::PROPERTY_DESCRIPTION,
-                self::PROPERTY_DISPLAY_ORDER
-            )
-        );
     }
 
     /**
@@ -337,14 +345,6 @@ class CourseType extends DataClass implements DisplayOrderDataClassListenerSuppo
         return CourseManagementRights::getInstance()->get_weblcms_location_by_identifier_from_courses_subtree(
             CourseManagementRights::TYPE_COURSE_TYPE, $this->get_id()
         );
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_course_type';
     }
 
     /**

@@ -9,12 +9,12 @@ use Chamilo\Core\Group\Storage\DataManager;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -89,7 +89,7 @@ class PlatformGroupEntityHelper
                 new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ENTITY_ID)));
         $joins = new Joins(array($join));
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::DISTINCT,
@@ -123,7 +123,7 @@ class PlatformGroupEntityHelper
         $parameters = new DataClassCountParameters(
             $condition,
             $joins,
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,

@@ -4,11 +4,11 @@ namespace Chamilo\Libraries\Storage\Parameters;
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  *
@@ -26,8 +26,6 @@ abstract class DataClassParameters implements Hashable
 
     private ?int $count;
 
-    private ?DataClassProperties $dataClassProperties;
-
     private bool $distinct;
 
     private ?GroupBy $groupBy;
@@ -40,15 +38,17 @@ abstract class DataClassParameters implements Hashable
 
     private ?OrderBy $orderBy;
 
+    private ?RetrieveProperties $retrieveProperties;
+
     public function __construct(
-        ?Condition $condition = null, ?Joins $joins = null, ?DataClassProperties $dataClassProperties = null,
+        ?Condition $condition = null, ?Joins $joins = null, ?RetrieveProperties $retrieveProperties = null,
         ?OrderBy $orderBy = null, ?GroupBy $groupBy = null, ?Condition $havingCondition = null, ?int $count = null,
         ?int $offset = null, ?bool $distinct = false
     )
     {
         $this->setCondition($condition);
         $this->setJoins($joins);
-        $this->setDataClassProperties($dataClassProperties);
+        $this->setRetrieveProperties($retrieveProperties);
         $this->setOrderBy($orderBy);
         $this->setGroupBy($groupBy);
         $this->setHavingCondition($havingCondition);
@@ -93,16 +93,6 @@ abstract class DataClassParameters implements Hashable
         $this->count = (int) $count;
     }
 
-    public function getDataClassProperties(): ?DataClassProperties
-    {
-        return $this->dataClassProperties;
-    }
-
-    public function setDataClassProperties(?DataClassProperties $dataClassProperties = null)
-    {
-        $this->dataClassProperties = $dataClassProperties;
-    }
-
     public function getDistinct(): bool
     {
         return $this->distinct;
@@ -130,8 +120,8 @@ abstract class DataClassParameters implements Hashable
         $hashParts[] = static::class;
         $hashParts[] = ($this->getCondition() instanceof Condition ? $this->getCondition()->getHashParts() : null);
         $hashParts[] = ($this->getJoins() instanceof Joins ? $this->getJoins()->getHashParts() : null);
-        $hashParts[] = ($this->getDataClassProperties() instanceof DataClassProperties ?
-            $this->getDataClassProperties()->getHashParts() : null);
+        $hashParts[] = ($this->getRetrieveProperties() instanceof RetrieveProperties ?
+            $this->getRetrieveProperties()->getHashParts() : null);
         $hashParts[] = ($this->getOrderBy() instanceof OrderBy ? $this->getOrderBy()->getHashParts() : null);
         $hashParts[] = ($this->getGroupBy() instanceof GroupBy ? $this->getGroupBy()->getHashParts() : null);
         $hashParts[] =
@@ -204,6 +194,16 @@ abstract class DataClassParameters implements Hashable
     public function setOrderBy(?OrderBy $orderBy = null)
     {
         $this->orderBy = $orderBy;
+    }
+
+    public function getRetrieveProperties(): ?RetrieveProperties
+    {
+        return $this->retrieveProperties;
+    }
+
+    public function setRetrieveProperties(?RetrieveProperties $retrieveProperties = null)
+    {
+        $this->retrieveProperties = $retrieveProperties;
     }
 
     /**

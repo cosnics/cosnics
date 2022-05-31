@@ -10,12 +10,12 @@ use Chamilo\Application\Weblcms\Course\Storage\DataClass\Course;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseCategory;
 use Chamilo\Libraries\Format\Table\Column\DataClassPropertyTableColumn;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
@@ -79,7 +79,7 @@ class CourseEntityHelper
      */
     public static function retrieve_table_data($condition, $count, $offset, $order_property)
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(Admin::class, Admin::PROPERTY_ORIGIN));
         $properties->add(new PropertyConditionVariable(Course::class, Course::PROPERTY_TITLE));
@@ -110,7 +110,7 @@ class CourseEntityHelper
         $parameters = new DataClassCountParameters(
             $condition,
             self::get_joins(),
-            new DataClassProperties(
+            new RetrieveProperties(
                 array(
                     new FunctionConditionVariable(
                         FunctionConditionVariable::DISTINCT,

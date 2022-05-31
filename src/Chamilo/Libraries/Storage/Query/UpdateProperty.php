@@ -1,5 +1,5 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataClass\Property;
+namespace Chamilo\Libraries\Storage\Query;
 
 use Chamilo\Libraries\Architecture\Interfaces\Hashable;
 use Chamilo\Libraries\Architecture\Traits\HashableTrait;
@@ -15,7 +15,7 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
  * @author Magali Gillard <magali.gillard@ehb.be>
  * @author Eduard Vossen <eduard.vossen@ehb.be>
  */
-class DataClassProperty implements Hashable
+class UpdateProperty implements Hashable
 {
 
     use HashableTrait;
@@ -40,7 +40,7 @@ class DataClassProperty implements Hashable
         return $this->propertyConditionVariable;
     }
 
-    public function setPropertyConditionVariable(ConditionVariable $propertyConditionVariable): DataClassProperty
+    public function setPropertyConditionVariable(ConditionVariable $propertyConditionVariable): UpdateProperty
     {
         $this->propertyConditionVariable = $propertyConditionVariable;
 
@@ -52,7 +52,7 @@ class DataClassProperty implements Hashable
         return $this->valueConditionVariable;
     }
 
-    public function setValueConditionVariable(ConditionVariable $valueConditionVariable): DataClassProperty
+    public function setValueConditionVariable(ConditionVariable $valueConditionVariable): UpdateProperty
     {
         $this->valueConditionVariable = $valueConditionVariable;
 
@@ -60,7 +60,7 @@ class DataClassProperty implements Hashable
     }
 
     /**
-     * @deprecated Use DataClassProperty::getPropertyConditionVariable() now
+     * @deprecated Use DataClassUpdateProperty::getPropertyConditionVariable() now
      */
     public function get_property(): ConditionVariable
     {
@@ -68,7 +68,7 @@ class DataClassProperty implements Hashable
     }
 
     /**
-     * @deprecated Use DataClassProperty::getValueConditionVariable() now
+     * @deprecated Use DataClassUpdateProperty::getValueConditionVariable() now
      */
     public function get_value(): ConditionVariable
     {
@@ -76,17 +76,17 @@ class DataClassProperty implements Hashable
     }
 
     /**
-     * @deprecated Use DataClassProperty::setPropertyConditionVariable() now
+     * @deprecated Use DataClassUpdateProperty::setPropertyConditionVariable() now
      */
-    public function set_property(ConditionVariable $propertyConditionVariable): DataClassProperty
+    public function set_property(ConditionVariable $propertyConditionVariable): UpdateProperty
     {
         return $this->setPropertyConditionVariable($propertyConditionVariable);
     }
 
     /**
-     * @deprecated Use DataClassProperty::setValueConditionVariable() now
+     * @deprecated Use DataClassUpdateProperty::setValueConditionVariable() now
      */
-    public function set_value(ConditionVariable $valueConditionVariable): DataClassProperty
+    public function set_value(ConditionVariable $valueConditionVariable): UpdateProperty
     {
         return $this->setValueConditionVariable($valueConditionVariable);
     }

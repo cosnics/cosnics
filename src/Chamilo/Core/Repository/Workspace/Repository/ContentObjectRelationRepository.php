@@ -12,9 +12,9 @@ use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use InvalidArgumentException;
 
 /**
@@ -143,7 +143,7 @@ class ContentObjectRelationRepository
             WorkspaceContentObjectRelation::class,
             new DataClassDistinctParameters(
                 $condition,
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             WorkspaceContentObjectRelation::class,

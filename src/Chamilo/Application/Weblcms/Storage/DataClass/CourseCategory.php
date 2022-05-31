@@ -6,10 +6,11 @@ use Chamilo\Application\Weblcms\Storage\DataManager;
 use Chamilo\Configuration\Category\Storage\DataClass\PlatformCategory;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListener;
 use Chamilo\Libraries\Storage\DataClass\Listeners\DisplayOrderDataClassListenerSupport;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -17,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  *
  * @package application.lib.weblcms.category_manager
  */
+
 /**
  *
  * @author Sven Vanpoucke
@@ -33,24 +35,49 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         $this->addListener(new DisplayOrderDataClassListener($this));
     }
 
-    public function get_code()
+    /**
+     * Deletes the dataclass in the database and updates the children and courses
+     *
+     * @return bool
+     */
+    public function delete(): bool
     {
-        return $this->getDefaultProperty(self::PROPERTY_CODE);
-    }
+        if (!parent::delete())
+        {
+            return false;
+        }
 
-    public function set_code($code)
-    {
-        $this->setDefaultProperty(self::PROPERTY_CODE, $code);
-    }
+        $parent_variable = new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_PARENT);
 
-    public function get_state()
-    {
-        return $this->getDefaultProperty(self::PROPERTY_STATE);
-    }
+        $condition = new EqualityCondition($parent_variable, new StaticConditionVariable($this->get_id()));
 
-    public function set_state($state)
-    {
-        $this->setDefaultProperty(self::PROPERTY_STATE, $state);
+        $properties = new UpdateProperties();
+        $properties->add(new UpdateProperty($parent_variable, new StaticConditionVariable($this->get_parent())));
+
+        if (!DataManager::updates(CourseCategory::class, $properties, $condition))
+        {
+            return false;
+        }
+
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        $properties = new UpdateProperties();
+        $properties->add(
+            new UpdateProperty(
+                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
+                new StaticConditionVariable($this->get_parent())
+            )
+        );
+
+        if (!DataManager::updates(Course::class, $properties, $condition))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -75,55 +102,48 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
     }
 
     /**
-     * Deletes the dataclass in the database and updates the children and courses
-     *
-     * @return bool
-     */
-    public function delete(): bool
-    {
-        if (! parent::delete())
-        {
-            return false;
-        }
-
-        $parent_variable = new PropertyConditionVariable(CourseCategory::class, CourseCategory::PROPERTY_PARENT);
-
-        $condition = new EqualityCondition($parent_variable, new StaticConditionVariable($this->get_id()));
-
-        $properties = new DataClassProperties();
-        $properties->add(new DataClassProperty($parent_variable, new StaticConditionVariable($this->get_parent())));
-
-        if (! DataManager::updates(CourseCategory::class, $properties, $condition))
-        {
-            return false;
-        }
-
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
-            new StaticConditionVariable($this->get_id()));
-
-        $properties = new DataClassProperties();
-        $properties->add(
-            new DataClassProperty(
-                new PropertyConditionVariable(Course::class, Course::PROPERTY_CATEGORY_ID),
-                new StaticConditionVariable($this->get_parent())));
-
-        if (! DataManager::updates(Course::class, $properties, $condition))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns the property for the display order
      *
      * @return string
      */
-    public function get_display_order_property()
+    public static function getTableName(): string
     {
-        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
+        return 'weblcms_course_category';
+    }
+
+    public function get_children_ids($recursive = true)
+    {
+        $condition = new EqualityCondition(
+            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
+            new StaticConditionVariable($this->get_id())
+        );
+
+        if (!$recursive)
+        {
+            $parameters = new DataClassDistinctParameters(
+                $condition,
+                new RetrieveProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID)))
+            );
+
+            return DataManager::distinct(self::class, $parameters);
+        }
+        else
+        {
+            $children_ids = [];
+            $children = DataManager::retrieve_categories($condition);
+
+            foreach ($children as $child)
+            {
+                $children_ids[] = $child->get_id();
+                $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
+            }
+
+            return $children_ids;
+        }
+    }
+
+    public function get_code()
+    {
+        return $this->getDefaultProperty(self::PROPERTY_CODE);
     }
 
     /**
@@ -136,21 +156,14 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         return array(new PropertyConditionVariable(self::class, self::PROPERTY_PARENT));
     }
 
-    public function get_parent_ids()
+    /**
+     * Returns the property for the display order
+     *
+     * @return string
+     */
+    public function get_display_order_property()
     {
-        if ($this->get_parent() == 0)
-        {
-            return [];
-        }
-        else
-        {
-            $parent = DataManager::retrieve_by_id(CourseCategory::class, $this->get_parent());
-
-            $parent_ids = [];
-            $parent_ids[] = $parent->get_id();
-            $parent_ids = array_merge($parent_ids, $parent->get_parent_ids());
-            return $parent_ids;
-        }
+        return new PropertyConditionVariable(self::class, self::PROPERTY_DISPLAY_ORDER);
     }
 
     public function get_fully_qualified_name($include_self = true)
@@ -172,40 +185,36 @@ class CourseCategory extends PlatformCategory implements DisplayOrderDataClassLi
         return implode(' <span class="text-primary">></span> ', array_reverse($names));
     }
 
-    public function get_children_ids($recursive = true)
+    public function get_parent_ids()
     {
-        $condition = new EqualityCondition(
-            new PropertyConditionVariable(self::class, self::PROPERTY_PARENT),
-            new StaticConditionVariable($this->get_id()));
-
-        if (! $recursive)
+        if ($this->get_parent() == 0)
         {
-            $parameters = new DataClassDistinctParameters(
-                $condition,
-                new DataClassProperties(array(new PropertyConditionVariable(self::class, self::PROPERTY_ID))));
-            return DataManager::distinct(self::class, $parameters);
+            return [];
         }
         else
         {
-            $children_ids = [];
-            $children = DataManager::retrieve_categories($condition);
+            $parent = DataManager::retrieve_by_id(CourseCategory::class, $this->get_parent());
 
-            foreach($children as $child)
-            {
-                $children_ids[] = $child->get_id();
-                $children_ids = array_merge($children_ids, $child->get_children_ids($recursive));
-            }
+            $parent_ids = [];
+            $parent_ids[] = $parent->get_id();
+            $parent_ids = array_merge($parent_ids, $parent->get_parent_ids());
 
-            return $children_ids;
+            return $parent_ids;
         }
     }
 
-    /**
-     *
-     * @return string
-     */
-    public static function getTableName(): string
+    public function get_state()
     {
-        return 'weblcms_course_category';
+        return $this->getDefaultProperty(self::PROPERTY_STATE);
+    }
+
+    public function set_code($code)
+    {
+        $this->setDefaultProperty(self::PROPERTY_CODE, $code);
+    }
+
+    public function set_state($state)
+    {
+        $this->setDefaultProperty(self::PROPERTY_STATE, $state);
     }
 }

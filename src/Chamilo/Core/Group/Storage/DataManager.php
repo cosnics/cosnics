@@ -4,22 +4,22 @@ namespace Chamilo\Core\Group\Storage;
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Group\Storage\DataClass\GroupRelUser;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -127,7 +127,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         if (!isset(self::$allSubscribedGroupsCache[$cacheId]))
         {
             // First: retrieve the left and right values of groups the user is directly subscribed to.
-            $properties = new DataClassProperties();
+            $properties = new RetrieveProperties();
 
             $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE));
             $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE));
@@ -196,7 +196,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 {
                     $parameters = new DataClassDistinctParameters(
                         $condition,
-                        new DataClassProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))
+                        new RetrieveProperties(array(new PropertyConditionVariable(Group::class, Group::PROPERTY_ID)))
                     );
                     $group_ids = static::distinct(Group::class, $parameters);
 
@@ -350,7 +350,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         }
 
         // First: retrieve the left and right values of the groups provided by the caller.
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_LEFT_VALUE));
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_RIGHT_VALUE));

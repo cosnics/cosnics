@@ -25,10 +25,10 @@ use Chamilo\Libraries\Format\Structure\Glyph\FontAwesomeGlyph;
 use Chamilo\Libraries\Format\Utilities\ResourceManager;
 use Chamilo\Libraries\Platform\Session\Request;
 use Chamilo\Libraries\Platform\Session\Session;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Utilities\StringUtilities;
@@ -236,7 +236,7 @@ class ImporterComponent extends Manager implements DelegateComponent
         $condition = new AndCondition($conditions);
 
         $parameters = new DataClassDistinctParameters(
-            $condition, new DataClassProperties(
+            $condition, new RetrieveProperties(
                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
             )
         );

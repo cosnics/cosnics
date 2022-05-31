@@ -17,9 +17,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 
 /**
  * Database repository for the rights entities
@@ -116,7 +116,7 @@ class RightsRepository
             ElementTargetEntity::class,
             new DataClassDistinctParameters(
                 null,
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             ElementTargetEntity::class,
@@ -131,7 +131,7 @@ class RightsRepository
             Element::class,
             new DataClassDistinctParameters(
                 $condition,
-                new DataClassProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))));
+                new RetrieveProperties(array(new PropertyConditionVariable(Element::class, Element::PROPERTY_ID)))));
     }
 
     /**
@@ -147,7 +147,7 @@ class RightsRepository
             ElementTargetEntity::class,
             new DataClassDistinctParameters(
                 $this->getTargetEntitiesConditionForUser(ElementTargetEntity::class, $user),
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             ElementTargetEntity::class,
@@ -165,7 +165,7 @@ class RightsRepository
             BlockTypeTargetEntity::class,
             new DataClassDistinctParameters(
                 null,
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             BlockTypeTargetEntity::class,
@@ -185,7 +185,7 @@ class RightsRepository
             BlockTypeTargetEntity::class,
             new DataClassDistinctParameters(
                 $this->getTargetEntitiesConditionForUser(BlockTypeTargetEntity::class, $user),
-                new DataClassProperties(
+                new RetrieveProperties(
                     array(
                         new PropertyConditionVariable(
                             BlockTypeTargetEntity::class,

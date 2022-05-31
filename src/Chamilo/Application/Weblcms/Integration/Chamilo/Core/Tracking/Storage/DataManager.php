@@ -6,7 +6,6 @@ use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataCl
 use Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\DataClass\CourseVisit;
 use Chamilo\Application\Weblcms\Storage\DataClass\CourseTool;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -87,7 +87,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
 
         $parameters = new DataClassCountGroupedParameters(
-            null, new DataClassProperties(
+            null, new RetrieveProperties(
                 array(new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID))
             ), $having, null,
             new GroupBy([new PropertyConditionVariable(CourseVisit::class, CourseVisit::PROPERTY_COURSE_ID)])
@@ -232,11 +232,11 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
     /**
      * Returns the select properties for a summary of the course visit tracker
      *
-     * @return DataClassProperties
+     * @return RetrieveProperties
      */
     public static function get_course_visit_summary_select_properties()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(
             new FunctionConditionVariable(
@@ -287,7 +287,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $condition = null, $offset = null, $count = null, $order_by = null
     )
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertiesConditionVariable(AssessmentAttempt::class));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));

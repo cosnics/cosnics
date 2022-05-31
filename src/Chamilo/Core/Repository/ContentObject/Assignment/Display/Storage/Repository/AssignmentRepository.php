@@ -13,7 +13,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignmen
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -30,6 +29,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -740,7 +740,7 @@ abstract class AssignmentRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties $dataClassProperties
+     * @param \Chamilo\Libraries\Storage\Query\RetrieveProperties $retrieveProperties
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition $condition
      * @param \Chamilo\Libraries\Storage\Query\Joins|null $joins
      * @param \Chamilo\Libraries\Storage\Query\GroupBy $groupBy
@@ -748,23 +748,23 @@ abstract class AssignmentRepository
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function findEntryStatistics(
-        DataClassProperties $dataClassProperties = null, Condition $condition = null, Joins $joins = null,
+        RetrieveProperties $retrieveProperties = null, Condition $condition = null, Joins $joins = null,
         GroupBy $groupBy = null
     )
     {
-        if (!$dataClassProperties instanceof DataClassProperties)
+        if (!$retrieveProperties instanceof RetrieveProperties)
         {
-            $dataClassProperties = new DataClassProperties();
+            $retrieveProperties = new RetrieveProperties();
         }
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::COUNT,
                 new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID), self::ENTRIES_COUNT
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MAX,
                 new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED),
@@ -772,21 +772,21 @@ abstract class AssignmentRepository
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::AVERAGE,
                 new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE), self::AVERAGE_SCORE
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MIN,
                 new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE), self::MINIMUM_SCORE
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::MAX,
                 new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE), self::MAXIMUM_SCORE
@@ -809,7 +809,7 @@ abstract class AssignmentRepository
 
         return $this->dataClassRepository->records(
             $this->getEntryClassName(),
-            new RecordRetrievesParameters($dataClassProperties, $condition, null, null, null, $joins, $groupBy)
+            new RecordRetrievesParameters($retrieveProperties, $condition, null, null, null, $joins, $groupBy)
         );
     }
 
@@ -825,7 +825,7 @@ abstract class AssignmentRepository
     public function findEntryStatisticsForEntity($entityType, $entityId, Condition $condition = null)
     {
         $entryStatistics = $this->findEntryStatistics(
-            new DataClassProperties(), $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition)
+            new RetrieveProperties(), $this->getEntityTypeAndIdCondition($entityType, $entityId, $condition)
         );
 
         return $entryStatistics[0];
@@ -877,7 +877,7 @@ abstract class AssignmentRepository
      * @param integer $offset
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     * @param DataClassProperties $properties
+     * @param RetrieveProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
@@ -885,7 +885,7 @@ abstract class AssignmentRepository
      */
     protected function findTargetsForEntityType(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
-        DataClassProperties $properties, $baseClass, $baseVariable, Condition $havingCondition = null
+        RetrieveProperties $properties, $baseClass, $baseVariable, Condition $havingCondition = null
     )
     {
         $properties->add(
@@ -950,7 +950,7 @@ abstract class AssignmentRepository
      * @param integer $offset
      * @param integer $count
      * @param \Chamilo\Libraries\Storage\Query\OrderBy $orderBy
-     * @param DataClassProperties $properties
+     * @param RetrieveProperties $properties
      * @param string $baseClass
      * @param PropertyConditionVariable $baseVariable
      *
@@ -960,7 +960,7 @@ abstract class AssignmentRepository
      */
     protected function findTargetsForEntityTypeWithEntries(
         $entityType, Condition $condition = null, Condition $joinCondition = null, $offset, $count, $orderBy,
-        DataClassProperties $properties, $baseClass, $baseVariable
+        RetrieveProperties $properties, $baseClass, $baseVariable
     )
     {
         $submittedVariable = new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_SUBMITTED);
@@ -1125,7 +1125,7 @@ abstract class AssignmentRepository
             )
         );
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(
             new FunctionConditionVariable(
                 FunctionConditionVariable::AVERAGE,
@@ -1206,7 +1206,7 @@ abstract class AssignmentRepository
             )
         );
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(new PropertyConditionVariable($this->getEntryClassName(), Entry::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));
@@ -1273,7 +1273,7 @@ abstract class AssignmentRepository
             )
         );
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable($this->getScoreClassName(), Score::PROPERTY_SCORE));
 
         $parameters = new RecordRetrieveParameters(

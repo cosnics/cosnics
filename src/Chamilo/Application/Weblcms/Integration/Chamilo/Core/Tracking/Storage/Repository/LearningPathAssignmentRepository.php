@@ -11,11 +11,10 @@ use Chamilo\Application\Weblcms\Storage\DataClass\ContentObjectPublication;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\DataClass\TreeNodeData;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -279,11 +278,11 @@ class LearningPathAssignmentRepository extends
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
      */
     protected function getDataClassPropertiesForUser()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));

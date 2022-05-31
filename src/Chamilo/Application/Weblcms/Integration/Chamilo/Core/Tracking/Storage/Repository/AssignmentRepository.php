@@ -13,7 +13,6 @@ use Chamilo\Application\Weblcms\Tool\Implementation\CourseGroup\Storage\DataClas
 use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\ContentObject\Assignment\Storage\DataClass\Assignment;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
@@ -21,7 +20,7 @@ use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
-use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -256,7 +255,7 @@ class AssignmentRepository
         $contentObjectPublicationIdProperty =
             new PropertyConditionVariable(Entry::class, Entry::PROPERTY_CONTENT_OBJECT_PUBLICATION_ID);
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add($contentObjectPublicationIdProperty);
         $properties->add(new PropertyConditionVariable(Entry::class, Entry::PROPERTY_ENTITY_TYPE));
 
@@ -523,33 +522,33 @@ class AssignmentRepository
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
      */
     protected function getDataClassPropertiesForCourseGroup()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable(CourseGroup::class, CourseGroup::PROPERTY_NAME));
 
         return $properties;
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
      */
     protected function getDataClassPropertiesForPlatformGroups()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
         return $properties;
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties
+     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
      */
     protected function getDataClassPropertiesForUser()
     {
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_ID));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_FIRSTNAME));
         $properties->add(new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME));

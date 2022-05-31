@@ -6,7 +6,6 @@ use Chamilo\Core\Repository\Workspace\Service\RightsService;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\Workspace;
 use Chamilo\Core\Repository\Workspace\Storage\DataClass\WorkspaceEntityRelation;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -19,6 +18,7 @@ use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
@@ -71,7 +71,7 @@ class WorkspaceRepository
         return DataManager::count(
             Workspace::class, new DataClassCountParameters(
                 $this->getWorkspaceFavouritesByUserCondition($user, $entities, RightsService::RIGHT_VIEW),
-                $this->getWorkspaceFavouritesByUserJoins(), new DataClassProperties(
+                $this->getWorkspaceFavouritesByUserJoins(), new RetrieveProperties(
                     array(
                         new FunctionConditionVariable(
                             FunctionConditionVariable::DISTINCT,

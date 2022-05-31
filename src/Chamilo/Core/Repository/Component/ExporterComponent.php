@@ -19,11 +19,11 @@ use Chamilo\Libraries\Format\Structure\Glyph\IdentGlyph;
 use Chamilo\Libraries\Format\Structure\Glyph\NamespaceIdentGlyph;
 use Chamilo\Libraries\Format\Table\Column\StaticTableColumn;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 use Chamilo\Libraries\Translation\Translation;
@@ -184,7 +184,7 @@ class ExporterComponent extends Manager
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID), $content_object_ids
         );
         $parameters = new DataClassDistinctParameters(
-            $condition, new DataClassProperties(
+            $condition, new RetrieveProperties(
                 array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_TYPE))
             )
         );
@@ -221,7 +221,7 @@ class ExporterComponent extends Manager
             $condition = new AndCondition($conditions);
 
             $parameters = new DataClassDistinctParameters(
-                $condition, new DataClassProperties(
+                $condition, new RetrieveProperties(
                     array(new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID))
                 )
             );

@@ -2,9 +2,9 @@
 namespace Chamilo\Configuration\Storage\Repository;
 
 use Chamilo\Configuration\Storage\DataClass\Registration;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 
 /**
@@ -58,7 +58,7 @@ class RegistrationRepository
         return $this->getDataClassRepository()->records(
             Registration::class,
             new RecordRetrievesParameters(
-                new DataClassProperties(array(new PropertiesConditionVariable(Registration::class)))));
+                new RetrieveProperties(array(new PropertiesConditionVariable(Registration::class)))));
     }
 
     /**

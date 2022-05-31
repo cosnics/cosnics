@@ -3,8 +3,6 @@ namespace Chamilo\Libraries\Storage\DataManager\Repository;
 
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 use Chamilo\Libraries\Storage\DataClass\NestedSet;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperty;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -16,6 +14,9 @@ use Chamilo\Libraries\Storage\Query\Condition\NotCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperties;
+use Chamilo\Libraries\Storage\Query\UpdateProperty;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -213,7 +214,7 @@ class NestedSetDataClassRepository extends DataClassRepository
     {
         return $this->distinct(
             get_class($nestedSet), new DataClassDistinctParameters(
-                $this->getAncestorsCondition($nestedSet, $includeSelf, $condition), new DataClassProperties(
+                $this->getAncestorsCondition($nestedSet, $includeSelf, $condition), new RetrieveProperties(
                     array(new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_ID))
                 )
             )
@@ -447,10 +448,10 @@ class NestedSetDataClassRepository extends DataClassRepository
     protected function getPostOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
         return new OrderBy(array(
-            new OrderProperty(
-                new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE), $sortOrder
-            ))
-        );
+                new OrderProperty(
+                    new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE), $sortOrder
+                )
+            ));
     }
 
     /**
@@ -469,10 +470,10 @@ class NestedSetDataClassRepository extends DataClassRepository
     protected function getPreOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC)
     {
         return new OrderBy(array(
-            new OrderProperty(
-                new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE), $sortOrder
-            ))
-        );
+                new OrderProperty(
+                    new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE), $sortOrder
+                )
+            ));
     }
 
     /**
@@ -703,19 +704,19 @@ class NestedSetDataClassRepository extends DataClassRepository
 
                 $properties = [];
 
-                $properties[] = new DataClassProperty(
+                $properties[] = new UpdateProperty(
                     $leftValueVariable, new OperationConditionVariable(
                         $leftValueVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
-                $properties[] = new DataClassProperty(
+                $properties[] = new UpdateProperty(
                     $rightValueVariable, new OperationConditionVariable(
                         $rightValueVariable, OperationConditionVariable::ADDITION, new StaticConditionVariable($shift)
                     )
                 );
 
-                if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
+                if (!$this->updates(get_class($nestedSet), new UpdateProperties($properties), $updateCondition))
                 {
                     return false;
                 }
@@ -797,7 +798,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         $leftValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE);
         $rightValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE);
 
-        $rightValueDataClassProperty = new DataClassProperty(
+        $rightValueDataClassProperty = new UpdateProperty(
             $rightValueVariable, new OperationConditionVariable(
                 $rightValueVariable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
             )
@@ -805,13 +806,13 @@ class NestedSetDataClassRepository extends DataClassRepository
 
         $properties = [];
         $properties[] = $rightValueDataClassProperty;
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $leftValueVariable, new OperationConditionVariable(
                 $leftValueVariable, OperationConditionVariable::MINUS, new StaticConditionVariable($delta)
             )
         );
 
-        if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
+        if (!$this->updates(get_class($nestedSet), new UpdateProperties($properties), $updateCondition))
         {
             return false;
         }
@@ -849,7 +850,7 @@ class NestedSetDataClassRepository extends DataClassRepository
         $properties = [];
         $properties[] = $rightValueDataClassProperty;
 
-        if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
+        if (!$this->updates(get_class($nestedSet), new RetrieveProperties($properties), $updateCondition))
         {
             return false;
         }
@@ -909,14 +910,14 @@ class NestedSetDataClassRepository extends DataClassRepository
         $leftValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE);
 
         $properties = [];
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $leftValueVariable, new OperationConditionVariable(
                 $leftValueVariable, OperationConditionVariable::ADDITION,
                 new StaticConditionVariable($numberOfElements * 2)
             )
         );
 
-        if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
+        if (!$this->updates(get_class($nestedSet), new UpdateProperties($properties), $updateCondition))
         {
             return false;
         }
@@ -946,14 +947,14 @@ class NestedSetDataClassRepository extends DataClassRepository
         $rightValueVariable = new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE);
 
         $properties = [];
-        $properties[] = new DataClassProperty(
+        $properties[] = new UpdateProperty(
             $rightValueVariable, new OperationConditionVariable(
                 $rightValueVariable, OperationConditionVariable::ADDITION,
                 new StaticConditionVariable($numberOfElements * 2)
             )
         );
 
-        if (!$this->updates(get_class($nestedSet), new DataClassProperties($properties), $updateCondition))
+        if (!$this->updates(get_class($nestedSet), new UpdateProperties($properties), $updateCondition))
         {
             return false;
         }

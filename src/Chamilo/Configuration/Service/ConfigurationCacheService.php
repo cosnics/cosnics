@@ -6,9 +6,9 @@ use Chamilo\Configuration\Storage\DataClass\Registration;
 use Chamilo\Configuration\Storage\DataClass\Setting;
 use Chamilo\Libraries\Cache\Doctrine\Service\DoctrinePhpFileCacheService;
 use Chamilo\Libraries\File\Path;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Utilities\StringUtilities;
 
@@ -39,7 +39,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         $languages = [];
         $languageObjects = DataManager::records(
             Language::class, new RecordRetrievesParameters(
-                new DataClassProperties(array(new PropertiesConditionVariable(Language::class)))
+                new RetrieveProperties(array(new PropertiesConditionVariable(Language::class)))
             )
         );
 
@@ -60,7 +60,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
         $registrations = [];
         $registrationsObjects = DataManager::records(
             Registration::class, new RecordRetrievesParameters(
-                new DataClassProperties(array(new PropertiesConditionVariable(Registration::class)))
+                new RetrieveProperties(array(new PropertiesConditionVariable(Registration::class)))
             )
         );
 
@@ -102,7 +102,7 @@ class ConfigurationCacheService extends DoctrinePhpFileCacheService
 
         $settingObjects = DataManager::records(
             Setting::class, new RecordRetrievesParameters(
-                new DataClassProperties(array(new PropertiesConditionVariable(Setting::class)))
+                new RetrieveProperties(array(new PropertiesConditionVariable(Setting::class)))
             )
         );
 

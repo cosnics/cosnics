@@ -3,7 +3,6 @@ namespace Chamilo\Application\Portfolio\Favourite\Storage\Repository;
 
 use Chamilo\Application\Portfolio\Favourite\Storage\DataClass\UserFavourite;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
@@ -15,6 +14,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -81,7 +81,7 @@ class FavouriteRepository
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_LASTNAME);
         $properties[] = new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE);
 
-        $dataClassProperties = new DataClassProperties($properties);
+        $retrieveProperties = new RetrieveProperties($properties);
 
         if (!$orderProperty)
         {
@@ -92,7 +92,7 @@ class FavouriteRepository
         }
 
         $parameters = new RecordRetrievesParameters(
-            $dataClassProperties, $this->getUserFavouriteCondition($sourceUser, $condition), $count, $offset,
+            $retrieveProperties, $this->getUserFavouriteCondition($sourceUser, $condition), $count, $offset,
             $orderProperty, $this->getFavouriteUsersJoins()
         );
 

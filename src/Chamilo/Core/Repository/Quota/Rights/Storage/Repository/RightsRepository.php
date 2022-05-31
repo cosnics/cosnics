@@ -5,7 +5,6 @@ use Chamilo\Core\Group\Storage\DataClass\Group;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocation;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRight;
 use Chamilo\Core\Repository\Quota\Rights\Storage\DataClass\RightsLocationEntityRightGroup;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
@@ -16,6 +15,7 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
@@ -116,30 +116,30 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
      */
     public function findRightsLocationEntityRightGroupsWithEntityAndGroupRecords()
     {
-        $dataClassProperties = new DataClassProperties();
+        $retrieveProperties = new RetrieveProperties();
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new PropertyConditionVariable(
                 RightsLocationEntityRightGroup::class, RightsLocationEntityRightGroup::PROPERTY_ID
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new PropertyConditionVariable(
                 RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_ID
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new PropertyConditionVariable(
                 RightsLocationEntityRight::class, RightsLocationEntityRight::PROPERTY_ENTITY_TYPE
             )
         );
 
-        $dataClassProperties->add(
+        $retrieveProperties->add(
             new PropertyConditionVariable(Group::class, Group::PROPERTY_ID, self::PROPERTY_GROUP_ID)
         );
-        $dataClassProperties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
+        $retrieveProperties->add(new PropertyConditionVariable(Group::class, Group::PROPERTY_NAME));
 
         $joins = new Joins();
 
@@ -170,7 +170,7 @@ class RightsRepository extends \Chamilo\Libraries\Rights\Storage\Repository\Righ
 
         return $this->getDataClassRepository()->records(
             RightsLocationEntityRightGroup::class,
-            new RecordRetrievesParameters($dataClassProperties, null, null, null, null, $joins)
+            new RecordRetrievesParameters($retrieveProperties, null, null, null, null, $joins)
         );
     }
 

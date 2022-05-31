@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Service;
 
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Database\DataClassDatabase;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryBuilder;
 use Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator;
@@ -12,6 +11,7 @@ use Chamilo\Libraries\Storage\Query\GroupBy;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 
 /**
  *
@@ -41,7 +41,7 @@ class ParametersProcessor
         $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
         $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
         $this->processDataClassProperties(
-            $dataClassDatabase, $queryBuilder, $parameters->getDataClassProperties()
+            $dataClassDatabase, $queryBuilder, $parameters->getRetrieveProperties()
         );
         $this->processOrderByCollection($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
         $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
@@ -74,10 +74,10 @@ class ParametersProcessor
     }
 
     protected function processDataClassProperties(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?DataClassProperties $properties = null
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, ?RetrieveProperties $properties = null
     ): QueryBuilder
     {
-        if ($properties instanceof DataClassProperties)
+        if ($properties instanceof RetrieveProperties)
         {
             foreach ($properties->get() as $conditionVariable)
             {

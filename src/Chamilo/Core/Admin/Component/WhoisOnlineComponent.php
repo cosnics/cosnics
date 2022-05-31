@@ -12,15 +12,15 @@ use Chamilo\Libraries\File\Redirect;
 use Chamilo\Libraries\Format\Structure\BreadcrumbTrail;
 use Chamilo\Libraries\Format\Table\Interfaces\TableSupport;
 use Chamilo\Libraries\Platform\Session\Request;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\DataManager\DataManager;
 use Chamilo\Libraries\Storage\Parameters\DataClassDistinctParameters;
+use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
-use Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
+use Chamilo\Libraries\Translation\Translation;
 use Exception;
 
 /**
@@ -102,7 +102,7 @@ class WhoisOnlineComponent extends Manager implements TableSupport
                 new PropertyConditionVariable(Online::class, Online::PROPERTY_LAST_ACCESS_DATE),
                 ComparisonCondition::GREATER_THAN,
                 new StaticConditionVariable($pastTime)),
-            new DataClassProperties(array(new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID))));
+            new RetrieveProperties(array(new PropertyConditionVariable(Online::class, Online::PROPERTY_USER_ID))));
 
         $userIds = DataManager::distinct(Online::class, $parameters);
 

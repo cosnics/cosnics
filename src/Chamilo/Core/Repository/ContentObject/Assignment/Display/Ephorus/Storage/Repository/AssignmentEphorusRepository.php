@@ -7,8 +7,6 @@ use Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\Data
 use Chamilo\Core\Repository\ContentObject\LearningPath\Storage\Repository\CommonDataClassRepository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
-use Doctrine\Common\Collections\ArrayCollection;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
@@ -18,7 +16,9 @@ use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @package Chamilo\Core\Repository\ContentObject\Assignment\Display\Ephorus\Storage\Repository
@@ -36,7 +36,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
     {
         $entryClassName = $this->getEntryClassName();
 
-        $properties = new DataClassProperties();
+        $properties = new RetrieveProperties();
 
         $properties->add(
             new PropertyConditionVariable(Request::class, Request::PROPERTY_ID, Request::PROPERTY_REQUEST_ID)
@@ -66,7 +66,7 @@ abstract class AssignmentEphorusRepository extends CommonDataClassRepository
         $joins = $this->getAssignmentRequestJoins();
 
         $recordRetrievesParameters->setJoins($joins);
-        $recordRetrievesParameters->setDataClassProperties($properties);
+        $recordRetrievesParameters->setRetrieveProperties($properties);
 
         $records = $this->dataClassRepository->records($entryClassName, $recordRetrievesParameters);
 

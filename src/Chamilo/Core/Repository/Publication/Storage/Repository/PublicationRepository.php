@@ -5,12 +5,12 @@ use Chamilo\Core\Repository\Publication\Storage\DataClass\Publication;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataManager;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\PropertiesConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use DomainException;
@@ -67,7 +67,7 @@ class PublicationRepository
         $parameters = new DataClassCountParameters(
             $baseCountParameters->getCondition(), $this->getPublicationJoins(
             $baseCountParameters->getJoins(), $publicationClassName, $contentObjectTypeClassName
-        ), $baseCountParameters->getDataClassProperties()
+        ), $baseCountParameters->getRetrieveProperties()
         );
 
         return DataManager::count($publicationClassName, $parameters);
@@ -162,7 +162,7 @@ class PublicationRepository
             }
         }
 
-        $properties = new DataClassProperties($propertiesArray);
+        $properties = new RetrieveProperties($propertiesArray);
 
         $properties->merge($baseRecordRetrievesParameters->get_properties());
 

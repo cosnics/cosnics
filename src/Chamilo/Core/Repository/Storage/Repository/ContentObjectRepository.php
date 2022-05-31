@@ -4,7 +4,6 @@ namespace Chamilo\Core\Repository\Storage\Repository;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObject;
 use Chamilo\Core\Repository\Storage\DataClass\ContentObjectAttachment;
 use Chamilo\Core\User\Storage\DataClass\User;
-use Chamilo\Libraries\Storage\DataClass\Property\DataClassProperties;
 use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassParameters;
@@ -20,6 +19,7 @@ use Chamilo\Libraries\Storage\Query\Join;
 use Chamilo\Libraries\Storage\Query\Joins;
 use Chamilo\Libraries\Storage\Query\OrderBy;
 use Chamilo\Libraries\Storage\Query\OrderProperty;
+use Chamilo\Libraries\Storage\Query\RetrieveProperties;
 use Chamilo\Libraries\Storage\Query\Variable\FunctionConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
@@ -196,7 +196,7 @@ class ContentObjectRepository
             return 0;
         }
 
-        $dataClassProperties = new DataClassProperties(
+        $retrieveProperties = new RetrieveProperties(
             [
                 new FunctionConditionVariable(
                     FunctionConditionVariable::SUM,
@@ -208,7 +208,7 @@ class ContentObjectRepository
 
         if ($contentObjectType::isExtended())
         {
-            $joins = (new Joins(
+            $joins = new Joins(
                 [
                     new Join(
                         ContentObject::class, new EqualityCondition(
@@ -219,7 +219,7 @@ class ContentObjectRepository
                         )
                     )
                 ]
-            ));
+            );
         }
         else
         {
@@ -227,7 +227,7 @@ class ContentObjectRepository
         }
 
         $usedStorageSpaceRecord = $this->getDataClassRepository()->record(
-            $contentObjectType, new RecordRetrieveParameters($dataClassProperties, $condition, null, $joins)
+            $contentObjectType, new RecordRetrieveParameters($retrieveProperties, $condition, null, $joins)
         );
 
         return $usedStorageSpaceRecord[ContentObjectRepository::PROPERTY_USED_STORAGE_SPACE];
