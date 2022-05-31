@@ -55,14 +55,6 @@ abstract class Tracker extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      *
      * @return Event
      */

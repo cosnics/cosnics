@@ -88,14 +88,6 @@ abstract class Event extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Get the default properties
      *
      * @return array The property names.

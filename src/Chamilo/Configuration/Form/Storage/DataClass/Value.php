@@ -28,14 +28,6 @@ class Value extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Get the default properties of all user course categories.
      *
      * @return array The property names.

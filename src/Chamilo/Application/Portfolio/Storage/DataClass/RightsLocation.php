@@ -85,15 +85,6 @@ class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
 
     /**
      *
-     * @return DataManager
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
-     *
      * @return \repository\ComplexContentObjectPathNode
      */
     public function get_node()

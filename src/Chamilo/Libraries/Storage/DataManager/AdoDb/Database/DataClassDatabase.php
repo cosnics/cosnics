@@ -498,11 +498,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
-    public function translateCondition(Condition $condition, bool $enableAliasing = true): string
-    {
-        return $this->getConditionPartTranslatorService()->translate($this, $condition, $enableAliasing);
-    }
-
     /**
      * @param string[] $propertiesToUpdate
      */

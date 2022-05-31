@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
-use Exception;
+use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
 
 /**
  *
@@ -11,42 +13,29 @@ use Exception;
  */
 class DistinctConditionVariableTranslator extends ConditionVariableTranslator
 {
-
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable
-     */
-    public function getConditionVariable()
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getConditionVariable();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function translate(bool $enableAliasing = true)
-    {
-        $distinctConditionVariable = $this->getConditionVariable();
-
-        if (!$distinctConditionVariable->hasConditionVariables())
-        {
-            throw new Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
-        }
-
         $strings = [];
 
         $strings[] = 'DISTINCT';
 
         $distinctStrings = [];
 
-        foreach ($distinctConditionVariable->getConditionVariables() as $conditionVariable)
+        if ($distinctConditionVariable->hasConditionVariables())
         {
-            $distinctStrings[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $conditionVariable, $enableAliasing
-            );
+            foreach ($distinctConditionVariable->get() as $conditionVariable)
+            {
+                $distinctStrings[] = $conditionPartTranslatorService->translate(
+                    $dataClassDatabase, $conditionVariable, $enableAliasing
+                );
+            }
+        }
+        else
+        {
+            $strings[] = '*';
         }
 
         $strings[] = implode(', ', $distinctStrings);

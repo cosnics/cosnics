@@ -72,8 +72,6 @@ interface DataClassDatabaseInterface
      */
     public function transactional(callable $function);
 
-    public function translateCondition(Condition $condition, bool $enableAliasing = true): string;
-
     /**
      * @param string[] $propertiesToUpdate
      */

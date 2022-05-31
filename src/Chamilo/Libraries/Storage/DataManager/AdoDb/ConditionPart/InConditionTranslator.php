@@ -1,8 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\Condition\InCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
-use InvalidArgumentException;
 
 /**
  *
@@ -13,54 +15,26 @@ use InvalidArgumentException;
 class InConditionTranslator extends ConditionTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Condition\InCondition
-     */
-    public function getCondition()
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        InCondition $inCondition, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getCondition();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
-    {
-        $values = $this->getCondition()->get_values();
-
-        if (!is_array($values))
-        {
-            if (is_scalar($values))
-            {
-                $values = array($values);
-            }
-            elseif (is_null($values))
-            {
-                $values = [];
-            }
-            else
-            {
-                throw new InvalidArgumentException(
-                    'An InCondition only accepts an array or a scalar as input for the values'
-                );
-            }
-        }
+        $values = $inCondition->getValues();
 
         if (count($values) > 0)
         {
             $where_clause = [];
 
-            $where_clause[] = $this->getConditionPartTranslatorService()->translate(
-                    $this->getDataClassDatabase(), $this->getCondition()->get_name(), $enableAliasing
+            $where_clause[] = $conditionPartTranslatorService->translate(
+                    $dataClassDatabase, $inCondition->getConditionVariable(), $enableAliasing
                 ) . ' IN (';
 
             $placeholders = [];
 
             foreach ($values as $value)
             {
-                $placeholders[] = $this->getDataClassDatabase()->quote($value);
+                $placeholders[] = $dataClassDatabase->quote($value);
             }
 
             $where_clause[] = implode(',', $placeholders);

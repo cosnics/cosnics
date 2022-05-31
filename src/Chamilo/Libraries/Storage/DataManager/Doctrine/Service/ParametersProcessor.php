@@ -33,6 +33,24 @@ class ParametersProcessor
         $this->storageAliasGenerator = $storageAliasGenerator;
     }
 
+    public function run(
+        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassParameters $parameters,
+        string $dataClassName
+    ): QueryBuilder
+    {
+        $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
+        $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
+        $this->processDataClassProperties(
+            $dataClassDatabase, $queryBuilder, $parameters->getRetrieveProperties()
+        );
+        $this->processOrderByCollection($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
+        $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
+        $this->processHavingCondition($dataClassDatabase, $queryBuilder, $parameters->getHavingCondition());
+        $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
+
+        return $queryBuilder;
+    }
+
     public function getConditionPartTranslatorService(): ConditionPartTranslatorService
     {
         return $this->conditionPartTranslatorService;
@@ -169,24 +187,6 @@ class ParametersProcessor
                 );
             }
         }
-
-        return $queryBuilder;
-    }
-
-    public function run(
-        DataClassDatabase $dataClassDatabase, QueryBuilder $queryBuilder, DataClassParameters $parameters,
-        string $dataClassName
-    ): QueryBuilder
-    {
-        $this->processCondition($dataClassDatabase, $queryBuilder, $parameters->getCondition());
-        $this->processJoins($dataClassDatabase, $queryBuilder, $dataClassName, $parameters->getJoins());
-        $this->processDataClassProperties(
-            $dataClassDatabase, $queryBuilder, $parameters->getRetrieveProperties()
-        );
-        $this->processOrderByCollection($dataClassDatabase, $queryBuilder, $parameters->getOrderBy());
-        $this->processGroupBy($dataClassDatabase, $queryBuilder, $parameters->getGroupBy());
-        $this->processHavingCondition($dataClassDatabase, $queryBuilder, $parameters->getHavingCondition());
-        $this->processLimit($queryBuilder, $parameters->getCount(), $parameters->getOffset());
 
         return $queryBuilder;
     }

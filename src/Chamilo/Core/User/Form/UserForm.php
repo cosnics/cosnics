@@ -37,17 +37,15 @@ class UserForm extends FormValidator
 
     const TYPE_EDIT = 2;
 
-    private $parent;
-
-    private $user;
+    private $form_type;
 
     private $form_user;
 
+    private $parent;
+
     private $unencryptedpass;
 
-    private $adminDM;
-
-    private $form_type;
+    private $user;
 
     /**
      * Creates a new UserForm Used by the admin to create/update a user
@@ -57,7 +55,6 @@ class UserForm extends FormValidator
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
-        $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
         $this->user = $user;
         $this->form_user = $form_user;
 

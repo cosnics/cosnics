@@ -71,11 +71,6 @@ class ForumPostAttachment extends DataClass
         return $this->content_object;
     }
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * Get the default properties of all content object attachments.
      *

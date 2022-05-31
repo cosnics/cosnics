@@ -70,8 +70,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
-
-            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
+            $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
             $record = $result->fetchNumeric();
@@ -97,8 +96,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
-
-            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
+            $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $result = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
@@ -171,8 +169,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
-
-            $queryBuilder = $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
+            $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
@@ -358,10 +355,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
-
-            $queryBuilder = $this->getParametersProcessor()->run(
-                $this, $queryBuilder, $parameters, $dataClassName
-            );
+            $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $sqlQuery = $queryBuilder->getSQL();
 
@@ -394,9 +388,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
             $queryBuilder = $this->getConnection()->createQueryBuilder();
 
             $this->handleQueryBuilderFrom($queryBuilder, $dataClassName);
-            $this->getParametersProcessor()->run(
-                $this, $queryBuilder, $parameters, $dataClassName
-            );
+            $this->getParametersProcessor()->run($this, $queryBuilder, $parameters, $dataClassName);
 
             $statement = $this->getConnection()->executeQuery($queryBuilder->getSQL());
 
@@ -450,11 +442,6 @@ class DataClassDatabase implements DataClassDatabaseInterface
         {
             return false;
         }
-    }
-
-    public function translateCondition(Condition $condition, bool $enableAliasing = true): string
-    {
-        return $this->getConditionPartTranslatorService()->translate($this, $condition, $enableAliasing);
     }
 
     /**

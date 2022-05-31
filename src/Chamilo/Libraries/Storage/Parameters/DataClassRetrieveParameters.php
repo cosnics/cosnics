@@ -19,20 +19,4 @@ class DataClassRetrieveParameters extends DataClassBasicRetrieveParameters
     {
         parent::__construct($condition, $joins, null, $orderBy);
     }
-
-    /**
-     * @deprecated Use getOrderBy() now
-     */
-    public function get_order_by(): ?OrderBy
-    {
-        return $this->getOrderBy();
-    }
-
-    /**
-     * @deprecated Use setOrderBy() now
-     */
-    public function set_order_by(?OrderBy $orderBy = null)
-    {
-        $this->setOrderBy($orderBy);
-    }
 }

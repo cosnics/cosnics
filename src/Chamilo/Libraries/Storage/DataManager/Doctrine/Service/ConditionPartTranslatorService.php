@@ -129,26 +129,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->caseConditionVariableTranslator;
     }
 
-    public function setCaseConditionVariableTranslator(CaseConditionVariableTranslator $caseConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->caseConditionVariableTranslator = $caseConditionVariableTranslator;
-
-        return $this;
-    }
-
     public function getCaseElementConditionVariableTranslator(): CaseElementConditionVariableTranslator
     {
         return $this->caseElementConditionVariableTranslator;
-    }
-
-    public function setCaseElementConditionVariableTranslator(
-        CaseElementConditionVariableTranslator $caseElementConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->caseElementConditionVariableTranslator = $caseElementConditionVariableTranslator;
-
-        return $this;
     }
 
     public function getComparisonConditionTranslator(): ComparisonConditionTranslator
@@ -156,24 +139,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->comparisonConditionTranslator;
     }
 
-    public function setComparisonConditionTranslator(ComparisonConditionTranslator $comparisonConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->comparisonConditionTranslator = $comparisonConditionTranslator;
-
-        return $this;
-    }
-
     public function getConditionPartCache(): ConditionPartCache
     {
         return $this->conditionPartCache;
-    }
-
-    public function setConditionPartCache(ConditionPartCache $conditionPartCache): ConditionPartTranslatorService
-    {
-        $this->conditionPartCache = $conditionPartCache;
-
-        return $this;
     }
 
     public function getDateFormatConditionVariableTranslator(): DateFormatConditionVariableTranslator
@@ -181,27 +149,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->dateFormatConditionVariableTranslator;
     }
 
-    public function setDateFormatConditionVariableTranslator(
-        DateFormatConditionVariableTranslator $dateFormatConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->dateFormatConditionVariableTranslator = $dateFormatConditionVariableTranslator;
-
-        return $this;
-    }
-
     public function getDistinctConditionVariableTranslator(): DistinctConditionVariableTranslator
     {
         return $this->distinctConditionVariableTranslator;
-    }
-
-    public function setDistinctConditionVariableTranslator(
-        DistinctConditionVariableTranslator $distinctConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->distinctConditionVariableTranslator = $distinctConditionVariableTranslator;
-
-        return $this;
     }
 
     public function getFunctionConditionVariableTranslator(): FunctionConditionVariableTranslator
@@ -209,26 +159,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->functionConditionVariableTranslator;
     }
 
-    public function setFunctionConditionVariableTranslator(
-        FunctionConditionVariableTranslator $functionConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->functionConditionVariableTranslator = $functionConditionVariableTranslator;
-
-        return $this;
-    }
-
     public function getInConditionTranslator(): InConditionTranslator
     {
         return $this->inConditionTranslator;
-    }
-
-    public function setInConditionTranslator(InConditionTranslator $inConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->inConditionTranslator = $inConditionTranslator;
-
-        return $this;
     }
 
     public function getMultipleAggregateConditionTranslator(): MultipleAggregateConditionTranslator
@@ -236,26 +169,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->multipleAggregateConditionTranslator;
     }
 
-    public function setMultipleAggregateConditionTranslator(
-        MultipleAggregateConditionTranslator $multipleAggregateConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->multipleAggregateConditionTranslator = $multipleAggregateConditionTranslator;
-
-        return $this;
-    }
-
     public function getNotConditionTranslator(): NotConditionTranslator
     {
         return $this->notConditionTranslator;
-    }
-
-    public function setNotConditionTranslator(NotConditionTranslator $notConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->notConditionTranslator = $notConditionTranslator;
-
-        return $this;
     }
 
     public function getOperationConditionVariableTranslator(): OperationConditionVariableTranslator
@@ -263,26 +179,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->operationConditionVariableTranslator;
     }
 
-    public function setOperationConditionVariableTranslator(
-        OperationConditionVariableTranslator $operationConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->operationConditionVariableTranslator = $operationConditionVariableTranslator;
-
-        return $this;
-    }
-
     public function getPatternMatchConditionTranslator(): PatternMatchConditionTranslator
     {
         return $this->patternMatchConditionTranslator;
-    }
-
-    public function setPatternMatchConditionTranslator(PatternMatchConditionTranslator $patternMatchConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->patternMatchConditionTranslator = $patternMatchConditionTranslator;
-
-        return $this;
     }
 
     public function getPropertiesConditionVariableTranslator(): PropertiesConditionVariableTranslator
@@ -290,27 +189,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->propertiesConditionVariableTranslator;
     }
 
-    public function setPropertiesConditionVariableTranslator(
-        PropertiesConditionVariableTranslator $propertiesConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->propertiesConditionVariableTranslator = $propertiesConditionVariableTranslator;
-
-        return $this;
-    }
-
     public function getPropertyConditionVariableTranslator(): PropertyConditionVariableTranslator
     {
         return $this->propertyConditionVariableTranslator;
-    }
-
-    public function setPropertyConditionVariableTranslator(
-        PropertyConditionVariableTranslator $propertyConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->propertyConditionVariableTranslator = $propertyConditionVariableTranslator;
-
-        return $this;
     }
 
     public function getRegularExpressionConditionTranslator(): RegularExpressionConditionTranslator
@@ -318,27 +199,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->regularExpressionConditionTranslator;
     }
 
-    public function setRegularExpressionConditionTranslator(
-        RegularExpressionConditionTranslator $regularExpressionConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->regularExpressionConditionTranslator = $regularExpressionConditionTranslator;
-
-        return $this;
-    }
-
     public function getStaticConditionVariableTranslator(): StaticConditionVariableTranslator
     {
         return $this->staticConditionVariableTranslator;
-    }
-
-    public function setStaticConditionVariableTranslator(
-        StaticConditionVariableTranslator $staticConditionVariableTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->staticConditionVariableTranslator = $staticConditionVariableTranslator;
-
-        return $this;
     }
 
     public function getSubselectConditionTranslator(): SubselectConditionTranslator
@@ -346,24 +209,9 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         return $this->subselectConditionTranslator;
     }
 
-    public function setSubselectConditionTranslator(SubselectConditionTranslator $subselectConditionTranslator
-    ): ConditionPartTranslatorService
-    {
-        $this->subselectConditionTranslator = $subselectConditionTranslator;
-
-        return $this;
-    }
-
     public function isQueryCacheEnabled(): bool
     {
         return $this->queryCacheEnabled;
-    }
-
-    public function setQueryCacheEnabled(bool $queryCacheEnabled): ConditionPartTranslatorService
-    {
-        $this->queryCacheEnabled = $queryCacheEnabled;
-
-        return $this;
     }
 
     public function translate(
@@ -388,10 +236,6 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     * @throws \Exception
-     */
     private function translateConditionPart(
         DataClassDatabaseInterface $dataClassDatabase, ConditionPart $conditionPart, ?bool $enableAliasing
     ): string
@@ -412,9 +256,7 @@ class ConditionPartTranslatorService implements ConditionPartTranslatorServiceIn
 
         if ($conditionPart instanceof StaticConditionVariable)
         {
-            return $this->getStaticConditionVariableTranslator()->translate(
-                $dataClassDatabase, $conditionPart, $enableAliasing
-            );
+            return $this->getStaticConditionVariableTranslator()->translate($dataClassDatabase, $conditionPart);
         }
 
         if ($conditionPart instanceof MultipleAggregateCondition)

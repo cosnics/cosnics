@@ -5,7 +5,6 @@ use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslat
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\DistinctConditionVariable;
-use Exception;
 
 /**
  *
@@ -19,22 +18,24 @@ class DistinctConditionVariableTranslator extends ConditionVariableTranslator
         DistinctConditionVariable $distinctConditionVariable, ?bool $enableAliasing = true
     ): string
     {
-        if (!$distinctConditionVariable->hasConditionVariables())
-        {
-            throw new Exception('A DistinctConditionVariable needs to have one or more ConditionVariables');
-        }
-
         $strings = [];
 
         $strings[] = 'DISTINCT';
 
         $distinctStrings = [];
 
-        foreach ($distinctConditionVariable->getConditionVariables() as $conditionVariable)
+        if ($distinctConditionVariable->hasConditionVariables())
         {
-            $distinctStrings[] = $conditionPartTranslatorService->translate(
-                $dataClassDatabase, $conditionVariable, $enableAliasing
-            );
+            foreach ($distinctConditionVariable->get() as $conditionVariable)
+            {
+                $distinctStrings[] = $conditionPartTranslatorService->translate(
+                    $dataClassDatabase, $conditionVariable, $enableAliasing
+                );
+            }
+        }
+        else
+        {
+            $strings[] = '*';
         }
 
         $strings[] = implode(', ', $distinctStrings);

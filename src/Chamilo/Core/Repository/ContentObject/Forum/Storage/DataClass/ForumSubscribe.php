@@ -48,16 +48,6 @@ class ForumSubscribe extends DataClass
     }
 
     /**
-     * Inherited Returns an instance of the DataManager.
-     * 
-     * @return DataManager An instance of the DataManager.
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the id of the forum that is subscribed.
      * 
      * @return int Returns the id of the forum that is subscribed.

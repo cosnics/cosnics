@@ -1,14 +1,14 @@
 <?php
-namespace Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart;
+namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
 use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\MultipleAggregateCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
  *
- * @package Chamilo\Libraries\Storage\DataManager\Doctrine\ConditionPart
+ * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
  * @author Magali Gillard <magali.gillard@ehb.be>
  */

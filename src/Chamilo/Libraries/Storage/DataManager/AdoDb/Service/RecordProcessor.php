@@ -14,41 +14,38 @@ class RecordProcessor
      * @param string $key
      * @param string[] $typeMap
      *
-     * @return NULL|string
+     * @return ?string
      */
-    protected function determineFieldTypeFromMap($key, $typeMap = [])
+    protected function determineFieldTypeFromMap(string $key, array $typeMap = []): ?string
     {
-        return isset($typeMap[$key]) ? $typeMap[$key] : null;
+        return $typeMap[$key] ?? null;
     }
 
     /**
-     *
      * @param mixed $field
-     * @param string $fieldType
+     * @param ?string $fieldType
      *
      * @return mixed
      */
-    protected function processField($field, $fieldType = null)
+    protected function processField($field, ?string $fieldType = null)
     {
         $field = $this->processResource($field);
 
         if ($fieldType)
         {
-            $field = settype($field, $fieldType);
+            settype($field, $fieldType);
         }
 
         return $field;
     }
 
     /**
-     * Processes a given record by transforming to the correct type
-     *
      * @param string[] $record
      * @param string[] $typeMap
      *
      * @return string[]
      */
-    public function processRecord($record, $typeMap = [])
+    public function processRecord(array $record, array $typeMap = []): array
     {
         foreach ($record as $key => &$field)
         {
@@ -59,12 +56,9 @@ class RecordProcessor
     }
 
     /**
-     *
      * @param mixed $field
-     *
-     * @return string
      */
-    protected function processResource($field)
+    protected function processResource($field): string
     {
         if (is_resource($field))
         {

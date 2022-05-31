@@ -16,8 +16,7 @@ class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
     public function translate(
-        DataClassDatabaseInterface $dataClassDatabase, StaticConditionVariable $staticConditionVariable,
-        ?bool $enableAliasing = true
+        DataClassDatabaseInterface $dataClassDatabase, StaticConditionVariable $staticConditionVariable
     ): string
     {
         $value = $staticConditionVariable->getValue();

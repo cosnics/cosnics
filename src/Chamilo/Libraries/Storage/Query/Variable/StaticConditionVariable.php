@@ -14,6 +14,9 @@ class StaticConditionVariable extends ConditionVariable
 
     private bool $quote;
 
+    /**
+     * @var mixed $value
+     */
     private $value;
 
     public function __construct($value, ?bool $quote = true)
@@ -44,11 +47,17 @@ class StaticConditionVariable extends ConditionVariable
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getValue()
     {
         return $this->value;
     }
 
+    /**
+     * @param mixed $value
+     */
     public function setValue($value): StaticConditionVariable
     {
         $this->value = $value;

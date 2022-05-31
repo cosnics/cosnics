@@ -14,10 +14,6 @@ use Chamilo\Libraries\Storage\Query\ConditionTranslator;
  */
 class SubselectConditionTranslator extends ConditionTranslator
 {
-
-    /**
-     * @throws \ReflectionException
-     */
     public function translate(
         ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
         SubselectCondition $subselectCondition, ?bool $enableAliasing = true
@@ -40,12 +36,9 @@ class SubselectConditionTranslator extends ConditionTranslator
 
         $class = $subselectCondition->getSubselectConditionVariable()->getDataClassName();
 
-        $alias = $this->getStorageAliasGenerator()->getDataClassAlias($class);
-
         $string[] = $class::getTableName();
-
         $string[] = 'AS';
-        $string[] = $alias;
+        $string[] = $this->getStorageAliasGenerator()->getDataClassAlias($class);
 
         if ($subselectCondition->getCondition())
         {

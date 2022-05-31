@@ -1,6 +1,7 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Factory;
 
+use ADOConnection;
 use Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName;
 use Chamilo\Libraries\Storage\Exception\ConnectionException;
 use Exception;
@@ -15,36 +16,22 @@ require_once realpath(__DIR__ . '/../../../../../../../') . '/vendor/adodb/adodb
 class ConnectionFactory
 {
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName
-     */
-    private $dataSourceName;
+    private DataSourceName $dataSourceName;
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName $dataSourceName
-     */
     public function __construct(DataSourceName $dataSourceName)
     {
         $this->dataSourceName = $dataSourceName;
     }
 
-    /**
-     *
-     * @return \ADOConnection
-     */
-    protected function getAdoConnection()
+    protected function getAdoConnection(): ADOConnection
     {
         return adoNewConnection('pdo');
     }
 
     /**
-     *
-     * @return \ADOConnection
      * @throws \Chamilo\Libraries\Storage\Exception\ConnectionException
      */
-    public function getConnection()
+    public function getConnection(): ADOConnection
     {
         $dataSourceName = $this->getDataSourceName();
         $connection = $this->getAdoConnection();
@@ -67,21 +54,15 @@ class ConnectionFactory
         }
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName
-     */
-    public function getDataSourceName()
+    public function getDataSourceName(): DataSourceName
     {
         return $this->dataSourceName;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\DataManager\AdoDb\DataSourceName $dataSourceName
-     */
-    public function setDataSourceName($dataSourceName)
+    public function setDataSourceName(DataSourceName $dataSourceName): ConnectionFactory
     {
         $this->dataSourceName = $dataSourceName;
+
+        return $this;
     }
 }

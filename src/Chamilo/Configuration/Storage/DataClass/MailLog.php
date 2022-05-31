@@ -156,15 +156,6 @@ class MailLog extends DataClass
     }
 
     /**
-     *
-     * @return \configuration\storage\DataManager
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * @return string
      */
     public static function getTableName(): string

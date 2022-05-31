@@ -50,14 +50,6 @@ class Publication extends DataClass
         return $this->getDefaultProperty(self::PROPERTY_CONTENT_OBJECT_ID);
     }
 
-    /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
     {
         return parent::getDefaultPropertyNames(

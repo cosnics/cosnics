@@ -261,10 +261,10 @@ class Configuration
         );
 
         $connection_parameters = array(
-            'user' => $data_source_name->get_username(),
-            'password' => $data_source_name->get_password(),
-            'host' => $data_source_name->get_host(),
-            'driverClass' => $data_source_name->get_driver(true)
+            'user' => $data_source_name->getUsername(),
+            'password' => $data_source_name->getPassword(),
+            'host' => $data_source_name->getHost(),
+            'driverClass' => $data_source_name->getDriver(true)
         );
 
         try

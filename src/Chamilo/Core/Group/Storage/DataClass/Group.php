@@ -313,14 +313,6 @@ class Group extends NestedSet
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the database quota for users in this group.
      *
      * @return Int the database quota

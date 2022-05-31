@@ -2,6 +2,7 @@
 namespace Chamilo\Libraries\Storage\Query\Condition;
 
 use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
+use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 
 /**
  * This class represents a subselect condition which allows you to pass the result of a specific query to an in
@@ -18,10 +19,10 @@ class SubselectCondition extends Condition
 
     private ConditionVariable $conditionVariable;
 
-    private ConditionVariable $subselectConditionVariable;
+    private PropertyConditionVariable $subselectConditionVariable;
 
     public function __construct(
-        ConditionVariable $conditionVariable, ConditionVariable $subselectConditionVariable,
+        ConditionVariable $conditionVariable, PropertyConditionVariable $subselectConditionVariable,
         ?Condition $condition = null
     )
     {
@@ -59,7 +60,7 @@ class SubselectCondition extends Condition
         return $hashParts;
     }
 
-    public function getSubselectConditionVariable(): ConditionVariable
+    public function getSubselectConditionVariable(): PropertyConditionVariable
     {
         return $this->subselectConditionVariable;
     }

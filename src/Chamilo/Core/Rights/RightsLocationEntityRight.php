@@ -77,9 +77,4 @@ abstract class RightsLocationEntityRight extends DataClass
     {
         $this->setDefaultProperty(self::PROPERTY_RIGHT_ID, $right_id);
     }
-
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
 }

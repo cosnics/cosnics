@@ -39,14 +39,6 @@ class Setting extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the application of this setting object
      *
      * @return string The setting application

@@ -2,7 +2,6 @@
 namespace Chamilo\Core\User\Form;
 
 use Chamilo\Configuration\Configuration;
-use Chamilo\Core\Admin\Storage\DataManager;
 use Chamilo\Core\Tracking\Storage\DataClass\ChangesTracker;
 use Chamilo\Core\Tracking\Storage\DataClass\Event;
 use Chamilo\Core\User\Manager;
@@ -42,11 +41,9 @@ class AccountForm extends FormValidator
 
     private $parent;
 
-    private $user;
-
     private $unencryptedpass;
 
-    private $adm;
+    private $user;
 
     /**
      * @param string $form_type
@@ -61,7 +58,6 @@ class AccountForm extends FormValidator
         parent::__construct('user_account', self::FORM_METHOD_POST, $action);
 
         $this->user = $user;
-        $this->adm = DataManager::getInstance();
         $this->authenticationValidator = $authenticationValidator;
 
         $this->initializeContainer();
@@ -290,8 +286,13 @@ class AccountForm extends FormValidator
         $configurationConsulter = Configuration::getInstance();
 
         $settings = array(
-            'allow_change_firstname', 'allow_change_lastname', 'allow_change_official_code', 'allow_change_email',
-            'allow_change_username', 'allow_change_user_picture', 'allow_change_password'
+            'allow_change_firstname',
+            'allow_change_lastname',
+            'allow_change_official_code',
+            'allow_change_email',
+            'allow_change_username',
+            'allow_change_user_picture',
+            'allow_change_password'
         );
 
         foreach ($settings as $setting)

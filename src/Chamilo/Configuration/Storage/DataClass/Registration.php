@@ -60,14 +60,6 @@ class Registration extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the type of this registration.
      *
      * @deprecated Use Registration::getType() now

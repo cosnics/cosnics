@@ -10,11 +10,6 @@ use Chamilo\Core\Repository\Instance\Storage\DataManager;
 class RightsLocation extends \Chamilo\Core\Rights\RightsLocation
 {
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      *
      * @return string

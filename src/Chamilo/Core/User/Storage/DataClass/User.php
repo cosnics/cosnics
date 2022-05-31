@@ -188,14 +188,6 @@ class User extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the database quota for this user.
      *
      * @return Int the database quota

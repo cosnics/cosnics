@@ -202,11 +202,6 @@ class CourseGroupGroupRelation extends DataClass
         return $data_set;
     }
 
-    function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * Gets the default properties of this course_group group relation object.
      *

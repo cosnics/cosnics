@@ -48,7 +48,7 @@ class FunctionConditionVariable extends ConditionVariable
         return $this->conditionVariable;
     }
 
-    public function setConditionVariable(ConditionVariable $conditionVariable)
+    public function setConditionVariable(ConditionVariable $conditionVariable): FunctionConditionVariable
     {
         $this->conditionVariable = $conditionVariable;
 

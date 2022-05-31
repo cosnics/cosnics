@@ -6,7 +6,8 @@ use Chamilo\Libraries\Architecture\Traits\ClassContext;
 use Chamilo\Libraries\DependencyInjection\DependencyInjectionContainerBuilder;
 use Chamilo\Libraries\Storage\DataClass\CompositeDataClass;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
-use Chamilo\Libraries\Storage\DataManager\Doctrine\Database;
+use Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository;
+use Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository;
 use Chamilo\Libraries\Storage\Parameters\DataClassCountGroupedParameters;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrieveParameters;
 use Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters;
@@ -224,10 +225,9 @@ class DataManager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
      * @throws \Exception
      */
-    public static function getDataClassRepository()
+    public static function getDataClassRepository(): DataClassRepository
     {
         return self::getService(
             'Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository'
@@ -235,29 +235,9 @@ class DataManager
     }
 
     /**
-     * Uses a singleton pattern and a factory pattern to return the data manager.
-     * The configuration determines which
-     * data manager class is to be instantiated
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Doctrine\Database
-     */
-    public static function getInstance()
-    {
-        if (!isset(self::$instance))
-        {
-            self::$instance = new Database();
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * @param string $serviceName
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository|\Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository
      * @throws \Exception
      */
-    public static function getService($serviceName)
+    public static function getService(string $serviceName)
     {
         return DependencyInjectionContainerBuilder::getInstance()->createContainer()->get(
             $serviceName
@@ -265,10 +245,9 @@ class DataManager
     }
 
     /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\StorageUnitRepository
      * @throws \Exception
      */
-    public static function getStorageUnitRepository()
+    public static function getStorageUnitRepository(): StorageUnitRepository
     {
         return self::getService(
             'Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository'
@@ -470,18 +449,6 @@ class DataManager
     public static function transactional($function)
     {
         return self::getDataClassRepository()->transactional($function);
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Condition\Condition|null $condition
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public static function translateCondition(Condition $condition = null)
-    {
-        return self::getDataClassRepository()->translateCondition($condition);
     }
 
     /**

@@ -31,27 +31,11 @@ class RecordRetrievesParameters extends DataClassRetrievesParameters
     }
 
     /**
-     * @deprecated Use getGroupBy() now
-     */
-    public function get_group_by(): ?GroupBy
-    {
-        return $this->getGroupBy();
-    }
-
-    /**
      * @deprecated Use getRetrieveProperties() now
      */
     public function get_properties(): ?RetrieveProperties
     {
         return $this->getRetrieveProperties();
-    }
-
-    /**
-     * @deprecated Use setGroupBy() now
-     */
-    public function set_group_by(?GroupBy $groupBy = null)
-    {
-        $this->setGroupBy($groupBy);
     }
 
     /**

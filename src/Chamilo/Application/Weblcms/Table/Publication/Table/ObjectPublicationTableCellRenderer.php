@@ -209,8 +209,6 @@ class ObjectPublicationTableCellRenderer extends RecordTableCellRenderer
             $target_entities = [];
         }
 
-        $rdm = \Chamilo\Core\Rights\Storage\DataManager::getInstance();
-
         $target_list = [];
 
         if (array_key_exists(0, $target_entities[0]))

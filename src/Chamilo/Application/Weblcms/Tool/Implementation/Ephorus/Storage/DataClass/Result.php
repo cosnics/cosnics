@@ -35,16 +35,6 @@ class Result extends EphorusDataClass
     }
 
     /**
-     * Returns the datamanager
-     *
-     * @return DataManager @codeCoverageIgnore
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the default properties of this dataclass
      *
      * @return string[] - The property types.

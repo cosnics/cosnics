@@ -225,14 +225,6 @@ class ForumPost extends DataClass implements AttachmentSupport
     }
 
     /**
-     * Inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the default properties of this dataclass
      *
      * @return String[] - The property names.

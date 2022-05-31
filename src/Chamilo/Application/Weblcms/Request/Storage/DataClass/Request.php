@@ -116,16 +116,6 @@ class Request extends DataClass
     }
 
     /**
-     * Get the data class data manager
-     *
-     * @return \libraries\Datamanager
-     */
-    function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the decision of this Request.
      *
      * @return integer The decision.

@@ -110,11 +110,6 @@ class CourseGroup extends NestedTreeNode
         return $this->getDefaultProperty(self::PROPERTY_COURSE_CODE);
     }
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * Get the default properties of all course_groups.
      *

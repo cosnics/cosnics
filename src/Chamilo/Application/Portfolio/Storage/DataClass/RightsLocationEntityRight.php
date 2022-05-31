@@ -15,15 +15,6 @@ class RightsLocationEntityRight extends \Chamilo\Core\Rights\RightsLocationEntit
 
     /**
      *
-     * @return DataManager
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
-     *
      * @return string[]
      */
     public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array

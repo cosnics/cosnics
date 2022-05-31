@@ -19,14 +19,6 @@ abstract class PlatformCategory extends DataClass
     const PROPERTY_PARENT = 'parent_id';
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return null;
-    }
-
-    /**
      * Get the default properties of all contributions.
      *
      * @return array The property titles.

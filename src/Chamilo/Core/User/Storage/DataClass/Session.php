@@ -30,16 +30,6 @@ class Session extends DataClass
     }
 
     /**
-     * Get the data class data manager
-     *
-     * @return \libraries\storage\data_manager\DataManager
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Get the default properties
      *
      * @param string[] $extendedPropertyNames

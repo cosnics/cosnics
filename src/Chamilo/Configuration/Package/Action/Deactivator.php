@@ -17,11 +17,6 @@ use Chamilo\Libraries\Translation\Translation;
 abstract class Deactivator extends Action
 {
 
-    public function get_data_manager()
-    {
-        return $this->data_manager;
-    }
-
     public function run()
     {
         $classNameUtilities = ClassnameUtilities::getInstance();

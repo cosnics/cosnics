@@ -97,7 +97,6 @@ class Hotpotatoes extends ContentObject implements Versionable
 
     public function get_maximum_score()
     {
-        // return WeblcmsDataManager::getInstance()->get_maximum_score($this);
         return 100;
     }
 

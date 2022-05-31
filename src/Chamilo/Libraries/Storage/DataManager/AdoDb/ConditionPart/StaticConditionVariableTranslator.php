@@ -1,7 +1,9 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 
 /**
  *
@@ -13,26 +15,15 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 class StaticConditionVariableTranslator extends ConditionVariableTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable
-     */
-    public function getConditionVariable()
+    public function translate(
+        DataClassDatabaseInterface $dataClassDatabase, StaticConditionVariable $staticConditionVariable
+    ): string
     {
-        return parent::getConditionVariable();
-    }
+        $value = $staticConditionVariable->getValue();
 
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
-    {
-        $value = $this->getConditionVariable()->get_value();
-
-        if ($this->getConditionVariable()->get_quote())
+        if ($staticConditionVariable->getQuote())
         {
-            $value = $this->getDataClassDatabase()->quote($value);
+            $value = $dataClassDatabase->quote($value);
         }
 
         return $value;

@@ -30,16 +30,6 @@ class RightsLocationEntityRightGroup extends DataClass
     private $location_entity_right;
 
     /**
-     * Get the data class data manager
-     *
-     * @return \libraries\Datamanager
-     */
-    function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Get the default properties
      *
      * @param $extendedPropertyNames string[]

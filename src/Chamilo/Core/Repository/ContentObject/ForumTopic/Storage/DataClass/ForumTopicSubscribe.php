@@ -51,17 +51,6 @@ class ForumTopicSubscribe extends DataClass
     }
 
     /**
-     * Gets the data manager of the forum topic subscribe object.
-     * 
-     * @return \core\repository\content_object\forum_topic\DataManager Returns a data manager object for database
-     *         communication
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Gets the id of the forum topic.
      * 
      * @return int The id of the forum topic

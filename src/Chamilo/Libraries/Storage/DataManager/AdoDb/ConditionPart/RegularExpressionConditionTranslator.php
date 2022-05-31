@@ -1,31 +1,27 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
+use Chamilo\Libraries\Storage\Query\Condition\RegularExpressionCondition;
 use Chamilo\Libraries\Storage\Query\ConditionTranslator;
 
 /**
- * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  *
+ * @package Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart
  * @author Hans De Bisschop <hans.de.bisschop@ehb.be>
+ * @author Magali Gillard <magali.gillard@ehb.be>
  */
 class RegularExpressionConditionTranslator extends ConditionTranslator
 {
 
-    public function getCondition()
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        RegularExpressionCondition $regularExpressionCondition, ?bool $enableAliasing = true
+    ): string
     {
-        return parent::getCondition();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
-    {
-        return $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $this->getCondition()->getConditionVariable(), $enableAliasing
-            ) . ' REGEXP ' .
-            $this->getDataClassDatabase()->quote($this->getCondition()->getRegularExpression());
+        return $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $regularExpressionCondition->getConditionVariable(), $enableAliasing
+            ) . ' REGEXP ' . $dataClassDatabase->quote($regularExpressionCondition->getRegularExpression());
     }
 }

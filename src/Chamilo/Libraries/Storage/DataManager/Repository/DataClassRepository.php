@@ -922,11 +922,6 @@ class DataClassRepository
         return $this->getDataClassDatabase()->transactional($function);
     }
 
-    public function translateCondition(Condition $condition): string
-    {
-        return $this->getDataClassDatabase()->translateCondition($condition);
-    }
-
     /**
      * @throws \ReflectionException
      */

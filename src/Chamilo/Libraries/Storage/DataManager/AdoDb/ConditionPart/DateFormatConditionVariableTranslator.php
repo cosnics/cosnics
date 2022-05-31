@@ -1,7 +1,10 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\DateFormatConditionVariable;
 
 /**
  *
@@ -12,21 +15,10 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
  */
 class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 {
-
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\DateFormatConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        DateFormatConditionVariable $dateFormatConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
         $strings = [];
 
@@ -34,16 +26,16 @@ class DateFormatConditionVariableTranslator extends ConditionVariableTranslator
 
         $strings[] = '(';
 
-        $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->get_condition_variable(), $enableAliasing
+        $strings[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $dateFormatConditionVariable->getConditionVariable(), $enableAliasing
         );
         $strings[] = ', ';
-        $strings[] = "'" . $this->getConditionVariable()->get_format() . "'";
+        $strings[] = "'" . $dateFormatConditionVariable->getFormat() . "'";
         $strings[] = ')';
 
-        if ($this->getConditionVariable()->get_alias())
+        if ($dateFormatConditionVariable->getAlias())
         {
-            return implode('', $strings) . ' AS ' . $this->getConditionVariable()->get_alias();
+            return implode('', $strings) . ' AS ' . $dateFormatConditionVariable->getAlias();
         }
         else
         {

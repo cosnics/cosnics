@@ -1,8 +1,11 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\Condition\Condition;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
+use Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable;
 
 /**
  *
@@ -15,30 +18,18 @@ use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        CaseElementConditionVariable $caseElementConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
         $strings = [];
 
-        $conditionVariable = $this->getConditionVariable();
-
-        if ($conditionVariable->get_condition() instanceof Condition)
+        if ($caseElementConditionVariable->getCondition() instanceof Condition)
         {
             $strings[] = 'WHEN ';
-            $strings[] = $this->getConditionPartTranslatorService()->translate(
-                $this->getDataClassDatabase(), $conditionVariable->get_condition(), $enableAliasing
+            $strings[] = $conditionPartTranslatorService->translate(
+                $dataClassDatabase, $caseElementConditionVariable->getCondition(), $enableAliasing
             );
             $strings[] = ' THEN ';
         }
@@ -47,7 +38,7 @@ class CaseElementConditionVariableTranslator extends ConditionVariableTranslator
             $strings[] = ' ELSE ';
         }
 
-        $strings[] = $conditionVariable->get_statement();
+        $strings[] = $caseElementConditionVariable->getStatement();
 
         return implode('', $strings);
     }

@@ -13,11 +13,6 @@ use Chamilo\Core\Menu\Storage\DataManager;
 class RightsLocation extends \Chamilo\Libraries\Rights\Domain\RightsLocation
 {
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * @return string
      */

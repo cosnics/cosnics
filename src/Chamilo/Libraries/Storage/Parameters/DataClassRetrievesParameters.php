@@ -36,42 +36,10 @@ class DataClassRetrievesParameters extends DataClassBasicRetrieveParameters
     }
 
     /**
-     * @deprecated Use getDistinct() now
-     */
-    public function get_distinct(): bool
-    {
-        return $this->getDistinct();
-    }
-
-    /**
-     * @deprecated Use getOffset() now
-     */
-    public function get_offset(): ?int
-    {
-        return $this->getOffset();
-    }
-
-    /**
      * @deprecated Use getCount() now
      */
     public function set_count(?int $count)
     {
         $this->setCount($count);
-    }
-
-    /**
-     * @deprecated Use setDistinct() now
-     */
-    public function set_distinct(bool $distinct = false)
-    {
-        $this->setDistinct($distinct);
-    }
-
-    /**
-     * @deprecated Use setOffset() now
-     */
-    public function set_offset(?int $offset)
-    {
-        $this->setOffset($offset);
     }
 }

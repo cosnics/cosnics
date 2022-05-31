@@ -1,6 +1,8 @@
 <?php
 namespace Chamilo\Libraries\Storage\DataManager\AdoDb\ConditionPart;
 
+use Chamilo\Libraries\Storage\DataManager\AdoDb\Service\ConditionPartTranslatorService;
+use Chamilo\Libraries\Storage\DataManager\Interfaces\DataClassDatabaseInterface;
 use Chamilo\Libraries\Storage\Query\ConditionVariableTranslator;
 use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 
@@ -14,29 +16,19 @@ use Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable;
 class OperationConditionVariableTranslator extends ConditionVariableTranslator
 {
 
-    /**
-     * @return \Chamilo\Libraries\Storage\Query\Variable\OperationConditionVariable
-     */
-    public function getConditionVariable()
-    {
-        return parent::getConditionVariable();
-    }
-
-    /**
-     * @param boolean $enableAliasing
-     *
-     * @return string
-     */
-    public function translate(bool $enableAliasing = true)
+    public function translate(
+        ConditionPartTranslatorService $conditionPartTranslatorService, DataClassDatabaseInterface $dataClassDatabase,
+        OperationConditionVariable $operationConditionVariable, ?bool $enableAliasing = true
+    ): string
     {
         $strings = [];
 
         $strings[] = '(';
-        $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->getLeftConditionVariable(), $enableAliasing
+        $strings[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $operationConditionVariable->getLeftConditionVariable(), $enableAliasing
         );
 
-        switch ($this->getConditionVariable()->get_operator())
+        switch ($operationConditionVariable->getOperator())
         {
             case OperationConditionVariable::ADDITION :
                 $strings[] = '+';
@@ -58,8 +50,8 @@ class OperationConditionVariableTranslator extends ConditionVariableTranslator
                 break;
         }
 
-        $strings[] = $this->getConditionPartTranslatorService()->translate(
-            $this->getDataClassDatabase(), $this->getConditionVariable()->getRightConditionVariable(), $enableAliasing
+        $strings[] = $conditionPartTranslatorService->translate(
+            $dataClassDatabase, $operationConditionVariable->getRightConditionVariable(), $enableAliasing
         );
         $strings[] = ')';
 

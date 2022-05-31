@@ -15,9 +15,6 @@ use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 class PropertyConditionVariableTranslator extends ConditionVariableTranslator
 {
 
-    /**
-     * @throws \ReflectionException
-     */
     public function translate(
         DataClassDatabaseInterface $dataClassDatabase, PropertyConditionVariable $propertyConditionVariable,
         ?bool $enableAliasing = true

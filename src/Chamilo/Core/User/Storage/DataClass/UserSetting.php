@@ -26,14 +26,6 @@ class UserSetting extends DataClass
             array(self::PROPERTY_USER_ID, self::PROPERTY_SETTING_ID, self::PROPERTY_VALUE));
     }
 
-    /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     public function get_user_id()
     {
         return $this->getDefaultProperty(self::PROPERTY_USER_ID);

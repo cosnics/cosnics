@@ -60,11 +60,6 @@ abstract class ContentObjectInstaller extends Installer
         );
     }
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      * Import a sample content object (if available)
      *

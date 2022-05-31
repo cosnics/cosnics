@@ -22,7 +22,7 @@ class DistinctConditionVariable extends ConditionVariable
         $this->conditionVariables = $conditionVariables;
     }
 
-    public function addConditionVariable(ConditionVariable $conditionVariable): DistinctConditionVariable
+    public function add(ConditionVariable $conditionVariable): DistinctConditionVariable
     {
         $this->conditionVariables[] = $conditionVariable;
 
@@ -33,20 +33,9 @@ class DistinctConditionVariable extends ConditionVariable
      *
      * @return \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[]
      */
-    public function getConditionVariables(): array
+    public function get(): array
     {
         return $this->conditionVariables;
-    }
-
-    /**
-     *
-     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
-     */
-    public function setConditionVariables(array $conditionVariables): DistinctConditionVariable
-    {
-        $this->conditionVariables = $conditionVariables;
-
-        return $this;
     }
 
     public function getHashParts(): array
@@ -55,7 +44,7 @@ class DistinctConditionVariable extends ConditionVariable
 
         $variableParts = [];
 
-        foreach ($this->getConditionVariables() as $conditionVariable)
+        foreach ($this->get() as $conditionVariable)
         {
             $variableParts[] = $conditionVariable->getHashParts();
         }
@@ -67,6 +56,17 @@ class DistinctConditionVariable extends ConditionVariable
 
     public function hasConditionVariables(): bool
     {
-        return count($this->getConditionVariables()) > 0;
+        return count($this->get()) > 0;
+    }
+
+    /**
+     *
+     * @param \Chamilo\Libraries\Storage\Query\Variable\ConditionVariable[] $conditionVariables
+     */
+    public function set(array $conditionVariables): DistinctConditionVariable
+    {
+        $this->conditionVariables = $conditionVariables;
+
+        return $this;
     }
 }

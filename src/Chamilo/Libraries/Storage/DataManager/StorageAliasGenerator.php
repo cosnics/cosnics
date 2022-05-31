@@ -15,28 +15,16 @@ class StorageAliasGenerator
     const TYPE_CONSTRAINT = 2;
     const TYPE_TABLE = 1;
 
-    /**
-     *
-     * @var \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    private static $instance;
-
-    /**
-     *
-     * @var \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    private $classnameUtilities;
+    private static StorageAliasGenerator $instance;
 
     /**
      *
      * @var string[][]
      */
-    private $aliases = [];
+    private array $aliases = [];
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
+    private ClassnameUtilities $classnameUtilities;
+
     public function __construct(ClassnameUtilities $classnameUtilities)
     {
         $this->classnameUtilities = $classnameUtilities;
@@ -48,51 +36,35 @@ class StorageAliasGenerator
     }
 
     /**
-     *
      * @return string[][]
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return $this->aliases;
     }
 
     /**
-     *
      * @return string[][]
      * @deprecated Use getAliases() now
      */
-    public function get_aliases()
-
+    public function get_aliases(): array
     {
         return $this->getAliases();
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Architecture\ClassnameUtilities
-     */
-    public function getClassnameUtilities()
+    public function getClassnameUtilities(): ClassnameUtilities
     {
         return $this->classnameUtilities;
     }
 
-    /**
-     *
-     * @param \Chamilo\Libraries\Architecture\ClassnameUtilities $classnameUtilities
-     */
-    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities)
+    public function setClassnameUtilities(ClassnameUtilities $classnameUtilities): StorageAliasGenerator
     {
         $this->classnameUtilities = $classnameUtilities;
+
+        return $this;
     }
 
-    /**
-     *
-     * @param string $tableName
-     * @param string $column
-     *
-     * @return string
-     */
-    public function getConstraintName($tableName, $column)
+    public function getConstraintName(string $tableName, string $column): string
     {
         $possibleName = '';
         $parts = explode('_', $tableName);
@@ -104,13 +76,7 @@ class StorageAliasGenerator
 
         $possibleName = $possibleName . '_' . $column;
 
-        if (!array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
-        {
-            $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
-
-            return $possibleName;
-        }
-        else
+        if (array_key_exists($possibleName, $this->aliases[self::TYPE_CONSTRAINT]))
         {
             $originalName = $possibleName;
             $index = 'a';
@@ -120,33 +86,19 @@ class StorageAliasGenerator
                 $possibleName = $originalName . '_' . $index;
                 $index ++;
             }
-
-            $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
-
-            return $possibleName;
         }
+
+        $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
+
+        return $possibleName;
     }
 
-    /**
-     *
-     * @param string $class
-     *
-     * @return string
-     * @throws \ReflectionException
-     */
-    public function getDataClassAlias($class)
+    public function getDataClassAlias(string $class): string
     {
-        /**
-         * @var \Chamilo\Libraries\Storage\DataClass\DataClass $class
-         */
         return $this->getTableAlias($class::getTableName());
     }
 
-    /**
-     *
-     * @return \Chamilo\Libraries\Storage\DataManager\StorageAliasGenerator
-     */
-    public static function getInstance()
+    public static function getInstance(): StorageAliasGenerator
     {
         if (!isset(self::$instance))
         {
@@ -156,13 +108,7 @@ class StorageAliasGenerator
         return self::$instance;
     }
 
-    /**
-     *
-     * @param string $tableName
-     *
-     * @return string
-     */
-    public function getTableAlias($tableName)
+    public function getTableAlias(string $tableName): string
     {
         if (array_key_exists($tableName, $this->aliases[self::TYPE_TABLE]))
         {
@@ -197,48 +143,33 @@ class StorageAliasGenerator
     }
 
     /**
-     *
      * @return string[]
      */
-    public function getTypes()
+    public function getTypes(): array
     {
         return array(self::TYPE_TABLE, self::TYPE_CONSTRAINT);
     }
 
     /**
-     *
-     * @param string $table_name
-     * @param string $column
-     *
-     * @return string
      * @deprecated Use getConstraintName() now
      */
-    public function get_constraint_name($table_name, $column)
+    public function get_constraint_name(string $table_name, string $column): string
     {
         return $this->getConstraintName($table_name, $column);
     }
 
     /**
-     *
-     * @param string $class
-     *
-     * @return string
-     * @throws \ReflectionException
      * @deprecated Use getDataClassAlias() now
      */
-    public function get_data_class_alias($class)
+    public function get_data_class_alias(string $class): string
     {
         return $this->getDataClassAlias($class);
     }
 
     /**
-     *
-     * @param string $tableName
-     *
-     * @return string
      * @deprecated Use getTableAlias() now
      */
-    public function get_table_alias($tableName)
+    public function get_table_alias(string $tableName): string
     {
         return $this->getTableAlias($tableName);
     }
@@ -248,7 +179,7 @@ class StorageAliasGenerator
      * @return string[]
      * @deprecated Use getTypes() now
      */
-    public function get_types()
+    public function get_types(): array
 
     {
         return $this->getTypes();

@@ -14,45 +14,31 @@ class DataSourceName extends \Chamilo\Libraries\Storage\DataManager\DataSourceNa
 {
 
     /**
-     * @return string
      * @throws \Exception
      */
-    public function getImplementedDriver()
+    public function getImplementedDriver(): string
     {
         switch ($this->getDriver())
         {
             case self::DRIVER_OCI8 :
                 return 'Doctrine\DBAL\Driver\OCI8\Driver';
-                break;
             case self::DRIVER_PGSQL :
                 return 'Doctrine\DBAL\Driver\PDO\PgSQL\Driver';
-                break;
             case self::DRIVER_SQLITE :
                 return 'Doctrine\DBAL\Driver\PDO\SQLite\Driver';
-                break;
-            // Deprecated option for backwards compatibility with older configuration files
-            case 'mysqli' :
             case self::DRIVER_MYSQL :
                 return 'Doctrine\DBAL\Driver\PDO\MySQL\Driver';
-                break;
             case self::DRIVER_MSSQL :
-                //return 'Chamilo\Libraries\Storage\DataManager\Doctrine\Driver\Mssql\MsSqlDoctrineDriver';
                 return 'Doctrine\DBAL\Driver\PDO\SQLSrv\Driver';
-                break;
             case self::DRIVER_IBM_DB2 :
                 return 'Doctrine\DBAL\Driver\IBMDB2\Driver';
-                break;
             case self::DRIVER_IBM :
                 return 'Doctrine\DBAL\Driver\PDOIbm\Driver';
-                break;
-
-            case self::DRIVER_OCI :
             default :
                 throw new Exception(
                     'The requested driver (' . $this->getDriver() .
                     ') is not available in Doctrine. Please provide a driver for Doctrine or choose another implementation'
                 );
-                break;
         }
     }
 }

@@ -35,11 +35,9 @@ class CaseConditionVariable extends ConditionVariable
     }
 
     /**
-     * Get the case_elements
-     *
      * @return \Chamilo\Libraries\Storage\Query\Variable\CaseElementConditionVariable[]
      */
-    public function get()
+    public function get(): array
     {
         return $this->caseElementConditionVariables;
     }
@@ -57,16 +55,15 @@ class CaseConditionVariable extends ConditionVariable
     }
 
     /**
-     *
-     * @see \Chamilo\Libraries\Storage\Query\ConditionPart::getHashParts()
+     * @return string[]
      */
     public function getHashParts(): array
     {
         $hashParts = parent::getHashParts();
 
-        foreach ($this->getCaseElementConditionVariables() as $case_element)
+        foreach ($this->get() as $caseElementConditionVariable)
         {
-            $hashParts[] = $case_element->getHashParts();
+            $hashParts[] = $caseElementConditionVariable->getHashParts();
         }
 
         sort($hashParts);

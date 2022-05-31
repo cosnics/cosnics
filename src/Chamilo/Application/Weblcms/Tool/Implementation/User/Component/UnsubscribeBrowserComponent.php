@@ -419,9 +419,6 @@ class UnsubscribeBrowserComponent extends Manager implements TableSupport
             {
                 case self::TAB_ALL :
                 case self::TAB_USERS :
-                    $storage_unit = DataManager::getInstance()->get_alias(
-                        User::getTableName()
-                    );
                     $conditions[] = $this->buttonToolbarRenderer->getConditions(
                         array(
                             new PropertyConditionVariable(User::class, User::PROPERTY_OFFICIAL_CODE),

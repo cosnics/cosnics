@@ -1,7 +1,6 @@
 <?php
 namespace Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataClass;
 
-use Chamilo\Application\Weblcms\Tool\Implementation\Assessment\Storage\DataManager;
 use Chamilo\Core\Repository\ContentObject\Assessment\Display\Configuration;
 use Chamilo\Libraries\Storage\DataClass\DataClass;
 
@@ -24,6 +23,34 @@ class Publication extends DataClass
     const PROPERTY_SHOW_SOLUTION = 'show_solution';
 
     /**
+     * Get the default properties
+     *
+     * @return array The property names.
+     */
+    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
+    {
+        return parent::getDefaultPropertyNames(
+            array(
+                self::PROPERTY_PUBLICATION_ID,
+                self::PROPERTY_ALLOW_HINTS,
+                self::PROPERTY_SHOW_SCORE,
+                self::PROPERTY_SHOW_CORRECTION,
+                self::PROPERTY_SHOW_SOLUTION,
+                self::PROPERTY_SHOW_ANSWER_FEEDBACK,
+                self::PROPERTY_FEEDBACK_LOCATION
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTableName(): string
+    {
+        return 'weblcms_assessment_publication';
+    }
+
+    /**
      *
      * @return boolean
      */
@@ -41,31 +68,6 @@ class Publication extends DataClass
         return new Configuration(
             $this->get_allow_hints(), $this->get_show_score(), $this->get_show_correction(), $this->get_show_solution(),
             $this->get_show_answer_feedback(), $this->get_feedback_location()
-        );
-    }
-
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
-     * Get the default properties
-     *
-     * @return array The property names.
-     */
-    public static function getDefaultPropertyNames(array $extendedPropertyNames = []): array
-    {
-        return parent::getDefaultPropertyNames(
-            array(
-                self::PROPERTY_PUBLICATION_ID,
-                self::PROPERTY_ALLOW_HINTS,
-                self::PROPERTY_SHOW_SCORE,
-                self::PROPERTY_SHOW_CORRECTION,
-                self::PROPERTY_SHOW_SOLUTION,
-                self::PROPERTY_SHOW_ANSWER_FEEDBACK,
-                self::PROPERTY_FEEDBACK_LOCATION
-            )
         );
     }
 
@@ -117,14 +119,6 @@ class Publication extends DataClass
     public function get_show_solution()
     {
         return $this->getDefaultProperty(self::PROPERTY_SHOW_SOLUTION);
-    }
-
-    /**
-     * @return string
-     */
-    public static function getTableName(): string
-    {
-        return 'weblcms_assessment_publication';
     }
 
     /**

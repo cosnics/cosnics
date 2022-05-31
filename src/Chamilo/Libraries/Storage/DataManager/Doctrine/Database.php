@@ -359,18 +359,6 @@ class Database
 
     /**
      *
-     * @param Condition|null $condition
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function translateCondition(Condition $condition = null)
-    {
-        return self::getDataClassDatabase()->translateCondition($condition);
-    }
-
-    /**
-     *
      * @param string $table_name
      * @param boolean $optimize
      *

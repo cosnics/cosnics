@@ -39,11 +39,9 @@ class RegisterForm extends FormValidator
 
     private $parent;
 
-    private $user;
-
     private $unencryptedpass;
 
-    private $adminDM;
+    private $user;
 
     /**
      * Creates a new RegisterForm Used for a guest to register him/herself
@@ -53,7 +51,6 @@ class RegisterForm extends FormValidator
         parent::__construct('user_settings', self::FORM_METHOD_POST, $action);
 
         $this->initializeContainer();
-        $this->adminDM = \Chamilo\Core\Admin\Storage\DataManager::getInstance();
         $this->user = $user;
         $this->build_creation_form();
         $this->setDefaults();
@@ -148,7 +145,6 @@ class RegisterForm extends FormValidator
         $this->addGroup($group, 'mail', Translation::get('SendMailToNewUser'), '&nbsp;');
         // Submit button
         // $this->addElement('submit', 'user_settings', 'OK');
-
 
         if (Configuration::getInstance()->get_setting(array(Manager::context(), 'enable_terms_and_conditions')))
         {

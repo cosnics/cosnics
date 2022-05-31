@@ -31,28 +31,11 @@ class DataClassCountGroupedParameters extends DataClassParameters
 
     /**
      *
-     * @deprecated Use getHavingCondition() now
-     */
-    public function get_having(): ?Condition
-    {
-        return $this->getHavingCondition();
-    }
-
-    /**
-     *
      * @deprecated Use getRetrieveProperties() now
      */
     public function get_properties(): ?RetrieveProperties
     {
         return $this->getRetrieveProperties();
-    }
-
-    /**
-     * @deprecated Use setHavingCondition() now
-     */
-    public function set_having(?Condition $havingCondition = null)
-    {
-        $this->setHavingCondition($havingCondition);
     }
 
     /**

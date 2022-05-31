@@ -27,14 +27,6 @@ class HelpItem extends DataClass
     }
 
     /**
-     * inherited
-     */
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
-    /**
      * Returns the name of this group.
      *
      * @return String The name

@@ -16,12 +16,9 @@ class ChamiloNamingStrategy extends DefaultNamingStrategy
 {
 
     /**
-     * @param string $className
-     *
-     * @return string
      * @throws \ReflectionException
      */
-    public function classToTableName($className)
+    public function classToTableName($className): string
     {
         $classNameUtilities = ClassnameUtilities::getInstance();
         $classNameString = StringUtilities::getInstance()->createString(

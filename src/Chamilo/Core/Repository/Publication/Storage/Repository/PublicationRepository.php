@@ -171,7 +171,7 @@ class PublicationRepository
             $baseRecordRetrievesParameters->getOffset(), $baseRecordRetrievesParameters->getOrderBy(),
             $this->getPublicationJoins(
                 $baseRecordRetrievesParameters->get_joins(), $publicationClassName, $contentObjectTypeClassName
-            ), $baseRecordRetrievesParameters->get_group_by()
+            ), $baseRecordRetrievesParameters->getGroupBy()
         );
 
         $records = DataManager::records(

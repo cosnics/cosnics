@@ -36,11 +36,6 @@ class Availability extends DataClass
                 self::PROPERTY_COLOUR));
     }
 
-    public function get_data_manager()
-    {
-        return DataManager::getInstance();
-    }
-
     /**
      *
      * @return integer
