@@ -247,7 +247,7 @@ class Group extends NestedSet
      *
      * @deprecated Part of GroupService::deleteGroup() now
      */
-    public function delete_related_content()
+    public function delete_related_content(): bool
     {
         // First, truncate the group so that users are removed.
         return $this->truncate();
@@ -295,16 +295,6 @@ class Group extends NestedSet
         }
 
         return $this->subgroupIdentifiers[(int) $recursive];
-    }
-
-    /**
-     * Get the group's children
-     *
-     * @deprecated Use GroupService::findSubGroupsForGroup() now
-     */
-    public function get_children($recursive = true)
-    {
-        return $this->get_subgroups($recursive);
     }
 
     public function get_code()
@@ -388,15 +378,6 @@ class Group extends NestedSet
     public function get_name()
     {
         return $this->getDefaultProperty(self::PROPERTY_NAME);
-    }
-
-    /**
-     *
-     * @deprecated use get_parent_id() instead.
-     */
-    public function get_parent()
-    {
-        return $this->get_parent_id();
     }
 
     /**
@@ -550,7 +531,7 @@ class Group extends NestedSet
      * @return boolean
      * @deprecated Use GroupService::moveGroup() now
      */
-    public function move($new_parent_id = 0, $new_previous_id = null, $condition = null)
+    public function move($new_parent_id = 0, $new_previous_id = null, $condition = null): bool
     {
         if ($new_previous_id != 0)
         {

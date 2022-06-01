@@ -135,7 +135,7 @@ class GroupForm extends FormValidator
         $value = $group->update();
 
         $new_parent = $values[Group::PROPERTY_PARENT_ID];
-        if ($group->get_parent() != $new_parent)
+        if ($group->get_parent_id() != $new_parent)
         {
             $group->move($new_parent);
         }
@@ -199,7 +199,7 @@ class GroupForm extends FormValidator
     {
         $group = $this->group;
         $defaults[Group::PROPERTY_ID] = $group->get_id();
-        $defaults[Group::PROPERTY_PARENT_ID] = $group->get_parent();
+        $defaults[Group::PROPERTY_PARENT_ID] = $group->get_parent_id();
         $defaults[Group::PROPERTY_NAME] = $group->get_name();
         $defaults[Group::PROPERTY_CODE] = $group->get_code();
         $defaults[Group::PROPERTY_DESCRIPTION] = $group->get_description();

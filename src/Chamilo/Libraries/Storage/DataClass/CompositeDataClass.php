@@ -27,7 +27,7 @@ abstract class CompositeDataClass extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
     public function checkForAdditionalProperties(): CompositeDataClass
@@ -78,7 +78,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * @return string[] An associative array containing the properties.
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAdditionalProperties(): array
     {
@@ -89,7 +89,7 @@ abstract class CompositeDataClass extends DataClass
 
     /**
      * @return mixed
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAdditionalProperty(string $name)
     {

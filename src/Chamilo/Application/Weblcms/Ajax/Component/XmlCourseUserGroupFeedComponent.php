@@ -340,7 +340,7 @@ class XmlCourseUserGroupFeedComponent extends Manager
 
     function dump_platform_group($group)
     {
-        $children = $group->get_children();
+        $children = $group->get_subgroups();
         $glyph = new FontAwesomeGlyph('users', [], null, 'fas');
 
         if ($children && count($children) > 0)

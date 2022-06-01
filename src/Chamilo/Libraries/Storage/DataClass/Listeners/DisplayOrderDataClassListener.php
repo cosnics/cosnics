@@ -16,7 +16,7 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
 class DisplayOrderDataClassListener extends DataClassListener
 {
 
-    private bool $checkDisplayOrderCondition;
+    private bool $checkDisplayOrderCondition = false;
 
     private DisplayOrderDataClassListenerSupport $dataClass;
 
@@ -72,7 +72,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         return $success;
     }
 
-    public function onAfterSetProperty(string $name, string $value): bool
+    public function onAfterSetProperty(string $name, $value): bool
     {
         if ($this->checkDisplayOrderCondition)
         {
@@ -109,7 +109,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         return true;
     }
 
-    public function onBeforeSetProperty(string $name, string $value): bool
+    public function onBeforeSetProperty(string $name, $value): bool
     {
         $initial_value = $this->dataClass->getDefaultProperty($name);
         if (is_null($initial_value) || ($initial_value == $value && !isset($this->oldDisplayOrderCondition)))

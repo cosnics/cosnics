@@ -143,7 +143,6 @@ class DataClassRepository
      *
      * @return ArrayCollection<tInternalRetrievesClass>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     protected function __retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
     {
@@ -271,7 +270,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function create(DataClass $dataClass): bool
     {
@@ -302,7 +301,7 @@ class DataClassRepository
 
         if ($dataClassCreated === true && $this->isQueryCacheEnabled())
         {
-            $parentDataClassName = $this->determineCompositeDataClassParentClassName($dataClass::class_name());
+            $parentDataClassName = $this->determineCompositeDataClassParentClassName(get_class($dataClass));
 
             return $this->getDataClassRepositoryCache()->addForDataClass(
                 $dataClass, new DataClassRetrieveParameters(
@@ -324,13 +323,10 @@ class DataClassRepository
         return $this->getDataClassDatabase()->create($dataClassName::getTableName(), $record);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function delete(DataClass $dataClass): bool
     {
         $dataClassName =
-            ($dataClass instanceof CompositeDataClass ? $dataClass::parentClassName() : $dataClass::class_name());
+            ($dataClass instanceof CompositeDataClass ? $dataClass::parentClassName() : get_class($dataClass));
 
         $condition = new EqualityCondition(
             new PropertyConditionVariable($dataClassName, $dataClassName::PROPERTY_ID),
@@ -345,11 +341,11 @@ class DataClassRepository
         if ($dataClass instanceof CompositeDataClass && $dataClass::isExtended())
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable($dataClass::class_name(), DataClass::PROPERTY_ID),
+                new PropertyConditionVariable(get_class($dataClass), DataClass::PROPERTY_ID),
                 new StaticConditionVariable($dataClass->getId())
             );
 
-            if (!$this->getDataClassDatabase()->delete($dataClass::class_name(), $condition))
+            if (!$this->getDataClassDatabase()->delete(get_class($dataClass), $condition))
             {
                 return false;
             }
@@ -642,7 +638,6 @@ class DataClassRepository
      * @param class-string<retrieveDataClassName> $dataClassName
      *
      * @return retrieveDataClassName
-     * @throws \ReflectionException
      */
     public function retrieve(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -663,7 +658,6 @@ class DataClassRepository
      * @param integer $identifier
      *
      * @return retrieveById
-     * @throws \ReflectionException
      */
     public function retrieveById(string $dataClassName, int $identifier)
     {
@@ -685,7 +679,6 @@ class DataClassRepository
      * @param class-string<retrieveClass> $dataClassName
      *
      * @return retrieveClass|bool
-     * @throws \ReflectionException
      */
     protected function retrieveClass(
         string $cacheDataClassName, string $dataClassName, DataClassRetrieveParameters $parameters
@@ -730,7 +723,6 @@ class DataClassRepository
      * @param class-string<retrieveCompositeDataClass> $dataClassName
      *
      * @return retrieveCompositeDataClass
-     * @throws \ReflectionException
      */
     protected function retrieveCompositeDataClass(string $dataClassName, DataClassRetrieveParameters $parameters)
     {
@@ -748,7 +740,6 @@ class DataClassRepository
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass): array
     {
@@ -758,14 +749,14 @@ class DataClassRepository
         }
 
         $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties(array(new PropertiesConditionVariable($compositeDataClass::class_name()))),
+            new RetrieveProperties(array(new PropertiesConditionVariable(get_class($compositeDataClass)))),
             new EqualityCondition(
-                new PropertyConditionVariable($compositeDataClass::class_name(), $compositeDataClass::PROPERTY_ID),
+                new PropertyConditionVariable(get_class($compositeDataClass), $compositeDataClass::PROPERTY_ID),
                 new StaticConditionVariable($compositeDataClass->getId())
             )
         );
 
-        return $this->getDataClassDatabase()->retrieve($compositeDataClass::class_name(), $parameters);
+        return $this->getDataClassDatabase()->retrieve(get_class($compositeDataClass), $parameters);
     }
 
     /**
@@ -804,7 +795,6 @@ class DataClassRepository
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): ArrayCollection
@@ -820,7 +810,6 @@ class DataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function retrievesClass(
@@ -850,7 +839,6 @@ class DataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function retrievesCompositeDataClass(string $dataClassName, DataClassRetrievesParameters $parameters
@@ -920,7 +908,7 @@ class DataClassRepository
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function update(DataClass $dataClass): bool
     {
@@ -931,7 +919,7 @@ class DataClassRepository
         }
         else
         {
-            $propertyConditionClass = $dataClass::class_name();
+            $propertyConditionClass = get_class($dataClass);
             $dataClassTableName = $dataClass->getTableName();
         }
 

@@ -34,10 +34,9 @@
 
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\NestedSetDataClassRepository"
                  class="Chamilo\Libraries\Storage\DataManager\Repository\NestedSetDataClassRepository">
-            <argument key="$dataClassDatabase"
+            <argument key="$dataClassRepository"
                       type="service"
-                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\Database\DataClassDatabase"/>
-            <argument key="$queryCacheEnabled">%chamilo.configuration.debug.enable_query_cache%</argument>
+                      id="Chamilo\Libraries\Storage\DataManager\Doctrine\DataClassRepository"/>
         </service>
 
         <service id="Chamilo\Libraries\Storage\DataManager\Doctrine\Repository\StorageUnitRepository">

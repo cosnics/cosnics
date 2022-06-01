@@ -224,7 +224,7 @@ class Manager implements PublicationInterface
         );
         $record = self::record(
             Publication::class, new RecordRetrieveParameters(
-                new RetrieveProperties(new PropertiesConditionVariable(Publication::class)), $condition
+                new RetrieveProperties([new PropertiesConditionVariable(Publication::class)]), $condition
             )
         );
 

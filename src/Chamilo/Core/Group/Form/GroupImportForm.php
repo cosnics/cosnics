@@ -218,7 +218,7 @@ class GroupImportForm extends FormValidator
         $group->set_description($data['description']);
         $succes = $group->update();
 
-        if ($group->get_parent() != $parent_group)
+        if ($group->get_parent_id() != $parent_group)
         {
             $succes &= $group->move($parent_group);
         }

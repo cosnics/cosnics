@@ -57,9 +57,6 @@ class DataClassRepositoryCache
         return $this->add($this->getCacheClassName($dataClassName), $parameters, $arrayCollection);
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function addForDataClass(DataClass $object, DataClassRetrieveParameters $parameters): bool
     {
         $className = $this->getDataClassCacheClassName($object);
@@ -122,9 +119,6 @@ class DataClassRepositoryCache
         return true;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function deleteForDataClass(DataClass $object): bool
     {
         $className = $this->getDataClassCacheClassName($object);
@@ -185,9 +179,6 @@ class DataClassRepositoryCache
         }
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     private function getDataClassCacheClassName(DataClass $object): string
     {
         $compositeDataClassName = CompositeDataClass::class;
@@ -201,7 +192,7 @@ class DataClassRepositoryCache
         }
         else
         {
-            return $object::class_name();
+            return get_class($object);
         }
     }
 

@@ -75,8 +75,8 @@ class RightsLocationRepository extends CommonDataClassRepository
             RightsLocation::class,
             new DataClassDistinctParameters(
                 $locationCondition,
-                new RetrieveProperties(
-                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)
+                new RetrieveProperties([
+                    new PropertyConditionVariable(RightsLocation::class, RightsLocation::PROPERTY_ID)]
                 )
             )
         );

@@ -184,7 +184,7 @@ class PublicationRepository
 
         return $this->getDataClassRepository()->record(
             Publication::class, new RecordRetrieveParameters(
-                new RetrieveProperties(new PropertiesConditionVariable(Publication::class)), $condition
+                new RetrieveProperties([new PropertiesConditionVariable(Publication::class)]), $condition
             )
         );
     }

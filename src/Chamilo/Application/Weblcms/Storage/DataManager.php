@@ -681,7 +681,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         );
         $record = self::record(
             ContentObjectPublication::class, new RecordRetrieveParameters(
-                new RetrieveProperties(new PropertiesConditionVariable(ContentObjectPublication::class)), $condition
+                new RetrieveProperties([new PropertiesConditionVariable(ContentObjectPublication::class)]), $condition
             )
         );
 

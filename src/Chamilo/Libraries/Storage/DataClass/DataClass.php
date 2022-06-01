@@ -90,7 +90,7 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
+     * @throws \ReflectionException
      */
     public function create(): bool
     {
@@ -107,7 +107,8 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
     public function delete(): bool
     {
@@ -128,7 +129,8 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \ReflectionException
      */
     protected function deleteDependencies(): bool
     {
@@ -513,7 +515,7 @@ abstract class DataClass
     }
 
     /**
-     * @throws \Exception
+     * @throws \ReflectionException
      */
     public function update(): bool
     {

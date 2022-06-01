@@ -271,7 +271,6 @@ class DataManager
 
     /**
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public static function retrieve_composite_data_class_additional_properties(CompositeDataClass $compositeDataClass
