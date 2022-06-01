@@ -27,10 +27,42 @@ abstract class ComplexContentObjectItemForm extends FormValidator
      * @param string $action
      * @param string $method
      */
-    public function __construct(ComplexContentObjectItem $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST)
+    public function __construct(
+        ComplexContentObjectItem $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST
+    )
     {
         parent::__construct('complex_content_object_item_form', $method, $action);
         $this->complex_content_object_item = $complex_content_object_item;
+    }
+
+    /**
+     *
+     * @param string $namespace
+     * @param \core\repository\storage\data_class\ComplexContentObjectItem $complex_content_object_item
+     * @param string $action
+     * @param string $method
+     *
+     * @return \core\repository\form\ComplexContentObjectItemForm
+     */
+    public static function factory(
+        $namespace, $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST
+    )
+    {
+        if (!$complex_content_object_item->isExtended())
+        {
+            return null;
+        }
+
+        $classNameUtilities = ClassnameUtilities::getInstance();
+
+        $contentObjectNamespace =
+            $classNameUtilities->getNamespaceFromClassname(get_class($complex_content_object_item));
+        $contentObjectNamespace = $classNameUtilities->getNamespaceParent($contentObjectNamespace, 2);
+        $objectName = $classNameUtilities->getClassnameFromObject($complex_content_object_item);
+
+        $class = $contentObjectNamespace . '\Form\\' . $objectName . 'Form';
+
+        return new $class($complex_content_object_item, $action, $method);
     }
 
     /**
@@ -44,36 +76,11 @@ abstract class ComplexContentObjectItemForm extends FormValidator
 
     /**
      *
-     * @return boolean
+     * @return string[]
      */
-    public function update()
+    public function get_default_values()
     {
-        return $this->get_complex_content_object_item()->update();
-    }
-
-    /**
-     *
-     * @param string $namespace
-     * @param \core\repository\storage\data_class\ComplexContentObjectItem $complex_content_object_item
-     * @param string $action
-     * @param string $method
-     * @return \core\repository\form\ComplexContentObjectItemForm
-     */
-    public static function factory($namespace, $complex_content_object_item, $action = null, $method = self::FORM_METHOD_POST)
-    {
-        if (! $complex_content_object_item->isExtended())
-        {
-            return null;
-        }
-        
-        $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceFromClassname(
-            $complex_content_object_item->class_name());
-        $contentObjectNamespace = ClassnameUtilities::getInstance()->getNamespaceParent($contentObjectNamespace, 2);
-        $objectName = ClassnameUtilities::getInstance()->getClassnameFromObject($complex_content_object_item);
-        
-        $class = $contentObjectNamespace . '\Form\\' . $objectName . 'Form';
-        
-        return new $class($complex_content_object_item, $action, $method);
+        return [];
     }
 
     /**
@@ -87,10 +94,10 @@ abstract class ComplexContentObjectItemForm extends FormValidator
 
     /**
      *
-     * @return string[]
+     * @return boolean
      */
-    public function get_default_values()
+    public function update()
     {
-        return [];
+        return $this->get_complex_content_object_item()->update();
     }
 }

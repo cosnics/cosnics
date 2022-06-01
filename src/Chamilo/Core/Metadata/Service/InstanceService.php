@@ -35,7 +35,7 @@ class InstanceService
         foreach ($selectedSchemaIds as $selectedSchemaId)
         {
             $schemaInstance = new SchemaInstance();
-            $schemaInstance->set_entity_type($entity->class_name());
+            $schemaInstance->set_entity_type(get_class($entity));
             $schemaInstance->set_entity_id($entity->getId());
             $schemaInstance->set_schema_id($selectedSchemaId);
             $schemaInstance->set_user_id($user->getId());

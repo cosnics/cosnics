@@ -190,9 +190,6 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
 
     public function render_cell($column, $category)
     {
-        $category_class_name = get_class($category);
-        $class_name = $category_class_name::class_name();
-
         switch ($column->get_name())
         {
             case CategoryTableColumnModel::CATEGORY :
@@ -206,7 +203,7 @@ class CategoryTableCellRenderer extends DataClassTableCellRenderer implements Ta
             case CategoryTableColumnModel::SUBCATEGORIES :
                 $count = $this->get_component()->get_parent()->count_categories(
                     new EqualityCondition(
-                        new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
+                        new PropertyConditionVariable(get_class($category), PlatformCategory::PROPERTY_PARENT),
                         new StaticConditionVariable($category->get_id())
                     )
                 );

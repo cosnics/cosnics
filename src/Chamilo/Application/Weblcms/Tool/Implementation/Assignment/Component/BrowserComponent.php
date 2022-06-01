@@ -38,8 +38,7 @@ class BrowserComponent extends Manager
                 $this->get_url(
                     array(
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL => \Chamilo\Application\Weblcms\Manager::ACTION_REPORTING,
-                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentScoresTemplate::class_name(
-                        ),
+                        \Chamilo\Application\Weblcms\Manager::PARAM_TEMPLATE_ID => AssignmentScoresTemplate::class,
                         \Chamilo\Application\Weblcms\Manager::PARAM_TOOL_ACTION => \Chamilo\Application\Weblcms\Tool\Implementation\Reporting\Manager::ACTION_VIEW
                     )
                 ),

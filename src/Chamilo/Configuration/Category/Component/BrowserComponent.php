@@ -118,12 +118,11 @@ class BrowserComponent extends Manager implements TableSupport
     public function get_condition()
     {
         $category_class_name = get_class($this->get_parent()->getCategory());
-        $class_name = $category_class_name::class_name();
 
         $cat_id = $this->get_category_id();
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_PARENT),
+            new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_PARENT),
             new StaticConditionVariable($cat_id)
         );
 
@@ -132,7 +131,7 @@ class BrowserComponent extends Manager implements TableSupport
         {
             $conditions = [];
             $conditions[] = new ContainsCondition(
-                new PropertyConditionVariable($class_name, PlatformCategory::PROPERTY_NAME), $search
+                new PropertyConditionVariable($category_class_name, PlatformCategory::PROPERTY_NAME), $search
             );
             $orcondition = new OrCondition($conditions);
 

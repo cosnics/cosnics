@@ -17,9 +17,9 @@ class EventRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
+     * @var \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
      */
-    private $renderer;
+    private $configuration;
 
     /**
      *
@@ -29,9 +29,9 @@ class EventRendererFactory
 
     /**
      *
-     * @var \Chamilo\Libraries\Calendar\Renderer\Event\Configuration
+     * @var \Chamilo\Libraries\Calendar\Renderer\Renderer
      */
-    private $configuration;
+    private $renderer;
 
     /**
      *
@@ -99,8 +99,13 @@ class EventRendererFactory
      */
     public function getEventRenderer()
     {
-        $eventRendererClassName = ClassnameUtilities::getInstance()->getNamespaceParent($this->getEvent()->context()) .
-            '\Renderer\Event\Type\Event' . $this->getRenderer()->class_name(false);
+        $classNameUtilities = ClassnameUtilities::getInstance();
+
+        $rendererClassName = $classNameUtilities->getClassNameFromNamespace(get_class($this->getRenderer()));
+
+        $eventRendererClassName =
+            $classNameUtilities->getNamespaceParent($this->getEvent()->context()) . '\Renderer\Event\Type\Event' .
+            $rendererClassName;
 
         return new $eventRendererClassName($this->getRenderer(), $this->getEvent(), $this->getConfiguration());
     }

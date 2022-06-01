@@ -11,11 +11,11 @@ use Chamilo\Core\Repository\ContentObject\HotspotQuestion\Storage\DataClass\Comp
 use Chamilo\Core\Repository\ContentObject\OrderingQuestion\Storage\DataClass\ComplexOrderingQuestion;
 use Chamilo\Core\Repository\Storage\DataClass\ComplexContentObjectItem;
 use Chamilo\Core\Repository\Storage\DataManager;
-use Chamilo\Libraries\Translation\Translation;
 use Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters;
 use Chamilo\Libraries\Storage\Query\Condition\EqualityCondition;
 use Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable;
 use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
+use Chamilo\Libraries\Translation\Translation;
 
 class RandomizerComponent extends Manager
 {
@@ -23,14 +23,15 @@ class RandomizerComponent extends Manager
     public function run()
     {
         $complex_content_object_items = DataManager::retrieve_complex_content_object_items(
-            ComplexContentObjectItem::class,
-            new DataClassRetrievesParameters(
+            ComplexContentObjectItem::class, new DataClassRetrievesParameters(
                 new EqualityCondition(
                     new PropertyConditionVariable(
-                        ComplexContentObjectItem::class,
-                        ComplexContentObjectItem::PROPERTY_PARENT), 
-                    new StaticConditionVariable($this->get_parent_content_object_id()))));
-        
+                        ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
+                    ), new StaticConditionVariable($this->get_parent_content_object_id())
+                )
+            )
+        );
+
         $supported_types = array(
             ComplexFillInBlanksQuestion::class,
             ComplexHotspotQuestion::class,
@@ -38,28 +39,29 @@ class RandomizerComponent extends Manager
             ComplexAssessmentMatrixQuestion::class,
             ComplexAssessmentMultipleChoiceQuestion::class,
             ComplexOrderingQuestion::class,
-            ComplexAssessmentSelectQuestion::class);
-        
+            ComplexAssessmentSelectQuestion::class
+        );
+
         $failures = 0;
         $questions = 0;
-        
-        foreach($complex_content_object_items as $complex_content_object_item)
+
+        foreach ($complex_content_object_items as $complex_content_object_item)
         {
-            if (in_array($complex_content_object_item->class_name(), $supported_types))
+            if (in_array(get_class($complex_content_object_item), $supported_types))
             {
                 $questions ++;
-                
-                if (! $complex_content_object_item->get_random())
+
+                if (!$complex_content_object_item->get_random())
                 {
                     $complex_content_object_item->set_random(1);
-                    if (! $complex_content_object_item->update())
+                    if (!$complex_content_object_item->update())
                     {
                         $failures ++;
                     }
                 }
             }
         }
-        
+
         if ($failures > 0)
         {
             if ($failures == $questions && $questions == 1)
@@ -90,12 +92,12 @@ class RandomizerComponent extends Manager
                 $message = 'QuestionsSuccessfullyRandomized';
             }
         }
-        
+
         $this->redirect(
-            Translation::get($message), 
-            false, 
-            array(
-                self::PARAM_ACTION => self::ACTION_BROWSE, 
-                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()));
+            Translation::get($message), false, array(
+                self::PARAM_ACTION => self::ACTION_BROWSE,
+                self::PARAM_COMPLEX_CONTENT_OBJECT_ITEM_ID => $this->get_complex_content_object_item_id()
+            )
+        );
     }
 }

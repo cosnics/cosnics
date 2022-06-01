@@ -389,7 +389,7 @@ abstract class Manager extends Application
                 array(
                     self::PARAM_ACTION => self::ACTION_VIEW_REPORTING_TEMPLATE,
                     self::PARAM_PUBLICATION_ID => Request::get(self::PARAM_PUBLICATION_ID),
-                    self::PARAM_TEMPLATE_NAME => PublicationDetailTemplate::class_name()
+                    self::PARAM_TEMPLATE_NAME => PublicationDetailTemplate::class
                 )
             );
 

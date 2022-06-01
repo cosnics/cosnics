@@ -117,7 +117,7 @@ class CategoryMenu extends HtmlMenu
         $category_class_name = get_class($this->category_manager->getCategory());
 
         $condition = new EqualityCondition(
-            new PropertyConditionVariable($category_class_name::class_name(), $category_class_name::PROPERTY_PARENT),
+            new PropertyConditionVariable($category_class_name, $category_class_name::PROPERTY_PARENT),
             new StaticConditionVariable($parent_id)
         );
 
@@ -125,7 +125,7 @@ class CategoryMenu extends HtmlMenu
             $condition, null, null, new OrderBy(array(
                     new OrderProperty(
                         new PropertyConditionVariable(
-                            $category_class_name::class_name(), $category_class_name::PROPERTY_DISPLAY_ORDER
+                            $category_class_name, $category_class_name::PROPERTY_DISPLAY_ORDER
                         )
                     )
                 ))

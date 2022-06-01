@@ -799,7 +799,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
         $joins = [];
 
         $joins[] = new Join(
-            $course_setting_relation_class::class_name(), new EqualityCondition(
+            $course_setting_relation_class, new EqualityCondition(
                 new PropertyConditionVariable(CourseSetting::class, CourseSetting::PROPERTY_ID),
                 new PropertyConditionVariable($course_setting_relation_class, $course_setting_foreign_property)
             )

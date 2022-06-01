@@ -38,7 +38,7 @@ class CategoryTableDataProvider extends DataClassTableDataProvider
         $orderBy->add(
             new OrderProperty(
                 new PropertyConditionVariable(
-                    $category_class_name::class_name(), $category_class_name::PROPERTY_DISPLAY_ORDER
+                    $category_class_name, $category_class_name::PROPERTY_DISPLAY_ORDER
                 )
             )
         );

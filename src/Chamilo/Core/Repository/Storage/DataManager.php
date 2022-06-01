@@ -391,7 +391,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        return self::count_content_objects($object::class_name(), $parameters);
+        return self::count_content_objects(get_class($object), $parameters);
     }
 
     public static function count_content_objects($type, $parameters = null)
@@ -649,8 +649,8 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             $condition, new RetrieveProperties(
             new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
         ), $having, null, new GroupBy([
-                    new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
-                ])
+                new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_CONTENT_HASH)
+            ])
         );
 
         return self::count_grouped(ContentObject::class, $parameters);
@@ -830,15 +830,15 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             if (count($properties) == 1)
             {
                 $property = new FunctionConditionVariable(
-                    FunctionConditionVariable::SUM, new PropertyConditionVariable($class::class_name(), $properties[0]),
+                    FunctionConditionVariable::SUM, new PropertyConditionVariable(get_class($class), $properties[0]),
                     'disk_space'
                 );
             }
 
             elseif (count($properties) == 2)
             {
-                $left = new PropertyConditionVariable($class::class_name(), $properties[0]);
-                $right = new PropertyConditionVariable($class::class_name(), $properties[1]);
+                $left = new PropertyConditionVariable(get_class($class), $properties[0]);
+                $right = new PropertyConditionVariable(get_class($class), $properties[1]);
                 $property = new FunctionConditionVariable(
                     FunctionConditionVariable::SUM,
                     new OperationConditionVariable($left, OperationConditionVariable::ADDITION, $right), 'disk_space'
@@ -846,18 +846,18 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             }
             else
             {
-                $left = new PropertyConditionVariable($class::class_name(), $properties[0]);
+                $left = new PropertyConditionVariable(get_class($class), $properties[0]);
                 $i = 1;
                 while (count($properties) > $i)
                 {
-                    $right = new PropertyConditionVariable($class::class_name(), $properties[$i]);
+                    $right = new PropertyConditionVariable(get_class($class), $properties[$i]);
                     $operation = new OperationConditionVariable($left, OperationConditionVariable::ADDITION, $right);
                     $left = $operation;
                     $i ++;
                 }
                 $property = new FunctionConditionVariable(FunctionConditionVariable::SUM, $operation, 'disk_space');
             }
-            $parameters = new RecordRetrieveParameters(new RetrieveProperties($property));
+            $parameters = new RecordRetrieveParameters(new RetrieveProperties([$property]));
 
             if ($owner)
             {
@@ -875,7 +875,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                 }
                 $condition = new EqualityCondition(
                     new PropertyConditionVariable(ContentObject::class, ContentObject::PROPERTY_ID),
-                    new PropertyConditionVariable($class::class_name(), $class::PROPERTY_ID)
+                    new PropertyConditionVariable(get_class($class), $class::PROPERTY_ID)
                 );
                 $join = new Join(ContentObject::class, $condition);
 
@@ -897,7 +897,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
                     $parameters->set_condition($match);
                 }
             }
-            $record = self::record($class::class_name(), $parameters);
+            $record = self::record(get_class($class), $parameters);
 
             $disk_space += $record['disk_space'];
         }
@@ -1177,7 +1177,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ))
         );
 
-        return self::retrieve_content_objects($object::class_name(), $parameters);
+        return self::retrieve_content_objects(get_class($object), $parameters);
     }
 
     public static function retrieve_content_objects($type, $parameters = null)
@@ -1325,7 +1325,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             ))
         );
 
-        return self::retrieve($object::class_name(), $parameters);
+        return self::retrieve(get_class($object), $parameters);
     }
 
     public static function retrieve_recycled_content_objects_from_category($category_id)

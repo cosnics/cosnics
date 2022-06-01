@@ -84,20 +84,14 @@ abstract class ContentObjectForm extends FormValidator
     protected $selectedTabIdentifier;
 
     /**
+     * @var \HTML_QuickForm_element[]
+     */
+    private $additional_elements;
+
+    /**
      * @var boolean
      */
     private $allow_new_version;
-
-    /**
-     * @var integer
-     */
-    private $owner_id;
-
-    /**
-     *
-     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
-     */
-    private $workspace;
 
     /**
      * @var \Chamilo\Core\Repository\Storage\DataClass\ContentObject
@@ -110,15 +104,21 @@ abstract class ContentObjectForm extends FormValidator
     private $extra;
 
     /**
-     * @var \HTML_QuickForm_element[]
+     * @var integer
      */
-    private $additional_elements;
+    private $owner_id;
 
     /**
      *
      * @var DynamicFormTabsRenderer
      */
     private $tabsGenerator;
+
+    /**
+     *
+     * @var \Chamilo\Core\Repository\Workspace\Architecture\WorkspaceInterface
+     */
+    private $workspace;
 
     /**
      * @param integer $form_type
@@ -202,18 +202,18 @@ abstract class ContentObjectForm extends FormValidator
         $entityService = $this->getEntityService();
 
         $entityFactory = $this->getDataClassEntityFactory();
-        $entity = $entityFactory->getEntity($this->get_content_object()->class_name());
+        $entity = $entityFactory->getEntity(get_class($this->get_content_object()));
 
         $availableSchemaIds = $entityService->getAvailableSchemaIdsForEntityType($entity);
 
         if (count($availableSchemaIds) > 0)
         {
             $entity = $entityFactory->getEntity(
-                $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
+                get_class($this->get_content_object()), $this->get_content_object()->get_id()
             );
             $schemaInstances = $entityService->getSchemaInstancesForEntity($entity);
 
-            foreach($schemaInstances as $schemaInstance)
+            foreach ($schemaInstances as $schemaInstance)
             {
                 $schema = $schemaInstance->getSchema();
                 $this->getTabsGenerator()->add_tab(
@@ -444,8 +444,7 @@ abstract class ContentObjectForm extends FormValidator
 
         $value = Configuration::getInstance()->get_setting(array(Manager::context(), 'description_required'));
         $required = $value == 1;
-        $name =
-            Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
+        $name = Translation::get('Description', [], ClassnameUtilities::getInstance()->getNamespaceFromObject($this));
         $this->add_html_editor(ContentObject::PROPERTY_DESCRIPTION, $name, $required, $htmleditor_options);
     }
 
@@ -475,8 +474,7 @@ abstract class ContentObjectForm extends FormValidator
     {
         $object = $this->content_object;
 
-        $owner =
-            \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $this->get_owner_id());
+        $owner = \Chamilo\Core\User\Storage\DataManager::retrieve_by_id(User::class, (int) $this->get_owner_id());
 
         if (!$in_tab)
         {
@@ -544,7 +542,7 @@ abstract class ContentObjectForm extends FormValidator
     public function build_metadata_choice_form()
     {
         $entity = $this->getDataClassEntityFactory()->getEntity(
-            $this->get_content_object()->class_name(), $this->get_content_object()->get_id()
+            get_class($this->get_content_object()), $this->get_content_object()->get_id()
         );
 
         $this->getInstanceFormService()->addElements($this, $entity);
@@ -686,7 +684,9 @@ abstract class ContentObjectForm extends FormValidator
         $action = null, $extra = null, $additional_elements = [], $allow_new_version = true, $form_variant = null
     )
     {
-        $base_class_name = $content_object->package() . '\Form\\' . $content_object->class_name(false);
+        $contentObjectClassName =
+            ClassnameUtilities::getInstance()->getClassNameFromNamespace(get_class($content_object));
+        $base_class_name = $content_object->package() . '\Form\\' . $contentObjectClassName;
 
         if ($form_variant)
         {

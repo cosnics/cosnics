@@ -403,7 +403,7 @@ class ContentObjectRepository
 
         $parameters = new DataClassRetrievesParameters(new AndCondition($conditions), null, null, $orderBy);
 
-        return $this->retrieveContentObjects($contentObject::class_name(), $parameters);
+        return $this->retrieveContentObjects(get_class($contentObject), $parameters);
     }
 
     /**

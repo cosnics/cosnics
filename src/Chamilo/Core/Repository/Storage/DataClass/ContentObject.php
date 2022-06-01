@@ -322,7 +322,7 @@ class ContentObject extends CompositeDataClass
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
+            ), new StaticConditionVariable($this->getId()), ComplexContentObjectItem::getStorageUnitName()
         );
 
         $helper_types = DataManager::get_active_helper_types();
@@ -330,14 +330,12 @@ class ContentObject extends CompositeDataClass
         foreach ($helper_types as $helper_type)
         {
             $subselect_condition = new EqualityCondition(
-                new PropertyConditionVariable($helper_type, 'reference_id'),
-                new StaticConditionVariable($this->get_id())
+                new PropertyConditionVariable($helper_type, 'reference_id'), new StaticConditionVariable($this->getId())
             );
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID),
-                $subselect_condition
+                ), new PropertyConditionVariable($helper_type, $helper_type::PROPERTY_ID), $subselect_condition
             );
         }
 
@@ -417,7 +415,7 @@ class ContentObject extends CompositeDataClass
                     );
                     $condition = new AndCondition($conditions);
                     $parameters = new DataClassRetrievesParameters($condition);
-                    $objects = DataManager::retrieve_content_objects($content_object::class_name(), $parameters);
+                    $objects = DataManager::retrieve_content_objects(get_class($content_object), $parameters);
                     foreach ($objects as $object)
                     {
                         $object->set_current(ContentObject::CURRENT_OLD);
@@ -531,8 +529,7 @@ class ContentObject extends CompositeDataClass
         foreach ($assisting_types as $type)
         {
             $condition = new EqualityCondition(
-                new PropertyConditionVariable($type::class_name(), 'reference_id'),
-                new StaticConditionVariable($this->get_id())
+                new PropertyConditionVariable($type, 'reference_id'), new StaticConditionVariable($this->get_id())
             );
             $assisting_objects = DataManager::retrieve_active_content_objects($type, $condition);
 
@@ -1424,8 +1421,7 @@ class ContentObject extends CompositeDataClass
             $conditions[] = new SubselectCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-                ), new PropertyConditionVariable($helper_type::class_name(), $helper_type::PROPERTY_ID),
-                $subselect_condition
+                ), new PropertyConditionVariable($helper_type, $helper_type::PROPERTY_ID), $subselect_condition
             );
         }
 

@@ -34,31 +34,30 @@ class RightsUtil
 
     private static $instance;
 
-    private $rights_cache;
+    private $entities_condition_cache;
 
-    private $rights_cache_specific_entity;
+    private $entity_item_condition_cache;
 
     private $location_cache;
 
-    private $entities_condition_cache;
+    private $location_ids_cache;
 
     private $locked_parent_cache;
 
-    private $entity_item_condition_cache;
+    private $rights_cache;
 
     /*
      * Use get_instance to make use of caching
      */
 
-    private $location_ids_cache;
+    private $rights_cache_specific_entity;
 
     /*
      * DONE
      */
 
     public function count_location_overview_with_rights_granted(
-        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null,
-        $tree_identifier = null
+        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
         $user_id = $user_id ?: Session::get_user_id();
@@ -71,21 +70,21 @@ class RightsUtil
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    $context_location_entity_right::class_name(), $context_location_entity_right::PROPERTY_RIGHT_ID
+                    $context_location_entity_right, $context_location_entity_right::PROPERTY_RIGHT_ID
                 ), new StaticConditionVariable($right_id)
             );
         }
         foreach ($retrieve_types as $retrieve_type)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE),
+                new PropertyConditionVariable($context_location, $context_location::PROPERTY_TYPE),
                 new StaticConditionVariable($retrieve_type)
             );
         }
         if (!is_null($tree_type))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TREE_TYPE),
+                new PropertyConditionVariable($context_location, $context_location::PROPERTY_TREE_TYPE),
                 new StaticConditionVariable($tree_type)
             );
         }
@@ -93,7 +92,7 @@ class RightsUtil
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    $context_location::class_name(), $context_location::PROPERTY_TREE_IDENTIFIER
+                    $context_location, $context_location::PROPERTY_TREE_IDENTIFIER
                 ), new StaticConditionVariable($tree_identifier)
             );
         }
@@ -352,11 +351,11 @@ class RightsUtil
         {
             $conditions = [];
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_TYPE),
+                new PropertyConditionVariable($context_class, $context_class::PROPERTY_ENTITY_TYPE),
                 new StaticConditionVariable($type)
             );
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_class::class_name(), $context_class::PROPERTY_ENTITY_ID),
+                new PropertyConditionVariable($context_class, $context_class::PROPERTY_ENTITY_ID),
                 new StaticConditionVariable($id)
             );
             $condition = new AndCondition($conditions);
@@ -469,8 +468,7 @@ class RightsUtil
      */
 
     public function get_location_overview_with_rights_granted(
-        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null,
-        $tree_identifier = null
+        $context, $user_id, $entities, $right_ids = [], $retrieve_types = [], $tree_type = null, $tree_identifier = null
     )
     {
         $user_id = $user_id ?: Session::get_user_id();
@@ -483,21 +481,21 @@ class RightsUtil
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    $context_location_entity_right::class_name(), $context_location_entity_right::PROPERTY_RIGHT_ID
+                    $context_location_entity_right, $context_location_entity_right::PROPERTY_RIGHT_ID
                 ), new StaticConditionVariable($right_id)
             );
         }
         foreach ($retrieve_types as $retrieve_type)
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TYPE),
+                new PropertyConditionVariable($context_location, $context_location::PROPERTY_TYPE),
                 new StaticConditionVariable($retrieve_type)
             );
         }
         if (!is_null($tree_type))
         {
             $conditions[] = new EqualityCondition(
-                new PropertyConditionVariable($context_location::class_name(), $context_location::PROPERTY_TREE_TYPE),
+                new PropertyConditionVariable($context_location, $context_location::PROPERTY_TREE_TYPE),
                 new StaticConditionVariable($tree_type)
             );
         }
@@ -505,7 +503,7 @@ class RightsUtil
         {
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
-                    $context_location::class_name(), $context_location::PROPERTY_TREE_IDENTIFIER
+                    $context_location, $context_location::PROPERTY_TREE_IDENTIFIER
                 ), new StaticConditionVariable($tree_identifier)
             );
         }
@@ -537,13 +535,11 @@ class RightsUtil
      * Idea: Retrieve the child-parent relation of location with as few queries as possible and store them in the
      * memory. The function
      * has_right_recursive(...) will loop over the child-parent tree, which is much faster than the recursive function
-     * calls to DataManager::retrieve_granted_rights_array(...). This function actually retrieves the location tree level-by-level starting
-     * with the leaf
-     * level, followed by parent level, then grandparents until an empty level is found.
-     * Result is a flat array mapping each ID in $location_ids onto its parent ID and each parent onto its grand parent
-     * ID, etc.
-     * Result will only contain child location ID's if the 'inherit' property of the location is true and the parent is
-     * not null.
+     * calls to DataManager::retrieve_granted_rights_array(...). This function actually retrieves the location tree
+     * level-by-level starting with the leaf level, followed by parent level, then grandparents until an empty level is
+     * found. Result is a flat array mapping each ID in $location_ids onto its parent ID and each parent onto its grand
+     * parent ID, etc. Result will only contain child location ID's if the 'inherit' property of the location is true
+     * and the parent is not null.
      *
      * @return array Keys: child location ID's Values: parent location ID's.
      */

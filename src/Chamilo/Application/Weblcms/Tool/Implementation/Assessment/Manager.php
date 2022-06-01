@@ -75,13 +75,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $dropdownButton->prependSubButton(
             new SubButton(
-                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
-                        self::PARAM_ASSESSMENT => $publication_id
-                    )
-                ), SubButton::DISPLAY_LABEL
+                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                    self::PARAM_ASSESSMENT => $publication_id
+                )
+            ), SubButton::DISPLAY_LABEL
             )
         );
     }
@@ -109,13 +108,12 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
 
         $toolbar->add_item(
             new ToolbarItem(
-                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'),
-                $this->get_url(
-                    array(
-                        \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
-                        self::PARAM_ASSESSMENT => $publication_id
-                    )
-                ), ToolbarItem::DISPLAY_ICON
+                Translation::get('ManageAttempts'), new FontAwesomeGlyph('file-signature', [], 'fas'), $this->get_url(
+                array(
+                    \Chamilo\Application\Weblcms\Tool\Manager::PARAM_ACTION => self::ACTION_VIEW_RESULTS,
+                    self::PARAM_ASSESSMENT => $publication_id
+                )
+            ), ToolbarItem::DISPLAY_ICON
             )
         );
     }
@@ -139,28 +137,21 @@ abstract class Manager extends \Chamilo\Application\Weblcms\Tool\Manager
         if (!array_key_exists($publication->get_id(), self::$checked_publications))
         {
             $assessment = $publication->get_content_object();
-            $track =
-                new AssessmentAttempt(
-                );
+            $track = new AssessmentAttempt();
             $condition_t = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssessmentAttempt::class_name(
-                    ),
-                    AssessmentAttempt::PROPERTY_ASSESSMENT_ID
+                    AssessmentAttempt::class, AssessmentAttempt::PROPERTY_ASSESSMENT_ID
                 ), new StaticConditionVariable($publication->get_id())
             );
             $condition_u = new EqualityCondition(
                 new PropertyConditionVariable(
-                    AssessmentAttempt::class_name(
-                    ),
-                    AssessmentAttempt::PROPERTY_USER_ID
+                    AssessmentAttempt::class, AssessmentAttempt::PROPERTY_USER_ID
                 ), new StaticConditionVariable($this->get_user_id())
             );
             $condition = new AndCondition(array($condition_t, $condition_u));
 
             $trackers = DataManager::retrieves(
-                AssessmentAttempt::class_name(
-                ), new DataClassRetrievesParameters($condition)
+                AssessmentAttempt::class, new DataClassRetrievesParameters($condition)
             );
 
             $count = count($trackers);

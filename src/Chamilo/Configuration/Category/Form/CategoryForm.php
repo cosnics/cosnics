@@ -196,11 +196,11 @@ class CategoryForm extends FormValidator
 
                 $conditions = [];
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME),
+                    new PropertyConditionVariable(get_class($category), $category::PROPERTY_NAME),
                     new StaticConditionVariable($category->get_name())
                 );
                 $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT),
+                    new PropertyConditionVariable(get_class($category), $category::PROPERTY_PARENT),
                     new StaticConditionVariable($category->get_parent())
                 );
                 $condition = new AndCondition($conditions);
@@ -241,16 +241,16 @@ class CategoryForm extends FormValidator
         $conditions = [];
         $conditions[] = new NotCondition(
             new EqualityCondition(
-                new PropertyConditionVariable($category::class_name(), $category::PROPERTY_ID),
+                new PropertyConditionVariable(get_class($category), $category::PROPERTY_ID),
                 new StaticConditionVariable($category->get_id())
             )
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_NAME),
+            new PropertyConditionVariable(get_class($category), $category::PROPERTY_NAME),
             new StaticConditionVariable($category->get_name())
         );
         $conditions[] = new EqualityCondition(
-            new PropertyConditionVariable($category::class_name(), $category::PROPERTY_PARENT),
+            new PropertyConditionVariable(get_class($category), $category::PROPERTY_PARENT),
             new StaticConditionVariable($category->get_parent())
         );
         $condition = new AndCondition($conditions);

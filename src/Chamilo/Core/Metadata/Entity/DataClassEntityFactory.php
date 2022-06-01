@@ -94,7 +94,7 @@ class DataClassEntityFactory
      */
     public function getEntityFromDataClass(DataClass $dataClass)
     {
-        return $this->getEntity($dataClass->class_name(), $dataClass->getId(), $dataClass);
+        return $this->getEntity(get_class($dataClass), $dataClass->getId(), $dataClass);
     }
 
     /**

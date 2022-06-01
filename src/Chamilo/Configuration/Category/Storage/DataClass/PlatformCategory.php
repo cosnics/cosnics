@@ -33,8 +33,8 @@ abstract class PlatformCategory extends DataClass
     protected function getDependencies(array $dependencies = []): array
     {
         return array(
-            $this->class_name() => new EqualityCondition(
-                new PropertyConditionVariable($this->class_name(), self::PROPERTY_PARENT),
+            get_class($this) => new EqualityCondition(
+                new PropertyConditionVariable(get_class($this), self::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id())
             )
         );
