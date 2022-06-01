@@ -34,7 +34,7 @@ class BlockTypeTargetEntity extends HomeTargetEntity
      *
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'home_block_type_target_entity';
     }

@@ -39,7 +39,7 @@ class ResultsViewerComponent extends Manager implements DelegateComponent
         $condition = new InCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
-            ), $question_cids, ComplexContentObjectItem::getTableName()
+            ), $question_cids, ComplexContentObjectItem::getStorageUnitName()
         );
 
         $questions_cloi = DataManager::retrieve_complex_content_object_items(

@@ -53,7 +53,7 @@ class ComplexAssessmentMatchTextQuestion extends ComplexContentObjectItem implem
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_complex_assessment_match_text_question';
     }

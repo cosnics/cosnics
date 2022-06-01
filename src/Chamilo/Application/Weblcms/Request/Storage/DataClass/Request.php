@@ -236,7 +236,7 @@ class Request extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_request_request';
     }

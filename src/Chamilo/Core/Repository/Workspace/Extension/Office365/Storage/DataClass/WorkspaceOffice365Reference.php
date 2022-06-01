@@ -120,7 +120,7 @@ class WorkspaceOffice365Reference extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_workspace_office365_reference';
     }

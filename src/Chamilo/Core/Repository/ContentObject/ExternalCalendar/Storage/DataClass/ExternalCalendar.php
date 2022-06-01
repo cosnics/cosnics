@@ -329,7 +329,7 @@ class ExternalCalendar extends ContentObject implements Versionable, FileStorage
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_external_calendar';
     }

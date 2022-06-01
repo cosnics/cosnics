@@ -140,7 +140,7 @@ class Relation extends DataClass implements EntityTranslationInterface
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'metadata_relation';
     }

@@ -36,7 +36,7 @@ class SubselectConditionTranslator extends ConditionTranslator
 
         $class = $subselectCondition->getSubselectConditionVariable()->getDataClassName();
 
-        $string[] = $class::getTableName();
+        $string[] = $class::getStorageUnitName();
         $string[] = 'AS';
         $string[] = $this->getStorageAliasGenerator()->getDataClassAlias($class);
 

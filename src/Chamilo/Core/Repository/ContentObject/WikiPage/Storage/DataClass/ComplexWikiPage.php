@@ -37,7 +37,7 @@ class ComplexWikiPage extends ComplexContentObjectItem
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_complex_wiki_page';
     }
@@ -60,13 +60,13 @@ class ComplexWikiPage extends ComplexContentObjectItem
             $conditions[] = new EqualityCondition(
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                ), new StaticConditionVariable($this->get_parent()), ComplexContentObjectItem::getTableName()
+                ), new StaticConditionVariable($this->get_parent()), ComplexContentObjectItem::getStorageUnitName()
             );
             $conditions[] = new NotCondition(
                 new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_ID
-                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
+                    ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
                 )
             );
 

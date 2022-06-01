@@ -63,7 +63,7 @@ class AssessmentOpenQuestion extends ContentObject implements Versionable
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_assessment_open_question';
     }

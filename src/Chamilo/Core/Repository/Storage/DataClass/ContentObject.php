@@ -265,7 +265,7 @@ class ContentObject extends CompositeDataClass
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
+            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
         );
 
         return DataManager::count_complex_content_object_items(
@@ -322,7 +322,7 @@ class ContentObject extends CompositeDataClass
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_REF
-            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
+            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
         );
 
         $helper_types = DataManager::get_active_helper_types();
@@ -548,7 +548,7 @@ class ContentObject extends CompositeDataClass
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                     ), new StaticConditionVariable($assisting_object->get_id()),
-                    ComplexContentObjectItem::getTableName()
+                    ComplexContentObjectItem::getStorageUnitName()
                 );
 
                 $condition = new OrCondition($conditions);
@@ -618,7 +618,7 @@ class ContentObject extends CompositeDataClass
         $conditions[] = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
+            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
         );
 
         $condition = new OrCondition($conditions);
@@ -866,7 +866,7 @@ class ContentObject extends CompositeDataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_content_object';
     }
@@ -1074,7 +1074,7 @@ class ContentObject extends CompositeDataClass
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getTableName()
+            ), new StaticConditionVariable($this->get_id()), ComplexContentObjectItem::getStorageUnitName()
         );
         $parameters = new DataClassRetrievesParameters($condition, $count, $offset, $order_by);
 

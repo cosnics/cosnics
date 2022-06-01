@@ -61,13 +61,13 @@ class MoverComponent extends Manager
                         ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_DISPLAY_ORDER),
                     new StaticConditionVariable($new_place),
-                    ComplexContentObjectItem::getTableName());
+                    ComplexContentObjectItem::getStorageUnitName());
                 $conditions[] = new EqualityCondition(
                     new PropertyConditionVariable(
                         ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($parent),
-                    ComplexContentObjectItem::getTableName());
+                    ComplexContentObjectItem::getStorageUnitName());
                 $condition = new AndCondition($conditions);
                 $items = DataManager::retrieve_complex_content_object_items(
                     ComplexContentObjectItem::class,

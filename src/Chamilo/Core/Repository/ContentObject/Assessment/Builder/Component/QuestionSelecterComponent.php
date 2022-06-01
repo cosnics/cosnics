@@ -34,7 +34,7 @@ class QuestionSelecterComponent extends Manager
                         ComplexContentObjectItem::class,
                         ComplexContentObjectItem::PROPERTY_PARENT),
                     new StaticConditionVariable($assessment_id),
-                    ComplexContentObjectItem::getTableName()));
+                    ComplexContentObjectItem::getStorageUnitName()));
             foreach($clois as $cloi)
             {
                 $question_ids[] = $cloi->get_ref();

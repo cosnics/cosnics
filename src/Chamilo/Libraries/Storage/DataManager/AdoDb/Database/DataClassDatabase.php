@@ -160,7 +160,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
         $queryBuilder = new QueryBuilder();
-        $queryBuilder->delete($dataClassName::getTableName(), $this->getAlias($dataClassName::getTableName()));
+        $queryBuilder->delete($dataClassName::getStorageUnitName(), $this->getAlias($dataClassName::getStorageUnitName()));
 
         if (isset($condition))
         {
@@ -322,20 +322,20 @@ class DataClassDatabase implements DataClassDatabaseInterface
         if (is_subclass_of($dataClassName, CompositeDataClass::class) &&
             get_parent_class($dataClassName) == CompositeDataClass::class)
         {
-            $tableName = $dataClassName::getTableName();
+            $tableName = $dataClassName::getStorageUnitName();
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && $dataClassName::isExtended())
         {
-            $tableName = $dataClassName::getTableName();
+            $tableName = $dataClassName::getStorageUnitName();
         }
         elseif (is_subclass_of($dataClassName, CompositeDataClass::class) && !$dataClassName::isExtended())
         {
             $parent = $dataClassName::parentClassName();
-            $tableName = $parent::getTableName();
+            $tableName = $parent::getStorageUnitName();
         }
         else
         {
-            $tableName = $dataClassName::getTableName();
+            $tableName = $dataClassName::getStorageUnitName();
         }
 
         return $tableName;

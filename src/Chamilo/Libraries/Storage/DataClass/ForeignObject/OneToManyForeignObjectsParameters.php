@@ -28,7 +28,7 @@ class OneToManyForeignObjectsParameters extends ForeignObjectsParameters
     {
         if (is_null($foreignKey))
         {
-            $foreignKey = $this->generateKey($this->getBaseObject()->getTableName());
+            $foreignKey = $this->generateKey($this->getBaseObject()->getStorageUnitName());
         }
 
         parent::setForeignKey($foreignKey);

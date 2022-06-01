@@ -115,7 +115,7 @@ abstract class Manager extends \Chamilo\Core\Repository\Display\Manager
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($root_complex_content_ref),
-                ComplexContentObjectItem::getTableName()));
+                ComplexContentObjectItem::getStorageUnitName()));
 
         foreach($children as $child)
         {

@@ -147,7 +147,7 @@ class Availability extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'calendar_availability';
     }

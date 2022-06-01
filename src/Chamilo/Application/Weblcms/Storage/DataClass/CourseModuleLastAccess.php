@@ -85,7 +85,7 @@ class CourseModuleLastAccess extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_course_module_last_access';
     }

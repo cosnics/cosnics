@@ -75,7 +75,7 @@ class StructureLocation extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'rights_structure_location';
     }

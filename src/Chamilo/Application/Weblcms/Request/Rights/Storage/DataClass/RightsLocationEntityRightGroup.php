@@ -82,7 +82,7 @@ class RightsLocationEntityRightGroup extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_request_rights_location_entity_right_group';
     }

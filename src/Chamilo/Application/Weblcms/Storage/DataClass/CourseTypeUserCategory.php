@@ -120,7 +120,7 @@ class CourseTypeUserCategory extends DataClass implements DisplayOrderDataClassL
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_course_type_user_category';
     }

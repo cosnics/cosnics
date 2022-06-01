@@ -197,7 +197,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $pageNumber = 1;
             }
 
-            $requestedPageNumber = Request::get(ForumTopic::getTableName() . '_' . 'page_nr');
+            $requestedPageNumber = Request::get(ForumTopic::getStorageUnitName() . '_' . 'page_nr');
 
             $this->pageNumber = $requestedPageNumber ?: $pageNumber;
         }
@@ -256,11 +256,11 @@ class TopicViewerComponent extends Manager implements DelegateComponent
                 $conditions = [];
                 $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_TITLE),
-                     $query , ForumPost::getTableName(), false
+                     $query , ForumPost::getStorageUnitName(), false
                 );
                 $conditions[] = new ContainsCondition(
                     new PropertyConditionVariable(ForumPost::class, ForumPost::PROPERTY_CONTENT),
-                    $query, ForumPost::getTableName(), false
+                    $query, ForumPost::getStorageUnitName(), false
                 );
 
                 return new OrCondition($conditions);
@@ -305,7 +305,7 @@ class TopicViewerComponent extends Manager implements DelegateComponent
             $pagerRenderer = new PagerRenderer($this->getPager());
 
             return $pagerRenderer->renderPaginationWithPageLimit(
-                $this->get_parameters(), ForumTopic::getTableName() . '_' . 'page_nr'
+                $this->get_parameters(), ForumTopic::getStorageUnitName() . '_' . 'page_nr'
             );
         }
         catch (Exception $ex)

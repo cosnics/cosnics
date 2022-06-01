@@ -277,11 +277,11 @@ class DataClassRepository
         if ($dataClass instanceof CompositeDataClass)
         {
             $parentClass = $dataClass->parentClassName();
-            $objectTableName = $parentClass::getTableName();
+            $objectTableName = $parentClass::getStorageUnitName();
         }
         else
         {
-            $objectTableName = $dataClass->getTableName();
+            $objectTableName = $dataClass->getStorageUnitName();
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
@@ -296,7 +296,7 @@ class DataClassRepository
             $objectProperties = $dataClass->getAdditionalProperties();
             $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-            $dataClassCreated = $this->getDataClassDatabase()->create($dataClass->getTableName(), $objectProperties);
+            $dataClassCreated = $this->getDataClassDatabase()->create($dataClass->getStorageUnitName(), $objectProperties);
         }
 
         if ($dataClassCreated === true && $this->isQueryCacheEnabled())
@@ -320,7 +320,7 @@ class DataClassRepository
 
     public function createRecord(string $dataClassName, array $record): bool
     {
-        return $this->getDataClassDatabase()->create($dataClassName::getTableName(), $record);
+        return $this->getDataClassDatabase()->create($dataClassName::getStorageUnitName(), $record);
     }
 
     public function delete(DataClass $dataClass): bool
@@ -915,12 +915,12 @@ class DataClassRepository
         if ($dataClass instanceof CompositeDataClass)
         {
             $propertyConditionClass = $dataClass::parentClassName();
-            $dataClassTableName = $propertyConditionClass::getTableName();
+            $dataClassTableName = $propertyConditionClass::getStorageUnitName();
         }
         else
         {
             $propertyConditionClass = get_class($dataClass);
-            $dataClassTableName = $dataClass->getTableName();
+            $dataClassTableName = $dataClass->getStorageUnitName();
         }
 
         $condition = new EqualityCondition(
@@ -943,7 +943,7 @@ class DataClassRepository
             );
 
             $result = $this->getDataClassDatabase()->update(
-                $dataClass->getTableName(), $condition, $dataClass->getAdditionalProperties()
+                $dataClass->getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
             );
         }
 
@@ -952,7 +952,7 @@ class DataClassRepository
 
     public function updates(string $dataClassName, UpdateProperties $properties, Condition $condition): bool
     {
-        if (!$this->getDataClassDatabase()->updates($dataClassName::getTableName(), $properties, $condition))
+        if (!$this->getDataClassDatabase()->updates($dataClassName::getStorageUnitName(), $properties, $condition))
         {
             return false;
         }

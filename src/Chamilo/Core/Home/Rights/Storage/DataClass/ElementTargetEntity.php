@@ -34,7 +34,7 @@ class ElementTargetEntity extends HomeTargetEntity
      *
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'home_element_type_target_entity';
     }

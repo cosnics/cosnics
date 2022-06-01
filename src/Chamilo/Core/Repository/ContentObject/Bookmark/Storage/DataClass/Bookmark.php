@@ -18,7 +18,7 @@ class Bookmark extends ContentObject implements Versionable, Includeable
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_bookmark';
     }

@@ -95,7 +95,7 @@ class StorageAliasGenerator
 
     public function getDataClassAlias(string $class): string
     {
-        return $this->getTableAlias($class::getTableName());
+        return $this->getTableAlias($class::getStorageUnitName());
     }
 
     public static function getInstance(): StorageAliasGenerator

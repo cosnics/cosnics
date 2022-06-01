@@ -10,7 +10,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  */
 class Note extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Note
 {
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_assignment_note';
     }

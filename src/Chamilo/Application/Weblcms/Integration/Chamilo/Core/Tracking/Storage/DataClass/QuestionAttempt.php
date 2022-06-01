@@ -46,7 +46,7 @@ class QuestionAttempt extends AbstractQuestionAttempt
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_question_attempt';
     }

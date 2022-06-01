@@ -60,7 +60,7 @@ class Blog extends ContentObject implements ComplexContentObjectSupport
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_blog';
     }

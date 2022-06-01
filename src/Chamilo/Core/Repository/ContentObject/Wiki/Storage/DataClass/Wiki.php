@@ -67,7 +67,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT),
                 new StaticConditionVariable($this->get_id()),
-                ComplexContentObjectItem::getTableName()));
+                ComplexContentObjectItem::getStorageUnitName()));
 
         if ($return_complex_items)
         {
@@ -122,7 +122,7 @@ class Wiki extends ContentObject implements ComplexContentObjectSupport
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_wiki';
     }

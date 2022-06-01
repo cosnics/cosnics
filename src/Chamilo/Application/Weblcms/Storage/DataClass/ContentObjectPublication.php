@@ -195,7 +195,7 @@ class ContentObjectPublication extends Publication implements DisplayOrderDataCl
      *
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_content_object_publication';
     }

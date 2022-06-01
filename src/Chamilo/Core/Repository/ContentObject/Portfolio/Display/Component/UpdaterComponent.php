@@ -75,7 +75,7 @@ class UpdaterComponent extends ItemComponent
                     $condition = new EqualityCondition(
                         new PropertyConditionVariable(
                             ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                        ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getTableName()
+                        ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getStorageUnitName()
                     );
                     $parameters = new DataClassRetrievesParameters($condition);
                     $children = DataManager::retrieve_complex_content_object_items(

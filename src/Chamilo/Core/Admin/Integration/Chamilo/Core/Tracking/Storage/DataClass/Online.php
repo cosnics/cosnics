@@ -75,7 +75,7 @@ class Online extends SimpleTracker
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_admin_online';
     }

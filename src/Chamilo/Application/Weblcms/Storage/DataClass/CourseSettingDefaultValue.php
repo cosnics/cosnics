@@ -53,7 +53,7 @@ class CourseSettingDefaultValue extends CourseSettingValue
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_course_setting_default_value';
     }

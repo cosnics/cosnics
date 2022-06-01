@@ -75,7 +75,7 @@ class DummyQuestionAttempt extends AbstractQuestionAttempt
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_assessment_preview_question_attempt';
     }

@@ -10,7 +10,7 @@ namespace Chamilo\Application\Weblcms\Integration\Chamilo\Core\Tracking\Storage\
  */
 class Feedback extends \Chamilo\Core\Repository\ContentObject\Assignment\Display\Bridge\Storage\DataClass\Feedback
 {
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_assignment_feedback';
     }

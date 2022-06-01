@@ -420,7 +420,7 @@ class Webpage extends ContentObject implements Versionable, Includeable, FileSto
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_webpage';
     }

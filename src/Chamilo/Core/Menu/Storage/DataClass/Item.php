@@ -159,7 +159,7 @@ class Item extends CompositeDataClass implements DataClassDisplayOrderSupport
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'menu_item';
     }

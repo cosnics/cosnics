@@ -242,7 +242,7 @@ class HtmlDescriptionRenditionImplementation extends HtmlRenditionImplementation
     public function prepare_pager()
     {
         // set the prefix
-        $this->param_prefix = ForumTopic::getTableName() . '_';
+        $this->param_prefix = ForumTopic::getStorageUnitName() . '_';
 
         // count the total number of objects
         $this->total_number_of_items = DataManager::count_forum_topic_posts($this->object->get_id());

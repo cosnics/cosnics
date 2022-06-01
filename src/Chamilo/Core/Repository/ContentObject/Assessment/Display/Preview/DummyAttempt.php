@@ -60,7 +60,7 @@ class DummyAttempt extends AbstractAttempt
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_assessment_preview_assessment_attempt';
     }

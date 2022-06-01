@@ -58,7 +58,7 @@ class GroupRelUser extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'group_group_rel_user';
     }

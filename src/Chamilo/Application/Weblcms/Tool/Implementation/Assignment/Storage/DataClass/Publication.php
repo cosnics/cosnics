@@ -46,7 +46,7 @@ class Publication extends DataClass
         );
     }
 
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_assignment_publication';
     }

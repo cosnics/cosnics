@@ -112,7 +112,7 @@ class ForumSubforumEditorComponent extends Manager implements DelegateComponent
                         ComplexContentObjectItem::class, new EqualityCondition(
                             new PropertyConditionVariable(
                                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-                            ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getTableName()
+                            ), new StaticConditionVariable($old_id), ComplexContentObjectItem::getStorageUnitName()
                         )
                     );
                     foreach($children as $child)

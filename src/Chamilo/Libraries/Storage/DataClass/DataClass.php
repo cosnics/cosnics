@@ -339,7 +339,7 @@ abstract class DataClass
         return (array_key_exists($propertyName, $properties)) ? $properties[$propertyName] : null;
     }
 
-    abstract public static function getTableName(): string;
+    abstract public static function getStorageUnitName(): string;
 
     /**
      * @deprecated Use getId() now

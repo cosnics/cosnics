@@ -43,7 +43,7 @@ class DummyQuestionAttempt extends TreeNodeQuestionAttempt
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_learning_path_preview_question_attempt';
     }

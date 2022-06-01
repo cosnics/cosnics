@@ -12,7 +12,7 @@ class RightsLocation extends \Chamilo\Libraries\Rights\Domain\RightsLocation
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_quota_rights_location';
     }

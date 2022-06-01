@@ -31,7 +31,7 @@ class ForeignObjectsParameters
 
     protected function generateKey(string $className): string
     {
-        return $className::getTableName() . '_' . DataClass::PROPERTY_ID;
+        return $className::getStorageUnitName() . '_' . DataClass::PROPERTY_ID;
     }
 
     public function getBaseObject(): DataClass

@@ -175,7 +175,7 @@ class Menu extends HtmlMenu
         $condition = new EqualityCondition(
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
-            ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::getTableName()
+            ), new StaticConditionVariable($parent_id), ComplexContentObjectItem::getStorageUnitName()
         );
         $parameters = new DataClassRetrievesParameters($condition);
         $clois = DataManager::retrieve_complex_content_object_items(

@@ -507,7 +507,7 @@ class CpoContentObjectExportController extends ContentObjectExportController
                     ComplexContentObjectItem::class,
                     ComplexContentObjectItem::PROPERTY_PARENT), 
                 new StaticConditionVariable($content_object->get_id()), 
-                ComplexContentObjectItem::getTableName());
+                ComplexContentObjectItem::getStorageUnitName());
             $children = DataManager::retrieve_complex_content_object_items(
                 ComplexContentObjectItem::class,
                 $condition);

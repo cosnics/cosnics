@@ -70,7 +70,7 @@ class LearningPathTreeNodeAttempt extends TreeNodeAttempt
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_learning_path_tree_node_attempt';
     }

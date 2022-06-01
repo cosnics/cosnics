@@ -57,7 +57,7 @@ class Option extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'configuration_form_option';
     }

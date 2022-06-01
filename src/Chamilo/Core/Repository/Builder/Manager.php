@@ -335,7 +335,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
                 new PropertyConditionVariable(
                     ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
                 ), new StaticConditionVariable($this->get_complex_content_object_item()->get_ref()),
-                ComplexContentObjectItem::getTableName()
+                ComplexContentObjectItem::getStorageUnitName()
             );
         }
 
@@ -343,7 +343,7 @@ abstract class Manager extends Application implements TabsTypeSelectorSupport, T
             new PropertyConditionVariable(
                 ComplexContentObjectItem::class, ComplexContentObjectItem::PROPERTY_PARENT
             ), new StaticConditionVariable($this->get_root_content_object_id()),
-            ComplexContentObjectItem::getTableName()
+            ComplexContentObjectItem::getStorageUnitName()
         );
     }
 

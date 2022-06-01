@@ -173,7 +173,7 @@ class DataManager extends \Chamilo\Libraries\Storage\DataManager\DataManager
             )
         );
 
-        $forum_post_alias = self::get_alias(ForumPost::getTableName());
+        $forum_post_alias = self::get_alias(ForumPost::getStorageUnitName());
 
         $order_by = [];
         $order_by[] = new OrderProperty(

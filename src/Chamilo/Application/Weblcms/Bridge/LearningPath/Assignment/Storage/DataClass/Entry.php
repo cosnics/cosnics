@@ -33,7 +33,7 @@ class Entry extends
         return parent::getDefaultPropertyNames($extendedPropertyNames);
     }
 
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'tracking_weblcms_learning_path_assignment_entry';
     }

@@ -101,7 +101,7 @@ class Assignment extends ContentObject implements AttachmentSupport
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_assignment';
     }

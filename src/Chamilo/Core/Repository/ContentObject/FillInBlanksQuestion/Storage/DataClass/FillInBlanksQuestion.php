@@ -348,7 +348,7 @@ class FillInBlanksQuestion extends ContentObject implements Versionable
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_fill_in_blanks_question';
     }

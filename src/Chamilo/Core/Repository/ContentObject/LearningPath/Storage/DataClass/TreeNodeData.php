@@ -525,7 +525,7 @@ class TreeNodeData extends DataClass implements DisplayOrderDataClassListenerSup
      *
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_learning_path_tree_node_data';
     }

@@ -129,7 +129,7 @@ class WorkspaceEntityRelation extends DataClass
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_workspace_entity_relation';
     }

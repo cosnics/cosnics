@@ -151,7 +151,7 @@ class Workspace extends DataClass implements WorkspaceInterface
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'repository_workspace';
     }

@@ -27,7 +27,7 @@ class CourseRequest extends CommonRequest
     /**
      * @return string
      */
-    public static function getTableName(): string
+    public static function getStorageUnitName(): string
     {
         return 'weblcms_course_request';
     }
