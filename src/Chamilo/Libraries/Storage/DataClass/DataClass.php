@@ -219,7 +219,6 @@ abstract class DataClass
      * @param \Chamilo\Libraries\Storage\Query\Condition\Condition[] $dependencies
      *
      * @return \Chamilo\Libraries\Storage\Query\Condition\Condition[]
-     * @throws \Exception
      */
     protected function getDependencies(array $dependencies = []): array
     {
