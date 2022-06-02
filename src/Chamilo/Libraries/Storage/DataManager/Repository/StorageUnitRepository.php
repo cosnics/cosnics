@@ -15,14 +15,14 @@ class StorageUnitRepository
 {
     use ClassContext;
 
-    const ALTER_STORAGE_UNIT_ADD = 1;
-    const ALTER_STORAGE_UNIT_ADD_INDEX = 7;
-    const ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY = 5;
-    const ALTER_STORAGE_UNIT_ADD_UNIQUE = 8;
-    const ALTER_STORAGE_UNIT_CHANGE = 2;
-    const ALTER_STORAGE_UNIT_DROP = 3;
-    const ALTER_STORAGE_UNIT_DROP_INDEX = 6;
-    const ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY = 4;
+    public const ALTER_STORAGE_UNIT_ADD = 1;
+    public const ALTER_STORAGE_UNIT_ADD_INDEX = 7;
+    public const ALTER_STORAGE_UNIT_ADD_PRIMARY_KEY = 5;
+    public const ALTER_STORAGE_UNIT_ADD_UNIQUE = 8;
+    public const ALTER_STORAGE_UNIT_CHANGE = 2;
+    public const ALTER_STORAGE_UNIT_DROP = 3;
+    public const ALTER_STORAGE_UNIT_DROP_INDEX = 6;
+    public const ALTER_STORAGE_UNIT_DROP_PRIMARY_KEY = 4;
 
     private StorageUnitDatabaseInterface $storageUnitDatabase;
 

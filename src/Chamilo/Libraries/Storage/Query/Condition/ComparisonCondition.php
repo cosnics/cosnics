@@ -15,11 +15,11 @@ use Chamilo\Libraries\Storage\Query\Variable\ConditionVariable;
 class ComparisonCondition extends Condition
 {
 
-    const EQUAL = 5;
-    const GREATER_THAN = 3;
-    const GREATER_THAN_OR_EQUAL = 4;
-    const LESS_THAN = 1;
-    const LESS_THAN_OR_EQUAL = 2;
+    public const EQUAL = 5;
+    public const GREATER_THAN = 3;
+    public const GREATER_THAN_OR_EQUAL = 4;
+    public const LESS_THAN = 1;
+    public const LESS_THAN_OR_EQUAL = 2;
 
     private ConditionVariable $leftConditionVariable;
 

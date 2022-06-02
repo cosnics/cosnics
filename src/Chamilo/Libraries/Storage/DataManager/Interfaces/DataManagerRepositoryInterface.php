@@ -12,30 +12,9 @@ use Chamilo\Libraries\Storage\DataClass\DataClass;
 interface DataManagerRepositoryInterface
 {
 
-    /**
-     * Wrapper for the creation of an object
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return boolean
-     */
-    public function create(DataClass $dataClass);
+    public function create(DataClass $dataClass): bool;
 
-    /**
-     * Wrapper for the deletion of an object
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return boolean
-     */
-    public function delete(DataClass $dataClass);
+    public function delete(DataClass $dataClass): bool;
 
-    /**
-     * Wrapper for the update of an object
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\DataClass $dataClass
-     *
-     * @return boolean
-     */
-    public function update(DataClass $dataClass);
+    public function update(DataClass $dataClass): bool;
 }

@@ -22,7 +22,7 @@ class DoctrineProxyCacheService extends FileBasedCacheService
         $this->entityManager = $entityManager;
     }
 
-    function getCachePath(): string
+    public function getCachePath(): string
     {
         return $this->entityManager->getConfiguration()->getProxyDir();
     }

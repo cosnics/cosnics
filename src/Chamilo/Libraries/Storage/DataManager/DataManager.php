@@ -85,7 +85,6 @@ class DataManager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public static function create(DataClass $dataClass): bool
@@ -258,7 +257,7 @@ class DataManager
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return retrieveById
      * @throws \ReflectionException
@@ -306,7 +305,6 @@ class DataManager
      * @param \Chamilo\Libraries\Storage\Parameters\DataClassRetrievesParameters $parameters
      *
      * @return ArrayCollection<tRetrieves>
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      * @throws \Exception
      */
@@ -344,7 +342,6 @@ class DataManager
     }
 
     /**
-     * @throws \ReflectionException
      * @throws \Exception
      */
     public static function update(DataClass $dataClass): bool

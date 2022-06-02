@@ -203,7 +203,7 @@ class NestedSetDataClassRepository
         return $this->getDataClassRepository()->distinct(
             get_class($nestedSet), new DataClassDistinctParameters(
                 $this->getAncestorsCondition($nestedSet, $includeSelf, $condition), new RetrieveProperties(
-                    array(new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID))
+                    [new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID)]
                 )
             )
         );
@@ -349,30 +349,27 @@ class NestedSetDataClassRepository
                 new StaticConditionVariable($nestedSet->getRightValue())
             );
         }
+        elseif ($includeSelf)
+        {
+            $conditions[] = new OrCondition(
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID),
+                        new StaticConditionVariable($nestedSet->getId())
+                    ),
+                    new EqualityCondition(
+                        new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable($nestedSet->getId())
+                    )
+                ]
+            );
+        }
         else
         {
-            if ($includeSelf)
-            {
-                $conditions[] = new OrCondition(
-                    array(
-                        new EqualityCondition(
-                            new PropertyConditionVariable(get_class($nestedSet), DataClass::PROPERTY_ID),
-                            new StaticConditionVariable($nestedSet->getId())
-                        ),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
-                            new StaticConditionVariable($nestedSet->getId())
-                        )
-                    )
-                );
-            }
-            else
-            {
-                $conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($nestedSet->getId())
-                );
-            }
+            $conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($nestedSet->getId())
+            );
         }
 
         if ($condition)
@@ -401,11 +398,11 @@ class NestedSetDataClassRepository
      */
     protected function getPostOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC): OrderBy
     {
-        return new OrderBy(array(
+        return new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_RIGHT_VALUE), $sortOrder
             )
-        ));
+        ]);
     }
 
     /**
@@ -417,11 +414,11 @@ class NestedSetDataClassRepository
      */
     protected function getPreOrderBy(NestedSet $nestedSet, int $sortOrder = SORT_ASC): OrderBy
     {
-        return new OrderBy(array(
+        return new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(get_class($nestedSet), NestedSet::PROPERTY_LEFT_VALUE), $sortOrder
             )
-        ));
+        ]);
     }
 
     /**
@@ -911,7 +908,7 @@ class NestedSetDataClassRepository
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return retrieveById
      */

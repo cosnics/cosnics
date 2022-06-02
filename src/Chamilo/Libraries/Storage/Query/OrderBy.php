@@ -41,7 +41,7 @@ class OrderBy implements Countable, Hashable
         return count($this->orderProperties);
     }
 
-    static public function generate(string $dataClassName, string $propertyName, ?int $direction = SORT_ASC): OrderBy
+    public static function generate(string $dataClassName, string $propertyName, ?int $direction = SORT_ASC): OrderBy
     {
         return new OrderBy([new OrderProperty(new PropertyConditionVariable($dataClassName, $propertyName), $direction)]
         );

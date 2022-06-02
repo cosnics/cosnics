@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Storage\Service;
 use Chamilo\Libraries\Storage\Query\Condition\AndCondition;
 use Chamilo\Libraries\Storage\Query\Condition\ContainsCondition;
 use Chamilo\Libraries\Storage\Query\Condition\OrCondition;
-use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 
 /**
  * @package Chamilo\Libraries\Storage\Service
@@ -14,19 +13,8 @@ use Chamilo\Libraries\Storage\Query\Condition\PatternMatchCondition;
 class SearchQueryConditionGenerator
 {
 
-    /**
-     * @param string $searchQuery
-     * @param \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable[] $properties
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     */
-    public function getSearchConditions(string $searchQuery, array $properties)
+    public function getSearchConditions(string $searchQuery, array $properties): ?AndCondition
     {
-        if (!is_array($properties))
-        {
-            $properties = array($properties);
-        }
-
         $searchQueryParts = $this->splitSearchQuery($searchQuery);
 
         if (is_null($searchQueryParts))
@@ -63,11 +51,9 @@ class SearchQueryConditionGenerator
      * For example, the query /"chamilo repository" utilities/ would be parsed into
      * array('chamilo repository', 'utilities').
      *
-     * @param string $pattern
-     *
-     * @return string[] The query's parts.
+     * @return ?string[] The query's parts.
      */
-    public function splitSearchQuery($pattern)
+    public function splitSearchQuery(string $pattern): ?array
     {
         $matches = [];
         preg_match_all('/(?:"([^"]+)"|""|(\S+))/', $pattern, $matches);

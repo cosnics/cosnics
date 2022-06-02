@@ -12,12 +12,12 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
 class OperationConditionVariable extends ConditionVariable
 {
 
-    const ADDITION = 1;
-    const BITWISE_AND = 5;
-    const BITWISE_OR = 6;
-    const DIVISION = 4;
-    const MINUS = 2;
-    const MULTIPLICATION = 3;
+    public const ADDITION = 1;
+    public const BITWISE_AND = 5;
+    public const BITWISE_OR = 6;
+    public const DIVISION = 4;
+    public const MINUS = 2;
+    public const MULTIPLICATION = 3;
 
     private ConditionVariable $leftConditionVariable;
 

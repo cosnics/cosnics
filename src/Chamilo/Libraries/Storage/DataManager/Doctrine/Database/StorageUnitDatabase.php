@@ -51,14 +51,14 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
         {
             if ($type == StorageUnitRepository::ALTER_STORAGE_UNIT_DROP)
             {
-                $column = new Column($property, Type::getType($this->parsePropertyType($attributes)));
+                $column = new Column($property, Type::getType($this::parsePropertyType($attributes)));
                 $query = 'ALTER TABLE ' . $storageUnitName . ' DROP COLUMN ' .
                     $column->getQuotedName($this->getConnection()->getDatabasePlatform());
             }
             else
             {
                 $column = new Column(
-                    $property, Type::getType($this->parsePropertyType($attributes)), $this->parseAttributes($attributes)
+                    $property, Type::getType($this::parsePropertyType($attributes)), $this::parseAttributes($attributes)
                 );
 
                 // Column declaration translation-code more or less directly from Doctrine since it doesn't support
@@ -83,13 +83,13 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
 
                 $columnData['type'] = $column->getType();
                 $columnData['length'] = $column->getLength();
-                $columnData['notnull'] = $column->getNotNull();
+                $columnData['notnull'] = $column->getNotnull();
                 $columnData['fixed'] = $column->getFixed();
                 $columnData['unique'] = false;
                 $columnData['version'] =
-                    ($column->hasPlatformOption("version")) ? $column->getPlatformOption('version') : false;
+                    ($column->hasPlatformOption('version')) ? $column->getPlatformOption('version') : false;
 
-                if (strtolower($columnData['type']->getName()) == "string" && $columnData['length'] === null)
+                if (strtolower($columnData['type']->getName()) == 'string' && $columnData['length'] === null)
                 {
                     $columnData['length'] = 255;
                 }
@@ -109,7 +109,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                     );
                 }
 
-                $columns = array($columnData['name'] => $columnData);
+                $columns = [$columnData['name'] => $columnData];
 
                 $fieldsQuery = $this->getConnection()->getDatabasePlatform()->getColumnDeclarationListSQL($columns);
 
@@ -189,7 +189,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     {
         try
         {
-            if ($this->getConnection()->createSchemaManager()->tablesExist(array($storageUnitName)))
+            if ($this->getConnection()->createSchemaManager()->tablesExist([$storageUnitName]))
             {
                 $this->drop($storageUnitName);
             }
@@ -207,7 +207,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                     }
                 }
 
-                $options = $this->parseAttributes($attributes);
+                $options = $this::parseAttributes($attributes);
 
                 $table->addColumn($property, $attributes['type'], $options);
 
@@ -217,7 +217,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
                         $storageUnitName, $storageUnitName
                     );
 
-                    $table->setPrimaryKey(array($property), $primaryKeyName);
+                    $table->setPrimaryKey([$property], $primaryKeyName);
                 }
             }
 
@@ -260,7 +260,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     {
         try
         {
-            $schema = new Schema(array(new Table($storageUnitName)));
+            $schema = new Schema([new Table($storageUnitName)]);
 
             $newSchema = clone $schema;
             $newSchema->dropTable($storageUnitName);
@@ -288,7 +288,7 @@ class StorageUnitDatabase implements StorageUnitDatabaseInterface
     {
         try
         {
-            return $this->getConnection()->createSchemaManager()->tablesExist(array($storageUnitName));
+            return $this->getConnection()->createSchemaManager()->tablesExist([$storageUnitName]);
         }
         catch (Exception $exception)
         {

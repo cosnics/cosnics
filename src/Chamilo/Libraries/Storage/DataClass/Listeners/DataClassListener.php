@@ -9,61 +9,34 @@ namespace Chamilo\Libraries\Storage\DataClass\Listeners;
  */
 abstract class DataClassListener
 {
-    const AFTER_CREATE = 'onAfterCreate';
-    const AFTER_DELETE = 'onAfterDelete';
-    const AFTER_SET_PROPERTY = 'onAfterSetProperty';
-    const AFTER_UPDATE = 'onAfterUpdate';
-    const BEFORE_CREATE = 'onBeforeCreate';
-    const BEFORE_DELETE = 'onBeforeDelete';
-    const BEFORE_SET_PROPERTY = 'onBeforeSetProperty';
-    const BEFORE_UPDATE = 'onBeforeUpdate';
-    const GET_DEPENDENCIES = 'onGetDependencies';
+    public const AFTER_CREATE = 'onAfterCreate';
+    public const AFTER_DELETE = 'onAfterDelete';
+    public const AFTER_SET_PROPERTY = 'onAfterSetProperty';
+    public const AFTER_UPDATE = 'onAfterUpdate';
+    public const BEFORE_CREATE = 'onBeforeCreate';
+    public const BEFORE_DELETE = 'onBeforeDelete';
+    public const BEFORE_SET_PROPERTY = 'onBeforeSetProperty';
+    public const BEFORE_UPDATE = 'onBeforeUpdate';
+    public const GET_DEPENDENCIES = 'onGetDependencies';
 
-    public function onAfterCreate(bool $success): bool
-    {
-        return true;
-    }
+    abstract public function onAfterCreate(bool $success): bool;
 
-    public function onAfterDelete(bool $success): bool
-    {
-        return true;
-    }
+    abstract public function onAfterDelete(bool $success): bool;
 
-    public function onAfterSetProperty(string $name, string $value): bool
-    {
-        return true;
-    }
+    abstract public function onAfterSetProperty(string $name, string $value): bool;
 
-    public function onAfterUpdate(bool $success): bool
-    {
-        return true;
-    }
+    abstract public function onAfterUpdate(bool $success): bool;
 
-    public function onBeforeCreate(): bool
-    {
-        return true;
-    }
+    abstract public function onBeforeCreate(): bool;
 
-    public function onBeforeDelete(): bool
-    {
-        return true;
-    }
+    abstract public function onBeforeDelete(): bool;
 
-    public function onBeforeSetProperty(string $name, string $value): bool
-    {
-        return true;
-    }
+    abstract public function onBeforeSetProperty(string $name, string $value): bool;
 
-    public function onBeforeUpdate(): bool
-    {
-        return true;
-    }
+    abstract public function onBeforeUpdate(): bool;
 
     /**
      * @param string[] $dependencies
      */
-    public function onGetDependencies(array &$dependencies = []): bool
-    {
-        return true;
-    }
+    abstract public function onGetDependencies(array &$dependencies = []): bool;
 }

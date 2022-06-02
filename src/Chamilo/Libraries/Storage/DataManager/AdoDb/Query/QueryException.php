@@ -4,7 +4,6 @@ namespace Chamilo\Libraries\Storage\DataManager\AdoDb\Query;
 use Exception;
 use function implode;
 
-
 class QueryException extends Exception
 {
 
@@ -14,7 +13,7 @@ class QueryException extends Exception
      *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
      */
-    public static function nonUniqueAlias($alias, $registeredAliases)
+    public static function nonUniqueAlias(string $alias, array $registeredAliases): QueryException
     {
         return new self(
             "The given alias '" . $alias . "' is not unique " .
@@ -29,7 +28,7 @@ class QueryException extends Exception
      *
      * @return \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
      */
-    public static function unknownAlias($alias, $registeredAliases)
+    public static function unknownAlias(string $alias, array $registeredAliases): QueryException
     {
         return new self(
             "The given alias '" . $alias . "' is not part of " .

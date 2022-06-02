@@ -18,9 +18,9 @@ class Join implements Hashable
 {
     use HashableTrait;
 
-    const TYPE_LEFT = 2;
-    const TYPE_NORMAL = 1;
-    const TYPE_RIGHT = 3;
+    public const TYPE_LEFT = 2;
+    public const TYPE_NORMAL = 1;
+    public const TYPE_RIGHT = 3;
 
     private ?Condition $condition;
 

@@ -21,7 +21,7 @@ class PatternMatchConditionTranslator extends ConditionTranslator
         $pattern = preg_replace(['/\\\\/', '/%/', '/\'/', '/_/'], ['\\\\\\\\', '\%', '\\\'', '\_'], $pattern);
 
         // Replace asterisks and question marks that are not prefixed with a backslash with the SQL equivalent
-        return preg_replace(array('/(?<!\\\\)\*/', '/(?<!\\\\)\?/'), array('%', '_'), $pattern);
+        return preg_replace(['/(?<!\\\\)\*/', '/(?<!\\\\)\?/'], ['%', '_'], $pattern);
     }
 
     public function translate(

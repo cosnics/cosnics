@@ -28,22 +28,15 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 abstract class NestedSet extends DataClass
 {
-    const AS_FIRST_CHILD_OF = 1;
-
-    const AS_LAST_CHILD_OF = 2;
-
-    const AS_NEXT_SIBLING_OF = 4;
-
-    const AS_PREVIOUS_SIBLING_OF = 3;
-
-    const PROPERTY_LEFT_VALUE = 'left_value';
-
-    const PROPERTY_PARENT_ID = 'parent_id';
-
-    const PROPERTY_RIGHT_VALUE = 'right_value';
+    public const AS_FIRST_CHILD_OF = 1;
+    public const AS_LAST_CHILD_OF = 2;
+    public const AS_NEXT_SIBLING_OF = 4;
+    public const AS_PREVIOUS_SIBLING_OF = 3;
+    public const PROPERTY_LEFT_VALUE = 'left_value';
+    public const PROPERTY_PARENT_ID = 'parent_id';
+    public const PROPERTY_RIGHT_VALUE = 'right_value';
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getAncestorsCondition()
      */
     public function build_ancestry_condition(bool $include_object = false, ?Condition $condition = null): AndCondition
@@ -82,7 +75,6 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getDescendantsCondition()
      */
     public function build_offspring_condition(
@@ -105,30 +97,27 @@ abstract class NestedSet extends DataClass
                 new StaticConditionVariable($this->getRightValue())
             );
         }
+        elseif ($include_self)
+        {
+            $children_conditions[] = new OrCondition(
+                [
+                    new EqualityCondition(
+                        new PropertyConditionVariable(static::class, self::PROPERTY_ID),
+                        new StaticConditionVariable($this->get_id())
+                    ),
+                    new EqualityCondition(
+                        new PropertyConditionVariable(static::class, self::PROPERTY_PARENT_ID),
+                        new StaticConditionVariable($this->get_id())
+                    )
+                ]
+            );
+        }
         else
         {
-            if ($include_self)
-            {
-                $children_conditions[] = new OrCondition(
-                    array(
-                        new EqualityCondition(
-                            new PropertyConditionVariable(static::class, self::PROPERTY_ID),
-                            new StaticConditionVariable($this->get_id())
-                        ),
-                        new EqualityCondition(
-                            new PropertyConditionVariable(static::class, self::PROPERTY_PARENT_ID),
-                            new StaticConditionVariable($this->get_id())
-                        )
-                    )
-                );
-            }
-            else
-            {
-                $children_conditions[] = new EqualityCondition(
-                    new PropertyConditionVariable(static::class, self::PROPERTY_PARENT_ID),
-                    new StaticConditionVariable($this->get_id())
-                );
-            }
+            $children_conditions[] = new EqualityCondition(
+                new PropertyConditionVariable(static::class, self::PROPERTY_PARENT_ID),
+                new StaticConditionVariable($this->get_id())
+            );
         }
 
         if ($condition)
@@ -140,33 +129,30 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPostOrderBy()
      */
     public function build_post_order_ordering(int $sort_order = SORT_ASC): OrderBy
     {
-        return new OrderBy(array(
+        return new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(static::class, self::PROPERTY_RIGHT_VALUE), $sort_order
             )
-        ));
+        ]);
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getPreOrderBy()
      */
     public function build_pre_order_ordering(int $sort_order = SORT_ASC): OrderBy
     {
-        return new OrderBy(array(
+        return new OrderBy([
             new OrderProperty(
                 new PropertyConditionVariable(static::class, self::PROPERTY_LEFT_VALUE), $sort_order
             )
-        ));
+        ]);
     }
 
     /**
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::getSiblingsCondition()
      */
     public function build_sibling_condition(bool $include_object = false, ?Condition $condition = null): AndCondition
@@ -309,7 +295,7 @@ abstract class NestedSet extends DataClass
 
                 // The call_user_func_array corresponds to parent::create()
                 if (!call_user_func_array(
-                    array($nested_set, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'), []
+                    [$nested_set, '\Chamilo\Libraries\Storage\DataClass\DataClass::create'], []
                 ))
                 {
                     return false;
@@ -340,7 +326,7 @@ abstract class NestedSet extends DataClass
 
                 // Since we want to hold on to this information until after all nodes have been deleted
                 // We have to copy the content of this result set into a temporary array
-                $need_their_related_data_removed = array($nested_set);
+                $need_their_related_data_removed = [$nested_set];
 
                 foreach ($descendants as $descendant)
                 {
@@ -449,7 +435,6 @@ abstract class NestedSet extends DataClass
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findAncestors()
      */
     public function get_ancestors(bool $include_self = true, ?Condition $condition = null): ArrayCollection
@@ -467,7 +452,6 @@ abstract class NestedSet extends DataClass
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      *
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
@@ -484,7 +468,6 @@ abstract class NestedSet extends DataClass
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findDescendants()
      */
     public function get_descendants(?Condition $condition = null): ArrayCollection
@@ -548,7 +531,6 @@ abstract class NestedSet extends DataClass
      *
      * @return \Doctrine\Common\Collections\ArrayCollection<\Chamilo\Libraries\Storage\DataClass\NestedSet>
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
-     * @throws \ReflectionException
      * @deprecated Migrated to NestedSetDataClassRepository::findSiblings()
      */
     public function get_siblings(bool $include_self = true, ?Condition $condition = null): ArrayCollection
@@ -571,15 +553,6 @@ abstract class NestedSet extends DataClass
     public function has_children(): bool
     {
         return $this->hasChildren();
-    }
-
-    /**
-     * @throws \ReflectionException
-     * @deprecated Migrated to NestedSetDataClassRepository::hasSiblings()
-     */
-    public function has_siblings(?Condition $condition = null): bool
-    {
-        return ($this->count_siblings(false, $condition) > 0);
     }
 
     public function isAncestorOf(NestedSet $nestedSet): bool
@@ -608,7 +581,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $node_or_id
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int $node_or_id
      *
      * @throws \ReflectionException
      * @deprecated Use NestedSet::isAncestorOf() now
@@ -619,7 +592,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $node_or_id
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int $node_or_id
      *
      * @throws \ReflectionException
      * @deprecated Use NestedSet::isDescendantOf() now
@@ -638,7 +611,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer $reference_node
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int $reference_node
      *
      * @throws \Exception
      * @throws \Throwable
@@ -1022,7 +995,7 @@ abstract class NestedSet extends DataClass
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|integer
+     * @param \Chamilo\Libraries\Storage\DataClass\NestedSet|int
      * @param mixed $reference_node
      *
      * @return \Chamilo\Libraries\Storage\DataClass\NestedSet|null

@@ -54,6 +54,6 @@ class OrderProperty implements Hashable
 
     public function getHashParts(): array
     {
-        return array($this->getConditionVariable()->getHashParts(), $this->getDirection());
+        return [$this->getConditionVariable()->getHashParts(), $this->getDirection()];
     }
 }

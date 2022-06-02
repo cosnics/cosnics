@@ -61,7 +61,7 @@ class DataClassRepositoryCache
     {
         $className = $this->getDataClassCacheClassName($object);
 
-        foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
+        foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
         {
             $value = $object->getDefaultProperty($cacheableProperty);
             if (isset($value))
@@ -87,7 +87,7 @@ class DataClassRepositoryCache
     }
 
     /**
-     * @param integer[] $counts
+     * @param int[] $counts
      *
      * @throws \Exception
      */
@@ -123,7 +123,7 @@ class DataClassRepositoryCache
     {
         $className = $this->getDataClassCacheClassName($object);
 
-        foreach ($object->getCacheablePropertyNames() as $cacheableProperty)
+        foreach ($object::getCacheablePropertyNames() as $cacheableProperty)
         {
             $cacheablePropertyParameters = new DataClassRetrieveParameters(
                 new EqualityCondition(
@@ -181,12 +181,7 @@ class DataClassRepositoryCache
 
     private function getDataClassCacheClassName(DataClass $object): string
     {
-        $compositeDataClassName = CompositeDataClass::class;
-
-        $isCompositeDataClass = $object instanceof $compositeDataClassName;
-        $isExtensionClass = get_parent_class($object) !== $compositeDataClassName;
-
-        if ($isCompositeDataClass && $isExtensionClass)
+        if ($object instanceof CompositeDataClass && get_parent_class($object) !== CompositeDataClass::class)
         {
             return $object::parentClassName();
         }

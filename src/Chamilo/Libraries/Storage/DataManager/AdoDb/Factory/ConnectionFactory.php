@@ -25,7 +25,7 @@ class ConnectionFactory
 
     protected function getAdoConnection(): ADOConnection
     {
-        return adoNewConnection('pdo');
+        return ADONewConnection('pdo');
     }
 
     /**
@@ -36,7 +36,7 @@ class ConnectionFactory
         $dataSourceName = $this->getDataSourceName();
         $connection = $this->getAdoConnection();
 
-        $connection->pConnect(
+        $connection->PConnect(
             $dataSourceName->getConnectionString(), $dataSourceName->getUsername(), $dataSourceName->getPassword()
         );
 

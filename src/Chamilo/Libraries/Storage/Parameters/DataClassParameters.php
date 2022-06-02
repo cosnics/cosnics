@@ -174,7 +174,7 @@ abstract class DataClassParameters implements Hashable
     /**
      * Get the offset of the result set relative to the first ordered result
      *
-     * @return integer
+     * @return int
      */
     public function getOffset(): ?int
     {

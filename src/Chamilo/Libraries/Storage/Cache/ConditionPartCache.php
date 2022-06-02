@@ -17,8 +17,6 @@ class ConditionPartCache
      */
     private array $cache;
 
-    /**
-     */
     public function __construct()
     {
         $this->cache = [true => [], false => []];

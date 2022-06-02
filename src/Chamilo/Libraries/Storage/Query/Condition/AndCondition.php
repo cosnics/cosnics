@@ -10,7 +10,7 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  */
 class AndCondition extends MultipleAggregateCondition
 {
-    const OPERATOR = ' AND ';
+    public const OPERATOR = ' AND ';
 
     public function getOperator(): string
     {

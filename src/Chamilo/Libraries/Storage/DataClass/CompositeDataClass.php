@@ -9,8 +9,8 @@ namespace Chamilo\Libraries\Storage\DataClass;
  */
 abstract class CompositeDataClass extends DataClass
 {
-    const PROPERTIES_ADDITIONAL = 'additional_properties';
-    const PROPERTY_TYPE = 'type';
+    public const PROPERTIES_ADDITIONAL = 'additional_properties';
+    public const PROPERTY_TYPE = 'type';
 
     /**
      *
@@ -39,7 +39,7 @@ abstract class CompositeDataClass extends DataClass
             /**
              * @var \Chamilo\Libraries\Storage\DataManager\DataManager $dataManagerClassName
              */
-            $dataManagerClassName = $this->package() . '\Storage\DataManager';
+            $dataManagerClassName = $this::package() . '\Storage\DataManager';
 
             $this->setAdditionalProperties(
                 $dataManagerClassName::retrieve_composite_data_class_additional_properties($this)
@@ -57,7 +57,7 @@ abstract class CompositeDataClass extends DataClass
     public static function factory(string $class, array &$record = []): CompositeDataClass
     {
         $object = parent::factory($class, $record);
-        foreach ($object->getAdditionalPropertyNames() as $property)
+        foreach ($object::getAdditionalPropertyNames() as $property)
         {
             if (array_key_exists($property, $record))
             {
@@ -88,7 +88,7 @@ abstract class CompositeDataClass extends DataClass
     }
 
     /**
-     * @return mixed
+     * @return ?string
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     public function getAdditionalProperty(string $name)
@@ -119,14 +119,14 @@ abstract class CompositeDataClass extends DataClass
         return $this->getType();
     }
 
-    static public function isAdditionalPropertyName(string $name): bool
+    public static function isAdditionalPropertyName(string $name): bool
     {
         return in_array($name, static::getAdditionalPropertyNames());
     }
 
     /**
      *
-     * @return boolean
+     * @return bool
      */
     public static function isExtended(): bool
     {

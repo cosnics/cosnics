@@ -12,8 +12,8 @@ use Chamilo\Libraries\Architecture\ClassnameUtilities;
  */
 class StorageAliasGenerator
 {
-    const TYPE_CONSTRAINT = 2;
-    const TYPE_TABLE = 1;
+    public const TYPE_CONSTRAINT = 2;
+    public const TYPE_TABLE = 1;
 
     private static StorageAliasGenerator $instance;
 
@@ -88,7 +88,7 @@ class StorageAliasGenerator
             }
         }
 
-        $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize(array($tableName, $column));
+        $this->aliases[self::TYPE_CONSTRAINT][$possibleName] = serialize([$tableName, $column]);
 
         return $possibleName;
     }
@@ -147,7 +147,7 @@ class StorageAliasGenerator
      */
     public function getTypes(): array
     {
-        return array(self::TYPE_TABLE, self::TYPE_CONSTRAINT);
+        return [self::TYPE_TABLE, self::TYPE_CONSTRAINT];
     }
 
     /**

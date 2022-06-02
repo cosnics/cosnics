@@ -67,7 +67,7 @@ class ParametersHandler
 
         $countVariable = new FunctionConditionVariable(FunctionConditionVariable::COUNT, $dataClassPropertyVariable);
 
-        $parameters->setRetrieveProperties(new RetrieveProperties(array($countVariable)));
+        $parameters->setRetrieveProperties(new RetrieveProperties([$countVariable]));
 
         return $this;
     }
@@ -77,7 +77,7 @@ class ParametersHandler
         $existingConditionVariables = $parameters->getRetrieveProperties()->get();
 
         $parameters->setRetrieveProperties(
-            new RetrieveProperties(array(new DistinctConditionVariable($existingConditionVariables)))
+            new RetrieveProperties([new DistinctConditionVariable($existingConditionVariables)])
         );
 
         return $this;
@@ -128,7 +128,7 @@ class ParametersHandler
 
         $dataClassRetrieveParameters->setRetrieveProperties(
             new RetrieveProperties(
-                array(new PropertiesConditionVariable($propertiesClassName))
+                [new PropertiesConditionVariable($propertiesClassName)]
             )
         );
 

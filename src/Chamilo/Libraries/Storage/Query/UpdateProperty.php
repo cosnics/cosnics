@@ -32,7 +32,7 @@ class UpdateProperty implements Hashable
 
     public function getHashParts(): array
     {
-        return array(__CLASS__, $this->getPropertyConditionVariable(), $this->getValueConditionVariable());
+        return [__CLASS__, $this->getPropertyConditionVariable(), $this->getValueConditionVariable()];
     }
 
     public function getPropertyConditionVariable(): ConditionVariable

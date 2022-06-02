@@ -47,6 +47,11 @@ class DisplayOrderDataClassListener extends DataClassListener
         return (count($conditions) > 0) ? new AndCondition($conditions) : null;
     }
 
+    public function onAfterCreate(bool $success): bool
+    {
+        return true;
+    }
+
     /**
      * @throws \ReflectionException
      * @throws \Exception
@@ -59,7 +64,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         /**
          * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
          */
-        $data_manager = $data_class->package() . '\Storage\DataManager';
+        $data_manager = $data_class::package() . '\Storage\DataManager';
 
         if ($success)
         {
@@ -85,6 +90,11 @@ class DisplayOrderDataClassListener extends DataClassListener
         return true;
     }
 
+    public function onAfterUpdate(bool $success): bool
+    {
+        return true;
+    }
+
     /**
      * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
@@ -97,7 +107,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         /**
          * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
          */
-        $data_manager = $data_class->package() . '\Storage\DataManager';
+        $data_manager = $data_class::package() . '\Storage\DataManager';
 
         $data_class->setDefaultProperty(
             $data_class->getDisplayOrderProperty()->getPropertyName(), $data_manager::retrieve_next_value(
@@ -106,6 +116,11 @@ class DisplayOrderDataClassListener extends DataClassListener
         )
         );
 
+        return true;
+    }
+
+    public function onBeforeDelete(): bool
+    {
         return true;
     }
 
@@ -125,12 +140,9 @@ class DisplayOrderDataClassListener extends DataClassListener
             {
                 $this->oldDisplayOrder = $initial_value;
             }
-            else
+            elseif ($this->oldDisplayOrder == $value)
             {
-                if ($this->oldDisplayOrder == $value)
-                {
-                    unset($this->oldDisplayOrder);
-                }
+                unset($this->oldDisplayOrder);
             }
         }
 
@@ -169,7 +181,7 @@ class DisplayOrderDataClassListener extends DataClassListener
         /**
          * @var \Chamilo\Libraries\Storage\DataManager\DataManager $data_manager
          */
-        $data_manager = $data_class->package() . '\Storage\DataManager';
+        $data_manager = $data_class::package() . '\Storage\DataManager';
 
         if (isset($this->oldDisplayOrderCondition))
         {
@@ -213,6 +225,11 @@ class DisplayOrderDataClassListener extends DataClassListener
             unset($this->oldDisplayOrder);
         }
 
+        return true;
+    }
+
+    public function onGetDependencies(array &$dependencies = []): bool
+    {
         return true;
     }
 }

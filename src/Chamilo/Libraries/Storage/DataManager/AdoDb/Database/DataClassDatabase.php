@@ -157,6 +157,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         }
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
+     */
     public function delete(string $dataClassName, ?Condition $condition = null): bool
     {
         $queryBuilder = new QueryBuilder();
@@ -421,6 +424,7 @@ class DataClassDatabase implements DataClassDatabaseInterface
     /**
      * @return string[][]
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
+     * @throws \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
      */
     public function retrieves(string $dataClassName, DataClassRetrievesParameters $parameters): array
     {
@@ -500,6 +504,8 @@ class DataClassDatabase implements DataClassDatabaseInterface
 
     /**
      * @param string[] $propertiesToUpdate
+     *
+     * @throws \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
      */
     public function update(string $dataClassStorageUnitName, Condition $condition, array $propertiesToUpdate): bool
     {
@@ -525,6 +531,9 @@ class DataClassDatabase implements DataClassDatabaseInterface
         return true;
     }
 
+    /**
+     * @throws \Chamilo\Libraries\Storage\DataManager\AdoDb\Query\QueryException
+     */
     public function updates(string $dataClassStorageUnitName, UpdateProperties $properties, Condition $condition): bool
     {
         if (count($properties->get()) > 0)

@@ -11,14 +11,14 @@ namespace Chamilo\Libraries\Storage\DataManager;
  */
 abstract class DataSourceName
 {
-    const DRIVER_IBM = 'ibm';
-    const DRIVER_IBM_DB2 = 'ibm_db2';
-    const DRIVER_MSSQL = 'mssql';
-    const DRIVER_MYSQL = 'mysql';
-    const DRIVER_OCI = 'oci';
-    const DRIVER_OCI8 = 'oci8';
-    const DRIVER_PGSQL = 'pgsql';
-    const DRIVER_SQLITE = 'sqlite';
+    public const DRIVER_IBM = 'ibm';
+    public const DRIVER_IBM_DB2 = 'ibm_db2';
+    public const DRIVER_MSSQL = 'mssql';
+    public const DRIVER_MYSQL = 'mysql';
+    public const DRIVER_OCI = 'oci';
+    public const DRIVER_OCI8 = 'oci8';
+    public const DRIVER_PGSQL = 'pgsql';
+    public const DRIVER_SQLITE = 'sqlite';
 
     private string $charset;
 

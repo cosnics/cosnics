@@ -11,12 +11,12 @@ namespace Chamilo\Libraries\Storage\Query\Variable;
  */
 class FunctionConditionVariable extends ConditionVariable
 {
-    const AVERAGE = 6;
-    const COUNT = 2;
-    const DISTINCT = 5;
-    const MAX = 4;
-    const MIN = 3;
-    const SUM = 1;
+    public const AVERAGE = 6;
+    public const COUNT = 2;
+    public const DISTINCT = 5;
+    public const MAX = 4;
+    public const MIN = 3;
+    public const SUM = 1;
 
     private ?string $alias;
 

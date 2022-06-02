@@ -38,7 +38,7 @@ class DataClassFactory
 
         if ($dataClass instanceof CompositeDataClass)
         {
-            foreach ($dataClass->getAdditionalPropertyNames() as $property)
+            foreach ($dataClass::getAdditionalPropertyNames() as $property)
             {
                 if (array_key_exists($property, $record))
                 {

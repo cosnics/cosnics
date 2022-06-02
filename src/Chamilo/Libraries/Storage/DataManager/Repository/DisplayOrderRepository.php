@@ -24,26 +24,14 @@ use Chamilo\Libraries\Storage\Query\Variable\StaticConditionVariable;
  */
 class DisplayOrderRepository
 {
-    /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
-    private $dataClassRepository;
+    private DataClassRepository $dataClassRepository;
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository $dataClassRepository
-     */
     public function __construct(DataClassRepository $dataClassRepository)
     {
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass)
+    public function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         $conditions = [];
 
@@ -66,13 +54,7 @@ class DisplayOrderRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return integer
-     * @throws \Exception
-     */
-    public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    public function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass): int
     {
         $conditions = [];
 
@@ -109,16 +91,11 @@ class DisplayOrderRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      * @param string[] $contextProperties
-     * @param integer $displayOrder
-     *
-     * @return boolean
-     * @throws \Exception
      */
     public function deleteDisplayOrderFromContext(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties, int $displayOrder
-    )
+    ): bool
     {
         $conditions = [];
 
@@ -139,12 +116,7 @@ class DisplayOrderRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return string
-     */
-    protected function determinePropertyDataClassName(DataClassDisplayOrderSupport $dataClass)
+    protected function determinePropertyDataClassName(DataClassDisplayOrderSupport $dataClass): string
     {
         if ($dataClass instanceof CompositeDataClass)
         {
@@ -157,12 +129,9 @@ class DisplayOrderRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
      * @return string[]
-     * @throws \Exception
      */
-    public function findDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass)
+    public function findDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass): array
     {
         $dataClassName = $this->determinePropertyDataClassName($dataClass);
 
@@ -178,12 +147,9 @@ class DisplayOrderRepository
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return integer
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
+    public function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
         return $this->getDataClassRepository()->retrieveNextValue(
             $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName(),
@@ -191,9 +157,6 @@ class DisplayOrderRepository
         );
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DataClassRepository
-     */
     public function getDataClassRepository(): DataClassRepository
     {
         return $this->dataClassRepository;
@@ -207,15 +170,7 @@ class DisplayOrderRepository
         $this->dataClassRepository = $dataClassRepository;
     }
 
-    /**
-     * Returns the display order condition based on the display order context properties
-     *
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     * @throws \Exception
-     */
-    protected function getDisplayOrderCondition(DataClassDisplayOrderSupport $dataClass)
+    protected function getDisplayOrderCondition(DataClassDisplayOrderSupport $dataClass): ?AndCondition
     {
         $displayOrderContextProperties = array_intersect_key(
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
@@ -226,16 +181,9 @@ class DisplayOrderRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     * @param string[] $contextProperties
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\AndCondition
-     * @throws \Exception
-     */
     protected function getDisplayOrderConditionForContextProperties(
         DataClassDisplayOrderSupport $dataClass, array $contextProperties
-    )
+    ): ?AndCondition
     {
         $conditions = [];
 
@@ -251,13 +199,7 @@ class DisplayOrderRepository
         return (count($conditions) > 0) ? new AndCondition($conditions) : null;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
-     * @throws \Exception
-     */
-    protected function getDisplayOrderDataClassProperties(DataClassDisplayOrderSupport $dataClass)
+    protected function getDisplayOrderDataClassProperties(DataClassDisplayOrderSupport $dataClass): RetrieveProperties
     {
         $retrieveProperties = new RetrieveProperties();
 
@@ -275,30 +217,17 @@ class DisplayOrderRepository
         return $retrieveProperties;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Variable\PropertyConditionVariable
-     * @throws \Exception
-     */
-    protected function getDisplayOrderPropertyConditionVariable(DataClassDisplayOrderSupport $dataClass)
+    protected function getDisplayOrderPropertyConditionVariable(DataClassDisplayOrderSupport $dataClass
+    ): PropertyConditionVariable
     {
         return new PropertyConditionVariable(
             $this->determinePropertyDataClassName($dataClass), $dataClass->getDisplayOrderPropertyName()
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     * @param integer $operator
-     * @param integer $displayOrder
-     *
-     * @return \Chamilo\Libraries\Storage\Query\Condition\ComparisonCondition
-     * @throws \Exception
-     */
     protected function getDisplayOrderUpdateComparisonCondition(
         DataClassDisplayOrderSupport $dataClass, int $operator, int $displayOrder
-    )
+    ): ComparisonCondition
     {
         return new ComparisonCondition(
             $this->getDisplayOrderPropertyConditionVariable($dataClass), $operator,
@@ -306,16 +235,9 @@ class DisplayOrderRepository
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     * @param integer $additionValue
-     *
-     * @return \Chamilo\Libraries\Storage\Query\RetrieveProperties
-     * @throws \Exception
-     */
     protected function getDisplayOrderUpdateDataClassProperties(
         DataClassDisplayOrderSupport $dataClass, int $additionValue
-    )
+    ): UpdateProperties
     {
         $displayOrderPropertyConditionVariable = $this->getDisplayOrderPropertyConditionVariable($dataClass);
 
@@ -324,8 +246,6 @@ class DisplayOrderRepository
             new StaticConditionVariable($additionValue)
         );
 
-        return new UpdateProperties(
-            array(new UpdateProperty($displayOrderPropertyConditionVariable, $updateVariable))
-        );
+        return new UpdateProperties([new UpdateProperty($displayOrderPropertyConditionVariable, $updateVariable)]);
     }
 }

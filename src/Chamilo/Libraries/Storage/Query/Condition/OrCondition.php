@@ -10,7 +10,7 @@ namespace Chamilo\Libraries\Storage\Query\Condition;
  */
 class OrCondition extends MultipleAggregateCondition
 {
-    const OPERATOR = ' OR ';
+    public const OPERATOR = ' OR ';
 
     public function getOperator(): string
     {

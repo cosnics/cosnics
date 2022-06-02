@@ -45,7 +45,7 @@ class DataClassRepository
 {
     use ClassContext;
 
-    const ALIAS_MAX_SORT = 'max_sort';
+    public const ALIAS_MAX_SORT = 'max_sort';
 
     private DataClassDatabaseInterface $dataClassDatabase;
 
@@ -276,12 +276,12 @@ class DataClassRepository
     {
         if ($dataClass instanceof CompositeDataClass)
         {
-            $parentClass = $dataClass->parentClassName();
+            $parentClass = $dataClass::parentClassName();
             $objectTableName = $parentClass::getStorageUnitName();
         }
         else
         {
-            $objectTableName = $dataClass->getStorageUnitName();
+            $objectTableName = $dataClass::getStorageUnitName();
         }
 
         $objectProperties = $dataClass->getDefaultProperties();
@@ -291,12 +291,12 @@ class DataClassRepository
 
         $dataClass->setId($this->getDataClassDatabase()->getLastInsertedIdentifier($objectTableName));
 
-        if ($dataClassCreated === true && $dataClass instanceof CompositeDataClass && $dataClass->isExtended())
+        if ($dataClassCreated === true && $dataClass instanceof CompositeDataClass && $dataClass::isExtended())
         {
             $objectProperties = $dataClass->getAdditionalProperties();
             $objectProperties[DataClass::PROPERTY_ID] = $dataClass->getId();
 
-            $dataClassCreated = $this->getDataClassDatabase()->create($dataClass->getStorageUnitName(), $objectProperties);
+            $dataClassCreated = $this->getDataClassDatabase()->create($dataClass::getStorageUnitName(), $objectProperties);
         }
 
         if ($dataClassCreated === true && $this->isQueryCacheEnabled())
@@ -395,7 +395,7 @@ class DataClassRepository
     {
         $parameters = new RecordRetrieveParameters(
             new RetrieveProperties(
-                array(new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE))
+                [new PropertyConditionVariable($dataClassName, CompositeDataClass::PROPERTY_TYPE)]
             ), $parameters->getCondition(), $parameters->getOrderBy(), $parameters->getJoins()
         );
 
@@ -418,7 +418,7 @@ class DataClassRepository
 
         $parameters = new RecordRetrieveParameters(
             new RetrieveProperties(
-                array(new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE))
+                [new PropertyConditionVariable($conditionDataClassName, CompositeDataClass::PROPERTY_TYPE)]
             ), $condition
         );
 
@@ -570,7 +570,13 @@ class DataClassRepository
         return ClassnameUtilities::getInstance()->getNamespaceParent(static::context());
     }
 
-    public function record(string $dataClassName, RecordRetrieveParameters $parameters): array
+    /**
+     * @param string $dataClassName
+     * @param \Chamilo\Libraries\Storage\Parameters\RecordRetrieveParameters $parameters
+     *
+     * @return string[]|false
+     */
+    public function record(string $dataClassName, RecordRetrieveParameters $parameters)
     {
         if ($this->isQueryCacheEnabled())
         {
@@ -655,7 +661,7 @@ class DataClassRepository
      * @template retrieveById
      *
      * @param class-string<retrieveById> $dataClassName
-     * @param integer $identifier
+     * @param int $identifier
      *
      * @return retrieveById
      */
@@ -743,13 +749,13 @@ class DataClassRepository
      */
     public function retrieveCompositeDataClassAdditionalProperties(CompositeDataClass $compositeDataClass): array
     {
-        if (!$compositeDataClass->isExtended())
+        if (!$compositeDataClass::isExtended())
         {
             return [];
         }
 
         $parameters = new RecordRetrieveParameters(
-            new RetrieveProperties(array(new PropertiesConditionVariable(get_class($compositeDataClass)))),
+            new RetrieveProperties([new PropertiesConditionVariable(get_class($compositeDataClass))]),
             new EqualityCondition(
                 new PropertyConditionVariable(get_class($compositeDataClass), $compositeDataClass::PROPERTY_ID),
                 new StaticConditionVariable($compositeDataClass->getId())
@@ -766,12 +772,12 @@ class DataClassRepository
     {
         $parameters = new RecordRetrieveParameters(
             new RetrieveProperties(
-                array(
+                [
                     new FunctionConditionVariable(
                         FunctionConditionVariable::MAX, new PropertyConditionVariable($dataClassName, $property),
                         self::ALIAS_MAX_SORT
                     )
-                )
+                ]
             ), $condition
         );
 
@@ -870,7 +876,7 @@ class DataClassRepository
             }
             else
             {
-                $joins = new Joins(array($join));
+                $joins = new Joins([$join]);
             }
 
             $parameters->setJoins($joins);
@@ -920,7 +926,7 @@ class DataClassRepository
         else
         {
             $propertyConditionClass = get_class($dataClass);
-            $dataClassTableName = $dataClass->getStorageUnitName();
+            $dataClassTableName = $dataClass::getStorageUnitName();
         }
 
         $condition = new EqualityCondition(
@@ -943,7 +949,7 @@ class DataClassRepository
             );
 
             $result = $this->getDataClassDatabase()->update(
-                $dataClass->getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
+                $dataClass::getStorageUnitName(), $condition, $dataClass->getAdditionalProperties()
             );
         }
 

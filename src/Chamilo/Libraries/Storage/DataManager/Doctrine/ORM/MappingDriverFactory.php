@@ -127,7 +127,7 @@ class MappingDriverFactory
     /**
      * @param string[] $mappingConfiguration
      *
-     * @return string[][][]
+     * @return string[][][]|string[][]
      */
     protected function processConfiguration(array $mappingConfiguration = []): array
     {

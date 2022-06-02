@@ -14,52 +14,27 @@ use Symfony\Component\Translation\Translator;
  */
 class DisplayOrderHandler
 {
-    /**
-     * @var \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository
-     */
-    private $displayOrderRepository;
+    private DisplayOrderRepository $displayOrderRepository;
 
-    /**
-     * @var \Symfony\Component\Translation\Translator
-     */
-    private $translator;
+    private Translator $translator;
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository $displayOrderRepository
-     * @param \Symfony\Component\Translation\Translator $translator
-     */
     public function __construct(DisplayOrderRepository $displayOrderRepository, Translator $translator)
     {
         $this->displayOrderRepository = $displayOrderRepository;
         $this->translator = $translator;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     */
-    protected function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass)
+    protected function addDisplayOrderToContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         return $this->getDisplayOrderRepository()->addDisplayOrderToContext($dataClass);
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return int
-     */
-    protected function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass)
+    protected function countOtherDisplayOrdersInContext(DataClassDisplayOrderSupport $dataClass): int
     {
         return $this->getDisplayOrderRepository()->countOtherDisplayOrdersInContext($dataClass);
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     */
-    protected function deleteDisplayOrderFromContext(DataClassDisplayOrderSupport $dataClass)
+    protected function deleteDisplayOrderFromContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         $displayOrderContextProperties = array_intersect_key(
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
@@ -70,16 +45,9 @@ class DisplayOrderHandler
         );
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     * @param string[] $displayOrderPropertiesRecord
-     *
-     * @return boolean
-     * @throws \Exception
-     */
     protected function deletePreviousDisplayOrderFromPreviousContext(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    )
+    ): bool
     {
         $displayOrderPropertyName = $dataClass->getDisplayOrderPropertyName();
 
@@ -93,32 +61,22 @@ class DisplayOrderHandler
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return integer
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    protected function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
+    protected function findNextDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
         return $this->getDisplayOrderRepository()->findNextDisplayOrderValue($dataClass);
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
      * @return string[]
-     * @throws \Exception
      */
-    protected function findPreviousDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass)
+    protected function findPreviousDisplayOrderPropertiesRecord(DataClassDisplayOrderSupport $dataClass): array
     {
         return $this->getDisplayOrderRepository()->findDisplayOrderPropertiesRecord($dataClass);
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return string
-     */
-    protected function getDisplayOrderContextAsString(DataClassDisplayOrderSupport $dataClass)
+    protected function getDisplayOrderContextAsString(DataClassDisplayOrderSupport $dataClass): string
     {
         $displayOrderContextProperties = array_intersect_key(
             $dataClass->getDefaultProperties(), array_flip($dataClass->getDisplayOrderContextPropertyNames())
@@ -134,67 +92,35 @@ class DisplayOrderHandler
         return implode(', ', $displayOrderContext);
     }
 
-    /**
-     * @return \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository
-     */
     public function getDisplayOrderRepository(): DisplayOrderRepository
     {
         return $this->displayOrderRepository;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataManager\Repository\DisplayOrderRepository $displayOrderRepository
-     */
-    public function setDisplayOrderRepository(DisplayOrderRepository $displayOrderRepository): void
-    {
-        $this->displayOrderRepository = $displayOrderRepository;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return integer
-     */
-    protected function getDisplayOrderValue(DataClassDisplayOrderSupport $dataClass)
+    protected function getDisplayOrderValue(DataClassDisplayOrderSupport $dataClass): int
     {
         return $dataClass->getDefaultProperty($dataClass->getDisplayOrderPropertyName());
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     * @param array $displayOrderPropertiesRecord
-     *
-     * @return integer
+     * @param string[] $displayOrderPropertiesRecord
      */
     protected function getDisplayOrderValueFromRecord(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    )
+    ): int
     {
         return $displayOrderPropertiesRecord[$dataClass->getDisplayOrderPropertyName()];
     }
 
-    /**
-     * @return \Symfony\Component\Translation\Translator
-     */
     public function getTranslator(): Translator
     {
         return $this->translator;
     }
 
     /**
-     * @param \Symfony\Component\Translation\Translator $translator
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function setTranslator(Translator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     */
-    protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass)
+    protected function handleAddedDataClassInContext(DataClassDisplayOrderSupport $dataClass): bool
     {
         if ($this->hasDisplayOrder($dataClass))
         {
@@ -211,24 +137,16 @@ class DisplayOrderHandler
         return true;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     * @throws \Exception
-     */
-    public function handleDisplayOrderAfterDelete(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderAfterDelete(DataClassDisplayOrderSupport $dataClass): bool
     {
         return $this->deleteDisplayOrderFromContext($dataClass);
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return bool
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderBeforeCreate(DataClassDisplayOrderSupport $dataClass): bool
     {
         $this->validateDisplayOrder($dataClass);
 
@@ -236,13 +154,10 @@ class DisplayOrderHandler
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
-     * @throws \Exception
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
-    public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass)
+    public function handleDisplayOrderBeforeUpdate(DataClassDisplayOrderSupport $dataClass): bool
     {
         $displayOrderPropertiesRecord = $this->findPreviousDisplayOrderPropertiesRecord($dataClass);
 
@@ -270,40 +185,28 @@ class DisplayOrderHandler
         return true;
     }
 
-    /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
-     * @return boolean
-     */
-    protected function hasDisplayOrder(DataClassDisplayOrderSupport $dataClass)
+    protected function hasDisplayOrder(DataClassDisplayOrderSupport $dataClass): bool
     {
         return !is_null($this->getDisplayOrderValue($dataClass));
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      * @param string[] $displayOrderPropertiesRecord
-     *
-     * @return boolean
-     * @throws \Exception
      */
     protected function hasDisplayOrderChanged(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    )
+    ): bool
     {
         return $this->getDisplayOrderValue($dataClass) !=
             $this->getDisplayOrderValueFromRecord($dataClass, $displayOrderPropertiesRecord);
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
      * @param string[] $displayOrderPropertiesRecord
-     *
-     * @return boolean
      */
     protected function hasDisplayOrderContextChanged(
         DataClassDisplayOrderSupport $dataClass, array $displayOrderPropertiesRecord
-    )
+    ): bool
     {
         foreach ($dataClass->getDisplayOrderContextPropertyNames() as $propertyName)
         {
@@ -317,7 +220,7 @@ class DisplayOrderHandler
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
+     * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function setDisplayOrderToNextValueInContext(DataClassDisplayOrderSupport $dataClass)
     {
@@ -328,8 +231,6 @@ class DisplayOrderHandler
     }
 
     /**
-     * @param \Chamilo\Libraries\Storage\DataClass\Interfaces\DataClassDisplayOrderSupport $dataClass
-     *
      * @throws \Chamilo\Libraries\Storage\Exception\DisplayOrderException
      */
     protected function validateDisplayOrder(DataClassDisplayOrderSupport $dataClass)

@@ -26,20 +26,4 @@ class DataClassRetrievesParameters extends DataClassBasicRetrieveParameters
             $condition, $joins, null, $orderBy, $groupBy, $havingCondition, $count, $offset, $distinct
         );
     }
-
-    /**
-     * @deprecated Use getCount() now
-     */
-    public function get_count(): ?int
-    {
-        return $this->getCount();
-    }
-
-    /**
-     * @deprecated Use getCount() now
-     */
-    public function set_count(?int $count)
-    {
-        $this->setCount($count);
-    }
 }

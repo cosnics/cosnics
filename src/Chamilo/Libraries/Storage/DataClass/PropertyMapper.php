@@ -12,7 +12,7 @@ class PropertyMapper
     /**
      * @param string[] $propertyNames
      *
-     * @return boolean|string
+     * @return bool|string
      */
     public function determineClassKeyValue(stdClass $class, array $propertyNames)
     {
@@ -111,7 +111,7 @@ class PropertyMapper
 
         foreach ($dataClasses as $dataClass)
         {
-            if (in_array($propertyName, $dataClass->getDefaultPropertyNames()))
+            if (in_array($propertyName, $dataClass::getDefaultPropertyNames()))
             {
                 $propertyValue = $dataClass->getDefaultProperty($propertyName);
 

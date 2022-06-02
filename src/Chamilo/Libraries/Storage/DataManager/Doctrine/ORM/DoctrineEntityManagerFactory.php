@@ -46,7 +46,7 @@ class DoctrineEntityManagerFactory
      */
     public function addEventListener($events, object $eventListener)
     {
-        $this->eventListeners[] = array('events' => $events, 'listener' => $eventListener);
+        $this->eventListeners[] = ['events' => $events, 'listener' => $eventListener];
     }
 
     /**

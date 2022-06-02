@@ -31,14 +31,14 @@ class ConnectionFactory
     {
         $dataSourceName = $this->getDataSourceName();
 
-        $connectionParameters = array(
+        $connectionParameters = [
             'dbname' => $dataSourceName->getDatabase(),
             'user' => $dataSourceName->getUsername(),
             'password' => $dataSourceName->getPassword(),
             'host' => $dataSourceName->getHost(),
             'driverClass' => $dataSourceName->getDriver(true),
             'charset' => 'UTF8'
-        );
+        ];
 
         try
         {

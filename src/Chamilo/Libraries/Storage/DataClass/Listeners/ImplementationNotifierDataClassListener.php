@@ -50,7 +50,6 @@ class ImplementationNotifierDataClassListener extends DataClassListener
     /**
      * @return string[]
      *
-     * @throws \ReflectionException
      * @throws \Chamilo\Libraries\Storage\Exception\DataClassNoResultException
      */
     protected function getImplementationPackages(): array
@@ -105,7 +104,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
                 continue;
             }
 
-            if (!call_user_func_array(array($className, $method), $parameters))
+            if (!call_user_func_array([$className, $method], $parameters))
             {
                 return false;
             }
@@ -194,7 +193,7 @@ class ImplementationNotifierDataClassListener extends DataClassListener
      */
     public function onGetDependencies(array &$dependencies = []): bool
     {
-        return $this->notifyImplementationPackages(__FUNCTION__, array(&$dependencies));
+        return $this->notifyImplementationPackages(__FUNCTION__, [&$dependencies]);
     }
 
     /**

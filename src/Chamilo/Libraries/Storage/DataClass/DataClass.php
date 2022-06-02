@@ -19,13 +19,13 @@ abstract class DataClass
 {
     use ClassContext;
 
-    const NO_UID = - 1;
+    public const NO_UID = - 1;
 
-    const PROPERTIES_DEFAULT = 'default_properties';
-    const PROPERTIES_FOREIGN = 'foreign_properties';
-    const PROPERTIES_OPTIONAL = 'optional_properties';
+    public const PROPERTIES_DEFAULT = 'default_properties';
+    public const PROPERTIES_FOREIGN = 'foreign_properties';
+    public const PROPERTIES_OPTIONAL = 'optional_properties';
 
-    const PROPERTY_ID = 'id';
+    public const PROPERTY_ID = 'id';
 
     /**
      * @var string[]
@@ -51,7 +51,7 @@ abstract class DataClass
 
     public function __toString(): string
     {
-        return Translation::get('ToStringNotImplemented', array('TYPE' => static::class));
+        return Translation::get('ToStringNotImplemented', ['TYPE' => static::class]);
     }
 
     public function addError(string $errorMsg): DataClass
@@ -90,7 +90,7 @@ abstract class DataClass
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function create(): bool
     {
@@ -101,7 +101,7 @@ abstract class DataClass
             $success = DataManager::create($this);
         }
 
-        $this->notify(DataClassListener::AFTER_CREATE, array($success));
+        $this->notify(DataClassListener::AFTER_CREATE, [$success]);
 
         return $success;
     }
@@ -123,7 +123,7 @@ abstract class DataClass
             $success = DataManager::delete($this);
         }
 
-        $this->notify(DataClassListener::AFTER_DELETE, array($success));
+        $this->notify(DataClassListener::AFTER_DELETE, [$success]);
 
         return $success;
     }
@@ -222,7 +222,7 @@ abstract class DataClass
      */
     protected function getDependencies(array $dependencies = []): array
     {
-        $this->notify(DataClassListener::GET_DEPENDENCIES, array(&$dependencies));
+        $this->notify(DataClassListener::GET_DEPENDENCIES, [&$dependencies]);
 
         return $dependencies;
     }
@@ -295,7 +295,7 @@ abstract class DataClass
     }
 
     /**
-     * @return mixed
+     * @return ?string
      */
     public function getOptionalProperty(string $name)
     {
@@ -329,7 +329,7 @@ abstract class DataClass
     }
 
     /**
-     * @return mixed
+     * @return ?string
      */
     public function getSpecificProperty(string $propertiesType, string $propertyName)
     {
@@ -376,7 +376,7 @@ abstract class DataClass
         {
             if (method_exists($listener, $event))
             {
-                if (!call_user_func_array(array($listener, $event), $parameters))
+                if (!call_user_func_array([$listener, $event], $parameters))
                 {
                     return false;
                 }
@@ -428,9 +428,9 @@ abstract class DataClass
      */
     public function setDefaultProperty(string $name, $value)
     {
-        $this->notify(DataClassListener::BEFORE_SET_PROPERTY, array($name, $value));
+        $this->notify(DataClassListener::BEFORE_SET_PROPERTY, [$name, $value]);
         $this->setSpecificProperty(self::PROPERTIES_DEFAULT, $name, $value);
-        $this->notify(DataClassListener::AFTER_SET_PROPERTY, array($name, $value));
+        $this->notify(DataClassListener::AFTER_SET_PROPERTY, [$name, $value]);
     }
 
     /**
@@ -514,7 +514,7 @@ abstract class DataClass
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws \Exception
      */
     public function update(): bool
     {
@@ -527,7 +527,7 @@ abstract class DataClass
             $success = DataManager::update($this);
         }
 
-        $this->notify(DataClassListener::AFTER_UPDATE, array($success));
+        $this->notify(DataClassListener::AFTER_UPDATE, [$success]);
 
         return $success;
     }

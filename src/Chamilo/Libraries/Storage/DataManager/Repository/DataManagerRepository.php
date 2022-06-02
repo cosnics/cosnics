@@ -15,6 +15,7 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
 
     /**
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function create(DataClass $dataClass): bool
     {
@@ -32,6 +33,7 @@ abstract class DataManagerRepository implements DataManagerRepositoryInterface
 
     /**
      * @throws \ReflectionException
+     * @throws \Exception
      */
     public function update(DataClass $dataClass): bool
     {

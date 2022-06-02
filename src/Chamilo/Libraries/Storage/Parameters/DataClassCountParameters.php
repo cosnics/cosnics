@@ -20,7 +20,7 @@ class DataClassCountParameters extends DataClassParameters
     {
         if ($retrieveProperties instanceof ConditionVariable)
         {
-            $retrieveProperties = new RetrieveProperties(array($retrieveProperties));
+            $retrieveProperties = new RetrieveProperties([$retrieveProperties]);
         }
 
         parent::__construct($condition, $joins, $retrieveProperties);

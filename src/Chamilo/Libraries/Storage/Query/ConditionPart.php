@@ -21,7 +21,7 @@ abstract class ConditionPart implements Hashable
      */
     public function getHashParts(): array
     {
-        return array(static::class);
+        return [static::class];
     }
 
     /**
